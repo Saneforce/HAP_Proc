@@ -9,7 +9,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route.AllDataFragment;
-import com.hap.checkinproc.SFA_Activity.Dashboard_Route.CompleteFragment;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.jetbrains.annotations.NotNull;

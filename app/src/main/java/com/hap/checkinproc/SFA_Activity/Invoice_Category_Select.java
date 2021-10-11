@@ -116,7 +116,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     private Integer totalQty;
     private TextView tvBillTotItem, tvPayMode, tvDate, tvOutStanding, tvTotOutstanding, tvInvAmt, tvPayAmt;
-    private double taxVal, totCGST, totSGST, totIGST;
+    private double taxVal;
 
     RelativeLayout rlPayment;
 
@@ -126,7 +126,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private List<Common_Model> payList = new ArrayList<>();
 
     String orderId = "";
-    private LinearLayout rlAddProduct,rlCredit, rlCash;
+    private LinearLayout rlAddProduct, rlCredit, rlCash;
     private int outstandAmt;
     private double payAmt;
 
@@ -288,7 +288,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         cbCredit.setChecked(false);
-                        llPayMode.setVisibility(View.VISIBLE);
+                        //  llPayMode.setVisibility(View.VISIBLE);
 
 
                     }
@@ -301,7 +301,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         cbCash.setChecked(false);
-                        llPayMode.setVisibility(View.GONE);
+                        //llPayMode.setVisibility(View.GONE);
                     }
                 }
             });
@@ -384,6 +384,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                            List<Product_Details_Modal> taxList = new ArrayList<>();
 
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -395,17 +396,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         double taxCal = ((Product_Modal.get(pmTax).getQty() * Product_Modal.get(pmTax).getRate()) - Product_Modal.get(pmTax).getDiscount()) * ((jsonObject1.getDouble("Tax_Val") / 100));
                                         wholeTax += taxCal;
 
-                                        switch (jsonObject1.getString("Tax_Type")) {
-                                            case "CGST":
-                                                Product_Modal.get(pmTax).setCGST(taxCal);
-                                                break;
-                                            case "SGST":
-                                                Product_Modal.get(pmTax).setSGST(taxCal);
-                                                break;
-                                            case "IGST":
-                                                Product_Modal.get(pmTax).setIGST(taxCal);
-                                                break;
-                                        }
+
+                                        taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+                                                jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+
+                                        Product_Modal.get(pmTax).setProductDetailsModal(taxList);
 
 
                                     }
@@ -595,10 +590,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
                         OutletItem.put("orderValue", totalvalues);
                         OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("CGST_TOT", totCGST);
-                        OutletItem.put("SGST_TOT", totSGST);
-                        OutletItem.put("IGST_TOT", totIGST);
-
 
                         OutletItem.put("NetAmount", totalvalues);
 
@@ -615,7 +606,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         if (cbCredit.isChecked())
                             OutletItem.put("payType", "Credit");
                         else
-                            OutletItem.put("payType", tvPayMode.getText().toString());
+                            OutletItem.put("payType", "Cash");
+
+                        // OutletItem.put("payType", tvPayMode.getText().toString());
                         OutletItem.put("orderId", orderId);
 
 
@@ -626,8 +619,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             OutletItem.put("Lat", "");
                             OutletItem.put("Long", "");
                         }
-                        ActivityData.put("Activity_Doctor_Report", OutletItem);
                         JSONArray Order_Details = new JSONArray();
+                        JSONArray totTaxArr = new JSONArray();
+                        ArrayList<Product_Details_Modal> totTaxList = new ArrayList<>();
+
                         for (int z = 0; z < Getorder_Array_List.size(); z++) {
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
@@ -640,17 +635,74 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
                             ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
-                            ProdItem.put("CGST", Getorder_Array_List.get(z).getCGST());
-                            ProdItem.put("SGST", Getorder_Array_List.get(z).getSGST());
-                            ProdItem.put("IGST", Getorder_Array_List.get(z).getIGST());
                             ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
                             ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+                            JSONArray tax_Details = new JSONArray();
+
+
+                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
+
+                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+                                    JSONObject taxData = new JSONObject();
+
+                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+
+                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+                                    taxData.put("Tax_Type", label);
+                                    taxData.put("Tax_Amt", amt);
+                                    tax_Details.put(taxData);
+
+
+                                    if (totTaxList.size() == 0) {
+                                        totTaxList.add(new Product_Details_Modal(label, amt));
+                                    } else {
+
+                                        boolean isDuplicate = false;
+                                        for (int totTax = 0; totTax < totTaxList.size(); totTax++) {
+                                            if (totTaxList.get(totTax).getTax_Type().equals(label)) {
+                                                double oldAmt = totTaxList.get(totTax).getTax_Amt();
+                                                isDuplicate = true;
+                                                totTaxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+
+                                            }
+                                        }
+
+                                        if (!isDuplicate) {
+                                            totTaxList.add(new Product_Details_Modal(label, amt));
+
+                                        }
+                                    }
+
+
+                                }
+
+
+                            }
+
+                            ProdItem.put("TAX_details", tax_Details);
+
 
                             Order_Details.put(ProdItem);
                         }
+                        for (int i = 0; i < totTaxList.size(); i++) {
+                            JSONObject totTaxObj = new JSONObject();
+
+
+                            totTaxObj.put("Tax_Type", totTaxList.get(i).getTax_Type());
+                            totTaxObj.put("Tax_Amt", totTaxList.get(i).getTax_Amt());
+                            totTaxArr.put(totTaxObj);
+
+                        }
+
+
+                        OutletItem.put("TOT_TAX_details", totTaxArr);
+                        ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
                     } catch (JSONException e) {
@@ -774,10 +826,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
-        totCGST = 0;
-        totSGST = 0;
-        totIGST = 0;
-
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
@@ -794,13 +842,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     if (!Common_Class.isNullOrEmpty(Product_Modal.get(pm).getTax()))
                         taxVal += Double.parseDouble(Product_Modal.get(pm).getTax());
 
-
-                    if (Product_Modal.get(pm).getCGST() != null)
-                        totCGST += Product_Modal.get(pm).getCGST();
-                    if (Product_Modal.get(pm).getSGST() != null)
-                        totSGST += Product_Modal.get(pm).getSGST();
-                    if (Product_Modal.get(pm).getIGST() != null)
-                        totIGST += Product_Modal.get(pm).getIGST();
 
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
@@ -948,7 +989,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            public LinearLayout gridcolor,undrCate;
+            public LinearLayout gridcolor, undrCate;
             TextView icon;
             ImageView ivCategoryIcon;
 
@@ -959,7 +1000,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 icon = view.findViewById(R.id.textView);
                 gridcolor = view.findViewById(R.id.gridcolor);
                 ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
-                undrCate=view.findViewById(R.id.undrCate);
+                undrCate = view.findViewById(R.id.undrCate);
 
 
             }
@@ -1367,6 +1408,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             if (!Common_Class.isNullOrEmpty(taxRes)) {
                                 JSONObject jsonObject = new JSONObject(taxRes.toString());
+                                List<Product_Details_Modal> taxList = new ArrayList<>();
 
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("Data");
@@ -1384,24 +1426,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                             wholeTax += taxCal;
 
-
-                                            switch (jsonObject1.getString("Tax_Type")) {
-                                                case "CGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(taxCal);
-                                                    break;
-                                                case "SGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(taxCal);
-                                                    break;
-                                                case "IGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(taxCal);
-                                                    break;
-                                            }
-
+                                            taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+                                                    jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
 
                                         }
                                     }
                                 }
 
+                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setProductDetailsModal(taxList);
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()
                                         + wholeTax)));

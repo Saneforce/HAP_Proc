@@ -314,7 +314,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public void removeMarkedPlaces(JSONArray data) {
+    public void removeMarkedPlaces() {
 
         try {
             if (common_class.isNetworkAvailable(this)) {
@@ -348,63 +348,66 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
                                 if (jsonObject.getBoolean("success")) {
 
-                                    Set<String> stationCodes = new HashSet<String>();
-                                    JSONArray tempArray = new JSONArray();
+
+                                    String placeIds = jsonObject.getString("Data");
 
 
-                                    for (int i = 0; i < data.length(); i++) {
-                                        String stationCode = jsonObject.getString("Data");
-                                        if (stationCodes.contains(stationCode)) {
-                                            continue;
-                                        } else {
-                                            stationCodes.add(stationCode);
-                                            tempArray.put(data.getJSONObject(i));
+                                    Log.v("markedPlace:","success: "+resData.length());
+                                    if (explore == null) {
+
+                                        for (int i = 0; i < resData.length(); i++) {
+
+                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
+                                                resData.remove(i);
+                                            } else {
+
+                                            }
                                         }
 
-                                    }
+                                        Log.v("markedPlace:","success:filter "+resData.length());
 
-                                    Log.e(TAG, " total size:" + data.length() + " FilterSize: " + tempArray.length());
+                                        explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
+                                        rclRetail.setAdapter(explore);
+                                        explore.notifyDataSetChanged();
+
+                                    } else {
 
 
-                                    for (int i = 0; i < tempArray.length(); i++) {
-                                        JSONObject json = tempArray.getJSONObject(i);
-                                        String lat = json.getJSONObject("geometry").getJSONObject("location").getString("lat");
-                                        String lng = json.getJSONObject("geometry").getJSONObject("location").getString("lng");
-                                        String name = json.getString("name");
-                                        String place_id = json.getString("place_id");
-                                        String vicinity = json.getString("vicinity");
-                                        String photoo = "", reference = "", height = "", width = "";
+                                        if (oldData != null) {
+                                            for (int i = 0; i < resData.length(); i++) {
+                                                oldData.put(resData.get(i));
 
-                                        try {
-                                            JSONArray jsonA = json.getJSONArray("photos");
-                                            JSONObject jo = jsonA.getJSONObject(0);
-                                            JSONArray ja = jo.getJSONArray("html_attributions");
-                                            //JSONObject jo1=ja.getJSONObject(0);
-                                            photoo = ja.getString(0);
-                                            reference = jo.getString("photo_reference");
-                                            height = jo.getString("height");
-                                            width = jo.getString("width");
-                                            Log.v("direction_latt", name + "phototss" + photoo);
-
-                                        } catch (JSONException e) {
+                                            }
                                         }
 
 
-                                        Log.v("direction_latt", name + "phototss");
-                                        LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+                                        resData = oldData;
 
-                                        marker = map.addMarker(new MarkerOptions().position(latLng)
-                                                .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                                        mark.add(marker);
+                                        resData = removeDuplicateItem(resData);
 
+                                        Log.v("markedPlace:2","success: "+resData.length());
+
+
+                                        for (int i = 0; i < resData.length(); i++) {
+
+                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
+                                                resData.remove(i);
+                                            } else {
+
+                                            }
+                                        }
+
+                                        Log.v("markedPlace:2","filter: "+resData.length());
+
+                                        explore.notifyData(resData);
 
                                     }
 
-                                    resData = tempArray;
+                                    common_class.ProgressdialogShow(0, "");
 
+
+                                } else {
                                     drDetail();
-
-
                                 }
                             }
 
@@ -868,43 +871,42 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             Log.e(TAG, "nextPageToken:" + nextPageToken);
 
 
-            removeMarkedPlaces(resData);
+            for (int i = 0; i < resData.length(); i++) {
+                JSONObject json = resData.getJSONObject(i);
+                String lat = json.getJSONObject("geometry").getJSONObject("location").getString("lat");
+                String lng = json.getJSONObject("geometry").getJSONObject("location").getString("lng");
+                String name = json.getString("name");
+                String place_id = json.getString("place_id");
+                String vicinity = json.getString("vicinity");
+                String photoo = "", reference = "", height = "", width = "";
 
-//            for (int i = 0; i < resData.length(); i++) {
-//                JSONObject json = resData.getJSONObject(i);
-//                String lat = json.getJSONObject("geometry").getJSONObject("location").getString("lat");
-//                String lng = json.getJSONObject("geometry").getJSONObject("location").getString("lng");
-//                String name = json.getString("name");
-//                String place_id = json.getString("place_id");
-//                String vicinity = json.getString("vicinity");
-//                String photoo = "", reference = "", height = "", width = "";
-//
-//                try {
-//                    JSONArray jsonA = json.getJSONArray("photos");
-//                    JSONObject jo = jsonA.getJSONObject(0);
-//                    JSONArray ja = jo.getJSONArray("html_attributions");
-//                    //JSONObject jo1=ja.getJSONObject(0);
-//                    photoo = ja.getString(0);
-//                    reference = jo.getString("photo_reference");
-//                    height = jo.getString("height");
-//                    width = jo.getString("width");
-//                    Log.v("direction_latt", name + "phototss" + photoo);
-//
-//                } catch (JSONException e) {
-//                }
-//
-//
-//                Log.v("direction_latt", name + "phototss");
-//                LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-//
-//                marker = map.addMarker(new MarkerOptions().position(latLng)
-//                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-//                mark.add(marker);
-//
-//
-//            }
-//
-//              drDetail();
+                try {
+                    JSONArray jsonA = json.getJSONArray("photos");
+                    JSONObject jo = jsonA.getJSONObject(0);
+                    JSONArray ja = jo.getJSONArray("html_attributions");
+                    //JSONObject jo1=ja.getJSONObject(0);
+                    photoo = ja.getString(0);
+                    reference = jo.getString("photo_reference");
+                    height = jo.getString("height");
+                    width = jo.getString("width");
+                    Log.v("direction_latt", name + "phototss" + photoo);
+
+                } catch (JSONException e) {
+                }
+
+
+                Log.v("direction_latt", name + "phototss");
+                LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+
+                marker = map.addMarker(new MarkerOptions().position(latLng)
+                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                mark.add(marker);
+
+
+            }
+
+            //  drDetail();
+            removeMarkedPlaces();
 
 
         } catch (Exception e) {

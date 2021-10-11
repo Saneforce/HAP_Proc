@@ -348,8 +348,7 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.Sync_Flag = "0";
                         if (checkValueStore())
                             aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
-                        else
-                        {
+                        else {
                             aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
                             aIntent.putExtra("Mode", "CIN");
                         }
@@ -544,10 +543,11 @@ public class Login extends AppCompatActivity {
         }
 
         //eMail = "srinivasan.vh@hap.in";
-        eMail = "ciadmin@hap.in";
+        //  eMail = "ciadmin@hap.in";
 //        eMail = "senthil.s@hap.in";
 //        eMail = "ssiva2519@gmail.com";
-       // eMail="sebastin.j@hap.in";
+        // eMail="sebastin.j@hap.in";
+        eMail = "haptest3@hap.in";
 
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);

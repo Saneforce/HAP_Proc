@@ -71,7 +71,7 @@
     <color name="greentext">#145A32</color>
 
 
-    <color name="invoiceordercolor">#FFD2B5</color>
+    <color name="invoiceordercolor">#80FFD2B5</color>
 
     <!--button Colors-->
     <color name="Request">#840013</color>

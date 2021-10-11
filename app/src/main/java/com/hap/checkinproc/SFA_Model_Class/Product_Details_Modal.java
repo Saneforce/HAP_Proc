@@ -3,6 +3,8 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Product_Details_Modal {
     @SerializedName("Package")
     @Expose
@@ -63,6 +65,7 @@ public class Product_Details_Modal {
     @SerializedName("SGST")
     @Expose
     private Double SGST;
+    private List<Product_Details_Modal> productDetailsModal;
 
 
     public String getMRP() {
@@ -81,6 +84,7 @@ public class Product_Details_Modal {
     public void setCGST(Double CGST) {
         this.CGST = CGST;
     }
+
 
     public Double getSGST() {
         return SGST;
@@ -173,6 +177,37 @@ public class Product_Details_Modal {
     @Expose
     private String Off_Pro_name;
 
+    @SerializedName("Tax_Type")
+    @Expose
+    private String Tax_Type;
+
+    @SerializedName("Tax_Id")
+    @Expose
+    private String Tax_Id;
+
+    @SerializedName("Tax_Val")
+    @Expose
+    private double Tax_Val;
+
+
+    public String getTax_Id() {
+        return Tax_Id;
+    }
+
+    public void setTax_Id(String tax_Id) {
+        Tax_Id = tax_Id;
+    }
+
+    public double getTax_Amt() {
+        return Tax_Amt;
+    }
+
+    public void setTax_Amt(double tax_Amt) {
+        Tax_Amt = tax_Amt;
+    }
+
+    private double Tax_Amt;
+
     public String getDiscount_value() {
         return discount_value;
     }
@@ -262,6 +297,30 @@ public class Product_Details_Modal {
         this.Amount = amount;
     }
 
+
+    public List<Product_Details_Modal> getProductDetailsModal() {
+        return productDetailsModal;
+    }
+
+    public void setProductDetailsModal(List<Product_Details_Modal> productDetailsModal) {
+        this.productDetailsModal = productDetailsModal;
+    }
+
+    public Product_Details_Modal(String Tax_Id, String Tax_Type, double Tax_Val, double Tax_Amt) {
+        this.Tax_Val = Tax_Val;
+        this.Tax_Type = Tax_Type;
+        this.Tax_Id = Tax_Id;
+        this.Tax_Amt = Tax_Amt;
+
+    }
+
+    public Product_Details_Modal(String Tax_Type, double Tax_Amt) {
+
+        this.Tax_Type = Tax_Type;
+
+        this.Tax_Amt = Tax_Amt;
+
+    }
 
     public Product_Details_Modal(String id, String name, String bookingDate, int Qty, String UOM) {
         this.id = id;
@@ -464,5 +523,21 @@ public class Product_Details_Modal {
 
     public void setPackage(String mPackage) {
         Package = mPackage;
+    }
+
+    public double getTax_Val() {
+        return Tax_Val;
+    }
+
+    public void setTax_Val(double tax_Val) {
+        Tax_Val = tax_Val;
+    }
+
+    public String getTax_Type() {
+        return Tax_Type;
+    }
+
+    public void setTax_Type(String tax_Type) {
+        Tax_Type = tax_Type;
     }
 }

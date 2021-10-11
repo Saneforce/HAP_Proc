@@ -45,7 +45,7 @@ import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
 
-    TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt;
+    TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt, tvOutstandDate;
     Button btnSubmit;
     EditText etRefNo, etAmtRec;
     private DatePickerDialog fromDatePickerDialog;
@@ -111,6 +111,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         common_class.getDb_310Data(Constants.OUTSTANDING, this);
         common_class.getDb_310Data(Constants.PAYMODES, this);
 
+
+        tvOutstandDate.setText("Outstanding as on " + Common_Class.GetDatewothouttime());
+
     }
 
 
@@ -123,6 +126,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         tvRetailorName = findViewById(R.id.retailername);
         rvPayMode = findViewById(R.id.rvPayMode);
         tvOutStandAmt = findViewById(R.id.tvPayOutStandAmt);
+        tvOutstandDate = findViewById(R.id.tvOutstandLabel);
 
         btnSubmit.setOnClickListener(this);
         etDate.setOnClickListener(this);
