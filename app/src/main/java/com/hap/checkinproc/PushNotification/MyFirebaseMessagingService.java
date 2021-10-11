@@ -100,20 +100,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "timestamp: " + timestamp);*/
 
             if(message.equalsIgnoreCase("reloadSale")) {
-
+                if (HAPApp.activeActivity.getClass().getSimpleName().equalsIgnoreCase("Dashboard_Route")) {
+                    Log.d("ActiveActivity", "Dashboard_Route");
+                    Log.d("ActiveActivity", "Dashboard_Route");
+                    liveUpdateListener.onUpdate(message);
+                }
+            }else{
                 if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                     Log.d("ActiveActivity", HAPApp.activeActivity.getClass().toString());
-                    if (HAPApp.activeActivity.getClass().getSimpleName().equalsIgnoreCase("Dashboard_Route")) {
-                        Log.d("ActiveActivity", "Dashboard_Route");
-                        Log.d("ActiveActivity","Dashboard_Route");
-                        liveUpdateListener.onUpdate(message);
-                    } else {
-                        // app is in foreground, broadcast the push message
-                        Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                        pushNotification.putExtra("message", message);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-                        showNotificationMessage(getApplicationContext(), title, message, "timestamp", pushNotification);
-                    }
+                    // app is in foreground, broadcast the push message
+                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                    pushNotification.putExtra("message", message);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+                    showNotificationMessage(getApplicationContext(), title, message, "timestamp", pushNotification);
                     // play notification sound
                /* NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                 notificationUtils.playNotificationSound();*/
