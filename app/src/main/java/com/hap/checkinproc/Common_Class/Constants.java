@@ -1,7 +1,5 @@
 package com.hap.checkinproc.Common_Class;
 
-import android.app.Activity;
-
 public class Constants {
     public static final String MAP_KEYLIST = "mapKeyList";
     public static final String MAP_KEY = "mapKey";
@@ -56,8 +54,10 @@ public class Constants {
     public static final String QPS_STATUS = "qpsStatus";
     public static final String QPS_LOCALPICLIST = "qpsLocalPicList";
     public static final String CUMULATIVEDATA = "cumulativeData";
-    public static final String OUTSTANDING="outstanding";
-    public static final String PAYMODES="payModes";
-    public static final String POP_ENTRY_STATUS ="popEntryStatus" ;
-    public static final String POP_LOCALPICLIST ="popLocPicList" ;
+    public static final String OUTSTANDING = "outstanding";
+    public static final String PAYMODES = "payModes";
+    public static final String POP_ENTRY_STATUS = "popEntryStatus";
+    public static final String POP_LOCALPICLIST = "popLocPicList";
+    public static final String Distributor_phone = "distPhone";
+    public static final String Retailor_PHNo = "retailorPhNo";
 }

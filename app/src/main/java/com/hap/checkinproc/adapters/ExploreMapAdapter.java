@@ -16,10 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -31,9 +28,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -47,9 +41,8 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     Context context;
     String laty, lngy;
     JSONObject json;
-    StringBuilder bu;
-    Type userType;
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
+
+    private String markedPlaceId = "";
 
 
     public ExploreMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
@@ -82,42 +75,19 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
 
+          //  removeMarkedPlaces();
+
+
             json = array.getJSONObject(position);
             holder.txt_dr.setText(json.getString("name"));
             holder.txt_add.setText(json.getString("vicinity"));
 
-            String place_id = json.getString("place_id");
 
-            // DatabaseHandler db = new DatabaseHandler(context);
-
-            Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
-
-            Retailer_Modal_List = new ArrayList<>();
-            // String outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
-            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-
-            Gson gson = new Gson();
-
-            userType = new TypeToken<ArrayList<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List>>() {
-            }.getType();
-            Retailer_Modal_List = gson.fromJson(outletserializableob, userType);
-
-
-           /* for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                Retailer_Modal_List.get(i).setPlace_id("ChIJ6fBt_tVnUjoRVxxz1mgBipI");
-                if (Retailer_Modal_List.get(i).getPlace_id().equals(place_id)) {
-                  //  holder.btnAddToList.setText("Marked");
-                    holder.btnAddToList.setBackgroundResource(R.drawable.button_greenbg);
-                    Log.v("ExploreAdapter: ", position + ":Marked");
-                    break;
-                } else {
-                   // holder.btnAddToList.setText("Direction");
-                    holder.btnAddToList.setBackgroundResource(R.drawable.button_blueg);
-                    Log.v("ExploreAdapter: ", position + ":Direction");
-                }
-
-            }*/
-
+//            if (markedPlaceId.indexOf(json.getString("place_id")) > 0) {
+//                holder.cvParent.setVisibility(View.GONE);
+//            } else {
+//                holder.cvParent.setVisibility(View.VISIBLE);
+//            }
 
             if (json.has("photos")) {
                 JSONArray jsonA = json.getJSONArray("photos");
@@ -306,23 +276,12 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
                                 if (jsonObject.getBoolean("success")) {
 
-                                    JSONArray filterData = array;
 
-                                    for (int j = 0; j < filterData.length(); j++) {
-
-                                        if (jsonObject.getString("Data").indexOf(filterData.getJSONObject(j).getString("place_id")) > 0) {
-
-                                            filterData.remove(j);
-
-                                        }
+                                    markedPlaceId = jsonObject.getString("Data");
 
 
-                                    }
-
-                                    array = filterData;
-                                    notifyDataSetChanged();
                                 } else {
-                                    notifyDataSetChanged();
+
                                 }
 
                             }
@@ -379,7 +338,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             rl_popup = (LinearLayout) itemView.findViewById(R.id.rl_popup);
             btnAddToList = (ImageView) itemView.findViewById(R.id.btnAddtoList);
             ivMarked = (ImageView) itemView.findViewById(R.id.ivMarked);
-            // cvParent=(CardView) itemView.findViewById(R.id.)
+            cvParent = (CardView) itemView.findViewById(R.id.cvExploreParent);
             // btn_route=(Button)itemView.findViewById(R.id.btn_route);
            /* btn_visit=(Button)itemView.findViewById(R.id.btn_visit);
             img_profile=(ImageView)itemView.findViewById(R.id.img_profile);*/

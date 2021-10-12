@@ -138,8 +138,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 tvOrderType.setText("TAX INVOICE");
             }
 
-            tvDistributorPh.setText("");
-            tvRetailorPhone.setText("");
+            tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
+            tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
 
         } catch (Exception e) {
 

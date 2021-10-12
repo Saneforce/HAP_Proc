@@ -214,7 +214,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             } else if (mRetailer_Modal_List.getInvoice_Flag().equals("1")) {
                 holder.cdParent.setBackgroundResource(R.color.invoiceordercolor);
             } else {
-                holder.cdParent.setBackgroundResource(R.color.greeninvoicecolor);
+                holder.cdParent.setBackgroundResource(R.color.greentrans);
             }
             holder.btnCallMob.setOnClickListener(new View.OnClickListener() {
                 @Override

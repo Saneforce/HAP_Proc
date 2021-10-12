@@ -81,8 +81,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     Gson gson;
     TextView takeorder, Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
-
-    private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
     Common_Class common_class;
     String Ukey;
@@ -90,23 +88,19 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
-
     String TAG = "Order_Category_Select";
     DatabaseHandler db;
-    private int selectedPos = 0;
-
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
     EditText etCategoryItemSearch;
+    int cashDiscount;
+    NumberFormat formatter = new DecimalFormat("##0.00");
+    private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
+    private int selectedPos = 0;
     private TextView tvTotalAmount;
     private double totalvalues, taxVal, totCGST, totSGST, totIGST;
     private Integer totalQty;
     private TextView tvBillTotItem;
-    int cashDiscount;
-
-
-    NumberFormat formatter = new DecimalFormat("##0.00");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -387,7 +381,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
                     double wholeTax = 0;
                     if (!Common_Class.isNullOrEmpty(taxRes)) {
-                        JSONObject jsonObject = new JSONObject(taxRes.toString());
+                        JSONObject jsonObject = new JSONObject(taxRes);
                         JSONArray jsonArray = jsonObject.getJSONArray("Data");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -395,20 +389,17 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
 
                                 if (jsonObject1.getDouble("Tax_Val") > 0) {
+
                                     double taxCal = Product_Modal.get(pmTax).getAmount() * ((jsonObject1.getDouble("Tax_Val") / 100));
                                     wholeTax += taxCal;
 
-                                    switch (jsonObject1.getString("Tax_Type")) {
-                                        case "CGST":
-                                            Product_Modal.get(pmTax).setCGST(taxCal);
-                                            break;
-                                        case "SGST":
-                                            Product_Modal.get(pmTax).setSGST(taxCal);
-                                            break;
-                                        case "IGST":
-                                            Product_Modal.get(pmTax).setIGST(taxCal);
-                                            break;
-                                    }
+
+                                    List<Product_Details_Modal> taxList = new ArrayList<>();
+
+                                    taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+                                            jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+
+                                    Product_Modal.get(pmTax).setProductDetailsModal(taxList);
 
 
                                 }
@@ -419,7 +410,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         Product_Modal.get(pmTax).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pmTax).getAmount()
                                 + wholeTax)));
 
-                        Product_Modal.get(pmTax).setTax(String.valueOf(formatter.format(wholeTax)));
+                        Product_Modal.get(pmTax).setTax(formatter.format(wholeTax));
 
 
                     }
@@ -589,12 +580,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
                         OutletItem.put("orderValue", totalvalues);
                         OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("CGST_TOT", totCGST);
-                        OutletItem.put("SGST_TOT", totSGST);
-                        OutletItem.put("IGST_TOT", totIGST);
-
-                        //  OutletItem.put("TAXAmount", taxVal);
-
                         OutletItem.put("NetAmount", totalvalues);
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
@@ -610,8 +595,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             OutletItem.put("Lat", "");
                             OutletItem.put("Long", "");
                         }
-                        ActivityData.put("Activity_Doctor_Report", OutletItem);
                         JSONArray Order_Details = new JSONArray();
+                        JSONArray totTaxArr = new JSONArray();
+                        ArrayList<Product_Details_Modal> totTaxList = new ArrayList<>();
+
+
                         for (int z = 0; z < Getorder_Array_List.size(); z++) {
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
@@ -626,18 +614,75 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
                             ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
-                            ProdItem.put("CGST", Getorder_Array_List.get(z).getCGST());
-                            ProdItem.put("SGST", Getorder_Array_List.get(z).getSGST());
-                            ProdItem.put("IGST", Getorder_Array_List.get(z).getIGST());
                             ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
                             ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
 
+                            JSONArray tax_Details = new JSONArray();
+
+
+                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
+
+                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+                                    JSONObject taxData = new JSONObject();
+
+                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+                                    taxData.put("Tax_Type", label);
+                                    taxData.put("Tax_Amt", amt);
+                                    tax_Details.put(taxData);
+
+
+                                    if (totTaxList.size() == 0) {
+                                        totTaxList.add(new Product_Details_Modal(label, amt));
+                                    } else {
+
+                                        boolean isDuplicate = false;
+                                        for (int totTax = 0; totTax < totTaxList.size(); totTax++) {
+                                            if (totTaxList.get(totTax).getTax_Type().equals(label)) {
+                                                double oldAmt = totTaxList.get(totTax).getTax_Amt();
+                                                isDuplicate = true;
+                                                totTaxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+
+                                            }
+                                        }
+
+                                        if (!isDuplicate) {
+                                            totTaxList.add(new Product_Details_Modal(label, amt));
+
+                                        }
+                                    }
+
+
+                                }
+
+
+                            }
+
+                            ProdItem.put("TAX_details", tax_Details);
 
                             Order_Details.put(ProdItem);
+
                         }
+
+                        for (int i = 0; i < totTaxList.size(); i++) {
+                            JSONObject totTaxObj = new JSONObject();
+
+
+                            totTaxObj.put("Tax_Type", totTaxList.get(i).getTax_Type());
+                            totTaxObj.put("Tax_Amt", totTaxList.get(i).getTax_Amt());
+                            totTaxArr.put(totTaxObj);
+
+                        }
+
+
+                        OutletItem.put("TOT_TAX_details", totTaxArr);
+                        ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
                     } catch (JSONException e) {
@@ -802,14 +847,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         taxVal += Double.parseDouble(Product_Modal.get(pm).getTax());
 
 
-                    if (Product_Modal.get(pm).getCGST() != null)
-                        totCGST += Product_Modal.get(pm).getCGST();
-                    if (Product_Modal.get(pm).getSGST() != null)
-                        totSGST += Product_Modal.get(pm).getSGST();
-                    if (Product_Modal.get(pm).getIGST() != null)
-                        totIGST += Product_Modal.get(pm).getIGST();
-
-
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
 
@@ -906,32 +943,46 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+
+            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+                moveProductScreen();
+
+            } else {
+                common_class.CommonIntentwithFinish(Invoice_History.class);
+
+            }
+            return true;
+        }
+        return false;
+    }
+
+    void moveProductScreen() {
+        lin_gridcategory.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.orderTypesLayout).setVisibility(View.VISIBLE);
+        findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
+        findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
+        findViewById(R.id.llBillHeader).setVisibility(View.GONE);
+        findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
+        findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
+
+
+        takeorder.setText("PROCEED TO CART");
+
+        showOrderItemList(selectedPos);
+
+
+    }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
-        private int rowLayout;
-
         Context context;
         LayoutInflater inflter;
         CategoryAdapter.MyViewHolder pholder;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-
-            public LinearLayout gridcolor,undrCate;
-            TextView icon;
-            ImageView ivCategoryIcon;
-
-
-            public MyViewHolder(View view) {
-                super(view);
-
-                icon = view.findViewById(R.id.textView);
-                gridcolor = view.findViewById(R.id.gridcolor);
-                ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
-                undrCate=view.findViewById(R.id.undrCate);
-
-            }
-        }
-
+        private int rowLayout;
 
         public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
             this.context = applicationContext;
@@ -1016,51 +1067,32 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             return listt.size();
         }
 
-
-    }
-
-
-    public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
-        private List<Product_Details_Modal> Product_Details_Modalitem;
-        private int rowLayout;
-
-        Context context;
-
-        int CategoryType;
-
-
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel;
-            ImageView ImgVwProd, QtyPls, QtyMns;
-            EditText Qty;
+
+            public LinearLayout gridcolor, undrCate;
+            TextView icon;
+            ImageView ivCategoryIcon;
 
 
             public MyViewHolder(View view) {
                 super(view);
-                productname = view.findViewById(R.id.productname);
-                QtyPls = view.findViewById(R.id.ivQtyPls);
-                QtyMns = view.findViewById(R.id.ivQtyMns);
-                Rate = view.findViewById(R.id.Rate);
-                Qty = view.findViewById(R.id.Qty);
-                RegularQty = view.findViewById(R.id.RegularQty);
-                Amount = view.findViewById(R.id.Amount);
-                Free = view.findViewById(R.id.Free);
-                Disc = view.findViewById(R.id.Disc);
-                tvTaxLabel = view.findViewById(R.id.tvTaxLabel);
 
-
-                if (CategoryType >= 0) {
-                    ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
-                    lblRQty = view.findViewById(R.id.status);
-                    regularAmt = view.findViewById(R.id.RegularAmt);
-                    QtyAmt = view.findViewById(R.id.qtyAmt);
-                    totalQty = view.findViewById(R.id.totalqty);
-                }
-
+                icon = view.findViewById(R.id.textView);
+                gridcolor = view.findViewById(R.id.gridcolor);
+                ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
+                undrCate = view.findViewById(R.id.undrCate);
 
             }
         }
+
+
+    }
+
+    public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
+        Context context;
+        int CategoryType;
+        private final List<Product_Details_Modal> Product_Details_Modalitem;
+        private final int rowLayout;
 
 
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
@@ -1334,12 +1366,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
 
                             if (!Common_Class.isNullOrEmpty(taxRes)) {
-                                JSONObject jsonObject = new JSONObject(taxRes.toString());
+                                JSONObject jsonObject = new JSONObject(taxRes);
 
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
                                 double wholeTax = 0;
+                                List<Product_Details_Modal> taxList = new ArrayList<>();
+
 
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -1351,6 +1385,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                                     ((jsonObject1.getDouble("Tax_Val") / 100));
 
                                             wholeTax += taxCal;
+
+
+                                            // List<Product_Details_Modal> taxList = new ArrayList<>();
 
 
                                             switch (jsonObject1.getString("Tax_Type")) {
@@ -1366,15 +1403,21 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                             }
 
 
+                                            taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+                                                    jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+
+
                                         }
                                     }
                                 }
+
+                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setProductDetailsModal(taxList);
 
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()
                                         + wholeTax)));
 
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax(String.valueOf(formatter.format(wholeTax)));
+                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax(formatter.format(wholeTax));
                                 holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
 
 
@@ -1484,29 +1527,46 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
         }
 
-
-    }
-
-
-    public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
-        private List<Product_Details_Modal> Product_Details_Modalitem;
-        private int rowLayout;
-
-        Context context;
-
-
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, tvDisc, Free, RegularQty, productQty, totalQty, tvTax;
+            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
+                    QtyAmt, totalQty, tvTaxLabel;
+            ImageView ImgVwProd, QtyPls, QtyMns;
+            EditText Qty;
 
 
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
-
+                QtyPls = view.findViewById(R.id.ivQtyPls);
+                QtyMns = view.findViewById(R.id.ivQtyMns);
+                Rate = view.findViewById(R.id.Rate);
+                Qty = view.findViewById(R.id.Qty);
+                RegularQty = view.findViewById(R.id.RegularQty);
+                Amount = view.findViewById(R.id.Amount);
                 Free = view.findViewById(R.id.Free);
+                Disc = view.findViewById(R.id.Disc);
+                tvTaxLabel = view.findViewById(R.id.tvTaxLabel);
+
+
+                if (CategoryType >= 0) {
+                    ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
+                    lblRQty = view.findViewById(R.id.status);
+                    regularAmt = view.findViewById(R.id.RegularAmt);
+                    QtyAmt = view.findViewById(R.id.qtyAmt);
+                    totalQty = view.findViewById(R.id.totalqty);
+                }
+
 
             }
         }
+
+
+    }
+
+    public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
+        Context context;
+        private final List<Product_Details_Modal> Product_Details_Modalitem;
+        private final int rowLayout;
 
 
         public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int Categorycolor) {
@@ -1559,41 +1619,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             return Product_Details_Modalitem.size();
         }
 
-
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView productname, Rate, Amount, tvDisc, Free, RegularQty, productQty, totalQty, tvTax;
 
 
-            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                moveProductScreen();
+            public MyViewHolder(View view) {
+                super(view);
+                productname = view.findViewById(R.id.productname);
 
-            } else {
-                common_class.CommonIntentwithFinish(Invoice_History.class);
+                Free = view.findViewById(R.id.Free);
 
             }
-            return true;
         }
-        return false;
-    }
-
-
-    void moveProductScreen() {
-        lin_gridcategory.setVisibility(View.VISIBLE);
-
-        findViewById(R.id.orderTypesLayout).setVisibility(View.VISIBLE);
-        findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
-        findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
-        findViewById(R.id.llBillHeader).setVisibility(View.GONE);
-        findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
-        findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-
-
-        takeorder.setText("PROCEED TO CART");
-
-        showOrderItemList(selectedPos);
 
 
     }

@@ -38,6 +38,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:layout_marginRight="@dimen/C5dp"
                 android:id="@+id/rlAddProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
