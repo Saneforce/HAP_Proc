@@ -85,9 +85,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
     public static Dashboard_Route dashboard_route;
-    static Common_Class common_class;
-    static TextView distributor_text;
-    static Shared_Common_Pref shared_common_pref;
+    public static Common_Class common_class;
+    public static TextView distributor_text;
+    public static Shared_Common_Pref shared_common_pref;
     public int scrollPosition = 0;
     List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
     List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
@@ -170,6 +170,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 Log.d("LiveEvent", "reloadList");
                 if (mode.equalsIgnoreCase("reloadSale") && updSale == false) {
                     getSalesCounts();
+                    getLastInvoiceData();
                 }
             }
         });
@@ -387,7 +388,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                                        finish();
 //                                    } else {
                                     //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                    common_class.CommonIntentwithFinish(Invoice_History.class);
                                     overridePendingTransition(R.anim.in, R.anim.out);
                                     //}
                                 }
@@ -613,7 +614,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                        finish();
 //                    } else {
                     //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                    common_class.CommonIntentwithFinish(Invoice_History.class);
                     overridePendingTransition(R.anim.in, R.anim.out);
                     //}
 
@@ -813,7 +814,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                                    finish();
 //                                } else {
                                 //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                common_class.CommonIntentwithFinish(Invoice_History.class);
                                 overridePendingTransition(R.anim.in, R.anim.out);
 //                                }
                             }
@@ -1024,7 +1025,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            finish();
 //                        } else {
                         //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                        common_class.CommonIntentwithFinish(Invoice_History.class);
                         overridePendingTransition(R.anim.in, R.anim.out);
                         //}
                     }
@@ -1127,7 +1128,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
 
                             shared_common_pref.save(Constants.Retailor_PHNo,mRetailer_Modal_ListFilter.get(position).getMobileNumber());
-                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                            common_class.CommonIntentwithFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             //}
 
@@ -1230,7 +1231,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 ////                            getActivity().finish();
 ////                        } else {
 //                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-//                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+//                        common_class.CommonIntentwithFinish(Invoice_History.class);
 //                        getActivity().overridePendingTransition(R.anim.in, R.anim.out);
 //                        //}
 //                    }
@@ -1313,7 +1314,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 ////                            getActivity().finish();
 ////                        } else {
 //                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-//                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+//                        common_class.CommonIntentwithFinish(Invoice_History.class);
 //                        getActivity().overridePendingTransition(R.anim.in, R.anim.out);
 //                        //}
 //                    }

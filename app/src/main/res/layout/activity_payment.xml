@@ -35,11 +35,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/C10dp"
         android:orientation="vertical">
-
-
         <TextView
             android:id="@+id/retailername"
             android:layout_width="match_parent"
@@ -70,7 +68,7 @@
                 android:textColor="@color/grey_600"
                 android:textSize="@dimen/C14dp"
                 android:textStyle="bold"
-                android:visibility="gone"></TextView>
+                android:visibility="gone"/>
 
 
             <TextView
@@ -81,7 +79,7 @@
                 android:gravity="end"
                 android:text="Outstanding as on 06/10/2021"
                 android:textSize="@dimen/C14dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"/>
 
             <TextView
 
@@ -99,8 +97,8 @@
         <LinearLayout
             android:layout_width="match_parent"
 
-            android:layout_height="0dp"
-            android:layout_weight="0.9"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <ScrollView
@@ -172,7 +170,7 @@
                             android:id="@+id/rvPayMode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
                     </LinearLayout>
@@ -269,24 +267,19 @@
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
-
         </LinearLayout>
-
-        <RelativeLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1">
-
-            <Button
-                android:id="@+id/btnPaySubmit"
-                style="@style/ButtonStyle"
-                android:layout_alignParentBottom="true"
-
-                android:text="Submit"></Button>
-        </RelativeLayout>
-
-
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/btnPaySubmit"
+            style="@style/ButtonStyle"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_blueg"
+            android:text="Submit"
+            android:textColor="@android:color/white"
+            android:theme="@style/BluePrimaryButton"
+            app:finalCornerAngle="50dp"
+            app:initialCornerAngle="10dp"
+            app:spinning_bar_color="#FFFFFFFF"
+            app:spinning_bar_padding="5dp"
+            app:spinning_bar_width="5dp" />
     </LinearLayout>
-
 </LinearLayout>

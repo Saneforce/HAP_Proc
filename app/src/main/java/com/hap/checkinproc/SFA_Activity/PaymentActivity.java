@@ -1,7 +1,9 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,7 +49,7 @@ import retrofit2.Response;
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
 
     TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt, tvOutstandDate;
-    Button btnSubmit;
+    CircularProgressButton btnSubmit;
     EditText etRefNo, etAmtRec;
     private DatePickerDialog fromDatePickerDialog;
     Common_Class common_class;
@@ -58,8 +61,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     NumberFormat formatter = new DecimalFormat("##0.00");
 
     Double outstandAmt;
-    public String payModeLabel = "";
+    public String payModeLabel = "cash";
     public static PaymentActivity paymentActivity;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,50 +179,77 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                                 if (jsonObject.getBoolean("success")) {
                                     common_class.showMsg(PaymentActivity.this, jsonObject.getString("Msg"));
+                                    ResetSubmitBtn(1);
                                     finish();
                                 }
 
                             }
 
                         } catch (Exception e) {
-
-
+                            ResetSubmitBtn(2);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.v("fail>>", t.toString());
-
-
+                        ResetSubmitBtn(2);
                     }
                 });
             } else {
                 Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                ResetSubmitBtn(0);
             }
         } catch (Exception e) {
             Log.v("fail>>", e.getMessage());
 
+            ResetSubmitBtn(0);
 
         }
     }
 
+    public void ResetSubmitBtn(int resetMode){
+        common_class.ProgressdialogShow(0, "");
+        long dely=3;
+        if(resetMode!=0) dely=1000;
+        if (resetMode==1){
+            btnSubmit.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        }else {
+            btnSubmit.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnSubmit.stopAnimation();
+                btnSubmit.revertAnimation();
+            }
+        },dely);
+
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPaySubmit:
 
-                if (!payModeAdapter.isModeSelected()) {
-                    common_class.showMsg(this, "Please select any Payment Mode");
-                } else if (etDate.getText().toString().equals("")) {
-                    common_class.showMsg(this, "Please enter the Date of payment");
-                } else if (etAmtRec.getText().toString().equals("")) {
-                    common_class.showMsg(this, "Please enter the Amount Received");
-                } else {
-                    submitPayData();
-
-                }
+                btnSubmit.startAnimation();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*if (!payModeAdapter.isModeSelected()) {
+                            common_class.showMsg(this, "Please select any Payment Mode");
+                        } else */
+                        if (etDate.getText().toString().equals("")) {
+                            common_class.showMsg(PaymentActivity.this, "Please enter the Date of payment");
+                            ResetSubmitBtn(0);
+                        } else if (etAmtRec.getText().toString().equals("")) {
+                            common_class.showMsg(PaymentActivity.this, "Please enter the Amount Received");
+                            ResetSubmitBtn(0);
+                        } else {
+                            submitPayData();
+                        }
+                    }
+                },100);
 
                 break;
 

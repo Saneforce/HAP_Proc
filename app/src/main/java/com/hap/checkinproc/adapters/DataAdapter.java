@@ -63,8 +63,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
-        if (position >= contactListFiltered.size()) return;
-        final Common_Model contact = contactListFiltered.get(position);
+        if (fruitViewHolder.getAdapterPosition() >= contactListFiltered.size()) return;
+        final Common_Model contact = contactListFiltered.get(fruitViewHolder.getAdapterPosition());
         fruitViewHolder.mTextName.setText("" + contact.getName());
         String getAddress = contact.getAddress();
         String getPhone = contact.getPhone();
@@ -91,7 +91,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
             if (shared_common_pref.getvalue(Constants.MAP_KEY).equals(contact.getName())) {
                 fruitViewHolder.checkBox_select.setChecked(true);
-                lastCheckedPos = position;
+                lastCheckedPos = fruitViewHolder.getAdapterPosition();
                 lastChecked = fruitViewHolder.checkBox_select;
             }
         } else if (typeName == 500) {
@@ -115,7 +115,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 CheckBox cb = (CheckBox) buttonView;
-                int clickedPos = position;
+                int clickedPos = fruitViewHolder.getAdapterPosition();
 
 
                 if (cb.isChecked()) {
@@ -129,7 +129,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
                     contactList.get(clickedPos).setSelected(cb.isSelected());
 
-                    shared_common_pref.save(Constants.MAP_KEY, contactList.get(position).getName());
+                    shared_common_pref.save(Constants.MAP_KEY, contactList.get(clickedPos).getName());
                     Nearby_Outlets.nearby_outlets.getExploreDr(false);
                 } else {
                     lastChecked = null;
@@ -144,6 +144,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public int getItemCount() {
+        if(contactListFiltered == null) return 0;
         return contactListFiltered.size();
     }
 
@@ -157,8 +158,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 List<Common_Model> filteredany = new ArrayList<>();
                 for (Common_Model row : contactList) {
                     String sName=row.getName().toLowerCase().trim().replaceAll("\\s", "");
-                    String getAddress = row.getAddress().toLowerCase().trim().replaceAll("\\s", "");
-                    String getPhone = row.getPhone().toLowerCase().trim().replaceAll("\\s", "");
+                    String getAddress = (row.getAddress()!=null)?row.getAddress().toLowerCase().trim().replaceAll("\\s", ""):"";
+                    String getPhone = (row.getPhone()!=null)?row.getPhone().toLowerCase().trim().replaceAll("\\s", ""):"";
                     if ((";"+sName).contains(";"+charString)||(";"+getAddress).contains(";"+charString)||(";"+getPhone).contains(";"+charString)) {
                         filteredList.add(row);
                     } else if (sName.contains(charString)|| getAddress.contains(charString)||getPhone.contains(charString)) {

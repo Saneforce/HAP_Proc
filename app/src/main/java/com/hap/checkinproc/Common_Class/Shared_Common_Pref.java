@@ -27,6 +27,7 @@ public class Shared_Common_Pref {
     public static Double Outletlong;
     public static String OutletAddress;
     public static String Outler_AddFlag = "";
+    public static String FromActivity = "";
     public static String OutletName = "OutletName";
     public static String OutletCode = "OutletCode";
 

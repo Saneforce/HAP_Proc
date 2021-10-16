@@ -576,7 +576,10 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     public boolean vali() {
-
+        if(worktype_text.getText().toString().equalsIgnoreCase("")){
+            Toast.makeText(this, "Required Field " + worktype_text.getText().toString(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
         for (int i = 0; i < dynamicarray.size(); i++) {
             if (dynamicarray.get(i).getFilter_Value() != null && dynamicarray.get(i).getFilter_Value().equals("") && dynamicarray.get(i).getFld_Mandatory().equals("1")) {
                 if (dynamicarray.get(i).getFld_Symbol().equals("JW")) {

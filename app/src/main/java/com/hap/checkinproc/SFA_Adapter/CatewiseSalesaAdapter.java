@@ -40,12 +40,19 @@ public class CatewiseSalesaAdapter extends RecyclerView.Adapter<CatewiseSalesaAd
         try {
             JSONObject itm=AryDta.getJSONObject(position);
             holder.txCatname.setText(itm.getString("name"));
+
             if(itm.has("Qty")) {
                 holder.txQty.setText(itm.getString("Qty"));
                 holder.txVal.setText("₹" + new DecimalFormat("##0.00").format(itm.getDouble("Val")));
             }else if(itm.has("Vals")){
                 JSONArray itmv=itm.getJSONArray("Vals");
                 if(itmv.length()>0) {
+                    if(itmv.getJSONObject(0).has("OQty")) {
+                        holder.txOQty.setText(itmv.getJSONObject(0).getString("OQty"));
+                    }
+                    if(itmv.getJSONObject(0).has("NQty")) {
+                        holder.txNQty.setText(itmv.getJSONObject(0).getString("NQty"));
+                    }
                     holder.txQty.setText(itmv.getJSONObject(0).getString("Qty"));
                     holder.txVal.setText("₹" + new DecimalFormat("##0.00").format(itmv.getJSONObject(0).getDouble("Val")));
                 }else{
@@ -67,12 +74,14 @@ public class CatewiseSalesaAdapter extends RecyclerView.Adapter<CatewiseSalesaAd
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txCatname,txQty,txVal;
+        public TextView txCatname,txOQty,txNQty,txQty,txVal;
         LinearLayout parent_layout;
         public MyViewHolder(View view) {
             super(view);
             parent_layout = view.findViewById(R.id.parent_layout);
             txCatname=view.findViewById(R.id.txCateName);
+            txOQty=view.findViewById(R.id.tvTodayOQty);
+            txNQty=view.findViewById(R.id.tvTodayNOQty);
             txQty=view.findViewById(R.id.tvTodayQty);
             txVal=view.findViewById(R.id.tvTodayVal);
         }

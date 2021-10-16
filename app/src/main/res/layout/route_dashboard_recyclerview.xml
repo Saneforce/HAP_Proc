@@ -47,7 +47,7 @@
                             android:id="@+id/txRetNo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="999"
+                            android:text="0"
                             android:paddingTop="@dimen/C4dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -321,19 +321,15 @@
 
                     </LinearLayout>
                     <LinearLayout
-    android:layout_width="2dp"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/C5dp"
-                        android:visibility="gone">
-    <LinearLayout
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grey_500"
-        android:padding="@dimen/C5dp"
-        android:layout_marginTop="@dimen/C20dp"
-        android:layout_marginBottom="@dimen/C15dp"
-        />
-</LinearLayout>
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:visibility="visible">
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/grey_500"
+                            />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -356,7 +352,8 @@
                                 android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:layout_gravity="center_vertical">
                                 <TextView
                                     android:id="@+id/tvLMFirst"
                                     android:layout_width="match_parent"
@@ -365,27 +362,30 @@
                                     android:text="Sep"
                                     android:textAlignment="center"
                                     android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="12sp"
+                                    android:textSize="11sp"
+                                    android:textAllCaps="true"
                                     android:textStyle="bold"/>
                                 <TextView
                                     android:id="@+id/tvLMSecond"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:textAllCaps="true"
                                     android:text="Aug"
                                     android:textAlignment="center"
                                     android:textColor="@color/black_80"
-                                    android:textSize="12sp"
+                                    android:textSize="11sp"
                                     android:textStyle="normal"/>
                                 <TextView
                                     android:id="@+id/tvLMThree"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:textAllCaps="true"
                                     android:text="Jul"
                                     android:textAlignment="center"
                                     android:textColor="@color/black_80"
-                                    android:textSize="12sp"
+                                    android:textSize="11sp"
                                     android:textStyle="normal"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -408,6 +408,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:textAlignment="textEnd"
+                                android:layout_weight="1"
                                 android:text="Inv.Val"
                                 android:textSize="10sp"
                                 android:paddingRight="2dp"
@@ -466,6 +467,7 @@
                                     android:fontFamily="sans-serif"
                                     android:textAlignment="textEnd"
                                     android:text="₹0.00"
+                                    android:layout_weight="1"
                                     android:textSize="11sp"
                                     android:textStyle="bold"
                                     android:paddingLeft="1dp"

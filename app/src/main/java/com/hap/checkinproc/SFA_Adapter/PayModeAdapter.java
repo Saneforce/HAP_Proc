@@ -66,7 +66,7 @@ public class PayModeAdapter extends RecyclerView.Adapter<PayModeAdapter.MyViewHo
                         PaymentActivity.paymentActivity.payModeLabel = payList.get(position).getName();
                     } else {
                         lastChecked = null;
-                        PaymentActivity.paymentActivity.payModeLabel = "";
+                        PaymentActivity.paymentActivity.payModeLabel = "cash";
 
                     }
 

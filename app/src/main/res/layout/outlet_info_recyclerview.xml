@@ -17,14 +17,30 @@
         android:weightSum="4">
 
         <TextView
-            android:padding="@dimen/C5dp"
-            android:layout_marginLeft="@dimen/C10dp"
             android:id="@+id/retailername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="thirumalai"
-            android:textColor="@color/Exit"
-            android:textSize="18dp" />
+            android:text=""
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginLeft="@dimen/C5dp"
+            android:layout_marginRight="@dimen/C5dp"
+            android:paddingTop="@dimen/C5dp"
+            android:paddingLeft="@dimen/C5dp"
+            android:paddingRight="@dimen/C5dp"
+            />
+        <TextView
+            android:id="@+id/ShopAddr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="11sp"
+            android:layout_marginLeft="@dimen/C5dp"
+            android:layout_marginRight="@dimen/C5dp"
+
+            android:paddingLeft="@dimen/C5dp"
+            android:paddingRight="@dimen/C5dp"/>
 
     </LinearLayout>
 
