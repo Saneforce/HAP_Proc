@@ -4,10 +4,7 @@ package com.hap.checkinproc.SFA_Adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,37 +13,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
-import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
-import com.hap.checkinproc.SFA_Activity.TabAdapter;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.MyViewHolder> {
@@ -58,6 +43,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     AdapterOnClick mAdapterOnClick;
     JSONObject PreSales;
     Shared_Common_Pref shared_common_pref;
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
@@ -174,6 +160,13 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 //            holder.invoice.setText("Last inv value :" + "\t\t" + mRetailer_Modal_List.getInvoiceValues());
 //            holder.values.setText("Value :" + "\t\t" + mRetailer_Modal_List.getValuesinv());
 //            holder.invoicedate.setText("Last inv date :" + "\t\t" + mRetailer_Modal_List.getInvoiceDate());
+            SimpleDateFormat fdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String csDT=fdt.format(new Date());
+            SimpleDateFormat f = new SimpleDateFormat("MMM");
+            holder.tvFirstMonth.setText(f.format(new Date()));
+            holder.tvSecondMnth.setText(f.format(DT.AddMonths(csDT,-1)));
+            holder.tvThirdMnth.setText(f.format(DT.AddMonths(csDT,-2)));
+
             if (mRetailer_Modal_List.getInvoice_Flag().equals("0")) {
                 holder.cdParent.setBackgroundResource(R.color.white);
             } else if (mRetailer_Modal_List.getInvoice_Flag().equals("1")) {

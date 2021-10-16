@@ -23,11 +23,12 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, status, invoice;
+        public TextView textviewname, textviewdate, status, invoice,outletAddress;
 
         public MyViewHolder(View view) {
             super(view);
             textviewname = view.findViewById(R.id.retailername);
+            outletAddress = view.findViewById(R.id.ShopAddr);
             status = view.findViewById(R.id.status);
             invoice = view.findViewById(R.id.invoice);
         }
@@ -51,11 +52,11 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     public void onBindViewHolder(Outlet_Info_Adapter.MyViewHolder holder, int position) {
         Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase() + "~" + Retailer_Modal_List.getId());
-
+        holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
         holder.textviewname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapterOnClick.onIntentClick(position);
+                mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
             }
         });
 

@@ -115,8 +115,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
-            // String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
-            // System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
             // if (!OrdersTable.equals("")) {
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Retailer_Modal_List != null) {
@@ -197,11 +195,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-//        customDialog.dismiss();
-//        Route_id = myDataset.get(position).getId();
-//        route_text.setText(myDataset.get(position).getName());
-//        OutletFilter(myDataset.get(position).getId());
-
         customDialog.dismiss();
         if (type == 2) {
             route_text.setText("");
@@ -210,23 +203,17 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone,myDataset.get(position).getPhone());
-
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
             loadroute(myDataset.get(position).getId());
             OutletFilter(myDataset.get(position).getId(), "1");
-
-
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Route_Id, myDataset.get(position).getId());
             OutletFilter(myDataset.get(position).getId(), "0");
-
-
         }
     }
-
     public void loadroute(String id) {
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
@@ -251,7 +238,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
         }
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -281,7 +267,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 break;
         }
     }
-
     private void GetJsonData(String jsonResponse, String type) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
@@ -305,7 +290,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
     }
-
     private void OutletFilter(String id, String flag) {
 
 
@@ -340,8 +324,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         }
 
     }
-
-
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -353,6 +335,9 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (listType.equals(Constants.Distributor_List)) {
+                    String Add2 = jsonObject1.optString("Addr2");
+                    String Mob = jsonObject1.optString("Mobile");
+                    Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
                     distributor_master.add(Model_Pojo);
                 } else if (listType.equals(Constants.Rout_List)) {
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));

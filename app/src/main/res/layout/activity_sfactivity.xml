@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/AppTitle"
                 android:layout_width="wrap_content"
@@ -220,7 +219,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_assignment_48" />
+                                    android:src="@drawable/ic_outline_assignment_48"
+                                    app:tint="#789F3D"/>
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -299,7 +299,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_add_chart_48" />
+                                    android:src="@drawable/ic_outline_add_chart_48"
+                                    app:tint="#789F3D" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -327,7 +328,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_my_location_24" />
+                                    android:src="@drawable/ic_outline_my_location_24"
+                                    app:tint="#789F3D" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -354,7 +356,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_baseline_storefront_24" />
+                                    android:src="@drawable/ic_baseline_storefront_24"
+                                    app:tint="#789F3D" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -381,7 +384,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_report_48" />
+                                    android:src="@drawable/ic_outline_report_48"
+                                    app:tint="#789F3D" />
 
                                 <TextView
                                     android:layout_width="match_parent"

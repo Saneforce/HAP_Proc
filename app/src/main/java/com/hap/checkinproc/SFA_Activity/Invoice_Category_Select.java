@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -68,6 +70,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,7 +87,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder, Out_Let_Name, Category_Nametext;
+    TextView  Out_Let_Name, Category_Nametext;
+
+    CircularProgressButton takeorder;
 
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
     LinearLayout lin_gridcategory;
@@ -127,6 +132,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private int outstandAmt;
     private double payAmt;
 
+    final Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -512,19 +518,25 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                 if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                     if (Getorder_Array_List != null && Getorder_Array_List.size() > 0) {
-                        String sLoc = sharedCommonPref.getvalue("CurrLoc");
-                        if (sLoc.equalsIgnoreCase("")) {
-                            new LocationFinder(getApplication(), new LocationEvents() {
-                                @Override
-                                public void OnLocationRecived(Location location) {
-                                    strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                        takeorder.startAnimation();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                                if (sLoc.equalsIgnoreCase("")) {
+                                    new LocationFinder(getApplication(), new LocationEvents() {
+                                        @Override
+                                        public void OnLocationRecived(Location location) {
+                                            strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                            SaveOrder();
+                                        }
+                                    });
+                                } else {
+                                    strLoc = sLoc.split(":");
                                     SaveOrder();
                                 }
-                            });
-                        } else {
-                            strLoc = sLoc.split(":");
-                            SaveOrder();
-                        }
+                            }
+                        },100);
                     } else {
                         common_class.showMsg(this, "Your Cart is empty...");
                     }
@@ -553,6 +565,24 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
     }
 
+    public void ResetSubmitBtn(int resetMode){
+        common_class.ProgressdialogShow(0, "");
+        long dely=10;
+        if(resetMode!=0) dely=1000;
+        if (resetMode==1){
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        }else {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                takeorder.stopAnimation();
+                takeorder.revertAnimation();
+            }
+        },dely);
+
+    }
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
@@ -692,18 +722,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             totTaxArr.put(totTaxObj);
 
                         }
-
-
                         OutletItem.put("TOT_TAX_details", totTaxArr);
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             if (response.isSuccessful()) {
@@ -719,13 +744,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         Shared_Common_Pref.Sync_Flag = "2";
 //                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
 
+                                        ResetSubmitBtn(1);
                                         startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                         finish();
                                     }
 
                                 } catch (Exception e) {
                                     Log.e(TAG, "invcatch: " + e.getMessage());
-
+                                    ResetSubmitBtn(2);
                                 }
                             }
                         }
@@ -733,18 +759,24 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e("SUBMIT_VALUE", "ERROR");
+                            ResetSubmitBtn(2);
                         }
                     });
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        ResetSubmitBtn(2);
+                    }
                 }
 
                 @Override
                 public void NegativeMethod(DialogInterface dialog, int id) {
-                    dialog.dismiss();
+                    dialog.dismiss();ResetSubmitBtn(0);
                 }
             });
         } else {
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            ResetSubmitBtn(0);
         }
     }
 

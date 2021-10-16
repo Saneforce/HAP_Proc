@@ -29,7 +29,6 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_other_brand_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet__report__view.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_payment.xml" value="0.2658514492753623" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pop_layout.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_print__invoice_.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.27291666666666664" />
@@ -38,7 +37,6 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/dashboard_view_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/edittext_dialog.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/edittext_price_dialog.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/explorelist.xml" value="0.2658514492753623" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/fragment_more_info.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/fruit_item.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/history_adapter_layout.xml" value="0.27291666666666664" />
@@ -69,7 +67,7 @@
         <entry key="app/src/main/res/drawable/round_status_blue.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/shape_user.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/drawable/sign_bg.xml" value="0.21197916666666666" />
-        <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_allowance.xml" value="0.11956521739130435" />
         <entry key="app/src/main/res/layout/activity_allowance_two.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
@@ -81,14 +79,15 @@
         <entry key="app/src/main/res/layout/activity_dist__locations.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_history_info.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_invoice__category__select.xml" value="0.2078125" />
-        <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5403111739745403" />
+        <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_lead_.xml" value="0.45048543689320386" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />
         <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.15489130434782608" />
         <entry key="app/src/main/res/layout/activity_other_brand_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_outlet__info_.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/activity_payment.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/activity_pop_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_q_r_code_scanner.xml" value="0.24592391304347827" />
@@ -97,7 +96,7 @@
         <entry key="app/src/main/res/layout/activity_s_f_a__dashboard.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_sales_calls.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/activity_secondary_order.xml" value="0.2078125" />
-        <entry key="app/src/main/res/layout/activity_sfactivity.xml" value="0.1621376811594203" />
+        <entry key="app/src/main/res/layout/activity_sfactivity.xml" value="0.5020746887966805" />
         <entry key="app/src/main/res/layout/activity_t_a_approval.xml" value="0.16802536231884058" />
         <entry key="app/src/main/res/layout/activity_t_a_claim.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/activity_t_l_cliam__apprval.xml" value="0.24592391304347827" />
@@ -109,6 +108,7 @@
         <entry key="app/src/main/res/layout/explorelist.xml" value="0.16394927536231885" />
         <entry key="app/src/main/res/layout/fragment_tab_outlet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fruit_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.33" />
         <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
         <entry key="app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.3559322033898305" />

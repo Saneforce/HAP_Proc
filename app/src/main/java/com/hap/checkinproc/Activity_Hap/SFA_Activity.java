@@ -686,6 +686,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
                 Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
 
             case R.id.Lin_Outlet:

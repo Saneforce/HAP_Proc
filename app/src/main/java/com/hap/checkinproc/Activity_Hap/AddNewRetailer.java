@@ -10,11 +10,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,24 +35,34 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
+import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,6 +78,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -72,16 +86,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener {
+public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback {
     TextView toolHeader;
     CustomListViewDialog customDialog;
     ImageView imgBack;
     EditText toolSearch, retailercode;
+    GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor;
+    RelativeLayout linReatilerRoute, rlDistributor,rlDelvryType;
     LinearLayout linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,txDelvryType;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -117,7 +132,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-
+CircularProgressButton btnRefLoc;
+    double RetLat=0.0,RetLng=0.0;
+    List<Common_Model> deliveryTypeList;
+    final Handler handler = new Handler();
     //    @Override
 //    protected void onRestart() {
 //        super.onRestart();
@@ -162,15 +180,76 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerPhone = findViewById(R.id.edt_new_phone);
             addRetailerEmail = findViewById(R.id.edt_new_email);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+            edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+            rlDelvryType = findViewById(R.id.rlDelvryType);
+            txDelvryType = findViewById(R.id.txDelvryType);
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
             mSubmit = findViewById(R.id.submit_button);
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
+            btnRefLoc= findViewById(R.id.btnRefLoc);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.route_map);
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(this);
+            }
 
+            deliveryTypeList = new ArrayList<>();
+            mCommon_model_spinner = new Common_Model("AC", "AC", "flag");
+            deliveryTypeList.add(mCommon_model_spinner);
+            mCommon_model_spinner = new Common_Model("OT", "Others", "flag");
+            deliveryTypeList.add(mCommon_model_spinner);
+
+            rlDelvryType.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialog = new CustomListViewDialog(AddNewRetailer.this, deliveryTypeList, 11);
+                    Window window = customDialog.getWindow();
+                    window.setGravity(Gravity.CENTER);
+                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+                }
+            });
 
             copypaste.setOnClickListener(this);
             ivPhotoShop.setOnClickListener(this);
+            btnRefLoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btnRefLoc.startAnimation();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new LocationFinder(getApplication(), new LocationEvents() {
+                                @Override
+                                public void OnLocationRecived(Location location) {
+                                    if( location==null){
+                                        Toast.makeText(AddNewRetailer.this,"Location Can't Getting Location. Try Again.",Toast.LENGTH_LONG).show();
+                                        btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+                                    }else {
+                                        RetLat = location.getLatitude();
+                                        RetLng = location.getLongitude();
+                                        Shared_Common_Pref.Outletlat=RetLat;
+                                        Shared_Common_Pref.Outletlong=RetLng;
+                                        getCompleteAddressString(RetLat,RetLng);
+                                        centreMapOnLocation("Your Location");
+                                        btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+                                    }
 
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            btnRefLoc.stopAnimation();
+                                            btnRefLoc.revertAnimation();
+                                            btnRefLoc.setBackground(getDrawable(R.drawable.button_blueg));
+                                        }
+                                    },1000);
+                                }
+                            });
+                        }
+                    },100);
+                }
+            });
 
             gson = new Gson();
             shared_common_pref = new Shared_Common_Pref(this);
@@ -317,6 +396,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
+
+
+                RetLat=Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
+                RetLng=Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
+
+                Shared_Common_Pref.Outletlat=RetLat;
+                Shared_Common_Pref.Outletlong=RetLng;
+
                 if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
                     addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
                 if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
@@ -362,6 +449,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
+                    else if(txDelvryType.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
+                    }
+
                     else if (imageConvert.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
@@ -895,6 +986,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("categoryuniverseswitch", common_class.addquote(categoryuniverseswitch));
             reportObject.put("lat", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlat)));
             reportObject.put("long", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlong)));
+            reportObject.put("VechType", txDelvryType.getText().toString());
+
+
             reportObject.put("unlisted_doctor_areaname", "''");
             reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
             reportObject.put("unlisted_doctor_contactperson", "''");
@@ -956,9 +1050,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else {
                         Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
                     }
-                    if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0") && !Shared_Common_Pref.Editoutletflag.equals("1")) {
-                        // startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
-                        common_class.CommonIntentwithFinish(SecondaryOrderActivity.class);
+                    if(Shared_Common_Pref.FromActivity == "Outlets"){
+                        Shared_Common_Pref.FromActivity = "";
+                        common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
                     } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
                         Shared_Common_Pref.Outler_AddFlag = "0";
                         Shared_Common_Pref.Sync_Flag = "1";
@@ -1008,6 +1102,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         } else if (type == 10) {
             txtRetailerChannel.setText(myDataset.get(position).getName());
             channelID = Integer.valueOf(myDataset.get(position).getId());
+        }else if (type == 11) {
+            txDelvryType.setText(myDataset.get(position).getName());
         }
     }
 
@@ -1112,5 +1208,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        centreMapOnLocation("Your Location");
+    }
+    public void centreMapOnLocation(String title){
+
+        LatLng userLocation = new LatLng(RetLat,RetLng );
+        mGoogleMap.clear();
+        mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title(title));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,16));
+
     }
 }

@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/outlet_name"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/C15dp"
                 android:text="Retailor"
@@ -877,8 +877,6 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"/>
                             </LinearLayout>
-
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -904,8 +902,6 @@
                                     android:textSize="@dimen/C13dp"></TextView>
 
                             </LinearLayout>
-
-
                         </LinearLayout>
                     </LinearLayout>
 
@@ -913,6 +909,7 @@
 
 
         </ScrollView>
+
         <RelativeLayout
 
             android:id="@+id/rlTakeOrder"
@@ -978,18 +975,38 @@
 
             </LinearLayout>
 
-            <TextView
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/takeorder"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/C15dp"
+                android:layout_marginEnd="@dimen/C15dp"
+                android:background="#00000000"
                 android:drawableTint="@color/white"
                 android:text="PROCEED TO CART"
                 android:textColor="@color/white"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:padding="@dimen/C5dp"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="10dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/takeorder"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_marginRight="@dimen/C15dp"-->
+<!--                android:drawableTint="@color/white"-->
+<!--                android:text="PROCEED TO CART"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
 
         </RelativeLayout>
     </LinearLayout>

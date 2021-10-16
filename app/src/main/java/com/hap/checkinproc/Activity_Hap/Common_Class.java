@@ -103,6 +103,19 @@ public class Common_Class {
         Date resultdate = new Date(c.getTimeInMillis());
         return resultdate;
     }
+    public Date AddMonths(String dateInString,int NoofMonths) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+
+            c.setTime(sdf.parse(dateInString));
+            c.add(Calendar.MONTH, NoofMonths);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date resultdate = new Date(c.getTimeInMillis());
+        return resultdate;
+    }
     public String AddMonths(String dateInString,int NoofDays, String pattern) {
         Log.d("DateString",dateInString);
         Log.d("DateString No.Dys",String.valueOf(NoofDays));
