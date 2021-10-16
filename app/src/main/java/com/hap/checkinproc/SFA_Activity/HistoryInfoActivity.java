@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class HistoryInfoActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class HistoryInfoActivity extends AppCompatActivity implements View.OnClickListener,
+        UpdateResponseUI {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -69,7 +71,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
 
     RecyclerView rv;
-    TextView tvSales;
+    TextView tvSales, tvOutstanding;
     LinearLayout llHistoryParent;
 
     public static String stDate = "", endDate = "";
@@ -106,6 +108,9 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         btnCurrentMnth.setTextColor(getResources().getColor(R.color.a50white));
 
 
+        common_class.getDb_310Data(Constants.OUTSTANDING, this);
+
+
     }
 
 
@@ -125,6 +130,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         btnCurrentMnth = findViewById(R.id.btnCurrentMnth);
         btnSelectDate = findViewById(R.id.btnSelectDate);
         ivMnthSelect = findViewById(R.id.ivMnthSelecter);
+        tvOutstanding = findViewById(R.id.tvOutstanding);
 
         btnToday.setOnClickListener(this);
         btnYesterday.setOnClickListener(this);
@@ -374,25 +380,46 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
 
-
             JSONObject jsonObject = new JSONObject(apiDataResponse);
-            if (jsonObject.getBoolean("success")) {
-                shared_common_pref.save(Constants.HistoryData, apiDataResponse);
 
-            } else {
-                shared_common_pref.clear_pref(Constants.HistoryData);
+            switch (key) {
+                case Constants.HistoryData:
+                    if (jsonObject.getBoolean("success")) {
+                        shared_common_pref.save(Constants.HistoryData, apiDataResponse);
 
+                    } else {
+                        shared_common_pref.clear_pref(Constants.HistoryData);
+
+                    }
+
+                    if (llHistoryParent.getVisibility() == View.VISIBLE) {
+                        tabLayout.setupWithViewPager(viewPager);
+                        setupViewPager(viewPager);
+                    } else {
+
+                        setAdapter();
+
+
+                    }
+                    break;
+                case Constants.OUTSTANDING:
+                    if (jsonObject.getBoolean("success")) {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(
+                                    jsonArray.getJSONObject(i).getDouble("Outstanding")));
+
+                        }
+
+                    } else {
+
+                        tvOutstanding.setText("₹" + 0.00);
+                    }
+                    break;
             }
 
-            if (llHistoryParent.getVisibility() == View.VISIBLE) {
-                tabLayout.setupWithViewPager(viewPager);
-                setupViewPager(viewPager);
-            } else {
 
-                setAdapter();
-
-
-            }
         } catch (Exception e) {
 
         }

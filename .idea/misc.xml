@@ -29,6 +29,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_other_brand_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet__report__view.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_payment.xml" value="0.2658514492753623" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pop_layout.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_print__invoice_.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.27291666666666664" />
@@ -37,6 +38,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/dashboard_view_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/edittext_dialog.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/edittext_price_dialog.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/explorelist.xml" value="0.2658514492753623" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/fragment_more_info.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/fruit_item.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/history_adapter_layout.xml" value="0.27291666666666664" />
@@ -80,7 +82,7 @@
         <entry key="app/src/main/res/layout/activity_history_info.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_invoice__category__select.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_lead_.xml" value="0.45048543689320386" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />

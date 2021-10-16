@@ -352,26 +352,28 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                     String placeIds = jsonObject.getString("Data");
 
 
-                                    Log.v("markedPlace:","success: "+resData.length());
+                                    Log.v("markedPlace:", "success: " + resData.length());
                                     if (explore == null) {
 
-                                        for (int i = 0; i < resData.length(); i++) {
 
-                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
-                                                resData.remove(i);
-                                            } else {
+//                                        for (int i = 0; i < resData.length(); i++) {
+//
+//                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
+//                                                resData.remove(i);
+//                                            }
+//                                        }
 
-                                            }
-                                        }
 
-                                        Log.v("markedPlace:","success:filter "+resData.length());
+                                        resData = removeDuplicateItem(resData, placeIds);
+
+
+                                        Log.v("markedPlace:", "success:filter " + resData.length());
 
                                         explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
                                         rclRetail.setAdapter(explore);
                                         explore.notifyDataSetChanged();
 
                                     } else {
-
 
                                         if (oldData != null) {
                                             for (int i = 0; i < resData.length(); i++) {
@@ -383,21 +385,19 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
                                         resData = oldData;
 
-                                        resData = removeDuplicateItem(resData);
+                                        resData = removeDuplicateItem(resData, placeIds);
 
-                                        Log.v("markedPlace:2","success: "+resData.length());
+                                        Log.v("markedPlace:2", "success: " + resData.length());
 
 
-                                        for (int i = 0; i < resData.length(); i++) {
+//                                        for (int i = 0; i < resData.length(); i++) {
+//
+//                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
+//                                                resData.remove(i);
+//                                            }
+//                                        }
 
-                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
-                                                resData.remove(i);
-                                            } else {
-
-                                            }
-                                        }
-
-                                        Log.v("markedPlace:2","filter: "+resData.length());
+                                        Log.v("markedPlace:2", "filter: " + resData.length());
 
                                         explore.notifyData(resData);
 
@@ -916,19 +916,26 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    JSONArray removeDuplicateItem(JSONArray yourJSONArray) {
+    JSONArray removeDuplicateItem(JSONArray yourJSONArray, String placeIds) {
         try {
             Set<String> stationCodes = new HashSet<String>();
             JSONArray tempArray = new JSONArray();
 
 
             for (int i = 0; i < yourJSONArray.length(); i++) {
-                String stationCode = yourJSONArray.getJSONObject(i).getString("name");
-                if (stationCodes.contains(stationCode)) {
+              //  String stationCode = yourJSONArray.getJSONObject(i).getString("name");
+                String placeId = yourJSONArray.getJSONObject(i).getString("place_id");
+
+
+                if (stationCodes.contains(placeId) || placeIds.indexOf(placeId) > 0) {
                     continue;
                 } else {
-                    stationCodes.add(stationCode);
+
+                    stationCodes.add(placeId);
                     tempArray.put(yourJSONArray.getJSONObject(i));
+
+                    Log.v("placeId_current:"+i, placeId + " RES:" + placeIds+" rslt: "+placeIds.indexOf(placeId));
+
                 }
 
             }
@@ -943,6 +950,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
         return null;
     }
+
 
     public class DownloadUrl {
 
@@ -1007,7 +1015,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
                 resData = oldData;
 
-                resData = removeDuplicateItem(resData);
+                resData = removeDuplicateItem(resData, "");
 
                 explore.notifyData(resData);
 

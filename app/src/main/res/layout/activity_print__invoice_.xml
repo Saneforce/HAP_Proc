@@ -385,8 +385,8 @@
 
                             <View
                                 android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/black"></View>
+                                android:layout_height="4dp"
+                                android:background="@drawable/line_dash_background"></View>
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
@@ -529,12 +529,14 @@
                             </RelativeLayout>
 
                             <View
+                                android:layout_marginTop="@dimen/C10dp"
                                 android:layout_width="match_parent"
-                                android:layout_height="3dp"
-                                android:background="@color/black"
-                                android:outlineAmbientShadowColor="@color/black"></View>
+                                android:layout_height="1dp"
+                                android:background="@color/background"
+                              ></View>
 
                             <RelativeLayout
+                                android:layout_marginTop="@dimen/C10dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -560,11 +562,6 @@
                                     android:textStyle="bold"></TextView>
                             </RelativeLayout>
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="3dp"
-                                android:background="@color/black"
-                                android:outlineAmbientShadowColor="@color/black"></View>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

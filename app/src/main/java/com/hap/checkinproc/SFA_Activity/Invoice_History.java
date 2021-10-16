@@ -51,10 +51,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -206,7 +203,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
                     intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
                     startActivity(intent);
-                    overridePendingTransition(R.anim.in,R.anim.out);
+                    overridePendingTransition(R.anim.in, R.anim.out);
                     //}
 
                 }
@@ -244,23 +241,23 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         switch (v.getId()) {
             case R.id.lin_payment:
                 common_class.CommonIntentwithoutFinish(PaymentActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvOtherBrand:
                 common_class.CommonIntentwithFinish(OtherBrandActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvQPS:
                 common_class.CommonIntentwithFinish(QPSActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvPOP:
                 common_class.CommonIntentwithFinish(POPActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvCoolerInfo:
                 common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
 
             case R.id.lin_order:
@@ -275,14 +272,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 Shared_Common_Pref.Invoicetoorder = "2";
                 //getInvoiceOrderQty();
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
             case R.id.lin_repeat_invoice:
                 break;
             case R.id.lastinvoice:
                 common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;
@@ -365,16 +362,13 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
 
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobj = Calendar.getInstance();
-                    String dateTime = df.format(calobj.getTime());
 
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("Worktype_code", Worktype_code);
                         HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
-                        HeadItem.put("dcr_activity_date", dateTime);
+                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                         HeadItem.put("Daywise_Remarks", txRmksNoOrd.getText().toString());
                         HeadItem.put("UKey", Common_Class.GetEkey());
                         HeadItem.put("orderValue", "0");
@@ -493,7 +487,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
                     intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
                     startActivity(intent);
-                    overridePendingTransition(R.anim.in,R.anim.out);
+                    overridePendingTransition(R.anim.in, R.anim.out);
                     //  }
 
                 }
@@ -504,9 +498,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
     }
+
     public void getSchemeList() {
         try {
             if (common_class.isNetworkAvailable(this)) {
@@ -666,7 +661,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             common_class.CommonIntentwithFinish(Dashboard_Route.class);
-            overridePendingTransition(R.anim.in,R.anim.out);
+            overridePendingTransition(R.anim.in, R.anim.out);
 
             return true;
         }
@@ -728,7 +723,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
 
                                     common_class.CommonIntentwithFinish(Order_Category_Select.class);
-                                    overridePendingTransition(R.anim.in,R.anim.out);
+                                    overridePendingTransition(R.anim.in, R.anim.out);
 
 
                                     common_class.ProgressdialogShow(0, "");

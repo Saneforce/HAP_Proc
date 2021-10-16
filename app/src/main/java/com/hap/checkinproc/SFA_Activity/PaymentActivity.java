@@ -112,7 +112,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         common_class.getDb_310Data(Constants.PAYMODES, this);
 
 
-        tvOutstandDate.setText("Outstanding as on " + Common_Class.GetDatewothouttime());
+        tvOutstandDate.setText("Previous Outstanding as on " + Common_Class.GetDatewothouttime());
 
     }
 
