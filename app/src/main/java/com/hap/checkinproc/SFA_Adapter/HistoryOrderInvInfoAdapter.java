@@ -64,7 +64,7 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
             }
             holder.tvAmount.setText("₹ " + formatter.format(mDate.get(position).getOrderValue()));
 
-            holder.tvName.setText("" + mDate.get(position).getNo_Of_items());
+            holder.tvName.setText("" + mDate.get(position).getName());
 
 
             holder.tvInvDate.setText("" + mDate.get(position).getInvoiceDate());

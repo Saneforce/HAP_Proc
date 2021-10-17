@@ -395,19 +395,19 @@ public class Common_Class {
                         }
 
 
-                        if (key.equals(Constants.GetTodayOrder_List)) {
+//                        if (key.equals(Constants.GetTodayOrder_List)) {
+//
+//                            updateUi = ((UpdateResponseUI) activity);
+//
+//                            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
+//                            userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+//                            }.getType();
+//                            outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
+//
+//                            updateUi.onLoadTodayOrderList(outletReport_view_modalList);
+//                        }
 
-                            updateUi = ((UpdateResponseUI) activity);
-
-                            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
-                            userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-                            }.getType();
-                            outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
-
-                            updateUi.onLoadTodayOrderList(outletReport_view_modalList);
-                        }
-
-                        if (key.equals(TodayOrderDetails_List) || key.equals(Competitor_List)) {
+                        if (key.equals(TodayOrderDetails_List) || key.equals(Competitor_List) || key.equals(Constants.GetTodayOrder_List)) {
 
                             updateUi = ((UpdateResponseUI) activity);
 
@@ -518,6 +518,25 @@ public class Common_Class {
                     case Constants.POP_ENTRY_STATUS:
                         axnname = "get/popentrystatus";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);
+                        break;
+
+                    case Constants.TAXList:
+                        axnname = "get/producttaxdetails";
+                        data.put("distributorid", Shared_Common_Pref.DistributorCode);
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("retailorId", Shared_Common_Pref.OutletCode);
+                        break;
+
+                    case Constants.FreeSchemeDiscList:
+                        axnname = "get/secondaryscheme";
+                        data.put("sfCode", Shared_Common_Pref.DistributorCode);
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        break;
+                    case Constants.PreOrderQtyList:
+                        axnname = "get/prevorderqty";
+                        data.put("retailorCode", Shared_Common_Pref.OutletCode);
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + key);

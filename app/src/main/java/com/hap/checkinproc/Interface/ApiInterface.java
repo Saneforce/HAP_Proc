@@ -530,17 +530,8 @@ public interface ApiInterface {
     Call<ResponseBody> getMarkedData(@Field("data") String body);
 
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/prevorderqty")
-    Call<ResponseBody> getPreOrderQty(@Field("data") String body);
-
-    @FormUrlEncoded
     @POST("Db_v310.php?axn=get/orderdetailsfrinv")
     Call<ResponseBody> getInvoiceOrderDetails(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/producttaxdetails")
-    Call<ResponseBody> getTAXDetails(@Field("data") String body);
-
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/popmaster")
@@ -556,9 +547,6 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=get/cumulativevalues")
     Call<ResponseBody> getCumulativeValues(@Field("data") String body);
 
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/dashboardvalues")
-    Call<ResponseBody> getDashboardValues(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/outletsummary")
@@ -572,9 +560,6 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=get/channelwiseoutletsummary")
     Call<ResponseBody> getDashboardData(@Field("data") String body);
 
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/secondaryscheme")
-    Call<ResponseBody> getSecondaryscheme(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v310.php?")

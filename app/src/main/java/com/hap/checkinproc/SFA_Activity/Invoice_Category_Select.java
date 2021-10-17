@@ -129,7 +129,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     String orderId = "";
     private LinearLayout rlAddProduct, rlCredit, rlCash;
-    private int outstandAmt;
+    private double outstandAmt;
     private double payAmt;
 
     final Handler handler = new Handler();

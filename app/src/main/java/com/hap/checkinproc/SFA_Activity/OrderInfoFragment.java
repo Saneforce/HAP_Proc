@@ -98,7 +98,7 @@ public class OrderInfoFragment extends Fragment {
 //                    }
 
 
-                    FilterOrderList.add(new OutletReport_View_Modal("", jsonObject1.getString("OrderID"), "",
+                    FilterOrderList.add(new OutletReport_View_Modal(0, jsonObject1.getString("OrderID"), "",
                             jsonObject1.getString("OutletName"),
                             jsonObject1.getString("Date"), (jsonObject1.getDouble("Order_Value")),
                             jsonObject1.getString("Status"), product_details_modalArrayList));
