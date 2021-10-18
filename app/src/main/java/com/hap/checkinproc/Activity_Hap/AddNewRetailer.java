@@ -65,6 +65,7 @@ import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -140,8 +141,6 @@ CircularProgressButton btnRefLoc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-
-
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_new_retailer);
 
@@ -981,7 +980,39 @@ CircularProgressButton btnRefLoc;
             txtRetailerRoute.setText("");
             distributor_text.setText(myDataset.get(position).getName());
             findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
-            loadroute(myDataset.get(position).getId());
+
+            JSONObject jParam = new JSONObject();
+                try {
+                    jParam.put("Stk", myDataset.get(position).getId());
+                    //jParam.put("div", UserDetails.getString("Divcode", ""));
+                } catch (JSONException ex) {
+
+                }
+                ApiClient.getClient().create(ApiInterface.class)
+                        .getDataArrayList("get/routelist", jParam.toString())
+                        .enqueue(new Callback<JsonArray>() {
+                            @Override
+                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                try {
+                                    // new Shared_Common_Pref(Dashboard_Two.this)
+                                    //         .save(Distributor_List, response.body().toString());
+                                    db.deleteMasterData(Constants.Rout_List);
+                                    db.addMasterData(Constants.Rout_List, response.body().toString());
+                                    getDbstoreData(Constants.Rout_List);
+                                    loadroute(myDataset.get(position).getId());
+                                } catch (Exception e) {
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonArray> call, Throwable t) {
+                                Log.d("RouteList", String.valueOf(t));
+                            }
+                        });
+
+
 
 
         } else if (type == 3) {

@@ -35,6 +35,8 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
@@ -55,6 +57,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Outlet_Info_Activity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     Gson gson;
@@ -218,8 +224,42 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone,myDataset.get(position).getPhone());
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
-            loadroute(myDataset.get(position).getId());
-            OutletFilter(myDataset.get(position).getId(), "1");
+
+
+
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("Stk", myDataset.get(position).getId());
+                //jParam.put("div", UserDetails.getString("Divcode", ""));
+            } catch (JSONException ex) {
+
+            }
+            ApiClient.getClient().create(ApiInterface.class)
+                    .getDataArrayList("get/routelist", jParam.toString())
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
+                                // new Shared_Common_Pref(Dashboard_Two.this)
+                                //         .save(Distributor_List, response.body().toString());
+                                db.deleteMasterData(Constants.Rout_List);
+                                db.addMasterData(Constants.Rout_List, response.body().toString());
+                                getDbstoreData(Constants.Rout_List);
+                                loadroute(myDataset.get(position).getId());
+                                OutletFilter(myDataset.get(position).getId(), "1");
+
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            Log.d("RouteList", String.valueOf(t));
+                        }
+                    });
+
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
