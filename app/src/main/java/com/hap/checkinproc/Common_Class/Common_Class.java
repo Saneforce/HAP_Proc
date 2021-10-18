@@ -3,6 +3,7 @@ package com.hap.checkinproc.Common_Class;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.Activity_Hap.SFA_Activity.sfa_date;
 import static com.hap.checkinproc.Common_Class.Constants.Category_List;
 import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
 import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
@@ -499,7 +500,6 @@ public class Common_Class {
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("fdt", HistoryInfoActivity.stDate);
                         data.put("tdt", HistoryInfoActivity.endDate);
-
                         break;
                     case Constants.PAYMODES:
                         axnname = "get/paymenttype";
@@ -536,15 +536,34 @@ public class Common_Class {
                         axnname = "get/prevorderqty";
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-
                         break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + key);
+                    case Constants.CUMULATIVEDATA:
+                        axnname = "get/cumulativevalues";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
+                    case Constants.SERVICEOUTLET:
+                        axnname = "get/serviceoutletsummary";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
+                    case Constants.OUTLET_SUMMARY:
+                        axnname = "get/outletsummary";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
+                    case Constants.SFA_DASHBOARD:
+                        axnname = "get/channelwiseoutletsummary";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
                 }
 
                 QueryString.put("axn", axnname);
-
-
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 

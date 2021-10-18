@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -26,7 +29,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.MVP.Main_Model;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
@@ -37,28 +40,24 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
-import com.hap.checkinproc.SFA_Adapter.OutletDashboardInfoAdapter;
+import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SFA_Activity extends AppCompatActivity implements View.OnClickListener /*,Main_Model.MasterSyncView*/ {
+public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary;
     Gson gson;
     Type userType;
@@ -74,9 +73,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     OutletDashboardInfoAdapter cumulativeInfoAdapter;
     private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
-    GridView recyclerView;
+    RecyclerView recyclerView;
     TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls, tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls;
     private DatePickerDialog fromDatePickerDialog;
+
+    public static String sfa_date = "";
 
 
     @Override
@@ -120,10 +121,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         init();
         setOnClickListener();
-        getNoOrderRemarks();getProductDetails();
+        getNoOrderRemarks();
+        getProductDetails();
         recyclerView = findViewById(R.id.gvOutlet);
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
+
+        tvDate.setText("" + Common_Class.GetDate());
+
+        sfa_date = tvDate.getText().toString();
 
 
         showDashboardData();
@@ -131,19 +137,18 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-    public void getProductDetails(){
+    public void getProductDetails() {
         if (common_class.isNetworkAvailable(this)) {
-            JSONObject jParam=new JSONObject();
+            JSONObject jParam = new JSONObject();
             try {
-                jParam.put("SF",UserDetails.getString("Sfcode",""));
-                jParam.put("div", UserDetails.getString("Divcode",""));
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/prodCate",jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                         db.deleteMasterData(Constants.Category_List);
-                        db.addMasterData(Constants.Category_List,response.body());
+                        db.addMasterData(Constants.Category_List, response.body());
                     }
 
                     @Override
@@ -151,11 +156,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-                service.getDataArrayList("get/prodDets",jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                         db.deleteMasterData(Constants.Product_List);
-                        db.addMasterData(Constants.Product_List,response.body());
+                        db.addMasterData(Constants.Product_List, response.body());
                     }
 
                     @Override
@@ -169,104 +174,51 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
     }
 
-    private void getCumulativeDataFromAPI() {
+    private void getCumulativeDataFromAPI(String response) {
 
         try {
+            JSONObject jsonObject = new JSONObject(response);
 
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            if (jsonObject.getBoolean("success")) {
 
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calobj = Calendar.getInstance();
-                String dateTime = df.format(calobj.getTime());
+                JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
+                int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
 
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("dt", dateTime);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
+                    todayCall = jsonObject1.getInt("TC");
+                    cumTodayCall = jsonObject1.getInt("CTC");
+                    newTodayCall = jsonObject1.getInt("NTC");
+                    proCall = jsonObject1.getInt("PC");
+                    cumProCall = jsonObject1.getInt("CPC");
+                    newProCall = jsonObject1.getInt("NPC");
 
-                Call<ResponseBody> call = service.getCumulativeValues(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
+                    tvTodayCalls.setText("" + todayCall);
+                    tvCumTodayCalls.setText("" + cumTodayCall);
+                    tvNewTodayCalls.setText("" + newTodayCall);
+                    tvProCalls.setText("" + proCall);
+                    tvCumProCalls.setText("" + cumProCall);
+                    tvNewProCalls.setText("" + newProCall);
 
 
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                        todayCall = jsonObject1.getInt("TC");
-                                        cumTodayCall = jsonObject1.getInt("CTC");
-                                        newTodayCall = jsonObject1.getInt("NTC");
-                                        proCall = jsonObject1.getInt("PC");
-                                        cumProCall = jsonObject1.getInt("CPC");
-                                        newProCall = jsonObject1.getInt("NPC");
-
-                                        tvTodayCalls.setText("" + todayCall);
-                                        tvCumTodayCalls.setText("" + cumTodayCall);
-                                        tvNewTodayCalls.setText("" + newTodayCall);
-                                        tvProCalls.setText("" + proCall);
-                                        tvCumProCalls.setText("" + cumProCall);
-                                        tvNewProCalls.setText("" + newProCall);
+                }
 
 
-                                    }
+                if (todayCall > 0 || proCall > 0)
+                    tvAvgTodayCalls.setText("" + (todayCall + proCall) / 2);
 
+                if (cumTodayCall > 0 || cumProCall > 0)
+                    tvAvgCumCalls.setText("" + (cumTodayCall + cumProCall) / 2);
+                if (newTodayCall > 0 || newProCall > 0)
+                    tvAvgNewCalls.setText("" + (newTodayCall + newProCall) / 2);
 
-                                    if (todayCall > 0 || proCall > 0)
-                                        tvAvgTodayCalls.setText("" + (todayCall + proCall) / 2);
-
-                                    if (cumTodayCall > 0 || cumProCall > 0)
-                                        tvAvgCumCalls.setText("" + (cumTodayCall + cumProCall) / 2);
-                                    if (newTodayCall > 0 || newProCall > 0)
-                                        tvAvgNewCalls.setText("" + (newTodayCall + newProCall) / 2);
-
-                                }
-
-
-                            }
-
-                        } catch (Exception e) {
-
-                            Log.v("fail>>1", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>2", t.toString());
-
-
-                    }
-                });
-            } else {
-                common_class.showMsg(this, "Please check your internet connection");
             }
         } catch (Exception e) {
             Log.v("fail>>", e.getMessage());
@@ -275,90 +227,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    private void getServiceOutletSummary() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calobj = Calendar.getInstance();
-                String dateTime = df.format(calobj.getTime());
-
-
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("dt", dateTime);
-
-
-                Call<ResponseBody> call = service.getServiceOutletsummary(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                        tvTotSerOutlet.setText("" + jsonObject1.getInt("totalcnt"));
-                                        tvNewSerOutlet.setText("" + jsonObject1.getInt("newcnt"));
-
-                                        tvExistSerOutlet.setText("" +
-                                                (jsonObject1.getInt("totalcnt") - jsonObject1.getInt("newcnt")));
-
-                                    }
-
-
-                                }
-
-
-                            }
-
-                        } catch (Exception e) {
-
-                            Log.v("fail>>1", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>2", t.toString());
-
-
-                    }
-                });
-            } else {
-                common_class.showMsg(this, "Please check your internet connection");
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
 
     private void getNoOrderRemarks() {
         try {
@@ -379,184 +247,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-            } else {
-                common_class.showMsg(this, "Please check your internet connection");
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-    private void getOutletSummary() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calobj = Calendar.getInstance();
-                String dateTime = df.format(calobj.getTime());
-
-
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("dt", dateTime);
-
-
-                Call<ResponseBody> call = service.getOutletsummary(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                                        tvServiceOutlet.setText("" + jsonObject1.getInt("ServiceOutlets"));
-                                        tvUniverseOutlet.setText("" + jsonObject1.getInt("UniverseOutlets"));
-
-                                    }
-
-
-                                }
-
-
-                            }
-
-                        } catch (Exception e) {
-
-                            Log.v("fail>>1", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>2", t.toString());
-
-
-                    }
-                });
-            } else {
-                common_class.showMsg(this, "Please check your internet connection");
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-
-    private void getDashboarddata() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calobj = Calendar.getInstance();
-                String dateTime = df.format(calobj.getTime());
-
-
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("dt", dateTime);
-
-
-                Call<ResponseBody> call = service.getDashboardData(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    cumulative_order_modelList.clear();
-
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                        cumulative_order_modelList.add(new Cumulative_Order_Model(jsonObject1.getString("Doc_Special_SName"),
-                                                jsonObject1.getInt("cnt")));
-
-
-                                    }
-
-
-                                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llGridParent.getLayoutParams();
-// Changes the height and width to the specified *pixels*
-                                    params.height = 180;
-                                    params.width = cumulative_order_modelList.size() * 150;
-                                    params.gravity = Gravity.CENTER_HORIZONTAL;
-                                    llGridParent.setLayoutParams(params);
-
-
-                                    cumulativeInfoAdapter = new OutletDashboardInfoAdapter(SFA_Activity.this,
-                                            cumulative_order_modelList);
-                                    recyclerView.setNumColumns(cumulative_order_modelList.size());
-
-                                    recyclerView.setAdapter(cumulativeInfoAdapter);
-
-
-                                }
-
-
-                            }
-
-                        } catch (Exception e) {
-
-
-                            Log.v("fail>>1", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                        Log.v("fail>>2", t.toString());
-
-
-                    }
-                });
             } else {
                 common_class.showMsg(this, "Please check your internet connection");
             }
@@ -596,62 +286,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         tvTotSerOutlet = (TextView) findViewById(R.id.tvTotalServiceOutlet);
         tvExistSerOutlet = (TextView) findViewById(R.id.tvExistServiceOutlet);
 
-//        viewPager = (ViewPager) findViewById(R.id.viewpager);
-//
-//
-//        tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-
-//        TableLayout stk = (TableLayout) findViewById(R.id.table_main);
-//        TableRow tbrow0 = new TableRow(this);
-//        TextView tv0 = new TextView(this);
-//        tv0.setText(" Description ");
-//        tv0.setTextColor(Color.WHITE);
-//        tbrow0.addView(tv0);
-//        TextView tv1 = new TextView(this);
-//        tv1.setText(" Existing ");
-//        tv1.setTextColor(Color.WHITE);
-//        tbrow0.addView(tv1);
-//        TextView tv2 = new TextView(this);
-//        tv2.setText(" New ");
-//        tv2.setTextColor(Color.WHITE);
-//        tbrow0.addView(tv2);
-//        TextView tv3 = new TextView(this);
-//        tv3.setText(" Total Milk \n Litres ");
-//        tv3.setTextColor(Color.WHITE);
-//        tbrow0.addView(tv3);
-//
-//        TextView tv4 = new TextView(this);
-//        tv4.setText(" New Milk Orders \n Litres ");
-//        tv4.setTextColor(Color.WHITE);
-//        tbrow0.addView(tv4);
-//
-//
-//        stk.addView(tbrow0);
-//        for (int i = 0; i < 25; i++) {
-//            TableRow tbrow = new TableRow(this);
-//            TextView t1v = new TextView(this);
-//            t1v.setText("" + i);
-//            t1v.setTextColor(Color.WHITE);
-//            t1v.setGravity(Gravity.CENTER);
-//            tbrow.addView(t1v);
-//            TextView t2v = new TextView(this);
-//            t2v.setText("Product " + i);
-//            t2v.setTextColor(Color.WHITE);
-//            t2v.setGravity(Gravity.CENTER);
-//            tbrow.addView(t2v);
-//            TextView t3v = new TextView(this);
-//            t3v.setText("Rs." + i);
-//            t3v.setTextColor(Color.WHITE);
-//            t3v.setGravity(Gravity.CENTER);
-//            tbrow.addView(t3v);
-//            TextView t4v = new TextView(this);
-//            t4v.setText("" + i * 15 / 32 * 10);
-//            t4v.setTextColor(Color.WHITE);
-//            t4v.setGravity(Gravity.CENTER);
-//            tbrow.addView(t4v);
-//            stk.addView(tbrow);
-//        }
 
     }
 
@@ -670,6 +304,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         int month = monthOfYear + 1;
                         tvDate.setText("" + year + "-" + month + "-" + dayOfMonth);
+                        sfa_date = tvDate.getText().toString();
 
                         showDashboardData();
 
@@ -744,14 +379,167 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
     void showDashboardData() {
-        getCumulativeDataFromAPI();
+        common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
+        common_class.getDb_310Data(Constants.SERVICEOUTLET, this);
+        common_class.getDb_310Data(Constants.OUTLET_SUMMARY, this);
+        common_class.getDb_310Data(Constants.SFA_DASHBOARD, this);
 
-       // common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
+    }
 
-        getServiceOutletSummary();
-        getOutletSummary();
 
-        getDashboarddata();
+    @Override
+    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            if (apiDataResponse != null) {
+                switch (key) {
+                    case Constants.CUMULATIVEDATA:
+                        getCumulativeDataFromAPI(apiDataResponse);
+                        break;
+                    case Constants.SERVICEOUTLET:
+                        JSONObject jsonObject = new JSONObject(apiDataResponse);
+                        if (jsonObject.getBoolean("success")) {
+                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                tvTotSerOutlet.setText("" + jsonArray.getJSONObject(i).getInt("totalcnt"));
+                                tvNewSerOutlet.setText("" + jsonArray.getJSONObject(i).getInt("newcnt"));
+                                tvExistSerOutlet.setText("" +
+                                        (jsonArray.getJSONObject(i).getInt("totalcnt") - jsonArray.getJSONObject(i).getInt("newcnt")));
+
+                            }
+                        }
+                        break;
+
+                    case Constants.OUTLET_SUMMARY:
+                        JSONObject outletObj = new JSONObject(apiDataResponse);
+                        if (outletObj.getBoolean("success")) {
+
+                            JSONArray jsonArray = outletObj.getJSONArray("Data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                tvServiceOutlet.setText("" + jsonArray.getJSONObject(i).getInt("ServiceOutlets"));
+                                tvUniverseOutlet.setText("" + jsonArray.getJSONObject(i).getInt("UniverseOutlets"));
+
+                            }
+                        }
+
+                        break;
+                    case Constants.SFA_DASHBOARD:
+                        JSONObject sfaObj = new JSONObject(apiDataResponse);
+                        if (sfaObj.getBoolean("success")) {
+
+                            JSONArray jsonArray = sfaObj.getJSONArray("Data");
+                            cumulative_order_modelList.clear();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                cumulative_order_modelList.add(new Cumulative_Order_Model(jsonObject1.getString("Doc_Special_SName"),
+                                        jsonObject1.getInt("cnt")));
+
+
+                            }
+
+
+                            cumulativeInfoAdapter = new OutletDashboardInfoAdapter(SFA_Activity.this,
+                                    cumulative_order_modelList);
+
+                            recyclerView.setAdapter(cumulativeInfoAdapter);
+
+
+                        }
+
+
+                        break;
+
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public class OutletDashboardInfoAdapter extends RecyclerView.Adapter<OutletDashboardInfoAdapter.MyViewHolder> {
+        Context context;
+        LayoutInflater inflter;
+        OutletDashboardInfoAdapter.MyViewHolder pholder;
+        private List<Cumulative_Order_Model> listt;
+
+        public OutletDashboardInfoAdapter(Context applicationContext, List<Cumulative_Order_Model> list) {
+            this.context = applicationContext;
+            this.listt = list;
+        }
+
+        @Override
+        public OutletDashboardInfoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view = layoutInflater.inflate(R.layout.outlet_dashboardinfo_recyclerview, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public void onBindViewHolder(OutletDashboardInfoAdapter.MyViewHolder holder, int position) {
+            try {
+
+
+                try {
+
+
+                   holder. tvDesc.setText("" + listt.get(position).getDesc());
+                    holder.tvValue.setText("" + listt.get(position).getValue());
+                } catch (Exception e) {
+                    Log.e("adaptergetView: ", e.getMessage());
+                }
+
+
+            } catch (Exception e) {
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return listt.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public LinearLayout gridcolor, undrCate;
+            TextView tvDesc,tvValue;
+            ImageView ivCategoryIcon;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+
+
+
+                tvDesc = view.findViewById(R.id.tvDesc);
+                tvValue = view.findViewById(R.id.tvValue);
+
+
+
+            }
+        }
+
 
     }
 

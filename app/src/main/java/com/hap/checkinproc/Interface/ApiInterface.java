@@ -537,29 +537,9 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=get/popmaster")
     Call<ResponseBody> getPOPMaster(@Field("data") String body);
 
-
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/categorywiseretailerdata")
     Call<ResponseBody> getLastThreeMnthsData(@Field("data") String body);
-
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/cumulativevalues")
-    Call<ResponseBody> getCumulativeValues(@Field("data") String body);
-
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/outletsummary")
-    Call<ResponseBody> getOutletsummary(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/serviceoutletsummary")
-    Call<ResponseBody> getServiceOutletsummary(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/channelwiseoutletsummary")
-    Call<ResponseBody> getDashboardData(@Field("data") String body);
-
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
