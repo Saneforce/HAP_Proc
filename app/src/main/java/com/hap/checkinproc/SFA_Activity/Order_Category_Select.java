@@ -98,7 +98,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     private int selectedPos = 0;
     private TextView tvTotalAmount;
-    private double totalvalues, taxVal, totCGST, totSGST, totIGST;
+    private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
 
@@ -824,9 +824,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         cashDiscount = 0;
         taxVal = 0;
 
-        totCGST = 0;
-        totSGST = 0;
-        totIGST = 0;
 
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {

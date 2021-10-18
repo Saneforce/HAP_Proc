@@ -4,14 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
 
             <LinearLayout
                 android:id="@+id/lin_gridOutlet"
@@ -20,189 +14,19 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal">
 
-                <GridView
+                <androidx.recyclerview.widget.RecyclerView
 
                     android:id="@+id/gvOutlet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/C5dp"
-                    android:columnWidth="70dp"
-                    android:gravity="center"
-                    android:horizontalSpacing="1dp"
-                    android:scrollbarAlwaysDrawHorizontalTrack="true"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    android:scrollbars="horizontal"
-                    android:stretchMode="none"
-                    android:verticalSpacing="1dp">
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
-                </GridView>
+                </androidx.recyclerview.widget.RecyclerView>
 
 
             </LinearLayout>
-        </LinearLayout>
-    </HorizontalScrollView>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/C3dp">
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                android:gravity="center"
-                android:text="Desc"
-
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="New Ltrs"
-
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="Total Ltrs"
-
-                android:textStyle="bold"></TextView>
-
-
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_weight="1"
-            android:background="@color/background">
-
-        </RelativeLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/C1dp">
-
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                android:gravity="center"
-                android:text=""
-                android:textStyle="bold"></TextView>
-
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Milk"
-
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Curd"
-
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Milk Product"
-                android:textStyle="bold"></TextView>
-
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Milk"
-
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Curd"
-
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Milk Product"
-
-                android:textStyle="bold"></TextView>
-
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_weight="1"
-            android:background="@color/background">
-
-        </RelativeLayout>
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/C5dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/pbChannelData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"></ProgressBar>
 
 </RelativeLayout>

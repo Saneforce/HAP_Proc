@@ -40,6 +40,7 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -47,12 +48,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -70,7 +68,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Product_Details_Modal> Order_Outlet_Filter;
     TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
-            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName;
+            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding;
     DatabaseHandler db;
 
     ImageView ok, ivPrint;
@@ -86,13 +84,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         try {
             super.onCreate(savedInstanceState);
             mPrint_invoice_activity = this;
-
             setContentView(R.layout.activity_print__invoice_);
             db = new DatabaseHandler(this);
             printrecyclerview = findViewById(R.id.printrecyclerview);
             gson = new Gson();
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            printrecyclerview.setLayoutManager(layoutManager);
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
             common_class = new Common_Class(this);
 
@@ -117,6 +112,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvDistributorPh = findViewById(R.id.distPhoneNum);
             tvOrderType = findViewById(R.id.tvTypeLabel);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
+            tvOutstanding = findViewById(R.id.tvOutstanding);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -141,6 +137,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
 
+
+            common_class.getDb_310Data(Constants.OUTSTANDING, this);
+
         } catch (Exception e) {
 
         }
@@ -155,9 +154,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 finish();
                 break;
             case R.id.ok:
-
                 createPdf();
-
                 break;
             case R.id.ivPrint:
                 showPrinterList();
@@ -257,6 +254,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 String gst = "           " + gstrate.getText().toString();
                 String discount = "           " + cashdiscount.getText().toString();
 
+                String outstand = "           " + tvOutstanding.getText().toString();
 
                 printama.printText("SubTotal" + "                       " + subTotal.substring(subtotal.getText().toString().length(), subTotal.length()));
                 printama.addNewLine();
@@ -265,6 +263,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.printText("Total Qty" + "                      " + totqty.substring(totalqty.getText().toString().length(), totqty.length()));
                 printama.addNewLine();
                 printama.printText("Gst Rate" + "                       " + gst.substring(gstrate.getText().toString().length(), gst.length()));
+                printama.addNewLine();
+                printama.printText("Outstanding" + "                    " + gst.substring(tvOutstanding.getText().toString().length(),
+                        outstand.length()));
                 printama.addNewLine();
                 printama.printText("Cash Discount" + "                  " + discount.substring(cashdiscount.getText().toString().length(), discount.length()));
                 printama.addNewLine();
@@ -470,6 +471,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             y = y + 30;
             canvas.drawText("Gst Rate", x, y, paint);
             canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
+
+            y = y + 30;
+            canvas.drawText("Outstanding", x, y, paint);
+            canvas.drawText(tvOutstanding.getText().toString(), (widthSize / 2) + 150, y, paint);
             y = y + 30;
             canvas.drawText("Cash Discount", x, y, paint);
             canvas.drawText(cashdiscount.getText().toString(), (widthSize / 2) + 150, y, paint);
@@ -566,8 +571,32 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
-        if (apiDataResponse != null && !apiDataResponse.equals("")) {
-            orderInvoiceDetailData();
+        try {
+            if (apiDataResponse != null && !apiDataResponse.equals("")) {
+                switch (key) {
+                    case Constants.TodayOrderDetails_List:
+                        orderInvoiceDetailData(apiDataResponse);
+                        break;
+                    case Constants.OUTSTANDING:
+                        JSONObject jsonObject = new JSONObject(apiDataResponse);
+                        if (jsonObject.getBoolean("success")) {
+
+                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(
+                                        jsonArray.getJSONObject(i).getDouble("Outstanding")));
+
+                            }
+
+                        } else {
+
+                            tvOutstanding.setText("₹" + 0.00);
+                        }
+                        break;
+                }
+            }
+        } catch (Exception e) {
+
         }
 
     }
@@ -651,14 +680,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
 
-    void orderInvoiceDetailData() {
+    void orderInvoiceDetailData(String response) {
         try {
 
             billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
-            String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
+            //   String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
             userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
             }.getType();
-            InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
+            InvoiceorderDetails_List = gson.fromJson(response, userType);
             Order_Outlet_Filter = new ArrayList<>();
             Order_Outlet_Filter.clear();
             int total_qtytext = 0;

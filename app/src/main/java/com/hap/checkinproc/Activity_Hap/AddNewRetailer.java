@@ -45,7 +45,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -758,7 +757,6 @@ CircularProgressButton btnRefLoc;
     }
 
 
-
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -980,44 +978,42 @@ CircularProgressButton btnRefLoc;
             txtRetailerRoute.setText("");
             distributor_text.setText(myDataset.get(position).getName());
             findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
-
             JSONObject jParam = new JSONObject();
-                try {
-                    jParam.put("Stk", myDataset.get(position).getId());
-                    //jParam.put("div", UserDetails.getString("Divcode", ""));
-                } catch (JSONException ex) {
+            try {
+                jParam.put("Stk", myDataset.get(position).getId());
+                //jParam.put("div", UserDetails.getString("Divcode", ""));
+            } catch (JSONException ex) {
 
-                }
-                ApiClient.getClient().create(ApiInterface.class)
-                        .getDataArrayList("get/routelist", jParam.toString())
-                        .enqueue(new Callback<JsonArray>() {
-                            @Override
-                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                try {
-                                    // new Shared_Common_Pref(Dashboard_Two.this)
-                                    //         .save(Distributor_List, response.body().toString());
-                                    db.deleteMasterData(Constants.Rout_List);
-                                    db.addMasterData(Constants.Rout_List, response.body().toString());
-                                    getDbstoreData(Constants.Rout_List);
-                                    loadroute(myDataset.get(position).getId());
-                                } catch (Exception e) {
+            }
+            ApiClient.getClient().create(ApiInterface.class)
+                    .getDataArrayList("get/routelist", jParam.toString())
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
 
-                                }
+                                db.deleteMasterData(Constants.Rout_List);
+                                db.addMasterData(Constants.Rout_List, response.body().toString());
+                                getDbstoreData(Constants.Rout_List);
+                                loadroute(myDataset.get(position).getId());
+                            } catch (Exception e) {
 
                             }
 
-                            @Override
-                            public void onFailure(Call<JsonArray> call, Throwable t) {
-                                Log.d("RouteList", String.valueOf(t));
-                            }
-                        });
+                        }
 
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            Log.d("RouteList", String.valueOf(t));
+                        }
+                    });
 
 
 
         } else if (type == 3) {
             routeId = myDataset.get(position).getId();
             txtRetailerRoute.setText(myDataset.get(position).getName());
+            loadroute(myDataset.get(position).getId());
 
 
         } else if (type == 9) {
@@ -1036,28 +1032,26 @@ CircularProgressButton btnRefLoc;
     }
 
     public void loadroute(String id) {
-        if (common_class.isNullOrEmpty(String.valueOf(id))) {
+        if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
         FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
             if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
         }
 
         if (FRoute_Master.size() == 1) {
-            txtRetailerRoute.setText(FRoute_Master.get(0).getName());
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
-
-
+            txtRetailerRoute.setText(FRoute_Master.get(0).getName());
+            shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
+            shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
+            routeId = FRoute_Master.get(0).getId();
         } else {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
-
         }
     }
-
 
 //    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
 //            new OnBackPressedDispatcher(new Runnable() {
@@ -1143,7 +1137,8 @@ CircularProgressButton btnRefLoc;
         mGoogleMap = googleMap;
         centreMapOnLocation("Your Location");
     }
-    public void centreMapOnLocation(String title){
+
+    public void centreMapOnLocation(String title) {
 
         LatLng userLocation = new LatLng(RetLat,RetLng );
         mGoogleMap.clear();

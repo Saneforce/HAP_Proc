@@ -3,6 +3,7 @@ package com.hap.checkinproc.Common_Class;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.Activity_Hap.SFA_Activity.sfa_date;
 import static com.hap.checkinproc.Common_Class.Constants.Category_List;
 import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
 import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
@@ -279,7 +280,7 @@ public class Common_Class {
 
                 case (Retailer_OutletList):
                     QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"Type\\\",\\\"DelivType\\\"," +
-                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
+                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
                             " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
@@ -378,6 +379,8 @@ public class Common_Class {
 
                             shared_common_pref.save(key, gson.toJson(response.body()));
 
+                            String res = response.body().toString();
+                            Log.e("RES>>", res);
                             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
                             }.getType();
 
@@ -393,19 +396,6 @@ public class Common_Class {
                             db.addMasterData(key, gson.toJson(response.body()));
 
                         }
-
-
-//                        if (key.equals(Constants.GetTodayOrder_List)) {
-//
-//                            updateUi = ((UpdateResponseUI) activity);
-//
-//                            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
-//                            userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-//                            }.getType();
-//                            outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
-//
-//                            updateUi.onLoadTodayOrderList(outletReport_view_modalList);
-//                        }
 
                         if (key.equals(TodayOrderDetails_List) || key.equals(Competitor_List) || key.equals(Constants.GetTodayOrder_List)) {
 
@@ -499,7 +489,6 @@ public class Common_Class {
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("fdt", HistoryInfoActivity.stDate);
                         data.put("tdt", HistoryInfoActivity.endDate);
-
                         break;
                     case Constants.PAYMODES:
                         axnname = "get/paymenttype";
@@ -536,15 +525,34 @@ public class Common_Class {
                         axnname = "get/prevorderqty";
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-
                         break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + key);
+                    case Constants.CUMULATIVEDATA:
+                        axnname = "get/cumulativevalues";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
+                    case Constants.SERVICEOUTLET:
+                        axnname = "get/serviceoutletsummary";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
+                    case Constants.OUTLET_SUMMARY:
+                        axnname = "get/outletsummary";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
+                    case Constants.SFA_DASHBOARD:
+                        axnname = "get/channelwiseoutletsummary";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("dt", sfa_date);
+                        break;
                 }
 
                 QueryString.put("axn", axnname);
-
-
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 

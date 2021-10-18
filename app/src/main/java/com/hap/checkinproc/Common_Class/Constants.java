@@ -60,4 +60,7 @@ public class Constants {
     public static final String POP_LOCALPICLIST = "popLocPicList";
     public static final String Distributor_phone = "distPhone";
     public static final String Retailor_PHNo = "retailorPhNo";
+    public static final String SERVICEOUTLET = "serviceOutlet";
+    public static final String OUTLET_SUMMARY = "outletSummary";
+    public static final String SFA_DASHBOARD = "sfaDashboard";
 }

@@ -365,6 +365,7 @@
                             android:background="@color/black"></View>
 
                         <androidx.recyclerview.widget.RecyclerView
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:id="@+id/printrecyclerview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -507,6 +508,31 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C12dp"></TextView>
                         </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Outstanding"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C12dp"></TextView>
+
+                            <TextView
+                                android:id="@+id/tvOutstanding"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="₹0.00"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C12dp"></TextView>
+                        </RelativeLayout>
+
 
                         <RelativeLayout
                             android:layout_width="wrap_content"

@@ -11,14 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:padding="@dimen/C5dp"
-            android:gravity="center_vertical"
             android:background="@color/colorPrimaryDark"
-            android:orientation="horizontal">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/C5dp">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,8 +32,8 @@
                     android:layout_height="match_parent"
                     android:text="HAP DAILY"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -41,50 +43,57 @@
                     android:textColor="@color/white"
                     android:textSize="8sp" />
             </LinearLayout>
+
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
-                <LinearLayout
-                android:id="@+id/llDistributor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/distributor_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/basic"
-                    android:hint="Select Distributor"
-                    android:textAlignment="textEnd"
-                    android:paddingRight="@dimen/C5dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textSize="13sp" />
-                <ImageView
-                    android:layout_width="7dp"
-                    android:layout_height="7dp"
-                    android:layout_gravity="center"
-                    app:tint="@color/white"
-                    android:src="@drawable/spin_down_arrow">
 
-                </ImageView>
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llDistributor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/distributor_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/basic"
+                        android:hint="Select Distributor"
+                        android:paddingRight="@dimen/C5dp"
+                        android:textAlignment="textEnd"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:layout_width="7dp"
+                        android:layout_height="7dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/spin_down_arrow"
+                        app:tint="@color/white">
+
+                    </ImageView>
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/btnCmbRoute"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/route_text"
                         android:layout_width="match_parent"
@@ -102,12 +111,13 @@
                         android:layout_width="@dimen/C7dp"
                         android:layout_height="@dimen/C7dp"
                         android:layout_gravity="center"
-                        app:tint="@color/white"
-                        android:src="@drawable/spin_down_arrow">
+                        android:src="@drawable/spin_down_arrow"
+                        app:tint="@color/white">
 
                     </ImageView>
                 </LinearLayout>
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/toolbar_home"
                 android:layout_width="@dimen/C30dp"
@@ -117,6 +127,7 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_home" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -131,162 +142,186 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
                 app:cardCornerRadius="@dimen/C5dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/C5dp"
                     android:layout_marginTop="@dimen/C8dp"
-                    android:layout_marginBottom="@dimen/C8dp">
+                    android:layout_marginBottom="@dimen/C8dp"
+                    android:padding="@dimen/C5dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/smryOrd"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
                                 android:fontFamily="sans-serif"
+                                android:text="0"
                                 android:textAlignment="center"
-                                android:textStyle="bold"
                                 android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16sp"/>
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:text="Order"
-                                android:textSize="9sp"/>
+                                android:textAlignment="center"
+                                android:textSize="9sp" />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200"/>
+                            android:background="@color/grey_200" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/smryNOrd"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
                                 android:fontFamily="sans-serif"
-                                android:textStyle="bold"
-                                android:textColor="@color/lightBlueDark"
+                                android:text="0"
                                 android:textAlignment="center"
-                                android:textSize="16sp"/>
+                                android:textColor="@color/lightBlueDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:text="New Order"
-                                android:textSize="9sp"/>
+                                android:textAlignment="center"
+                                android:textSize="9sp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200"/>
+                            android:background="@color/grey_200" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/smryNOOrd"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
                                 android:fontFamily="sans-serif"
-                                android:textStyle="bold"
-                                android:textColor="@color/Extended"
+                                android:text="0"
                                 android:textAlignment="center"
-                                android:textSize="16sp"/>
+                                android:textColor="@color/Extended"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:text="No Order"
-                                android:textSize="9sp"/>
+                                android:textAlignment="center"
+                                android:textSize="9sp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200"/>
+                            android:background="@color/grey_200" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/smryInv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
                                 android:fontFamily="sans-serif"
-                                android:textStyle="bold"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:text="0"
                                 android:textAlignment="center"
-                                android:textSize="16sp"/>
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:text="Invoice"
-                                android:textSize="9sp"/>
+                                android:textAlignment="center"
+                                android:textSize="9sp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200"/>
+                            android:background="@color/grey_200" />
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/smryInvVal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
                                 android:fontFamily="sans-serif"
-                                android:textStyle="bold"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:text="0"
                                 android:textAlignment="center"
-                                android:textSize="16sp"/>
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:text="Value"
-                                android:textSize="9sp"/>
+                                android:textAlignment="center"
+                                android:textSize="9sp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="1dp"
                                 android:text="0000000000"
-                                android:visibility="invisible"/>
+                                android:visibility="invisible" />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200"/>
+                            android:background="@color/grey_200" />
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -297,17 +332,19 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="1dp"
                                 android:text="0000"
-                                android:visibility="invisible"/>
+                                android:visibility="invisible" />
+
                             <ImageView
                                 android:id="@+id/ivBtnRpt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:padding="@dimen/C5dp"
-                                app:tint="@color/colorAccent"
-                                android:src="@drawable/report"/>
+                                android:src="@drawable/report"
+                                app:tint="@color/colorAccent" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -325,19 +362,20 @@
                             android:id="@+id/headtext"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:fontFamily="@font/basic"
                             android:text="Route"
                             android:textAllCaps="true"
                             android:textColor="#FFF"
                             android:textSize="18dp"
-                            android:textStyle="bold"
-                            android:layout_weight="1"/>
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
+                            android:text="History"
                             android:textColor="@color/white"
-                            android:text="History"/>
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -378,49 +416,51 @@
                     </RelativeLayout>
 
 
-
-
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
                 app:cardCornerRadius="@dimen/C5dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/C2dp"
                     android:layout_marginLeft="@dimen/C5dp"
+                    android:layout_marginTop="@dimen/C2dp"
                     android:layout_marginRight="@dimen/C5dp"
+                    android:orientation="horizontal"
                     android:paddingTop="@dimen/C8dp"
                     android:paddingBottom="@dimen/C1dp">
+
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
                         android:gravity="center_horizontal">
+
                         <LinearLayout
                             android:id="@+id/btSrvOtlt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            >
+                            android:paddingRight="15dp">
+
                             <ImageView
                                 android:layout_width="@dimen/C20dp"
                                 android:layout_height="@dimen/C20dp"
                                 android:padding="@dimen/C1dp"
-                                android:src="@drawable/ic_baseline_storefront_24"/>
+                                android:src="@drawable/ic_baseline_storefront_24" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/txSrvOtlt"
                                     android:layout_width="match_parent"
@@ -429,125 +469,133 @@
                                     android:text="Service Outlets"
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textStyle="bold" />
+
                                 <LinearLayout
                                     android:id="@+id/undrServ"
-                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
                                     android:layout_height="2dp"
                                     android:layout_marginLeft="@dimen/C5dp"
-                                    android:background="@color/colorPrimaryDark"/>
+                                    android:background="@color/colorPrimaryDark"
+                                    android:orientation="horizontal" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    >
+                                    android:layout_height="wrap_content">
+
                                     <TextView
                                         android:id="@+id/txSrvOtltCnt"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textAlignment="center"
                                         android:layout_marginTop="@dimen/C2dp"
                                         android:text="0"
+                                        android:textAlignment="center"
                                         android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        />
+                                        android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="@dimen/C2dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/grey_200"/>
+                        android:background="@color/grey_200" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
-                        >
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal">
+
                         <LinearLayout
                             android:id="@+id/btUniOtlt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            >
+                            android:paddingRight="15dp">
+
                             <ImageView
                                 android:layout_width="@dimen/C20dp"
                                 android:layout_height="@dimen/C20dp"
                                 android:padding="@dimen/C1dp"
-                                android:src="@drawable/ic_baseline_storefront_24"/>
+                                android:src="@drawable/ic_baseline_storefront_24" />
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/txUniOtlt"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="@dimen/C5dp"
-                                    android:text="Universal Outlets"
-                                    />
+                                    android:text="Universal Outlets" />
+
                                 <LinearLayout
                                     android:id="@+id/undrUni"
-                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
                                     android:layout_height="2dp"
                                     android:layout_marginLeft="@dimen/C5dp"
-                                    android:visibility="invisible"
-                                    android:background="@color/colorPrimaryDark"/>
+                                    android:background="@color/colorPrimaryDark"
+                                    android:orientation="horizontal"
+                                    android:visibility="invisible" />
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    >
+                                    android:layout_height="wrap_content">
+
                                     <TextView
                                         android:id="@+id/txUniOtltCnt"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textAlignment="center"
-                                        android:text="0"
                                         android:layout_marginTop="@dimen/C2dp"
+                                        android:text="0"
+                                        android:textAlignment="center"
                                         android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        />
+                                        android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/C2dp"
-    android:layout_marginLeft="@dimen/C5dp"
-    android:layout_marginRight="@dimen/C5dp"
-    android:layout_marginBottom="@dimen/C5dp"
-    android:background="@drawable/hash_border">
-    <ImageView
-        android:layout_width="@dimen/C20dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/C3dp"
-        android:src="@drawable/ic_search_icon"/>
-    <EditText
-        android:id="@+id/txSearchRet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="@dimen/C5dp"
-        android:textSize="12sp"
-        android:hint="Search"
-        />
-</LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C5dp"
+                android:layout_marginTop="@dimen/C2dp"
+                android:layout_marginRight="@dimen/C5dp"
+                android:layout_marginBottom="@dimen/C5dp"
+                android:background="@drawable/hash_border">
+
+                <ImageView
+                    android:layout_width="@dimen/C20dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/C3dp"
+                    android:src="@drawable/ic_search_icon" />
+
+                <EditText
+                    android:id="@+id/txSearchRet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="Search"
+                    android:padding="@dimen/C5dp"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:orientation="vertical">
+
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -562,6 +610,7 @@
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabs"
+                        style="@style/TabTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:background="@drawable/blue_bg"
@@ -571,17 +620,18 @@
 
                 </RelativeLayout>
             </com.google.android.material.appbar.AppBarLayout>
+
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -611,104 +661,7 @@
 
             </LinearLayout>
         </LinearLayout>
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/lin_request_status"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C5dp"
-
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/Alltextclick"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="All"
-                        android:textColor="@color/grey_800"
-                        android:textSize="18dp" />
-
-                    <View
-                        android:id="@+id/Alltextview"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/C3dp"
-                        android:background="@drawable/blue_bg">
-
-                    </View>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lin_request_Pending"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C5dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/Pendingclick"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Pending"
-                        android:textColor="@color/grey_800"
-                        android:textSize="18dp" />
-
-                    <View
-                        android:id="@+id/pendingview"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/C3dp"
-                        android:background="@drawable/blue_bg">
-
-                    </View>
-                </LinearLayout>
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C5dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/Completeclick"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Complete"
-                        android:textColor="@color/grey_800"
-                        android:textSize="18dp" />
-
-                    <View
-                        android:id="@+id/completeview"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/C3dp"
-                        android:background="@drawable/blue_bg"></View>
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/ReachedOutlet"
             style="@style/ButtonStyle"
