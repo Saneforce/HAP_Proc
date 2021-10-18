@@ -103,41 +103,6 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 textviewdate.setText("" + plantime);
 
 
-             //   common_models.clear();
-
-
-//                for (int rt = 0; rt < Retailer_Modal_Listitem.size(); rt++) {
-//
-//                    if (!shared_common_pref.getvalue(Constants.RetailorTodayData).equals("")) {
-//                        if (tdList != null && tdList.size() > 0) {
-//                            boolean isHaveToday = false;
-//
-//                            for (int i = 0; i < tdList.size(); i++) {
-//
-//
-//                                if (tdList.get(i).getCust_Code().equals(Retailer_Modal_Listitem.get(rt).getId())) {
-//                                    isHaveToday = true;
-//
-//
-//                                }
-//                            }
-//
-//                            if (!isHaveToday) {
-//
-//                            }
-//
-//
-//                        }
-//
-//                    }
-//
-//                }
-
-
-//                RetailorAdapter adapter = new RetailorAdapter(Retailer_Modal_Listitem, context);
-//
-//                listView.setAdapter(adapter);
-//
 
             } catch (Exception e) {
                 Log.e("RouteAdapter:holder ", e.getMessage());

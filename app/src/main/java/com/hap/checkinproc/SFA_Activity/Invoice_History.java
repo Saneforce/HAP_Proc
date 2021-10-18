@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -48,25 +47,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Invoice_History extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
-    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd;
+    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment;
     Common_Class common_class;
-    List<OutletReport_View_Modal> OutletReport_View_Modal;
+    List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
     Type userType;
     Gson gson;
@@ -81,6 +75,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     List<Common_Model> ldgRemarks = new ArrayList<>();
     Button btnSbmtNOrd;
     ImageView btnRmkClose;
+
 
     //Updateed
     @Override
@@ -99,7 +94,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     mlocation = location;
                 }
             });
-            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
 
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
@@ -122,6 +116,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txRmksNoOrd = (TextView) findViewById(R.id.txRmksNoOrd);
             btnRmkClose = (ImageView) findViewById(R.id.btnRmkClose);
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
+            tvOutstanding = findViewById(R.id.tvOutstanding);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -165,53 +160,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 }
             });
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            invoicerecyclerview.setLayoutManager(layoutManager);
-            String DCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
-//            lin_invoice.setVisibility(View.VISIBLE);
-//            if (!DCRMode.equalsIgnoreCase("")) {
-//                lin_invoice.setVisibility(View.GONE);
-//            }
-            // String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
-            userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-            }.getType();
-            OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
-            if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-                for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                    if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
-                        FilterOrderList.add(filterlist);
-                    }
-                }
-            }
 
-
-            mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                    Shared_Common_Pref.Invoicetoorder = "1";
-//                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
-//                        Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
-//                        startActivity(intent);
-//                    } else {
-                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.in,R.anim.out);
-                    //}
-
-                }
-            });
-            invoicerecyclerview.setAdapter(mReportViewAdapter);
             lin_invoice.setOnClickListener(this);
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
@@ -220,9 +169,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
-            getSchemeList();
-            getTaxDetails();
-
+            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+            common_class.getDb_310Data(Constants.TAXList, this);
+            common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
+            common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
         } catch (Exception e) {
 
@@ -244,28 +194,28 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         switch (v.getId()) {
             case R.id.lin_payment:
                 common_class.CommonIntentwithoutFinish(PaymentActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvOtherBrand:
                 common_class.CommonIntentwithFinish(OtherBrandActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvQPS:
                 common_class.CommonIntentwithFinish(QPSActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvPOP:
                 common_class.CommonIntentwithFinish(POPActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvCoolerInfo:
                 common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
 
             case R.id.lin_order:
                 Shared_Common_Pref.Invoicetoorder = "0";
-                getPreOrderQty();
+                common_class.getDb_310Data(Constants.PreOrderQtyList, this);
 
                 //Shared_Common_Pref.TransSlNo = "0";
                 break;
@@ -275,14 +225,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 Shared_Common_Pref.Invoicetoorder = "2";
                 //getInvoiceOrderQty();
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
             case R.id.lin_repeat_invoice:
                 break;
             case R.id.lastinvoice:
                 common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;
@@ -304,7 +254,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
 
             case R.id.tvOrder:
-                getPreOrderQty();
+                common_class.getDb_310Data(Constants.PreOrderQtyList, this);
                 break;
         }
     }
@@ -331,22 +281,13 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         //type =1 product category data values
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
-            //Category_Modal.clear();
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 if (type.equals("1")) {
-//                    String id = String.valueOf(jsonObject1.optInt("id"));
-//                    String name = jsonObject1.optString("name");
-//                    String Division_Code = jsonObject1.optString("Division_Code");
-//                    String Cat_Image = jsonObject1.optString("Cat_Image");
-//                    String sampleQty = jsonObject1.optString("sampleQty");
-//                    String colorflag = jsonObject1.optString("colorflag");
-//                    Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
+
                 } else {
-//                    Route_Code = jsonObject1.optString("cluster");
-//                    Dirtributor_Cod = jsonObject1.optString("stockist");
                     Worktype_code = jsonObject1.optString("wtype");
-                    // Distributor_Name = jsonObject1.optString("StkName");
                 }
             }
         } catch (JSONException e) {
@@ -365,16 +306,13 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
 
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobj = Calendar.getInstance();
-                    String dateTime = df.format(calobj.getTime());
 
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("Worktype_code", Worktype_code);
                         HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
-                        HeadItem.put("dcr_activity_date", dateTime);
+                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                         HeadItem.put("Daywise_Remarks", txRmksNoOrd.getText().toString());
                         HeadItem.put("UKey", Common_Class.GetEkey());
                         HeadItem.put("orderValue", "0");
@@ -455,208 +393,158 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
     @Override
     public void onLoadTodayOrderList(List<com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal> outletReportViewModals) {
-        if (outletReportViewModals != null) {
 
-            OutletReport_View_Modal.clear();
-
-            OutletReport_View_Modal = outletReportViewModals;
-
-            FilterOrderList.clear();
-
-            if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-                for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                    if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
-                        FilterOrderList.add(filterlist);
-                    }
-                }
-            }
-
-
-            mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                    Shared_Common_Pref.Invoicetoorder = "1";
-//                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
-//                        getPreOrderQty();
-//
-//                    } else {
-                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-
-                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.in,R.anim.out);
-                    //  }
-
-                }
-            });
-            invoicerecyclerview.setAdapter(mReportViewAdapter);
-        }
 
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
-
-    }
-    public void getSchemeList() {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
-                JSONObject HeadItem = new JSONObject();
+            if (apiDataResponse != null && !apiDataResponse.equals("")) {
 
-                HeadItem.put("sfCode", Shared_Common_Pref.DistributorCode);
-                HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
+                switch (key) {
+                    case Constants.OUTSTANDING:
+                        JSONObject jsonObjectOutStd = new JSONObject(apiDataResponse);
+                        if (jsonObjectOutStd.getBoolean("success")) {
 
-
-                Call<ResponseBody> call = service.getSecondaryscheme(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                if (jsonObject.getBoolean("success")) {
-
-
-                                    Gson gson = new Gson();
-                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    if (jsonArray != null && jsonArray.length() > 1) {
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
-                                                    jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
-                                                    Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
-                                                    jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
-                                                    jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
-
-
-                                        }
-                                    }
-
-                                    sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
-
-
-                                } else {
-                                    sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
-
-                                }
-
+                            JSONArray jsonArray = jsonObjectOutStd.getJSONArray("Data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(
+                                        jsonArray.getJSONObject(i).getDouble("Outstanding")));
 
                             }
 
-                        } catch (Exception e) {
+                        } else {
 
+                            tvOutstanding.setText("₹" + 0.00);
+                        }
+                        break;
+                    case Constants.FreeSchemeDiscList:
+                        JSONObject jsonObject = new JSONObject(apiDataResponse);
+
+                        if (jsonObject.getBoolean("success")) {
+
+
+                            Gson gson = new Gson();
+                            List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                            if (jsonArray != null && jsonArray.length() > 1) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                    product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                            jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                            Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
+                                            jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
+                                            jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+
+
+                                }
+                            }
+
+                            sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
+
+
+                        } else {
+                            sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
 
                         }
-                    }
+                        break;
+                    case Constants.TAXList:
+                        JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>", t.toString());
+                        if (jsonObjectTax.getBoolean("success")) {
+                            sharedCommonPref.save(Constants.TAXList, apiDataResponse);
 
+                        } else {
+                            sharedCommonPref.clear_pref(Constants.TAXList);
 
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-
-    public void getTaxDetails() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                JSONObject HeadItem = new JSONObject();
-
-                HeadItem.put("distributorid", Shared_Common_Pref.DistributorCode);
-                HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("retailorId", Shared_Common_Pref.OutletCode);
-
-
-                Call<ResponseBody> call = service.getTAXDetails(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
+                        }
+                        break;
+                    case Constants.GetTodayOrder_List:
+                        userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+                        }.getType();
+                        OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);
+                        if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
+                            for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
+                                if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
+                                    FilterOrderList.add(filterlist);
                                 }
+                            }
+                        }
 
-                                JSONObject jsonObject = new JSONObject(is.toString());
 
-
-                                if (jsonObject.getBoolean("success")) {
-                                    sharedCommonPref.save(Constants.TAXList, is.toString());
-
-                                } else {
-                                    sharedCommonPref.clear_pref(Constants.TAXList);
-
-                                }
+                        mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
+                            @Override
+                            public void onIntentClick(int position) {
+                                Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+                                Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+                                Shared_Common_Pref.Invoicetoorder = "1";
+                                Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                                sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
+                                Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+                                intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+                                intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+                                intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                                intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+                                intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+                                intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.in, R.anim.out);
 
 
                             }
+                        });
+                        invoicerecyclerview.setAdapter(mReportViewAdapter);
 
-                        } catch (Exception e) {
+                        break;
+
+                    case Constants.PreOrderQtyList:
+                        JSONObject jsonObjectPreOrder = new JSONObject(apiDataResponse);
 
 
+                        if (jsonObjectPreOrder.getBoolean("success")) {
+
+                            Gson gson = new Gson();
+                            List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                            JSONArray jsonArray = jsonObjectPreOrder.getJSONArray("Data");
+
+                            if (jsonArray != null && jsonArray.length() > 0) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                    product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
+                                            "", "", jsonObject1.getInt("Qty"), ""));
+
+
+                                }
+                            }
+
+                            sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
+
+
+                            common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                            overridePendingTransition(R.anim.in, R.anim.out);
+                            Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
+
+                        } else {
+                            sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
+                            Log.v("PreOrderList: ", "" + "not success");
                         }
-                    }
+                        break;
+                }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>", t.toString());
-
-
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
+            Log.v("Invoice History: ", e.getMessage());
 
         }
     }
@@ -666,109 +554,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             common_class.CommonIntentwithFinish(Dashboard_Route.class);
-            overridePendingTransition(R.anim.in,R.anim.out);
+            overridePendingTransition(R.anim.in, R.anim.out);
 
             return true;
         }
         return false;
     }
-
-    private void getPreOrderQty() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                common_class.ProgressdialogShow(1, "");
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                JSONObject HeadItem = new JSONObject();
-
-                HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-
-
-                Call<ResponseBody> call = service.getPreOrderQty(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    Gson gson = new Gson();
-                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    if (jsonArray != null && jsonArray.length() > 0) {
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
-                                                    "", "", jsonObject1.getInt("Qty"), ""));
-
-
-                                        }
-                                    }
-
-                                    sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
-
-
-                                    common_class.CommonIntentwithFinish(Order_Category_Select.class);
-                                    overridePendingTransition(R.anim.in,R.anim.out);
-
-
-                                    common_class.ProgressdialogShow(0, "");
-                                    Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
-
-                                } else {
-                                    sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
-                                    Log.v("PreOrderList: ", "" + "not success");
-                                    common_class.ProgressdialogShow(0, "");
-
-
-                                }
-
-
-                            }
-
-                        } catch (Exception e) {
-                            common_class.ProgressdialogShow(0, "");
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>", t.toString());
-                        common_class.ProgressdialogShow(0, "");
-
-
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
 
 }

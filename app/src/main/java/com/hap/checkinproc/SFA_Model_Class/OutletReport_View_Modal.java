@@ -6,9 +6,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class OutletReport_View_Modal {
+    private  String name;
     @SerializedName("No_Of_items")
     @Expose
-    private String No_Of_items = "";
+    private int No_Of_items;
     @SerializedName("slno")
     @Expose
     private String slno = "";
@@ -129,11 +130,11 @@ public class OutletReport_View_Modal {
         return invoicevalues;
     }
 
-    public String getNo_Of_items() {
+    public int getNo_Of_items() {
         return No_Of_items;
     }
 
-    public void setNo_Of_items(String no_Of_items) {
+    public void setNo_Of_items(int no_Of_items) {
         No_Of_items = no_Of_items;
     }
 
@@ -160,7 +161,7 @@ public class OutletReport_View_Modal {
 
     List<Product_Details_Modal> product_details_modal;
 
-    public OutletReport_View_Modal(String no_Of_items, String slno, String orderNo, String stockistCode, String transSlNo, String outletCode, String sfCode, String orderDate, Double orderValue, String invoice_Flag, String invoicevalues, String netAmount, String discount_Amount, String status) {
+    public OutletReport_View_Modal(int no_Of_items, String slno, String orderNo, String stockistCode, String transSlNo, String outletCode, String sfCode, String orderDate, Double orderValue, String invoice_Flag, String invoicevalues, String netAmount, String discount_Amount, String status) {
         this.No_Of_items = no_Of_items;
         this.slno = slno;
         this.orderNo = orderNo;
@@ -185,7 +186,7 @@ public class OutletReport_View_Modal {
         this.product_details_modal = product_details_modal;
     }
 
-    public OutletReport_View_Modal(String no_Of_items, String orderNo, String InvoiceID, String outletCode, String orderDate, double orderValue,
+    public OutletReport_View_Modal(int no_Of_items, String orderNo, String InvoiceID, String outletCode, String orderDate, double orderValue,
                                    String status, List<Product_Details_Modal> product_details_modal) {
         this.outletCode = outletCode;
         this.Status = status;
@@ -198,7 +199,7 @@ public class OutletReport_View_Modal {
 
     }
 
-    public OutletReport_View_Modal(String no_Of_items, String orderNo, String InvoiceID, String outletCode, String orderDate, double orderValue,
+    public OutletReport_View_Modal(String name, String orderNo, String InvoiceID, String outletCode, String orderDate, double orderValue,
                                    String status) {
         this.outletCode = outletCode;
         this.Status = status;
@@ -206,7 +207,7 @@ public class OutletReport_View_Modal {
         this.orderNo = orderNo;
         this.InvoiceID = InvoiceID;
         this.orderValue = orderValue;
-        this.No_Of_items = no_Of_items;
+        this.name = name;
 
     }
 
@@ -301,6 +302,14 @@ public class OutletReport_View_Modal {
 
     public void setInvoiceItems(String invoiceItems) {
         InvoiceItems = invoiceItems;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 

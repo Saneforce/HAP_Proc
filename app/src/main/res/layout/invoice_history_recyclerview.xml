@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C8dp"
+        android:layout_margin="@dimen/C5dp"
         app:cardCornerRadius="@dimen/C10dp">
 
 
@@ -19,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/C3dp"
-            tools:ignore="MissingConstraints">
+            android:padding="@dimen/C3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,7 +40,7 @@
                         android:gravity="left"
                         android:text="OrderID"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C14dp"></TextView>
+                        android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
 
 
@@ -58,7 +57,7 @@
                         android:gravity="center"
                         android:text="54"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C14dp"></TextView>
+                        android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -74,7 +73,7 @@
                         android:gravity="center"
                         android:text="Value"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C14dp"></TextView>
+                        android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -90,7 +89,7 @@
                         android:gravity="center"
                         android:text=""
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C14dp"></TextView>
+                        android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
 
             </LinearLayout>
@@ -120,7 +119,7 @@
                         android:layout_toRightOf="@+id/ivDate"
                         android:text="OrderDate"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C14dp"></TextView>
+                        android:textSize="@dimen/C13dp"></TextView>
 
                 </RelativeLayout>
 
@@ -145,16 +144,11 @@
                         android:layout_toRightOf="@+id/ivStatus"
                         android:text="Complete"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C14dp"></TextView>
+                        android:textSize="@dimen/C13dp"></TextView>
 
                 </RelativeLayout>
             </LinearLayout>
 
-            <!--        <View-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="0.4dp"-->
-            <!--            android:background="@color/statuscolor"-->
-            <!--            android:outlineAmbientShadowColor="@color/statuscolor"></View>-->
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -65,12 +65,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -132,7 +129,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     String orderId = "";
     private LinearLayout rlAddProduct, rlCredit, rlCash;
-    private int outstandAmt;
+    private double outstandAmt;
     private double payAmt;
 
     final Handler handler = new Handler();
@@ -596,17 +593,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
 
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Calendar calobj = Calendar.getInstance();
-                    String dateTime = df.format(calobj.getTime());
-
                     // String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("Worktype_code", Worktype_code);
                         HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
-                        HeadItem.put("dcr_activity_date", dateTime);
+                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                         HeadItem.put("Daywise_Remarks", "");
                         HeadItem.put("UKey", Ukey);
                         HeadItem.put("orderValue", totalvalues);

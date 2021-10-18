@@ -83,11 +83,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             holder.txt_add.setText(json.getString("vicinity"));
 
 
-//            if (markedPlaceId.indexOf(json.getString("place_id")) > 0) {
-//                holder.cvParent.setVisibility(View.GONE);
-//            } else {
-//                holder.cvParent.setVisibility(View.VISIBLE);
-//            }
 
             if (json.has("photos")) {
                 JSONArray jsonA = json.getJSONArray("photos");

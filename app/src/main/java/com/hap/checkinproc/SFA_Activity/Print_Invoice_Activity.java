@@ -654,7 +654,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     void orderInvoiceDetailData() {
         try {
 
-            billnumber.setText("Order No: " + Shared_Common_Pref.TransSlNo);
+            billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
             String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
             userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
             }.getType();
@@ -683,9 +683,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
 
-            DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
-            Calendar calobjw = Calendar.getInstance();
-            invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
+
+            invoicedate.setText(/*"Date : " +*/ Common_Class.GetDatewothouttime());
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
 
