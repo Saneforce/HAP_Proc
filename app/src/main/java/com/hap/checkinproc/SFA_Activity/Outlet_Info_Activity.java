@@ -184,7 +184,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         reloadData();
     }
     public void reloadData(){
-        if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
+        if (Retailer_Modal_ListFilter != null) {
             recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {

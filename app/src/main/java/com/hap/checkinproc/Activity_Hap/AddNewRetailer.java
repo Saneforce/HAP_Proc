@@ -94,9 +94,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor,rlDelvryType;
+    RelativeLayout linReatilerRoute, rlDistributor,rlDelvryType,rlOutletType;
     LinearLayout linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,txDelvryType;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,txDelvryType,txOutletType;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -110,7 +110,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONArray mainArray;
     JSONObject docMasterObject;
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue, imageConvert = "", imageServer = "";
-    Integer routeId1, classId, channelID;
+    Integer routeId1, classId, channelID,iOutletTyp;
     String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
     Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -134,20 +134,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> distributor_master = new ArrayList<>();
 CircularProgressButton btnRefLoc;
     double RetLat=0.0,RetLng=0.0;
-    List<Common_Model> deliveryTypeList;
+    List<Common_Model> deliveryTypeList,outletTypeList;
     final Handler handler = new Handler();
-    //    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//
-//
-//        filePath = shared_common_pref.getvalue(Constants.Retailor_FilePath);
-//
-//        if (!filePath.isEmpty())
-//            ivPhotoShop.setImageURI(Uri.parse(filePath));
-//
-//
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +171,9 @@ CircularProgressButton btnRefLoc;
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             rlDelvryType = findViewById(R.id.rlDelvryType);
             txDelvryType = findViewById(R.id.txDelvryType);
+            rlOutletType = findViewById(R.id.rlOutletType);
+            txOutletType = findViewById(R.id.txOutletType);
+
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
             mSubmit = findViewById(R.id.submit_button);
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
@@ -211,6 +202,22 @@ CircularProgressButton btnRefLoc;
                 }
             });
 
+            outletTypeList = new ArrayList<>();
+            mCommon_model_spinner = new Common_Model("1", "Service", "flag");
+            outletTypeList.add(mCommon_model_spinner);
+            mCommon_model_spinner = new Common_Model("0", "Universal", "flag");
+            outletTypeList.add(mCommon_model_spinner);
+
+            rlOutletType.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialog = new CustomListViewDialog(AddNewRetailer.this, outletTypeList, 13);
+                    Window window = customDialog.getWindow();
+                    window.setGravity(Gravity.CENTER);
+                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+                }
+            });
             copypaste.setOnClickListener(this);
             ivPhotoShop.setOnClickListener(this);
             btnRefLoc.setOnClickListener(new View.OnClickListener() {
@@ -284,6 +291,16 @@ CircularProgressButton btnRefLoc;
             getRouteDetails();
             getRetailerClass();
             getRetailerChannel();
+
+            if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
+                iOutletTyp = Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
+                if(iOutletTyp==0)
+                    txOutletType.setText("Universal");
+                else
+                    txOutletType.setText("Service");
+                txDelvryType.setText(Retailer_Modal_List.get(getOutletPosition()).getDelivType());
+            }
+
             TextView txtHelp = findViewById(R.id.toolbar_help);
             ImageView imgHome = findViewById(R.id.toolbar_home);
             txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -449,9 +466,16 @@ CircularProgressButton btnRefLoc;
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
+                    else if(txtRetailerChannel.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
+                    }
                     else if(txDelvryType.getText().toString().equalsIgnoreCase("")){
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
                     }
+                    else if(txOutletType.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
+                    }
+
 
                     else if (imageConvert.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
@@ -498,22 +522,6 @@ CircularProgressButton btnRefLoc;
                         }
                     }
                 }
-
-//                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
-//
-//                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
-//                    ivShopPhoto.setImageResource(R.drawable.profile_img);
-//                } else {
-//                    Glide.with(this)
-//                            .load(shared_common_pref.getvalue(Constants.SHOP_PHOTO, "")) // image url
-//                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
-//                            .error(R.drawable.profile_img)  // any image in case of error
-//                            .override(200, 200) // resizing
-//                            .centerCrop()
-//                            .into(ivShopPhoto);
-                // }
-
-
             }
 
             shared_common_pref.save(Constants.Retailor_FilePath, "");
@@ -629,26 +637,6 @@ CircularProgressButton btnRefLoc;
             }
         });
     }
-
-
-
-
-    /*Route Click*/
-//    public void OnclickRoute() {
-//
-//        linReatilerRoute.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailDetails, 8);
-//                Window window = customDialog.getWindow();
-//                window.setGravity(Gravity.CENTER);
-//                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//                customDialog.show();
-//            }
-//        });
-//    }
-
 
     /*Route Class*/
     public void getRetailerClass() {
@@ -771,103 +759,6 @@ CircularProgressButton btnRefLoc;
     }
 
 
-    /*Add New Retailer*/
-//    public void addNewRetailers() {
-//        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//        Calendar calobjw = Calendar.getInstance();
-//        KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
-//        keyCodeValue = keyEk + KeyHyp + KeyDate + dfw.format(calobjw.getTime()).hashCode();
-//        Log.e("KEY_CODE_HASH", keyCodeValue);
-//        JSONObject reportObject = new JSONObject();
-//        docMasterObject = new JSONObject();
-//        try {
-//            reportObject.put("town_code", "'" + routeId + "'");
-//            reportObject.put("wlkg_sequence", "null");
-//            reportObject.put("unlisted_doctor_name", "'" + addRetailerName.getText().toString() + "'");
-//            reportObject.put("unlisted_Owner_name", "'" + owner_name.getText().toString() + "'");
-//            reportObject.put("unlisted_doctor_pincode", "'" + edt_pin_codeedit.getText().toString() + "'");
-//            reportObject.put("unlisted_doctor_gst", "'" + edt_gst.getText().toString() + "'");
-//            reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
-//            reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
-//            reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
-//            reportObject.put("unlisted_doctor_landmark", "''");
-//            reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
-//            reportObject.put("reason_category", common_class.addquote(reason_category_remarks));
-//            reportObject.put("Compititor_Id", common_class.addquote(Compititor_Id));
-//            reportObject.put("Compititor_Name", common_class.addquote(Compititor_Name));
-//            reportObject.put("CatUniverSelectId", common_class.addquote(CatUniverSelectId));
-//            reportObject.put("AvailUniverSelectId", common_class.addquote(AvailUniverSelectId));
-//            reportObject.put("HatsunAvailswitch", common_class.addquote(HatsunAvailswitch));
-//            reportObject.put("categoryuniverseswitch", common_class.addquote(categoryuniverseswitch));
-//            reportObject.put("lat", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlat)));
-//            reportObject.put("long", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlong)));
-//            reportObject.put("unlisted_doctor_areaname", "''");
-//            reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
-//            reportObject.put("unlisted_doctor_contactperson", "''");
-//            reportObject.put("unlisted_doctor_designation", "''");
-//            reportObject.put("unlisted_doctor_phone2", "''");
-//            reportObject.put("unlisted_doctor_phone3", "''");
-//            reportObject.put("unlisted_doctor_contactperson2", "''");
-//            reportObject.put("unlisted_doctor_contactperson3", "''");
-//            reportObject.put("unlisted_doctor_designation2", "''");
-//            reportObject.put("unlisted_cat_code", "null");
-//            reportObject.put("unlisted_specialty_code", channelID);
-//            reportObject.put("unlisted_qulifi", "'samp'");
-//            reportObject.put("unlisted_class", classId);
-//            reportObject.put("id", common_class.addquote(Shared_Common_Pref.OutletCode));
-//            reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
-//            docMasterObject.put("unlisted_doctor_master", reportObject);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        mainArray = new JSONArray();
-//        mainArray.put(docMasterObject);
-//
-//        String totalValueString = "";
-//        Map<String, String> QueryString = new HashMap<>();
-//        if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-//            QueryString.put("axn", "dcr/save");
-//            totalValueString = mainArray.toString();
-//        } else {
-//            QueryString.put("axn", "upd/retailer");
-//            totalValueString = reportObject.toString();
-//        }
-//        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-//        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-//        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-//        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        // addNewRetailer
-//        Log.e("QueryString", totalValueString);
-//        Call<JsonObject> call = apiInterface.addNewRetailer(QueryString, totalValueString);
-//        call.enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                JsonObject jsonObject = response.body();
-//                Log.e("Add_Retailer_details", String.valueOf(jsonObject));
-//                String success = String.valueOf(jsonObject.get("success"));
-//                if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-//                    Toast.makeText(AddNewRetailer.this, "Outlet Added successfully", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
-//                }
-//                if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0") && !Shared_Common_Pref.Editoutletflag.equals("1")) {
-//                    startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
-//                } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
-//                    Shared_Common_Pref.Outler_AddFlag = "0";
-//                    Shared_Common_Pref.Sync_Flag = "1";
-//                    startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
-//                    // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonObject> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-
 
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
@@ -987,6 +878,8 @@ CircularProgressButton btnRefLoc;
             reportObject.put("lat", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlat)));
             reportObject.put("long", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlong)));
             reportObject.put("VechType", txDelvryType.getText().toString());
+            reportObject.put("OutletTypeNm", txOutletType.getText().toString());
+            reportObject.put("OutletTypeCd", iOutletTyp);
 
 
             reportObject.put("unlisted_doctor_areaname", "''");
@@ -999,6 +892,7 @@ CircularProgressButton btnRefLoc;
             reportObject.put("unlisted_doctor_contactperson3", "''");
             reportObject.put("unlisted_doctor_designation2", "''");
             reportObject.put("unlisted_cat_code", "null");
+            reportObject.put("unlisted_specialty_name", txtRetailerChannel.getText().toString());
             reportObject.put("unlisted_specialty_code", channelID);
             reportObject.put("unlisted_qulifi", "'samp'");
             reportObject.put("unlisted_class", classId);
@@ -1104,6 +998,9 @@ CircularProgressButton btnRefLoc;
             channelID = Integer.valueOf(myDataset.get(position).getId());
         }else if (type == 11) {
             txDelvryType.setText(myDataset.get(position).getName());
+        }else if (type == 13) {
+            txOutletType.setText(myDataset.get(position).getName());
+            iOutletTyp=Integer.valueOf(myDataset.get(position).getId());
         }
     }
 

@@ -131,6 +131,10 @@ public class Retailer_Modal_List {
     @Expose
     private String Type;
 
+    @SerializedName("DelivType")
+    @Expose
+    private String DelivType;
+
     @SerializedName("ERP_Code")
     @Expose
     private String ERP_Code;
@@ -258,6 +262,14 @@ public class Retailer_Modal_List {
 
     public void setType(String type) {
         Type = type;
+    }
+
+    public String getDelivType() {
+        return DelivType;
+    }
+
+    public void setDelivType(String delivType) {
+        DelivType = delivType;
     }
 
     public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
