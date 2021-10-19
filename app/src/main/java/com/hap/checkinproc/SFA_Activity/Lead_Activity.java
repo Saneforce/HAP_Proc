@@ -1,10 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import static android.Manifest.permission.CALL_PHONE;
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,27 +16,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Lead_Adapter;
-import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
-import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -52,7 +45,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Lead_Activity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     Gson gson;
@@ -176,16 +171,16 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void SearchRetailers(){
+    private void SearchRetailers() {
         Retailer_Modal_ListFilter.clear();
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
         String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        for (int sr=0;sr<Retailer_Modal_List.size();sr++){
-            String itmname=Retailer_Modal_List.get(sr).getName().toUpperCase();
-            String sSchText=txSearchRet.getText().toString().toUpperCase();
-            if((";"+itmname).indexOf(";"+sSchText)>-1){
+        for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
+            String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
+            String sSchText = txSearchRet.getText().toString().toUpperCase();
+            if ((";" + itmname).indexOf(";" + sSchText) > -1) {
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
             }
         }
@@ -202,10 +197,40 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             distributor_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
-            sharedCommonPref.save(Constants.Distributor_phone,myDataset.get(position).getPhone());
+            sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
-            loadroute(myDataset.get(position).getId());
-            OutletFilter(myDataset.get(position).getId(), "1");
+
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("Stk", myDataset.get(position).getId());
+                //jParam.put("div", UserDetails.getString("Divcode", ""));
+            } catch (JSONException ex) {
+
+            }
+            ApiClient.getClient().create(ApiInterface.class)
+                    .getDataArrayList("get/routelist", jParam.toString())
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
+
+                                db.deleteMasterData(Constants.Rout_List);
+                                db.addMasterData(Constants.Rout_List, response.body().toString());
+                                getDbstoreData(Constants.Rout_List);
+                                loadroute(myDataset.get(position).getId());
+                                OutletFilter(myDataset.get(position).getId(), "1");
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            Log.d("RouteList", String.valueOf(t));
+                        }
+                    });
+
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
@@ -214,6 +239,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             OutletFilter(myDataset.get(position).getId(), "0");
         }
     }
+
     public void loadroute(String id) {
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
@@ -238,6 +264,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -246,7 +273,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 sharedCommonPref.save("RouteName", route_text.getText().toString());
                 //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
                 common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
-                overridePendingTransition(R.anim.in,R.anim.out);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.route_text:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
@@ -267,6 +294,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 break;
         }
     }
+
     private void GetJsonData(String jsonResponse, String type) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
@@ -290,6 +318,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
     }
+
     private void OutletFilter(String id, String flag) {
 
 
@@ -324,6 +353,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -382,7 +412,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
     }
 

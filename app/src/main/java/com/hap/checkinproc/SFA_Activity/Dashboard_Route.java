@@ -94,10 +94,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, Alltextclick, Completeclick, Pendingclick, ReachedOutlet, route_text,
+    TextView headtext, textViewname, ReachedOutlet, route_text,
             txSrvOtlt, txUniOtlt, txSrvOtltCnt, txUniOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal;
     EditText txSearchRet;
-    View Alltextview, completeview, pendingview;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, undrUni, undrServ;
     Common_Model Model_Pojo;
     List<Common_Model> distributor_master = new ArrayList<>();
@@ -186,13 +185,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
             textViewname = findViewById(R.id.textViewname);
-            Alltextclick = findViewById(R.id.Alltextclick);
-            Completeclick = findViewById(R.id.Completeclick);
-            Pendingclick = findViewById(R.id.Pendingclick);
-            Alltextview = findViewById(R.id.Alltextview);
-            completeview = findViewById(R.id.completeview);
             ReachedOutlet = findViewById(R.id.ReachedOutlet);
-            pendingview = findViewById(R.id.pendingview);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
             ivToolbarHome = findViewById(R.id.toolbar_home);
             llDistributor = findViewById(R.id.llDistributor);
@@ -214,15 +207,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             undrServ = findViewById(R.id.undrServ);
             undrUni = findViewById(R.id.undrUni);
             viewPager = findViewById(R.id.viewpager);
-            viewPager.setOffscreenPageLimit(3);
+            viewPager.setOffscreenPageLimit(4);
             tabLayout = findViewById(R.id.tabs);
 
-            Alltextview.setVisibility(View.VISIBLE);
-            completeview.setVisibility(View.INVISIBLE);
-            pendingview.setVisibility(View.INVISIBLE);
-            Alltextclick.setOnClickListener(this);
-            Completeclick.setOnClickListener(this);
-            Pendingclick.setOnClickListener(this);
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
             route_text.setOnClickListener(this);
@@ -308,7 +295,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 if (!shared_common_pref.getvalue(Constants.Route_name).equals("")) {
                     route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
                     Route_id = shared_common_pref.getvalue(Constants.Route_Id);
-                    //OutletFilter(shared_common_pref.getvalue(Constants.Route_Id), "0");
                 }
 
                 if (Retailer_Modal_List != null) {
@@ -356,7 +342,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                     Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
                                     Shared_Common_Pref.OutletAvail = Retailer_Modal_ListFilter.get(position).getHatsun_AvailablityId();
                                     Shared_Common_Pref.OutletUniv = Retailer_Modal_ListFilter.get(position).getCategory_Universe_Id();
-                                    shared_common_pref.save(Constants.Retailor_PHNo,Retailer_Modal_ListFilter.get(position).getMobileNumber());
+                                    shared_common_pref.save(Constants.Retailor_PHNo, Retailer_Modal_ListFilter.get(position).getMobileNumber());
                                     shared_common_pref.save("CurrLoc", "");
 
 
@@ -576,10 +562,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
         adapter.notifyDataSetChanged();
 
-        recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+
+
+        recyclerView.setAdapter( new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview,
+                getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
                 try {
@@ -593,27 +581,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
                     shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
                     shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_ListFilter.get(position).getName().toUpperCase());
-                            shared_common_pref.save(Constants.Retailor_PHNo,Retailer_Modal_ListFilter.get(position).getMobileNumber());
-
-                    //*+ "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
-
-//                    if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-//                            || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
-//
-//                        Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-//                        Shared_Common_Pref.Outlet_Info_Flag = "0";
-//                        Shared_Common_Pref.Editoutletflag = "1";
-//                        Shared_Common_Pref.Outler_AddFlag = "0";
-//                        Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
-//                        intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
-//                        intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
-//                        intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-//                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getMobileNumber());
-//                        intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
-//                        startActivity(intent);
-//                        finish();
-//                    } else {
-                    //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    shared_common_pref.save(Constants.Retailor_PHNo, Retailer_Modal_ListFilter.get(position).getMobileNumber());
                     common_class.CommonIntentwithFinish(Invoice_History.class);
                     overridePendingTransition(R.anim.in, R.anim.out);
                     //}
@@ -637,6 +605,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             }
         }));
 
+
+
     }
 
     private void createTabFragment() {
@@ -648,24 +618,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.Alltextclick:
-                // OutletFilter("t", "1");
-                Alltextview.setVisibility(View.VISIBLE);
-                completeview.setVisibility(View.INVISIBLE);
-                pendingview.setVisibility(View.INVISIBLE);
-                break;
-            case R.id.Completeclick:
-                //  OutletFilter("t", "2");
-                Alltextview.setVisibility(View.INVISIBLE);
-                completeview.setVisibility(View.VISIBLE);
-                pendingview.setVisibility(View.INVISIBLE);
-                break;
-            case R.id.Pendingclick:
-                //OutletFilter("t", "3");
-                Alltextview.setVisibility(View.INVISIBLE);
-                completeview.setVisibility(View.INVISIBLE);
-                pendingview.setVisibility(View.VISIBLE);
-                break;
+
             case R.id.ReachedOutlet:
                 //if (Distributor_Id == null || Distributor_Id.equals("")) {
                 /*if (distributor_text.getText().toString().equals("")) {
@@ -730,7 +683,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             distributor_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
-            shared_common_pref.save(Constants.Distributor_phone,myDataset.get(position).getPhone());
+            shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
             getLastInvoiceData();
 
 
@@ -935,16 +888,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     FRoute_Master.add(Model_Pojo);
                     Route_Masterlist.add(Model_Pojo);
                 }
-//                else if (type.equals("6")) {
-//
-//                    route_text.setText(jsonObject1.optString("ClstrName"));
-//                    Distributor_Id = jsonObject1.optString("stockist");
-//                    Route_id = jsonObject1.optString("cluster");
-//                    distributor_text.setText(jsonObject1.optString("StkName"));
-//                    loadroute(jsonObject1.optString("stockist"));
-//
-//
-//                }
 
             }
 
@@ -1006,7 +949,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
                         shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
                         shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
-                        shared_common_pref.save(Constants.Retailor_PHNo,Retailer_Modal_ListFilter.get(position).getMobileNumber());
+                        shared_common_pref.save(Constants.Retailor_PHNo, Retailer_Modal_ListFilter.get(position).getMobileNumber());
                         //common_class.CommonIntentwithFinish(Route_Product_Info.class);
 //                        if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
 //                                || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
@@ -1067,11 +1010,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         private RecyclerView recyclerView;
 
         public AllDataFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int position) {
-
-
             this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
-
-            // this.mRetailer_Modal_ListFilter = dashboard_route.Retailer_Modal_ListFilter;
             this.tabPosition = String.valueOf(position);
         }
 
@@ -1079,13 +1018,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-
             return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
         }
 
 
         public void updateData() {
-
 
             recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
                 @Override
@@ -1127,7 +1064,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
 
-                            shared_common_pref.save(Constants.Retailor_PHNo,mRetailer_Modal_ListFilter.get(position).getMobileNumber());
+                            shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getMobileNumber());
                             common_class.CommonIntentwithFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             //}
@@ -1153,7 +1090,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             }));
 
 
-
         }
 
         @Override
@@ -1169,173 +1105,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-//    public static class PendingFragment extends Fragment {
-//        String tabPosition = "";
-//        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
-//        private Context context;
-//        private RecyclerView recyclerView;
-//
-//        public PendingFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int s) {
-//            tabPosition = String.valueOf(s);
-//            this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
-//        }
-//
-//        @Override
-//        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//            super.onViewCreated(view, savedInstanceState);
-//            this.context = getContext();
-//            recyclerView = view.findViewById(R.id.recyclerView);
-//
-//
-//            //  dashboard_route.OutletFilter("t", "3", false);
-//            recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
-//                @Override
-//                public void onIntentClick(int position) {
-//                    if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
-//                        Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
-//                    } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
-//                        Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Shared_Common_Pref.Outler_AddFlag = "0";
-//                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase()
-//                        ;
-//                        Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
-//                        Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
-//                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-//                        Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
-//                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-//                        shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
-//                        shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());
-//                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase()/* + "~" +
-//                                mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
-////                        if (mRetailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-////                                || mRetailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
-////
-////                            Intent intent = new Intent(context, AddNewRetailer.class);
-////                            Shared_Common_Pref.Outlet_Info_Flag = "0";
-////                            Shared_Common_Pref.Editoutletflag = "1";
-////                            Shared_Common_Pref.Outler_AddFlag = "0";
-////                            Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_ListFilter.get(position).getId());
-////                            intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_ListFilter.get(position).getId()));
-////                            intent.putExtra("OutletName", mRetailer_Modal_ListFilter.get(position).getName());
-////                            intent.putExtra("OutletAddress", mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
-////                            intent.putExtra("OutletMobile", mRetailer_Modal_ListFilter.get(position).getMobileNumber());
-////                            intent.putExtra("OutletRoute", mRetailer_Modal_ListFilter.get(position).getTownName());
-////                            startActivity(intent);
-////                            getActivity().finish();
-////                        } else {
-//                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-//                        common_class.CommonIntentwithFinish(Invoice_History.class);
-//                        getActivity().overridePendingTransition(R.anim.in, R.anim.out);
-//                        //}
-//                    }
-//                }
-//
-//                @Override
-//                public void CallMobile(String MobileNo) {
-//                    Log.d("Event", "CAll Mobile");
-//                    int readReq = ContextCompat.checkSelfPermission(context, CALL_PHONE);
-//                    if (readReq != PackageManager.PERMISSION_GRANTED) {
-//                        ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-//                    } else {
-//                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                        callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
-//                        startActivity(callIntent);
-//                    }
-//                }
-//            }));
-//
-//        }
-//    }
-//
-//    public static class CompleteFragment extends Fragment {
-//        String tabPosition = "";
-//        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
-//        private Context context;
-//        private RecyclerView recyclerView;
-//
-//        public CompleteFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int s) {
-//            tabPosition = String.valueOf(s);
-//            this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
-//        }
-//
-//        @Override
-//        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//            super.onViewCreated(view, savedInstanceState);
-//            this.context = getContext();
-//            recyclerView = view.findViewById(R.id.recyclerView);
-//
-//
-//            recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
-//                @Override
-//                public void onIntentClick(int position) {
-//                    if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
-//                        Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
-//                    } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
-//                        Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Shared_Common_Pref.Outler_AddFlag = "0";
-//                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
-//                        Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
-//                        Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
-//                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-//                        Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
-//                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-//                        shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
-//                        shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());
-//                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code,
-//                                mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() /*+ "~"+ mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
-////                        if (mRetailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-////                                || mRetailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
-////
-////                            Intent intent = new Intent(context, AddNewRetailer.class);
-////                            Shared_Common_Pref.Outlet_Info_Flag = "0";
-////                            Shared_Common_Pref.Editoutletflag = "1";
-////                            Shared_Common_Pref.Outler_AddFlag = "0";
-////                            Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_ListFilter.get(position).getId());
-////                            intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_ListFilter.get(position).getId()));
-////                            intent.putExtra("OutletName", mRetailer_Modal_ListFilter.get(position).getName());
-////                            intent.putExtra("OutletAddress", mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
-////                            intent.putExtra("OutletMobile", mRetailer_Modal_ListFilter.get(position).getMobileNumber());
-////                            intent.putExtra("OutletRoute", mRetailer_Modal_ListFilter.get(position).getTownName());
-////                            startActivity(intent);
-////                            getActivity().finish();
-////                        } else {
-//                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-//                        common_class.CommonIntentwithFinish(Invoice_History.class);
-//                        getActivity().overridePendingTransition(R.anim.in, R.anim.out);
-//                        //}
-//                    }
-//                }
-//
-//                @Override
-//                public void CallMobile(String MobileNo) {
-//                    Log.d("Event", "CAll Mobile");
-//                    int readReq = ContextCompat.checkSelfPermission(context, CALL_PHONE);
-//                    if (readReq != PackageManager.PERMISSION_GRANTED) {
-//                        ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-//                    } else {
-//                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                        callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
-//                        startActivity(callIntent);
-//                    }
-//                }
-//            }));
-//
-//        }
-//    }
 
 }
 

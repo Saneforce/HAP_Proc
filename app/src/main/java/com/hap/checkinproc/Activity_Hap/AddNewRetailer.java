@@ -45,7 +45,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -65,6 +64,7 @@ import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -94,9 +94,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor,rlDelvryType,rlOutletType;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType;
     LinearLayout linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,txDelvryType,txOutletType;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text, txDelvryType, txOutletType;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -110,7 +110,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONArray mainArray;
     JSONObject docMasterObject;
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue, imageConvert = "", imageServer = "";
-    Integer routeId1, classId, channelID,iOutletTyp;
+    Integer  classId, channelID, iOutletTyp;
     String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
     Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -132,9 +132,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-CircularProgressButton btnRefLoc;
-    double RetLat=0.0,RetLng=0.0;
-    List<Common_Model> deliveryTypeList,outletTypeList;
+    CircularProgressButton btnRefLoc;
+    double RetLat = 0.0, RetLng = 0.0;
+    List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
 
     @Override
@@ -178,7 +178,7 @@ CircularProgressButton btnRefLoc;
             mSubmit = findViewById(R.id.submit_button);
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
-            btnRefLoc= findViewById(R.id.btnRefLoc);
+            btnRefLoc = findViewById(R.id.btnRefLoc);
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
             if (mapFragment != null) {
@@ -230,15 +230,15 @@ CircularProgressButton btnRefLoc;
                             new LocationFinder(getApplication(), new LocationEvents() {
                                 @Override
                                 public void OnLocationRecived(Location location) {
-                                    if( location==null){
-                                        Toast.makeText(AddNewRetailer.this,"Location Can't Getting Location. Try Again.",Toast.LENGTH_LONG).show();
+                                    if (location == null) {
+                                        Toast.makeText(AddNewRetailer.this, "Location Can't Getting Location. Try Again.", Toast.LENGTH_LONG).show();
                                         btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
-                                    }else {
+                                    } else {
                                         RetLat = location.getLatitude();
                                         RetLng = location.getLongitude();
-                                        Shared_Common_Pref.Outletlat=RetLat;
-                                        Shared_Common_Pref.Outletlong=RetLng;
-                                        getCompleteAddressString(RetLat,RetLng);
+                                        Shared_Common_Pref.Outletlat = RetLat;
+                                        Shared_Common_Pref.Outletlong = RetLng;
+                                        getCompleteAddressString(RetLat, RetLng);
                                         centreMapOnLocation("Your Location");
                                         btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
                                     }
@@ -250,11 +250,11 @@ CircularProgressButton btnRefLoc;
                                             btnRefLoc.revertAnimation();
                                             btnRefLoc.setBackground(getDrawable(R.drawable.button_blueg));
                                         }
-                                    },1000);
+                                    }, 1000);
                                 }
                             });
                         }
-                    },100);
+                    }, 100);
                 }
             });
 
@@ -294,7 +294,7 @@ CircularProgressButton btnRefLoc;
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
                 iOutletTyp = Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
-                if(iOutletTyp==0)
+                if (iOutletTyp == 0)
                     txOutletType.setText("Universal");
                 else
                     txOutletType.setText("Service");
@@ -415,11 +415,11 @@ CircularProgressButton btnRefLoc;
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
 
 
-                RetLat=Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
-                RetLng=Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
+                RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
+                RetLng = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
 
-                Shared_Common_Pref.Outletlat=RetLat;
-                Shared_Common_Pref.Outletlong=RetLng;
+                Shared_Common_Pref.Outletlat = RetLat;
+                Shared_Common_Pref.Outletlong = RetLng;
 
                 if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
                     addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
@@ -466,18 +466,13 @@ CircularProgressButton btnRefLoc;
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
-                    else if(txtRetailerChannel.getText().toString().equalsIgnoreCase("")){
+                    else if (txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(txDelvryType.getText().toString().equalsIgnoreCase("")){
+                    } else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(txOutletType.getText().toString().equalsIgnoreCase("")){
+                    } else if (txOutletType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                    else if (imageConvert.equals("")) {
+                    } else if (imageConvert.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
@@ -759,7 +754,6 @@ CircularProgressButton btnRefLoc;
     }
 
 
-
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -944,7 +938,7 @@ CircularProgressButton btnRefLoc;
                     } else {
                         Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
                     }
-                    if(Shared_Common_Pref.FromActivity == "Outlets"){
+                    if (Shared_Common_Pref.FromActivity == "Outlets") {
                         Shared_Common_Pref.FromActivity = "";
                         common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
                     } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
@@ -981,12 +975,42 @@ CircularProgressButton btnRefLoc;
             txtRetailerRoute.setText("");
             distributor_text.setText(myDataset.get(position).getName());
             findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
-            loadroute(myDataset.get(position).getId());
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("Stk", myDataset.get(position).getId());
+                //jParam.put("div", UserDetails.getString("Divcode", ""));
+            } catch (JSONException ex) {
+
+            }
+            ApiClient.getClient().create(ApiInterface.class)
+                    .getDataArrayList("get/routelist", jParam.toString())
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
+
+                                db.deleteMasterData(Constants.Rout_List);
+                                db.addMasterData(Constants.Rout_List, response.body().toString());
+                                getDbstoreData(Constants.Rout_List);
+                                loadroute(myDataset.get(position).getId());
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            Log.d("RouteList", String.valueOf(t));
+                        }
+                    });
+
 
 
         } else if (type == 3) {
             routeId = myDataset.get(position).getId();
             txtRetailerRoute.setText(myDataset.get(position).getName());
+            loadroute(myDataset.get(position).getId());
 
 
         } else if (type == 9) {
@@ -996,37 +1020,35 @@ CircularProgressButton btnRefLoc;
         } else if (type == 10) {
             txtRetailerChannel.setText(myDataset.get(position).getName());
             channelID = Integer.valueOf(myDataset.get(position).getId());
-        }else if (type == 11) {
+        } else if (type == 11) {
             txDelvryType.setText(myDataset.get(position).getName());
-        }else if (type == 13) {
+        } else if (type == 13) {
             txOutletType.setText(myDataset.get(position).getName());
-            iOutletTyp=Integer.valueOf(myDataset.get(position).getId());
+            iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
         }
     }
 
     public void loadroute(String id) {
-        if (common_class.isNullOrEmpty(String.valueOf(id))) {
+        if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
         FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
             if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
         }
 
         if (FRoute_Master.size() == 1) {
-            txtRetailerRoute.setText(FRoute_Master.get(0).getName());
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
-
-
+            txtRetailerRoute.setText(FRoute_Master.get(0).getName());
+            shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
+            shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
+            routeId = FRoute_Master.get(0).getId();
         } else {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
-
         }
     }
-
 
 //    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
 //            new OnBackPressedDispatcher(new Runnable() {
@@ -1112,12 +1134,13 @@ CircularProgressButton btnRefLoc;
         mGoogleMap = googleMap;
         centreMapOnLocation("Your Location");
     }
-    public void centreMapOnLocation(String title){
 
-        LatLng userLocation = new LatLng(RetLat,RetLng );
+    public void centreMapOnLocation(String title) {
+
+        LatLng userLocation = new LatLng(RetLat, RetLng);
         mGoogleMap.clear();
         mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title(title));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,16));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
 
     }
 }

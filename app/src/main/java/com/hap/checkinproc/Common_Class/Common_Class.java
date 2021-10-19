@@ -280,7 +280,7 @@ public class Common_Class {
 
                 case (Retailer_OutletList):
                     QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"Type\\\",\\\"DelivType\\\"," +
-                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
+                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
                             " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
@@ -379,6 +379,8 @@ public class Common_Class {
 
                             shared_common_pref.save(key, gson.toJson(response.body()));
 
+                            String res = response.body().toString();
+                            Log.e("RES>>", res);
                             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
                             }.getType();
 
@@ -394,19 +396,6 @@ public class Common_Class {
                             db.addMasterData(key, gson.toJson(response.body()));
 
                         }
-
-
-//                        if (key.equals(Constants.GetTodayOrder_List)) {
-//
-//                            updateUi = ((UpdateResponseUI) activity);
-//
-//                            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
-//                            userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-//                            }.getType();
-//                            outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
-//
-//                            updateUi.onLoadTodayOrderList(outletReport_view_modalList);
-//                        }
 
                         if (key.equals(TodayOrderDetails_List) || key.equals(Competitor_List) || key.equals(Constants.GetTodayOrder_List)) {
 

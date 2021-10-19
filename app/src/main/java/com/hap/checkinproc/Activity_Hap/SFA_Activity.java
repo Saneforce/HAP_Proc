@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -127,7 +128,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
 
-        tvDate.setText("" + Common_Class.GetDate());
+        tvDate.setText("" + Common_Class.GetDatewothouttime());
 
         sfa_date = tvDate.getText().toString();
 
@@ -450,6 +451,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                             cumulativeInfoAdapter = new OutletDashboardInfoAdapter(SFA_Activity.this,
                                     cumulative_order_modelList);
+
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            recyclerView.setLayoutManager(layoutManager);
+
 
                             recyclerView.setAdapter(cumulativeInfoAdapter);
 

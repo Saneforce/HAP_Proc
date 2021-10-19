@@ -112,6 +112,10 @@ public class Retailer_Modal_List {
     @Expose
     private double CurdVal;
 
+    @SerializedName("OrderFlg")
+    @Expose
+    private int OrderFlg;
+
 
     @SerializedName("Milk")
     @Expose
@@ -800,5 +804,13 @@ public class Retailer_Modal_List {
 
     public void setOutletClass(String aClass) {
         Class = aClass;
+    }
+
+    public int getOrderFlg() {
+        return OrderFlg;
+    }
+
+    public void setOrderFlg(int orderFlg) {
+        OrderFlg = orderFlg;
     }
 }
