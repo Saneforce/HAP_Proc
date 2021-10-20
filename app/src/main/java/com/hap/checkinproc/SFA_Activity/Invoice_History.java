@@ -391,11 +391,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal> outletReportViewModals) {
-
-
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

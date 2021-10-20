@@ -32,6 +32,8 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -44,6 +46,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -104,6 +107,7 @@ public class Common_Class {
     private DatePickerDialog fromDatePickerDialog;
 
     String pickDate = "";
+    private CustomListViewDialog customDialog;
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -490,6 +494,10 @@ public class Common_Class {
                         data.put("fdt", HistoryInfoActivity.stDate);
                         data.put("tdt", HistoryInfoActivity.endDate);
                         break;
+                    case Constants.RETAILER_STATUS:
+                        axnname = "get/retailerorderstatus";
+                        data.put("distname", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
                     case Constants.PAYMODES:
                         axnname = "get/paymenttype";
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
@@ -549,6 +557,9 @@ public class Common_Class {
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("divCode", Shared_Common_Pref.Div_Code);
                         data.put("dt", sfa_date);
+                        break;
+                    case Constants.STATE_LIST:
+                        axnname = "get/states";
                         break;
                 }
 
@@ -638,6 +649,20 @@ public class Common_Class {
 
             }
         });
+    }
+
+    public void showCommonDialog(List<Common_Model> dataList, int type, Activity activity) {
+        customDialog = new CustomListViewDialog(activity, dataList, type);
+        Window windowww = customDialog.getWindow();
+        windowww.setGravity(Gravity.CENTER);
+        windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+    }
+
+    public void dismissCommonDialog() {
+        if (customDialog != null)
+            customDialog.dismiss();
+
     }
 
 

@@ -277,10 +277,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

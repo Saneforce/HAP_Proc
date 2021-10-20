@@ -289,10 +289,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

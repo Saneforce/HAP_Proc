@@ -15,12 +15,9 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,7 +39,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -100,8 +96,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, undrUni, undrServ;
     Common_Model Model_Pojo;
     List<Common_Model> distributor_master = new ArrayList<>();
-    List<Common_Model> Route_Masterlist = new ArrayList<>();
-    CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     String Route_id;
     String Distributor_Id;
@@ -124,6 +118,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
+    private Route_View_Adapter route_view_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,7 +258,24 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    SearchRetailers();
+                    //  SearchRetailers();
+
+
+                    if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                        String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+                        Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
+                    }
+                    String sSchText = txSearchRet.getText().toString();
+                    Retailer_Modal_ListFilter.clear();
+                    for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+                        if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
+                                && (sSchText.equalsIgnoreCase("") ||
+                                (";" + Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + sSchText.toLowerCase()) > -1))
+                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                    }
+                    setPagerAdapter(true);
+
+
                 }
             });
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -478,6 +490,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (Distributor_Id != null) {
+            common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
@@ -559,58 +579,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     (";" + Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + sSchText.toLowerCase()) > -1))
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
         }
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-        adapter.notifyDataSetChanged();
 
-
-
-        recyclerView.setAdapter( new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview,
-                getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-                try {
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase();
-                    Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
-                    Shared_Common_Pref.DistributorCode = Distributor_Id;
-                    Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                    Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
-                    //common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                    shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                    shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
-                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_ListFilter.get(position).getName().toUpperCase());
-                    shared_common_pref.save(Constants.Retailor_PHNo, Retailer_Modal_ListFilter.get(position).getMobileNumber());
-                    common_class.CommonIntentwithFinish(Invoice_History.class);
-                    overridePendingTransition(R.anim.in, R.anim.out);
-                    //}
-
-                } catch (Exception e) {
-                    Log.e("DR:RetailorClick: ", e.getMessage());
-                }
-            }
-
-            @Override
-            public void CallMobile(String MobileNo) {
-                Log.d("Event", "CAll Mobile");
-                int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
-                if (readReq != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                } else {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
-                    startActivity(callIntent);
-                }
-            }
-        }));
-
-
+        setPagerAdapter(false);
 
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -637,19 +612,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 //}
                 break;
             case R.id.distributor_text:
-                customDialog = new CustomListViewDialog(Dashboard_Route.this, distributor_master, 2);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+
+                common_class.showCommonDialog(distributor_master, 2, this);
                 break;
             case R.id.route_text:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                    customDialog = new CustomListViewDialog(Dashboard_Route.this, FRoute_Master, 3);
-                    Window windowww = customDialog.getWindow();
-                    windowww.setGravity(Gravity.CENTER);
-                    windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+
+                    common_class.showCommonDialog(FRoute_Master, 3, this);
                 }
                 break;
             case R.id.toolbar_home:
@@ -674,7 +643,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
+        //   customDialog.dismiss();
+        common_class.dismissCommonDialog();
         if (type == 2) {
             route_text.setText("");
             shared_common_pref.save(Constants.Route_Id, "");
@@ -684,6 +654,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+
+            common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
+
             getLastInvoiceData();
 
 
@@ -724,71 +697,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 txUniOtltCnt.setText(String.valueOf(CountUR));
                 txSrvOtltCnt.setText(String.valueOf(CountSR));
                 // shared_common_pref.save(Retailer_OutletList, gson.toJson(Retailer_Modal_ListFilter));
-                TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
-                viewPager.setAdapter(adapter);
-                tabLayout.setupWithViewPager(viewPager);
-
-                adapter.notifyDataSetChanged();
-
-                recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                    @Override
-                    public void onIntentClick(int position) {
-                        try {
-                            if (Distributor_Id == null || Distributor_Id.equalsIgnoreCase("")) {
-                                Toast.makeText(Dashboard_Route.this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Shared_Common_Pref.Outler_AddFlag = "0";
-                                Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
-
-                                ;
-                                Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
-                                Shared_Common_Pref.DistributorCode = Distributor_Id;
-                                Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                                Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
-                                //common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                                shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                                shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
-                                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
-                                        /* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
-//                                if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-//                                        || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
-//
-//                                    Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-//                                    Shared_Common_Pref.Outlet_Info_Flag = "0";
-//                                    Shared_Common_Pref.Editoutletflag = "1";
-//                                    Shared_Common_Pref.Outler_AddFlag = "0";
-//                                    Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
-//                                    intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
-//                                    intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
-//                                    intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-//                                    intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getMobileNumber());
-//                                    intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
-//                                    startActivity(intent);
-//                                    finish();
-//                                } else {
-                                //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                                common_class.CommonIntentwithFinish(Invoice_History.class);
-                                overridePendingTransition(R.anim.in, R.anim.out);
-//                                }
-                            }
-                        } catch (Exception e) {
-                            Log.e("DR:RetailorClick: ", e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void CallMobile(String MobileNo) {
-                        Log.d("Event", "CAll Mobile");
-                        int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
-                        if (readReq != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                        } else {
-                            Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
-                            startActivity(callIntent);
-                        }
-                    }
-                }));
+                setPagerAdapter(false);
             } else {
                 common_class.getDataFromApi(Retailer_OutletList, this, false);
 
@@ -825,7 +734,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
 
             }
-            //common_class.getDataFromApi(Retailer_OutletList, this, false);
 
 
         } catch (Exception e) {
@@ -849,12 +757,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-        FRoute_Master.clear();
-        for (int i = 0; i < Route_Masterlist.size(); i++) {
-            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-            }
-        }
+
 
         if (FRoute_Master.size() == 1) {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
@@ -863,6 +766,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             Route_id = FRoute_Master.get(0).getId();
         } else {
+            Route_id = "";
+            shared_common_pref.save(Constants.Route_Id, "");
+            route_text.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
@@ -870,6 +776,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
+
+            FRoute_Master.clear();
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -886,10 +795,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
                     Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
                     FRoute_Master.add(Model_Pojo);
-                    Route_Masterlist.add(Model_Pojo);
+
                 }
 
             }
+
 
         } catch (Exception e) {
 
@@ -924,33 +834,44 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Retailer_Modal_ListFilter = Retailer_Modal_List;
 
 
-            TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+            setPagerAdapter(false);
+        }
+
+    }
+
+
+    void setPagerAdapter(boolean isFilter) {
+
+        if (isFilter) {
+            adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition());
+        } else {
+            adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter);
+            viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
+        }
 
-            adapter.notifyDataSetChanged();
+        route_view_adapter = new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+            @Override
+            public void onIntentClick(int position) {
+                if (Distributor_Id == null || Distributor_Id.equalsIgnoreCase("")) {
+                    Toast.makeText(Dashboard_Route.this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                } else if ((Route_id == null || Route_id.equalsIgnoreCase("")) && !sDeptType.equalsIgnoreCase("2")) {
+                    Toast.makeText(Dashboard_Route.this, "Select The Route", Toast.LENGTH_SHORT).show();
+                } else {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
+                    ;
+                    Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
+                    Shared_Common_Pref.DistributorCode = Distributor_Id;
+                    Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                    Shared_Common_Pref.Route_Code = Route_id;
 
-            recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    if (Distributor_Id == null || Distributor_Id.equalsIgnoreCase("")) {
-                        Toast.makeText(Dashboard_Route.this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-                    } else if ((Route_id == null || Route_id.equalsIgnoreCase("")) && !sDeptType.equalsIgnoreCase("2")) {
-                        Toast.makeText(Dashboard_Route.this, "Select The Route", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
-                        ;
-                        Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
-                        Shared_Common_Pref.DistributorCode = Distributor_Id;
-                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                        Shared_Common_Pref.Route_Code = Route_id;
-
-                        shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                        shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
-                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
-                        shared_common_pref.save(Constants.Retailor_PHNo, Retailer_Modal_ListFilter.get(position).getMobileNumber());
-                        //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                    shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                    shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
+                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
+                    shared_common_pref.save(Constants.Retailor_PHNo, Retailer_Modal_ListFilter.get(position).getMobileNumber());
+                    //common_class.CommonIntentwithFinish(Route_Product_Info.class);
 //                        if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
 //                                || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 //
@@ -967,37 +888,69 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            startActivity(intent);
 //                            finish();
 //                        } else {
-                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                        common_class.CommonIntentwithFinish(Invoice_History.class);
-                        overridePendingTransition(R.anim.in, R.anim.out);
-                        //}
-                    }
+                    //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    common_class.CommonIntentwithFinish(Invoice_History.class);
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                    //}
                 }
+            }
 
-                @Override
-                public void CallMobile(String MobileNo) {
-                    Log.d("Event", "CAll Mobile");
-                    int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
-                    if (readReq != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                    } else {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
-                        startActivity(callIntent);
-                    }
+            @Override
+            public void CallMobile(String MobileNo) {
+                Log.d("Event", "CAll Mobile");
+                int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                } else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
+                    startActivity(callIntent);
                 }
-            }));
-        }
-
-    }
-
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
+            }
+        });
+        recyclerView.setAdapter(route_view_adapter);
 
     }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+
+        try {
+            if (apiDataResponse != null) {
+                switch (key) {
+                    case Constants.RETAILER_STATUS:
+                        JSONObject jsonObject = new JSONObject(apiDataResponse);
+
+                        if (jsonObject.getBoolean("success")) {
+                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                            String outletCode = "";
+
+
+                            for (int arr = 0; arr < jsonArray.length(); arr++) {
+                                JSONObject arrObj = jsonArray.getJSONObject(arr);
+
+                                int flag = arrObj.getInt("OrderFlg");
+                                //  To be=0,invoice-3,order-2,no order-1;
+                                String sMode = flag == 0 ? "To be" : flag == 3 ? "invoice" : flag == 2 ? "order" : "no order";
+
+                                outletCode = outletCode + arrObj.getString("ListedDrCode") + sMode + ",";
+
+
+                            }
+
+                            shared_common_pref.save(Constants.RETAILER_STATUS, outletCode);
+
+                            Log.v("statusList:", outletCode);
+
+
+                            setPagerAdapter(false);
+                        }
+                        break;
+                }
+            }
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -1098,13 +1051,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             this.context = getContext();
             mView = view;
             recyclerView = view.findViewById(R.id.recyclerView);
-
             updateData();
-
-
         }
     }
-
-
 }
 

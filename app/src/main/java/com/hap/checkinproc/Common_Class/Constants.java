@@ -63,4 +63,6 @@ public class Constants {
     public static final String SERVICEOUTLET = "serviceOutlet";
     public static final String OUTLET_SUMMARY = "outletSummary";
     public static final String SFA_DASHBOARD = "sfaDashboard";
+    public static final String STATE_LIST="stateList";
+    public static final String RETAILER_STATUS ="retailerStatus" ;
 }

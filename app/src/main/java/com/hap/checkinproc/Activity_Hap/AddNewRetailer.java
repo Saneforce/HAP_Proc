@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,6 +55,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
@@ -86,7 +88,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback {
+public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
     TextView toolHeader;
     CustomListViewDialog customDialog;
     ImageView imgBack;
@@ -94,9 +96,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType;
-    LinearLayout linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text, txDelvryType, txOutletType;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState,linReatilerChannel;
+    LinearLayout linReatilerClass,  CurrentLocLin, retailercodevisible;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
+            txDelvryType, txOutletType, tvStateName;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -110,7 +113,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONArray mainArray;
     JSONObject docMasterObject;
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue, imageConvert = "", imageServer = "";
-    Integer  classId, channelID, iOutletTyp;
+    Integer classId, channelID, iOutletTyp, stateCode;
     String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
     Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -136,6 +139,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
+    private ArrayList<Common_Model> stateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +177,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             txDelvryType = findViewById(R.id.txDelvryType);
             rlOutletType = findViewById(R.id.rlOutletType);
             txOutletType = findViewById(R.id.txOutletType);
+            rlState = findViewById(R.id.rl_state);
+            tvStateName = findViewById(R.id.tvState);
 
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
             mSubmit = findViewById(R.id.submit_button);
@@ -194,11 +200,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             rlDelvryType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    customDialog = new CustomListViewDialog(AddNewRetailer.this, deliveryTypeList, 11);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    showCommonDialog(deliveryTypeList, 11);
                 }
             });
 
@@ -211,15 +213,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    customDialog = new CustomListViewDialog(AddNewRetailer.this, outletTypeList, 13);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    showCommonDialog(outletTypeList, 13);
+
                 }
             });
             copypaste.setOnClickListener(this);
             ivPhotoShop.setOnClickListener(this);
+            rlState.setOnClickListener(this);
             btnRefLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -343,14 +343,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
-//            ImageView backView = findViewById(R.id.imag_back);
-//            backView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mOnBackPressedDispatcher.onBackPressed();
-//                }
-//            });
-            // OnclickRoute();
+
             onClickRetailerClass();
             onClickRetailerChannel();
 
@@ -458,6 +451,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerAddress.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
+                    } else if (tvStateName.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Select the State", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerCity.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerPhone.getText().toString().matches("")) {
@@ -571,6 +566,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
+
+            FRoute_Master.clear();
+
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -682,11 +681,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             @Override
             public void onClick(View v) {
 
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailClass, 9);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                showCommonDialog(modelRetailClass, 9);
             }
         });
     }
@@ -744,11 +739,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         linReatilerChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailChannel, 10);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                showCommonDialog(modelRetailChannel, 10);
             }
         });
     }
@@ -773,59 +764,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         Log.v("full_profile", yy + "");
         return yy;
     }
-
-
-    private void sendImageToServer(String sfcode, String filename, String mode) {
-        try {
-            common_class.ProgressdialogShow(1, "File Uploading...");
-            MultipartBody.Part imgg = convertimg("file", filePath);
-
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<ResponseBody> mCall = apiInterface.outletFileUpload(sfcode, filename, mode, imgg);
-
-            Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
-
-            mCall.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                    try {
-                        String jsonData = response.body().string();
-                        Log.v(TAG + "request_data_upload", String.valueOf(jsonData));
-                        JSONObject js = new JSONObject(jsonData);
-                        if (js.getBoolean("success")) {
-                            Log.v("printing_dynamic_cou", js.getString("url"));
-                            Toast.makeText(getApplicationContext(), js.getString("url"), Toast.LENGTH_SHORT).show();
-                            common_class.ProgressdialogShow(0, "File Uploading...");
-
-                            // imgUrl = js.getString("url");
-                        } else {
-                            Toast.makeText(getApplicationContext(), js.getString("message"), Toast.LENGTH_SHORT).show();
-                            common_class.ProgressdialogShow(0, "File Uploading...");
-                        }
-
-                    } catch (Exception e) {
-                        Log.e(TAG, "response:catch" + e.getMessage());
-                        common_class.ProgressdialogShow(0, "File Uploading...");
-
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.e(TAG + "onfailure", "ERROR");
-                    common_class.ProgressdialogShow(0, "File Uploading...");
-
-                }
-            });
-        } catch (Exception e) {
-            Log.e(TAG, "out catch: " + e.getMessage());
-            common_class.ProgressdialogShow(0, "File Uploading...");
-
-        }
-    }
-
 
     public void addNewRetailers() {
         try {
@@ -858,8 +796,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 reportObject.put("outstanding_amount", 0);
 
             else
-                reportObject.put("outstanding_amount", edt_outstanding.getText().toString());
+                reportObject.put("outstanding_amount", "'" +edt_outstanding.getText().toString());
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
+            reportObject.put("State_Code", "'" + tvStateName.getText().toString() + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
             reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
             reportObject.put("reason_category", common_class.addquote(reason_category_remarks));
@@ -894,10 +833,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
-            reportObject.put("place_id", place_id);
+            reportObject.put("place_id","'" +place_id);
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
-            reportObject.put("img_name", imageServer);
+            reportObject.put("img_name", "'" +imageServer);
 
             //
 
@@ -963,68 +902,68 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
 
-      /*  if (type == 8) {
-            txtRetailerRoute.setText(myDataset.get(position).getName());
-            routeId = myDataset.get(position).getId();
-            routeId = String.valueOf(routeId.subSequence(1, routeId.length() - 1));
-            routeId1 = Integer.valueOf(routeId);
-            Log.e("ASDFGHJ", "" + routeId);
-        }*/
-        customDialog.dismiss();
-        if (type == 2) {
-            txtRetailerRoute.setText("");
-            distributor_text.setText(myDataset.get(position).getName());
-            findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("Stk", myDataset.get(position).getId());
-                //jParam.put("div", UserDetails.getString("Divcode", ""));
-            } catch (JSONException ex) {
+       common_class.dismissCommonDialog();
+        switch (type) {
+            case 1:
+                tvStateName.setText(myDataset.get(position).getName());
+                stateCode = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 2:
+                txtRetailerRoute.setText("");
+                distributor_text.setText(myDataset.get(position).getName());
+                findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
+                JSONObject jParam = new JSONObject();
+                try {
+                    jParam.put("Stk", myDataset.get(position).getId());
+                    //jParam.put("div", UserDetails.getString("Divcode", ""));
+                } catch (JSONException ex) {
 
-            }
-            ApiClient.getClient().create(ApiInterface.class)
-                    .getDataArrayList("get/routelist", jParam.toString())
-                    .enqueue(new Callback<JsonArray>() {
-                        @Override
-                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                            try {
+                }
+                ApiClient.getClient().create(ApiInterface.class)
+                        .getDataArrayList("get/routelist", jParam.toString())
+                        .enqueue(new Callback<JsonArray>() {
+                            @Override
+                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                try {
 
-                                db.deleteMasterData(Constants.Rout_List);
-                                db.addMasterData(Constants.Rout_List, response.body().toString());
-                                getDbstoreData(Constants.Rout_List);
-                                loadroute(myDataset.get(position).getId());
-                            } catch (Exception e) {
+                                    db.deleteMasterData(Constants.Rout_List);
+                                    db.addMasterData(Constants.Rout_List, response.body().toString());
+                                    getDbstoreData(Constants.Rout_List);
+                                    loadroute(myDataset.get(position).getId());
+                                } catch (Exception e) {
+
+                                }
 
                             }
 
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonArray> call, Throwable t) {
-                            Log.d("RouteList", String.valueOf(t));
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<JsonArray> call, Throwable t) {
+                                Log.d("RouteList", String.valueOf(t));
+                            }
+                        });
 
 
-
-        } else if (type == 3) {
-            routeId = myDataset.get(position).getId();
-            txtRetailerRoute.setText(myDataset.get(position).getName());
-            loadroute(myDataset.get(position).getId());
-
-
-        } else if (type == 9) {
-
-            txtRetailerClass.setText(myDataset.get(position).getName());
-            classId = Integer.valueOf(myDataset.get(position).getId());
-        } else if (type == 10) {
-            txtRetailerChannel.setText(myDataset.get(position).getName());
-            channelID = Integer.valueOf(myDataset.get(position).getId());
-        } else if (type == 11) {
-            txDelvryType.setText(myDataset.get(position).getName());
-        } else if (type == 13) {
-            txOutletType.setText(myDataset.get(position).getName());
-            iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 3:
+                routeId = myDataset.get(position).getId();
+                txtRetailerRoute.setText(myDataset.get(position).getName());
+                loadroute(myDataset.get(position).getId());
+                break;
+            case 9:
+                txtRetailerClass.setText(myDataset.get(position).getName());
+                classId = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 10:
+                txtRetailerChannel.setText(myDataset.get(position).getName());
+                channelID = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 11:
+                txDelvryType.setText(myDataset.get(position).getName());
+                break;
+            case 13:
+                txOutletType.setText(myDataset.get(position).getName());
+                iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
+                break;
         }
     }
 
@@ -1032,12 +971,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-        FRoute_Master.clear();
-        for (int i = 0; i < Route_Masterlist.size(); i++) {
-            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-            }
-        }
+//        FRoute_Master.clear();
+//        for (int i = 0; i < Route_Masterlist.size(); i++) {
+//            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+//                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
+//            }
+//        }
 
         if (FRoute_Master.size() == 1) {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
@@ -1046,6 +985,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             routeId = FRoute_Master.get(0).getId();
         } else {
+            txtRetailerRoute.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
@@ -1088,26 +1028,32 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
     }
 
+
+    void showCommonDialog(List<Common_Model> dataList, int type) {
+        customDialog = new CustomListViewDialog(AddNewRetailer.this, dataList, type);
+        Window windowww = customDialog.getWindow();
+        windowww.setGravity(Gravity.CENTER);
+        windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.rl_state:
+                if (stateList == null || stateList.size() == 0)
+                    common_class.getDb_310Data(Constants.STATE_LIST, this);
+                else
+                    showCommonDialog(stateList, 1);
+                break;
 
             case R.id.rl_route:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                    customDialog = new CustomListViewDialog(AddNewRetailer.this, FRoute_Master, 3);
-                    Window windowww = customDialog.getWindow();
-                    windowww.setGravity(Gravity.CENTER);
-                    windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    showCommonDialog(FRoute_Master, 3);
                 }
                 break;
             case R.id.rl_Distributor:
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, distributor_master, 2);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                showCommonDialog(distributor_master, 2);
                 break;
             case R.id.copypaste:
                 addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
@@ -1141,6 +1087,47 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         mGoogleMap.clear();
         mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title(title));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+
+    }
+
+    @Override
+    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+
+        try {
+            if (apiDataResponse != null) {
+
+                switch (key) {
+                    case Constants.STATE_LIST:
+                        JSONObject stateObj = new JSONObject(apiDataResponse);
+
+                        if (stateObj.getBoolean("success")) {
+                            stateList = new ArrayList<>();
+
+                            stateList.clear();
+
+                            JSONArray array = stateObj.getJSONArray("Data");
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject obj = array.getJSONObject(i);
+                                stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
+                            }
+
+                            showCommonDialog(stateList, 1);
+
+                        }
+                        break;
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
 
     }
 }

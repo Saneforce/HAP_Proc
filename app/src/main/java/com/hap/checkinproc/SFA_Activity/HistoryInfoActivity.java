@@ -354,29 +354,6 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
-        if (outletReportViewModals != null) {
-
-            OutletReport_View_Modal.clear();
-
-            OutletReport_View_Modal = outletReportViewModals;
-
-            FilterOrderList.clear();
-
-            if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-                for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                    if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
-                        FilterOrderList.add(filterlist);
-                    }
-                }
-            }
-
-
-        }
-
-    }
-
-    @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
 

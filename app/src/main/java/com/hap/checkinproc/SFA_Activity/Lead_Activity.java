@@ -244,13 +244,13 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-        FRoute_Master.clear();
-        for (int i = 0; i < Route_Masterlist.size(); i++) {
-            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
-                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-            }
-        }
+//        FRoute_Master.clear();
+//        for (int i = 0; i < Route_Masterlist.size(); i++) {
+//            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+//                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
+//                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
+//            }
+//        }
 
         if (FRoute_Master.size() == 1) {
             route_text.setText(FRoute_Master.get(0).getName());
@@ -260,6 +260,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
 
         } else {
+            route_text.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
 
         }
@@ -356,6 +357,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
     void getDbstoreData(String listType) {
         try {
+            FRoute_Master.clear();
             JSONArray jsonArray = db.getMasterData(listType);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -406,10 +408,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
