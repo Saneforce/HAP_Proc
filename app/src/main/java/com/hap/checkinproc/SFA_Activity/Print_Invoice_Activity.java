@@ -564,10 +564,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

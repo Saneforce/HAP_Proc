@@ -42,9 +42,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     String laty, lngy;
     JSONObject json;
 
-    private String markedPlaceId = "";
-
-
     public ExploreMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
 
         this.mInflater = LayoutInflater.from(context);
@@ -74,9 +71,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
-
-          //  removeMarkedPlaces();
-
 
             json = array.getJSONObject(position);
             holder.txt_dr.setText(json.getString("name"));
@@ -235,78 +229,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
         }
     }
-
-    public void removeMarkedPlaces() {
-
-        try {
-            Common_Class common_class = new Common_Class(context);
-            if (common_class.isNetworkAvailable(context)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                JSONObject HeadItem = new JSONObject();
-
-
-                HeadItem.put("lat", laty);
-                HeadItem.put("lng", lngy);
-                HeadItem.put("date", Common_Class.GetDate());
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-
-                Call<ResponseBody> call = service.getMarkedData(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-                                if (jsonObject.getBoolean("success")) {
-
-
-                                    markedPlaceId = jsonObject.getString("Data");
-
-
-                                } else {
-
-                                }
-
-                            }
-
-
-                        } catch (Exception e) {
-
-                            Log.v("fail>>", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>", t.toString());
-
-
-                    }
-                });
-            } else {
-                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-
-    }
-
 
     @Override
     public int getItemCount() {

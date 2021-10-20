@@ -95,9 +95,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     Common_Class common_class;
     TextView Createoutlet, latitude, longitude, availableoutlets, btnNearme, btnExplore, cAddress;
     EditText txSearchRet;
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> ShowRetailer_Modal_List;
-    public static Shared_Common_Pref shared_common_pref;
+     public static Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
     MapView mapView;
     GoogleMap map;
@@ -186,8 +184,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                     SearchRetailers();
                 }
             });
-            String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-            //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
             latitude.setText("Locating Please Wait...");
             new LocationFinder(getApplication(), new LocationEvents() {
                 @Override
@@ -856,8 +852,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     public void getDrDetail(String placesdata) {
         try {
-
-
             if (resData != null)
                 oldData = resData;
 
@@ -907,7 +901,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
             //  drDetail();
             removeMarkedPlaces();
-
 
         } catch (Exception e) {
             e.printStackTrace();

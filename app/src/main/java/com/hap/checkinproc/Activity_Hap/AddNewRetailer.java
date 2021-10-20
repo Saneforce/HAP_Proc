@@ -54,6 +54,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
@@ -81,22 +82,21 @@ import java.util.Map;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback {
+public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
     TextView toolHeader;
-    CustomListViewDialog customDialog;
     ImageView imgBack;
     EditText toolSearch, retailercode;
     GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor,rlDelvryType,rlOutletType;
-    LinearLayout linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,txDelvryType,txOutletType;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel;
+    LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
+            txDelvryType, txOutletType, tvStateName;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -110,7 +110,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONArray mainArray;
     JSONObject docMasterObject;
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue, imageConvert = "", imageServer = "";
-    Integer routeId1, classId, channelID,iOutletTyp;
+    Integer classId, channelID, iOutletTyp, stateCode;
     String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
     Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -136,6 +136,7 @@ CircularProgressButton btnRefLoc;
     double RetLat=0.0,RetLng=0.0;
     List<Common_Model> deliveryTypeList,outletTypeList;
     final Handler handler = new Handler();
+    private ArrayList<Common_Model> stateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +172,8 @@ CircularProgressButton btnRefLoc;
             txDelvryType = findViewById(R.id.txDelvryType);
             rlOutletType = findViewById(R.id.rlOutletType);
             txOutletType = findViewById(R.id.txOutletType);
+            rlState = findViewById(R.id.rl_state);
+            tvStateName = findViewById(R.id.tvState);
 
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
             mSubmit = findViewById(R.id.submit_button);
@@ -192,11 +195,7 @@ CircularProgressButton btnRefLoc;
             rlDelvryType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    customDialog = new CustomListViewDialog(AddNewRetailer.this, deliveryTypeList, 11);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    common_class.showCommonDialog(deliveryTypeList, 11, AddNewRetailer.this);
                 }
             });
 
@@ -209,15 +208,13 @@ CircularProgressButton btnRefLoc;
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    customDialog = new CustomListViewDialog(AddNewRetailer.this, outletTypeList, 13);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    common_class.showCommonDialog(outletTypeList, 13, AddNewRetailer.this);
+
                 }
             });
             copypaste.setOnClickListener(this);
             ivPhotoShop.setOnClickListener(this);
+            rlState.setOnClickListener(this);
             btnRefLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -292,7 +289,7 @@ CircularProgressButton btnRefLoc;
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
                 iOutletTyp = Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
-                if(iOutletTyp==0)
+                if (iOutletTyp == 0)
                     txOutletType.setText("Universal");
                 else
                     txOutletType.setText("Service");
@@ -341,14 +338,7 @@ CircularProgressButton btnRefLoc;
                         startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
-//            ImageView backView = findViewById(R.id.imag_back);
-//            backView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mOnBackPressedDispatcher.onBackPressed();
-//                }
-//            });
-            // OnclickRoute();
+
             onClickRetailerClass();
             onClickRetailerChannel();
 
@@ -413,11 +403,11 @@ CircularProgressButton btnRefLoc;
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
 
 
-                RetLat=Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
-                RetLng=Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
+                RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
+                RetLng = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
 
-                Shared_Common_Pref.Outletlat=RetLat;
-                Shared_Common_Pref.Outletlong=RetLng;
+                Shared_Common_Pref.Outletlat = RetLat;
+                Shared_Common_Pref.Outletlong = RetLng;
 
                 if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
                     addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
@@ -456,6 +446,8 @@ CircularProgressButton btnRefLoc;
                         Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerAddress.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
+                    } else if (tvStateName.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Select the State", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerCity.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerPhone.getText().toString().matches("")) {
@@ -464,18 +456,13 @@ CircularProgressButton btnRefLoc;
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
-                    else if(txtRetailerChannel.getText().toString().equalsIgnoreCase("")){
+                    else if (txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(txDelvryType.getText().toString().equalsIgnoreCase("")){
+                    } else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(txOutletType.getText().toString().equalsIgnoreCase("")){
+                    } else if (txOutletType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                    else if (imageConvert.equals("")) {
+                    } else if (imageConvert.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
@@ -574,6 +561,10 @@ CircularProgressButton btnRefLoc;
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
+
+            FRoute_Master.clear();
+
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -685,11 +676,7 @@ CircularProgressButton btnRefLoc;
             @Override
             public void onClick(View v) {
 
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailClass, 9);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                common_class.showCommonDialog(modelRetailClass, 9, AddNewRetailer.this);
             }
         });
     }
@@ -747,11 +734,7 @@ CircularProgressButton btnRefLoc;
         linReatilerChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailChannel, 10);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                common_class.showCommonDialog(modelRetailChannel, 10, AddNewRetailer.this);
             }
         });
     }
@@ -776,59 +759,6 @@ CircularProgressButton btnRefLoc;
         Log.v("full_profile", yy + "");
         return yy;
     }
-
-
-    private void sendImageToServer(String sfcode, String filename, String mode) {
-        try {
-            common_class.ProgressdialogShow(1, "File Uploading...");
-            MultipartBody.Part imgg = convertimg("file", filePath);
-
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<ResponseBody> mCall = apiInterface.outletFileUpload(sfcode, filename, mode, imgg);
-
-            Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
-
-            mCall.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                    try {
-                        String jsonData = response.body().string();
-                        Log.v(TAG + "request_data_upload", String.valueOf(jsonData));
-                        JSONObject js = new JSONObject(jsonData);
-                        if (js.getBoolean("success")) {
-                            Log.v("printing_dynamic_cou", js.getString("url"));
-                            Toast.makeText(getApplicationContext(), js.getString("url"), Toast.LENGTH_SHORT).show();
-                            common_class.ProgressdialogShow(0, "File Uploading...");
-
-                            // imgUrl = js.getString("url");
-                        } else {
-                            Toast.makeText(getApplicationContext(), js.getString("message"), Toast.LENGTH_SHORT).show();
-                            common_class.ProgressdialogShow(0, "File Uploading...");
-                        }
-
-                    } catch (Exception e) {
-                        Log.e(TAG, "response:catch" + e.getMessage());
-                        common_class.ProgressdialogShow(0, "File Uploading...");
-
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.e(TAG + "onfailure", "ERROR");
-                    common_class.ProgressdialogShow(0, "File Uploading...");
-
-                }
-            });
-        } catch (Exception e) {
-            Log.e(TAG, "out catch: " + e.getMessage());
-            common_class.ProgressdialogShow(0, "File Uploading...");
-
-        }
-    }
-
 
     public void addNewRetailers() {
         try {
@@ -861,8 +791,9 @@ CircularProgressButton btnRefLoc;
                 reportObject.put("outstanding_amount", 0);
 
             else
-                reportObject.put("outstanding_amount", edt_outstanding.getText().toString());
+                reportObject.put("outstanding_amount", "'" + edt_outstanding.getText().toString());
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
+            reportObject.put("State_Code", "'" + stateCode + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
             reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
             reportObject.put("reason_category", common_class.addquote(reason_category_remarks));
@@ -897,10 +828,10 @@ CircularProgressButton btnRefLoc;
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
-            reportObject.put("place_id", place_id);
+            reportObject.put("place_id", "'" + place_id);
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
-            reportObject.put("img_name", imageServer);
+            reportObject.put("img_name", "'" + imageServer);
 
             //
 
@@ -966,80 +897,74 @@ CircularProgressButton btnRefLoc;
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
 
-      /*  if (type == 8) {
-            txtRetailerRoute.setText(myDataset.get(position).getName());
-            routeId = myDataset.get(position).getId();
-            routeId = String.valueOf(routeId.subSequence(1, routeId.length() - 1));
-            routeId1 = Integer.valueOf(routeId);
-            Log.e("ASDFGHJ", "" + routeId);
-        }*/
-        customDialog.dismiss();
-        if (type == 2) {
-            txtRetailerRoute.setText("");
-            distributor_text.setText(myDataset.get(position).getName());
-            findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("Stk", myDataset.get(position).getId());
-                //jParam.put("div", UserDetails.getString("Divcode", ""));
-            } catch (JSONException ex) {
+        common_class.dismissCommonDialog();
+        switch (type) {
+            case 1:
+                tvStateName.setText(myDataset.get(position).getName());
+                stateCode = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 2:
+                txtRetailerRoute.setText("");
+                distributor_text.setText(myDataset.get(position).getName());
+                findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
+                JSONObject jParam = new JSONObject();
+                try {
+                    jParam.put("Stk", myDataset.get(position).getId());
+                    //jParam.put("div", UserDetails.getString("Divcode", ""));
+                } catch (JSONException ex) {
 
-            }
-            ApiClient.getClient().create(ApiInterface.class)
-                    .getDataArrayList("get/routelist", jParam.toString())
-                    .enqueue(new Callback<JsonArray>() {
-                        @Override
-                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                            try {
+                }
+                ApiClient.getClient().create(ApiInterface.class)
+                        .getDataArrayList("get/routelist", jParam.toString())
+                        .enqueue(new Callback<JsonArray>() {
+                            @Override
+                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                try {
 
-                                db.deleteMasterData(Constants.Rout_List);
-                                db.addMasterData(Constants.Rout_List, response.body().toString());
-                                getDbstoreData(Constants.Rout_List);
-                                loadroute(myDataset.get(position).getId());
-                            } catch (Exception e) {
+                                    db.deleteMasterData(Constants.Rout_List);
+                                    db.addMasterData(Constants.Rout_List, response.body().toString());
+                                    getDbstoreData(Constants.Rout_List);
+                                    loadroute(myDataset.get(position).getId());
+                                } catch (Exception e) {
+
+                                }
 
                             }
 
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonArray> call, Throwable t) {
-                            Log.d("RouteList", String.valueOf(t));
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<JsonArray> call, Throwable t) {
+                                Log.d("RouteList", String.valueOf(t));
+                            }
+                        });
 
 
-
-        } else if (type == 3) {
-            routeId = myDataset.get(position).getId();
-            txtRetailerRoute.setText(myDataset.get(position).getName());
-            loadroute(myDataset.get(position).getId());
-
-
-        } else if (type == 9) {
-
-            txtRetailerClass.setText(myDataset.get(position).getName());
-            classId = Integer.valueOf(myDataset.get(position).getId());
-        } else if (type == 10) {
-            txtRetailerChannel.setText(myDataset.get(position).getName());
-            channelID = Integer.valueOf(myDataset.get(position).getId());
-        }else if (type == 11) {
-            txDelvryType.setText(myDataset.get(position).getName());
-        }else if (type == 13) {
-            txOutletType.setText(myDataset.get(position).getName());
-            iOutletTyp=Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 3:
+                routeId = myDataset.get(position).getId();
+                txtRetailerRoute.setText(myDataset.get(position).getName());
+                //loadroute(myDataset.get(position).getId());
+                break;
+            case 9:
+                txtRetailerClass.setText(myDataset.get(position).getName());
+                classId = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 10:
+                txtRetailerChannel.setText(myDataset.get(position).getName());
+                channelID = Integer.valueOf(myDataset.get(position).getId());
+                break;
+            case 11:
+                txDelvryType.setText(myDataset.get(position).getName());
+                break;
+            case 13:
+                txOutletType.setText(myDataset.get(position).getName());
+                iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
+                break;
         }
     }
 
     public void loadroute(String id) {
         if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
-        }
-        FRoute_Master.clear();
-        for (int i = 0; i < Route_Masterlist.size(); i++) {
-            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-            }
         }
 
         if (FRoute_Master.size() == 1) {
@@ -1049,6 +974,7 @@ CircularProgressButton btnRefLoc;
             shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             routeId = FRoute_Master.get(0).getId();
         } else {
+            txtRetailerRoute.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
@@ -1091,26 +1017,24 @@ CircularProgressButton btnRefLoc;
         }
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.rl_state:
+                if (stateList == null || stateList.size() == 0)
+                    common_class.getDb_310Data(Constants.STATE_LIST, this);
+                else
+                    common_class.showCommonDialog(stateList, 1, this);
+                break;
 
             case R.id.rl_route:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                    customDialog = new CustomListViewDialog(AddNewRetailer.this, FRoute_Master, 3);
-                    Window windowww = customDialog.getWindow();
-                    windowww.setGravity(Gravity.CENTER);
-                    windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    common_class.showCommonDialog(FRoute_Master, 3, this);
                 }
                 break;
             case R.id.rl_Distributor:
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, distributor_master, 2);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                common_class.showCommonDialog(distributor_master, 2, this);
                 break;
             case R.id.copypaste:
                 addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
@@ -1140,10 +1064,51 @@ CircularProgressButton btnRefLoc;
 
     public void centreMapOnLocation(String title) {
 
-        LatLng userLocation = new LatLng(RetLat,RetLng );
+        LatLng userLocation = new LatLng(RetLat, RetLng);
         mGoogleMap.clear();
         mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title(title));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,16));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+
+    }
+
+    @Override
+    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+
+        try {
+            if (apiDataResponse != null) {
+
+                switch (key) {
+                    case Constants.STATE_LIST:
+                        JSONObject stateObj = new JSONObject(apiDataResponse);
+
+                        if (stateObj.getBoolean("success")) {
+                            stateList = new ArrayList<>();
+
+                            stateList.clear();
+
+                            JSONArray array = stateObj.getJSONArray("Data");
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject obj = array.getJSONObject(i);
+                                stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
+                            }
+
+                            common_class.showCommonDialog(stateList, 1, this);
+
+                        }
+                        break;
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
 
     }
 }

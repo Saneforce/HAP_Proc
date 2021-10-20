@@ -458,7 +458,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.v("get_dr_detttt", googlePlacesData + " :api: " + sb);
-            // getDrDetail(googlePlacesData);
 
             Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
             Shared_Common_Pref.Outler_AddFlag = "1";

@@ -393,10 +393,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

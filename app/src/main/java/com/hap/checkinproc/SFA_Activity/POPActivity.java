@@ -411,10 +411,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    @Override
-    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
