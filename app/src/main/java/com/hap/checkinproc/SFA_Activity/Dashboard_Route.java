@@ -120,6 +120,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     boolean updSale = true;
     private Route_View_Adapter route_view_adapter;
 
+    public String searchText = "";
+    public int tabSelectedPos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -261,18 +264,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     //  SearchRetailers();
 
 
-                    if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
-                        String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-                        Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
-                    }
-                    String sSchText = txSearchRet.getText().toString();
-                    Retailer_Modal_ListFilter.clear();
-                    for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                        if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
-                                && (sSchText.equalsIgnoreCase("") ||
-                                (";" + Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + sSchText.toLowerCase()) > -1))
-                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                    }
+
                     setPagerAdapter(true);
 
 
@@ -843,7 +835,20 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     void setPagerAdapter(boolean isFilter) {
 
         if (isFilter) {
-            adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition());
+
+            if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+                Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
+            }
+            String sSchText = txSearchRet.getText().toString();
+
+            Retailer_Modal_ListFilter = Retailer_Modal_List;
+
+            searchText = txSearchRet.getText().toString();
+
+            adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), sSchText,RetType);
+
+
         } else {
             adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter);
             viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
