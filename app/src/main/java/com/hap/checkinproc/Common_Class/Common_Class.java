@@ -39,7 +39,6 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
@@ -371,6 +370,7 @@ public class Common_Class {
                             shared_common_pref = new Shared_Common_Pref(activity);
 
                         if (key.equals(Retailer_OutletList)) {
+                            Log.v("Res>>", response.body().toString());
                             shared_common_pref.save(key, gson.toJson(response.body()));
 
                         } else {
@@ -426,8 +426,12 @@ public class Common_Class {
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         break;
 
-                    case Constants.QPS_STATUS:
+                    case Constants.POP_MATERIAL:
                         axnname = "get/popmaster";
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("retailorCode", Shared_Common_Pref.OutletCode);
+                        data.put("distributorcode", Shared_Common_Pref.DistributorCode);
                         break;
 
                     case Constants.OUTSTANDING:

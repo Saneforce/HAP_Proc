@@ -931,10 +931,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     }
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
 

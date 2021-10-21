@@ -20,10 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,7 +52,6 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
-import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
@@ -102,7 +98,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     Common_Model mCommon_model_spinner;
-    List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail,
             edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding;
@@ -330,9 +325,6 @@ CircularProgressButton btnRefLoc;
                 public void onClick(View v) {
                     Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                     if (CheckIn == true) {
-//                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-//                        Dashboard.putExtra("Mode", "CIN");
-//                        startActivity(Dashboard);
                         common_class.CommonIntentwithoutFinish(SFA_Activity.class);
                     } else
                         startActivity(new Intent(getApplicationContext(), Dashboard.class));
@@ -363,6 +355,7 @@ CircularProgressButton btnRefLoc;
                     Log.e("Compititor_Name", "" + Compititor_Name);
                     //The key argument here must match that used in the other activity
                 } else {
+                    common_class.getDb_310Data(Constants.STATE_LIST, this);
                     addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
                     addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                     txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
@@ -377,6 +370,7 @@ CircularProgressButton btnRefLoc;
                     edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
                     edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
                     // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
+
 
                     if (i.getExtras().getString("Compititor_Id") != null)
                         Compititor_Id = i.getExtras().getString("Compititor_Id");
@@ -937,7 +931,6 @@ CircularProgressButton btnRefLoc;
                             }
                         });
 
-
                 break;
             case 3:
                 routeId = myDataset.get(position).getId();
@@ -1024,8 +1017,8 @@ CircularProgressButton btnRefLoc;
             case R.id.rl_state:
                 if (stateList == null || stateList.size() == 0)
                     common_class.getDb_310Data(Constants.STATE_LIST, this);
-                else
-                    common_class.showCommonDialog(stateList, 1, this);
+                //else
+                common_class.showCommonDialog(stateList, 1, this);
                 break;
 
             case R.id.rl_route:
@@ -1071,34 +1064,34 @@ CircularProgressButton btnRefLoc;
 
     }
 
-    @Override
-    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
-
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
-
         try {
             if (apiDataResponse != null) {
 
                 switch (key) {
                     case Constants.STATE_LIST:
                         JSONObject stateObj = new JSONObject(apiDataResponse);
-
                         if (stateObj.getBoolean("success")) {
                             stateList = new ArrayList<>();
-
                             stateList.clear();
 
                             JSONArray array = stateObj.getJSONArray("Data");
 
+                            String strState = "";
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject obj = array.getJSONObject(i);
+                                strState = strState + obj.getString("State_Code") + obj.getString("StateName") + ",";
                                 stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
                             }
 
-                            common_class.showCommonDialog(stateList, 1, this);
+                            if (!Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                                strState = strState.substring(strState.indexOf(Retailer_Modal_List.get(getOutletPosition()).getStateCode()) + Retailer_Modal_List.get(getOutletPosition()).getStateCode().length());
+                                strState = strState.substring(0, strState.indexOf(","));
+                                tvStateName.setText("" + strState);
+                            }
+
 
                         }
                         break;

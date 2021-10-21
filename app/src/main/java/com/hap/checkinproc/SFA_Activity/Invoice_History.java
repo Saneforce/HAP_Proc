@@ -386,10 +386,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         }
     }
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
     @Override

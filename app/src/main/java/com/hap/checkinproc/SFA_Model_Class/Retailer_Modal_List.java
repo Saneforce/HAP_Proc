@@ -360,6 +360,9 @@ public class Retailer_Modal_List {
     @SerializedName("Owner_Name")
     @Expose
     private String Owner_Name;
+    @SerializedName("StateCode")
+    @Expose
+    private String StateCode;
     @SerializedName("Statusname")
     @Expose
     private String Statusname;
@@ -812,5 +815,13 @@ public class Retailer_Modal_List {
 
     public void setOrderFlg(int orderFlg) {
         OrderFlg = orderFlg;
+    }
+
+    public String getStateCode() {
+        return StateCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        StateCode = stateCode;
     }
 }

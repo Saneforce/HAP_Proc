@@ -693,11 +693,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
 
-    @Override
-    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
-
-    }
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
@@ -754,7 +749,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
 
         Retailer_Modal_ListFilter.clear();
-        CountSR = 0;
+        CountUR = 0;
         CountSR = 0;
 
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
@@ -877,4 +872,3 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 }
-

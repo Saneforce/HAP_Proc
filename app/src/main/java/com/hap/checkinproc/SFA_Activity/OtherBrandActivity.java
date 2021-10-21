@@ -284,10 +284,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
 
