@@ -180,6 +180,9 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                             EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                         }
                     }
+                    totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
+                    PersonalKmEdit.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, totalPM)});
+
                 }
 
 
@@ -190,22 +193,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
             }
         });
-
-
-        PersonalKmEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (!EndedEditText.getText().toString().equals("")) {
-                    totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
-                    Log.v("TOTAL_KM_INSIDe", String.valueOf(totalPM));
-
-                    if (totalPM > 0)
-                        PersonalKmEdit.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, totalPM)});
-                }
-            }
-        });
-
 
         EndedKmImage.setOnClickListener(new View.OnClickListener() {
             @Override
