@@ -22,9 +22,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     private String mRetType = "1";
 
 
-    public TabAdapter(FragmentManager fm, int tabPos, List<Retailer_Modal_List> retailer_Modal_List) {
+    public TabAdapter(FragmentManager fm, int tabPos, List<Retailer_Modal_List> retailer_Modal_List, String RetType) {
         super(fm);
         this.mRetailer_Modal_List = retailer_Modal_List;
+        this.mRetType = RetType;
         Log.v("tabAdapter: ", "pos:" + tabPos);
     }
 
@@ -79,10 +80,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
             for (int i = 0; i < mRetailer_Modal_List.size(); i++) {
                 if (val.indexOf(mRetailer_Modal_List.get(i).getId() + sMode) > -1 &&
                         (Route_id.equalsIgnoreCase("") || Route_id.equalsIgnoreCase(mRetailer_Modal_List.get(i).getTownCode())) &&
-                        (((mRetailer_Modal_List.get(i).getType().equalsIgnoreCase(mRetType)
-                                && (mSearchText.equalsIgnoreCase("") || (flag == mTabPos &&
-                                (";" + mRetailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + mSearchText.toLowerCase()) > -1)))) ||
-                                (flag != mTabPos))) {
+                        mRetailer_Modal_List.get(i).getType().equalsIgnoreCase(mRetType)
+                        && (mSearchText.equalsIgnoreCase("") || (flag == mTabPos &&
+                        (";" + mRetailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + mSearchText.toLowerCase()) > -1) ||
+                        (flag != mTabPos))) {
                     Retailer_Modal_ListFilter.add(mRetailer_Modal_List.get(i));
                 }
             }

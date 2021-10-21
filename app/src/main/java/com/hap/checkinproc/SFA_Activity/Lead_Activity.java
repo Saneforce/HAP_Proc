@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -33,7 +29,6 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Lead_Adapter;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
@@ -62,13 +57,11 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     String Route_id;
     EditText txSearchRet;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-
-    CustomListViewDialog customDialog;
     DatabaseHandler db;
     String TAG = "Lead_Activity:";
     private TextView distributor_text;
+    private String routeId = "";
 
 
     @Override
@@ -109,26 +102,8 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
-            // if (!OrdersTable.equals("")) {
-            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-            if (Retailer_Modal_List != null) {
-                Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
-                GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
-                TotalOutlets.setText(String.valueOf(Retailer_Modal_List.size()));
-                int todaycount = 0;
-                for (Retailer_Modal_List lm : Retailer_Modal_List) {
-                    if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
-                        todaycount++;
-                    }
-                }
-                todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
-            }
-            if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
-                recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-
-                // recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
-            }
+            setAdapter();
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -162,7 +137,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    SearchRetailers();
+                    setAdapter();
                 }
             });
 
@@ -171,26 +146,10 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void SearchRetailers() {
-        Retailer_Modal_ListFilter.clear();
-        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-        }.getType();
-        String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
-        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
-            String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
-            String sSchText = txSearchRet.getText().toString().toUpperCase();
-            if ((";" + itmname).indexOf(";" + sSchText) > -1) {
-                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
-            }
-        }
-        TotalOutlets.setText(String.valueOf(Retailer_Modal_List.size()));
-        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-    }
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
+        common_class.dismissCommonDialog();
         if (type == 2) {
             route_text.setText("");
             sharedCommonPref.save(Constants.Route_Id, "");
@@ -244,13 +203,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-//        FRoute_Master.clear();
-//        for (int i = 0; i < Route_Masterlist.size(); i++) {
-//            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-//                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
-//                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-//            }
-//        }
 
         if (FRoute_Master.size() == 1) {
             route_text.setText(FRoute_Master.get(0).getName());
@@ -278,20 +230,12 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.route_text:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                    customDialog = new CustomListViewDialog(Lead_Activity.this, FRoute_Master, 3);
-                    Window windowww = customDialog.getWindow();
-                    windowww.setGravity(Gravity.CENTER);
-                    windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    common_class.showCommonDialog(FRoute_Master, 3, this);
                 }
                 break;
 
             case R.id.distributor_text:
-                customDialog = new CustomListViewDialog(Lead_Activity.this, distributor_master, 2);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                common_class.showCommonDialog(distributor_master, 2, this);
                 break;
         }
     }
@@ -308,7 +252,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("1")) {
                     FRoute_Master.add(Model_Pojo);
-                    Route_Masterlist.add(Model_Pojo);
+
                 } else if (String.valueOf(jsonObject1.optString("Button_Access")).indexOf("D") > -1) {
                     route_text.setText(jsonObject1.optString("ClstrName"));
                     Route_id = jsonObject1.optString("cluster");
@@ -321,31 +265,13 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void OutletFilter(String id, String flag) {
-
-
         try {
-
             if (flag.equals("0")) {
-
-                Retailer_Modal_ListFilter = new ArrayList<>();
-
-                for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                    if (id.equals(Retailer_Modal_List.get(i).getTownCode()))
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-
-
-                recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter,
-                        R.layout.lead_recyclerview, getApplicationContext()));
-
-                TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_ListFilter.size());
-
-
+                routeId = id;
+                setAdapter();
             } else {
-
+                routeId = "";
                 common_class.getDataFromApi(Retailer_OutletList, this, false);
-
-
             }
 
 
@@ -375,7 +301,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
                     Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
                     FRoute_Master.add(Model_Pojo);
-                    Route_Masterlist.add(Model_Pojo);
+
                 }
 
             }
@@ -390,30 +316,51 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
-        if (retailer_modal_list != null) {
-            Retailer_Modal_List.clear();
-            Retailer_Modal_List = retailer_modal_list;
 
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            if (apiDataResponse != null) {
+                switch (key) {
+                    case Retailer_OutletList:
+                        setAdapter();
+                        break;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    void setAdapter() {
+        String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
+
+        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+        if (Retailer_Modal_List != null) {
             Retailer_Modal_ListFilter.clear();
+            //            int todaycount = 0;
+//            for (Retailer_Modal_List lm : Retailer_Modal_List) {
+//                if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
+//                    todaycount++;
+//                }
+//            }
+//            todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
 
-            Retailer_Modal_ListFilter = Retailer_Modal_List;
-
+            for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
+                String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
+                String sSchText = txSearchRet.getText().toString().toUpperCase();
+                if ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId)))) {
+                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
+                }
+            }
+            TotalOutlets.setText(String.valueOf(Retailer_Modal_ListFilter.size()));
             recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-            new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-            recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
 
-            TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
         }
 
 
     }
-
-
-
-    @Override
-    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
-
-    }
-
-
 }

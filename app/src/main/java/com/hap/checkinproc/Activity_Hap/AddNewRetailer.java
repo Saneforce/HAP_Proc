@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -83,21 +82,19 @@ import java.util.Map;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
     TextView toolHeader;
-    CustomListViewDialog customDialog;
     ImageView imgBack;
     EditText toolSearch, retailercode;
     GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState,linReatilerChannel;
-    LinearLayout linReatilerClass,  CurrentLocLin, retailercodevisible;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel;
+    LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
             txDelvryType, txOutletType, tvStateName;
     Type userType;
@@ -200,7 +197,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             rlDelvryType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showCommonDialog(deliveryTypeList, 11);
+                    common_class.showCommonDialog(deliveryTypeList, 11, AddNewRetailer.this);
                 }
             });
 
@@ -213,7 +210,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showCommonDialog(outletTypeList, 13);
+                    common_class.showCommonDialog(outletTypeList, 13, AddNewRetailer.this);
 
                 }
             });
@@ -681,7 +678,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             @Override
             public void onClick(View v) {
 
-                showCommonDialog(modelRetailClass, 9);
+                common_class.showCommonDialog(modelRetailClass, 9, AddNewRetailer.this);
             }
         });
     }
@@ -739,7 +736,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         linReatilerChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCommonDialog(modelRetailChannel, 10);
+                common_class.showCommonDialog(modelRetailChannel, 10, AddNewRetailer.this);
             }
         });
     }
@@ -796,9 +793,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 reportObject.put("outstanding_amount", 0);
 
             else
-                reportObject.put("outstanding_amount", "'" +edt_outstanding.getText().toString());
+                reportObject.put("outstanding_amount", "'" + edt_outstanding.getText().toString());
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
-            reportObject.put("State_Code", "'" + tvStateName.getText().toString() + "'");
+            reportObject.put("State_Code", "'" + stateCode + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
             reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
             reportObject.put("reason_category", common_class.addquote(reason_category_remarks));
@@ -833,10 +830,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
-            reportObject.put("place_id","'" +place_id);
+            reportObject.put("place_id", "'" + place_id);
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
-            reportObject.put("img_name", "'" +imageServer);
+            reportObject.put("img_name", "'" + imageServer);
 
             //
 
@@ -902,7 +899,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
 
-       common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog();
         switch (type) {
             case 1:
                 tvStateName.setText(myDataset.get(position).getName());
@@ -947,7 +944,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             case 3:
                 routeId = myDataset.get(position).getId();
                 txtRetailerRoute.setText(myDataset.get(position).getName());
-                loadroute(myDataset.get(position).getId());
+                //loadroute(myDataset.get(position).getId());
                 break;
             case 9:
                 txtRetailerClass.setText(myDataset.get(position).getName());
@@ -971,12 +968,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-//        FRoute_Master.clear();
-//        for (int i = 0; i < Route_Masterlist.size(); i++) {
-//            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-//                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-//            }
-//        }
 
         if (FRoute_Master.size() == 1) {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
@@ -1029,14 +1020,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
 
-    void showCommonDialog(List<Common_Model> dataList, int type) {
-        customDialog = new CustomListViewDialog(AddNewRetailer.this, dataList, type);
-        Window windowww = customDialog.getWindow();
-        windowww.setGravity(Gravity.CENTER);
-        windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -1044,16 +1027,16 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 if (stateList == null || stateList.size() == 0)
                     common_class.getDb_310Data(Constants.STATE_LIST, this);
                 else
-                    showCommonDialog(stateList, 1);
+                    common_class.showCommonDialog(stateList, 1, this);
                 break;
 
             case R.id.rl_route:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                    showCommonDialog(FRoute_Master, 3);
+                    common_class.showCommonDialog(FRoute_Master, 3, this);
                 }
                 break;
             case R.id.rl_Distributor:
-                showCommonDialog(distributor_master, 2);
+                common_class.showCommonDialog(distributor_master, 2, this);
                 break;
             case R.id.copypaste:
                 addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
@@ -1117,7 +1100,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
                             }
 
-                            showCommonDialog(stateList, 1);
+                            common_class.showCommonDialog(stateList, 1, this);
 
                         }
                         break;

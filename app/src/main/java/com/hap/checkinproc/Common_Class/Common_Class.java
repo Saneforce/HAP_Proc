@@ -4,14 +4,8 @@ package com.hap.checkinproc.Common_Class;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 import static com.hap.checkinproc.Activity_Hap.SFA_Activity.sfa_date;
-import static com.hap.checkinproc.Common_Class.Constants.Category_List;
-import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
-import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
-import static com.hap.checkinproc.Common_Class.Constants.Outlet_Total_Orders;
-import static com.hap.checkinproc.Common_Class.Constants.Product_List;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
-import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 import android.Manifest;
 import android.app.Activity;
@@ -363,9 +357,7 @@ public class Common_Class {
     void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity, Boolean boolRefresh) {
         try {
             DatabaseHandler db = new DatabaseHandler(activity);
-
             ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
 
             Call<Object> call = service.GetRouteObject(QueryString, QuerySTring1);
             call.enqueue(new Callback<Object>() {
@@ -379,87 +371,16 @@ public class Common_Class {
                             shared_common_pref = new Shared_Common_Pref(activity);
 
                         if (key.equals(Retailer_OutletList)) {
-                            updateUi = ((UpdateResponseUI) activity);
-
                             shared_common_pref.save(key, gson.toJson(response.body()));
 
-                            String res = response.body().toString();
-                            Log.e("RES>>", res);
-                            userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-                            }.getType();
-
-                            retailer_modal_list = new ArrayList<>();
-                            retailer_modal_list.clear();
-                            retailer_modal_list = gson.fromJson(shared_common_pref.getvalue(Retailer_OutletList), userTypeRetailor);
-                            if (retailer_modal_list != null)
-                                updateUi.onLoadFilterData(retailer_modal_list);
-
                         } else {
-
                             db.deleteMasterData(key);
                             db.addMasterData(key, gson.toJson(response.body()));
-
                         }
 
-                        if (key.equals(TodayOrderDetails_List) || key.equals(Competitor_List) || key.equals(Constants.GetTodayOrder_List)) {
+                        updateUi = ((UpdateResponseUI) activity);
+                        updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
-                            updateUi = ((UpdateResponseUI) activity);
-
-                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
-                        }
-
-
-                        switch (key) {
-                            //case Retailer_OutletList:
-
-                            // getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
-                            // break;
-                            case Distributor_List:
-                                getDataFromApi(Category_List, activity, boolRefresh);
-                                break;
-                            case Category_List:
-                                getDataFromApi(Product_List, activity, boolRefresh);
-                                break;
-                            case Product_List:
-                                getDataFromApi(Rout_List, activity, boolRefresh);
-                                break;
-                            case Rout_List:
-                                if (boolRefresh)
-                                    getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
-
-                                else {
-                                    ProgressdialogShow(0, "Data Syncing");
-                                    activity.startActivity(new Intent(activity, SFA_Activity.class));
-                                }
-                                break;
-
-                            case Constants.GetTodayOrder_List:
-                                if (boolRefresh)
-                                    getDataFromApi(Outlet_Total_Orders, activity, boolRefresh);
-                                break;
-                            case Outlet_Total_Orders:
-                                if (boolRefresh)
-                                    getDataFromApi(TodayOrderDetails_List, activity, boolRefresh);
-                                break;
-                            case TodayOrderDetails_List:
-                                if (boolRefresh)
-                                    getDataFromApi(Competitor_List, activity, boolRefresh);
-                                break;
-                            case Competitor_List:
-                                if (boolRefresh)
-                                    getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
-                                break;
-                            case Constants.Outlet_Total_AlldaysOrders:
-                                if (boolRefresh)
-                                    getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
-                                break;
-                            case Constants.Todaydayplanresult:
-                                if (boolRefresh)
-                                    CommonIntentwithFinish(SFA_Activity.class);
-                                break;
-
-
-                        }
 
                     } catch (Exception e) {
 
@@ -484,10 +405,12 @@ public class Common_Class {
                 Map<String, String> QueryString = new HashMap<>();
                 String axnname = "";
                 JSONObject data = new JSONObject();
-
-
                 switch (key) {
 
+                    case Rout_List:
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        axnname = "get/routelist";
+                        break;
                     case Constants.HistoryData:
                         axnname = "get/orderandinvoice";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
