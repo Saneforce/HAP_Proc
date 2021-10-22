@@ -314,10 +314,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    @Override
-    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

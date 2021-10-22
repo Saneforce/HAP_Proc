@@ -166,22 +166,29 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         TotalOutlets.setText(String.valueOf(Retailer_Modal_ListFilter.size()));
 
         if (Retailer_Modal_ListFilter != null) {
+
             recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {
-                    Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                    Shared_Common_Pref.Outlet_Info_Flag = "1";
-                    Shared_Common_Pref.Editoutletflag = "1";
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Shared_Common_Pref.FromActivity = "Outlets";
-                    Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
-                    intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
-                    intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
-                    intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                    intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getMobileNumber());
-                    intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
-                    startActivity(intent);
-                    finish();
+                    try {
+                        Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
+                        Shared_Common_Pref.Outlet_Info_Flag = "1";
+                        Shared_Common_Pref.Editoutletflag = "1";
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.FromActivity = "Outlets";
+                        Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
+                        intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
+                        intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
+                        intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getMobileNumber());
+                        intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
+
+                        startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+
+                    }
+
                 }
             }));
 
@@ -264,16 +271,12 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.route_text:
-                if (FRoute_Master != null && FRoute_Master.size() > 1) {
-
+                if (FRoute_Master != null && FRoute_Master.size() > 1)
                     common_class.showCommonDialog(FRoute_Master, 3, this);
-                }
+
                 break;
-
             case R.id.distributor_text:
-
                 common_class.showCommonDialog(distributor_master, 2, this);
-
                 break;
         }
     }
@@ -303,8 +306,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     }
 
     private void OutletFilter(String id, String flag) {
-
-
         try {
 
             if (flag.equals("0")) {
@@ -356,11 +357,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
-    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
-
-    }
-
-    @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
         try {
@@ -369,6 +365,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                     case Retailer_OutletList:
                         reloadData();
                         break;
+
                 }
             }
         } catch (Exception e) {

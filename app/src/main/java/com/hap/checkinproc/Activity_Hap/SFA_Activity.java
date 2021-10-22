@@ -388,10 +388,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
 

@@ -348,10 +348,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         return b;
     }
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

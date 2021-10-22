@@ -828,7 +828,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     }
 
     class findDrDetail extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... voids) {
 
@@ -844,7 +843,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.v("get_dr_detttt", googlePlacesData);
+            Log.v("get_dr_detttt", ""+googlePlacesData);
             getDrDetail(googlePlacesData);
         }
     }
@@ -1051,8 +1050,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     //draw route
     private void drawRoute(String mDestination) {
-
-
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(mDestination);
 
@@ -1087,9 +1084,5 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
         return url;
     }
-
-
     //draw route
-
-
 }

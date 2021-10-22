@@ -922,10 +922,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     }
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
 

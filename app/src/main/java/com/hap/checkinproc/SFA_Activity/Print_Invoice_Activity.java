@@ -559,10 +559,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
 

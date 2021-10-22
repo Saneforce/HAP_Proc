@@ -65,4 +65,5 @@ public class Constants {
     public static final String SFA_DASHBOARD = "sfaDashboard";
     public static final String STATE_LIST="stateList";
     public static final String RETAILER_STATUS ="retailerStatus" ;
+    public static final String POP_MATERIAL = "popMaterialMaster";
 }

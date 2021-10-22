@@ -5,11 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -20,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -34,24 +30,18 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.POPStatusAdapter;
 import com.hap.checkinproc.SFA_Adapter.PopAddAdapter;
-import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,8 +66,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     List<Product_Details_Modal> popAddList = new ArrayList<>();
     private ArrayList<Common_Model> popMaterialList = new ArrayList<>();
-    private CustomListViewDialog customDialog;
-
     public static POPActivity popActivity;
     private int selectedPos;
     Shared_Common_Pref shared_common_pref;
@@ -88,7 +76,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_layout);
         common_class = new Common_Class(this);
-        shared_common_pref=new Shared_Common_Pref(this);
+        shared_common_pref = new Shared_Common_Pref(this);
         popActivity = this;
 
         btnSubmit = findViewById(R.id.btnSubmit);
@@ -131,78 +119,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
 
-
-        if (common_class.isNetworkAvailable(this))
-            getPOPMasterData();
-        else
-            common_class.showMsg(this, "Please check your internet connection.");
-
-    }
-
-    private void getPOPMasterData() {
-        try {
-            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-            JSONObject HeadItem = new JSONObject();
-            HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
-            HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-            HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
-
-            HeadItem.put("distributorcode", Shared_Common_Pref.DistributorCode);
-
-
-            Call<ResponseBody> call = service.getPOPMaster(HeadItem.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    InputStreamReader ip = null;
-                    StringBuilder is = new StringBuilder();
-                    String line = null;
-                    try {
-                        if (response.isSuccessful()) {
-                            ip = new InputStreamReader(response.body().byteStream());
-                            BufferedReader bf = new BufferedReader(ip);
-                            while ((line = bf.readLine()) != null) {
-                                is.append(line);
-                                Log.v("Res>>", is.toString());
-                            }
-
-
-                            JSONObject jsonObject = new JSONObject(is.toString());
-
-                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                            popMaterialList.clear();
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
-                                        jsonObject1.getString("POP_UOM")));
-                            }
-
-
-                        }
-
-                    } catch (Exception e) {
-
-                        Log.v("fail>>1", e.getMessage());
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.v("fail>>2", t.toString());
-
-
-                }
-            });
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
     }
 
     @Override
@@ -219,7 +135,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 findViewById(R.id.llPOPRequestStatus).setVisibility(View.GONE);
                 ivAdd.setVisibility(View.VISIBLE);
                 // btnSubmit.setText("Completed");
-               // btnSubmit.setVisibility(View.VISIBLE);
+                // btnSubmit.setVisibility(View.VISIBLE);
                 findViewById(R.id.rlPOPSubmit).setVisibility(View.VISIBLE);
             }
 
@@ -237,13 +153,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
                 findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
                 ivAdd.setVisibility(View.GONE);
-                // btnSubmit.setText("Completed");
-               // btnSubmit.setVisibility(View.GONE);
                 findViewById(R.id.rlPOPSubmit).setVisibility(View.GONE);
-
                 common_class.getDb_310Data(Constants.POP_ENTRY_STATUS, this);
-
-
                 break;
             case R.id.tvBookingDate:
                 Calendar newCalendar = Calendar.getInstance();
@@ -259,16 +170,16 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 fromDatePickerDialog.show();
                 break;
             case R.id.tvOrder:
-                common_class.commonDialog(this,Order_Category_Select.class);
+                common_class.commonDialog(this, Order_Category_Select.class);
                 break;
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this,OtherBrandActivity.class);
+                common_class.commonDialog(this, OtherBrandActivity.class);
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this,QPSActivity.class);
+                common_class.commonDialog(this, QPSActivity.class);
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this,CoolerInfoActivity.class);
+                common_class.commonDialog(this, CoolerInfoActivity.class);
                 break;
             case R.id.ivAddPOP:
                 popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
@@ -284,7 +195,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-
     private void SaveOrder() {
 
         List<Product_Details_Modal> submitPOPList = new ArrayList<>();
@@ -299,7 +209,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
             }
         }
 
-
         if (submitPOPList.size() > 0) {
             if (common_class.isNetworkAvailable(this)) {
 
@@ -310,10 +219,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                         JSONArray data = new JSONArray();
                         JSONObject ActivityData = new JSONObject();
 
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Calendar calobj = Calendar.getInstance();
-                        String dateTime = df.format(calobj.getTime());
-
                         try {
                             JSONObject HeadItem = new JSONObject();
                             HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
@@ -321,7 +226,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                             HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
                             HeadItem.put("CustName", Shared_Common_Pref.OutletName);
                             HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
-                            HeadItem.put("Datetime", dateTime);
+                            HeadItem.put("Datetime", Common_Class.GetDate());
                             HeadItem.put("date", tvBookingDate.getText().toString());
                             ActivityData.put("Json_Head", HeadItem);
 
@@ -354,7 +259,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                                         String san = jsonObjects.getString("success");
                                         Log.e("Success_Message", san);
                                         if (san.equals("true")) {
-                                            Toast.makeText(POPActivity.this, "Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                            common_class.showMsg(POPActivity.this, "Submitted Successfully");
                                             startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                             finish();
                                         }
@@ -389,7 +294,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         if (selectedPos >= 0) {
-            customDialog.dismiss();
+            common_class.dismissCommonDialog();
             popAddList.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(),
                     "", 0, myDataset.get(position).getFlag()));
             popAddAdapter.notifyData(popAddList);
@@ -399,30 +304,37 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     public void showBrandDialog(int position) {
         selectedPos = position;
-        customDialog = new CustomListViewDialog(this, popMaterialList, 1);
-        Window windoww = customDialog.getWindow();
-        windoww.setGravity(Gravity.CENTER);
-        windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
+        if (popMaterialList.size() == 0)
+            common_class.getDb_310Data(Constants.POP_MATERIAL, this);
+        else
+            common_class.showCommonDialog(popMaterialList, 1, this);
     }
-
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
-
-    }
-
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
         try {
+            switch (key) {
+                case Constants.POP_ENTRY_STATUS:
+                    JSONObject jsonObject = new JSONObject(apiDataResponse);
+                    if (jsonObject.getBoolean("success")) {
+                        popStatusAdapter = new POPStatusAdapter(this, jsonObject.getJSONArray("Data"));
+                        rvQps.setAdapter(popStatusAdapter);
+                    }
+                    break;
+                case Constants.POP_MATERIAL:
+                    JSONObject materialObj = new JSONObject(apiDataResponse);
+                    JSONArray jsonArray = materialObj.getJSONArray("Data");
+                    popMaterialList.clear();
 
-            JSONObject jsonObject = new JSONObject(apiDataResponse);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
+                                jsonObject1.getString("POP_UOM")));
+                    }
 
-            if (jsonObject.getBoolean("success")) {
-                popStatusAdapter = new POPStatusAdapter(this, jsonObject.getJSONArray("Data"));
-                rvQps.setAdapter(popStatusAdapter);
+                    common_class.showCommonDialog(popMaterialList, 1, this);
+                    break;
             }
         } catch (Exception e) {
 

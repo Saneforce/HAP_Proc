@@ -272,10 +272,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    @Override
-    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
 
-    }
 
 
 
