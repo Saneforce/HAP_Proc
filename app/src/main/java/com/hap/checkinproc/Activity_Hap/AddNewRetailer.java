@@ -127,17 +127,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-    CircularProgressButton btnRefLoc;
-    double RetLat = 0.0, RetLng = 0.0;
-    List<Common_Model> deliveryTypeList, outletTypeList;
+CircularProgressButton btnRefLoc;
+    double RetLat=0.0,RetLng=0.0;
+    List<Common_Model> deliveryTypeList,outletTypeList;
     final Handler handler = new Handler();
     private ArrayList<Common_Model> stateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-
-
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_new_retailer);
 
@@ -176,7 +174,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             mSubmit = findViewById(R.id.submit_button);
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
-            btnRefLoc = findViewById(R.id.btnRefLoc);
+            btnRefLoc= findViewById(R.id.btnRefLoc);
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
             if (mapFragment != null) {
@@ -222,15 +220,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             new LocationFinder(getApplication(), new LocationEvents() {
                                 @Override
                                 public void OnLocationRecived(Location location) {
-                                    if (location == null) {
-                                        Toast.makeText(AddNewRetailer.this, "Location Can't Getting Location. Try Again.", Toast.LENGTH_LONG).show();
+                                    if( location==null){
+                                        Toast.makeText(AddNewRetailer.this,"Location Can't Getting Location. Try Again.",Toast.LENGTH_LONG).show();
                                         btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
-                                    } else {
+                                    }else {
                                         RetLat = location.getLatitude();
                                         RetLng = location.getLongitude();
-                                        Shared_Common_Pref.Outletlat = RetLat;
-                                        Shared_Common_Pref.Outletlong = RetLng;
-                                        getCompleteAddressString(RetLat, RetLng);
+                                        Shared_Common_Pref.Outletlat=RetLat;
+                                        Shared_Common_Pref.Outletlong=RetLng;
+                                        getCompleteAddressString(RetLat,RetLng);
                                         centreMapOnLocation("Your Location");
                                         btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
                                     }
@@ -242,11 +240,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                             btnRefLoc.revertAnimation();
                                             btnRefLoc.setBackground(getDrawable(R.drawable.button_blueg));
                                         }
-                                    }, 1000);
+                                    },1000);
                                 }
                             });
                         }
-                    }, 100);
+                    },100);
                 }
             });
 
@@ -868,7 +866,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else {
                         Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
                     }
-                    if (Shared_Common_Pref.FromActivity == "Outlets") {
+                    if(Shared_Common_Pref.FromActivity == "Outlets"){
                         Shared_Common_Pref.FromActivity = "";
                         common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
                     } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
