@@ -80,7 +80,7 @@
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />
-        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.3673012318029115" />
+        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_dashboard__two.xml" value="0.1644021739130435" />
         <entry key="app/src/main/res/layout/activity_deviation_entry.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/activity_dist__locations.xml" value="0.18432971014492755" />
@@ -89,6 +89,7 @@
         <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_lead_.xml" value="0.45048543689320386" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />
         <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.15489130434782608" />
@@ -114,7 +115,7 @@
         <entry key="app/src/main/res/layout/explorelist.xml" value="0.16394927536231885" />
         <entry key="app/src/main/res/layout/fragment_tab_outlet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fruit_item.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
+        <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.5" />
         <entry key="app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.3559322033898305" />
         <entry key="app/src/main/res/layout/product_pay_recyclerview.xml" value="0.13802083333333334" />

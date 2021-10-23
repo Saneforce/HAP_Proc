@@ -443,6 +443,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 if (isChecked) {
                     //linCheckOut.setVisibility(View.INVISIBLE);
                     vwldgBillAmt.setVisibility(View.GONE);
+                    ldg_coutDt.setText(DT.AddDays(DateTime+" 00:00:00",2,"yyyy-MM-dd"));
                     cnSty = 1;
                    // ldg_cout.setText("");
                    // ldg_coutDt.setText("");
@@ -450,12 +451,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     countLoding = 1;
 
                 } else {
+
+                    COutDate=DT.AddDays(DateTime+" 00:00:00",1,"yyyy-MM-dd");
+                    ldg_coutDt.setText(DT.AddDays(DateTime+" 00:00:00",1,"yyyy-MM-dd"));
                     SumOFLodging(0);
                     countLoding = 0;
                     cnSty = 0;
                     vwldgBillAmt.setVisibility(View.VISIBLE);
                     linCheckOut.setVisibility(View.VISIBLE);
                 }
+
+                nofNght=DT.Daybetween( DateTime+" 00:00:00",COutDate+" 00:00:00");
+                //if(nofNght==0) nofNght=1;
+                NoofNight.setText(" - "+ String.valueOf(nofNght)+" Nights - ");
+                linContinueStay.setVisibility(View.VISIBLE);
+               // if(DT.Daybetween(DateTime+" 00:00:00",ldg_coutDt.getText().toString()+ " 00:00:00")<=1)
+               //     linContinueStay.setVisibility(View.GONE);
+                getStayAllow();
             }
         });
         mChckEarly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -1591,7 +1603,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     //if(nofNght==0) nofNght=1;
                     NoofNight.setText(" - "+ String.valueOf(nofNght)+" Nights - ");
                     linContinueStay.setVisibility(View.VISIBLE);
-                    if(DT.Daybetween(DateTime+" 00:00:00",ldg_coutDt.getText().toString()+ " 00:00:00")<=1)
+                    if(DT.Daybetween(DateTime+" 00:00:00",ldg_coutDt.getText().toString()+ " 00:00:00")<1)
                         linContinueStay.setVisibility(View.GONE);
                     getStayAllow();
                 }
@@ -2795,7 +2807,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     }
                     SumOFLodging(0);
                     linContinueStay.setVisibility(View.VISIBLE);
-                    if(DT.Daybetween(COutDate + " 00:00:00",DateTime+" 00:00:00")<=1)
+                    if(DT.Daybetween(COutDate + " 00:00:00",DateTime+" 00:00:00")<1)
                         linContinueStay.setVisibility(View.GONE);
 
                     /*
@@ -4275,7 +4287,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                 TotalDays.setVisibility(View.GONE);
             } else {
                 TotalDays.setVisibility(View.VISIBLE);
-                if(DT.Daybetween(DateTime+" 00:00:00",COutDate + " 00:00:00")<=1)
+                if(DT.Daybetween(DateTime+" 00:00:00",COutDate + " 00:00:00")<1)
                     linContinueStay.setVisibility(View.GONE);
             }
             edt_ldg_bill.setText("");

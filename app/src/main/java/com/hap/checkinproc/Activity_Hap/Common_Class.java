@@ -32,7 +32,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 public class Common_Class {
-    public static String Version_Name="Ver 3.1.19";
+    public static String Version_Name="Ver 3.1.20";
     public static String Work_Type="0";
     public static Location location=null;
 

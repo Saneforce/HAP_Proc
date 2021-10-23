@@ -9,8 +9,12 @@
     <color name="colorAccent">#43A047</color>
     <color name="colorPrimary">#7CB342</color>
     <color name="colorPrimaryDark">#056162</color>
+    <color name="ButtonDefault">#FFC744</color>
 
-<!--        <color name="colorAccent">#4A87EE</color>017E6F-->
+
+
+
+    <!--        <color name="colorAccent">#4A87EE</color>017E6F-->
 <!--        <color name="colorPrimary">#FFC107</color>-->
 <!--        <color name="colorPrimaryDark">#ff9819</color>-->
 
