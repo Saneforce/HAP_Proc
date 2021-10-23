@@ -280,7 +280,7 @@ public class Common_Class {
                             " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
-                            " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
+                            " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
                             " \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   " +
                             "\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"" +
                             "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"OutletOrder asc\\\",\\\"doctor_name asc\\\"]\",\"desig\":\"stockist\"}";
@@ -365,7 +365,6 @@ public class Common_Class {
                     try {
                         Gson gson = new Gson();
 
-
                         if (shared_common_pref == null)
                             shared_common_pref = new Shared_Common_Pref(activity);
 
@@ -398,7 +397,6 @@ public class Common_Class {
         }
     }
 
-
     public void getDb_310Data(String key, Activity activity) {
         try {
             if (isNetworkAvailable(activity)) {
@@ -406,9 +404,24 @@ public class Common_Class {
                 String axnname = "";
                 JSONObject data = new JSONObject();
                 switch (key) {
+                    case Constants.QPS_STATUS:
+                        axnname = "get/qpsentrystatus";
+                        data.put("retailerCode", Shared_Common_Pref.OutletCode);
+                        break;
+                    case Constants.QPS_HAPBRAND:
+                        data.put("retailorCode", Shared_Common_Pref.OutletCode);
+                        axnname = "get/qpshaplitres";
+                        break;
+                    case Constants.QPS_COMBO:
+                        axnname = "get/qpsallocation";
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        data.put("retailorCode", Shared_Common_Pref.OutletCode);
+                        data.put("distributorcode", Shared_Common_Pref.DistributorCode);
 
+                        break;
                     case Rout_List:
-                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
                         axnname = "get/routelist";
                         break;
                     case Constants.HistoryData:
@@ -539,7 +552,6 @@ public class Common_Class {
 
     }
 
-
     public void showMsg(Activity activity, String msg) {
         Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -564,18 +576,19 @@ public class Common_Class {
         return pickDate;
     }
 
-    public void commonDialog(Activity activity, Class moveActivity) {
-        AlertDialogBox.showDialog(activity, "HAP Check-In", "Do you confirm to cancel Cart?", "Yes", "No", false, new AlertBox() {
-            @Override
-            public void PositiveMethod(DialogInterface dialog, int id) {
-                CommonIntentwithFinish(moveActivity);
-            }
+    public void commonDialog(Activity activity, Class moveActivity, String name) {
+        AlertDialogBox.showDialog(activity, "HAP Check-In", "Do you confirm to cancel " + name,
+                "Yes", "No", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+                        CommonIntentwithFinish(moveActivity);
+                    }
 
-            @Override
-            public void NegativeMethod(DialogInterface dialog, int id) {
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
 
-            }
-        });
+                    }
+                });
     }
 
     public void showCommonDialog(List<Common_Model> dataList, int type, Activity activity) {

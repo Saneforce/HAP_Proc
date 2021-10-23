@@ -494,16 +494,16 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class);
+                common_class.commonDialog(this, OtherBrandActivity.class,"Other Brand?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class);
+                common_class.commonDialog(this, QPSActivity.class,"QPS?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class);
+                common_class.commonDialog(this, POPActivity.class,"POP?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class);
+                common_class.commonDialog(this, CoolerInfoActivity.class,"Cooler Info?");
                 break;
 
             case R.id.takeorder:

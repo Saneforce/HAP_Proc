@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -29,6 +25,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.QPSAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
@@ -49,25 +46,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class QPSActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
-
+public class QPSActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     Button btnSubmit;
     TextView tvViewStatus;
     TextView tvOrder, tvOtherBrand, tvPOP, tvCoolerInfo;
     RecyclerView rvQps;
-
     QPSAdapter qpsAdapter;
     ArrayList<QPS_Modal> qpsModals = new ArrayList<>();
-
-    Common_Class common_class;
-
+    public Common_Class common_class;
     TextView etBookingDate;
     DatePickerDialog fromDatePickerDialog;
-
     TextView tvHapBrand, tvPeriod, tvGift, tvAvailble, tvTarget;
     ImageView ivEye;
-    private CustomListViewDialog customDialog;
-
     EditText etNewOrder, etOtherBrand;
     TextView tvRetailorName;
     ImageView ivToolbarHome;
@@ -82,11 +72,9 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qps);
         qpsActivity = this;
-
         init();
 
         tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
-
 
         tvOrder.setOnClickListener(this);
         tvOtherBrand.setOnClickListener(this);
@@ -97,9 +85,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         tvViewStatus.setOnClickListener(this);
         etBookingDate.setOnClickListener(this);
 
-
         findViewById(R.id.tvQPS).setVisibility(View.GONE);
-
 
         common_class.gotoHomeScreen(this, ivToolbarHome);
 
@@ -136,11 +122,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-
-        if (common_class.isNetworkAvailable(this))
-            getHapBrandFromAPI();
-        else
-            common_class.showMsg(this, "Please check your internet connection.");
+        common_class.getDb_310Data(Constants.QPS_HAPBRAND, this);
     }
 
 
@@ -244,246 +226,8 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         return false;
     }
 
-    private void getHapBrandFromAPI() {
-        try {
-            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-            JSONObject HeadItem = new JSONObject();
-
-            HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
-
-
-            Call<ResponseBody> call = service.getHapBrand(HeadItem.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    InputStreamReader ip = null;
-                    StringBuilder is = new StringBuilder();
-                    String line = null;
-                    try {
-                        if (response.isSuccessful()) {
-                            ip = new InputStreamReader(response.body().byteStream());
-                            BufferedReader bf = new BufferedReader(ip);
-                            while ((line = bf.readLine()) != null) {
-                                is.append(line);
-                                Log.v("Res>>", is.toString());
-                            }
-
-                            JSONObject jsonObject = new JSONObject(is.toString());
-
-                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                int val = jsonObject1.getInt("HapLtr");
-                                tvHapBrand.setText("" + val);
-                            }
-
-                        }
-
-                    } catch (Exception e) {
-
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.v("fail>>", t.toString());
-
-
-                }
-            });
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-    private void getdataFromAPI() {
-        try {
-            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-            JSONObject HeadItem = new JSONObject();
-            HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
-            HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-            HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
-
-            HeadItem.put("distributorcode", Shared_Common_Pref.DistributorCode);
-
-
-            Call<ResponseBody> call = service.getQPSData(HeadItem.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    InputStreamReader ip = null;
-                    StringBuilder is = new StringBuilder();
-                    String line = null;
-                    try {
-                        if (response.isSuccessful()) {
-                            ip = new InputStreamReader(response.body().byteStream());
-                            BufferedReader bf = new BufferedReader(ip);
-                            while ((line = bf.readLine()) != null) {
-                                is.append(line);
-                                Log.v("Res>>", is.toString());
-                            }
-
-
-                            JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                            if (jsonObject.getBoolean("success")) {
-
-                                JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                qpsComboList.clear();
-
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                    qpsComboList.add(new Common_Model(jsonObject1.getString("Days_Period")
-                                            , jsonObject1.getInt("Total_Ltrs"), jsonObject1.getString("QPS_Name"), jsonObject1.getString("QPS_Code")));
-                                }
-
-
-                                customDialog = new CustomListViewDialog(QPSActivity.this, qpsComboList, 500);
-                                Window windoww = customDialog.getWindow();
-                                windoww.setGravity(Gravity.CENTER);
-                                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                                customDialog.show();
-                            } else {
-                                common_class.showMsg(QPSActivity.this, jsonObject.getString("Msg"));
-                            }
-
-
-                        }
-
-                    } catch (Exception e) {
-
-                        Log.v("fail>>1", e.getMessage());
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.v("fail>>2", t.toString());
-
-
-                }
-            });
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-
-    public void getQPSStatus() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("retailerCode", Shared_Common_Pref.OutletCode);
-
-                Call<ResponseBody> call = service.getQPSStatus(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-                                qpsModals.clear();
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-
-                                        JSONObject arrObj = jsonArray.getJSONObject(i);
-
-
-                                        JSONArray fileArray = arrObj.getJSONArray("Images");
-
-                                        List<String> fileList = new ArrayList<>();
-
-                                        if (fileArray != null && fileArray.length() > 0) {
-                                            for (int fa = 0; fa < fileArray.length(); fa++) {
-                                                if (!Common_Class.isNullOrEmpty(String.valueOf(fileArray.get(fa))))
-                                                    fileList.add(String.valueOf(fileArray.get(fa)));
-                                            }
-
-                                            qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
-                                                    arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
-                                                    arrObj.getString("Received_Date"), arrObj.getString("Status"), fileList));
-                                        }
-                                    }
-
-                                    tvViewStatus.setVisibility(View.GONE);
-                                    findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
-                                    findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
-
-                                    // btnSubmit.setText("Completed");
-                                    btnSubmit.setVisibility(View.GONE);
-
-
-                                } else {
-
-                                    qpsModals.clear();
-                                    common_class.showMsg(QPSActivity.this, jsonObject.getString("Msg"));
-                                }
-
-
-                                qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
-                                rvQps.setAdapter(qpsAdapter);
-
-
-                            }
-
-                        } catch (Exception e) {
-
-                            Log.v("fail>>1", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>2", t.toString());
-
-
-                    }
-                });
-            } else
-                common_class.showMsg(this, "Please check your internet connection");
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-
     @Override
     public void onClick(View v) {
-        Common_Class common_class = new Common_Class(this);
         switch (v.getId()) {
             case R.id.etQPSBookingDate:
                 Calendar newCalendar = Calendar.getInstance();
@@ -498,27 +242,22 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 fromDatePickerDialog.show();
                 break;
             case R.id.tvQPSViewStatus:
-
-                getQPSStatus();
+                common_class.getDb_310Data(Constants.QPS_STATUS, this);
                 break;
             case R.id.tvOrder:
-                common_class.commonDialog(this,Order_Category_Select.class);
+                common_class.commonDialog(this, Order_Category_Select.class, "Order?");
                 break;
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this,OtherBrandActivity.class);
+                common_class.commonDialog(this, OtherBrandActivity.class, "Other Brand?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this,POPActivity.class);
+                common_class.commonDialog(this, POPActivity.class, "POP?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this,CoolerInfoActivity.class);
+                common_class.commonDialog(this, CoolerInfoActivity.class, "QPS?");
                 break;
             case R.id.ivQPSComboData:
-                if (common_class.isNetworkAvailable(this)) {
-                    getdataFromAPI();
-                } else {
-                    common_class.showMsg(this, "Please check your internet connection.");
-                }
+                common_class.getDb_310Data(Constants.QPS_COMBO, this);
                 break;
             case R.id.btnSubmit:
                 if (isValiddata()) {
@@ -588,18 +327,13 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-
-        customDialog.dismiss();
-
+        common_class.dismissCommonDialog();
         tvPeriod.setText("" + myDataset.get(position).getName());
         tvGift.setText("" + myDataset.get(position).getQPS_Name());
         tvTarget.setText("" + myDataset.get(position).getTotal_Ltrs());
-
         QPS_Code = myDataset.get(position).getQPS_Code();
 
-
     }
-
 
     void init() {
         common_class = new Common_Class(this);
@@ -626,5 +360,90 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         tvRetailorName = findViewById(R.id.Category_Nametext);
 
 
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            if (apiDataResponse != null) {
+
+                switch (key) {
+                    case Constants.QPS_STATUS:
+                        JSONObject stsObj = new JSONObject(apiDataResponse);
+
+                        qpsModals.clear();
+
+                        if (stsObj.getBoolean("success")) {
+
+                            JSONArray jsonArray = stsObj.getJSONArray("Data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+
+                                JSONObject arrObj = jsonArray.getJSONObject(i);
+
+                                JSONArray fileArray = arrObj.getJSONArray("Images");
+
+                                List<String> fileList = new ArrayList<>();
+
+                                if (fileArray != null && fileArray.length() > 0) {
+                                    for (int fa = 0; fa < fileArray.length(); fa++) {
+                                        if (!Common_Class.isNullOrEmpty(String.valueOf(fileArray.get(fa))))
+                                            fileList.add(String.valueOf(fileArray.get(fa)));
+                                    }
+
+                                    qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
+                                            arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
+                                            arrObj.getString("Received_Date"), arrObj.getString("Status"), fileList));
+                                }
+                            }
+
+                            tvViewStatus.setVisibility(View.GONE);
+                            findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
+                            findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
+
+                            // btnSubmit.setText("Completed");
+                            btnSubmit.setVisibility(View.GONE);
+
+
+                        } else {
+                            qpsModals.clear();
+                            common_class.showMsg(QPSActivity.this, stsObj.getString("Msg"));
+                        }
+
+                        qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
+                        rvQps.setAdapter(qpsAdapter);
+                        break;
+                    case Constants.QPS_HAPBRAND:
+                        JSONObject jsonObject = new JSONObject(apiDataResponse);
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            tvHapBrand.setText("" + jsonArray.getJSONObject(i).getInt("HapLtr"));
+                        }
+                        break;
+                    case Constants.QPS_COMBO:
+                        JSONObject comboObj = new JSONObject(apiDataResponse);
+                        if (comboObj.getBoolean("success")) {
+
+                            JSONArray comboArr = comboObj.getJSONArray("Data");
+
+                            qpsComboList.clear();
+
+                            for (int i = 0; i < comboArr.length(); i++) {
+                                JSONObject jsonObject1 = comboArr.getJSONObject(i);
+
+                                qpsComboList.add(new Common_Model(jsonObject1.getString("Days_Period")
+                                        , jsonObject1.getInt("Total_Ltrs"), jsonObject1.getString("QPS_Name"), jsonObject1.getString("QPS_Code")));
+                            }
+
+                            common_class.showCommonDialog(qpsComboList, 500, this);
+                        } else {
+                            common_class.showMsg(QPSActivity.this, comboObj.getString("Msg"));
+                        }
+                        break;
+                }
+            }
+        } catch (Exception e) {
+
+        }
     }
 }

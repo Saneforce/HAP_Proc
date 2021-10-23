@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -95,7 +96,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     Common_Class common_class;
     TextView Createoutlet, latitude, longitude, availableoutlets, btnNearme, btnExplore, cAddress;
     EditText txSearchRet;
-     public static Shared_Common_Pref shared_common_pref;
+    public static Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
     MapView mapView;
     GoogleMap map;
@@ -188,84 +189,15 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             new LocationFinder(getApplication(), new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
-                    ;
+
                     if (location == null) {
                         availableoutlets.setText("Location Not Detacted.");
                         Toast.makeText(Nearby_Outlets.this, "Location Not Detacted. Please Try Again.", Toast.LENGTH_LONG).show();
                         return;
+                    } else {
+
+                        showNearbyData(location);
                     }
-
-                    Shared_Common_Pref.Outletlat = location.getLatitude();
-                    Shared_Common_Pref.Outletlong = location.getLongitude();
-                    latitude.setText("Lat : " + location.getLatitude());
-                    longitude.setText("Lng : " + location.getLongitude());
-                    getCompleteAddressString(location.getLatitude(), location.getLongitude());
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("SF", UserDetails.getString("Sfcode", ""));
-                        jsonObject.put("Div", UserDetails.getString("Divcode", ""));
-                        jsonObject.put("Lat", location.getLatitude());
-                        jsonObject.put("Lng", location.getLongitude());
-                        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                        service.getDataArrayList("get/fencedOutlet", jsonObject.toString()).enqueue(new Callback<JsonArray>() {
-                            @Override
-                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                try {
-                                    jOutlets = response.body();
-                                    availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
-                                    recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
-                                            getApplicationContext(), new AdapterOnClick() {
-                                        @Override
-                                        public void onIntentClick(int position) {
-                                            try {
-                                                JsonObject jItm = jOutlets.get(position).getAsJsonObject();
-
-                                                Shared_Common_Pref.Outler_AddFlag = "0";
-                                                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
-                                                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-                                                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
-                                                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                                                Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
-                                                //common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                                                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
-                                                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
-                                                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
-//                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
-//                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
-//                                        else
-                                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                                            } catch (Exception e) {
-
-                                            }
-                                        }
-                                    }));
-                                } catch (Exception e) {
-
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonArray> call, Throwable t) {
-                                Log.d("Fence", t.getMessage());
-                            }
-                        });
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    map.getUiSettings().setMyLocationButtonEnabled(false);
-                    if (ActivityCompat.checkSelfPermission(Nearby_Outlets.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Nearby_Outlets.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        Log.d("LocationError", "Need Location Permission");
-                        return;
-                    }
-                    laty = location.getLatitude();
-                    lngy = location.getLongitude();
-                    map.setMyLocationEnabled(true);
-                    map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-                    getExploreDr(true);
                 }
             });
 
@@ -310,6 +242,80 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    void showNearbyData(Location location) {
+        Shared_Common_Pref.Outletlat = location.getLatitude();
+        Shared_Common_Pref.Outletlong = location.getLongitude();
+        latitude.setText("Lat : " + location.getLatitude());
+        longitude.setText("Lng : " + location.getLongitude());
+        getCompleteAddressString(location.getLatitude(), location.getLongitude());
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("SF", UserDetails.getString("Sfcode", ""));
+            jsonObject.put("Div", UserDetails.getString("Divcode", ""));
+            jsonObject.put("Lat", location.getLatitude());
+            jsonObject.put("Lng", location.getLongitude());
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            service.getDataArrayList("get/fencedOutlet", jsonObject.toString()).enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    try {
+                        jOutlets = response.body();
+                        availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
+                        recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
+                                getApplicationContext(), new AdapterOnClick() {
+                            @Override
+                            public void onIntentClick(int position) {
+                                try {
+                                    JsonObject jItm = jOutlets.get(position).getAsJsonObject();
+
+                                    Shared_Common_Pref.Outler_AddFlag = "0";
+                                    Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+                                    Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+                                    Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
+                                    Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+                                    //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                                    //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                                    shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+                                    shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+                                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
+//                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
+//                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
+//                                        else
+                                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        }));
+                    } catch (Exception e) {
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Log.d("Fence", t.getMessage());
+                }
+            });
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        if (ActivityCompat.checkSelfPermission(Nearby_Outlets.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Nearby_Outlets.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("LocationError", "Need Location Permission");
+            return;
+        }
+        laty = location.getLatitude();
+        lngy = location.getLongitude();
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
+        getExploreDr(true);
+    }
+
     public void removeMarkedPlaces() {
 
         try {
@@ -317,7 +323,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
                 JSONObject HeadItem = new JSONObject();
-
 
                 HeadItem.put("lat", laty);
                 HeadItem.put("lng", lngy);
@@ -432,8 +437,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
 
     }
-
-
     private void SearchRetailers() {
         JsonArray srhOutlets = new JsonArray();
         for (int sr = 0; sr < jOutlets.size(); sr++) {
@@ -456,7 +459,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
                 Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
                 Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
                 //common_class.CommonIntentwithFinish(Route_Product_Info.class);
                 shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
                 shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
@@ -843,7 +846,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.v("get_dr_detttt", ""+googlePlacesData);
+            Log.v("get_dr_detttt", "" + googlePlacesData);
             getDrDetail(googlePlacesData);
         }
     }
@@ -915,7 +918,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
 
             for (int i = 0; i < yourJSONArray.length(); i++) {
-              //  String stationCode = yourJSONArray.getJSONObject(i).getString("name");
+                //  String stationCode = yourJSONArray.getJSONObject(i).getString("name");
                 String placeId = yourJSONArray.getJSONObject(i).getString("place_id");
 
 
@@ -926,7 +929,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                     stationCodes.add(placeId);
                     tempArray.put(yourJSONArray.getJSONObject(i));
 
-                    Log.v("placeId_current:"+i, placeId + " RES:" + placeIds+" rslt: "+placeIds.indexOf(placeId));
+                    Log.v("placeId_current:" + i, placeId + " RES:" + placeIds + " rslt: " + placeIds.indexOf(placeId));
 
                 }
 
@@ -1061,6 +1064,25 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            new LocationFinder(this, new LocationEvents() {
+                @Override
+                public void OnLocationRecived(Location location) {
+                    try {
+                        showNearbyData(location);
+                    } catch (Exception e) {
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
 
     @Override
     protected void onRestart() {

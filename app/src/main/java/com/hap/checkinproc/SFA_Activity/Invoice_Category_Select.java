@@ -830,21 +830,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     public void updateToTALITEMUI() {
         TextView tvTotalItems = findViewById(R.id.tvTotalItems);
         TextView tvTotLabel = findViewById(R.id.tvTotLabel);
-
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
-
         TextView tvTax = findViewById(R.id.tvTaxVal);
-
-
         TextView tvBillSubTotal = findViewById(R.id.subtotal);
         TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
-
         tvBillTotItem = findViewById(R.id.totalitem);
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
         TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
-
-
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
         totalvalues = 0;
@@ -853,20 +846,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         taxVal = 0;
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
-
             if (Product_Modal.get(pm).getRegularQty() != null) {
                 if (Product_Modal.get(pm).getQty() > 0 /*|| Product_Modal.get(pm).getRegularQty() > 0*/) {
-
-
                     cashDiscount += (int) Product_Modal.get(pm).getDiscount();
-
-                    totalvalues += Double.valueOf(formatter.format(Product_Modal.get(pm).getAmount()));
-
+                    totalvalues += Product_Modal.get(pm).getAmount();
                     totalQty += Product_Modal.get(pm).getQty()/* + Product_Modal.get(pm).getRegularQty()*/;
-
                     if (!Common_Class.isNullOrEmpty(Product_Modal.get(pm).getTax()))
                         taxVal += Double.parseDouble(Product_Modal.get(pm).getTax());
-
 
                     Getorder_Array_List.add(Product_Modal.get(pm));
 

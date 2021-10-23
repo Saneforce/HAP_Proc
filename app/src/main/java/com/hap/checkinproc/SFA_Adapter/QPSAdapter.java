@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.QPSActivity.qpsActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -218,7 +220,7 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
 
                         if (jsonObjects.getBoolean("success")) {
                             Toast.makeText(context, jsonObjects.getString("Msg"), Toast.LENGTH_SHORT).show();
-                            QPSActivity.qpsActivity.getQPSStatus();
+                            qpsActivity.common_class.getDb_310Data(Constants.QPS_STATUS, qpsActivity);
                         }
                     } catch (Exception e) {
 

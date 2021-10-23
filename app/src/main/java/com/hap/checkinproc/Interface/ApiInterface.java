@@ -502,18 +502,6 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/qpsallocation")
-    Call<ResponseBody> getQPSData(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/qpsentrystatus")
-    Call<ResponseBody> getQPSStatus(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/qpshaplitres")
-    Call<ResponseBody> getHapBrand(@Field("data") String body);
-
-    @FormUrlEncoded
     @POST("Db_v310.php?axn=save/qpsentry")
     Call<ResponseBody> submitQPSData(@Field("data") String body);
 
@@ -532,10 +520,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/orderdetailsfrinv")
     Call<ResponseBody> getInvoiceOrderDetails(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/popmaster")
-    Call<ResponseBody> getPOPMaster(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/categorywiseretailerdata")

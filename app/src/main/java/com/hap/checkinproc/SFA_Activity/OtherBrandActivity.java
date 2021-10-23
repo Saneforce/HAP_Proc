@@ -4,11 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -32,9 +28,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -59,7 +53,6 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     public static OtherBrandActivity otherBrandActivity;
     OtherBrandAdapter otherBrandAdapter;
     private List<Common_Model> otherBrandList = new ArrayList<>();
-    CustomListViewDialog customDialog;
     private int selectedPos = -1;
     private Type userTypeCompetitor;
     private TextView tvSubmit;
@@ -120,16 +113,16 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         Common_Class common_class = new Common_Class(this);
         switch (v.getId()) {
             case R.id.tvOrder:
-                common_class.commonDialog(this, Order_Category_Select.class);
+                common_class.commonDialog(this, Order_Category_Select.class, "Order?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class);
+                common_class.commonDialog(this, QPSActivity.class, "QPS?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class);
+                common_class.commonDialog(this, POPActivity.class, "POP?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class);
+                common_class.commonDialog(this, CoolerInfoActivity.class, "Cooler Info?");
                 break;
 
             case R.id.tvAddBrand:
@@ -144,9 +137,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
     private void SaveOrder() {
         List<Product_Details_Modal> submitBrandList = new ArrayList<>();
-
         submitBrandList.clear();
-
         for (int i = 0; i < Getorder_Array_List.size(); i++) {
             if (!Getorder_Array_List.get(i).getName().equals("") && !Getorder_Array_List.get(i).getSku().equals("") &&
                     Getorder_Array_List.get(i).getAmount() > 0 &&
@@ -156,12 +147,8 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
             }
         }
 
-
         if (submitBrandList.size() > 0) {
-
-
             if (common_class.isNetworkAvailable(this)) {
-
                 AlertDialogBox.showDialog(OtherBrandActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
@@ -250,31 +237,22 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             common_class.CommonIntentwithFinish(Invoice_History.class);
-
             return true;
         }
         return false;
     }
 
     public void showBrandDialog(int position) {
-
         selectedPos = position;
-        customDialog = new CustomListViewDialog(this, otherBrandList, 501);
-        Window windoww = customDialog.getWindow();
-        windoww.setGravity(Gravity.CENTER);
-        windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-
+        common_class.showCommonDialog(otherBrandList, 501, this);
     }
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         try {
-
             if (selectedPos >= 0) {
-                customDialog.dismiss();
+                common_class.dismissCommonDialog();
                 Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
                 otherBrandAdapter.notifyData(Getorder_Array_List);
 
@@ -283,10 +261,6 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
             Log.v("OtherBrandDialog: ", e.getMessage());
         }
     }
-
-
-
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
@@ -301,41 +275,5 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         }
 
     }
-
-
-//    public void notifyData(JSONArray array) {
-//        this.array = array;
-//        notifyDataSetChanged();
-//    }
-
-
-//    public void updateToTALITEMUI() {
-//        TextView tvTotalItems = findViewById(R.id.tvTotalItems);
-//        TextView tvTotalAmount = findViewById(R.id.tvTotalAmount);
-//
-//
-//
-//
-//        GetPurchaseOrderList = new ArrayList<>();
-//        GetPurchaseOrderList.clear();
-//        int totalvalues = 0, totalQty = 0;
-//
-//        for (int i = 0; i < Getorder_Array_List.size(); i++) {
-//
-//            Product_Details_Modal pm = Getorder_Array_List.get(i);
-//            if (pm.getAmount() > 0) {
-//                GetPurchaseOrderList.add(pm);
-//                totalvalues += pm.getAmount();
-//                totalQty += pm.getQty();
-//
-//            }
-//        }
-//
-//        tvTotalAmount.setText("₹ " + totalvalues);
-//        tvTotalItems.setText("Items : " + GetPurchaseOrderList.size());
-//
-//
-//
-//    }
 
 }

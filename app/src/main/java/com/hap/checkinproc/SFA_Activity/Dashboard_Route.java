@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import static android.Manifest.permission.CALL_PHONE;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -126,7 +126,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
         db = new DatabaseHandler(this);
         getDbstoreData(Constants.Distributor_List);
-        getDbstoreData(Constants.Rout_List);
+
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
@@ -165,8 +165,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
         try {
-
-
             headtext = findViewById(R.id.headtext);
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
@@ -275,6 +273,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                common_class.getDb_310Data(Rout_List, this);
+                getLastInvoiceData();
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
@@ -282,11 +282,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
 
 
-                if (!shared_common_pref.getvalue(Constants.Route_name).equals("")) {
+                if (!shared_common_pref.getvalue(Route_Id).equals("")) {
                     route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
-                    Route_id = shared_common_pref.getvalue(Constants.Route_Id);
                 }
-
                 if (Retailer_Modal_List != null) {
 
                     String todayorderliost = String.valueOf(db.getMasterData(Constants.Outlet_Total_Orders));
@@ -313,10 +311,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         }
                     }
                     Retailer_Modal_ListFilter.clear();
-                    if (shared_common_pref.getvalue(Constants.Route_Id).equals(""))
-                        OutletFilter(Distributor_Id, "1", true);
-                    else
-                        OutletFilter(Route_id, "0", true);
+//                    if (shared_common_pref.getvalue(Constants.Route_Id).equals(""))
+//                        OutletFilter(shared_common_pref.getvalue(Constants.Distributor_Id), "1", true);
+//                    else
+//                        OutletFilter(shared_common_pref.getvalue(Route_Id), "0", true);
 
                     sDeptType = UserDetails.getString("DeptType", "");
                     sDeptType = "1";
@@ -329,6 +327,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 btnCmbRoute.setVisibility(View.GONE);
             }
 
+            setPagerAdapter(false);
             createTabFragment();
 
         } catch (Exception e) {
@@ -337,20 +336,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             e.printStackTrace();
         }
 
-        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals(""))
-            getLastInvoiceData();
-        getSalesCounts();
+
     }
 
-    public void updateSales() {
-        new android.os.Handler(Looper.getMainLooper()).postDelayed(
-                new Runnable() {
-                    public void run() {
-                        getSalesCounts();
-                    }
-                },
-                60000);
-    }
 
     public void getSalesCounts() {
         updSale = true;
@@ -544,88 +532,26 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         common_class.dismissCommonDialog();
         if (type == 2) {
             route_text.setText("");
+            shared_common_pref.save(Constants.Route_name, "");
             shared_common_pref.save(Constants.Route_Id, "");
             Distributor_Id = myDataset.get(position).getId();
             btnCmbRoute.setVisibility(View.VISIBLE);
             distributor_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
-
             getLastInvoiceData();
-
-
-            loadroute(myDataset.get(position).getId());
-            OutletFilter(myDataset.get(position).getId(), "1", true);
-
-
+            common_class.getDataFromApi(Retailer_OutletList, this, false);
+            common_class.getDb_310Data(Rout_List, this);
         } else if (type == 3) {
-            Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_Id, myDataset.get(position).getId());
-            Route_id = myDataset.get(position).getId();
-            OutletFilter(myDataset.get(position).getId(), "0", true);
-
-
+            setPagerAdapter(false);
         }
     }
-
-
-    public void OutletFilter(String id, String flag, Boolean pagerUpdate) {
-        try {
-            CountUR = 0;
-            CountSR = 0;
-
-
-            if (flag.equals("0")) {
-                setPagerAdapter(false);
-            } else {
-                common_class.getDataFromApi(Retailer_OutletList, this, false);
-
-                JSONObject jParam = new JSONObject();
-                try {
-                    jParam.put("Stk", id);
-                    //jParam.put("div", UserDetails.getString("Divcode", ""));
-                } catch (JSONException ex) {
-
-                }
-                ApiClient.getClient().create(ApiInterface.class)
-                        .getDataArrayList("get/routelist", jParam.toString())
-                        .enqueue(new Callback<JsonArray>() {
-                            @Override
-                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                try {
-                                    // new Shared_Common_Pref(Dashboard_Two.this)
-                                    //         .save(Distributor_List, response.body().toString());
-                                    db.deleteMasterData(Constants.Rout_List);
-                                    db.addMasterData(Constants.Rout_List, response.body().toString());
-                                    getDbstoreData(Constants.Rout_List);
-                                    loadroute(id);
-                                } catch (Exception e) {
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonArray> call, Throwable t) {
-                                Log.d("RouteList", String.valueOf(t));
-                            }
-                        });
-
-
-            }
-
-
-        } catch (Exception e) {
-            Log.e("DR:RetailorFilter: ", e.getMessage());
-        }
-
-    }
-
 
     @Override
     public void setDataToRouteObject(Object noticeArrayList, int position) {
@@ -641,18 +567,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-
-
         if (FRoute_Master.size() == 1) {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
             route_text.setText(FRoute_Master.get(0).getName());
             shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
             shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
-            Route_id = FRoute_Master.get(0).getId();
+
         } else {
-            Route_id = "";
-            shared_common_pref.save(Constants.Route_Id, "");
-            route_text.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
@@ -660,9 +581,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
-
-            FRoute_Master.clear();
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -670,17 +588,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 String flag = jsonObject1.optString("FWFlg");
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
-                if (listType.equals(Constants.Distributor_List)) {
-                    String Add2 = jsonObject1.optString("Addr2");
-                    String Mob = jsonObject1.optString("Mobile");
-                    Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
-                    distributor_master.add(Model_Pojo);
-                } else if (listType.equals(Constants.Rout_List)) {
-                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
-                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
-                    FRoute_Master.add(Model_Pojo);
-
-                }
+                String Add2 = jsonObject1.optString("Addr2");
+                String Mob = jsonObject1.optString("Mobile");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
+                distributor_master.add(Model_Pojo);
 
             }
 
@@ -693,14 +604,24 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             if (apiDataResponse != null) {
                 switch (key) {
                     case Rout_List:
-                        getDbstoreData(Constants.Rout_List);
+                        JSONArray routeArr = new JSONArray(apiDataResponse);
+                        FRoute_Master.clear();
+                        for (int i = 0; i < routeArr.length(); i++) {
+                            JSONObject jsonObject1 = routeArr.getJSONObject(i);
+                            String id = String.valueOf(jsonObject1.optInt("id"));
+                            String name = jsonObject1.optString("name");
+                            String flag = jsonObject1.optString("FWFlg");
+                            Model_Pojo = new Common_Model(id, name, flag);
+                            Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
+                            FRoute_Master.add(Model_Pojo);
+
+                        }
                         loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
                     case Retailer_OutletList:
@@ -803,7 +724,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                         if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
                             Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
-                        } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                        } else if (shared_common_pref.getvalue(Route_Id).equals("") && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {
                             Shared_Common_Pref.Outler_AddFlag = "0";
@@ -811,7 +732,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
                             Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
                             Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                            Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
+                            // Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
                             // common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
                             shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());

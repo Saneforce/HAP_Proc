@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -52,15 +54,12 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Joint_Work_Listner;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.MVP.MasterSync_Implementations;
-import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.Model_Class.Tp_Dynamic_Modal;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Joint_Work_Adapter;
 import com.hap.checkinproc.common.DatabaseHandler;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,8 +78,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
 public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
 
@@ -105,7 +102,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     EditText edt_remarks, eText, etext2, empidedittext;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String TpDate,worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
+    String TpDate, worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
     private TextClock tClock;
     Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
@@ -146,6 +143,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     Shared_Common_Pref sharedCommonPref;
 
     DatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,9 +160,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         dynamicrecyclerview.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
         tourdate = findViewById(R.id.tourdate);
-        TpDate=com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
-        String[] TP_Dt=TpDate.split("-");
-        tourdate.setText(TP_Dt[2]+"/"+TP_Dt[1]+"/"+TP_Dt[0]);
+        TpDate = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
+        String[] TP_Dt = TpDate.split("-");
+        tourdate.setText(TP_Dt[2] + "/" + TP_Dt[1] + "/" + TP_Dt[0]);
         route_text = findViewById(R.id.route_text);
         worktypelayout = findViewById(R.id.worktypelayout);
         distributors_layout = findViewById(R.id.distributors_layout);
@@ -331,7 +329,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Log.e("Button_Access", myDataset.get(position).getCheckouttime());
             Fieldworkflag = myDataset.get(position).getFlag();
             Worktype_Button = myDataset.get(position).getCheckouttime();
-            ExpNeed=myDataset.get(position).getExpNeed();
+            ExpNeed = myDataset.get(position).getExpNeed();
             Log.e("LogWorktype", String.valueOf(myDataset.get(position).getId()));
             jointwork_layout.setVisibility(View.GONE);
             GetTp_Worktype_Fields(Worktype_Button);
@@ -447,7 +445,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 ProductJson_Object.put("Fld_Src_Name", dynamicarray.get(z).getFld_Src_Name());
                                 ProductJson_Object.put("Fld_Src_Field", dynamicarray.get(z).getFld_Src_Field());
                                 ProductJson_Object.put("Fld_Length", dynamicarray.get(z).getFld_Length());
-                                ProductJson_Object.put("Fld_Symbol",dynamicarray.get(z).getFld_Symbol());
+                                ProductJson_Object.put("Fld_Symbol", dynamicarray.get(z).getFld_Symbol());
                                 ProductJson_Object.put("Fld_Mandatory", dynamicarray.get(z).getFld_Mandatory());
                                 ProductJson_Object.put("Active_flag", dynamicarray.get(z).getActive_flag());
                                 ProductJson_Object.put("Control_id", dynamicarray.get(z).getControl_id());
@@ -455,12 +453,12 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 ProductJson_Object.put("Filter_Text", dynamicarray.get(z).getFilter_Text());
                                 ProductJson_Object.put("Filter_Value", dynamicarray.get(z).getFilter_Value());
                                 ProductJson_Object.put("Field_Col", dynamicarray.get(z).getField_Col());
-                                if(dynamicarray.get(z).getFld_Symbol().equals("D")){
+                                if (dynamicarray.get(z).getFld_Symbol().equals("D")) {
                                     jsonobj.put("Worked_with_Code", dynamicarray.get(z).getFilter_Text());
-                                    jsonobj.put("Worked_with_Name",dynamicarray.get(z).getFilter_Value());
-                                }else if(dynamicarray.get(z).getFld_Symbol().equals("R")){
+                                    jsonobj.put("Worked_with_Name", dynamicarray.get(z).getFilter_Value());
+                                } else if (dynamicarray.get(z).getFld_Symbol().equals("R")) {
                                     jsonobj.put("RouteCode", dynamicarray.get(z).getFilter_Text());
-                                    jsonobj.put("RouteName",dynamicarray.get(z).getFilter_Value());
+                                    jsonobj.put("RouteName", dynamicarray.get(z).getFilter_Value());
                                 }
                                 personarray.put(ProductJson_Object);
                             } catch (JSONException e) {
@@ -489,7 +487,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                                 common_class.ProgressdialogShow(2, "Tour  plan");
                                 if (response.code() == 200 || response.code() == 201) {
-                                    if (ExpNeed==true) {
+                                    if (ExpNeed == true) {
                                         Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
                                         intent.putExtra("My_Day_Plan", "One");
                                         startActivity(intent);
@@ -554,17 +552,17 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     public void loadWorkTypes() {
         db = new DatabaseHandler(this);
         try {
-            JSONArray HAPLoca=db.getMasterData("HAPWorkTypes");
-            if(HAPLoca!=null){
-                for(int li=0;li<HAPLoca.length();li++){
-                    JSONObject jItem=HAPLoca.getJSONObject(li);
+            JSONArray HAPLoca = db.getMasterData("HAPWorkTypes");
+            if (HAPLoca != null) {
+                for (int li = 0; li < HAPLoca.length(); li++) {
+                    JSONObject jItem = HAPLoca.getJSONObject(li);
                     String id = String.valueOf(jItem.optInt("id"));
                     String name = jItem.optString("name");
                     String flag = jItem.optString("FWFlg");
                     String ETabs = jItem.optString("ETabs");
                     String PlInv = jItem.optString("Place_Involved");
-                    boolean tExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
-                    Common_Model item = new Common_Model(id, name, flag, ETabs,tExpNeed);
+                    boolean tExpNeed = (PlInv.equalsIgnoreCase("Y") ? true : false);
+                    Common_Model item = new Common_Model(id, name, flag, ETabs, tExpNeed);
                     worktypelist.add(item);
                 }
             }
@@ -572,6 +570,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             e.printStackTrace();
         }
     }
+
     public void OrderType() {
         travelTypeList = new ArrayList<>();
         travelTypeList.add("HQ");
@@ -592,8 +591,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     }
 
     public boolean vali() {
-        if(worktype_text.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(this, "Select the worktype" , Toast.LENGTH_SHORT).show();
+        if (worktype_text.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(this, "Select the worktype", Toast.LENGTH_SHORT).show();
             return false;
         }
         for (int i = 0; i < dynamicarray.size(); i++) {
@@ -724,13 +723,13 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         modeId = String.valueOf(jsoncc.getJSONObject(0).get("Mot_ID"));
                         STRCode = String.valueOf(jsoncc.getJSONObject(0).get("To_Place_ID"));
                         modeVal = String.valueOf(jsoncc.getJSONObject(0).get("Mode_Travel_Id"));
-                        Worktype_Button=String.valueOf(jsoncc.getJSONObject(0).get("Button_Access"));
+                        Worktype_Button = String.valueOf(jsoncc.getJSONObject(0).get("Button_Access"));
                         String Jointworkcode = String.valueOf(jsoncc.getJSONObject(0).get("JointworkCode"));
                         String JointWork_Name = String.valueOf(jsoncc.getJSONObject(0).get("JointWork_Name"));
                         String[] arrOfStr = Jointworkcode.split(",");
                         String[] arrOfname = JointWork_Name.split(",");
 
-                        if(!Jointworkcode.equals("")) {
+                        if (!Jointworkcode.equals("")) {
                             //Model_Pojo = new Common_Model(arrOfStr.get("Sf_Name").getAsString() + "-" + EmpDet.get("sf_Designation_Short_Name").getAsString(), EmpDet.get("Sf_Code").getAsString(), false);
                             for (int ik = 0; arrOfStr.length > ik; ik++) {
                                 Model_Pojo = new Common_Model(arrOfname[ik], arrOfStr[ik], false);
@@ -933,7 +932,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         QueryString.put("Worktype_Code", wflag);
         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Log.e("QUERYSTRING",QueryString.toString());
+        Log.e("QUERYSTRING", QueryString.toString());
         Call<Object> call = service.GettpWorktypeFields(QueryString);
         call.enqueue(new Callback<Object>() {
             @Override
@@ -1092,8 +1091,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     holder.edittextid.setVisibility(View.GONE);
                     if (titlecaptions.equals("Distributor")) {
                         shared_common_pref.save(Constants.Distributor_name, SEttextvalues);
-                        shared_common_pref.save(Constants.Distributor_Id,dynamicarray.get(position).getFilter_Text());
-                        common_class.getDataFromApi(Constants.Retailer_OutletList,Mydayplan_Activity.this,false);
+                        shared_common_pref.save(Constants.Distributor_Id, dynamicarray.get(position).getFilter_Text());
+                        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, dynamicarray.get(position).getFilter_Text());
+                        common_class.getDataFromApi(Constants.Retailer_OutletList, Mydayplan_Activity.this, false);
                     }
 
 

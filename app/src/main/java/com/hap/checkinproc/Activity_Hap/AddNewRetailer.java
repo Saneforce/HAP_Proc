@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
@@ -59,9 +60,9 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -125,13 +126,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private String place_id = "";
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-CircularProgressButton btnRefLoc;
-    double RetLat=0.0,RetLng=0.0;
-    List<Common_Model> deliveryTypeList,outletTypeList;
+    CircularProgressButton btnRefLoc;
+    double RetLat = 0.0, RetLng = 0.0;
+    List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
     private ArrayList<Common_Model> stateList;
+    private String name = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +176,7 @@ CircularProgressButton btnRefLoc;
             mSubmit = findViewById(R.id.submit_button);
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
-            btnRefLoc= findViewById(R.id.btnRefLoc);
+            btnRefLoc = findViewById(R.id.btnRefLoc);
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
             if (mapFragment != null) {
@@ -213,39 +215,35 @@ CircularProgressButton btnRefLoc;
             btnRefLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    btnRefLoc.startAnimation();
+
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            new LocationFinder(getApplication(), new LocationEvents() {
-                                @Override
-                                public void OnLocationRecived(Location location) {
-                                    if( location==null){
-                                        Toast.makeText(AddNewRetailer.this,"Location Can't Getting Location. Try Again.",Toast.LENGTH_LONG).show();
-                                        btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
-                                    }else {
-                                        RetLat = location.getLatitude();
-                                        RetLng = location.getLongitude();
-                                        Shared_Common_Pref.Outletlat=RetLat;
-                                        Shared_Common_Pref.Outletlong=RetLng;
-                                        getCompleteAddressString(RetLat,RetLng);
-                                        centreMapOnLocation("Your Location");
-                                        btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
-                                    }
-
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            btnRefLoc.stopAnimation();
-                                            btnRefLoc.revertAnimation();
-                                            btnRefLoc.setBackground(getDrawable(R.drawable.button_blueg));
+                            try {
+                                new LocationFinder(getApplication(), new LocationEvents() {
+                                    @Override
+                                    public void OnLocationRecived(Location location) {
+                                        try {
+                                            if (location == null) {
+                                                Toast.makeText(AddNewRetailer.this, "Location Can't Getting Location. Try Again.", Toast.LENGTH_LONG).show();
+                                                //btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+                                                return;
+                                            } else {
+                                               refreshLocation(location);
+                                            }
+                                        } catch (Exception e) {
+                                            Log.v(TAG, "LOC1:" + e.getMessage());
                                         }
-                                    },1000);
-                                }
-                            });
+                                    }
+                                });
+                            } catch (Exception e) {
+                                Log.v(TAG, "LOC3:" + e.getMessage());
+                            }
                         }
-                    },100);
+                    }, 100);
+
                 }
+
             });
 
             gson = new Gson();
@@ -256,15 +254,16 @@ CircularProgressButton btnRefLoc;
             }.getType();
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+            txtRetailerRoute.setText(shared_common_pref.getvalue(Constants.Route_name));
+            routeId = shared_common_pref.getvalue(Constants.Route_Id);
+
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
                 CurrentLocLin.setVisibility(View.GONE);
                 retailercodevisible.setVisibility(View.GONE);
                 CurrentLocationsAddress.setVisibility(View.GONE);
                 //   routeId = shared_common_pref.getvalue("RouteSelect");
-                routeId = shared_common_pref.getvalue(Constants.Route_Id);
-
-                txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
                 CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
                 getCompleteAddressString(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
                 headtext.setText("Create Outlet");
@@ -356,6 +355,13 @@ CircularProgressButton btnRefLoc;
                     //The key argument here must match that used in the other activity
                 } else {
                     common_class.getDb_310Data(Constants.STATE_LIST, this);
+
+                    name = "http://hapapps.sanfmcg.com/" + Retailer_Modal_List.get(getOutletPosition()).getImagename();
+                    name = name.replace(",", "");
+                    Picasso.with(AddNewRetailer.this)
+                            .load(name)
+                            .error(R.drawable.profile_img)
+                            .into(ivPhotoShop);
                     addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
                     addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                     txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
@@ -456,7 +462,7 @@ CircularProgressButton btnRefLoc;
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
                     } else if (txOutletType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
-                    } else if (imageConvert.equals("")) {
+                    } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
@@ -505,15 +511,12 @@ CircularProgressButton btnRefLoc;
 
             shared_common_pref.save(Constants.Retailor_FilePath, "");
 
-            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
 
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 linReatilerRoute.setOnClickListener(this);
                 rlDistributor.setOnClickListener(this);
                 getDbstoreData(Constants.Distributor_List);
-                getDbstoreData(Constants.Rout_List);
-
-                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
+                common_class.getDb_310Data(Rout_List, this);
 
             }
 
@@ -524,6 +527,33 @@ CircularProgressButton btnRefLoc;
         }
 
 
+    }
+
+    void refreshLocation(Location location){
+
+        btnRefLoc.startAnimation();
+        RetLat = location.getLatitude();
+        RetLng = location.getLongitude();
+        Shared_Common_Pref.Outletlat = RetLat;
+        Shared_Common_Pref.Outletlong = RetLng;
+        getCompleteAddressString(RetLat, RetLng);
+        centreMapOnLocation("Your Location");
+        btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    btnRefLoc.stopAnimation();
+                    btnRefLoc.revertAnimation();
+                    btnRefLoc.setBackground(getDrawable(R.drawable.button_blueg));
+                } catch (Exception e) {
+                    Log.v(TAG, "LOC2:" + e.getMessage());
+
+                }
+            }
+        }, 1000);
     }
 
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
@@ -556,24 +586,14 @@ CircularProgressButton btnRefLoc;
         try {
             JSONArray jsonArray = db.getMasterData(listType);
 
-            FRoute_Master.clear();
-
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
                 String name = jsonObject1.optString("name");
                 String flag = jsonObject1.optString("FWFlg");
-                String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
-                if (listType.equals(Constants.Distributor_List)) {
-                    distributor_master.add(Model_Pojo);
-                } else if (listType.equals(Constants.Rout_List)) {
-                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
-                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
-                    FRoute_Master.add(Model_Pojo);
-                    Route_Masterlist.add(Model_Pojo);
-                }
+                distributor_master.add(Model_Pojo);
+
 
             }
 
@@ -780,7 +800,7 @@ CircularProgressButton btnRefLoc;
             reportObject.put("unlisted_doctor_gst", "'" + edt_gst.getText().toString() + "'");
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
-            reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString());
+            reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString() + "'");
             if (edt_outstanding.getText().toString().equals(""))
                 reportObject.put("outstanding_amount", 0);
 
@@ -861,12 +881,16 @@ CircularProgressButton btnRefLoc;
                     JsonObject jsonObject = response.body();
                     // Log.e("Add_Retailer_details", String.valueOf(jsonObject));
                     String success = String.valueOf(jsonObject.get("success"));
+
+                    common_class.getDataFromApi(Constants.Retailer_OutletList, AddNewRetailer.this, false);
+
                     if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                         Toast.makeText(AddNewRetailer.this, "Outlet Added successfully", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
                     }
-                    if(Shared_Common_Pref.FromActivity == "Outlets"){
+
+                    if (Shared_Common_Pref.FromActivity == "Outlets") {
                         Shared_Common_Pref.FromActivity = "";
                         common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
                     } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
@@ -899,43 +923,15 @@ CircularProgressButton btnRefLoc;
                 break;
             case 2:
                 txtRetailerRoute.setText("");
+                routeId = "";
                 distributor_text.setText(myDataset.get(position).getName());
                 findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
-                JSONObject jParam = new JSONObject();
-                try {
-                    jParam.put("Stk", myDataset.get(position).getId());
-                    //jParam.put("div", UserDetails.getString("Divcode", ""));
-                } catch (JSONException ex) {
-
-                }
-                ApiClient.getClient().create(ApiInterface.class)
-                        .getDataArrayList("get/routelist", jParam.toString())
-                        .enqueue(new Callback<JsonArray>() {
-                            @Override
-                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                try {
-
-                                    db.deleteMasterData(Constants.Rout_List);
-                                    db.addMasterData(Constants.Rout_List, response.body().toString());
-                                    getDbstoreData(Constants.Rout_List);
-                                    loadroute(myDataset.get(position).getId());
-                                } catch (Exception e) {
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonArray> call, Throwable t) {
-                                Log.d("RouteList", String.valueOf(t));
-                            }
-                        });
-
+                shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
+                common_class.getDb_310Data(Constants.Rout_List, this);
                 break;
             case 3:
                 routeId = myDataset.get(position).getId();
                 txtRetailerRoute.setText(myDataset.get(position).getName());
-                //loadroute(myDataset.get(position).getId());
                 break;
             case 9:
                 txtRetailerClass.setText(myDataset.get(position).getName());
@@ -963,11 +959,8 @@ CircularProgressButton btnRefLoc;
         if (FRoute_Master.size() == 1) {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
             txtRetailerRoute.setText(FRoute_Master.get(0).getName());
-            shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
-            shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             routeId = FRoute_Master.get(0).getId();
         } else {
-            txtRetailerRoute.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
@@ -995,17 +988,35 @@ CircularProgressButton btnRefLoc;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        try {
 
-        if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
-            finalPath = "/storage/emulated/0";
-            filePath = outputFileUri.getPath();
-            filePath = filePath.substring(1);
-            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
 
-            file = new File(filePath);
+            new LocationFinder(this, new LocationEvents() {
+                @Override
+                public void OnLocationRecived(Location location) {
+                    try {
+                        refreshLocation(location);
+                    } catch (Exception e) {
+                    }
+                }
+            });
+            if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
+                finalPath = "/storage/emulated/0";
+                filePath = outputFileUri.getPath();
+                filePath = filePath.substring(1);
+                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
 
-            ivPhotoShop.setImageURI(Uri.fromFile(file));
+                file = new File(filePath);
 
+                ivPhotoShop.setImageURI(Uri.fromFile(file));
+
+
+
+
+
+
+            }
+        } catch (Exception e) {
 
         }
     }
@@ -1034,17 +1045,21 @@ CircularProgressButton btnRefLoc;
                 break;
 
             case R.id.ivShopPhoto:
-                AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
-                    @Override
-                    public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
-                        imageServer = FileName;
-                        imageConvert = fullPath;
-                        ivPhotoShop.setImageBitmap(image);
-                    }
-                });
-                Intent intent = new Intent(AddNewRetailer.this, AllowancCapture.class);
-                intent.putExtra("allowance", "One");
-                startActivity(intent);
+                try {
+                    AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                        @Override
+                        public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                            imageServer = FileName;
+                            imageConvert = fullPath;
+                            ivPhotoShop.setImageBitmap(image);
+                        }
+                    });
+                    Intent intent = new Intent(AddNewRetailer.this, AllowancCapture.class);
+                    intent.putExtra("allowance", "One");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.v(TAG, ":imageClk:" + e.getMessage());
+                }
                 break;
         }
     }
@@ -1071,6 +1086,21 @@ CircularProgressButton btnRefLoc;
             if (apiDataResponse != null) {
 
                 switch (key) {
+                    case Rout_List:
+                        JSONArray routeArr = new JSONArray(apiDataResponse);
+                        FRoute_Master.clear();
+                        for (int i = 0; i < routeArr.length(); i++) {
+                            JSONObject jsonObject1 = routeArr.getJSONObject(i);
+                            String id = String.valueOf(jsonObject1.optInt("id"));
+                            String name = jsonObject1.optString("name");
+                            String flag = jsonObject1.optString("FWFlg");
+                            Model_Pojo = new Common_Model(id, name, flag);
+                            Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
+                            FRoute_Master.add(Model_Pojo);
+
+                        }
+                        loadroute(shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
+                        break;
                     case Constants.STATE_LIST:
                         JSONObject stateObj = new JSONObject(apiDataResponse);
                         if (stateObj.getBoolean("success")) {

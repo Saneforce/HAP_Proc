@@ -450,6 +450,9 @@ public class Retailer_Modal_List {
     @SerializedName("Class")
     @Expose
     private String 	Class;
+    @SerializedName("Imagename")
+    @Expose
+    private String 	Imagename;
 
     public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String pin_code, String gst, String reason_category, String category_Universe_Id) {
         this.id = id;
@@ -823,5 +826,13 @@ public class Retailer_Modal_List {
 
     public void setStateCode(String stateCode) {
         StateCode = stateCode;
+    }
+
+    public String getImagename() {
+        return Imagename;
+    }
+
+    public void setImagename(String imagename) {
+        Imagename = imagename;
     }
 }

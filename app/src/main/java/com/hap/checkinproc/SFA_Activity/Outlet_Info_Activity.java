@@ -1,6 +1,8 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -26,8 +27,6 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
@@ -36,16 +35,11 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Outlet_Info_Activity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     Gson gson;
@@ -60,13 +54,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     String Route_id;
     EditText txSearchRet;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
     DatabaseHandler db;
     String TAG = "Lead_Activity:";
     private TextView distributor_text;
-    private String routeId = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +87,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             }.getType();
 
             getDbstoreData(Constants.Distributor_List);
-            getDbstoreData(Constants.Rout_List);
 
             ImageView backView = findViewById(R.id.imag_back);
             backView.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +99,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             reloadData();
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
+            // GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
@@ -119,13 +109,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
 
             if (!sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
-                OutletFilter(sharedCommonPref.getvalue(Constants.Distributor_Id), "1");
                 findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
-                loadroute(sharedCommonPref.getvalue(Constants.Distributor_Id));
-
+                common_class.getDb_310Data(Rout_List, this);
             } else {
                 findViewById(R.id.btnCmbRoute).setVisibility(View.GONE);
-
             }
 
             txSearchRet.addTextChangedListener(new TextWatcher() {
@@ -156,6 +143,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
         String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+        String routeId=sharedCommonPref.getvalue(Route_Id);
         for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
             String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
             String sSchText = txSearchRet.getText().toString().toUpperCase();
@@ -204,58 +192,26 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             distributor_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+            sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("Stk", myDataset.get(position).getId());
-                //jParam.put("div", UserDetails.getString("Divcode", ""));
-            } catch (JSONException ex) {
-
-            }
-            ApiClient.getClient().create(ApiInterface.class)
-                    .getDataArrayList("get/routelist", jParam.toString())
-                    .enqueue(new Callback<JsonArray>() {
-                        @Override
-                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                            try {
-
-                                db.deleteMasterData(Constants.Rout_List);
-                                db.addMasterData(Constants.Rout_List, response.body().toString());
-                                getDbstoreData(Constants.Rout_List);
-                                loadroute(myDataset.get(position).getId());
-                                OutletFilter(myDataset.get(position).getId(), "1");
-                            } catch (Exception e) {
-
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonArray> call, Throwable t) {
-                            Log.d("RouteList", String.valueOf(t));
-                        }
-                    });
+            common_class.getDataFromApi(Retailer_OutletList, this, false);
+            common_class.getDb_310Data(Rout_List, this);
         } else if (type == 3) {
-            Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Route_Id, myDataset.get(position).getId());
-            OutletFilter(myDataset.get(position).getId(), "0");
+            reloadData();
         }
     }
 
-    public void loadroute(String id) {
-        if (common_class.isNullOrEmpty(String.valueOf(id))) {
-            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
-        }
+    public void loadroute() {
         if (FRoute_Master.size() == 1) {
             route_text.setText(FRoute_Master.get(0).getName());
             sharedCommonPref.save(Constants.Route_name, FRoute_Master.get(0).getName());
             sharedCommonPref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
         } else {
-            route_text.setText("");
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
@@ -264,9 +220,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reachedoutlets:
-                sharedCommonPref.save("RouteSelect", Route_id);
-                sharedCommonPref.save("RouteName", route_text.getText().toString());
-                //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
                 common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
@@ -281,52 +234,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void GetJsonData(String jsonResponse, String type) {
-        try {
-            JSONArray jsonArray = new JSONArray(jsonResponse);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = String.valueOf(jsonObject1.optInt("id"));
-                String name = jsonObject1.optString("name");
-                String flag = jsonObject1.optString("FWFlg");
-                String ETabs = jsonObject1.optString("ETabs");
-                Model_Pojo = new Common_Model(id, name, flag);
-                if (type.equals("1")) {
-                    FRoute_Master.add(Model_Pojo);
-                    Route_Masterlist.add(Model_Pojo);
-                } else if (String.valueOf(jsonObject1.optString("Button_Access")).indexOf("D") > -1) {
-                    route_text.setText(jsonObject1.optString("ClstrName"));
-                    Route_id = jsonObject1.optString("cluster");
-                }
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void OutletFilter(String id, String flag) {
-        try {
-
-            if (flag.equals("0")) {
-                routeId = id;
-
-                reloadData();
-            } else {
-                routeId = "";
-                common_class.getDataFromApi(Retailer_OutletList, this, false);
-            }
-
-
-        } catch (Exception e) {
-            Log.e("DR:RetailorFilter: ", e.getMessage());
-        }
-
-    }
-
     void getDbstoreData(String listType) {
         try {
-            FRoute_Master.clear();
             JSONArray jsonArray = db.getMasterData(listType);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -335,17 +244,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 String flag = jsonObject1.optString("FWFlg");
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
-                if (listType.equals(Constants.Distributor_List)) {
-                    String Add2 = jsonObject1.optString("Addr2");
-                    String Mob = jsonObject1.optString("Mobile");
-                    Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
-                    distributor_master.add(Model_Pojo);
-                } else if (listType.equals(Constants.Rout_List)) {
-                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
-                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
-                    FRoute_Master.add(Model_Pojo);
-                    Route_Masterlist.add(Model_Pojo);
-                }
+                String Add2 = jsonObject1.optString("Addr2");
+                String Mob = jsonObject1.optString("Mobile");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
+                distributor_master.add(Model_Pojo);
 
             }
 
@@ -364,6 +266,21 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 switch (key) {
                     case Retailer_OutletList:
                         reloadData();
+                        break;
+                    case Rout_List:
+                        JSONArray routeArr = new JSONArray(apiDataResponse);
+                        FRoute_Master.clear();
+                        for (int i = 0; i < routeArr.length(); i++) {
+                            JSONObject jsonObject1 = routeArr.getJSONObject(i);
+                            String id = String.valueOf(jsonObject1.optInt("id"));
+                            String name = jsonObject1.optString("name");
+                            String flag = jsonObject1.optString("FWFlg");
+                            Model_Pojo = new Common_Model(id, name, flag);
+                            Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
+                            FRoute_Master.add(Model_Pojo);
+
+                        }
+                        loadroute();
                         break;
 
                 }
