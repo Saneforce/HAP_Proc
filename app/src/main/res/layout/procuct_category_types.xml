@@ -29,7 +29,8 @@
             android:gravity="center"
             android:background="@drawable/button_blueg"
             android:text="Order"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="11sp" />
 
         <TextView
@@ -48,7 +49,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Other Brand"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="11sp" />
 
 
@@ -66,8 +68,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="QPS"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:background="@drawable/button_blueg"
+            android:textStyle="bold"
             android:textSize="11sp" />
 
         <TextView
@@ -85,7 +88,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="POP"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="11sp" />
 
         <TextView
@@ -103,7 +107,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Cooler Info"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="11sp" />
 
 

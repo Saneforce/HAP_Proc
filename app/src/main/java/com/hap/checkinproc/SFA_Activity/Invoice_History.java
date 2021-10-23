@@ -1,9 +1,12 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -20,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
@@ -57,7 +61,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Invoice_History extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
-    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding;
+
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    public static final String CheckInDetail = "CheckInDetail";
+    public static final String UserDetail = "MyPrefs";
+
+    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding
+            ,txPrvBal,txSalesAmt,txPayment;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
@@ -95,6 +106,9 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 }
             });
 
+            CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
             outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -116,7 +130,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txRmksNoOrd = (TextView) findViewById(R.id.txRmksNoOrd);
             btnRmkClose = (ImageView) findViewById(R.id.btnRmkClose);
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
-            tvOutstanding = findViewById(R.id.tvOutstanding);
+            tvOutstanding = findViewById(R.id.txOutstanding);
+            txPrvBal = findViewById(R.id.PrvOutAmt);
+            txSalesAmt = findViewById(R.id.SalesAmt);
+            txPayment = findViewById(R.id.PaymentAmt);
+
 
 
             lin_noOrder.setOnClickListener(this);
@@ -172,14 +190,52 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
             common_class.getDb_310Data(Constants.TAXList, this);
             common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
-            common_class.getDb_310Data(Constants.OUTSTANDING, this);
+            //common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
+            getOutstanding();
         } catch (Exception e) {
 
         }
 
     }
 
+    private void getOutstanding() {
+        JSONObject jParam = new JSONObject();
+        try {
+            jParam.put("SF", UserDetails.getString("Sfcode", ""));
+            jParam.put("Stk", Shared_Common_Pref.DistributorCode);
+            jParam.put("Cus", Shared_Common_Pref.OutletCode);
+            jParam.put("div", UserDetails.getString("Divcode", ""));
+
+            ApiClient.getClient().create(ApiInterface.class)
+                    .getDataArrayList("get/outstanding",jParam.toString())
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
+                                JsonArray res = response.body();
+                                JsonObject jItem=res.get(0).getAsJsonObject();
+                                txPrvBal.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("pBal").getAsDouble()));
+                                txSalesAmt.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("Debit").getAsDouble()));
+                                txPayment.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("Credit").getAsDouble()));
+                                tvOutstanding.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("Balance").getAsDouble()));
+
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                            Log.d("InvHistory", String.valueOf(t));
+                        }
+                    });
+        }catch (JSONException e){
+
+        }
+    }
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
