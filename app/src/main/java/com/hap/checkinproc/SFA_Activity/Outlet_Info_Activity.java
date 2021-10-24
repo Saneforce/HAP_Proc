@@ -168,7 +168,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                         intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
                         intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
                         intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getPrimary_No());
+                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getMobileNumber());
                         intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
 
                         startActivity(intent);

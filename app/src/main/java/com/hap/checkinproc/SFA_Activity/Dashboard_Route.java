@@ -757,7 +757,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
 
-                            shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
+                            shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getMobileNumber());
                             common_class.CommonIntentwithFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             //}
