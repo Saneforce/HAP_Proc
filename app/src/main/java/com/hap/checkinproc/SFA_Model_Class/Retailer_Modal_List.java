@@ -399,6 +399,12 @@ public class Retailer_Modal_List {
     @SerializedName("Mobile_Number")
     @Expose
     private String mobileNumber;
+    @SerializedName("Primary_No")
+    @Expose
+    private String Primary_No;
+    @SerializedName("Secondary_No")
+    @Expose
+    private String Secondary_No;
     @SerializedName("Doc_cat_code")
     @Expose
     private Integer docCatCode;
@@ -834,5 +840,21 @@ public class Retailer_Modal_List {
 
     public void setImagename(String imagename) {
         Imagename = imagename;
+    }
+
+    public String getSecondary_No() {
+        return Secondary_No;
+    }
+
+    public void setSecondary_No(String secondary_No) {
+        Secondary_No = secondary_No;
+    }
+
+    public String getPrimary_No() {
+        return Primary_No;
+    }
+
+    public void setPrimary_No(String primary_No) {
+        Primary_No = primary_No;
     }
 }

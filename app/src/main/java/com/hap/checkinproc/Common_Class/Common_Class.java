@@ -48,6 +48,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
+import com.hap.checkinproc.SFA_Activity.PayLedgerActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -280,7 +281,7 @@ public class Common_Class {
                             " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
-                            " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
+                            " \\\"LastUpdt_Date\\\",\\\"Primary_No\\\"\\\"Secondary_No\\\"\\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
                             " \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   " +
                             "\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"" +
                             "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"OutletOrder asc\\\",\\\"doctor_name asc\\\"]\",\"desig\":\"stockist\"}";
@@ -404,6 +405,13 @@ public class Common_Class {
                 String axnname = "";
                 JSONObject data = new JSONObject();
                 switch (key) {
+                    case Constants.LEDGER:
+                        axnname = "get/outletwiseledger";
+                        data.put("SF", Shared_Common_Pref.Sf_Code);
+                        data.put("Stk", Shared_Common_Pref.DistributorCode);
+                        data.put("FDT", PayLedgerActivity.ledgerFDT);
+                        data.put("TDT", PayLedgerActivity.ledgerTDT);
+                        break;
                     case Constants.QPS_STATUS:
                         axnname = "get/qpsentrystatus";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);

@@ -19,7 +19,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -77,8 +76,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -229,7 +226,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                                 //btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
                                                 return;
                                             } else {
-                                               refreshLocation(location);
+                                                refreshLocation(location);
                                             }
                                         } catch (Exception e) {
                                             Log.v(TAG, "LOC1:" + e.getMessage());
@@ -365,8 +362,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
                     addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                     txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                    addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
+                    addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
                     retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getSecondary_No() != null)
+                        etPhoneNo2.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSecondary_No());
                     if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
                         addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
                     if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
@@ -398,7 +397,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
                 addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                 txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
+                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
 
@@ -529,7 +528,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     }
 
-    void refreshLocation(Location location){
+    void refreshLocation(Location location) {
 
         btnRefLoc.startAnimation();
         RetLat = location.getLatitude();
@@ -753,27 +752,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         });
     }
 
-
-    public MultipartBody.Part convertimg(String tag, String path) {
-        MultipartBody.Part yy = null;
-        Log.v("full_profile", path);
-        try {
-            if (!TextUtils.isEmpty(path)) {
-                File file;
-                file = new File(path);
-//                if (path.contains(".png") || path.contains(".jpg") || path.contains(".jpeg"))
-//                    file = new Compressor(getApplicationContext()).compressToFile(file);
-//                else
-//                    file = new File(path);
-                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
-                yy = MultipartBody.Part.createFormData(tag, file.getPath(), requestBody);
-            }
-        } catch (Exception e) {
-        }
-        Log.v("full_profile", yy + "");
-        return yy;
-    }
-
     public void addNewRetailers() {
         try {
             if (!imageServer.equalsIgnoreCase("")) {
@@ -872,7 +850,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             // addNewRetailer
             Log.e("QueryString", totalValueString);
 
-            //MultipartBody.Part imgg = convertimg("file", finalPath);
 
             Call<JsonObject> call = apiInterface.addNewRetailer(QueryString, totalValueString);
             call.enqueue(new Callback<JsonObject>() {
@@ -914,7 +891,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-
         common_class.dismissCommonDialog();
         switch (type) {
             case 1:
@@ -976,14 +952,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     @Override
     public void onBackPressed() {
-
         finish();
     }
 
     public void onSuperBackPressed() {
         super.onBackPressed();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
@@ -1011,16 +985,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 ivPhotoShop.setImageURI(Uri.fromFile(file));
 
 
-
-
-
-
             }
         } catch (Exception e) {
 
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -1078,7 +1047,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
 
     }
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {

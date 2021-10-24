@@ -42,13 +42,13 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimaryDark"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/btnToday"
@@ -97,6 +97,7 @@
 
 
             </LinearLayout>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_date"
                 android:layout_width="match_parent"
@@ -246,6 +247,7 @@
                             android:background="@color/grey_200" />
 
                         <LinearLayout
+                            android:id="@+id/llRpt"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
@@ -449,47 +451,33 @@
                 android:layout_weight="0.8">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:id="@+id/invoicerecyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/C5dp"
-                android:paddingTop="@dimen/C5dp"
-                android:paddingRight="@dimen/C5dp"
-                android:paddingBottom="@dimen/C5dp">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/lin_order"
                     style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/C5dp">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_order_24"
-                        />
+                        android:src="@drawable/ic_order_24" />
 
                     <TextView
+
                         android:id="@+id/Alltextclick"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:paddingLeft="@dimen/C5dp"
                         android:text="ORDER"
                         android:textSize="11sp"
@@ -526,23 +514,13 @@
                 <LinearLayout
                     android:id="@+id/lin_invoice"
                     style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/C5dp">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_invoice_24"
-                        >
+                        android:src="@drawable/ic_invoice_24">
 
                     </ImageView>
 
@@ -560,23 +538,13 @@
                 <LinearLayout
                     android:id="@+id/lin_noOrder"
                     style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/C5dp">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_noorder_24"
-                        />
+                        android:src="@drawable/ic_noorder_24" />
 
                     <TextView
                         android:id="@+id/tvNoorder"
@@ -593,23 +561,13 @@
                 <LinearLayout
                     android:id="@+id/lin_payment"
                     style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/C5dp">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_payment_24"
-                        />
+                        android:src="@drawable/ic_payment_24" />
 
                     <TextView
                         android:id="@+id/tvPayment"
@@ -742,8 +700,8 @@
                     android:background="@drawable/button_blueg"
                     android:padding="@dimen/C10dp"
                     android:text="Submit"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

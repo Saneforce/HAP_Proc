@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/row_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/C5dp">
+
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/sno"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C12dp"></TextView>
+
+
+        <TextView
+            android:id="@+id/tvDebit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:gravity="end"
+            android:text="Debit"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C12dp"></TextView>
+
+
+        <TextView
+            android:id="@+id/tvCredit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:gravity="end"
+            android:text="Credit"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C12dp"></TextView>
+
+
+        <TextView
+            android:id="@+id/tvBalance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:gravity="end"
+            android:text="Balance"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C12dp"></TextView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+

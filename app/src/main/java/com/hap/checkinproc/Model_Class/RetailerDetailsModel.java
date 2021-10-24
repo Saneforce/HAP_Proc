@@ -34,6 +34,9 @@ public class RetailerDetailsModel {
     @SerializedName("Mobile_Number")
     @Expose
     private String mobileNumber;
+    @SerializedName("Mobile_Number_2")
+    @Expose
+    private String mobileNumber2;
     @SerializedName("Doc_cat_code")
     @Expose
     private Integer docCatCode;
@@ -146,5 +149,13 @@ public class RetailerDetailsModel {
 
     public void setDocSpecialCode(Integer docSpecialCode) {
         this.docSpecialCode = docSpecialCode;
+    }
+
+    public String getMobileNumber2() {
+        return mobileNumber2;
+    }
+
+    public void setMobileNumber2(String mobileNumber2) {
+        this.mobileNumber2 = mobileNumber2;
     }
 }

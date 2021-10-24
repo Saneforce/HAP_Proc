@@ -13,13 +13,10 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -39,7 +36,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -53,9 +49,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
@@ -87,15 +81,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView  Out_Let_Name, Category_Nametext;
+    TextView Out_Let_Name, Category_Nametext;
 
     CircularProgressButton takeorder;
 
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
     LinearLayout lin_gridcategory;
     Common_Class common_class;
-    CustomListViewDialog customDialog;
-
 
     String Ukey;
     String[] strLoc;
@@ -133,6 +125,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private double payAmt;
 
     final Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -536,7 +529,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     SaveOrder();
                                 }
                             }
-                        },100);
+                        }, 100);
                     } else {
                         common_class.showMsg(this, "Your Cart is empty...");
                     }
@@ -565,13 +558,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
     }
 
-    public void ResetSubmitBtn(int resetMode){
+    public void ResetSubmitBtn(int resetMode) {
         common_class.ProgressdialogShow(0, "");
-        long dely=10;
-        if(resetMode!=0) dely=1000;
-        if (resetMode==1){
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
             takeorder.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
-        }else {
+        } else {
             takeorder.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
         }
         handler.postDelayed(new Runnable() {
@@ -580,9 +573,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 takeorder.stopAnimation();
                 takeorder.revertAnimation();
             }
-        },dely);
+        }, dely);
 
     }
+
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
@@ -729,39 +723,39 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                         responseBodyCall.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.isSuccessful()) {
-                                try {
-                                    Log.e("JSON_VALUES", response.body().toString());
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
-                                    if (san.equals("true")) {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        Log.e("JSON_VALUES", response.body().toString());
+                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                        String san = jsonObjects.getString("success");
+                                        Log.e("Success_Message", san);
+                                        if (san.equals("true")) {
 
-                                        Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
 
-                                        Shared_Common_Pref.Sync_Flag = "2";
+                                            Shared_Common_Pref.Sync_Flag = "2";
 //                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
 
-                                        ResetSubmitBtn(1);
-                                        startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                                        finish();
-                                    }
+                                            ResetSubmitBtn(1);
+                                            startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+                                            finish();
+                                        }
 
-                                } catch (Exception e) {
-                                    Log.e(TAG, "invcatch: " + e.getMessage());
-                                    ResetSubmitBtn(2);
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "invcatch: " + e.getMessage());
+                                        ResetSubmitBtn(2);
+                                    }
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e("SUBMIT_VALUE", "ERROR");
-                            ResetSubmitBtn(2);
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Log.e("SUBMIT_VALUE", "ERROR");
+                                ResetSubmitBtn(2);
+                            }
+                        });
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -771,7 +765,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                 @Override
                 public void NegativeMethod(DialogInterface dialog, int id) {
-                    dialog.dismiss();ResetSubmitBtn(0);
+                    dialog.dismiss();
+                    ResetSubmitBtn(0);
                 }
             });
         } else {
@@ -918,9 +913,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     }
 
 
-
-
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -964,12 +956,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         common_class.showMsg(this, "No Records Found");
                     }
                     if (payList.size() > 0) {
-
-                        customDialog = new CustomListViewDialog(Invoice_Category_Select.this, payList, 1);
-                        Window windoww = customDialog.getWindow();
-                        windoww.setGravity(Gravity.CENTER);
-                        windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                        customDialog.show();
+                        common_class.showCommonDialog(payList, 1, this);
                     }
 
                     break;
@@ -983,7 +970,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
+        common_class.dismissCommonDialog();
         tvPayMode.setText("" + myDataset.get(position).getName());
     }
 

@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +22,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -43,7 +38,6 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -67,9 +61,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
 
-    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding
-            ,txPrvBal,txSalesAmt,txPayment;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment;
+    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -77,7 +70,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     Gson gson;
     Invoice_History_Adapter mReportViewAdapter;
     RecyclerView invoicerecyclerview;
-    CustomListViewDialog customDialog;
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
     private String[] strLoc;
@@ -130,11 +122,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txRmksNoOrd = (TextView) findViewById(R.id.txRmksNoOrd);
             btnRmkClose = (ImageView) findViewById(R.id.btnRmkClose);
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
+            linRpt = (LinearLayout) findViewById(R.id.llRpt);
             tvOutstanding = findViewById(R.id.txOutstanding);
             txPrvBal = findViewById(R.id.PrvOutAmt);
             txSalesAmt = findViewById(R.id.SalesAmt);
             txPayment = findViewById(R.id.PaymentAmt);
-
 
 
             lin_noOrder.setOnClickListener(this);
@@ -146,7 +138,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvOrder.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
             linPayment.setOnClickListener(this);
-
+            linRpt.setOnClickListener(this);
 
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
@@ -158,12 +150,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txRmkTmplSpinn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    customDialog = new CustomListViewDialog(Invoice_History.this, ldgRemarks, 1);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
+                    common_class.showCommonDialog(ldgRemarks, 1, Invoice_History.this);
                 }
             });
             btnSbmtNOrd.setOnClickListener(new View.OnClickListener() {
@@ -208,17 +195,17 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             jParam.put("div", UserDetails.getString("Divcode", ""));
 
             ApiClient.getClient().create(ApiInterface.class)
-                    .getDataArrayList("get/outstanding",jParam.toString())
+                    .getDataArrayList("get/outstanding", jParam.toString())
                     .enqueue(new Callback<JsonArray>() {
                         @Override
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                             try {
                                 JsonArray res = response.body();
-                                JsonObject jItem=res.get(0).getAsJsonObject();
-                                txPrvBal.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("pBal").getAsDouble()));
-                                txSalesAmt.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("Debit").getAsDouble()));
-                                txPayment.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("Credit").getAsDouble()));
-                                tvOutstanding.setText("₹"+new DecimalFormat("##0.00").format(jItem.get("Balance").getAsDouble()));
+                                JsonObject jItem = res.get(0).getAsJsonObject();
+                                txPrvBal.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("pBal").getAsDouble()));
+                                txSalesAmt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Debit").getAsDouble()));
+                                txPayment.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Credit").getAsDouble()));
+                                tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Balance").getAsDouble()));
 
                             } catch (Exception e) {
 
@@ -232,13 +219,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                             Log.d("InvHistory", String.valueOf(t));
                         }
                     });
-        }catch (JSONException e){
+        } catch (JSONException e) {
 
         }
     }
+
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
+        common_class.dismissCommonDialog();
         if (type == 1) {
             txRmksNoOrd.setText(myDataset.get(position).getName());
         }
@@ -248,6 +236,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llRpt:
+                common_class.CommonIntentwithoutFinish(PayLedgerActivity.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
+                break;
             case R.id.lin_payment:
                 common_class.CommonIntentwithoutFinish(PaymentActivity.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
@@ -441,8 +433,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
 
     @Override

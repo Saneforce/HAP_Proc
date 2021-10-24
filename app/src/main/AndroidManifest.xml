@@ -46,6 +46,10 @@
         <activity
             android:name=".SFA_Activity.HistoryInfoActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".SFA_Activity.PayLedgerActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.MapDirectionActivity"
             android:screenOrientation="portrait" />
