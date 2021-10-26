@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
-public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.MyViewHolder> {
+public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdapter.MyViewHolder> {
     Context context;
     List<OutletReport_View_Modal> mDate;
     AdapterOnClick mAdapterOnClick;
@@ -36,14 +36,14 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
     Common_Class common_class;
     Shared_Common_Pref shared_common_pref;
 
-    public HistoryInfoAdapter(Context context, List<OutletReport_View_Modal> mDate, int rowlayout, int tab, AdapterOnClick mAdapterOnClick) {
+
+    public DashboardInfoAdapter(Context context, List<OutletReport_View_Modal> mDate, int rowlayout, int tab, AdapterOnClick mAdapterOnClick) {
         this.context = context;
         this.mDate = mDate;
         this.rowlayout = rowlayout;
         this.tab = tab;
         this.mAdapterOnClick = mAdapterOnClick;
         common_class = new Common_Class(context);
-        shared_common_pref = new Shared_Common_Pref(context);
 
 
     }
@@ -51,10 +51,10 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
 
     @NonNull
     @Override
-    public HistoryInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DashboardInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         listItem = layoutInflater.inflate(rowlayout, null, false);
-        return new HistoryInfoAdapter.MyViewHolder(listItem);
+        return new DashboardInfoAdapter.MyViewHolder(listItem);
     }
 
     @Override
@@ -69,12 +69,13 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
 
 
     @Override
-    public void onBindViewHolder(HistoryInfoAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(DashboardInfoAdapter.MyViewHolder holder, int position) {
         try {
             holder.tvId.setText("" + mDate.get(position).getOrderNo());
             holder.tvDate.setText("" + mDate.get(position).getOrderDate());
             holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
             holder.tvStatus.setText(mDate.get(position).getStatus());
+            holder.tvType.setText(""+(position + 1));
 
 
             if (mDate.get(position).getStatus().equals("Completed")) {
@@ -89,33 +90,16 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
             if (mDate.get(position).getProduct_details_modal() != null && mDate.get(position).getProduct_details_modal().size() > 0) {
                 for (int i = 0; i < mDate.get(position).getProduct_details_modal().size(); i++) {
                     Product_Details_Modal pm = mDate.get(position).getProduct_details_modal().get(i);
-                    if((i+1)==mDate.get(position).getProduct_details_modal().size())
-                        value.append(pm.getName() + " x " + pm.getQty() );
+                    if ((i + 1) == mDate.get(position).getProduct_details_modal().size())
+                        value.append(pm.getName() + " x " + pm.getQty());
                     else
-                    value.append(pm.getName() + " x " + pm.getQty() + ", ");
+                        value.append(pm.getName() + " x " + pm.getQty() + ", ");
 
                 }
 
                 holder.tvName.setText("" + value);
             } else
                 holder.tvName.setText("");
-
-
-//            holder.btnReOrder.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Gson gson = new Gson();
-//
-//                    shared_common_pref.save(Constants.PreOrderQtyList, gson.toJson(mDate.get(position).getProduct_details_modal()));
-//
-//
-//                    if (tab == 1)
-//                        context.startActivity(new Intent(context, Order_Category_Select.class));
-//                    else
-//                        context.startActivity(new Intent(context, Invoice_Category_Select.class));
-//
-//                }
-//            });
 
         } catch (Exception e) {
             Log.e("History_Adapter:", e.getMessage());
@@ -129,7 +113,7 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvId, tvDate, tvStatus, tvAmount, tvAddress, tvOutletName, tvInvDate, tvInvStatus, tvInvId, tvInvAmt, tvInvProducts;
+        TextView tvName, tvId, tvDate, tvStatus, tvAmount, tvAddress, tvOutletName, tvType;
         ImageView ivStatus;
         Button btnReOrder;
 
@@ -144,6 +128,7 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
             ivStatus = itemView.findViewById(R.id.ivStatus);
             tvDate = itemView.findViewById(R.id.tvDate);
             btnReOrder = itemView.findViewById(R.id.btnReOrder);
+            tvType = itemView.findViewById(R.id.txTypePos);
 
 
         }

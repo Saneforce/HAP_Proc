@@ -17,8 +17,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +45,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -115,7 +112,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     String TAG = "Nearby_Outlets", CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
 
     ImageView ivFilterKeysMenu, ivNearMe, ivExplore;
-    CustomListViewDialog customDialog;
 
     List<Common_Model> mapKeyList = new ArrayList<>();
 
@@ -583,11 +579,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.ivFilterKeysMenu:
-                customDialog = new CustomListViewDialog(Nearby_Outlets.this, mapKeyList, 1000);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                common_class.showCommonDialog(mapKeyList,1000,this);
                 break;
 
 

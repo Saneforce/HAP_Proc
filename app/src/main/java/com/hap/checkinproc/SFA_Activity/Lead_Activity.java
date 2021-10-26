@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -80,8 +79,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
 
-            getDbstoreData(Constants.Distributor_List);
-            getDbstoreData(Constants.Rout_List);
+            getDbstoreData();
 
             ImageView backView = findViewById(R.id.imag_back);
             backView.setOnClickListener(new View.OnClickListener() {
@@ -194,10 +192,12 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    void getDbstoreData(String listType) {
+    void getDbstoreData() {
         try {
 
-            JSONArray jsonArray = db.getMasterData(listType);
+            // JSONArray jsonArray = db.getMasterData(Constants.Distributor_List);
+            JSONArray jsonArray = new JSONArray(Constants.Distributor_List);
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));

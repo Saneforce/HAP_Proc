@@ -1,8 +1,6 @@
 
 package com.hap.checkinproc.Activity_Hap;
 
-import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -50,7 +48,6 @@ import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -769,6 +766,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+
+
                                 Intent aIntent;
                                 String sDeptType = UserDetails.getString("DeptType", "");
                                 Log.d("DeptType", sDeptType);
@@ -779,43 +778,49 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     startActivity(aIntent);
 
                                 } else {
-                                    JSONObject jParam = new JSONObject();
-                                    try {
-                                        jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                                        jParam.put("div", UserDetails.getString("Divcode", ""));
-                                    } catch (JSONException ex) {
-                                        Log.v(Tag, "sfa"+ex.getMessage());
 
-                                    }
-                                    JSONArray jsonArray = db.getMasterData(Distributor_List);
+                                    startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
 
-                                    ApiClient.getClient().create(ApiInterface.class)
-                                            .getDataArrayList("get/distributor", jParam.toString())
-                                            .enqueue(new Callback<JsonArray>() {
-                                                @Override
-                                                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                                    try {
-                                                        // new Shared_Common_Pref(Dashboard_Two.this)
-                                                        //         .save(Distributor_List, response.body().toString());
-                                                        db.deleteMasterData(Distributor_List);
-                                                        db.addMasterData(Distributor_List, response.body().toString());
-                                                        if (jsonArray.length() < 1) {
-                                                            startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
-                                                        }
-                                                    } catch (Exception e) {
-                                                        Log.v(Tag, " distri: "+e.getMessage());
-                                                    }
+//                                    JSONObject jParam = new JSONObject();
+//                                    try {
+//                                        jParam.put("SF", UserDetails.getString("Sfcode", ""));
+//                                        jParam.put("div", UserDetails.getString("Divcode", ""));
+//                                    } catch (JSONException ex) {
+//                                        Log.v(Tag, "sfa" + ex.getMessage());
+//
+//                                    }
 
-                                                }
 
-                                                @Override
-                                                public void onFailure(Call<JsonArray> call, Throwable t) {
-                                                    Log.v(Tag, " distri:fai: "+String.valueOf(t));
-                                                }
-                                            });
-                                    if (jsonArray.length() > 0) {
-                                        startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
-                                    }
+
+//                                    JSONArray jsonArray = db.getMasterData(Distributor_List);
+//
+//                                    ApiClient.getClient().create(ApiInterface.class)
+//                                            .getDataArrayList("get/distributor", jParam.toString())
+//                                            .enqueue(new Callback<JsonArray>() {
+//                                                @Override
+//                                                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+//                                                    try {
+//                                                        // new Shared_Common_Pref(Dashboard_Two.this)
+//                                                        //         .save(Distributor_List, response.body().toString());
+//                                                        db.deleteMasterData(Distributor_List);
+//                                                        db.addMasterData(Distributor_List, response.body().toString());
+//                                                        if (jsonArray.length() < 1) {
+//                                                            startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+//                                                        }
+//                                                    } catch (Exception e) {
+//                                                        Log.v(Tag, " distri: "+e.getMessage());
+//                                                    }
+//
+//                                                }
+//
+//                                                @Override
+//                                                public void onFailure(Call<JsonArray> call, Throwable t) {
+//                                                    Log.v(Tag, " distri:fai: "+String.valueOf(t));
+//                                                }
+//                                            });
+//                                    if (jsonArray.length() > 0) {
+                                    // startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+                                    //}
                                     /*Shared_Common_Pref.Sync_Flag = "0";
                                     com.hap.checkinproc.Common_Class.Common_Class common_class = new com.hap.checkinproc.Common_Class.Common_Class(Dashboard_Two.this);
 

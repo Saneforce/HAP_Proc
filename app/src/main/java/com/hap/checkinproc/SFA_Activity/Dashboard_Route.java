@@ -102,7 +102,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     DatabaseHandler db;
 
     ImageView ivToolbarHome, ivBtnRpt;
-    LinearLayout llDistributor;
+    LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder;
     TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -125,7 +125,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         StopedUpdate = false;
 
         db = new DatabaseHandler(this);
-        getDbstoreData(Constants.Distributor_List);
+        getDbstoreData();
 
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
@@ -173,6 +173,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
             ivToolbarHome = findViewById(R.id.toolbar_home);
             llDistributor = findViewById(R.id.llDistributor);
+            llOrder = findViewById(R.id.llOrder);
+            llNewOrder = findViewById(R.id.llNewOrder);
+            llNoOrder = findViewById(R.id.llNoOrder);
+            llInvoice = findViewById(R.id.llInv);
             txSearchRet = findViewById(R.id.txSearchRet);
             txSrvOtlt = findViewById(R.id.txSrvOtlt);
             txSrvOtltCnt = findViewById(R.id.txSrvOtltCnt);
@@ -200,6 +204,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ivToolbarHome.setOnClickListener(this);
             btnCmbRoute.setOnClickListener(this);
             llDistributor.setOnClickListener(this);
+            llOrder.setOnClickListener(this);
+            llNewOrder.setOnClickListener(this);
+            llNoOrder.setOnClickListener(this);
+            llInvoice.setOnClickListener(this);
 
             ivBtnRpt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -351,6 +359,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     try {
                         JsonArray jRes = response.body();
+                        Log.v("Salessumry:", response.body().toString());
                         if (jRes.size() > 0) {
                             JsonObject jItm = jRes.get(0).getAsJsonObject();
                             double invVal = jItm.get("InvVal").getAsDouble();
@@ -478,6 +487,27 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llOrder:
+                Intent intent = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                intent.putExtra("type", "Orders");
+                startActivity(intent);
+                break;
+            case R.id.llNewOrder:
+                Intent intentNew = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                intentNew.putExtra("type", "New Order");
+                startActivity(intentNew);
+                break;
+            case R.id.llNoOrder:
+                Intent intentNO = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                intentNO.putExtra("type", "Orders");
+                intentNO.putExtra("status", "No Order");
+                startActivity(intentNO);
+                break;
+            case R.id.llInv:
+                Intent intentInv = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                intentInv.putExtra("type", "Invoice");
+                startActivity(intentInv);
+                break;
 
             case R.id.ReachedOutlet:
                 //if (Distributor_Id == null || Distributor_Id.equals("")) {
@@ -578,9 +608,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    void getDbstoreData(String listType) {
+    void getDbstoreData() {
         try {
-            JSONArray jsonArray = db.getMasterData(listType);
+           // JSONArray jsonArray = db.getMasterData(listType);
+            JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -757,7 +789,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
 
-                            shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getMobileNumber());
+                            shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
                             common_class.CommonIntentwithFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             //}

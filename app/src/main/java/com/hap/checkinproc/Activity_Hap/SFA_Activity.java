@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,8 +39,6 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -61,7 +57,7 @@ import retrofit2.Response;
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary;
     Gson gson;
-    Type userType;
+
     public static final String UserDetail = "MyPrefs";
     Common_Class common_class;
     Shared_Common_Pref sharedCommonPref;
@@ -115,24 +111,23 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         ivLogout.setOnClickListener(this);
         linPrimary.setOnClickListener(this);
         gson = new Gson();
-
-
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
 
         init();
         setOnClickListener();
-        getNoOrderRemarks();
-        getProductDetails();
-        recyclerView = findViewById(R.id.gvOutlet);
 
-        llGridParent = findViewById(R.id.lin_gridOutlet);
+
+        common_class.getDb_310Data(Constants.Distributor_List, this);
+
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
 
         sfa_date = tvDate.getText().toString();
 
 
+        getNoOrderRemarks();
+        getProductDetails();
         showDashboardData();
 
     }
@@ -287,7 +282,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         tvTotSerOutlet = (TextView) findViewById(R.id.tvTotalServiceOutlet);
         tvExistSerOutlet = (TextView) findViewById(R.id.tvExistServiceOutlet);
 
+        recyclerView = findViewById(R.id.gvOutlet);
 
+        llGridParent = findViewById(R.id.lin_gridOutlet);
     }
 
     @Override
@@ -388,10 +385,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -468,8 +461,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     public class OutletDashboardInfoAdapter extends RecyclerView.Adapter<OutletDashboardInfoAdapter.MyViewHolder> {
         Context context;
-        LayoutInflater inflter;
-        OutletDashboardInfoAdapter.MyViewHolder pholder;
         private List<Cumulative_Order_Model> listt;
 
         public OutletDashboardInfoAdapter(Context applicationContext, List<Cumulative_Order_Model> list) {
@@ -497,12 +488,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onBindViewHolder(OutletDashboardInfoAdapter.MyViewHolder holder, int position) {
             try {
-
-
                 try {
-
-
-                   holder. tvDesc.setText("" + listt.get(position).getDesc());
+                    holder.tvDesc.setText("" + listt.get(position).getDesc());
                     holder.tvValue.setText("" + listt.get(position).getValue());
                 } catch (Exception e) {
                     Log.e("adaptergetView: ", e.getMessage());
@@ -522,19 +509,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            public LinearLayout gridcolor, undrCate;
-            TextView tvDesc,tvValue;
-            ImageView ivCategoryIcon;
-
+            TextView tvDesc, tvValue;
 
             public MyViewHolder(View view) {
                 super(view);
-
-
-
                 tvDesc = view.findViewById(R.id.tvDesc);
                 tvValue = view.findViewById(R.id.tvValue);
-
 
 
             }

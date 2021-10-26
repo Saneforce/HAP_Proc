@@ -367,7 +367,8 @@ public class Login extends AppCompatActivity {
 
     boolean checkValueStore() {
         try {
-            JSONArray storeData = db.getMasterData(Constants.Distributor_List);
+            //  JSONArray storeData = db.getMasterData(Constants.Distributor_List);
+            JSONArray storeData = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
             if (storeData != null && storeData.length() > 0)
                 return true;
         } catch (Exception e) {

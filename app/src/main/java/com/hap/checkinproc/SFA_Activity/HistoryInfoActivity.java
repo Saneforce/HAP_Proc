@@ -33,7 +33,6 @@ import com.hap.checkinproc.SFA_Model_Class.MonthYearPickerDialog;
 import com.hap.checkinproc.SFA_Model_Class.MonthYearPickerDialogFragment;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,7 +54,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    public static TextView tvOutletName, tvStartDate, tvEndDate;
+    public static TextView tvStartDate, tvEndDate;
 
     Common_Class common_class;
     ImageView ivToolbarHome, ivMnthSelect;
@@ -71,7 +70,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
 
     RecyclerView rv;
-    TextView tvSales, tvOutstanding;
+    TextView tvSales, tvOutstanding, tvOutletName;
     LinearLayout llHistoryParent;
 
     public static String stDate = "", endDate = "";
@@ -152,7 +151,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     private void setupViewPager(ViewPager viewPager) {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OrderInfoFragment("Order"), "Order");
+        adapter.addFragment(new OrderInfoFragment("Orders"), "Order");
         adapter.addFragment(new InvoiceInfoFragment("Invoice"), "Invoice");
         adapter.addFragment(new OrderInvoiceInfoFragment("Order vs Invoice"), "Order vs Invoice");
         viewPager.setAdapter(adapter);
@@ -349,7 +348,6 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -370,10 +368,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                         tabLayout.setupWithViewPager(viewPager);
                         setupViewPager(viewPager);
                     } else {
-
                         setAdapter();
-
-
                     }
                     break;
                 case Constants.OUTSTANDING:

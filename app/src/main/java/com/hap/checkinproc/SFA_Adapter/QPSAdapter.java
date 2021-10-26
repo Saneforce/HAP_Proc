@@ -179,8 +179,6 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
 
         JSONArray data = new JSONArray();
         JSONObject ActivityData = new JSONObject();
-
-
         try {
             JSONObject HeadItem = new JSONObject();
             HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
@@ -234,9 +232,7 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
             }
         });
 
-
     }
-
 
     @Override
     public int getItemCount() {

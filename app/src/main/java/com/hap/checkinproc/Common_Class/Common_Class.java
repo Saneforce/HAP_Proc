@@ -102,6 +102,9 @@ public class Common_Class {
 
     String pickDate = "";
     private CustomListViewDialog customDialog;
+    SharedPreferences UserDetails;
+    public static final String UserDetail = "MyPrefs";
+
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -281,7 +284,7 @@ public class Common_Class {
                             " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
-                            " \\\"LastUpdt_Date\\\",\\\"Primary_No\\\"\\\"Secondary_No\\\"\\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
+                            " \\\"LastUpdt_Date\\\",\\\"Primary_No\\\",\\\"Secondary_No\\\",\\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
                             " \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   " +
                             "\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"" +
                             "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"OutletOrder asc\\\",\\\"doctor_name asc\\\"]\",\"desig\":\"stockist\"}";
@@ -404,7 +407,15 @@ public class Common_Class {
                 Map<String, String> QueryString = new HashMap<>();
                 String axnname = "";
                 JSONObject data = new JSONObject();
+
+                UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
                 switch (key) {
+                    case Constants.Distributor_List:
+                        axnname = "get/distributor";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
                     case Constants.LEDGER:
                         axnname = "get/outletwiseledger";
                         data.put("SF", Shared_Common_Pref.Sf_Code);
@@ -426,7 +437,6 @@ public class Common_Class {
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("distributorcode", Shared_Common_Pref.DistributorCode);
-
                         break;
                     case Rout_List:
                         data.put("Stk", shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
@@ -437,6 +447,12 @@ public class Common_Class {
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("fdt", HistoryInfoActivity.stDate);
                         data.put("tdt", HistoryInfoActivity.endDate);
+                        break;
+                    case Constants.DASHBOARD_TYPE_INFO:
+                        axnname = "get/orderandinvoice";
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("fdt", Common_Class.GetDatewothouttime());
+                        data.put("tdt", Common_Class.GetDatewothouttime());
                         break;
                     case Constants.RETAILER_STATUS:
                         axnname = "get/retailerorderstatus";

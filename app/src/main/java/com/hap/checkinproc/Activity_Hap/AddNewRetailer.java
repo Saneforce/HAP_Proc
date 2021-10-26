@@ -362,7 +362,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
                     addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                     txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                    addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
+                    addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
                     retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
                     if (Retailer_Modal_List.get(getOutletPosition()).getSecondary_No() != null)
                         etPhoneNo2.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSecondary_No());
@@ -397,7 +397,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
                 addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                 txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
+                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
 
@@ -514,7 +514,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 linReatilerRoute.setOnClickListener(this);
                 rlDistributor.setOnClickListener(this);
-                getDbstoreData(Constants.Distributor_List);
+                getDbstoreData();
                 common_class.getDb_310Data(Rout_List, this);
 
             }
@@ -581,9 +581,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         return strAdd;
     }
 
-    void getDbstoreData(String listType) {
+    void getDbstoreData() {
         try {
-            JSONArray jsonArray = db.getMasterData(listType);
+            //  JSONArray jsonArray = db.getMasterData(listType);
+            JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);

@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,7 +50,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
     Shared_Common_Pref sharedCommonPref;
     Common_Model Model_Pojo;
-    String Route_id;
     EditText txSearchRet;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
@@ -86,7 +84,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
 
-            getDbstoreData(Constants.Distributor_List);
+            getDbstoreData();
 
             ImageView backView = findViewById(R.id.imag_back);
             backView.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +141,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
         String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        String routeId=sharedCommonPref.getvalue(Route_Id);
+        String routeId = sharedCommonPref.getvalue(Route_Id);
         for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
             String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
             String sSchText = txSearchRet.getText().toString().toUpperCase();
@@ -168,7 +166,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                         intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
                         intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
                         intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getMobileNumber());
+                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getPrimary_No());
                         intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
 
                         startActivity(intent);
@@ -234,9 +232,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    void getDbstoreData(String listType) {
+    void getDbstoreData() {
         try {
-            JSONArray jsonArray = db.getMasterData(listType);
+            //JSONArray jsonArray = db.getMasterData(listType);
+            JSONArray jsonArray = new JSONArray(sharedCommonPref.getvalue(Constants.Distributor_List));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));

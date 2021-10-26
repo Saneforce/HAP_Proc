@@ -1,14 +1,13 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,7 +22,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
-import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -51,15 +49,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
-
 public class Dist_Locations extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     LinearLayout selectdistributor;
     TextView distilatitude, distilongitude, distributor_Name, capturelatlong, submit_button;
     Gson gson;
     Common_Model Model_Pojo;
     List<Common_Model> distributor_master = new ArrayList<>();
-    CustomListViewDialog customDialog;
     Shared_Common_Pref sharedCommonPref;
     String Distributor_Id = "";
     ProgressBar progressbar;
@@ -89,9 +84,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
             capturelatlong.setOnClickListener(this);
 
             gson = new Gson();
-            // String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Distributor_List);
-            String outletserializableob = String.valueOf(db.getMasterData(Constants.Distributor_List));
-            GetJsonData(outletserializableob, "1");
+            GetJsonData();
             selectdistributor.setOnClickListener(this);
             ImageView backView = findViewById(R.id.imag_back);
             backView.setOnClickListener(new View.OnClickListener() {
@@ -110,9 +103,11 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void GetJsonData(String jsonResponse, String type) {
+    private void GetJsonData() {
         try {
-            JSONArray jsonArray = new JSONArray(jsonResponse);
+            // JSONArray jsonArray = new JSONArray(jsonResponse);
+            JSONArray jsonArray = new JSONArray(sharedCommonPref.getvalue(Constants.Distributor_List));
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -120,9 +115,8 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
                 String flag = jsonObject1.optString("FWFlg");
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
-                if (type.equals("1")) {
-                    distributor_master.add(Model_Pojo);
-                }
+                distributor_master.add(Model_Pojo);
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -131,7 +125,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
+        common_class.dismissCommonDialog();
         if (type == 2) {
             distributor_Name.setText(myDataset.get(position).getName());
             Distributor_Id = myDataset.get(position).getId();
@@ -142,11 +136,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.selectdistributor:
-                customDialog = new CustomListViewDialog(Dist_Locations.this, distributor_master, 2);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                common_class.showCommonDialog(distributor_master, 2, this);
                 break;
             case R.id.submit_button:
                 if (distributor_Name.getText().toString().equalsIgnoreCase("")) {
