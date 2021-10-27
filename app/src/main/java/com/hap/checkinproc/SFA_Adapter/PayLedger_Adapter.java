@@ -13,15 +13,18 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class PayLedger_Adapter extends RecyclerView.Adapter<PayLedger_Adapter.MyViewHolder> {
 
     Context context;
-    List<Common_Model> mArr;
+    JSONArray mArr;
 
-    public PayLedger_Adapter(Context context, List<Common_Model> arr) {
+    public PayLedger_Adapter(Context context, JSONArray arr) {
         this.context = context;
         this.mArr = arr;
     }
@@ -29,38 +32,55 @@ public class PayLedger_Adapter extends RecyclerView.Adapter<PayLedger_Adapter.My
     @NonNull
     @Override
     public PayLedger_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.adapter_ledger_layout, null, false);
-
-        return new PayLedger_Adapter.MyViewHolder(listItem);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_ledger_layout, parent, false);
+        return new PayLedger_Adapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(PayLedger_Adapter.MyViewHolder holder, int position) {
+        try {
+            JSONObject item=mArr.getJSONObject(position);
+            holder.txCustNm.setText(item.getString("CustName"));
+            holder.txtOBAmt.setText("₹" + new DecimalFormat("##0.00").format(item.getDouble("OBAmt")));
+            holder.txtCBAmt.setText("₹" + new DecimalFormat("##0.00").format(item.getDouble("ClAmt")));
+            holder.txtRecNo.setVisibility(View.VISIBLE);
+            if (item.getJSONArray("Details").length()>0){
+                holder.txtRecNo.setVisibility(View.GONE);
+            }
+            holder.lstLdgrView.setAdapter(new rcylPayledgerAda(item.getJSONArray("Details"),R.layout.rcyl_ledger_detail,context));
+            if(item.getDouble("OBAmt")>=0){
+                holder.txtOBAmt.setTextColor(context.getResources().getColor(R.color.greentext));
+            }else{
+                holder.txtOBAmt.setTextColor(context.getResources().getColor(R.color.color_red));
+            }
+            if(item.getDouble("ClAmt")>=0){
+                holder.txtCBAmt.setTextColor(context.getResources().getColor(R.color.greentext));
+            }else{
+                holder.txtCBAmt.setTextColor(context.getResources().getColor(R.color.color_red));
+            }
 
-        holder.tvDate.setText(""+mArr.get(position).getId());
-        holder.tvDebit.setText(""+mArr.get(position).getName());
-        holder.tvCredit.setText(""+mArr.get(position).getFlag());
-
-        holder.tvBal.setText(""+mArr.get(position).getCheckouttime());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return mArr.size();
+        return mArr.length();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate, tvDebit, tvCredit, tvBal;
-
+        TextView txCustNm,txtOBAmt,txtCBAmt,txtRecNo;
+        RecyclerView lstLdgrView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            tvDebit = itemView.findViewById(R.id.tvDebit);
-            tvCredit = itemView.findViewById(R.id.tvCredit);
-            tvBal = itemView.findViewById(R.id.tvBalance);
+            txCustNm=itemView.findViewById(R.id.txtCustNm);
+            lstLdgrView=itemView.findViewById(R.id.ryclLedger);
+            txtOBAmt=itemView.findViewById(R.id.txtOBAmt);
+            txtCBAmt=itemView.findViewById(R.id.txtCBAmt);
+            txtRecNo=itemView.findViewById(R.id.txtRecNo);
 
         }
     }

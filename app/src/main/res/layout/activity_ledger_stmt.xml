@@ -49,28 +49,17 @@
             android:maxLines="1"
             android:text="7 Hills milk Centre"
             android:textColor="@color/black"
-            android:textSize="@dimen/C16dp"
+            android:textSize="16sp"
             android:textStyle="bold">
 
         </TextView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C10dp"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif"
-            android:text="Opening Amount as on 23/10/2021 : ₹4000.00"
-            android:textColor="@color/black"
-            android:textStyle="bold">
-
-        </TextView>
-
         <LinearLayout
             android:id="@+id/llCustomDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C10dp"
+            android:layout_marginBottom="@dimen/C10dp"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:layout_marginRight="@dimen/C10dp"
             android:orientation="horizontal"
             android:visibility="visible">
 
@@ -118,7 +107,7 @@
                 android:layout_weight="1"
                 android:text="Date"
                 android:textColor="@color/white"
-                android:textSize="@dimen/C14dp"></TextView>
+                android:textSize="@dimen/C14dp"/>
 
 
             <TextView
@@ -130,9 +119,8 @@
                 android:gravity="end"
                 android:text="Debit"
                 android:textColor="@color/white"
-                android:textSize="@dimen/C14dp"></TextView>
-
-
+                android:textSize="@dimen/C14dp"
+                />
             <TextView
                 android:id="@+id/tvCredit"
                 android:layout_width="match_parent"
@@ -142,9 +130,7 @@
                 android:gravity="end"
                 android:text="Credit"
                 android:textColor="@color/white"
-                android:textSize="@dimen/C14dp"></TextView>
-
-
+                android:textSize="@dimen/C14dp" />
             <TextView
                 android:id="@+id/tvBalance"
                 android:layout_width="match_parent"
@@ -154,24 +140,17 @@
                 android:gravity="end"
                 android:text="Balance"
                 android:textColor="@color/white"
-                android:textSize="@dimen/C14dp"></TextView>
-
+                android:textSize="@dimen/C14dp"
+                />
         </LinearLayout>
-
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLedger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C5dp"
-            app:cardCornerRadius="@dimen/C10dp">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvLedger"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
-        </androidx.cardview.widget.CardView>
-
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:paddingTop="@dimen/C5dp"
+            android:paddingBottom="@dimen/C10dp"
+            />
     </LinearLayout>
 
 

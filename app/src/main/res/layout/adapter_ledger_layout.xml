@@ -1,66 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <LinearLayout
-        android:id="@+id/row_report"
+        android:layout_marginLeft="@dimen/C5dp"
+        android:layout_marginRight="@dimen/C5dp"
+    app:cardUseCompatPadding="true">
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="@dimen/C5dp">
+        android:orientation="vertical"
+        android:padding="@dimen/C10dp">
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/txtCustNm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Sekar Store"
+                android:textSize="15sp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textColor="#333333"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/sno"
-            android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp"></TextView>
+                <TextView
+                    android:id="@+id/txtOBAmt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:textColor="#333333"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Opening Outstanding"
+                    android:textSize="8sp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_marginTop="-8dp"
+                    android:textColor="#333333"/>
+            </LinearLayout>
+        </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/C3dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_400"
+                />
+            <TextView
+                android:id="@+id/txtRecNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No Details"
+                android:textColor="@color/grey_500"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ryclLedger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginBottom="@dimen/C5dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_400"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Outstanding"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:paddingTop="@dimen/C5dp"
+                    android:paddingBottom="@dimen/C5dp"
+                    android:textColor="#333333"/>
+                <TextView
+                    android:id="@+id/txtCBAmt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:padding="@dimen/C5dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="#333333"/>
 
-        <TextView
-            android:id="@+id/tvDebit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:gravity="end"
-            android:text="Debit"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-
-        <TextView
-            android:id="@+id/tvCredit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:gravity="end"
-            android:text="Credit"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp"></TextView>
-
-
-        <TextView
-            android:id="@+id/tvBalance"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:gravity="end"
-            android:text="Balance"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp"></TextView>
-
-    </LinearLayout>
-
-
-</RelativeLayout>
+</LinearLayout>
 
 

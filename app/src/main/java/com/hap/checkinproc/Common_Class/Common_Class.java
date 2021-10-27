@@ -416,7 +416,11 @@ public class Common_Class {
         }
     }
 
+
     public void getDb_310Data(String key, Activity activity) {
+        getDb_310Data(key,activity,null);
+    }
+    public void getDb_310Data(String key, Activity activity,JsonObject jparam) {
         try {
             if (isNetworkAvailable(activity)) {
                 Map<String, String> QueryString = new HashMap<>();
@@ -435,8 +439,8 @@ public class Common_Class {
                         axnname = "get/outletwiseledger";
                         data.put("SF", Shared_Common_Pref.Sf_Code);
                         data.put("Stk", Shared_Common_Pref.DistributorCode);
-                        data.put("FDT", PayLedgerActivity.ledgerFDT);
-                        data.put("TDT", PayLedgerActivity.ledgerTDT);
+                        data.put("FDT", jparam.get("FDate").getAsString());
+                        data.put("TDT", jparam.get("TDate").getAsString());
                         break;
                     case Constants.QPS_STATUS:
                         axnname = "get/qpsentrystatus";

@@ -17,8 +17,6 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_dashboard__route.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_dashboard__two.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_dashboard_info.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_dist__locations.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_history_info.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_history_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__category__select.xml" value="0.25271739130434784" />
@@ -29,23 +27,16 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_nearby__outlets.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order__category__select.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order_categories_types.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order_category.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_other_brand_layout.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet__info_.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet__report__view.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pay_stmt.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_payment.xml" value="0.2658514492753623" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pop_layout.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_print__invoice_.xml" value="0.33" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_route__product__info.xml" value="0.2658514492753623" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/adapter_ledger_layout.xml" value="0.28489583333333335" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/back_arrow.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/custom_dialog_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/custom_toolbar_help.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/dashboard_view_recyclerview.xml" value="0.27291666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/db_type_info_adapter_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/edittext_dialog.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/edittext_price_dialog.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/explorelist.xml" value="0.2658514492753623" />
@@ -89,7 +80,7 @@
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />
-        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.3673012318029115" />
+        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_dashboard__two.xml" value="0.1644021739130435" />
         <entry key="app/src/main/res/layout/activity_deviation_entry.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/activity_dist__locations.xml" value="0.18432971014492755" />
@@ -98,6 +89,8 @@
         <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_lead_.xml" value="0.45048543689320386" />
+        <entry key="app/src/main/res/layout/activity_ledger_stmt.xml" value="0.17314814814814813" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />
         <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.15489130434782608" />
@@ -115,6 +108,7 @@
         <entry key="app/src/main/res/layout/activity_t_a_approval.xml" value="0.16802536231884058" />
         <entry key="app/src/main/res/layout/activity_t_a_claim.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/activity_t_l_cliam__apprval.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/adapter_ledger_layout.xml" value="0.2" />
         <entry key="app/src/main/res/layout/category_order_horizantal_universe_gridview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/categorywise_sales_adp.xml" value="0.5508345978755691" />
         <entry key="app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.23505434782608695" />
@@ -123,11 +117,12 @@
         <entry key="app/src/main/res/layout/explorelist.xml" value="0.16394927536231885" />
         <entry key="app/src/main/res/layout/fragment_tab_outlet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fruit_item.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
+        <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.5" />
         <entry key="app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.3559322033898305" />
         <entry key="app/src/main/res/layout/product_pay_recyclerview.xml" value="0.13802083333333334" />
         <entry key="app/src/main/res/layout/product_pay_recyclerview_edit.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/rcyl_ledger_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.35318559556786705" />
         <entry key="app/src/main/res/layout/sfatoolbar.xml" value="0.20833333333333334" />
       </map>

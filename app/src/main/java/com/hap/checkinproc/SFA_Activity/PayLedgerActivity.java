@@ -10,12 +10,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PayLedger_Adapter;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,16 +48,14 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_ledger_stmt);
         init();
 
+        JsonObject jParam=new JsonObject();
+        jParam.addProperty("FDate",ledgerFDT);
+        jParam.addProperty("TDate",ledgerTDT);
+        common_class.getDb_310Data(Constants.LEDGER, this,jParam);
 
-        common_class.getDb_310Data(Constants.LEDGER, this);
 
-        common_modelList.add(new Common_Model("23/10/2021", "1000.00", "2000.00", "4000.00"));
-        common_modelList.add(new Common_Model("23/10/2021", "1000.00", "", "3000.00"));
-        common_modelList.add(new Common_Model("23/10/2021", "500.00", "", "200.00"));
-
-        plAdapter = new PayLedger_Adapter(this, common_modelList);
-
-        rvLedger.setAdapter(plAdapter);
+        //plAdapter = new PayLedger_Adapter(this, common_modelList);
+        //rvLedger.setAdapter(plAdapter);
     }
 
     public void init() {
@@ -70,8 +72,8 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         tvStartDate.setText(Common_Class.GetDatewothouttime());
         tvEndDate.setText(Common_Class.GetDatewothouttime());
 
-        ledgerFDT = tvStartDate.getText().toString();
-        ledgerTDT = tvEndDate.getText().toString();
+        ledgerFDT = String.valueOf(tvStartDate.getText());
+        ledgerTDT = String.valueOf(tvEndDate.getText());
 
     }
 
@@ -129,8 +131,11 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         ledgerFDT = tvStartDate.getText().toString();
+                        JsonObject jParam=new JsonObject();
+                        jParam.addProperty("FDate",ledgerFDT);
+                        jParam.addProperty("TDate",ledgerTDT);
                         common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity
-                                .this);
+                                .this,jParam);
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
                 } else {
@@ -138,7 +143,11 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         ledgerTDT = tvEndDate.getText().toString();
-                        common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this);
+
+                        JsonObject jParam=new JsonObject();
+                        jParam.addProperty("FDate",ledgerFDT);
+                        jParam.addProperty("TDate",ledgerTDT);
+                        common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this,jParam);
 
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
@@ -159,6 +168,15 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
             if (apiDataResponse != null) {
                 switch (key) {
                     case Constants.LEDGER:
+                        JSONArray legList= new JSONArray(apiDataResponse);
+                        /*common_modelList.clear();
+                        for(int il=0;il<legList.length();il++){
+                            JSONObject lItm=legList.getJSONObject(il);
+                            common_modelList.add(new Common_Model(lItm.getString("LedgDate"), lItm.getString("Debit"), lItm.getString("Credit"), lItm.getString("Balance")));
+
+                        }*/
+                        plAdapter = new PayLedger_Adapter(this, legList);
+                        rvLedger.setAdapter(plAdapter);
                         break;
                 }
             }
