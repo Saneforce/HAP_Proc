@@ -281,7 +281,7 @@ public class Common_Class {
                             " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
-                            " \\\"LastUpdt_Date\\\",\\\"Primary_No\\\"\\\"Secondary_No\\\"\\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
+                            " \\\"LastUpdt_Date\\\",\\\"Primary_No\\\",\\\"Secondary_No\\\",\\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
                             " \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   " +
                             "\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"" +
                             "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"OutletOrder asc\\\",\\\"doctor_name asc\\\"]\",\"desig\":\"stockist\"}";
@@ -398,7 +398,11 @@ public class Common_Class {
         }
     }
 
+
     public void getDb_310Data(String key, Activity activity) {
+        getDb_310Data(key,activity,null);
+    }
+    public void getDb_310Data(String key, Activity activity,JsonObject jparam) {
         try {
             if (isNetworkAvailable(activity)) {
                 Map<String, String> QueryString = new HashMap<>();
@@ -409,8 +413,8 @@ public class Common_Class {
                         axnname = "get/outletwiseledger";
                         data.put("SF", Shared_Common_Pref.Sf_Code);
                         data.put("Stk", Shared_Common_Pref.DistributorCode);
-                        data.put("FDT", PayLedgerActivity.ledgerFDT);
-                        data.put("TDT", PayLedgerActivity.ledgerTDT);
+                        data.put("FDT", jparam.get("FDate").getAsString());
+                        data.put("TDT", jparam.get("TDate").getAsString());
                         break;
                     case Constants.QPS_STATUS:
                         axnname = "get/qpsentrystatus";
