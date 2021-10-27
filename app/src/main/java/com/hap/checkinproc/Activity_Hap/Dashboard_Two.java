@@ -846,7 +846,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, View_All_Status_Activity.class);
                 intent.putExtra("Priod", mPriod);
                 intent.putExtra("Status", "");
-
                 break;
             case R.id.btnExit:
                 SharedPreferences.Editor editor = UserDetails.edit();

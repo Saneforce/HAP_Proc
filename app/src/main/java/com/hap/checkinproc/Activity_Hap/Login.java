@@ -2,6 +2,8 @@ package com.hap.checkinproc.Activity_Hap;
 
 import static android.widget.Toast.LENGTH_LONG;
 
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -62,15 +64,12 @@ import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 public class Login extends AppCompatActivity {
     TextInputEditText name, password;
     Button btnLogin;
@@ -536,6 +535,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
+
     public void login(int requestCode) {
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
@@ -546,135 +546,174 @@ public class Login extends AppCompatActivity {
         //eMail = "srinivasan.vh@hap.in";
         //  eMail = "ciadmin@hap.in";
 //        eMail = "senthil.s@hap.in";
-//        eMail = "ssiva2519@gmail.com";
+     //   eMail = "ssiva2519@gmail.com";
         // eMail="sebastin.j@hap.in";
-        eMail = "haptest3@hap.in";
-
+        //eMail = "haptest3@hap.in";
+        eMail = "1007120@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
                 if (response.isSuccessful()) {
+
                     if (response.body().getSuccess() == true) {
-                        Intent intent;
-                        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                        JsonArray CinData = response.body().getCInData();
-                        if (CinData.size() > 0) {
+
+
+                        if (response.body().getData().get(0).getLoginType().equals("CheckIn")) {
+                            shared_common_pref.save(Constants.LOGIN_TYPE, Constants.CHECKIN_TYPE);
+
+                            Intent intent = null;
+                            Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                            JsonArray CinData = response.body().getCInData();
+                            if (CinData.size() > 0) {
+                                JsonObject CinObj = CinData.get(0).getAsJsonObject();
+                                SharedPreferences.Editor editor = CheckInDetails.edit();
+                                editor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
+                                editor.putString("Shift_Name", CinObj.get("Sft_Name").getAsString());
+                                ///if(CinObj.getAsJsonObject("End_Time").isJsonNull()!= true)
+                                if (CinObj.get("End_Time").isJsonNull() != true)
+                                    editor.putString("CINEnd", CinObj.getAsJsonObject("End_Time").get("date").getAsString());
+                                else
+                                    editor.putString("CINEnd", "");
+                                editor.putString("ShiftStart", CinObj.getAsJsonObject("Sft_STime").get("date").getAsString());
+                                editor.putString("ShiftEnd", CinObj.getAsJsonObject("sft_ETime").get("date").getAsString());
+                                editor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
+                                editor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
+
+                                String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
+                                int Type = CinObj.get("Type").getAsInt();
+                                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
+                                    editor.putString("FTime", CTime);
+                                editor.putString("Logintime", CTime);
+                                if (Type == 0) CheckIn = true;
+                                editor.putBoolean("CheckIn", CheckIn);
+                                editor.apply();
+                            }
+
                             JsonObject CinObj = CinData.get(0).getAsJsonObject();
-                            SharedPreferences.Editor editor = CheckInDetails.edit();
-                            editor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
-                            editor.putString("Shift_Name", CinObj.get("Sft_Name").getAsString());
-                            ///if(CinObj.getAsJsonObject("End_Time").isJsonNull()!= true)
-                            if (CinObj.get("End_Time").isJsonNull() != true)
-                                editor.putString("CINEnd", CinObj.getAsJsonObject("End_Time").get("date").getAsString());
-                            else
-                                editor.putString("CINEnd", "");
-                            editor.putString("ShiftStart", CinObj.getAsJsonObject("Sft_STime").get("date").getAsString());
-                            editor.putString("ShiftEnd", CinObj.getAsJsonObject("sft_ETime").get("date").getAsString());
-                            editor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
-                            editor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
 
-                            String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
-                            int Type = CinObj.get("Type").getAsInt();
-                            if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
-                                editor.putString("FTime", CTime);
-                            editor.putString("Logintime", CTime);
-                            if (Type == 0) CheckIn = true;
-                            editor.putBoolean("CheckIn", CheckIn);
-                            editor.apply();
-                        }
 
-                        if (requestCode == RC_SIGN_IN) {
-                            if (CheckIn == true) {
-                                intent = new Intent(Login.this, Dashboard_Two.class);
-                                intent.putExtra("Mode", "CIN");
+                            if (requestCode == RC_SIGN_IN) {
+                                if (CheckIn == true) {
+                                    intent = new Intent(Login.this, Dashboard_Two.class);
+                                    intent.putExtra("Mode", "CIN");
+                                } else {
+                                    intent = new Intent(Login.this, Dashboard.class);
+                                }
                             } else {
-                                intent = new Intent(Login.this, Dashboard.class);
+                                intent = new Intent(Login.this, Dashboard_Two.class);
+                                intent.putExtra("Mode", "RPT");
+                            }
+
+                            String code = response.body().getData().get(0).getSfCode();
+                            String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
+                            String empID = response.body().getData().get(0).getSfEmpId();
+                            String sName = response.body().getData().get(0).getSfName();
+                            String div = response.body().getData().get(0).getDivisionCode();
+                            Integer type = response.body().getData().get(0).getCheckCount();
+                            String DesigNm = response.body().getData().get(0).getSfDesignationShortName();
+                            String SFRptCd = response.body().getData().get(0).getSfRptCode();
+                            String SFRptNm = response.body().getData().get(0).getSfRptName();
+                            String DeptCd = response.body().getData().get(0).getSFDept();
+                            String DeptNm = response.body().getData().get(0).getDeptName();
+                            String DeptType = response.body().getData().get(0).getDeptType();
+                            String SFHQ = response.body().getData().get(0).getsFHQ();
+                            String SFHQID = response.body().getData().get(0).getHQID();
+                            String SFHQCode = response.body().getData().get(0).getHQCode();
+                            String SFHQLoc = response.body().getData().get(0).getHOLocation();
+                            int THrsPerm = response.body().getData().get(0).getTHrsPerm();
+                            String mProfile = response.body().getData().get(0).getProfile();
+                            String mProfPath = response.body().getData().get(0).getProfPath();
+                            Integer OTFlg = response.body().getData().get(0).getOTFlg();
+
+                            /* Unwanted Lines */
+                            Shared_Common_Pref.Sf_Code = code;
+                            Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
+                            Shared_Common_Pref.Div_Code = div;
+                            Shared_Common_Pref.StateCode = Sf_type;
+                            shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
+                            shared_common_pref.save(Shared_Common_Pref.Div_Code, div); //l
+                            shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type); //l
+                            shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.body().getData().get(0).getSfEmpId()); //l
+                            shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.body().getData().get(0).getSfName()); //l
+                            shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.body().getData().get(0).getDeptName()); //l
+                            shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName()); //l
+                            shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type)); //l
+                            shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
+                            Shared_Common_Pref.Dept_Type = DeptType;
+                            Shared_Common_Pref.SF_Type = Sf_type;
+                            /*Endof Unwanted Lines*/
+
+                            SharedPreferences.Editor editor = UserDetails.edit();
+                            editor.putString("Sf_Type", Sf_type);
+                            editor.putString("Sfcode", code);
+                            editor.putString("EmpId", empID);
+                            editor.putString("SfName", sName);
+                            editor.putString("SFDesig", DesigNm);
+                            editor.putString("SFRptCode", SFRptNm);
+                            editor.putString("SFRptName", SFRptNm);
+                            editor.putString("SFHQ", SFHQ);
+                            editor.putString("SFHQCode", SFHQCode);
+                            editor.putString("SFHQID", SFHQID);
+                            editor.putInt("THrsPerm", THrsPerm);
+                            editor.putString("Divcode", div);
+                            editor.putInt("CheckCount", type);
+                            editor.putString("DeptCd", DeptCd);
+                            editor.putString("DeptNm", DeptNm);
+                            editor.putString("DeptType", DeptType);
+                            editor.putInt("OTFlg", OTFlg);
+                            Log.d("DeptType", String.valueOf(DeptType));
+                            editor.putString("State_Code", Sf_type);
+                            editor.putString("email", eMail);
+                            if (!UserLastName.equalsIgnoreCase("")) {
+                                editor.putString("DesigNm", UserLastName);
+                                editor.putString("DepteNm", UserLastName1);
+                            }
+
+                            editor.putString("url", String.valueOf(profile));
+                            editor.putString("Profile", String.valueOf(mProfile));
+                            editor.putString("ProfPath", String.valueOf(mProfPath));
+
+                            editor.apply();
+                            if (requestCode == RC_SIGN_IN || requestCode == 0)
+                                editor.putBoolean("Login", true);
+                            else
+                                editor.putBoolean("Login", false);
+                            editor.apply();
+                            startActivity(intent);
+                            try {
+                                mProgress.dismiss();
+                            } catch (Exception e) {
+
                             }
                         } else {
-                            intent = new Intent(Login.this, Dashboard_Two.class);
-                            intent.putExtra("Mode", "RPT");
-                        }
-                        String code = response.body().getData().get(0).getSfCode();
-                        String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
-                        String empID = response.body().getData().get(0).getSfEmpId();
-                        String sName = response.body().getData().get(0).getSfName();
-                        String div = response.body().getData().get(0).getDivisionCode();
-                        Integer type = response.body().getData().get(0).getCheckCount();
-                        String DesigNm = response.body().getData().get(0).getSfDesignationShortName();
-                        String SFRptCd = response.body().getData().get(0).getSfRptCode();
-                        String SFRptNm = response.body().getData().get(0).getSfRptName();
-                        String DeptCd = response.body().getData().get(0).getSFDept();
-                        String DeptNm = response.body().getData().get(0).getDeptName();
-                        String DeptType = response.body().getData().get(0).getDeptType();
-                        String SFHQ = response.body().getData().get(0).getsFHQ();
-                        String SFHQID = response.body().getData().get(0).getHQID();
-                        String SFHQCode = response.body().getData().get(0).getHQCode();
-                        String SFHQLoc = response.body().getData().get(0).getHOLocation();
-                        int THrsPerm = response.body().getData().get(0).getTHrsPerm();
-                        String mProfile = response.body().getData().get(0).getProfile();
-                        String mProfPath = response.body().getData().get(0).getProfPath();
-                        Integer OTFlg = response.body().getData().get(0).getOTFlg();
+                            shared_common_pref.save(Constants.Distributor_Id, response.body().getData().get(0).getDistCode());
+                            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.body().getData().get(0).getDistCode());
+                            shared_common_pref.save(Constants.Distributor_name, response.body().getData().get(0).getStockist_Name());
+                            shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
+                            shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
+                            SharedPreferences.Editor editor = UserDetails.edit();
+                            //   editor.putString("Sf_Type", response.body().getData().get(0).getDistCode());
+                            editor.putString("Sfcode", response.body().getData().get(0).getDistCode());
+                            editor.putString("Divcode", response.body().getData().get(0).getDivisionCode());
+                            editor.putString("State_Code", response.body().getData().get(0).getState_Code());
 
-                        /* Unwanted Lines */
-                        Shared_Common_Pref.Sf_Code = code;
-                        Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
-                        Shared_Common_Pref.Div_Code = div;
-                        Shared_Common_Pref.StateCode = Sf_type;
-                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
-                        shared_common_pref.save(Shared_Common_Pref.Div_Code, div); //l
-                        shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type); //l
-                        shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.body().getData().get(0).getSfEmpId()); //l
-                        shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.body().getData().get(0).getSfName()); //l
-                        shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.body().getData().get(0).getDeptName()); //l
-                        shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName()); //l
-                        shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type)); //l
-                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
-                        Shared_Common_Pref.Dept_Type = DeptType;
-                        Shared_Common_Pref.SF_Type = Sf_type;
-                        /*Endof Unwanted Lines*/
+                            editor.putString("email", eMail);
+                            if (!UserLastName.equalsIgnoreCase("")) {
+                                editor.putString("DesigNm", UserLastName);
+                                editor.putString("DepteNm", UserLastName1);
+                            }
 
-                        SharedPreferences.Editor editor = UserDetails.edit();
-                        editor.putString("Sf_Type", Sf_type);
-                        editor.putString("Sfcode", code);
-                        editor.putString("EmpId", empID);
-                        editor.putString("SfName", sName);
-                        editor.putString("SFDesig", DesigNm);
-                        editor.putString("SFRptCode", SFRptNm);
-                        editor.putString("SFRptName", SFRptNm);
-                        editor.putString("SFHQ", SFHQ);
-                        editor.putString("SFHQCode", SFHQCode);
-                        editor.putString("SFHQID", SFHQID);
-                        editor.putInt("THrsPerm", THrsPerm);
-                        editor.putString("Divcode", div);
-                        editor.putInt("CheckCount", type);
-                        editor.putString("DeptCd", DeptCd);
-                        editor.putString("DeptNm", DeptNm);
-                        editor.putString("DeptType", DeptType);
-                        editor.putInt("OTFlg", OTFlg);
-                        Log.d("DeptType", String.valueOf(DeptType));
-                        editor.putString("State_Code", Sf_type);
-                        editor.putString("email", eMail);
-                        if (!UserLastName.equalsIgnoreCase("")) {
-                            editor.putString("DesigNm", UserLastName);
-                            editor.putString("DepteNm", UserLastName1);
-                        }
+                            editor.putString("url", String.valueOf(profile));
 
-                        editor.putString("url", String.valueOf(profile));
-                        editor.putString("Profile", String.valueOf(mProfile));
-                        editor.putString("ProfPath", String.valueOf(mProfPath));
-
-                        editor.apply();
-                        if (requestCode == RC_SIGN_IN || requestCode == 0)
-                            editor.putBoolean("Login", true);
-                        else
-                            editor.putBoolean("Login", false);
-                        editor.apply();
-                        startActivity(intent);
-                        try {
-                            mProgress.dismiss();
-                        } catch (Exception e) {
+                            editor.apply();
+                            if (requestCode == RC_SIGN_IN || requestCode == 0)
+                                editor.putBoolean("Login", true);
+                            else
+                                editor.putBoolean("Login", false);
+                            editor.apply();
+                            startActivity(new Intent(Login.this, SFA_Activity.class));
 
                         }
                     } else {
@@ -700,6 +739,7 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
 
     private boolean checkPermission() {
         return (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -782,6 +822,5 @@ public class Login extends AppCompatActivity {
             mBound = false;
         }
     };
-
 
 }

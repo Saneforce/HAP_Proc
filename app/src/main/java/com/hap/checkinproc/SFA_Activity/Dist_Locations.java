@@ -98,6 +98,12 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
+
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                selectdistributor.setEnabled(false);
+                distributor_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
+            }
+
         } catch (Exception e) {
 
         }

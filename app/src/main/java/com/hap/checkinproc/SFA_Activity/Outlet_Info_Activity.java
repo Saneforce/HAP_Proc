@@ -54,7 +54,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
     DatabaseHandler db;
-    String TAG = "Lead_Activity:";
+    String TAG = "OUTLET_INFO_Activity:";
     private TextView distributor_text;
 
     @Override
@@ -129,6 +129,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                     reloadData();
                 }
             });
+
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+                distributor_text.setEnabled(false);
+
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());

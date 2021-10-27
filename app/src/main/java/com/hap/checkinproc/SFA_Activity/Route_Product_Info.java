@@ -61,7 +61,6 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
     Gson gson;
     Type userType;
     List<Retailer_Modal_List> Retailer_Modal_List;
-
     DatabaseHandler db;
 
     @Override
@@ -108,7 +107,7 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
 //            String Category_List = sharedCommonPref.getvalue(Shared_Common_Pref.Category_List);
 //            String Compititor_List = sharedCommonPref.getvalue(Shared_Common_Pref.Compititor_List);
 
-          //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
             String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
 
             String Category_List = String.valueOf(db.getMasterData(Constants.Category_List));
@@ -369,8 +368,6 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                         Availlistt.get(i).setColorFlag("0");
                         gridcolor.setBackground(getResources().getDrawable(R.drawable.grid_backround_red));
                         ShowCatUniverse(i, "0");
-
-
                     }
                 }
             });

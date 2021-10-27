@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,7 +47,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -117,8 +118,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         init();
         setOnClickListener();
 
-
-        common_class.getDb_310Data(Constants.Distributor_List, this);
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
+            common_class.getDb_310Data(Constants.Distributor_List, this);
+        else
+            common_class.getDataFromApi(Constants.Retailer_OutletList, this,false);
 
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
@@ -343,10 +346,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         sharedCommonPref.save("ActivityStart", "false");
-                        Intent intent = new Intent(SFA_Activity.this, Dashboard_Two.class);
-                        intent.putExtra("Mode", "CIN");
-                        startActivity(intent);
-                        finish();
+                        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
+                            Intent intent = new Intent(SFA_Activity.this, Dashboard_Two.class);
+                            intent.putExtra("Mode", "CIN");
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            SharedPreferences CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = UserDetails.edit();
+                            editor.putBoolean("Login", false);
+                            editor.apply();
+                            CheckInDetails.edit().clear().commit();
+                            finishAffinity();
+                        }
                     }
 
                     @Override

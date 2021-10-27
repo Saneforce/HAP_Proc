@@ -61,6 +61,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,6 +112,20 @@ public class Common_Class {
 
         activity.startActivity(intent);
         activity.finish();
+    }
+    public String getDateWithFormat(String dateInString, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateInString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        sdf = new SimpleDateFormat(pattern);
+        Date resultdate = new Date(c.getTimeInMillis());
+        dateInString = sdf.format(resultdate);
+        return dateInString;
     }
 
     public Common_Class(Context context) {

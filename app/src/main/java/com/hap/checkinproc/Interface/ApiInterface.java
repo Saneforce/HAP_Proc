@@ -34,9 +34,10 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
-    /*login*/
+
     @GET("Db_v300.php?")
     Call<Model> login(@Query("axn") String axn, @Query("Email") String Email, @Query("DvID") String deveiceId);
+
 
     @POST("db_new_activity.php?")
     Call<Object> GettpWorktypeFields(@QueryMap Map<String, String> params);

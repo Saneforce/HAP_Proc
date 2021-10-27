@@ -1,10 +1,7 @@
 package com.hap.checkinproc.Model_Class;
 
-import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONArray;
 
 public class Datum {
 
@@ -39,9 +36,23 @@ public class Datum {
     @SerializedName("Sf_code")
     @Expose
     private String sfCode;
+
+    @SerializedName("SF_Code")
+    @Expose
+    private String distCode;
+
+    @SerializedName("Stockist_Name")
+    @Expose
+    private String Stockist_Name;
+    @SerializedName("Stockist_Mobile")
+    @Expose
+    private String Stockist_Mobile;
     @SerializedName("CheckCount")
     @Expose
     private Integer checkCount;
+    @SerializedName("loginType")
+    @Expose
+    private String loginType;
     @SerializedName("Geo_Fencing")
     @Expose
     private Integer geoFencing;
@@ -85,6 +96,9 @@ public class Datum {
     @SerializedName("RptName")
     @Expose
     private String SfRptName;
+    @SerializedName("State_Code")
+    @Expose
+    private String State_Code;
 
     public String getSfUserName() {
         return sfUserName;
@@ -117,6 +131,7 @@ public class Datum {
     public void setSfDesignationShortName(String sfDesignationShortName) {
         this.sfDesignationShortName = sfDesignationShortName;
     }
+
     public String getSfRptCode() {
         return SfRptCode;
     }
@@ -124,6 +139,7 @@ public class Datum {
     public String getSfRptName() {
         return SfRptName;
     }
+
     public Integer getSFStatus() {
         return sFStatus;
     }
@@ -204,17 +220,26 @@ public class Datum {
         this.sFDept = sFDept;
     }
 
-    public String getHQID() { return sHQID; }
+    public String getHQID() {
+        return sHQID;
+    }
+
     public void setHQID(String sFHQ) {
         this.sHQID = sHQID;
     }
 
-    public String getHQCode() { return sHQCode; }
+    public String getHQCode() {
+        return sHQCode;
+    }
+
     public void setHQCode(String sFHQ) {
         this.sHQCode = sHQCode;
     }
 
-    public String getsFHQ() { return sFHQ; }
+    public String getsFHQ() {
+        return sFHQ;
+    }
+
     public void setsFHQ(String sFHQ) {
         this.sFHQ = sFHQ;
     }
@@ -242,6 +267,7 @@ public class Datum {
     public String getProfile() {
         return mProfile;
     }
+
     public String getProfPath() {
         return mProfPath;
     }
@@ -249,6 +275,7 @@ public class Datum {
     public void setHOLocation(String hOLocation) {
         this.hOLocation = hOLocation;
     }
+
     public int getTHrsPerm() {
         return THrsPerm;
     }
@@ -258,4 +285,43 @@ public class Datum {
     }
 
 
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
+
+    public String getDistCode() {
+        return distCode;
+    }
+
+    public void setDistCode(String distCode) {
+        this.distCode = distCode;
+    }
+
+    public String getStockist_Mobile() {
+        return Stockist_Mobile;
+    }
+
+    public void setStockist_Mobile(String stockist_Mobile) {
+        Stockist_Mobile = stockist_Mobile;
+    }
+
+    public String getStockist_Name() {
+        return Stockist_Name;
+    }
+
+    public void setStockist_Name(String stockist_Name) {
+        Stockist_Name = stockist_Name;
+    }
+
+    public String getState_Code() {
+        return State_Code;
+    }
+
+    public void setState_Code(String state_Code) {
+        State_Code = state_Code;
+    }
 }

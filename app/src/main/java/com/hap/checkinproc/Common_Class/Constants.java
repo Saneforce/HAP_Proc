@@ -69,6 +69,10 @@ public class Constants {
     public static final String QPS_HAPBRAND = "hapBrand";
     public static final String QPS_COMBO = "qpsCombo";
     public static final String TEMP_DISTRIBUTOR_ID = "tempDistId";
-    public static final String LEDGER ="ledger" ;
-    public static final String DASHBOARD_TYPE_INFO ="dbTypeInfo" ;
+    public static final String LEDGER = "ledger";
+    public static final String DASHBOARD_TYPE_INFO = "dbTypeInfo";
+    public static String LOGIN_TYPE = "loginType";
+    public static String CHECKIN_TYPE = "checkinType";
+    public static String DISTRIBUTER_TYPE = "distributerType";
+
 }

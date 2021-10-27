@@ -106,7 +106,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private static DecimalFormat df2 = new DecimalFormat("#.##");
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     int CountUR = 0, CountSR = 0;
     Boolean StopedUpdate;
@@ -287,7 +286,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
                 Distributor_Id = shared_common_pref.getvalue(Constants.Distributor_Id);
-                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
+                loadroute();
 
 
                 if (!shared_common_pref.getvalue(Route_Id).equals("")) {
@@ -337,6 +336,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             setPagerAdapter(false);
             createTabFragment();
+
+            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+                distributor_text.setEnabled(false);
+
 
         } catch (Exception e) {
             Log.e("Retailor List:ex ", e.getMessage());
@@ -527,12 +530,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 //}
                 break;
             case R.id.distributor_text:
-
                 common_class.showCommonDialog(distributor_master, 2, this);
                 break;
             case R.id.route_text:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
-
                     common_class.showCommonDialog(FRoute_Master, 3, this);
                 }
                 break;
@@ -593,10 +594,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     }
 
-    public void loadroute(String id) {
-        if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
-            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
-        }
+    public void loadroute() {
+
         if (FRoute_Master.size() == 1) {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
             route_text.setText(FRoute_Master.get(0).getName());
@@ -612,7 +611,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         try {
            // JSONArray jsonArray = db.getMasterData(listType);
             JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -654,7 +652,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             FRoute_Master.add(Model_Pojo);
 
                         }
-                        loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
+                        loadroute();
                         break;
                     case Retailer_OutletList:
                         setPagerAdapter(false);
