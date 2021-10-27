@@ -520,6 +520,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
 
 
+            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                rlDistributor.setEnabled(false);
+                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+            }
+
+
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
 

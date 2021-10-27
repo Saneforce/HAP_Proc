@@ -102,6 +102,10 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                 selectdistributor.setEnabled(false);
                 distributor_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
+
+                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+
+
             }
 
         } catch (Exception e) {

@@ -79,6 +79,7 @@
                         android:textSize="13sp" />
 
                     <ImageView
+                        android:id="@+id/ivDistSpinner"
                         android:layout_width="7dp"
                         android:layout_height="7dp"
                         android:layout_gravity="center"

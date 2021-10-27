@@ -130,8 +130,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 }
             });
 
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                 distributor_text.setEnabled(false);
+                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+            }
 
 
         } catch (Exception e) {

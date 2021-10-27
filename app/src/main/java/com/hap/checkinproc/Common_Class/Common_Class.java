@@ -866,8 +866,6 @@ public class Common_Class {
 
 
     public void gotoHomeScreen(Context context, View ivToolbarHome) {
-
-
         ivToolbarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

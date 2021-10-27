@@ -337,13 +337,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             setPagerAdapter(false);
             createTabFragment();
 
-            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                 distributor_text.setEnabled(false);
+                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+            }
 
 
         } catch (Exception e) {
             Log.e("Retailor List:ex ", e.getMessage());
-
             e.printStackTrace();
         }
 
@@ -609,7 +610,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     void getDbstoreData() {
         try {
-           // JSONArray jsonArray = db.getMasterData(listType);
+            // JSONArray jsonArray = db.getMasterData(listType);
             JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);

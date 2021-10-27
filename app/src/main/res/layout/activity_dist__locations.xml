@@ -150,6 +150,7 @@
                                     android:textSize="13dp" />
 
                                 <ImageView
+                                    android:id="@+id/ivDistSpinner"
                                     android:layout_width="@dimen/C10dp"
                                     android:layout_height="@dimen/C10dp"
                                     android:layout_gravity="center"
