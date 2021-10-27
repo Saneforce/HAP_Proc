@@ -36,6 +36,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:fontFamily="sans-serif"
                     android:id="@+id/txtOBAmt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
                     android:textSize="13sp"
                     android:layout_weight="1"
                     android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/C3dp"
                     android:textAlignment="textEnd"
                     android:textColor="#333333"/>
 
@@ -98,6 +100,7 @@
                     android:paddingBottom="@dimen/C5dp"
                     android:textColor="#333333"/>
                 <TextView
+                    android:fontFamily="sans-serif"
                     android:id="@+id/txtCBAmt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
