@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -34,9 +33,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Print_Invoice_Adapter;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 
@@ -162,7 +159,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             case R.id.btnInvoice:
                 Shared_Common_Pref.Invoicetoorder = "4";
-                getInvoiceOrderDetails();
+                common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
+                // getInvoiceOrderDetails();
                 break;
         }
     }
@@ -559,10 +558,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
 
-
-
-
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -691,9 +686,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 total_qtytext += ivl.getQuantity();
                 subTotalVal += ivl.getValue();
 
+                List<Product_Details_Modal> taxList = new ArrayList<>();
+
 
                 Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                        "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
+                        "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(),
+                        ivl.getQty(), ivl.getValue(), taxList));
+
 
             }
 
@@ -709,7 +708,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             invoicedate.setText(/*"Date : " +*/ Common_Class.GetDatewothouttime());
 
-            sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
+            sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 
             mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                 @Override

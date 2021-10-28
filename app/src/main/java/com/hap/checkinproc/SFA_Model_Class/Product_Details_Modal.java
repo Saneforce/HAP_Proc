@@ -271,7 +271,7 @@ public class Product_Details_Modal {
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, Double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
-                                 Integer RegularQty, Double Amount) {
+                                 Integer RegularQty, Double Amount,List<Product_Details_Modal> productDetailsModal) {
         this.id = id;
         this.name = name;
         this.productCatCode = productCatCode;
@@ -285,6 +285,7 @@ public class Product_Details_Modal {
         this.Qty = Qty;
         this.RegularQty = RegularQty;
         this.Amount = Amount;
+        this.productDetailsModal=productDetailsModal;
     }
 
     public Product_Details_Modal(String id, String name, String sku, int price, int Qty, double amount, String scheme) {

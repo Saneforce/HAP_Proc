@@ -203,52 +203,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             categorygrid.setAdapter(customAdapteravail);
 
 
-            if (Shared_Common_Pref.Invoicetoorder != null && Shared_Common_Pref.Invoicetoorder.equals("1")) {
-
-                String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
-                userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
-                }.getType();
-                InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
-                Log.e("ORDER_SL_NUmber", Shared_Common_Pref.TransSlNo);
-                Order_Outlet_Filter = new ArrayList<>();
-                for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-                    if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
-                        Log.e("ORDER_SL_Loop", Shared_Common_Pref.TransSlNo);
-                        Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                                "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
-                    }
-
-                }
-                //Log.e("Product_Modal.size()", String.valueOf(Product_Modal.size()));
-                for (int j = 0; Product_Modal.size() > j; j++) {
-                    for (int i = 0; Order_Outlet_Filter.size() > i; i++) {
-                        if (Product_Modal.get(j).getId().equals(Order_Outlet_Filter.get(i).getId())) {
-                            Product_Modal.get(j).setQty(Order_Outlet_Filter.get(i).getQty());
-                            // Log.e("SETQTY", String.valueOf(Order_Outlet_Filter.get(i).getQty()));
-                            Product_Modal.get(j).setAmount(Order_Outlet_Filter.get(i).getAmount());
-                            Product_Modal.get(j).setRegularQty(Order_Outlet_Filter.get(i).getRegularQty());
-                        }
-                    }
-                }
-                //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
-                int jki = 0;
-                Log.e("Category_Before", String.valueOf(Category_Modal.size()));
-                for (Category_Universe_Modal CM : Category_Modal) {
-                    for (Product_Details_Modal PM : Product_Modal) {
-                        if (PM.getQty() > 0 || PM.getRegularQty() > 0) {
-                            if (CM.getId().equals(String.valueOf(PM.getProductCatCode())) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
-                                Category_Modal.get(jki).setColorFlag("1");
-                                Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
-                            }
-                        }
-                    }
-                    jki++;
-
-                }
-                FilterProduct("invoice", true);
-            }
-
-
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
@@ -337,7 +291,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 Shared_Common_Pref.Invoicetoorder = "2";
 
 
-                String preOrderList = sharedCommonPref.getvalue(Constants.InvoiceQtyList);
+             /*   String preOrderList = sharedCommonPref.getvalue(Constants.InvoiceQtyList);
                 JSONObject invoiceObj = new JSONObject(preOrderList);
 
 
@@ -366,52 +320,99 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     }
 
 
-                }
+                }*/
+
+                String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
+                JSONArray jsonArray1 = new JSONArray(preOrderList);
 
 
-                if (!Common_Class.isNullOrEmpty(preOrderList)) {
-                    String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+//                if (invoiceObj.getBoolean("success")) {
+//                    JSONArray jsonArray = invoiceObj.getJSONArray("Data");
 
+                if (jsonArray1 != null && jsonArray1.length() > 0) {
+                    for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                        for (int i = 0; i < jsonArray1.length(); i++) {
+                            JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
 
-                    for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
-                        double wholeTax = 0;
-                        if (!Common_Class.isNullOrEmpty(taxRes)) {
-                            JSONObject jsonObject = new JSONObject(taxRes.toString());
+                            if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
+                                Product_Modal.get(pm).setRegularQty
+                                        (jsonObject1.getInt("Quantity"));
+                                Product_Modal.get(pm).setQty(
+                                        jsonObject1.getInt("Quantity"));
+                                Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
+                                Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
+//                                Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("free")));
+                                Product_Modal.get(pm).setRate((jsonObject1.getDouble("Rate")));
 
+                                JSONArray taxArr = jsonObject1.getJSONArray("TAX_details");
+                                List<Product_Details_Modal> taxList = new ArrayList<>();
+                                double wholeTax = 0;
+                                for (int tax = 0; tax < taxArr.length(); tax++) {
+                                    JSONObject taxObj = taxArr.getJSONObject(tax);
+                                    taxList.add(new Product_Details_Modal(taxObj.getString("Tax_Code"), taxObj.getString("Tax_Name"), taxObj.getDouble("Tax_Val"),
+                                            taxObj.getDouble("Tax_Amt")));
+                                    wholeTax += taxObj.getDouble("Tax_Amt");
 
-                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
-                            List<Product_Details_Modal> taxList = new ArrayList<>();
-
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
-
-                                    if (jsonObject1.getDouble("Tax_Val") > 0) {
-                                        double taxCal = ((Product_Modal.get(pmTax).getQty() * Product_Modal.get(pmTax).getRate()) - Product_Modal.get(pmTax).getDiscount()) * ((jsonObject1.getDouble("Tax_Val") / 100));
-                                        wholeTax += taxCal;
-
-
-                                        taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
-                                                jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
-
-                                        Product_Modal.get(pmTax).setProductDetailsModal(taxList);
-
-
-                                    }
                                 }
+
+                                Product_Modal.get(pm).setProductDetailsModal(taxList);
+                                Product_Modal.get(pm).setTax(String.valueOf(formatter.format(wholeTax)));
+
+
                             }
-
-
-                            Product_Modal.get(pmTax).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pmTax).getAmount())));
-
-                            Product_Modal.get(pmTax).setTax(String.valueOf(formatter.format(wholeTax)));
 
 
                         }
                     }
                 }
+
+
+                //}
+
+
+//                if (!Common_Class.isNullOrEmpty(preOrderList)) {
+//                    String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+//
+//
+//                    for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
+//                        double wholeTax = 0;
+//                        if (!Common_Class.isNullOrEmpty(taxRes)) {
+//                            JSONObject jsonObject = new JSONObject(taxRes.toString());
+//
+//
+//                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+//                            List<Product_Details_Modal> taxList = new ArrayList<>();
+//
+//
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//
+//                                if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
+//
+//                                    if (jsonObject1.getDouble("Tax_Val") > 0) {
+//                                        double taxCal = ((Product_Modal.get(pmTax).getQty() * Product_Modal.get(pmTax).getRate()) - Product_Modal.get(pmTax).getDiscount()) * ((jsonObject1.getDouble("Tax_Val") / 100));
+//                                        wholeTax += taxCal;
+//
+//
+//                                        taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+//                                                jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+//
+//                                        Product_Modal.get(pmTax).setProductDetailsModal(taxList);
+//
+//
+//                                    }
+//                                }
+//                            }
+//
+//
+//                            Product_Modal.get(pmTax).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pmTax).getAmount())));
+//
+//                            Product_Modal.get(pmTax).setTax(String.valueOf(formatter.format(wholeTax)));
+//
+//
+//                        }
+//                    }
+//                }
 
             }
 
@@ -596,7 +597,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                         HeadItem.put("Daywise_Remarks", "");
                         HeadItem.put("UKey", Ukey);
-                        HeadItem.put("orderValue", totalvalues);
+                        HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
@@ -605,10 +606,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("modified_time", Common_Class.GetDate());
                         OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
                         OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
-                        OutletItem.put("orderValue", totalvalues);
+                        OutletItem.put("orderValue", formatter.format(totalvalues));
                         OutletItem.put("CashDiscount", cashDiscount);
 
-                        OutletItem.put("NetAmount", totalvalues);
+                        OutletItem.put("NetAmount", formatter.format(totalvalues));
 
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);

@@ -567,7 +567,8 @@ public class Login extends AppCompatActivity {
                         SharedPreferences.Editor userEditor = UserDetails.edit();
                         SharedPreferences.Editor cInEditor = CheckInDetails.edit();
 
-                        if (response.body().getData().get(0).getLoginType() != null && response.body().getData().get(0).getLoginType().equals("Distributor")) {
+                        if (response.body().getData().get(0).getLoginType() != null &&
+                                response.body().getData().get(0).getLoginType().equals("Distributor")) {
 
                             shared_common_pref.save(Constants.Distributor_Id, response.body().getData().get(0).getDistCode());
                             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.body().getData().get(0).getDistCode());

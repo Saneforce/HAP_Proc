@@ -42,9 +42,7 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
@@ -54,12 +52,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -158,54 +153,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(),
                     Category_Modal);
             categorygrid.setAdapter(customAdapteravail);
-
-
-            if (Shared_Common_Pref.Invoicetoorder != null) {
-                if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-
-                    String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
-                    userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
-                    }.getType();
-                    InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
-                    Log.e("ORDER_SL_NUmber", Shared_Common_Pref.TransSlNo);
-                    Order_Outlet_Filter = new ArrayList<>();
-                    for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-                        if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
-                            Log.e("ORDER_SL_Loop", Shared_Common_Pref.TransSlNo);
-                            Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                                    "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
-                        }
-
-                    }
-                    //Log.e("Product_Modal.size()", String.valueOf(Product_Modal.size()));
-                    for (int j = 0; Product_Modal.size() > j; j++) {
-                        for (int i = 0; Order_Outlet_Filter.size() > i; i++) {
-                            if (Product_Modal.get(j).getId().equals(Order_Outlet_Filter.get(i).getId())) {
-                                Product_Modal.get(j).setQty(Order_Outlet_Filter.get(i).getQty());
-                                Product_Modal.get(j).setAmount(Order_Outlet_Filter.get(i).getAmount());
-                                Product_Modal.get(j).setRegularQty(Order_Outlet_Filter.get(i).getRegularQty());
-                            }
-                        }
-                    }
-                    //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
-                    int jki = 0;
-                    Log.e("Category_Before", String.valueOf(Category_Modal.size()));
-                    for (Category_Universe_Modal CM : Category_Modal) {
-                        for (Product_Details_Modal PM : Product_Modal) {
-                            if (PM.getQty() > 0 || PM.getRegularQty() > 0) {
-
-                                if (CM.getId().equals(String.valueOf(PM.getProductCatCode())) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
-                                    Category_Modal.get(jki).setColorFlag("1");
-                                    Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
-                                }
-                            }
-                        }
-                        jki++;
-
-                    }
-                    FilterProduct("invoice", true);
-                }
-            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -494,16 +441,16 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class,"Other Brand?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "Other Brand?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class,"QPS?");
+                common_class.commonDialog(this, QPSActivity.class, "QPS?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class,"POP?");
+                common_class.commonDialog(this, POPActivity.class, "POP?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class,"Cooler Info?");
+                common_class.commonDialog(this, CoolerInfoActivity.class, "Cooler Info?");
                 break;
 
             case R.id.takeorder:
@@ -566,7 +513,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                         HeadItem.put("Daywise_Remarks", "");
                         HeadItem.put("UKey", Ukey);
-                        HeadItem.put("orderValue", totalvalues);
+                        HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
@@ -575,9 +522,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("modified_time", Common_Class.GetDate());
                         OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
                         OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
-                        OutletItem.put("orderValue", totalvalues);
+                        OutletItem.put("orderValue", formatter.format(totalvalues));
                         OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("NetAmount", totalvalues);
+                        OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                         OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
@@ -669,7 +616,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                         for (int i = 0; i < totTaxList.size(); i++) {
                             JSONObject totTaxObj = new JSONObject();
-
 
                             totTaxObj.put("Tax_Type", totTaxList.get(i).getTax_Type());
                             totTaxObj.put("Tax_Amt", totTaxList.get(i).getTax_Amt());
@@ -825,7 +771,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         taxVal = 0;
 
 
-
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
             if (Product_Modal.get(pm).getRegularQty() != null) {
@@ -921,9 +866,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Category_Nametext.setOnClickListener(this);
 
     }
-
-
-
 
 
     @Override
