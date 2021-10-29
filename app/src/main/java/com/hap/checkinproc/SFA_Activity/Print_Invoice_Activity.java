@@ -66,10 +66,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     List<Product_Details_Modal> Order_Outlet_Filter;
     TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
             retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding;
-    DatabaseHandler db;
 
     ImageView ok, ivPrint;
-    private FileOutputStream writer;
+
     public static Print_Invoice_Activity mPrint_invoice_activity;
 
     Button btnInvoice;
@@ -82,7 +81,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             super.onCreate(savedInstanceState);
             mPrint_invoice_activity = this;
             setContentView(R.layout.activity_print__invoice_);
-            db = new DatabaseHandler(this);
             printrecyclerview = findViewById(R.id.printrecyclerview);
             gson = new Gson();
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
@@ -133,8 +131,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
-
-
+            retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
+            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
+            invoicedate.setText(Common_Class.GetDatewothouttime());
             common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
         } catch (Exception e) {
@@ -394,20 +393,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.BLACK);
             paint.setTextSize(15);
 
-//            String item = "Item                           ";
-//            String qty1 = "     Qty";
-//            String rate1 = "       Rate";
-//            String amt1 = "      Total";
-
-
-            // canvas.drawText(item + qty1 + rate1 + amt1, x, y, paint);
             canvas.drawText("Item", x, y, paint);
             canvas.drawText("Qty", (widthSize / 2) + 20, y, paint);
             canvas.drawText("Rate", (widthSize / 2) + 70, y, paint);
             canvas.drawText("Total", (widthSize / 2) + 150, y, paint);
-
-
-            //  Log.e("Header length: ", "item: " + item.length() + " qty: " + qty1.length() + " rate: " + rate1.length() + " amt : " + amt1.length());
 
 
             y = y + 10;
@@ -590,90 +579,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     }
 
-    private void getInvoiceOrderDetails() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                common_class.ProgressdialogShow(1, "");
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                JSONObject HeadItem = new JSONObject();
-
-                HeadItem.put("OrderID", Shared_Common_Pref.TransSlNo);
-
-
-                Call<ResponseBody> call = service.getInvoiceOrderDetails(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                if (jsonObject.getBoolean("success")) {
-
-
-                                    sharedCommonPref.save(Constants.InvoiceQtyList, is.toString());
-
-
-                                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
-
-
-                                } else {
-                                    sharedCommonPref.clear_pref(Constants.InvoiceQtyList);
-                                    Log.v("PreOrderList: ", "" + "not success");
-
-                                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
-
-
-                                }
-
-
-                            } else {
-
-                            }
-
-                        } catch (Exception e) {
-                            common_class.ProgressdialogShow(0, "");
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>", t.toString());
-                        common_class.ProgressdialogShow(0, "");
-
-
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
-
     void orderInvoiceDetailData(String response) {
         try {
 
             billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
-            //   String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
             userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
             }.getType();
             InvoiceorderDetails_List = gson.fromJson(response, userType);
@@ -688,34 +597,20 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 List<Product_Details_Modal> taxList = new ArrayList<>();
 
-
                 Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
                         "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(),
                         ivl.getQty(), ivl.getValue(), taxList));
 
 
             }
-
-
-            retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
-            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
-
             totalqty.setText("" + String.valueOf(total_qtytext));
             totalitem.setText("" + Order_Outlet_Filter.size());
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
 
-
-            invoicedate.setText(/*"Date : " +*/ Common_Class.GetDatewothouttime());
-
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 
-            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    //  sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
-                }
-            });
+            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter);
             printrecyclerview.setAdapter(mReportViewAdapter);
 
             cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));

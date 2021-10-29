@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -43,7 +45,6 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -54,7 +55,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -65,17 +68,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     //GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
-    List<Product_Details_Modal> Order_Outlet_Filter;
     List<Product_Details_Modal> Product_ModalSetAdapter;
     List<Product_Details_Modal> Getorder_Array_List;
     List<Product_Details_Modal> freeQty_Array_List;
-
-    List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
     TextView takeorder, Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvTimer;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
     Common_Class common_class;
     String Ukey;
@@ -96,6 +96,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvQPS = (TextView) findViewById(R.id.tvQPS);
             tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
             etCategoryItemSearch = findViewById(R.id.searchView);
+            tvTimer = findViewById(R.id.tvTimer);
 
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -322,9 +324,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
 
 
-            Log.v(TAG, " order oncreate:j ");
+            Log.v(TAG, " order oncreate:j " + preOrderList);
 
-            if (!Common_Class.isNullOrEmpty(preOrderList)) {
+            if (preOrderList != null && preOrderList.length() > 4) {
                 for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
                     double wholeTax = 0;
                     if (!Common_Class.isNullOrEmpty(taxRes)) {
@@ -365,6 +367,24 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
 
             Log.v(TAG, " order oncreate:k ");
+
+            if (sharedCommonPref.getBoolValue(Constants.PRIMARY_ORDER)) {
+                findViewById(R.id.llRegular).setVisibility(View.GONE);
+                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
+                findViewById(R.id.tvTimer).setVisibility(View.VISIBLE);
+
+                Out_Let_Name.setText("PRIMARY ORDERS");
+
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        tvTimer.setText(Common_Class.GetTime() + "   /   " + "17:00:00");
+                        handler.postDelayed(this, 1000);
+                    }
+                }, 1000);
+
+            }
+
+
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -419,7 +439,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "Order is empty", Toast.LENGTH_SHORT).show();
         else
-            FilterProduct("order", false);
+            FilterProduct();
 
     }
 
@@ -437,7 +457,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             case R.id.ivClose:
                 findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
                 findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
-
                 break;
 
             case R.id.tvOtherBrand:
@@ -454,38 +473,59 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.takeorder:
+                try {
 
-                if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                    if (Getorder_Array_List != null
-                            && Getorder_Array_List.size() > 0) {
-                        String sLoc = sharedCommonPref.getvalue("CurrLoc");
-                        if (sLoc.equalsIgnoreCase("")) {
-                            new LocationFinder(getApplication(), new LocationEvents() {
-                                @Override
-                                public void OnLocationRecived(Location location) {
-                                    strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                    if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+                        String startTime = "17:05:00";
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                        Date d1 = sdf.parse(Common_Class.GetTime());
+                        Date d2 = sdf.parse(startTime);
+                        long elapsed = d2.getTime() - d1.getTime();
+                        System.out.println("time difference: " + elapsed);
+
+
+                        if (Getorder_Array_List != null
+                                && Getorder_Array_List.size() > 0) {
+
+                            if (!sharedCommonPref.getBoolValue(Constants.PRIMARY_ORDER) || (elapsed >= 0)) {
+
+                                String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                                if (sLoc.equalsIgnoreCase("")) {
+                                    new LocationFinder(getApplication(), new LocationEvents() {
+                                        @Override
+                                        public void OnLocationRecived(Location location) {
+                                            strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                            SaveOrder();
+                                        }
+                                    });
+                                } else {
+                                    strLoc = sLoc.split(":");
                                     SaveOrder();
                                 }
-                            });
+                            }
+                            else {
+                                common_class.showMsg(this, "Time UP...");
+
+                            }
                         } else {
-                            strLoc = sLoc.split(":");
-                            SaveOrder();
+                            common_class.showMsg(this, "Your Cart is empty...");
                         }
                     } else {
-                        common_class.showMsg(this, "Your Cart is empty...");
-                    }
-                } else {
-                    if (Shared_Common_Pref.Invoicetoorder != null) {
-                        if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                            FilterProduct("invoice", true);
-                        } else if (Shared_Common_Pref.Invoicetoorder.equals("2")) {
-                            FilterProduct("invoice", true);
+                        if (Shared_Common_Pref.Invoicetoorder != null) {
+                            if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
+                                FilterProduct();
+                            } else if (Shared_Common_Pref.Invoicetoorder.equals("2")) {
+                                FilterProduct();
+                            } else {
+                                showOrderList();
+                            }
                         } else {
                             showOrderList();
                         }
-                    } else {
-                        showOrderList();
+
                     }
+                } catch (Exception e) {
+
                 }
                 break;
 
@@ -679,7 +719,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void FilterProduct(String StringFlag, boolean flag) {
+    private void FilterProduct() {
 
 
         findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
@@ -882,7 +922,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 moveProductScreen();
 
             } else {
-                common_class.CommonIntentwithFinish(Invoice_History.class);
+                if (sharedCommonPref.getBoolValue(Constants.PRIMARY_ORDER)) {
+                    sharedCommonPref.save(Constants.PRIMARY_ORDER, false);
+                    common_class.CommonIntentwithFinish(SFA_Activity.class);
+                } else
+                    common_class.CommonIntentwithFinish(Invoice_History.class);
 
             }
             return true;
@@ -1062,8 +1106,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
+                if (sharedCommonPref.getBoolValue(Constants.PRIMARY_ORDER)) {
+                    holder.llRegular.setVisibility(View.GONE);
+                }
+
 
                 if (CategoryType >= 0) {
+
                     holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
 
@@ -1463,6 +1512,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
+            LinearLayout llRegular;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -1476,6 +1526,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 Free = view.findViewById(R.id.Free);
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxLabel);
+                llRegular = view.findViewById(R.id.llRegular);
 
 
                 if (CategoryType >= 0) {

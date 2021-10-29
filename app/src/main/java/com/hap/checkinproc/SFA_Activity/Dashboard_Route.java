@@ -358,6 +358,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         try {
             jParam.put("SF", UserDetails.getString("Sfcode", ""));
             jParam.put("div", UserDetails.getString("Divcode", ""));
+            jParam.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+
             apiInterface.getDataArrayList("get/salessumry", jParam.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -491,23 +493,28 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.llOrder:
                 Intent intent = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                Shared_Common_Pref.SALES_MODE = "order";
                 intent.putExtra("type", "Orders");
                 startActivity(intent);
                 break;
             case R.id.llNewOrder:
+                Shared_Common_Pref.SALES_MODE = "neworder";
                 Intent intentNew = new Intent(getApplicationContext(), DashboardInfoActivity.class);
                 intentNew.putExtra("type", "New Order");
                 startActivity(intentNew);
                 break;
             case R.id.llNoOrder:
+                Shared_Common_Pref.SALES_MODE = "noorder";
                 Intent intentNO = new Intent(getApplicationContext(), DashboardInfoActivity.class);
                 intentNO.putExtra("type", "Orders");
                 intentNO.putExtra("status", "No Order");
                 startActivity(intentNO);
                 break;
             case R.id.llInv:
+                Shared_Common_Pref.SALES_MODE = "invoice";
                 Intent intentInv = new Intent(getApplicationContext(), DashboardInfoActivity.class);
                 intentInv.putExtra("type", "Invoice");
                 startActivity(intentInv);

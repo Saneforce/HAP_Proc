@@ -48,7 +48,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
-import com.hap.checkinproc.SFA_Activity.PayLedgerActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -113,6 +112,7 @@ public class Common_Class {
         activity.startActivity(intent);
         activity.finish();
     }
+
     public String getDateWithFormat(String dateInString, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
@@ -418,9 +418,10 @@ public class Common_Class {
 
 
     public void getDb_310Data(String key, Activity activity) {
-        getDb_310Data(key,activity,null);
+        getDb_310Data(key, activity, null);
     }
-    public void getDb_310Data(String key, Activity activity,JsonObject jparam) {
+
+    public void getDb_310Data(String key, Activity activity, JsonObject jparam) {
         try {
             if (isNetworkAvailable(activity)) {
                 Map<String, String> QueryString = new HashMap<>();
@@ -430,6 +431,11 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.SALES_SUMMARY:
+                        axnname = "get/salessummarydetails";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("mode", Shared_Common_Pref.SALES_MODE);
+                        break;
                     case Constants.Distributor_List:
                         axnname = "get/distributor";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
@@ -522,24 +528,28 @@ public class Common_Class {
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("divCode", Shared_Common_Pref.Div_Code);
                         data.put("dt", sfa_date);
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SERVICEOUTLET:
                         axnname = "get/serviceoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("divCode", Shared_Common_Pref.Div_Code);
                         data.put("dt", sfa_date);
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.OUTLET_SUMMARY:
                         axnname = "get/outletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("divCode", Shared_Common_Pref.Div_Code);
                         data.put("dt", sfa_date);
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SFA_DASHBOARD:
                         axnname = "get/channelwiseoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("divCode", Shared_Common_Pref.Div_Code);
                         data.put("dt", sfa_date);
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.STATE_LIST:
                         axnname = "get/states";
@@ -768,6 +778,13 @@ public class Common_Class {
     public static String GetDate() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+
+    public static String GetTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("HH:mm:ss");
         String plantime = dpln.format(c.getTime());
         return plantime;
     }

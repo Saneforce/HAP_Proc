@@ -37,8 +37,8 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
+import com.hap.checkinproc.SFA_Activity.Order_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
-import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -121,7 +121,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
             common_class.getDb_310Data(Constants.Distributor_List, this);
         else
-            common_class.getDataFromApi(Constants.Retailer_OutletList, this,false);
+            common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
@@ -294,8 +294,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Lin_primary:
-                common_class.CommonIntentwithNEwTask(PrimaryOrderActivity.class);
-
+                sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
+                sharedCommonPref.save(Constants.PRIMARY_ORDER, true);
+                common_class.CommonIntentwithNEwTask(Order_Category_Select.class);
                 break;
             case R.id.ivSFACalendar:
 

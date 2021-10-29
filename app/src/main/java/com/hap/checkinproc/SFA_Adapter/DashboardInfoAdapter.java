@@ -5,46 +5,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.List;
 
 public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdapter.MyViewHolder> {
     Context context;
-    List<OutletReport_View_Modal> mDate;
-    AdapterOnClick mAdapterOnClick;
+    JSONArray mDate;
     private View listItem;
     int rowlayout;
-    NumberFormat formatter = new DecimalFormat("##0.00");
 
-    int tab;
-
-    Common_Class common_class;
-    Shared_Common_Pref shared_common_pref;
+    String DistName = "";
 
 
-    public DashboardInfoAdapter(Context context, List<OutletReport_View_Modal> mDate, int rowlayout, int tab, AdapterOnClick mAdapterOnClick) {
+    public DashboardInfoAdapter(Context context, JSONArray mDate, int rowlayout) {
         this.context = context;
         this.mDate = mDate;
         this.rowlayout = rowlayout;
-        this.tab = tab;
-        this.mAdapterOnClick = mAdapterOnClick;
-        common_class = new Common_Class(context);
-
 
     }
 
@@ -71,35 +58,28 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
     @Override
     public void onBindViewHolder(DashboardInfoAdapter.MyViewHolder holder, int position) {
         try {
-            holder.tvId.setText("" + mDate.get(position).getOrderNo());
-            holder.tvDate.setText("" + mDate.get(position).getOrderDate());
-            holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
-            holder.tvStatus.setText(mDate.get(position).getStatus());
-            holder.tvType.setText(""+(position + 1));
+            JSONObject mObj = mDate.getJSONObject(position);
 
+            holder.tvOutletName.setText(mObj.getString("OutletName"));
 
-            if (mDate.get(position).getStatus().equals("Completed")) {
-                holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
-            } else {
-                holder.ivStatus.setImageResource(R.drawable.ic_round_pending_24);
+            if (DistName.contains(mObj.getString("FranchiseName")))
+                holder.tvDistName.setVisibility(View.GONE);
+            else {
+                DistName = DistName + mObj.getString("FranchiseName");
+
+                holder.tvDistName.setText(mObj.getString("FranchiseName"));
             }
-            holder.tvAmount.setText("₹ " + formatter.format(mDate.get(position).getOrderValue()));
 
-            StringBuilder value = new StringBuilder();
-            //  holder.tvName.setText("" + mDate.get(position).getNo_Of_items());
-            if (mDate.get(position).getProduct_details_modal() != null && mDate.get(position).getProduct_details_modal().size() > 0) {
-                for (int i = 0; i < mDate.get(position).getProduct_details_modal().size(); i++) {
-                    Product_Details_Modal pm = mDate.get(position).getProduct_details_modal().get(i);
-                    if ((i + 1) == mDate.get(position).getProduct_details_modal().size())
-                        value.append(pm.getName() + " x " + pm.getQty());
-                    else
-                        value.append(pm.getName() + " x " + pm.getQty() + ", ");
+            if (Shared_Common_Pref.SALES_MODE.equals("noorder")) {
+                holder.tvStatus.setText(mObj.getString("Remarks"));
+                holder.tvAmount.setVisibility(View.GONE);
+                holder.tvId.setVisibility(View.GONE);
+            } else {
+                holder.tvStatus.setVisibility(View.GONE);
+                holder.tvAmount.setText("₹ " + new DecimalFormat("##0.00").format(mObj.getDouble("TransactionAmt")));
+                holder.tvId.setText(mObj.getString("TransactionNo"));
+            }
 
-                }
-
-                holder.tvName.setText("" + value);
-            } else
-                holder.tvName.setText("");
 
         } catch (Exception e) {
             Log.e("History_Adapter:", e.getMessage());
@@ -108,27 +88,22 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
 
     @Override
     public int getItemCount() {
-        return mDate.size();
+        return mDate.length();
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvId, tvDate, tvStatus, tvAmount, tvAddress, tvOutletName, tvType;
+        TextView tvId, tvStatus, tvAmount, tvOutletName, tvDistName;
         ImageView ivStatus;
-        Button btnReOrder;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvOutletName = itemView.findViewById(R.id.retailername);
-            tvName = itemView.findViewById(R.id.tvProductName);
             tvId = itemView.findViewById(R.id.tvOrderId);
             tvStatus = itemView.findViewById(R.id.tvStatus);
             tvAmount = itemView.findViewById(R.id.tvAmount);
-            tvAddress = itemView.findViewById(R.id.tvAddress);
             ivStatus = itemView.findViewById(R.id.ivStatus);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            btnReOrder = itemView.findViewById(R.id.btnReOrder);
-            tvType = itemView.findViewById(R.id.txTypePos);
+            tvDistName = itemView.findViewById(R.id.tvDistributer);
 
 
         }

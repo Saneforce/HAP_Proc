@@ -50,7 +50,6 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -71,13 +70,10 @@ import retrofit2.Response;
 
 public class Invoice_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     NumberFormat formatter = new DecimalFormat("##0.00");
-    //GridView categorygrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
-    List<Product_Details_Modal> Order_Outlet_Filter;
     List<Product_Details_Modal> Product_ModalSetAdapter;
     List<Product_Details_Modal> Getorder_Array_List;
-    List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
@@ -91,7 +87,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     String Ukey;
     String[] strLoc;
-    String Convert_Json_toString, Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "", mDCRMode;
+    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "", mDCRMode;
     Shared_Common_Pref sharedCommonPref;
     EditText cashdiscount;
     Prodct_Adapter mProdct_Adapter;
@@ -255,8 +251,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     }
                 }
             });
-
-
             etRecAmt.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -290,44 +284,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 orderId = Shared_Common_Pref.TransSlNo;
                 Shared_Common_Pref.Invoicetoorder = "2";
 
-
-             /*   String preOrderList = sharedCommonPref.getvalue(Constants.InvoiceQtyList);
-                JSONObject invoiceObj = new JSONObject(preOrderList);
-
-
-                if (invoiceObj.getBoolean("success")) {
-                    JSONArray jsonArray = invoiceObj.getJSONArray("Data");
-
-                    if (jsonArray != null && jsonArray.length() > 0) {
-                        for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
-                                    Product_Modal.get(pm).setRegularQty(jsonObject1.getInt("Total_Qty"));
-                                    Product_Modal.get(pm).setQty(jsonObject1.getInt("Total_Qty"));
-                                    Product_Modal.get(pm).setAmount(jsonObject1.getDouble("Total_Amount"));
-                                    Product_Modal.get(pm).setDiscount(jsonObject1.getInt("Discount"));
-                                    Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("free")));
-                                    Product_Modal.get(pm).setRate((jsonObject1.getDouble("Rate")));
-
-
-                                }
-
-
-                            }
-                        }
-                    }
-
-
-                }*/
-
                 String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
                 JSONArray jsonArray1 = new JSONArray(preOrderList);
 
-
-//                if (invoiceObj.getBoolean("success")) {
-//                    JSONArray jsonArray = invoiceObj.getJSONArray("Data");
 
                 if (jsonArray1 != null && jsonArray1.length() > 0) {
                     for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -365,54 +324,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         }
                     }
                 }
-
-
-                //}
-
-
-//                if (!Common_Class.isNullOrEmpty(preOrderList)) {
-//                    String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
-//
-//
-//                    for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
-//                        double wholeTax = 0;
-//                        if (!Common_Class.isNullOrEmpty(taxRes)) {
-//                            JSONObject jsonObject = new JSONObject(taxRes.toString());
-//
-//
-//                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
-//                            List<Product_Details_Modal> taxList = new ArrayList<>();
-//
-//
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//
-//                                if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
-//
-//                                    if (jsonObject1.getDouble("Tax_Val") > 0) {
-//                                        double taxCal = ((Product_Modal.get(pmTax).getQty() * Product_Modal.get(pmTax).getRate()) - Product_Modal.get(pmTax).getDiscount()) * ((jsonObject1.getDouble("Tax_Val") / 100));
-//                                        wholeTax += taxCal;
-//
-//
-//                                        taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
-//                                                jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
-//
-//                                        Product_Modal.get(pmTax).setProductDetailsModal(taxList);
-//
-//
-//                                    }
-//                                }
-//                            }
-//
-//
-//                            Product_Modal.get(pmTax).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pmTax).getAmount())));
-//
-//                            Product_Modal.get(pmTax).setTax(String.valueOf(formatter.format(wholeTax)));
-//
-//
-//                        }
-//                    }
-//                }
 
             }
 
@@ -474,7 +385,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "Invoice is empty", Toast.LENGTH_SHORT).show();
         else
-            FilterProduct("invoice", false);
+            FilterProduct();
 
     }
 
@@ -722,7 +633,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                        Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code,
+                                sharedCommonPref.getvalue(Constants.LOGIN_TYPE), data.toString());
                         responseBodyCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -776,9 +688,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
     }
 
-    private void FilterProduct(String StringFlag, boolean flag) {
-
-
+    private void FilterProduct() {
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
@@ -1624,7 +1534,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
-
                 common_class.CommonIntentwithFinish(Invoice_History.class);
             }
             return true;

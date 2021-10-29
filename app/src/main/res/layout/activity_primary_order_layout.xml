@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:padding="@dimen/C5dp"
-        android:gravity="center_vertical"
         android:background="@color/colorPrimaryDark"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:padding="@dimen/C5dp"
         tools:ignore="MissingConstraints">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,8 +26,8 @@
                 android:layout_height="match_parent"
                 android:text="HATSUN DAILY"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -36,16 +37,19 @@
                 android:textColor="@color/white"
                 android:textSize="8sp" />
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/llDistributor"
                 android:layout_width="wrap_content"
@@ -53,6 +57,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/distributor_text"
                     android:layout_width="match_parent"
@@ -60,26 +65,29 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/basic"
                     android:hint="Select Distributor"
-                    android:textAlignment="textEnd"
                     android:paddingRight="@dimen/C5dp"
+                    android:textAlignment="textEnd"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:textSize="13sp" />
+
                 <ImageView
                     android:layout_width="7dp"
                     android:layout_height="7dp"
                     android:layout_gravity="center"
-                    app:tint="@color/white"
-                    android:src="@drawable/spin_down_arrow">
+                    android:src="@drawable/spin_down_arrow"
+                    app:tint="@color/white">
 
                 </ImageView>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/btnCmbRoute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/route_text"
                     android:layout_width="match_parent"
@@ -97,12 +105,13 @@
                     android:layout_width="@dimen/C7dp"
                     android:layout_height="@dimen/C7dp"
                     android:layout_gravity="center"
-                    app:tint="@color/white"
-                    android:src="@drawable/spin_down_arrow">
+                    android:src="@drawable/spin_down_arrow"
+                    app:tint="@color/white">
 
                 </ImageView>
             </LinearLayout>
         </LinearLayout>
+
         <ImageView
             android:id="@+id/toolbar_home"
             android:layout_width="@dimen/C30dp"

@@ -35,7 +35,6 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
 
     RecyclerView rvLedger;
     PayLedger_Adapter plAdapter;
-    List<Common_Model> common_modelList = new ArrayList<>();
     private Common_Class common_class;
     static SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
     private String date;
@@ -169,12 +168,6 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                 switch (key) {
                     case Constants.LEDGER:
                         JSONArray legList= new JSONArray(apiDataResponse);
-                        /*common_modelList.clear();
-                        for(int il=0;il<legList.length();il++){
-                            JSONObject lItm=legList.getJSONObject(il);
-                            common_modelList.add(new Common_Model(lItm.getString("LedgDate"), lItm.getString("Debit"), lItm.getString("Credit"), lItm.getString("Balance")));
-
-                        }*/
                         plAdapter = new PayLedger_Adapter(this, legList);
                         rvLedger.setAdapter(plAdapter);
                         break;

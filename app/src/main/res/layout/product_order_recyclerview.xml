@@ -71,15 +71,14 @@
                             android:visibility="visible" />
 
 
-
                         <TextView
                             android:id="@+id/Rate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
-                            android:drawablePadding="@dimen/C3dp"
                             android:drawableRight="@drawable/edit_small"
+                            android:drawablePadding="@dimen/C3dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -88,12 +87,11 @@
                             android:textStyle="bold" />
 
 
-
-
                     </RelativeLayout>
 
 
-                    <RelativeLayout
+                    <LinearLayout
+                        android:id="@+id/llRegular"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:orientation="horizontal">
@@ -113,11 +111,11 @@
 
 
                         <TextView
-
                             android:id="@+id/RegularQty"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/tvRegularLabel"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
 
                             android:hint=""
@@ -128,22 +126,25 @@
 
 
                         <TextView
+
                             android:id="@+id/RegularAmt"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:fontFamily="sans-serif"
-                            android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
                             android:textColor="@color/txt_color_black"
                             android:textStyle="bold"
                             android:visibility="visible" />
 
 
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -158,44 +159,48 @@
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
                             android:text="New Qty : "
-                            android:textColor="@color/grey_800"/>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:background="@drawable/order_qty_backround">
-    <ImageView
-        android:id="@+id/ivQtyMns"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:padding="6dp"
-        app:tint="@color/color_red"
-        android:src="@drawable/disable_minus"/>
-    <EditText
-        android:id="@+id/Qty"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:gravity="center_vertical"
-        android:background="@color/white"
-        android:hint="0"
-        android:text=""
-        android:inputType="number"
-        android:maxLength="4"
-        android:paddingLeft="@dimen/C5dp"
-        android:paddingRight="@dimen/C5dp"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/C13dp"
-        tools:ignore="RtlCompat"/>
-    <ImageView
-        android:id="@+id/ivQtyPls"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:padding="6dp"
-        app:tint="@color/green"
-        android:src="@drawable/plus"/>
-</LinearLayout>
+                            android:textColor="@color/grey_800" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/order_qty_backround">
+
+                            <ImageView
+                                android:id="@+id/ivQtyMns"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:padding="6dp"
+                                android:src="@drawable/disable_minus"
+                                app:tint="@color/color_red" />
+
+                            <EditText
+                                android:id="@+id/Qty"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:background="@color/white"
+                                android:gravity="center_vertical"
+                                android:hint="0"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageView
+                                android:id="@+id/ivQtyPls"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:padding="6dp"
+                                android:src="@drawable/plus"
+                                app:tint="@color/green" />
+                        </LinearLayout>
 
 
                         <RelativeLayout
