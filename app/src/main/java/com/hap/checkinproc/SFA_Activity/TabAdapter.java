@@ -77,10 +77,13 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         if (mRetailer_Modal_List != null) {
             String val = shared_common_pref.getvalue(Constants.RETAILER_STATUS);
             String sMode = flag == 0 ? "To be" : flag == 1 ? "invoice" : flag == 2 ? "order" : "no order";
+
             for (int i = 0; i < mRetailer_Modal_List.size(); i++) {
+
+                String outletType = mRetailer_Modal_List.get(i).getType() == null ? "0" : mRetailer_Modal_List.get(i).getType();
                 if (val.indexOf(mRetailer_Modal_List.get(i).getId() + sMode) > -1 &&
                         (Route_id.equalsIgnoreCase("") || Route_id.equalsIgnoreCase(mRetailer_Modal_List.get(i).getTownCode())) &&
-                        mRetailer_Modal_List.get(i).getType().equalsIgnoreCase(mRetType)
+                        outletType.equalsIgnoreCase(mRetType)
                         && (mSearchText.equalsIgnoreCase("") || (flag == mTabPos &&
                         (";" + mRetailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + mSearchText.toLowerCase()) > -1) ||
                         (flag != mTabPos))) {

@@ -100,6 +100,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".SFA_Activity.PrimaryOrderActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
             android:name=".SFA_Activity.Invoice_History"
             android:screenOrientation="portrait" />
         <activity

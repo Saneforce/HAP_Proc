@@ -37,8 +37,8 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
-import com.hap.checkinproc.SFA_Activity.Order_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
+import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -120,8 +120,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
             common_class.getDb_310Data(Constants.Distributor_List, this);
-        else
+        else {
+            findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+        }
 
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
@@ -296,10 +298,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             case R.id.Lin_primary:
                 sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
                 sharedCommonPref.save(Constants.PRIMARY_ORDER, true);
-                common_class.CommonIntentwithNEwTask(Order_Category_Select.class);
+                common_class.CommonIntentwithNEwTask(PrimaryOrderActivity.class);
                 break;
             case R.id.ivSFACalendar:
-
                 Calendar newCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -368,8 +369,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 break;
-
-
             case R.id.Lin_Route:
                 sharedCommonPref.save(sharedCommonPref.DCRMode, "");
                 common_class.CommonIntentwithNEwTask(Dashboard_Route.class);

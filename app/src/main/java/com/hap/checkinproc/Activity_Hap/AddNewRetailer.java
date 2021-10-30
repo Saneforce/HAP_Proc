@@ -274,12 +274,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 mSubmit.setVisibility(View.GONE);
                 headtext.setText("Outlet Info");
             }
-          //  getRouteDetails();
+            //  getRouteDetails();
             getRetailerClass();
             getRetailerChannel();
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
                 iOutletTyp = Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
+                if (Retailer_Modal_List.get(getOutletPosition()).getType() == null)
+                    iOutletTyp = 0;
                 if (iOutletTyp == 0)
                     txOutletType.setText("Universal");
                 else
@@ -524,7 +526,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 rlDistributor.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
-
 
 
         } catch (Exception e) {
