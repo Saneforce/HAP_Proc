@@ -554,8 +554,8 @@ public class Login extends AppCompatActivity {
 //        eMail = "senthil.s@hap.in";
         //   eMail = "ssiva2519@gmail.com";
         // eMail="sebastin.j@hap.in";
-        eMail = "haptest3@hap.in";
-       // eMail = "1007120@hap.in";
+        // eMail = "haptest3@hap.in";
+        eMail = "1007120@hap.in";
         //eMail = "santhosh.gp@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
@@ -576,10 +576,17 @@ public class Login extends AppCompatActivity {
                             shared_common_pref.save(Constants.Distributor_name, response.body().getData().get(0).getStockist_Name());
                             shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
+
+
                             //   editor.putString("Sf_Type", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Sfcode", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Divcode", response.body().getData().get(0).getDivisionCode());
                             userEditor.putString("State_Code", response.body().getData().get(0).getState_Code());
+
+                            Shared_Common_Pref.Sf_Code = response.body().getData().get(0).getDistCode();
+                            Shared_Common_Pref.Div_Code = response.body().getData().get(0).getDivisionCode();
+                            shared_common_pref.save(Shared_Common_Pref.Div_Code, response.body().getData().get(0).getDivisionCode());
+                            shared_common_pref.save(Shared_Common_Pref.Sf_Code, response.body().getData().get(0).getDistCode());
 
                             userEditor.putString("email", eMail);
                             if (!UserLastName.equalsIgnoreCase("")) {

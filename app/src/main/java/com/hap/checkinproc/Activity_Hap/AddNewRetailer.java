@@ -436,6 +436,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
                 }
             }
+
+
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -467,7 +469,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
-
                         addNewRetailers();
                     }
 
@@ -523,6 +524,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
             if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
+                    mSubmit.setVisibility(View.GONE);
+
                 rlDistributor.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
@@ -726,6 +730,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
                 JsonArray jsonArray = response.body();
                 Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
                 for (int a = 0; a < jsonArray.size(); a++) {
@@ -834,10 +839,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
-            reportObject.put("place_id", "'" + place_id);
+            reportObject.put("place_id", "'" + place_id + "'");
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
-            reportObject.put("img_name", "'" + imageServer);
+            reportObject.put("img_name", "'" + imageServer + "'");
+            reportObject.put(Constants.LOGIN_TYPE, "'" + shared_common_pref.getvalue(Constants.LOGIN_TYPE) + "'");
+
 
             //
 
@@ -974,7 +981,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
 

@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -73,7 +74,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Gson gson;
     TextView takeorder, Out_Let_Name, Category_Nametext,
             tvTimer;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -116,6 +117,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
+            llTdPriOrd = findViewById(R.id.llTodayPriOrd);
 
 
             etCategoryItemSearch = findViewById(R.id.searchView);
@@ -128,6 +130,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             rlCategoryItemSearch.setOnClickListener(this);
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
+            llTdPriOrd.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             recyclerView = findViewById(R.id.orderrecyclerview);
@@ -246,6 +249,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llTodayPriOrd:
+                startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
+                break;
             case R.id.rlAddProduct:
                 moveProductScreen();
                 break;
@@ -691,11 +697,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 moveProductScreen();
 
             } else {
-                if (sharedCommonPref.getBoolValue(Constants.PRIMARY_ORDER)) {
-                    sharedCommonPref.save(Constants.PRIMARY_ORDER, false);
-                    common_class.CommonIntentwithFinish(SFA_Activity.class);
-                } else
-                    common_class.CommonIntentwithFinish(Invoice_History.class);
+                common_class.CommonIntentwithFinish(SFA_Activity.class);
 
             }
             return true;
@@ -1102,7 +1104,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             }
 
 
-                            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+                            String taxRes = sharedCommonPref.getvalue(Constants.PrimaryTAXList);
 
                             if (!Common_Class.isNullOrEmpty(taxRes)) {
                                 JSONObject jsonObject = new JSONObject(taxRes);

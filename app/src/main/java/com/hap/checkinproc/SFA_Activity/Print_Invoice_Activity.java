@@ -27,33 +27,22 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Print_Invoice_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
-import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Print_Invoice_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Print_Invoice_Adapter mReportViewAdapter;
@@ -124,6 +113,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
                 tvOrderType.setText("ORDER");
+            } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order")) {
+                findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
+                tvOrderType.setText("PRIMARY ORDER");
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 tvOrderType.setText("TAX INVOICE");

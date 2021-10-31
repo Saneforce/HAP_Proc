@@ -296,9 +296,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Lin_primary:
-                sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
-                sharedCommonPref.save(Constants.PRIMARY_ORDER, true);
-                common_class.CommonIntentwithNEwTask(PrimaryOrderActivity.class);
+                common_class.getDb_310Data(Constants.PrimaryTAXList, this);
                 break;
             case R.id.ivSFACalendar:
                 Calendar newCalendar = Calendar.getInstance();
@@ -402,6 +400,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+                    case Constants.PrimaryTAXList:
+                        sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
+                        common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        break;
                     case Constants.CUMULATIVEDATA:
                         getCumulativeDataFromAPI(apiDataResponse);
                         break;

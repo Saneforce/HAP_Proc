@@ -46,6 +46,7 @@ public class Constants {
     public static final String InvoiceQtyList = "InvoiceQtyList";
 
     public static final String TAXList = "taxList";
+    public static final String PrimaryTAXList = "primaryTaxList";
 
     public static final String INVOICE_ORDERLIST = "invoiceOrderList";
     public static final String ORDER_ID = "orderId";

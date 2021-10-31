@@ -431,10 +431,16 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.PrimaryTAXList:
+                        axnname = "get/primaryproducttaxdetails";
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
                     case Constants.SALES_SUMMARY:
                         axnname = "get/salessummarydetails";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
                         data.put("mode", Shared_Common_Pref.SALES_MODE);
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.Distributor_List:
                         axnname = "get/distributor";
