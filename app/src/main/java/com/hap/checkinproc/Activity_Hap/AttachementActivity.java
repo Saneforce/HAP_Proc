@@ -68,6 +68,8 @@ public class AttachementActivity extends AppCompatActivity {
         allRelative.setBackgroundColor(Color.TRANSPARENT);
 
         intentValue = new ArrayList<String>();
+        String sfcode=String.valueOf(getIntent().getSerializableExtra("sfcode"));
+
         allImage(String.valueOf(getIntent().getSerializableExtra("position")),
                 String.valueOf(getIntent().getSerializableExtra("headTravel")),
                 String.valueOf(getIntent().getSerializableExtra("mode")),

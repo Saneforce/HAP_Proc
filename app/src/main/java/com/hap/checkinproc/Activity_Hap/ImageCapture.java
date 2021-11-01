@@ -969,7 +969,6 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 modelCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
                         mProgress.dismiss();
                         if (response.isSuccessful()) {
                             Log.e("TOTAL_REPOSNEaaa", String.valueOf(response.body()));
@@ -985,7 +984,6 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
                             Intent playIntent = new Intent(ImageCapture.this, SANGPSTracker.class);
                             stopService(playIntent);
-                            finishAffinity();
 
                             JsonObject itm = response.body().getAsJsonObject();
                             String mMessage = "Your Check-Out Submitted Successfully<br><br>Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
@@ -1009,6 +1007,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                                     Callto.enqueue(new Callback<JsonArray>() {
                                         @Override
                                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                            finishAffinity();
                                             if (response.body().size() > 0) {
                                                 Intent takePhoto = new Intent(ImageCapture.this, AllowanceActivityTwo.class);
                                                 takePhoto.putExtra("Mode", "COUT");
