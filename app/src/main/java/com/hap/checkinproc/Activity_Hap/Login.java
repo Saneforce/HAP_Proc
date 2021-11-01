@@ -554,8 +554,8 @@ public class Login extends AppCompatActivity {
 //        eMail = "senthil.s@hap.in";
         //   eMail = "ssiva2519@gmail.com";
         // eMail="sebastin.j@hap.in";
-        // eMail = "haptest3@hap.in";
-        eMail = "1007120@hap.in";
+        eMail = "haptest3@hap.in";
+        //eMail = "1007120@hap.in";
         //eMail = "santhosh.gp@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
@@ -576,7 +576,7 @@ public class Login extends AppCompatActivity {
                             shared_common_pref.save(Constants.Distributor_name, response.body().getData().get(0).getStockist_Name());
                             shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
-
+                            shared_common_pref.save(Constants.CUTOFF_TIME, response.body().getData().get(0).getCutoffTime());
 
                             //   editor.putString("Sf_Type", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Sfcode", response.body().getData().get(0).getDistCode());

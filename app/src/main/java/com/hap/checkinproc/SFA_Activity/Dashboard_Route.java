@@ -124,12 +124,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         StopedUpdate = false;
 
         db = new DatabaseHandler(this);
-        getDbstoreData();
+
 
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+        getDbstoreData();
         getSalesCounts();
         JSONObject jParam = new JSONObject();
         try {
@@ -779,7 +780,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                         if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
                             Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
-                        } else if (shared_common_pref.getvalue(Route_Id).equals("") && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                        } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {
                             Shared_Common_Pref.Outler_AddFlag = "0";

@@ -48,6 +48,11 @@ public class Product_Details_Modal {
     @SerializedName("Rate")
     @Expose
     private Double Rate;
+
+    @SerializedName("SBRate")
+    @Expose
+    private Double SBRate;
+
     @SerializedName("Amount")
     @Expose
     private Double Amount;
@@ -540,5 +545,13 @@ public class Product_Details_Modal {
 
     public void setTax_Type(String tax_Type) {
         Tax_Type = tax_Type;
+    }
+
+    public Double getSBRate() {
+        return SBRate;
+    }
+
+    public void setSBRate(Double SBRate) {
+        this.SBRate = SBRate;
     }
 }

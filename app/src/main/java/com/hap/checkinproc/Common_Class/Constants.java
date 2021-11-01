@@ -77,4 +77,5 @@ public class Constants {
     public static final String CHECKIN_TYPE = "CheckIn";
     public static final String DISTRIBUTER_TYPE = "Distributor";
     public static final String PRIMARY_ORDER = "primaryOrder";
+    public static final String CUTOFF_TIME ="cutOffTime" ;
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -495,11 +494,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             AlertDialogBox.showDialog(Invoice_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
-
+                    common_class.ProgressdialogShow(1, "");
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
-
-                    // String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
@@ -640,23 +637,19 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 if (response.isSuccessful()) {
                                     try {
+                                        common_class.ProgressdialogShow(0, "");
                                         Log.e("JSON_VALUES", response.body().toString());
                                         JSONObject jsonObjects = new JSONObject(response.body().toString());
                                         String san = jsonObjects.getString("success");
                                         Log.e("Success_Message", san);
                                         if (san.equals("true")) {
-
-                                            Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
-
-                                            Shared_Common_Pref.Sync_Flag = "2";
-//                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-
+                                            common_class.showMsg(Invoice_Category_Select.this, "Invoice Submitted Successfully");
                                             ResetSubmitBtn(1);
-                                            startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                                            finish();
+                                            common_class.CommonIntentwithFinish(Invoice_History.class);
                                         }
 
                                     } catch (Exception e) {
+                                        common_class.ProgressdialogShow(0, "");
                                         Log.e(TAG, "invcatch: " + e.getMessage());
                                         ResetSubmitBtn(2);
                                     }

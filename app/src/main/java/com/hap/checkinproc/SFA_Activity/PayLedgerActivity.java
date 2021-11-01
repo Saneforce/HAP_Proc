@@ -12,21 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PayLedger_Adapter;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PayLedgerActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
@@ -38,6 +35,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
     private Common_Class common_class;
     static SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
     private String date;
+    Shared_Common_Pref sharedCommonPref;
 
     public static String ledgerFDT = "", ledgerTDT = "";
 
@@ -47,18 +45,17 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_ledger_stmt);
         init();
 
-        JsonObject jParam=new JsonObject();
-        jParam.addProperty("FDate",ledgerFDT);
-        jParam.addProperty("TDate",ledgerTDT);
-        common_class.getDb_310Data(Constants.LEDGER, this,jParam);
+        JsonObject jParam = new JsonObject();
+        jParam.addProperty("FDate", ledgerFDT);
+        jParam.addProperty("TDate", ledgerTDT);
+        common_class.getDb_310Data(Constants.LEDGER, this, jParam);
 
-
-        //plAdapter = new PayLedger_Adapter(this, common_modelList);
-        //rvLedger.setAdapter(plAdapter);
+        tvOutletName.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
     }
 
     public void init() {
         common_class = new Common_Class(this);
+        sharedCommonPref = new Shared_Common_Pref(this);
         rvLedger = findViewById(R.id.rvLedger);
         tvOutletName = findViewById(R.id.retailername);
         tvStartDate = findViewById(R.id.tvStartDate);
@@ -130,11 +127,11 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         ledgerFDT = tvStartDate.getText().toString();
-                        JsonObject jParam=new JsonObject();
-                        jParam.addProperty("FDate",ledgerFDT);
-                        jParam.addProperty("TDate",ledgerTDT);
+                        JsonObject jParam = new JsonObject();
+                        jParam.addProperty("FDate", ledgerFDT);
+                        jParam.addProperty("TDate", ledgerTDT);
                         common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity
-                                .this,jParam);
+                                .this, jParam);
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
                 } else {
@@ -143,10 +140,10 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                         tvEndDate.setText(date);
                         ledgerTDT = tvEndDate.getText().toString();
 
-                        JsonObject jParam=new JsonObject();
-                        jParam.addProperty("FDate",ledgerFDT);
-                        jParam.addProperty("TDate",ledgerTDT);
-                        common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this,jParam);
+                        JsonObject jParam = new JsonObject();
+                        jParam.addProperty("FDate", ledgerFDT);
+                        jParam.addProperty("TDate", ledgerTDT);
+                        common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this, jParam);
 
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
@@ -167,7 +164,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
             if (apiDataResponse != null) {
                 switch (key) {
                     case Constants.LEDGER:
-                        JSONArray legList= new JSONArray(apiDataResponse);
+                        JSONArray legList = new JSONArray(apiDataResponse);
                         plAdapter = new PayLedger_Adapter(this, legList);
                         rvLedger.setAdapter(plAdapter);
                         break;

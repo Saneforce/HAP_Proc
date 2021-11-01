@@ -132,7 +132,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             rlAddProduct.setOnClickListener(this);
             llTdPriOrd.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -183,7 +182,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    tvTimer.setText(Common_Class.GetTime() + "   /   " + "17:00:00");
+                    tvTimer.setText(Common_Class.GetTime() + "   /   " + sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
                     handler.postDelayed(this, 1000);
                 }
             }, 1000);
@@ -269,10 +268,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 try {
 
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                        String startTime = "17:05:00";
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                         Date d1 = sdf.parse(Common_Class.GetTime());
-                        Date d2 = sdf.parse(startTime);
+                        Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
                         long elapsed = d2.getTime() - d1.getTime();
                         System.out.println("time difference: " + elapsed);
 
@@ -385,7 +383,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty()
                             );
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
+                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getSBRate()));
 
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
@@ -871,7 +869,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
+                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getSBRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
 
@@ -892,7 +890,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     }
 
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
+                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getSBRate() * Product_Details_Modal.getQty()));
 
 
                 }
@@ -947,11 +945,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
-                            holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                            holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate()));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
-                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
+                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate()));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
                             }
 

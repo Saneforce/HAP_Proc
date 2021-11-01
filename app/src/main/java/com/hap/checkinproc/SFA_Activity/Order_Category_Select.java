@@ -3,7 +3,6 @@ package com.hap.checkinproc.SFA_Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -367,6 +366,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             Log.v(TAG, " order oncreate:k ");
 
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -518,7 +519,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
-
+                    common_class.ProgressdialogShow(1, "");
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
 
@@ -657,24 +658,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             if (response.isSuccessful()) {
                                 try {
+                                    common_class.ProgressdialogShow(0, "");
                                     Log.e("JSON_VALUES", response.body().toString());
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
                                     if (san.equals("true")) {
-                                        if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
-                                            Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(Order_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        }
-                                        Shared_Common_Pref.Sync_Flag = "2";
-//                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-
-                                        startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                                        finish();
+                                        common_class.showMsg(Order_Category_Select.this, "Order Submitted Successfully");
+                                        common_class.CommonIntentwithFinish(Invoice_History.class);
                                     }
 
                                 } catch (Exception e) {
+                                    common_class.ProgressdialogShow(0, "");
 
                                 }
                             }
@@ -682,6 +677,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
+                            common_class.ProgressdialogShow(0, "");
                             Log.e("SUBMIT_VALUE", "ERROR");
                         }
                     });
@@ -753,7 +749,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
         if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
             findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
-            Free_Adapter mFreeAdapter = new Free_Adapter(freeQty_Array_List, R.layout.product_free_recyclerview, getApplicationContext(), -1);
+            Free_Adapter mFreeAdapter = new Free_Adapter(freeQty_Array_List, R.layout.product_free_recyclerview, getApplicationContext());
             freeRecyclerview.setAdapter(mFreeAdapter);
 
         } else {
@@ -895,8 +891,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
 
@@ -930,9 +924,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
         Context context;
-        LayoutInflater inflter;
+
         CategoryAdapter.MyViewHolder pholder;
-        private int rowLayout;
+
 
         public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
             this.context = applicationContext;
@@ -1522,7 +1516,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         private final int rowLayout;
 
 
-        public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int Categorycolor) {
+        public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context) {
             this.Product_Details_Modalitem = Product_Details_Modalitem;
             this.rowLayout = rowLayout;
             this.context = context;

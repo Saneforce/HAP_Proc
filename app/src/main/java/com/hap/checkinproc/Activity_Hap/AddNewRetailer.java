@@ -353,7 +353,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     Log.e("Compititor_Name", "" + Compititor_Name);
                     //The key argument here must match that used in the other activity
                 } else {
-                    common_class.getDb_310Data(Constants.STATE_LIST, this);
 
                     name = "http://hapapps.sanfmcg.com/" + Retailer_Modal_List.get(getOutletPosition()).getImagename();
                     name = name.replace(",", "");
@@ -530,6 +529,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 rlDistributor.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
+
+            common_class.getDb_310Data(Constants.STATE_LIST, this);
+
 
 
         } catch (Exception e) {
