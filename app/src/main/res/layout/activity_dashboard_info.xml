@@ -31,10 +31,11 @@
 
 
         <TextView
+            android:textAlignment="center"
             android:id="@+id/tvDistributer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C10dp"
+            android:layout_marginTop="@dimen/C10dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="7 Hills milk Centre"
@@ -47,23 +48,13 @@
 
     </LinearLayout>
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cdInfo"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C10dp"
-        app:cardCornerRadius="@dimen/C5dp">
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:visibility="visible"
             android:id="@+id/rvDashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
-    </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>
 

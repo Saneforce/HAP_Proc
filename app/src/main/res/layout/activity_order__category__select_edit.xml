@@ -21,23 +21,34 @@
             android:visibility="visible"></include>
 
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/C15dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/C15dp">
 
             <TextView
                 android:id="@+id/outlet_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/C15dp"
                 android:text="Retailor"
                 android:textColor="@color/black"
                 android:textSize="17dp"
                 android:textStyle="bold" />
-        </LinearLayout>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="@dimen/C15dp"
+                android:text=""
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/lin_gridcategory"
@@ -253,6 +264,7 @@
 
 
                                 <LinearLayout
+                                    android:id="@+id/llRegular"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">

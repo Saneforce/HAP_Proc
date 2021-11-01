@@ -41,6 +41,10 @@ public class Datum {
     @Expose
     private String distCode;
 
+    @SerializedName("CutoffTime")
+    @Expose
+    private String CutoffTime;
+
     @SerializedName("Stockist_Name")
     @Expose
     private String Stockist_Name;
@@ -323,5 +327,13 @@ public class Datum {
 
     public void setState_Code(String state_Code) {
         State_Code = state_Code;
+    }
+
+    public String getCutoffTime() {
+        return CutoffTime;
+    }
+
+    public void setCutoffTime(String cutoffTime) {
+        CutoffTime = cutoffTime;
     }
 }

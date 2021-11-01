@@ -120,8 +120,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
             common_class.getDb_310Data(Constants.Distributor_List, this);
-        else
-            common_class.getDataFromApi(Constants.Retailer_OutletList, this,false);
+        else {
+            findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
+            common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+        }
 
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
@@ -294,11 +296,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Lin_primary:
-                common_class.CommonIntentwithNEwTask(PrimaryOrderActivity.class);
-
+                common_class.getDb_310Data(Constants.PrimaryTAXList, this);
                 break;
             case R.id.ivSFACalendar:
-
                 Calendar newCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -367,8 +367,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 break;
-
-
             case R.id.Lin_Route:
                 sharedCommonPref.save(sharedCommonPref.DCRMode, "");
                 common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
@@ -402,6 +400,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+                    case Constants.PrimaryTAXList:
+                        sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
+                        common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        break;
                     case Constants.CUMULATIVEDATA:
                         getCumulativeDataFromAPI(apiDataResponse);
                         break;

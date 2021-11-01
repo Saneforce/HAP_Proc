@@ -46,6 +46,7 @@ public class Constants {
     public static final String InvoiceQtyList = "InvoiceQtyList";
 
     public static final String TAXList = "taxList";
+    public static final String PrimaryTAXList = "primaryTaxList";
 
     public static final String INVOICE_ORDERLIST = "invoiceOrderList";
     public static final String ORDER_ID = "orderId";
@@ -71,8 +72,10 @@ public class Constants {
     public static final String TEMP_DISTRIBUTOR_ID = "tempDistId";
     public static final String LEDGER = "ledger";
     public static final String DASHBOARD_TYPE_INFO = "dbTypeInfo";
-    public static String LOGIN_TYPE = "loginType";
-    public static String CHECKIN_TYPE = "checkinType";
-    public static String DISTRIBUTER_TYPE = "distributerType";
-
+    public static final String SALES_SUMMARY = "salesSummary";
+    public static final String LOGIN_TYPE = "loginType";
+    public static final String CHECKIN_TYPE = "CheckIn";
+    public static final String DISTRIBUTER_TYPE = "Distributor";
+    public static final String PRIMARY_ORDER = "primaryOrder";
+    public static final String CUTOFF_TIME ="cutOffTime" ;
 }

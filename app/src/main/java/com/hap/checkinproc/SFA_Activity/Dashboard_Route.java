@@ -124,12 +124,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         StopedUpdate = false;
 
         db = new DatabaseHandler(this);
-        getDbstoreData();
+
 
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+        getDbstoreData();
         getSalesCounts();
         JSONObject jParam = new JSONObject();
         try {
@@ -358,6 +359,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         try {
             jParam.put("SF", UserDetails.getString("Sfcode", ""));
             jParam.put("div", UserDetails.getString("Divcode", ""));
+            jParam.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+
             apiInterface.getDataArrayList("get/salessumry", jParam.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -373,7 +376,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             smryInv.setText(jItm.get("InvCnt").getAsString());
                             smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
                         } else {
-
                             smryOrd.setText("0");
                             smryNOrd.setText("0");
                             smryNOOrd.setText("0");
@@ -491,26 +493,47 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.llOrder:
-                Intent intent = new Intent(getApplicationContext(), DashboardInfoActivity.class);
-                intent.putExtra("type", "Orders");
-                startActivity(intent);
+                if (smryOrd.getText().toString().equals("0"))
+                    common_class.showMsg(this, "No Records Found");
+                else {
+                    Intent intent = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                    Shared_Common_Pref.SALES_MODE = "order";
+                    intent.putExtra("type", "Orders");
+                    startActivity(intent);
+                }
                 break;
             case R.id.llNewOrder:
-                Intent intentNew = new Intent(getApplicationContext(), DashboardInfoActivity.class);
-                intentNew.putExtra("type", "New Order");
-                startActivity(intentNew);
+                if (smryNOrd.getText().toString().equals("0"))
+                    common_class.showMsg(this, "No Records Found");
+                else {
+                    Shared_Common_Pref.SALES_MODE = "neworder";
+                    Intent intentNew = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                    intentNew.putExtra("type", "New Order");
+                    startActivity(intentNew);
+                }
                 break;
             case R.id.llNoOrder:
-                Intent intentNO = new Intent(getApplicationContext(), DashboardInfoActivity.class);
-                intentNO.putExtra("type", "Orders");
-                intentNO.putExtra("status", "No Order");
-                startActivity(intentNO);
+                if (smryNOOrd.getText().toString().equals("0"))
+                    common_class.showMsg(this, "No Records Found");
+                else {
+                    Shared_Common_Pref.SALES_MODE = "noorder";
+                    Intent intentNO = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                    intentNO.putExtra("type", "Orders");
+                    intentNO.putExtra("status", "No Order");
+                    startActivity(intentNO);
+                }
                 break;
             case R.id.llInv:
-                Intent intentInv = new Intent(getApplicationContext(), DashboardInfoActivity.class);
-                intentInv.putExtra("type", "Invoice");
-                startActivity(intentInv);
+                if (smryInv.getText().toString().equals("0"))
+                    common_class.showMsg(this, "No Records Found");
+                else {
+                    Shared_Common_Pref.SALES_MODE = "invoice";
+                    Intent intentInv = new Intent(getApplicationContext(), DashboardInfoActivity.class);
+                    intentInv.putExtra("type", "Invoice");
+                    startActivity(intentInv);
+                }
                 break;
 
             case R.id.ReachedOutlet:
@@ -693,37 +716,39 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     void setPagerAdapter(boolean isFilter) {
+        try {
 
-        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
-            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-            Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
-        }
+            if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+                Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
+            }
 
+            Retailer_Modal_ListFilter.clear();
+            CountUR = 0;
+            CountSR = 0;
 
-        Retailer_Modal_ListFilter.clear();
-        CountUR = 0;
-        CountSR = 0;
+            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+                if (Retailer_Modal_List.get(i).getType() == null)
+                    Retailer_Modal_List.get(i).setType("0");
+                if (!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
+                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
 
-        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-            if (!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
-            if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
+            }
+            txUniOtltCnt.setText(String.valueOf(CountUR));
+            txSrvOtltCnt.setText(String.valueOf(CountSR));
 
+            Retailer_Modal_ListFilter = Retailer_Modal_List;
 
-        }
-        txUniOtltCnt.setText(String.valueOf(CountUR));
-        txSrvOtltCnt.setText(String.valueOf(CountSR));
-
-        Retailer_Modal_ListFilter = Retailer_Modal_List;
-
-
-        if (isFilter) {
-            adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType);
-
-        } else {
-            adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType);
-            viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
-            viewPager.setAdapter(adapter);
-            tabLayout.setupWithViewPager(viewPager);
+            if (isFilter) {
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType);
+            } else {
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType);
+                viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
+                viewPager.setAdapter(adapter);
+                tabLayout.setupWithViewPager(viewPager);
+            }
+        } catch (Exception e) {
+            Log.v("DAshboard_Route:", e.getMessage());
         }
     }
 
@@ -755,7 +780,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                         if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
                             Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
-                        } else if (shared_common_pref.getvalue(Route_Id).equals("") && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                        } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {
                             Shared_Common_Pref.Outler_AddFlag = "0";

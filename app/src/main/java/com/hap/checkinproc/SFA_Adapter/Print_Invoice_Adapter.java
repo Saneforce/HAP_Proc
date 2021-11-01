@@ -21,10 +21,9 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
     List<Product_Details_Modal> mDate;
     AdapterOnClick mAdapterOnClick;
 
-    public Print_Invoice_Adapter(Context context, List<Product_Details_Modal> mDate, AdapterOnClick mAdapterOnClick) {
+    public Print_Invoice_Adapter(Context context, List<Product_Details_Modal> mDate) {
         this.context = context;
         this.mDate = mDate;
-        this.mAdapterOnClick = mAdapterOnClick;
     }
 
     @NonNull

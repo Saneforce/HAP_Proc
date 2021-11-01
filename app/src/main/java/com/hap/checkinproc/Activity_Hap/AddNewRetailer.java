@@ -274,12 +274,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 mSubmit.setVisibility(View.GONE);
                 headtext.setText("Outlet Info");
             }
-            getRouteDetails();
+            //  getRouteDetails();
             getRetailerClass();
             getRetailerChannel();
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
                 iOutletTyp = Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
+                if (Retailer_Modal_List.get(getOutletPosition()).getType() == null)
+                    iOutletTyp = 0;
                 if (iOutletTyp == 0)
                     txOutletType.setText("Universal");
                 else
@@ -351,7 +353,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     Log.e("Compititor_Name", "" + Compititor_Name);
                     //The key argument here must match that used in the other activity
                 } else {
-                    common_class.getDb_310Data(Constants.STATE_LIST, this);
 
                     name = "http://hapapps.sanfmcg.com/" + Retailer_Modal_List.get(getOutletPosition()).getImagename();
                     name = name.replace(",", "");
@@ -434,6 +435,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
                 }
             }
+
+
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -465,7 +468,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
-
                         addNewRetailers();
                     }
 
@@ -521,9 +523,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
             if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
+                    mSubmit.setVisibility(View.GONE);
+
                 rlDistributor.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
+
+            common_class.getDb_310Data(Constants.STATE_LIST, this);
 
 
 
@@ -613,47 +620,49 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
     /*Route Details*/
-    public void getRouteDetails() {
-
-        String routeMap = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-
-                Log.e("Route_response", response.body().toString());
-
-                JsonArray jsonArray = response.body();
-                for (int a = 0; a < jsonArray.size(); a++) {
-                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-                    String className = String.valueOf(jsonObject.get("name"));
-                    String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
-                    String id = String.valueOf(jsonObject.get("id"));
-                    Log.e("RETAILER_CLASS_NAME", retailerClass);
-
-
-                    mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
-                    Log.e("LeaveType_Request", retailerClass);
-                    modelRetailDetails.add(mCommon_model_spinner);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.e("Route_response", "ERROR");
-
-            }
-        });
-    }
+//    public void getRouteDetails() {
+//
+//        String routeMap = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
+//        call.enqueue(new Callback<JsonArray>() {
+//            @Override
+//            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+//
+//                Log.e("Route_response", response.body().toString());
+//
+//                JsonArray jsonArray = response.body();
+//                for (int a = 0; a < jsonArray.size(); a++) {
+//                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+//                    String className = String.valueOf(jsonObject.get("name"));
+//                    String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
+//                    String id = String.valueOf(jsonObject.get("id"));
+//                    Log.e("RETAILER_CLASS_NAME", retailerClass);
+//
+//
+//                    mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
+//                    Log.e("LeaveType_Request", retailerClass);
+//                    modelRetailDetails.add(mCommon_model_spinner);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JsonArray> call, Throwable t) {
+//                Log.e("Route_response", "ERROR");
+//
+//            }
+//        });
+//    }
 
     /*Route Class*/
     public void getRetailerClass() {
         try {
-            String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\", \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\"," +
+                    " \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
+            Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
+                    shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
             call.enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -714,12 +723,16 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Retailer Channel */
     public void getRetailerChannel() {
-        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\",\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
+                "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
+                shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24",
+                routeMap);
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
                 JsonArray jsonArray = response.body();
                 Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
                 for (int a = 0; a < jsonArray.size(); a++) {
@@ -828,13 +841,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
-            reportObject.put("place_id", "'" + place_id);
+            reportObject.put("place_id", "'" + place_id + "'");
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
-            reportObject.put("img_name", "'" + imageServer);
-
-            //
-
+            reportObject.put("img_name", "'" + imageServer + "'");
+            reportObject.put(Constants.LOGIN_TYPE, "'" + shared_common_pref.getvalue(Constants.LOGIN_TYPE) + "'");
 
             docMasterObject.put("unlisted_doctor_master", reportObject);
 
@@ -851,7 +862,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 totalValueString = reportObject.toString();
             }
             QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            QueryString.put("State_Code", String.valueOf(stateCode));
             QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
             QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -968,7 +979,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
 

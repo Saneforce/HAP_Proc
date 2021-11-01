@@ -180,6 +180,9 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             //common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
             getOutstanding();
+
+            if(sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
         } catch (Exception e) {
 
         }

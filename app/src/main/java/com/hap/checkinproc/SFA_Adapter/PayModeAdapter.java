@@ -61,8 +61,6 @@ public class PayModeAdapter extends RecyclerView.Adapter<PayModeAdapter.MyViewHo
                         lastCheckedPos = clickedPos;
 
                         payList.get(clickedPos).setSelected(cb.isSelected());
-
-
                         PaymentActivity.paymentActivity.payModeLabel = payList.get(position).getName();
                     } else {
                         lastChecked = null;

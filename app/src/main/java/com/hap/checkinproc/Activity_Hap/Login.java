@@ -556,6 +556,7 @@ public class Login extends AppCompatActivity {
         // eMail="sebastin.j@hap.in";
         //eMail = "senthilraja.d@hap.in";
         //eMail = "1007120@hap.in";
+        //eMail = "santhosh.gp@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
@@ -567,17 +568,25 @@ public class Login extends AppCompatActivity {
                         SharedPreferences.Editor userEditor = UserDetails.edit();
                         SharedPreferences.Editor cInEditor = CheckInDetails.edit();
 
-                        if (response.body().getData().get(0).getLoginType() != null && response.body().getData().get(0).getLoginType().equals("Distributor")) {
+                        if (response.body().getData().get(0).getLoginType() != null &&
+                                response.body().getData().get(0).getLoginType().equals("Distributor")) {
 
                             shared_common_pref.save(Constants.Distributor_Id, response.body().getData().get(0).getDistCode());
                             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.body().getData().get(0).getDistCode());
                             shared_common_pref.save(Constants.Distributor_name, response.body().getData().get(0).getStockist_Name());
                             shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
+                            shared_common_pref.save(Constants.CUTOFF_TIME, response.body().getData().get(0).getCutoffTime());
+
                             //   editor.putString("Sf_Type", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Sfcode", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Divcode", response.body().getData().get(0).getDivisionCode());
                             userEditor.putString("State_Code", response.body().getData().get(0).getState_Code());
+
+                            Shared_Common_Pref.Sf_Code = response.body().getData().get(0).getDistCode();
+                            Shared_Common_Pref.Div_Code = response.body().getData().get(0).getDivisionCode();
+                            shared_common_pref.save(Shared_Common_Pref.Div_Code, response.body().getData().get(0).getDivisionCode());
+                            shared_common_pref.save(Shared_Common_Pref.Sf_Code, response.body().getData().get(0).getDistCode());
 
                             userEditor.putString("email", eMail);
                             if (!UserLastName.equalsIgnoreCase("")) {

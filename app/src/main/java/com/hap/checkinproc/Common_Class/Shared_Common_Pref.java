@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Shared_Common_Pref {
+    public static String SALES_MODE = "";
     SharedPreferences Common_pref;
     SharedPreferences.Editor editor;
     Activity activity;

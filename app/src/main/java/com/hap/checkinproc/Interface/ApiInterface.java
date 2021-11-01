@@ -332,7 +332,8 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=table/list")
-    Call<JsonArray> retailerClass(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
+    Call<JsonArray> retailerClass(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF,
+                                  @Query("State_Code") String StateCode, @Field("data") String data);
 
     @POST("Db_V13.php?axn=get/precall")
     Call<RetailerViewDetails> retailerViewDetails(@Query("Msl_No") String retailerID, @Query("divisionCode") String divisionCode, @Query("sfCode") String sfCode);
@@ -435,7 +436,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/invoice")
-    Call<JsonObject> saveInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+    Call<JsonObject> saveInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Query("loginType") String loginType, @Field("data") String toString);
 
 
     @FormUrlEncoded

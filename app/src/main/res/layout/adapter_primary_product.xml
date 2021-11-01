@@ -77,8 +77,6 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
-                            android:drawableRight="@drawable/edit_small"
-                            android:drawablePadding="@dimen/C3dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -90,61 +88,6 @@
                     </RelativeLayout>
 
 
-                    <LinearLayout
-                        android:id="@+id/llRegular"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvRegularLabel"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="Regular  : "
-                            android:textColor="@color/grey_800"
-                            android:visibility="visible" />
-
-
-                        <TextView
-                            android:id="@+id/RegularQty"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvRegularLabel"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="0"
-                            android:textColor="@color/grey_800"
-                            android:visibility="visible" />
-
-
-                        <TextView
-
-                            android:id="@+id/RegularAmt"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif"
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="₹0"
-                            android:gravity="center_vertical"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/txt_color_black"
-                            android:textStyle="bold"
-                            android:visibility="visible" />
-
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

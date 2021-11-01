@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,8 +25,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PayModeAdapter;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -87,19 +84,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    if (s.toString().equals("")) {
-                        tvRemainAmt.setText("₹" + outstandAmt);
-                    } else {
-                        double remainAmt = outstandAmt;
+                    double enterAmt = 0;
+                    if (!s.toString().equals(""))
+                        enterAmt = Double.parseDouble(s.toString());
 
-                        if (remainAmt < Integer.parseInt(s.toString())) {
-                            tvRemainAmt.setText("₹" + 0.00);
-                        } else {
-                            tvRemainAmt.setText("₹" + formatter.format(outstandAmt - Double.parseDouble(s.toString())));
-                        }
+                    tvRemainAmt.setText("₹" + formatter.format(outstandAmt - enterAmt));
 
 
-                    }
                 } catch (Exception e) {
                     Log.e("paymentAct:etAmtRec ", e.getMessage());
                 }
@@ -208,13 +199,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void ResetSubmitBtn(int resetMode){
+    public void ResetSubmitBtn(int resetMode) {
         common_class.ProgressdialogShow(0, "");
-        long dely=3;
-        if(resetMode!=0) dely=1000;
-        if (resetMode==1){
+        long dely = 3;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
             btnSubmit.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
-        }else {
+        } else {
             btnSubmit.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
         }
         handler.postDelayed(new Runnable() {
@@ -223,7 +214,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 btnSubmit.stopAnimation();
                 btnSubmit.revertAnimation();
             }
-        },dely);
+        }, dely);
 
     }
 
@@ -249,7 +240,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             submitPayData();
                         }
                     }
-                },100);
+                }, 100);
 
                 break;
 
@@ -271,9 +262,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         }
     }
-
-
-
 
 
     @Override

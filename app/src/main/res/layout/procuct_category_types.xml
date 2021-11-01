@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="horizontal"
-    android:paddingBottom="5dp">
+   >
 
     <LinearLayout
         android:id="@+id/llParentForms"
