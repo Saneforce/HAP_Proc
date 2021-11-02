@@ -419,12 +419,12 @@ public class TAViewStatus extends AppCompatActivity {
         img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                 Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                 stat.putExtra("position", txtLodgUKey.getText().toString());
                 stat.putExtra("headTravel", "LOD");
+                stat.putExtra("sfcode", sfCode);;
                 stat.putExtra("mode", "Room");
-                stat.putExtra("date", DateTime);
+                stat.putExtra("date", Ta_DATE);
                 startActivity(stat);
             }
         });
@@ -491,12 +491,11 @@ public String ddmmyy(String srcdt){
         }
     }
     public void LateAttach(View v) {
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
         stat.putExtra("position", lodgLate);
         stat.putExtra("headTravel", "LOD");
         stat.putExtra("mode", "LateMode");
-        stat.putExtra("date", DateTime);
+        stat.putExtra("date", Ta_DATE);
         startActivity(stat);
     }
     public void EarImage(View v) {
@@ -517,12 +516,11 @@ public String ddmmyy(String srcdt){
         }
     }
     public void EarAttach(View v) {
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
         stat.putExtra("position", lodgEarly);
         stat.putExtra("headTravel", "LOD");
         stat.putExtra("mode", "EarlyMode");
-        stat.putExtra("date", DateTime);
+        stat.putExtra("date", Ta_DATE);
         startActivity(stat);
     }
     private void calOverAllTotal(Double localCov, Double otherExp, double tTotAmt) {
@@ -558,7 +556,6 @@ public String ddmmyy(String srcdt){
         View pv = (View) v.getParent().getParent();
         edt_ldg_JnEmp = pv.findViewById(R.id.edt_ldg_JnEmp);
         String sEmpID = String.valueOf(edt_ldg_JnEmp.getText());
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
         if (edt_ldg_JnEmp.getText().toString().equals("")) {
 
@@ -566,7 +563,7 @@ public String ddmmyy(String srcdt){
 
             Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
                     UserDetails.getString("Divcode", ""),
-                    UserDetails.getString("Sfcode", ""), sEmpID, "", DateTime, null);
+                    UserDetails.getString("Sfcode", ""), sEmpID, "", Ta_DATE, null);
             Callto.enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -1672,13 +1669,12 @@ public String ddmmyy(String srcdt){
                     editMode = editTexts.getText().toString();
                     LcUKey = lcTxtUKeys.getText().toString();
 
-                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                     stat.putExtra("position", LcUKey);
                     stat.putExtra("headTravel", "LC");
                     stat.putExtra("mode", editMode);
-                    stat.putExtra("date", DateTime);
+                    stat.putExtra("date", Ta_DATE);
                     startActivity(stat);
                 }
             });
@@ -1786,17 +1782,13 @@ public String ddmmyy(String srcdt){
                     editMode = oeEditext.getText().toString();
 
                     OeUKey = oeTxtUKeys.getText().toString();
-                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-
-                    Log.v("OE_UKEY", OeUKey);
-                    Log.v("OE_mode", editMode);
-                    Log.v("OE_date", DateTime);
+                    //DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                     stat.putExtra("position", OeUKey);
                     stat.putExtra("headTravel", "OE");
                     stat.putExtra("mode", editMode);
-                    stat.putExtra("date", DateTime);
+                    stat.putExtra("date", Ta_DATE);
                     startActivity(stat);
 
                 }
@@ -2253,9 +2245,9 @@ public String ddmmyy(String srcdt){
         Log.e("nano_startTime", String.valueOf(nano_startTime));
         ImageUKey = keyEk + sfCode + nano_startTime;
 
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        //DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> mCall = apiInterface.taImage(ImageUKey, count, HeadTravel, Mode, DateTime, sfCode, from, To, imgg);
+        Call<ResponseBody> mCall = apiInterface.taImage(ImageUKey, count, HeadTravel, Mode, Ta_DATE, sfCode, from, To, imgg);
 
         Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
 
