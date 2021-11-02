@@ -847,10 +847,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("img_name", "'" + imageServer + "'");
             reportObject.put(Constants.LOGIN_TYPE, "'" + shared_common_pref.getvalue(Constants.LOGIN_TYPE) + "'");
 
-
-            //
-
-
             docMasterObject.put("unlisted_doctor_master", reportObject);
 
             mainArray = new JSONArray();
@@ -866,7 +862,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 totalValueString = reportObject.toString();
             }
             QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            QueryString.put("State_Code", String.valueOf(stateCode));
             QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
             QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
