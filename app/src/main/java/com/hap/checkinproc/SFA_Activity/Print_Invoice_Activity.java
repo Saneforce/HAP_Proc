@@ -115,7 +115,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 tvOrderType.setText("ORDER");
             } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
+                findViewById(R.id.llOutletParent).setVisibility(View.GONE);
                 tvOrderType.setText("PRIMARY ORDER");
+
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 tvOrderType.setText("TAX INVOICE");
