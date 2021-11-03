@@ -50,7 +50,9 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         jParam.addProperty("TDate", ledgerTDT);
         common_class.getDb_310Data(Constants.LEDGER, this, jParam);
 
-        tvOutletName.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+        // tvOutletName.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+        tvOutletName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
+
     }
 
     public void init() {

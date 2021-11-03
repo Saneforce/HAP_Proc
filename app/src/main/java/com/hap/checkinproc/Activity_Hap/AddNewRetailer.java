@@ -83,14 +83,14 @@ import retrofit2.Response;
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
     TextView toolHeader;
     ImageView imgBack;
-    EditText toolSearch, retailercode;
+    EditText toolSearch ;
     GoogleMap mGoogleMap;
     Button mSubmit;
     ApiInterface service;
     RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel;
     LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
-            txDelvryType, txOutletType, tvStateName;
+            txDelvryType, txOutletType, tvStateName,retailercode;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -1101,10 +1101,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                             JSONArray array = stateObj.getJSONArray("Data");
 
-                            //  String strState = "";
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject obj = array.getJSONObject(i);
-                                //  strState = strState + obj.getString("State_Code") + obj.getString("StateName") + ",";
                                 stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
 
                                 if (!Shared_Common_Pref.Outler_AddFlag.equals("1") && (Retailer_Modal_List.get(getOutletPosition()).getStateCode() != null && obj.getString("State_Code").equals
@@ -1114,12 +1112,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                     stateCode = Integer.valueOf(obj.getString("State_Code"));
                                 }
                             }
-
-//                            if (!Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-//                                strState = strState.substring(strState.indexOf(Retailer_Modal_List.get(getOutletPosition()).getStateCode()) + Retailer_Modal_List.get(getOutletPosition()).getStateCode().length());
-//                                strState = strState.substring(0, strState.indexOf(","));
-//                                tvStateName.setText("" + strState);
-//                            }
 
 
                         }

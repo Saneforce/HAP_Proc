@@ -505,6 +505,7 @@ public class Common_Class {
                     case Constants.OUTSTANDING:
                         axnname = "get/customeroutstanding";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);
+                        data.put("distributorcode", Shared_Common_Pref.DistributorCode);
                         break;
 
                     case Constants.POP_ENTRY_STATUS:
