@@ -3868,7 +3868,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                 editModeId=edtRwID.getText().toString();
 
                 CtrlsListModel UTAItem=uTAItems.get(editModeId);
-                if(editMode.equalsIgnoreCase("")){
+                if(editMode.equalsIgnoreCase("") ){
                     Toast.makeText(TAClaimActivity.this,"Select the Travel Mode",Toast.LENGTH_LONG).show();
                     ResetSubmitBtn(0,btnAnim);
                     return;
