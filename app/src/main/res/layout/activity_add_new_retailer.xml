@@ -246,6 +246,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+
                             android:id="@+id/retailercodevisible"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -275,7 +276,7 @@
                             </LinearLayout>
 
 
-                            <EditText
+                            <TextView
                                 android:id="@+id/retailercode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

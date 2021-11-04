@@ -1,35 +1,16 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.common.DatabaseHandler;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.hap.checkinproc.Common_Class.Constants.Category_List;
-import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
-import static com.hap.checkinproc.Common_Class.Constants.Product_List;
-import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
-import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 public class Common_Class {
     public static String Version_Name="Ver 3.1.20";

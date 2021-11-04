@@ -171,6 +171,7 @@
                         </RelativeLayout>
 
                         <LinearLayout
+                            android:id="@+id/llOutletParent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/rect_dash_background"
@@ -248,9 +249,9 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_marginTop="@dimen/C5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C5dp"
                     app:cardCornerRadius="@dimen/C5dp">
 
                     <LinearLayout
@@ -364,11 +365,11 @@
                             android:background="@color/black"></View>
 
                         <androidx.recyclerview.widget.RecyclerView
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:id="@+id/printrecyclerview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                         <View
                             android:layout_width="match_parent"
@@ -387,15 +388,15 @@
                             android:textSize="@dimen/C13dp" />
 
                         <View
-                            android:visibility="visible"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/background" />
+                            android:background="@color/background"
+                            android:visibility="visible" />
 
                         <RelativeLayout
-                            android:layout_marginTop="10dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
 
                             <TextView
                                 android:layout_width="match_parent"
