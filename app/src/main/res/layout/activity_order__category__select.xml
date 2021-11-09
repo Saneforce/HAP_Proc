@@ -640,7 +640,7 @@
 
 
             <LinearLayout
-                style="@style/ButtonStyle"
+                style="@style/DashboardButton"
                 android:background="@drawable/button_greenbg"
                 android:orientation="horizontal"
                 android:weightSum="3">

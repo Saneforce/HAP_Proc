@@ -290,7 +290,7 @@
 
 
                     <Button
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:layout_gravity="center"
                         android:layout_width="110dp"
@@ -310,7 +310,7 @@
 
 
                     <Button
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:id="@+id/Oapprovebutton"
                         android:fontFamily="@font/alegreya_sans_sc"
@@ -321,7 +321,7 @@
                     <Button
                         android:id="@+id/ODreject"
                         android:layout_weight="1"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:textStyle="bold"
                         android:fontFamily="@font/alegreya_sans_sc"
                         android:background="@drawable/button_amber"

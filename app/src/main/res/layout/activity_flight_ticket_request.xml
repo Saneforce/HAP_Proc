@@ -229,8 +229,7 @@
                                 android:layout_marginBottom="@dimen/C10dp">
 
                                 <Button
-                                    style="@style/ButtonStyle"
-                                    android:background="@drawable/button_blueg"
+                                    style="@style/BottomButton"
                                     android:text="submit" />
 
                             </LinearLayout>

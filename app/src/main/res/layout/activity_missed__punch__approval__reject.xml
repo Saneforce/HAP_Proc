@@ -287,7 +287,6 @@
                         android:layout_width="110dp"
                         android:id="@+id/mp_rejectsave"
                         android:layout_gravity="center"
-                        android:background="@drawable/blue_txt_bg"
                         android:textStyle="bold"
                         android:text="Save" />
                 </LinearLayout>
@@ -299,7 +298,7 @@
                     android:layout_gravity="center">
 
                     <Button
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:id="@+id/MPapprovebutton"
                         android:fontFamily="@font/alegreya_sans_sc"
@@ -310,7 +309,7 @@
                     <Button
                         android:id="@+id/MPreject"
                         android:layout_weight="1"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:textStyle="bold"
                         android:fontFamily="@font/alegreya_sans_sc"
                         android:background="@drawable/button_amber"

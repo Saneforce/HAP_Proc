@@ -2674,14 +2674,14 @@
 
 
                 <Button
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:layout_weight="1"
                     android:background="@color/ApproveGreen"
                     android:onClick="onApproval"
                     android:text="Approve " />
 
                 <Button
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:layout_weight="1"
                     android:background="@color/color_red"
                     android:onClick="onReject"

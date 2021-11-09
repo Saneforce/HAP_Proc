@@ -291,8 +291,7 @@ android:visibility="gone"
 
             <Button
                 android:onClick="DaException"
-                style="@style/ButtonStyle"
-                android:background="@drawable/button_blueg"
+                style="@style/BottomButton"
                 android:text="Submit" />
 
 

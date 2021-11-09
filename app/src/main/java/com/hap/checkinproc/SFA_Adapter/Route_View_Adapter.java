@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -51,7 +52,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
         LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection;
-        ImageView icMob;
+        ImageView icMob,btnEditRet;
         RecyclerView lstTdyView, lstPreView;
 
 
@@ -66,7 +67,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 invoicedate = view.findViewById(R.id.invoicedate);
                 tvRetailorCode = view.findViewById(R.id.retailorCode);
                 txRetNo = view.findViewById(R.id.txRetNo);
-
+                btnEditRet=view.findViewById(R.id.btnEditRet);
                 tvFirstMonth = view.findViewById(R.id.tvLMFirst);
                 tvSecondMnth = view.findViewById(R.id.tvLMSecond);
                 tvThirdMnth = view.findViewById(R.id.tvLMThree);
@@ -157,6 +158,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 holder.icMob.setVisibility(View.GONE);
             }
 
+
 //            if (mRetailer_Modal_List.getStatusname() != null) {
 //                holder.status.setText("Status :" + "\t\t" + mRetailer_Modal_List.getStatusname().toUpperCase());
 //            } else {
@@ -194,6 +196,24 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                         }
                     });
+                }
+            });
+            holder.btnEditRet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, AddNewRetailer.class);
+                    Shared_Common_Pref.Outlet_Info_Flag = "1";
+                    Shared_Common_Pref.Editoutletflag = "1";
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Shared_Common_Pref.FromActivity = "Outlets";
+                    Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_List.getId());
+                    intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_List.getId()));
+                    intent.putExtra("OutletName", mRetailer_Modal_List.getName());
+                    intent.putExtra("OutletAddress", mRetailer_Modal_List.getListedDrAddress1());
+                    intent.putExtra("OutletMobile", mRetailer_Modal_List.getPrimary_No());
+                    intent.putExtra("OutletRoute", mRetailer_Modal_List.getTownName());
+
+                    context.startActivity(intent);
                 }
             });
             holder.linDirection.setOnClickListener(new View.OnClickListener() {

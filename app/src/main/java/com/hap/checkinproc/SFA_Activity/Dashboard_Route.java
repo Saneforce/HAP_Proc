@@ -67,6 +67,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -86,7 +87,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, ReachedOutlet, route_text,
+    TextView headtext, textViewname, ReachedOutlet, route_text,txtOrdDate,
             txSrvOtlt, txUniOtlt, txSrvOtltCnt, txUniOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal;
     EditText txSearchRet;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, undrUni, undrServ;
@@ -112,6 +113,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     ApiInterface apiInterface;
     boolean updSale = true;
 
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +187,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             btSrvOtlt = findViewById(R.id.btSrvOtlt);
             btUniOtlt = findViewById(R.id.btUniOtlt);
             ivBtnRpt = findViewById(R.id.ivBtnRpt);
+            txtOrdDate=findViewById(R.id.txtOrdDate);
 
             smryOrd = findViewById(R.id.smryOrd);
             smryNOrd = findViewById(R.id.smryNOrd);
@@ -215,6 +218,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
                 }
             });
+            txtOrdDate.setText(DT.getDateWithFormat(new Date(),"dd-MMM-yyyy"));
             btSrvOtlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -692,8 +696,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                 JSONObject arrObj = jsonArray.getJSONObject(arr);
 
                                 int flag = arrObj.getInt("OrderFlg");
-                                //  To be=0,invoice-3,order-2,no order-1;
-                                String sMode = flag == 0 ? "To be" : flag == 3 ? "invoice" : flag == 2 ? "order" : "no order";
+                                //  BTG=0,invoice-3,order-2,no order-1;
+                                String sMode = flag == 0 ? "BTG" : flag == 3 ? "invoice" : flag == 2 ? "order" : "no order";
 
                                 outletCode = outletCode + arrObj.getString("ListedDrCode") + sMode + ",";
 

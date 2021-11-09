@@ -155,7 +155,7 @@
 
         <Button
             android:id="@+id/sign_in_button"
-            style="@style/ButtonStyle"
+            style="@style/DashboardButton"
             android:layout_weight="1"
             android:background="@drawable/button_green"
             android:text="Sign In"
@@ -163,14 +163,14 @@
 
         <Button
             android:id="@+id/btnReport"
-            style="@style/ButtonStyle"
+            style="@style/DashboardButton"
             android:layout_weight="1"
-            android:background="@drawable/button_blueg"
+            android:background="@drawable/button_dblue"
             android:text="My Dashboard" />
 
         <Button
             android:id="@+id/btnExit"
-            style="@style/ButtonStyle"
+            style="@style/DashboardButton"
             android:layout_weight="1"
             android:background="@drawable/button_check_out"
             android:text="Exit" />

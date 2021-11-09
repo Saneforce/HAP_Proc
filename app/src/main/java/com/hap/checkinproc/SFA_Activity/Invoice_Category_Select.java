@@ -832,8 +832,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         JSONArray jsonArray = jsonObject.getJSONArray("Data");
                         for (int i = 0; i < jsonArray.length(); i++) {
 
-                            outstandAmt = jsonArray.getJSONObject(i).getInt("Outstanding");
-                            tvOutStanding.setText("₹ " + formatter.format(jsonArray.getJSONObject(i).getInt("Outstanding")));
+                            outstandAmt = jsonArray.getJSONObject(i).getDouble("Outstanding");
+                            if (outstandAmt<0) outstandAmt=Math.abs(outstandAmt); else outstandAmt=0-outstandAmt;
+                            tvOutStanding.setText("₹ " + formatter.format(outstandAmt));
                         }
 
                     } else {

@@ -179,7 +179,7 @@
 
                         <Button
                             android:id="@+id/button_cancel"
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:background="@drawable/button_red"
                             android:text="CANCEL" />
 

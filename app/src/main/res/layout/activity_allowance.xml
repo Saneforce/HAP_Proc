@@ -310,8 +310,7 @@
 
                                     <TextView
                                         style="@style/TextStyle"
-                                        android:text="Photo"
-                                        android:textColor="#fff"  />
+                                        android:text="Photo" />
 
                                 </LinearLayout>
 
@@ -386,10 +385,8 @@
             android:visibility="gone"></ImageView>
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:id="@+id/btn_submit"
-            style="@style/ButtonStyle"
-            android:background="@drawable/button_blueg"
+            style="@style/BottomButton"
             android:text="Submit"
-            android:textColor="@android:color/white"
             android:theme="@style/BluePrimaryButton"
             app:finalCornerAngle="50dp"
             app:initialCornerAngle="0dp"

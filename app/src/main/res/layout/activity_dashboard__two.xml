@@ -295,7 +295,7 @@
                                         android:elevation="@dimen/C5dp"
                                         android:padding="1dp"
                                         android:text="View All"
-                                        android:textColor="@color/background"
+                                        android:textColor="@color/black"
                                         android:textFontWeight="900"
                                         android:textSize="12sp" />
 
@@ -326,7 +326,7 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:background="@color/background"
                             android:text="Start Activity"
                             android:textColor="@color/background"
@@ -340,14 +340,14 @@
                         android:orientation="horizontal">
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:layout_weight="1"
                             android:background="@color/background"
                             android:text="Gate In"
                             android:textColor="@color/background" />
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:layout_weight="1"
                             android:background="@color/background"
                             android:text="Gate Out"
@@ -361,14 +361,14 @@
                         android:orientation="horizontal">
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:layout_weight="1"
                             android:background="@color/background"
                             android:text="Requests &amp; Status"
                             android:textColor="@color/background" />
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:layout_weight="1"
                             android:background="@color/background"
                             android:text="TA &amp; Claim"
@@ -381,7 +381,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:layout_weight="1"
                             android:background="@color/background"
                             android:text="Approvals"
@@ -396,7 +396,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:layout_weight="1"
                             android:background="@color/background"
                             android:text="Check-out"
@@ -718,7 +718,7 @@
                                     android:elevation="@dimen/C5dp"
                                     android:padding="1dp"
                                     android:text="View All"
-                                    android:textColor="#ffffff"
+                                    android:textColor="@color/black"
                                     android:textFontWeight="900"
                                     android:textSize="12sp" />
 
@@ -788,7 +788,7 @@
 
                     <Button
                         android:id="@+id/StActivity"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:background="@drawable/g_sign"
                         android:text="Start Activity"
                         app:layout_flexBasisPercent="47%" />
@@ -803,14 +803,14 @@
 
                     <Button
                         android:id="@+id/btn_gate_in"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_gate_in"
                         android:text="Gate In" />
 
                     <Button
                         android:id="@+id/btn_gate_out"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_red"
                         android:text="Gate Out" />
@@ -824,14 +824,14 @@
 
                     <Button
                         android:id="@+id/cardview3"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_amber"
                         android:text="Requests &amp; Status" />
 
                     <Button
                         android:id="@+id/btn_da_exp_entry"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_purple"
                         android:text="TA &amp; Claim" />
@@ -844,7 +844,7 @@
 
                     <Button
                         android:id="@+id/approvals"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_dgreen"
                         android:text="Approvals" />
@@ -860,7 +860,7 @@
 
                     <Button
                         android:id="@+id/cardview5"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/g_sign"
                         android:text="My Reports"
@@ -868,14 +868,14 @@
 
                     <Button
                         android:id="@+id/btnCheckout"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_check_out"
                         android:text="Check-out" />
 
                     <Button
                         android:id="@+id/btnExit"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:layout_weight="1"
                         android:background="@drawable/button_check_out"
                         android:text="Exit" />

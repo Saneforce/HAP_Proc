@@ -25,7 +25,7 @@
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/C15dp">
+            android:layout_marginTop="@dimen/C8dp">
 
             <TextView
                 android:id="@+id/outlet_name"
@@ -50,6 +50,35 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/lin_gridtype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/PGroup"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </androidx.recyclerview.widget.RecyclerView>
+            <LinearLayout
+                android:layout_width="@dimen/C2dp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_500"
+                android:layout_margin="@dimen/C5dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/PBrnd"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/lin_gridcategory"
             android:layout_width="match_parent"
@@ -673,10 +702,10 @@
         <RelativeLayout
 
             android:id="@+id/rlTakeOrder"
+            style="@style/BottomButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/C50dp"
             android:layout_margin="@dimen/C5dp"
-            android:background="@drawable/button_blueg"
             android:padding="@dimen/C5dp"
             android:visibility="visible">
 

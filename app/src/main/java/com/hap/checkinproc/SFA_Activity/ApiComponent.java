@@ -21,6 +21,4 @@ public interface ApiComponent {
     void inject(Outet_Report_Details activity);
     void inject(Nearby_Outlets activity);
     void inject(Dashboard_Route activity);
-
-
 }

@@ -226,7 +226,27 @@
                 android:textColorHint="@color/black"
                 android:textSize="18dp" />
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:layout_marginRight="@dimen/C2dp"
+            android:layout_marginBottom="@dimen/C5dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View only AC-Outlet"
+                android:letterSpacing="0.02"
+                android:layout_weight="1"
+                />
+            <Switch
+                android:id="@+id/swACOutlet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -250,6 +270,7 @@
                 android:hint="Search"
                 />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -325,7 +346,7 @@
 
             <TextView
                 android:id="@+id/reachedoutlets"
-                style="@style/ButtonStyle"
+                style="@style/BottomButton"
                 android:text="Reached Outlet" />
         </LinearLayout>
 

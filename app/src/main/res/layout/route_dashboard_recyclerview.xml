@@ -71,7 +71,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:drawableRight="@drawable/edit_small"
                             android:drawablePadding="@dimen/C5dp"
                             android:ellipsize="end"
                             android:maxLines="1"
@@ -80,6 +79,16 @@
                             android:textSize="16dp"
                             android:textStyle="bold" />
 
+                        <ImageView
+                            android:id="@+id/btnEditRet"
+                            android:layout_width="35dp"
+                            android:layout_height="25dp"
+                            android:layout_toRightOf="@id/retailername"
+                            android:paddingLeft="@dimen/C15dp"
+                            android:paddingRight="@dimen/C5dp"
+                            android:paddingTop="@dimen/C5dp"
+                            android:paddingBottom="@dimen/C5dp"
+                            android:src="@drawable/edit_small" />
 
                     </RelativeLayout>
 

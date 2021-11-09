@@ -12,6 +12,8 @@ public class Constants {
     public static final String Distributor_List = "distributorList";
     public static final String Product_List = "productList";
     public static final String Category_List = "categoryList";
+    public static final String ProdTypes_List = "ProdTypeList";
+    public static final String ProdGroups_List = "ProdGroupList";
     public static final String Rout_List = "routList";
 
     public static final String GetTodayOrder_List = "getTodayOrderList";

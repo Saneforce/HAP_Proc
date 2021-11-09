@@ -4365,7 +4365,6 @@ Log.d("DACliam","Error : "+t.getMessage());
             modeTextView.setText(myDataset.get(position).getName());
         }
         else if (type == 8) {
-
             Integer editTextPosition = myDataset.get(position).getPho();
             View view = travelDynamicLoaction.getChildAt(editTextPosition);
             editText = (TextView) (view.findViewById(R.id.enter_mode));

@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Common_Class {
-    public static String Version_Name="Ver 3.1.20";
+    public static String Version_Name="Ver 3.1.22";
     public static String Work_Type="0";
     public static Location location=null;
 
@@ -205,6 +205,12 @@ public class Common_Class {
         sdf = new SimpleDateFormat(pattern);
         Date resultdate = new Date(c.getTimeInMillis());
         dateInString = sdf.format(resultdate);
+        return dateInString;
+    }
+
+    public String getDateWithFormat(Date date, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String dateInString = sdf.format(date);
         return dateInString;
     }
 

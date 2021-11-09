@@ -136,7 +136,39 @@
             android:layout_marginRight="@dimen/C5dp"
             android:orientation="vertical"
             android:paddingTop="@dimen/C8dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C5dp"
+                app:cardCornerRadius="@dimen/C4dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/C8dp"
+                android:paddingRight="@dimen/C8dp"
+                android:paddingBottom="@dimen/C5dp"
+                android:paddingTop="@dimen/C5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:letterSpacing="0.09"
+                    android:text="Date"
+                    android:layout_weight="1"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/txtOrdDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="13sp"
+                    android:letterSpacing="0.09"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+            </LinearLayout>
+            </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_date"
                 android:layout_width="match_parent"
@@ -147,10 +179,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/C8dp"
-                    android:layout_marginBottom="@dimen/C8dp"
-                    android:padding="@dimen/C5dp">
-
+                    android:layout_marginTop="@dimen/C2dp"
+                    android:layout_marginBottom="@dimen/C5dp"
+                    android:paddingLeft="@dimen/C5dp"
+                    android:paddingRight="@dimen/C5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Over All"
+                        android:textSize="13sp"
+                        android:letterSpacing="0.09"
+                        android:paddingLeft="@dimen/C8dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:background="@color/grey_200"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -582,7 +630,8 @@
                     android:layout_width="@dimen/C20dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/C3dp"
-                    android:src="@drawable/ic_search_icon" />
+                    android:src="@drawable/ic_search_icon"
+                    app:tint="@color/colorPrimaryDark"/>
 
                 <EditText
                     android:id="@+id/txSearchRet"
@@ -619,6 +668,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:background="@drawable/blue_bg"
+
                         app:tabGravity="fill"
                         app:tabIndicatorColor="@android:color/white"
                         app:tabIndicatorHeight="2dp" />
@@ -669,7 +719,7 @@
 
         <TextView
             android:id="@+id/ReachedOutlet"
-            style="@style/ButtonStyle"
+            style="@style/BottomButton"
             android:text="Reached Outlet" />
     </LinearLayout>
 </RelativeLayout>

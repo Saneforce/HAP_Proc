@@ -463,14 +463,15 @@
 
                 <LinearLayout
                     android:id="@+id/lin_order"
-                    style="@style/ButtonStyle"
+                    style="@style/BottomButton"
                     android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_order_24" />
+                        android:src="@drawable/ic_order_24"
+                        app:tint="#fff"/>
 
                     <TextView
 
@@ -480,7 +481,8 @@
                         android:paddingLeft="@dimen/C5dp"
                         android:text="ORDER"
                         android:textSize="11sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="#fff"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -512,14 +514,15 @@
 
                 <LinearLayout
                     android:id="@+id/lin_invoice"
-                    style="@style/ButtonStyle"
+                    style="@style/BottomButton"
                     android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_invoice_24">
+                        android:src="@drawable/ic_invoice_24"
+                        app:tint="@color/white">
 
                     </ImageView>
 
@@ -531,19 +534,21 @@
                         android:paddingLeft="@dimen/C5dp"
                         android:text="INVOICE"
                         android:textSize="11sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lin_noOrder"
-                    style="@style/ButtonStyle"
+                    style="@style/BottomButton"
                     android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_noorder_24" />
+                        android:src="@drawable/ic_noorder_24"
+                        app:tint="@color/white"/>
 
                     <TextView
                         android:id="@+id/tvNoorder"
@@ -554,19 +559,21 @@
                         android:text="No Order"
                         android:textAllCaps="true"
                         android:textSize="11sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lin_payment"
-                    style="@style/ButtonStyle"
+                    style="@style/BottomButton"
                     android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_payment_24" />
+                        android:src="@drawable/ic_payment_24"
+                        app:tint="@color/white"/>
 
                     <TextView
                         android:id="@+id/tvPayment"
@@ -576,7 +583,8 @@
                         android:paddingLeft="@dimen/C5dp"
                         android:text="PAYMENT"
                         android:textSize="11sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
                 </LinearLayout>
 
                 <LinearLayout

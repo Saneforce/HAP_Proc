@@ -40,9 +40,12 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.adapters.HAPListItem;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -51,6 +54,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.security.PrivateKey;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -104,8 +108,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(Order_Category_Select.this);
             common_class = new Common_Class(this);
-            /*Grpgrid = findViewById(R.id.PGroup);
-            Brndgrid = findViewById(R.id.PBrnd);*/
+            Grpgrid = findViewById(R.id.PGroup);
+            Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
@@ -126,6 +130,25 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             etCategoryItemSearch = findViewById(R.id.searchView);
             tvTimer = findViewById(R.id.tvTimer);
 
+            JSONArray ProdGroups= db.getMasterData(Constants.ProdGroups_List);
+            LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
+            GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            Grpgrid.setLayoutManager(GrpgridlayManager);
+
+            RyclListItemAdb grplistItems=new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+
+                    try {
+                        FilterTypes(item.getString("id"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            Grpgrid.setAdapter(grplistItems);
+
+            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             Product_ModalSetAdapter = new ArrayList<>();
@@ -374,7 +397,33 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         }
     }
+    private void FilterTypes( String GrpID ){
+        try {
+            JSONArray TypGroups= new JSONArray();
+            JSONArray tTypGroups= db.getMasterData(Constants.ProdTypes_List);
+            LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
+            TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            Brndgrid.setLayoutManager(TypgridlayManager);
+            for (int i = 0; i < tTypGroups.length(); i++) {
 
+                JSONObject ritm = tTypGroups.getJSONObject(i);
+                if(ritm.getString("id").equalsIgnoreCase(GrpID)){
+                    TypGroups.put(ritm);
+                }
+            }
+
+
+            RyclListItemAdb TyplistItems=new RyclListItemAdb(TypGroups, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+
+                }
+            });
+            Brndgrid.setAdapter(TyplistItems);
+        } catch (JSONException e) {
+                    e.printStackTrace();
+        }
+    }
     private void GetJsonData(String jsonResponse, String type) {
 
         //type =1 product category data values
@@ -971,14 +1020,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     @Override
                     public void onClick(View v) {
                         if (pholder != null) {
-                            pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                            pholder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                            pholder.icon.setTextColor(getResources().getColor(R.color.black));
                             pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                             pholder.undrCate.setVisibility(View.GONE);
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
                         showOrderItemList(holder.getAdapterPosition());
-
+                        holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                         holder.undrCate.setVisibility(View.VISIBLE);
@@ -988,12 +1038,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 if (position == selectedPos) {
 
+                    holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                     holder.undrCate.setVisibility(View.VISIBLE);
                     pholder = holder;
                 } else {
-                    holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                    holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                    holder.icon.setTextColor(getResources().getColor(R.color.black));
                     holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
                 }
@@ -1377,7 +1429,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                             if (CategoryType == -1) {
                                 if (holder.Amount.getText().toString().equals("₹0.00")) {
-                                    Product_Details_Modalitem.remove(position);
+                                    Product_Details_Modalitem.remove(holder.getAdapterPosition());
                                     notifyDataSetChanged();
                                 }
 

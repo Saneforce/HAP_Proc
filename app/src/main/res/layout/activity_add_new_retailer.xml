@@ -475,10 +475,11 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginRight="@dimen/C10dp"
                                     android:background="@drawable/button_blueg"
+                                    android:textColor="@color/white"
                                     android:paddingLeft="15dp"
                                     android:paddingRight="15dp"
                                     android:text="Refresh Location"
-                                    android:textColor="@android:color/white"
+                                    android:textSize="13sp"
                                     android:theme="@style/BluePrimaryButton"
                                     app:finalCornerAngle="50dp"
                                     app:initialCornerAngle="10dp"
@@ -486,7 +487,6 @@
                                     app:spinning_bar_padding="5dp"
                                     app:spinning_bar_width="5dp"
                                     android:textAlignment="center"
-                                    android:textStyle="bold"
                                     tools:ignore="RtlCompat" />
                             </LinearLayout>
 
@@ -1109,7 +1109,7 @@
         <Button
 
             android:id="@+id/submit_button"
-            style="@style/ButtonStyle"
+            style="@style/BottomButton"
             android:text="Save"
 
             />

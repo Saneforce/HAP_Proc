@@ -270,6 +270,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             btnGateIn.setVisibility(View.GONE);
             btnGateOut.setVisibility(View.GONE);
             cardGateDet.setVisibility(View.GONE);
+            StActivity.setVisibility(View.VISIBLE);
 
             btnExit.setVisibility(View.GONE);
             if (getIntent().getExtras() != null) {
@@ -280,14 +281,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     cardview3.setVisibility(View.VISIBLE);
                     cardview4.setVisibility(View.VISIBLE);
                     //cardView5.setVisibility(View.VISIBLE);
-                    StActivity.setVisibility(View.VISIBLE);
                     btnCheckout.setVisibility(View.VISIBLE);
                     btnApprovals.setVisibility(View.VISIBLE);
                 } else {
                     cardview3.setVisibility(View.GONE);
                     // cardview4.setVisibility(View.GONE);
                     cardView5.setVisibility(View.GONE);
-                    StActivity.setVisibility(View.GONE);
+                    //StActivity.setVisibility(View.GONE);
                     btnCheckout.setVisibility(View.GONE);
                     btnExit.setVisibility(View.VISIBLE);
                     //               btnApprovals.setVisibility(View.GONE);
@@ -296,7 +296,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 cardview3.setVisibility(View.GONE);
                 //cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
-                StActivity.setVisibility(View.GONE);
+                //StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
             }
             if (sSFType.equals("0"))

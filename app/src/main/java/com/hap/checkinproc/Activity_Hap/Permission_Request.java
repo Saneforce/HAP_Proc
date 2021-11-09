@@ -249,9 +249,11 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                     if(sftSTime.getTime()<=fTime.getTime() && fTime.getTime()<=sftETime.getTime()){
                                         StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sHour, sMinute);
                                         eText.setText(String.format("%02d:%02d", sHour, sMinute));
+                                        FTime=String.format("%02d:%02d", sHour, sMinute);
                                     }else{
                                         eText.setText("");
                                         eText2.setText("");
+                                        FTime="";
                                         Toast.makeText(Permission_Request.this, "Please Choose the time between the Shifttime", Toast.LENGTH_SHORT).show();
                                     }
                                     ToTimeData();

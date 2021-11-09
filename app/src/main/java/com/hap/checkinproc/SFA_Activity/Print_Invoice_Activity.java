@@ -120,7 +120,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
-                tvOrderType.setText("TAX INVOICE");
+                tvOrderType.setText("INVOICE");
             }
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
@@ -354,11 +354,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.DKGRAY);
             paint.setTextSize(14);
             y = y + 20;
-            canvas.drawText("Nandanam", x, y, paint);
+            canvas.drawText(retailerroute.getText().toString(), x, y, paint);
             y = y + 20;
-            canvas.drawText("No 4,Lotus colony,Nandanam", x, y, paint);
+            canvas.drawText(retaileAddress.getText().toString(), x, y, paint);
             y = y + 20;
-            canvas.drawText("Chennai 600028", x, y, paint);
 
             y = y + 20;
             paint.setColor(Color.BLACK);

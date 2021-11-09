@@ -67,18 +67,18 @@
 
             <Button
                 android:id="@+id/lin_myday_plan"
-                style="@style/ButtonStyle"
+                style="@style/DashboardButton"
                 android:background="@drawable/g_sign"
                 android:text="My day plan" />
             <Button
                 android:id="@+id/lin_check_in"
-                style="@style/ButtonStyle"
+                style="@style/DashboardButton"
                 android:background="@drawable/button_green"
                 android:text="Check-In"
                 android:visibility="gone" />
             <Button
                 android:id="@+id/lin_RecheckIn"
-                style="@style/ButtonStyle"
+                style="@style/DashboardButton"
                 android:background="@drawable/button_orange"
                 android:text="Re-Call"
                 android:visibility="gone" />
@@ -96,21 +96,21 @@
 
                 <Button
                     android:id="@+id/lin_request_status"
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:background="@drawable/button_amber"
                     android:text="Requests &amp; Status"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button
                     android:id="@+id/lin_report"
-                    style="@style/ButtonStyle"
-                    android:background="@drawable/button_blueg"
+                    style="@style/DashboardButton"
+                    android:background="@drawable/button_dblue"
                     android:text="My DashBoard"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button
                     android:id="@+id/lin_onduty"
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:background="@drawable/button_blue"
                     android:text="On-Duty "
                     app:layout_flexBasisPercent="47%" />
@@ -156,28 +156,28 @@
 
                 <Button
                     android:id="@+id/lin_ta_claim"
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:background="@drawable/button_purple"
                     android:text="TA &amp; Claim"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button
                     android:id="@+id/lin_extenden_shift"
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:background="@drawable/button_orange"
                     android:text="Extended Shift"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button
                     android:id="@+id/lin_tour_plan"
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:background="@drawable/g_sign"
                     android:text="Work Plan - PJP"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button
                     android:id="@+id/lin_holiday_working"
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:background="@drawable/button_green"
                     android:text="Holiday Working"
                     app:layout_flexBasisPercent="47%" />
@@ -186,7 +186,7 @@
 
             <Button
                 android:id="@+id/lin_exit"
-                style="@style/ButtonStyle"
+                style="@style/DashboardButton"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_check_out"
                 android:text="Exit" />

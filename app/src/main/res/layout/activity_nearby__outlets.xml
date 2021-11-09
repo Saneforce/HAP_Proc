@@ -334,11 +334,11 @@
                         android:paddingLeft="@dimen/C8dp"
                         android:paddingRight="@dimen/C8dp"
                         android:src="@drawable/back_arrow"
-                        android:visibility="gone"></ImageView>
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/Createoutlet"
-                        style="@style/ButtonStyle"
+                        style="@style/BottomButton"
                         android:text="Create Outlet" />
                 </LinearLayout>
             </LinearLayout>

@@ -77,14 +77,14 @@
                 android:layout_margin="5dp"
                 android:orientation="horizontal">
                 <Button
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:id="@+id/btn_approve"
                     android:layout_weight="1"
                     android:background="@drawable/button_green"
                     android:text="Approve" />
 
                 <Button
-                    style="@style/ButtonStyle"
+                    style="@style/DashboardButton"
                     android:id="@+id/btn_reject"
                     android:layout_weight="1"
                     android:background="@drawable/button_amber"

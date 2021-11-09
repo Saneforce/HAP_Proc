@@ -534,7 +534,7 @@
 
 
             <LinearLayout
-                style="@style/ButtonStyle"
+                style="@style/DashboardButton"
                 android:background="@drawable/button_greenbg"
                 android:orientation="horizontal"
                 android:weightSum="3">
@@ -684,7 +684,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/C5dp"
                 android:src="@drawable/ic_round_shopping_bag_24"
-                app:tint="@color/white"></ImageView>
+                app:tint="@color/black"/>
 
             <TextView
                 android:id="@+id/tvCart"
@@ -693,7 +693,7 @@
                 android:layout_toRightOf="@+id/ivCart"
                 android:gravity="center_vertical"
                 android:text="|"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:visibility="gone">
 
 
@@ -711,7 +711,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Items : 0"
-                    android:textColor="@color/white">
+                    android:textColor="@color/black">
 
                 </TextView>
 
@@ -721,7 +721,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text=" ₹ : 0"
-                    android:textColor="@color/white">
+                    android:textColor="@color/black">
 
                 </TextView>
 
@@ -737,7 +737,7 @@
                 android:layout_marginRight="@dimen/C15dp"
                 android:drawableTint="@color/white"
                 android:text="PROCEED TO CART"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 

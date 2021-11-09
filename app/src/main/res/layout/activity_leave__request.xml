@@ -669,7 +669,6 @@
                 android:gravity="center_vertical"
                 android:text="SUBMIT"
                 android:textAlignment="center"
-                android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat" />
 

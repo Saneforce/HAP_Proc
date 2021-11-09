@@ -124,7 +124,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }
-
+        if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
+            DistLocation.setVisibility(View.GONE);
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
 
@@ -132,49 +133,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
         getNoOrderRemarks();
-        getProductDetails();
         showDashboardData();
 
     }
 
 
-    public void getProductDetails() {
-        if (common_class.isNetworkAvailable(this)) {
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("div", UserDetails.getString("Divcode", ""));
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.Category_List);
-                        db.addMasterData(Constants.Category_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.Product_List);
-                        db.addMasterData(Constants.Product_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
@@ -227,8 +190,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
-
     private void getNoOrderRemarks() {
         try {
             if (common_class.isNetworkAvailable(this)) {
@@ -388,7 +349,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     void showDashboardData() {
         common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
-        common_class.getDb_310Data(Constants.SERVICEOUTLET, this);
+        //common_class.getDb_310Data(Constants.SERVICEOUTLET, this);
         common_class.getDb_310Data(Constants.OUTLET_SUMMARY, this);
         common_class.getDb_310Data(Constants.SFA_DASHBOARD, this);
 
@@ -454,7 +415,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                     cumulative_order_modelList);
 
                             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            //layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                             recyclerView.setLayoutManager(layoutManager);
 
 

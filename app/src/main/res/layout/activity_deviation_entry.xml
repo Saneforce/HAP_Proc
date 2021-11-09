@@ -132,9 +132,8 @@
             android:layout_alignParentBottom="true"
             >
             <Button
-                style="@style/ButtonStyle"
+                style="@style/BottomButton"
                 android:id="@+id/deviation_submit"
-                android:background="@drawable/button_blueg"
                 android:text="SUBMIT" />
 
             <ImageView

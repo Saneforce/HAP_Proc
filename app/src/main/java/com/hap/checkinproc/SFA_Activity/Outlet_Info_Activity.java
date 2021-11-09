@@ -10,8 +10,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,6 +58,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     DatabaseHandler db;
     String TAG = "OUTLET_INFO_Activity:";
     private TextView distributor_text;
+    Switch swACOutlet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             distributor_text = findViewById(R.id.distributor_text);
 
             txSearchRet = findViewById(R.id.txSearchRet);
+            swACOutlet = findViewById(R.id.swACOutlet);
 
             route_text.setOnClickListener(this);
             reachedoutlets.setOnClickListener(this);
@@ -129,7 +133,12 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                     reloadData();
                 }
             });
-
+            swACOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reloadData();
+                }
+            });
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                 distributor_text.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
@@ -151,7 +160,14 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
             String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
             String sSchText = txSearchRet.getText().toString().toUpperCase();
-            if ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId)))) {
+            boolean ACTrue=false;
+            if(swACOutlet.isChecked()) {
+               if(Retailer_Modal_List.get(sr).getDelivType()!=null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
+                ACTrue=true;
+            }else{
+                ACTrue=true;
+            }
+            if (ACTrue==true && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
             }
         }

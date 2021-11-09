@@ -580,29 +580,29 @@
                         android:layout_marginTop="@dimen/C20dp">
                         <Button
                         android:id="@+id/haplocationbutton"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:background="@drawable/otherlocations"
                             android:text="HAP Locations" />
                         <Button
                             android:id="@+id/otherlocationbutton"
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:background="@drawable/other_location"
                             android:text="Other Location" />
                         <Button
                             android:id="@+id/exitclose"
-                            style="@style/ButtonStyle"
+                            style="@style/DashboardButton"
                             android:background="@drawable/button_check_out"
                             android:text="Exit" />
                     </LinearLayout>
                     <Button
                         android:id="@+id/submitbutton"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:background="@drawable/other_location"
                         android:text="Submit"
                         android:visibility="gone" />
                     <Button
                         android:id="@+id/closebutton"
-                        style="@style/ButtonStyle"
+                        style="@style/DashboardButton"
                         android:background="@drawable/button_check_out"
                         android:text="Close"
                         android:visibility="gone" />

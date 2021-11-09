@@ -61,7 +61,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String title = (position == 0) ? "To be - " : position == 1 ? "Invoice - " : position == 2 ? "Order - " : "No Order - ";
+        String title = (position == 0) ? "BTG - " : position == 1 ? "Invoice - " : position == 2 ? "Order - " : "No Order - ";
         OutletFilter(position);
         title = title + Retailer_Modal_ListFilter.size();
         return title;
@@ -76,7 +76,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         if (mRetailer_Modal_List != null) {
             String val = shared_common_pref.getvalue(Constants.RETAILER_STATUS);
-            String sMode = flag == 0 ? "To be" : flag == 1 ? "invoice" : flag == 2 ? "order" : "no order";
+            String sMode = flag == 0 ? "BTG" : flag == 1 ? "invoice" : flag == 2 ? "order" : "no order";
 
             for (int i = 0; i < mRetailer_Modal_List.size(); i++) {
 
