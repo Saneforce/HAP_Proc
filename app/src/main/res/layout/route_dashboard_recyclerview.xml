@@ -60,38 +60,46 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
+
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
+
                         <TextView
+                            android:drawablePadding="@dimen/C10dp"
                             android:id="@+id/retailername"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:drawablePadding="@dimen/C5dp"
+                            android:drawableRight="@drawable/ic_round_fiber_new_24"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="A.M.Snacks"
+                            android:text="A.M."
                             android:textColor="@color/black"
                             android:textSize="16dp"
                             android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/btnEditRet"
-                            android:layout_width="35dp"
-                            android:layout_height="25dp"
-                            android:layout_toRightOf="@id/retailername"
-                            android:paddingLeft="@dimen/C15dp"
-                            android:paddingRight="@dimen/C5dp"
-                            android:paddingTop="@dimen/C5dp"
-                            android:paddingBottom="@dimen/C5dp"
-                            android:src="@drawable/edit_small" />
+
+
+
 
                     </RelativeLayout>
 
+
+                    <ImageView
+                        android:id="@+id/btnEditRet"
+                        android:layout_width="35dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:paddingLeft="@dimen/C5dp"
+                        android:paddingTop="@dimen/C5dp"
+                        android:paddingRight="@dimen/C5dp"
+                        android:paddingBottom="@dimen/C5dp"
+                        android:src="@drawable/edit_small" />
 
                     <TextView
                         android:id="@+id/retailorCode"

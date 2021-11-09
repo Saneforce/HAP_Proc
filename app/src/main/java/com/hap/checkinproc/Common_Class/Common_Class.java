@@ -215,6 +215,7 @@ public class Common_Class {
     }
 
 
+
     public void makeCall(int mobilenumber) {
         final int REQUEST_PHONE_CALL = 1;
         Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -560,6 +561,18 @@ public class Common_Class {
                         break;
                     case Constants.STATE_LIST:
                         axnname = "get/states";
+                        break;
+                    case Constants.Category_List:
+                        axnname = "get/prodCate";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
+                    case Constants.Product_List:
+                        axnname = "get/prodDets";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
                         break;
                 }
 

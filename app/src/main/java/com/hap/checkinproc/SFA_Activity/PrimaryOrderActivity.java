@@ -131,6 +131,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
             llTdPriOrd.setOnClickListener(this);
+            Category_Nametext.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
@@ -139,26 +140,12 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
+            common_class.getDb_310Data(Constants.Category_List, this);
+            common_class.getDb_310Data(Constants.Product_List, this);
 
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1");
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
-            userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-            }.getType();
-            Product_Modal = gson.fromJson(OrdersTable, userType);
-
-            PrimaryOrderActivity.CategoryAdapter customAdapteravail = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
-                    Category_Modal);
-            categorygrid.setAdapter(customAdapteravail);
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
-
-            Log.v(TAG, " order oncreate:h ");
-
-            showOrderItemList(0);
-
-            Log.v(TAG, " order oncreate:i ");
-
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -169,7 +156,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    showOrderFilterItem(selectedPos, s.toString());
+                    showOrderItemList(selectedPos, s.toString());
 
                 }
 
@@ -262,11 +249,12 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             case R.id.ivClose:
                 findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
                 findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
+                etCategoryItemSearch.setText("");
+                showOrderItemList(selectedPos, "");
                 break;
 
             case R.id.takeorder:
                 try {
-
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                         Date d1 = sdf.parse(Common_Class.GetTime());
@@ -473,9 +461,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
                                     if (san.equals("true")) {
-
                                         Toast.makeText(PrimaryOrderActivity.this, "Primary Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-
                                         finish();
                                     }
 
@@ -635,33 +621,16 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    public void showOrderItemList(int categoryPos, String filterString) {
 
-    public void showOrderFilterItem(int categoryPos, String filterString) {
-        categoryPos = selectedPos;
         Product_ModalSetAdapter.clear();
         for (Product_Details_Modal personNpi : Product_Modal) {
             if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
+                if (Common_Class.isNullOrEmpty(filterString))
                     Product_ModalSetAdapter.add(personNpi);
-            }
-        }
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        Category_Nametext.setVisibility(View.VISIBLE);
-        Category_Nametext.setText(listt.get(categoryPos).getName());
+                else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
+                    Product_ModalSetAdapter.add(personNpi);
 
-
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
-        recyclerView.setAdapter(mProdct_Adapter);
-
-        Category_Nametext.setOnClickListener(this);
-    }
-
-    public void showOrderItemList(int categoryPos) {
-
-        Product_ModalSetAdapter.clear();
-        for (Product_Details_Modal personNpi : Product_Modal) {
-            if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                Product_ModalSetAdapter.add(personNpi);
             }
         }
         // lin_gridcategory.setVisibility(View.GONE);
@@ -676,13 +645,28 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos).notifyDataSetChanged();
         recyclerView.setItemViewCacheSize(Product_ModalSetAdapter.size());
 
-        Category_Nametext.setOnClickListener(this);
+
 
     }
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+
+        switch (key) {
+            case Constants.Category_List:
+                GetJsonData(sharedCommonPref.getvalue(Constants.Category_List), "1");
+                PrimaryOrderActivity.CategoryAdapter customAdapteravail = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
+                        Category_Modal);
+                categorygrid.setAdapter(customAdapteravail);
+                break;
+            case Constants.Product_List:
+                String OrdersTable = sharedCommonPref.getvalue(Constants.Product_List);
+                userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                }.getType();
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+                showOrderItemList(0, "");
+                break;
+        }
 
     }
 
@@ -714,7 +698,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         takeorder.setText("PROCEED TO CART");
 
-        showOrderItemList(selectedPos);
+        showOrderItemList(selectedPos, "");
 
 
     }
@@ -768,14 +752,16 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onClick(View v) {
                         if (pholder != null) {
-                            pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                            pholder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                            pholder.icon.setTextColor(getResources().getColor(R.color.black));
                             pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                             pholder.undrCate.setVisibility(View.GONE);
+
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
-                        showOrderItemList(holder.getAdapterPosition());
-
+                        showOrderItemList(holder.getAdapterPosition(), "");
+                        holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                         holder.undrCate.setVisibility(View.VISIBLE);
@@ -784,13 +770,14 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
 
                 if (position == selectedPos) {
-
+                    holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                     holder.undrCate.setVisibility(View.VISIBLE);
                     pholder = holder;
                 } else {
-                    holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                    holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                    holder.icon.setTextColor(getResources().getColor(R.color.black));
                     holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
                 }

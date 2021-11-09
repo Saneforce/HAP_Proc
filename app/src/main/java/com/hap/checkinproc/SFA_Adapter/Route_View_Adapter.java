@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
@@ -52,13 +53,12 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
         LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection;
-        ImageView icMob,btnEditRet;
+        ImageView icMob, btnEditRet;
         RecyclerView lstTdyView, lstPreView;
 
 
         public MyViewHolder(View view) {
             super(view);
-
             try {
 
                 textviewname = view.findViewById(R.id.retailername);
@@ -67,7 +67,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 invoicedate = view.findViewById(R.id.invoicedate);
                 tvRetailorCode = view.findViewById(R.id.retailorCode);
                 txRetNo = view.findViewById(R.id.txRetNo);
-                btnEditRet=view.findViewById(R.id.btnEditRet);
+                btnEditRet = view.findViewById(R.id.btnEditRet);
                 tvFirstMonth = view.findViewById(R.id.tvLMFirst);
                 tvSecondMnth = view.findViewById(R.id.tvLMSecond);
                 tvThirdMnth = view.findViewById(R.id.tvLMThree);
@@ -94,6 +94,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
+
 
                 linDistance.setVisibility(View.GONE);
                 txDistName.setVisibility(View.GONE);
@@ -157,6 +158,12 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             if (mRetailer_Modal_List.getPrimary_No().equalsIgnoreCase("")) {
                 holder.icMob.setVisibility(View.GONE);
             }
+
+
+            if (mRetailer_Modal_List.getInvoiceDate().equalsIgnoreCase("-"))
+                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            else
+                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_round_fiber_new_24, 0);
 
 
 //            if (mRetailer_Modal_List.getStatusname() != null) {

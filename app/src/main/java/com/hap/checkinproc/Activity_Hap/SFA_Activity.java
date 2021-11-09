@@ -44,7 +44,6 @@ import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -138,7 +137,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
     }
@@ -190,6 +188,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
     private void getNoOrderRemarks() {
         try {
             if (common_class.isNetworkAvailable(this)) {

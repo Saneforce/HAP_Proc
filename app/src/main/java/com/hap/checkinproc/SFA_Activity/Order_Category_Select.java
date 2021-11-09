@@ -45,7 +45,6 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.adapters.HAPListItem;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -54,7 +53,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.security.PrivateKey;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -130,12 +128,12 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             etCategoryItemSearch = findViewById(R.id.searchView);
             tvTimer = findViewById(R.id.tvTimer);
 
-            JSONArray ProdGroups= db.getMasterData(Constants.ProdGroups_List);
+            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
 
-            RyclListItemAdb grplistItems=new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
 
@@ -182,13 +180,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             Log.v(TAG, " order oncreate:h ");
 
-            showOrderItemList(0);
+            showOrderItemList(0, "");
 
             Log.v(TAG, " order oncreate:i ");
             tvOtherBrand.setOnClickListener(this);
             tvQPS.setOnClickListener(this);
             tvPOP.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
+            Category_Nametext.setOnClickListener(this);
 
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
 
@@ -201,8 +200,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    showOrderFilterItem(selectedPos, s.toString());
+                    showOrderItemList(selectedPos, s.toString());
 
                 }
 
@@ -397,23 +395,24 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         }
     }
-    private void FilterTypes( String GrpID ){
+
+    private void FilterTypes(String GrpID) {
         try {
-            JSONArray TypGroups= new JSONArray();
-            JSONArray tTypGroups= db.getMasterData(Constants.ProdTypes_List);
+            JSONArray TypGroups = new JSONArray();
+            JSONArray tTypGroups = db.getMasterData(Constants.ProdTypes_List);
             LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
             TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Brndgrid.setLayoutManager(TypgridlayManager);
             for (int i = 0; i < tTypGroups.length(); i++) {
 
                 JSONObject ritm = tTypGroups.getJSONObject(i);
-                if(ritm.getString("id").equalsIgnoreCase(GrpID)){
+                if (ritm.getString("id").equalsIgnoreCase(GrpID)) {
                     TypGroups.put(ritm);
                 }
             }
 
 
-            RyclListItemAdb TyplistItems=new RyclListItemAdb(TypGroups, this, new onListItemClick() {
+            RyclListItemAdb TyplistItems = new RyclListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
 
@@ -421,9 +420,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             });
             Brndgrid.setAdapter(TyplistItems);
         } catch (JSONException e) {
-                    e.printStackTrace();
+            e.printStackTrace();
         }
     }
+
     private void GetJsonData(String jsonResponse, String type) {
 
         //type =1 product category data values
@@ -490,6 +490,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             case R.id.ivClose:
                 findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
                 findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
+                etCategoryItemSearch.setText("");
+                showOrderItemList(selectedPos, "");
                 break;
 
             case R.id.tvOtherBrand:
@@ -882,13 +884,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     }
 
-
-    public void showOrderFilterItem(int categoryPos, String filterString) {
+    public void showOrderItemList(int categoryPos, String filterString) {
         categoryPos = selectedPos;
         Product_ModalSetAdapter.clear();
         for (Product_Details_Modal personNpi : Product_Modal) {
             if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
+                if (Common_Class.isNullOrEmpty(filterString))
+                    Product_ModalSetAdapter.add(personNpi);
+                else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
                     Product_ModalSetAdapter.add(personNpi);
             }
         }
@@ -896,39 +899,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Category_Nametext.setVisibility(View.VISIBLE);
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
-
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
-
         recyclerView.setAdapter(mProdct_Adapter);
         new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos).notifyDataSetChanged();
         recyclerView.setItemViewCacheSize(Product_ModalSetAdapter.size());
-
-
-        Category_Nametext.setOnClickListener(this);
-    }
-
-    public void showOrderItemList(int categoryPos) {
-
-        Product_ModalSetAdapter.clear();
-        for (Product_Details_Modal personNpi : Product_Modal) {
-            if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                Product_ModalSetAdapter.add(personNpi);
-            }
-        }
-        // lin_gridcategory.setVisibility(View.GONE);
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        Category_Nametext.setVisibility(View.VISIBLE);
-        Category_Nametext.setText(listt.get(categoryPos).getName());
-
-
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
-
-        recyclerView.setAdapter(mProdct_Adapter);
-        new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos).notifyDataSetChanged();
-        recyclerView.setItemViewCacheSize(Product_ModalSetAdapter.size());
-
-        Category_Nametext.setOnClickListener(this);
-
     }
 
 
@@ -966,7 +940,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         takeorder.setText("PROCEED TO CART");
 
-        showOrderItemList(selectedPos);
+        showOrderItemList(selectedPos, "");
 
 
     }
@@ -1027,7 +1001,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
-                        showOrderItemList(holder.getAdapterPosition());
+                        showOrderItemList(holder.getAdapterPosition(), "");
                         holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);

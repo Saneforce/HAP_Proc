@@ -1,7 +1,5 @@
 package com.hap.checkinproc.SFA_Model_Class;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -143,6 +141,7 @@ public class Retailer_Modal_List {
     @Expose
     private String ERP_Code;
 
+
     public Retailer_Modal_List getRetailer_modal_list() {
         return retailer_modal_list;
     }
@@ -227,6 +226,10 @@ public class Retailer_Modal_List {
     public void setStatusname(String statusname) {
         Statusname = statusname;
     }
+
+
+
+
 
     public String getValuesinv() {
         return Valuesinv;
@@ -455,10 +458,10 @@ public class Retailer_Modal_List {
     private String Speciality;
     @SerializedName("Class")
     @Expose
-    private String 	Class;
+    private String Class;
     @SerializedName("Imagename")
     @Expose
-    private String 	Imagename;
+    private String Imagename;
 
     public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String pin_code, String gst, String reason_category, String category_Universe_Id) {
         this.id = id;

@@ -403,7 +403,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 break;
 
             case R.id.rlPayMode:
-
                 common_class.getDb_310Data(Constants.PAYMODES, this);
                 break;
 
@@ -414,12 +413,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             case R.id.ivClose:
                 findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
                 findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
-
+                etCategoryItemSearch.setText("");
+                showOrderItemList(selectedPos, "");
                 break;
 
-
             case R.id.takeorder:
-
                 if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                     if (Getorder_Array_List != null && Getorder_Array_List.size() > 0) {
                         takeorder.startAnimation();
@@ -445,9 +443,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         common_class.showMsg(this, "Your Cart is empty...");
                     }
                 } else {
-
                     showOrderList();
-
                 }
                 break;
 
@@ -833,7 +829,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             outstandAmt = jsonArray.getJSONObject(i).getDouble("Outstanding");
-                            if (outstandAmt<0) outstandAmt=Math.abs(outstandAmt); else outstandAmt=0-outstandAmt;
+                            if (outstandAmt < 0) outstandAmt = Math.abs(outstandAmt);
+                            else outstandAmt = 0 - outstandAmt;
                             tvOutStanding.setText("₹ " + formatter.format(outstandAmt));
                         }
 
@@ -948,35 +945,39 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     @Override
                     public void onClick(View v) {
                         if (pholder != null) {
-                            pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                            pholder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                            pholder.icon.setTextColor(getResources().getColor(R.color.black));
                             pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                             pholder.undrCate.setVisibility(View.GONE);
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
                         showOrderItemList(holder.getAdapterPosition(), "");
-
+                        holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                         holder.undrCate.setVisibility(View.VISIBLE);
+
                     }
                 });
 
 
                 if (position == selectedPos) {
 
+                    holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                     holder.undrCate.setVisibility(View.VISIBLE);
                     pholder = holder;
                 } else {
-                    holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                    holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                    holder.icon.setTextColor(getResources().getColor(R.color.black));
                     holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
                 }
 
-
-            } catch (Exception e) {
+            } catch (
+                    Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
 
