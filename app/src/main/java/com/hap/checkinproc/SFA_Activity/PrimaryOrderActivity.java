@@ -81,7 +81,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
-    String TAG = "Order_Category_Select";
+    String TAG = "PRIMARY_ORDER";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
@@ -146,6 +146,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
+            common_class.getDb_310Data(Constants.PRIMARY_SCHEME, this);
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -338,16 +339,14 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         JSONObject OutletItem = new JSONObject();
                         OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
                         OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
-                        OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
+                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
                         OutletItem.put("orderValue", formatter.format(totalvalues));
                         OutletItem.put("CashDiscount", cashDiscount);
                         OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                         OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
-                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "order");
 
                         if (strLoc.length > 0) {
@@ -381,6 +380,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getConversionFactor());
 
                             JSONArray tax_Details = new JSONArray();
 
@@ -450,7 +450,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.savePrimaryOrder(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -460,8 +460,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
+                                    common_class.showMsg(PrimaryOrderActivity.this, jsonObjects.getString("Msg"));
                                     if (san.equals("true")) {
-                                        Toast.makeText(PrimaryOrderActivity.this, "Primary Order Submitted Successfully", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
 
@@ -646,28 +646,68 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         recyclerView.setItemViewCacheSize(Product_ModalSetAdapter.size());
 
 
-
     }
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
 
-        switch (key) {
-            case Constants.Category_List:
-                GetJsonData(sharedCommonPref.getvalue(Constants.Category_List), "1");
-                PrimaryOrderActivity.CategoryAdapter customAdapteravail = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
-                        Category_Modal);
-                categorygrid.setAdapter(customAdapteravail);
-                break;
-            case Constants.Product_List:
-                String OrdersTable = sharedCommonPref.getvalue(Constants.Product_List);
-                userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                }.getType();
-                Product_Modal = gson.fromJson(OrdersTable, userType);
-                showOrderItemList(0, "");
-                break;
+            switch (key) {
+                case Constants.Category_List:
+                    GetJsonData(sharedCommonPref.getvalue(Constants.Category_List), "1");
+                    PrimaryOrderActivity.CategoryAdapter customAdapteravail = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
+                            Category_Modal);
+                    categorygrid.setAdapter(customAdapteravail);
+                    break;
+                case Constants.Product_List:
+                    String OrdersTable = sharedCommonPref.getvalue(Constants.Product_List);
+                    userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                    }.getType();
+                    Product_Modal = gson.fromJson(OrdersTable, userType);
+                    showOrderItemList(0, "");
+                    break;
+
+                case Constants.PRIMARY_SCHEME:
+
+                    JSONObject jsonObject = new JSONObject(apiDataResponse);
+
+                    if (jsonObject.getBoolean("success")) {
+
+
+                        Gson gson = new Gson();
+                        List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                        if (jsonArray != null && jsonArray.length() > 1) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                        jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                        Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
+                                        jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
+                                        jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+
+
+                            }
+                        }
+
+                        sharedCommonPref.save(Constants.PRIMARY_SCHEME, gson.toJson(product_details_modalArrayList));
+
+
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.PRIMARY_SCHEME);
+
+                    }
+                    break;
+
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
-
     }
 
     @Override
@@ -928,7 +968,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty);
+                            double totQty = (enterQty * Double.valueOf(Product_Details_Modalitem.get(position).getConversionFactor()));
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -941,7 +981,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             }
 
 
-                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+                            String strSchemeList = sharedCommonPref.getvalue(Constants.PRIMARY_SCHEME);
 
                             Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
                             }.getType();

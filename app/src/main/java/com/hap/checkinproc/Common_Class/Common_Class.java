@@ -215,7 +215,6 @@ public class Common_Class {
     }
 
 
-
     public void makeCall(int mobilenumber) {
         final int REQUEST_PHONE_CALL = 1;
         Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -327,6 +326,11 @@ public class Common_Class {
                     QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
                     QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
                     break;
+                case Constants.GetTodayPrimaryOrder_List:
+                    QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    break;
 
                 case Constants.Outlet_Total_Orders:
                     QuerySTring1 = "{\"tableName\":\"gettotaloutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -339,6 +343,13 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
+                case Constants.TodayPrimaryOrderDetails_List:
+                    QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
 
                 case Constants.Competitor_List:
                     QuerySTring1 = "{\"tableName\":\"get_compititordetails\"}";
@@ -524,6 +535,11 @@ public class Common_Class {
                     case Constants.FreeSchemeDiscList:
                         axnname = "get/secondaryscheme";
                         data.put("sfCode", Shared_Common_Pref.DistributorCode);
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        break;
+                    case Constants.PRIMARY_SCHEME:
+                        axnname = "get/primaryscheme";
+                        data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         break;
                     case Constants.PreOrderQtyList:

@@ -87,8 +87,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, ReachedOutlet, route_text,txtOrdDate,
-            txSrvOtlt, txUniOtlt, txSrvOtltCnt, txUniOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal;
+    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate,
+            txSrvOtlt, txUniOtlt, txSrvOtltCnt, txUniOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, undrUni, undrServ;
     Common_Model Model_Pojo;
@@ -170,6 +170,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             headtext = findViewById(R.id.headtext);
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
+            tvDistributor = findViewById(R.id.tvDistributer);
             textViewname = findViewById(R.id.textViewname);
             ReachedOutlet = findViewById(R.id.ReachedOutlet);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
@@ -187,7 +188,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             btSrvOtlt = findViewById(R.id.btSrvOtlt);
             btUniOtlt = findViewById(R.id.btUniOtlt);
             ivBtnRpt = findViewById(R.id.ivBtnRpt);
-            txtOrdDate=findViewById(R.id.txtOrdDate);
+            txtOrdDate = findViewById(R.id.txtOrdDate);
 
             smryOrd = findViewById(R.id.smryOrd);
             smryNOrd = findViewById(R.id.smryNOrd);
@@ -218,7 +219,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
                 }
             });
-            txtOrdDate.setText(DT.getDateWithFormat(new Date(),"dd-MMM-yyyy"));
+            txtOrdDate.setText(DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
             btSrvOtlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -290,6 +291,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+                tvDistributor.setText(shared_common_pref.getvalue(Constants.Distributor_name));
                 Distributor_Id = shared_common_pref.getvalue(Constants.Distributor_Id);
                 loadroute();
 
@@ -596,6 +598,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Distributor_Id = myDataset.get(position).getId();
             btnCmbRoute.setVisibility(View.VISIBLE);
             distributor_text.setText(myDataset.get(position).getName());
+            tvDistributor.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());

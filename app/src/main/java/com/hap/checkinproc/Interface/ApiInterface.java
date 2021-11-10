@@ -435,6 +435,10 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("db_v310.php?axn=save/primaryorder")
+    Call<JsonObject> savePrimaryOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
     @POST("db_v310.php?axn=save/invoice")
     Call<JsonObject> saveInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Query("loginType") String loginType, @Field("data") String toString);
 
