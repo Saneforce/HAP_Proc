@@ -718,7 +718,7 @@
                                     android:elevation="@dimen/C5dp"
                                     android:padding="1dp"
                                     android:text="View All"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/white"
                                     android:textFontWeight="900"
                                     android:textSize="12sp" />
 
