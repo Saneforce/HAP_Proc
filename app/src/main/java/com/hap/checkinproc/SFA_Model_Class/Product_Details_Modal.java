@@ -64,6 +64,10 @@ public class Product_Details_Modal {
     @Expose
     private String PImage;
 
+    @SerializedName("ConversionFactor")
+    @Expose
+    private String ConversionFactor;
+
     @SerializedName("CGST")
     @Expose
     private Double CGST;
@@ -553,5 +557,13 @@ public class Product_Details_Modal {
 
     public void setSBRate(Double SBRate) {
         this.SBRate = SBRate;
+    }
+
+    public String getConversionFactor() {
+        return ConversionFactor;
+    }
+
+    public void setConversionFactor(String conversionFactor) {
+        ConversionFactor = conversionFactor;
     }
 }

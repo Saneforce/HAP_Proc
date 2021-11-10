@@ -56,7 +56,7 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
         holder.txtOrderDate.setText("" + mDate.get(position).getOrderDate());
         holder.txtOrderID.setText(mDate.get(position).getOrderNo());
         holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
-        holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
+        holder.Itemcountinvoice.setText("" + mDate.get(position).getStatus());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

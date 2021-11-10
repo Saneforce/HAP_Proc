@@ -45,6 +45,7 @@ public class Constants {
 
     public static final String RetailorTodayDataDynamic = "retailorTodayDataDynamic";
     public static final String FreeSchemeDiscList = "freeSchemeDiscList";
+    public static final String PRIMARY_SCHEME = "primaryScheme";
     public static final String InvoiceQtyList = "InvoiceQtyList";
 
     public static final String TAXList = "taxList";
@@ -79,5 +80,7 @@ public class Constants {
     public static final String CHECKIN_TYPE = "CheckIn";
     public static final String DISTRIBUTER_TYPE = "Distributor";
     public static final String PRIMARY_ORDER = "primaryOrder";
-    public static final String CUTOFF_TIME ="cutOffTime" ;
+    public static final String CUTOFF_TIME = "cutOffTime";
+    public static final String GetTodayPrimaryOrder_List = "getTodayPrimaryOrderList";
+    public static final String TodayPrimaryOrderDetails_List="todayPrimaryOrderDetail";
 }

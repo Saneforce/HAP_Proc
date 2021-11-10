@@ -75,7 +75,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
             common_class = new Common_Class(this);
 
-            common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
 
             netamount = findViewById(R.id.netamount);
             back = findViewById(R.id.back);
@@ -113,14 +112,17 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
                 tvOrderType.setText("ORDER");
+                common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
                 tvOrderType.setText("PRIMARY ORDER");
+                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
 
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 tvOrderType.setText("INVOICE");
+                common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             }
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
@@ -546,6 +548,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
                 switch (key) {
                     case Constants.TodayOrderDetails_List:
+                        orderInvoiceDetailData(apiDataResponse);
+                        break;
+                    case Constants.TodayPrimaryOrderDetails_List:
                         orderInvoiceDetailData(apiDataResponse);
                         break;
                     case Constants.OUTSTANDING:

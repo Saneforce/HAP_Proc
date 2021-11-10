@@ -61,7 +61,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
-            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+            common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, this, false);
 
         } catch (Exception e) {
 
@@ -92,15 +92,14 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
                 switch (key) {
 
-                    case Constants.GetTodayOrder_List:
+                    case Constants.GetTodayPrimaryOrder_List:
                         userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
                         }.getType();
                         OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);
                         if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
                             for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                                if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
-                                    FilterOrderList.add(filterlist);
-                                }
+                                FilterOrderList.add(filterlist);
+
                             }
                         }
 
