@@ -341,7 +341,7 @@ public class Login extends AppCompatActivity {
                 String ActStarted = shared_common_pref.getvalue("ActivityStart");
 
                 if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
-                    Shared_Common_Pref.LOGINTYPE=Constants.DISTRIBUTER_TYPE;
+                    Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                     startActivity(new Intent(this, SFA_Activity.class));
                 } else {
                     if (ActStarted.equalsIgnoreCase("true")) {
@@ -550,8 +550,8 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        //eMail = "ciadmin@hap.in";
-        eMail = "1005675@hap.in";
+        eMail = "ciadmin@hap.in";
+        // eMail = "1005675@hap.in";
         //eMail = "haptest3@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
@@ -573,7 +573,7 @@ public class Login extends AppCompatActivity {
                             shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                             shared_common_pref.save(Constants.CUTOFF_TIME, response.body().getData().get(0).getCutoffTime());
-                            Shared_Common_Pref.LOGINTYPE=Constants.DISTRIBUTER_TYPE;
+                            Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                             //   editor.putString("Sf_Type", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Sfcode", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Divcode", response.body().getData().get(0).getDivisionCode());
@@ -606,7 +606,7 @@ public class Login extends AppCompatActivity {
 
                         } else {
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.CHECKIN_TYPE);
-                            Shared_Common_Pref.LOGINTYPE=Constants.CHECKIN_TYPE;
+                            Shared_Common_Pref.LOGINTYPE = Constants.CHECKIN_TYPE;
                             Intent intent = null;
                             Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                             JsonArray CinData = response.body().getCInData();

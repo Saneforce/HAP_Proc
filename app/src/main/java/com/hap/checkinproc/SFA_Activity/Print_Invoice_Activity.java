@@ -54,7 +54,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Product_Details_Modal> Order_Outlet_Filter;
     TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
-            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding;
+            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt;
 
     ImageView ok, ivPrint;
 
@@ -96,6 +96,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvOrderType = findViewById(R.id.tvTypeLabel);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
             tvOutstanding = findViewById(R.id.tvOutstanding);
+            tvPaidAmt = findViewById(R.id.tvPaidAmt);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -155,12 +156,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             case R.id.btnInvoice:
                 Shared_Common_Pref.Invoicetoorder = "4";
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
-
-                // getInvoiceOrderDetails();
                 break;
         }
     }
-
 
     public void printBill() {
         try {
@@ -307,7 +305,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             // connectedTo.setText(text);
         }
     }
-
 
     private void createPdf() {
         try {
@@ -541,7 +538,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     }
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -586,6 +582,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             InvoiceorderDetails_List = gson.fromJson(response, userType);
             Order_Outlet_Filter = new ArrayList<>();
             Order_Outlet_Filter.clear();
+
+
             int total_qtytext = 0;
             double subTotalVal = 0.00;
             for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
@@ -597,7 +595,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
                         "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(),
-                        ivl.getQty(), ivl.getValue(), taxList));
+                        ivl.getQty(), ivl.getValue(), taxList, ivl.getPaidAmount()));
 
 
             }
@@ -605,6 +603,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             totalitem.setText("" + Order_Outlet_Filter.size());
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
+            tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(0).getPaidAmount())));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 

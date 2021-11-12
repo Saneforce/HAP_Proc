@@ -353,14 +353,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                     if (explore == null) {
 
 
-//                                        for (int i = 0; i < resData.length(); i++) {
-//
-//                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
-//                                                resData.remove(i);
-//                                            }
-//                                        }
-
-
                                         resData = removeDuplicateItem(resData, placeIds);
 
 
@@ -385,14 +377,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                         resData = removeDuplicateItem(resData, placeIds);
 
                                         Log.v("markedPlace:2", "success: " + resData.length());
-
-
-//                                        for (int i = 0; i < resData.length(); i++) {
-//
-//                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
-//                                                resData.remove(i);
-//                                            }
-//                                        }
 
                                         Log.v("markedPlace:2", "filter: " + resData.length());
 

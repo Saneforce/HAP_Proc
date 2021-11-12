@@ -443,6 +443,12 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.MYTEAM_LOCATION:
+                        axnname = "get/myteamlocation";
+                        data.put("sfcode", jparam.get("sfcode").getAsString());
+                        data.put("date", jparam.get("date").getAsString());
+                        data.put("type", jparam.get("type").getAsString());
+                        break;
                     case Constants.PrimaryTAXList:
                         axnname = "get/primaryproducttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
