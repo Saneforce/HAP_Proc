@@ -30,7 +30,7 @@
                 android:layout_marginTop="@dimen/C3dp"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/profile_img" />
+                android:src="@drawable/ic_baseline_person_24" />
 
 
             <TextView
@@ -72,7 +72,7 @@
                 android:layout_marginTop="@dimen/C3dp"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/profile_img" />
+                android:src="@drawable/ic_baseline_person_24" />
 
 
             <TextView
@@ -114,7 +114,7 @@
                 android:layout_marginTop="@dimen/C3dp"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/profile_img" />
+                android:src="@drawable/ic_baseline_person_24" />
 
 
             <TextView
@@ -156,7 +156,7 @@
                 android:layout_marginTop="@dimen/C3dp"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/profile_img" />
+                android:src="@drawable/ic_baseline_person_24" />
 
 
             <TextView
@@ -198,7 +198,7 @@
                 android:layout_marginTop="@dimen/C3dp"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/profile_img" />
+                android:src="@drawable/ic_baseline_person_24" />
 
 
             <TextView

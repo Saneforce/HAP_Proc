@@ -775,29 +775,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
 
             shared_common_pref.save(Constants.PLACE_ID_URL, sb.toString());
-//
-//
-//            JSONArray jsonA = resData.getJSONObject(position).getJSONArray("photos");
-//
-//
-//            if (jsonA != null & jsonA.length() > 0) {
-//                JSONObject jo = jsonA.getJSONObject(0);
-//
-//                StringBuilder bu = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?photoreference=");
-//                bu.append(jo.getString("photo_reference"));
-//                bu.append("&sensor=false");
-//                bu.append("&maxheight=" + jo.getString("height"));
-//                bu.append("&maxwidth=" + jo.getString("width"));
-//                bu.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
-//
-//                shared_common_pref.save(Constants.SHOP_PHOTO, bu.toString());
-//            } else {
-//                shared_common_pref.save(Constants.SHOP_PHOTO, "");
-//
-//            }
+
         } catch (Exception e) {
             shared_common_pref.save(Constants.PLACE_ID_URL, "");
-            // shared_common_pref.save(Constants.SHOP_PHOTO, "");
+
         }
     }
 

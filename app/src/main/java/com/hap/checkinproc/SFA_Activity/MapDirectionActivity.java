@@ -101,9 +101,14 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 // clocation=location;
                 currentLocation = location;
                 fetchLocation();
-                DownloadTask downloadTask = new DownloadTask();
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
+
+                if (getIntent().getStringExtra(Constants.MAP_ROUTE).equalsIgnoreCase("")) {
+
+                } else {
+                    DownloadTask downloadTask = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
+                }
 
 
             }
@@ -299,7 +304,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 if (ReachedOutlet.getText().toString().contains("START")) {
                     try {
                         shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                     Uri gmmIntentUri = Uri.parse("google.navigation:q=" + getIntent().getStringExtra(Constants.DEST_LAT) + "," + getIntent().getStringExtra(Constants.DEST_LNG) + "&mode=l");
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
@@ -567,11 +573,9 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     }
                     mPolyline = mGoogleMap.addPolyline(lineOptions);
 
-
                     LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
                     Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
                             .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
 
                 } else
                     Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();

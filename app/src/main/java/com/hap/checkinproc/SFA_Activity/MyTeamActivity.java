@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +40,9 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.MyTeamCategoryAdapter;
+import com.hap.checkinproc.SFA_Adapter.MyTeamMapAdapter;
+import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
@@ -48,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MyTeamActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback, UpdateResponseUI, Master_Interface {
+public class MyTeamActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, UpdateResponseUI, Master_Interface, View.OnTouchListener {
 
 
     Common_Class common_class;
@@ -58,22 +62,26 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     SharedPreferences UserDetails, CheckInDetails;
     MapView mapView;
     GoogleMap map;
-    Boolean rev = false;
-    ArrayList<Marker> mark = new ArrayList<>();
 
+    ArrayList<Marker> mark = new ArrayList<>();
+    Boolean rev = false;
 
     double laty = 0.0, lngy = 0.0;
 
-    RelativeLayout vwRetails;
-
     private int _yDelta, ht;
-
     String TAG = "MyTeamActivity", CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
-    public static MyTeamActivity nearby_outlets;
+    public static MyTeamActivity myTeamActivity;
 
     private Marker marker;
     LinearLayout llZSM, llRSM, llSDM, llSDE, llALL;
 
+    RecyclerView rvCategory, rvTeamDetail;
+    List<Category_Universe_Modal> categoryList = new ArrayList<>();
+    MyTeamCategoryAdapter adapter;
+
+    public static int selectedPos = 0;
+    RelativeLayout vwRetails;
+    MyTeamMapAdapter mapAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +89,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_myteam_layout);
 
-            nearby_outlets = this;
+            myTeamActivity = this;
             shared_common_pref = new Shared_Common_Pref(this);
 
             CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
@@ -93,20 +101,21 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             mapView.getMapAsync(this);
             vwRetails.setOnTouchListener(this);
             RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, 635);
+                    RelativeLayout.LayoutParams.MATCH_PARENT, 400);
             rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             vwRetails.setLayoutParams(rel_btn);
             Log.d("Height:", String.valueOf(vwRetails.getHeight()));
 
+
             common_class = new Common_Class(this);
 
-            latitude.setText("Locating Please Wait...");
+
             new LocationFinder(getApplication(), new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
 
                     if (location == null) {
-                        availableoutlets.setText("Location Not Detacted.");
+
                         Toast.makeText(MyTeamActivity.this, "Location Not Detacted. Please Try Again.", Toast.LENGTH_LONG).show();
                         return;
                     } else {
@@ -116,15 +125,18 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
-            Createoutlet.setOnClickListener(this);
-            ImageView backView = findViewById(R.id.imag_back);
-
-            backView.setOnClickListener(this);
-
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
+            categoryList.add(new Category_Universe_Modal("", "ZSM", "", "", "", ""));
+            categoryList.add(new Category_Universe_Modal("", "RSM", "", "", "", ""));
+            categoryList.add(new Category_Universe_Modal("", "SDM", "", "", "", ""));
+            categoryList.add(new Category_Universe_Modal("", "SDE", "", "", "", ""));
+            categoryList.add(new Category_Universe_Modal("", "ALL", "", "", "", ""));
+
+            adapter = new MyTeamCategoryAdapter(categoryList, R.layout.myteam_category_adapter_layout, this);
+            rvCategory.setAdapter(adapter);
 
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
@@ -135,8 +147,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     void showNearbyData(Location location) {
         Shared_Common_Pref.Outletlat = location.getLatitude();
         Shared_Common_Pref.Outletlong = location.getLongitude();
-        latitude.setText("Lat : " + location.getLatitude());
-        longitude.setText("Lng : " + location.getLongitude());
+//        latitude.setText("Lat : " + location.getLatitude());
+//        longitude.setText("Lng : " + location.getLongitude());
         getCompleteAddressString(location.getLatitude(), location.getLongitude());
         map.getUiSettings().setMyLocationButtonEnabled(false);
         if (ActivityCompat.checkSelfPermission(MyTeamActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MyTeamActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -163,15 +175,10 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
 
     void init() {
-        Createoutlet = findViewById(R.id.Createoutlet);
-        availableoutlets = findViewById(R.id.availableoutlets);
-        latitude = findViewById(R.id.latitude);
-        longitude = findViewById(R.id.longitude);
-        cAddress = findViewById(R.id.cAddress);
-
-        vwRetails = findViewById(R.id.vwRetails);
-
         mapView = (MapView) findViewById(R.id.mapview);
+        rvCategory = findViewById(R.id.rvTeamCategory);
+        rvTeamDetail = findViewById(R.id.rvTeamDetail);
+        vwRetails = findViewById(R.id.vwRetails);
 
         llZSM = findViewById(R.id.llZSM);
         llRSM = findViewById(R.id.llRSM);
@@ -190,9 +197,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.imag_back:
-                finish();
-                break;
+
             case R.id.llZSM:
                 getTeamLoc("ZSM");
                 break;
@@ -222,7 +227,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                 for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
                     strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                 }
-                cAddress.setText(strReturnedAddress.toString());
+                //  cAddress.setText(strReturnedAddress.toString());
                 strAdd = strReturnedAddress.toString();
                 //Log.w("My Current loction address", strReturnedAddress.toString());
             } else {
@@ -262,73 +267,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                _yDelta = Y;
-                if (Y < 500) {
-                    ht = vwRetails.getHeight();
-                    rev = true;
-                } else {
-                    rev = false;
-                }
-                Log.d("Y:", String.valueOf(Y) + " _yDelta:" + String.valueOf(_yDelta));
-                break;
-            case MotionEvent.ACTION_UP:
-                Log.d("Height:", String.valueOf(vwRetails.getHeight()) + "=" + String.valueOf(mapView.getHeight()));
-                int Hight = 635;
-                if (rev == false) {
-                    Hight = 635;
-                    if (vwRetails.getHeight() > 700) {
-                        Hight = mapView.getHeight();
-                    }
-                }
-                if (rev == true) {
-                    Hight = mapView.getHeight();
-                    if (vwRetails.getHeight() < (mapView.getHeight() - 100)) {
-                        Hight = 635;
-                    }
-                }
-                RelativeLayout.LayoutParams vwlist = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT, Hight);
-                vwlist.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                vwRetails.setLayoutParams(vwlist);
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int incHight = 0;
-                if (rev == false) {
-                    incHight = (_yDelta - Y) + 635;
-                } else {
-                    incHight = ht - (Y - _yDelta);
-                }
-                if (incHight < 0) incHight = 0;
-                Log.d("Y:", String.valueOf(Y) + " _yDelta:" + String.valueOf(_yDelta) + "=" + (Y - _yDelta) + " inc:" + String.valueOf(incHight));
-                if (incHight > 634) {
-                    RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT, incHight);
-                    rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    vwRetails.setLayoutParams(rel_btn);
-                    Log.d("=>Height:", String.valueOf(vwRetails.getHeight()) + "=" + String.valueOf(mapView.getHeight()));
-
-                }
-               /* RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vwRetails.getLayoutParams();
-                layoutParams.topMargin = Y - _yDelta;*/
-                // vwRetails.setLayoutParams(layoutParams);
-                break;
-        }
-        //_root.invalidate();
-        return true;
-    }
-
-
-    @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
 
     }
@@ -353,6 +291,10 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                                         .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                                 mark.add(marker);
                             }
+
+                            mapAdapter = new MyTeamMapAdapter(this, arr, String.valueOf(laty), String.valueOf(lngy));
+                            rvTeamDetail.setAdapter(mapAdapter);
+
                         }
 
 
@@ -416,4 +358,69 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        final int X = (int) event.getRawX();
+        final int Y = (int) event.getRawY();
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+                _yDelta = Y;
+                if (Y < 500) {
+                    ht = vwRetails.getHeight();
+                    rev = true;
+                } else {
+                    rev = false;
+                }
+                Log.d("Y:", String.valueOf(Y) + " _yDelta:" + String.valueOf(_yDelta));
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d("Height:", String.valueOf(vwRetails.getHeight()) + "=" + String.valueOf(mapView.getHeight()));
+                int Hight = 400;
+                if (rev == false) {
+                    Hight = 400;
+                    if (vwRetails.getHeight() > 700) {
+                        Hight = mapView.getHeight();
+                    }
+                }
+                if (rev == true) {
+                    Hight = mapView.getHeight();
+                    if (vwRetails.getHeight() < (mapView.getHeight() - 100)) {
+                        Hight = 400;
+                    }
+                }
+                RelativeLayout.LayoutParams vwlist = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, Hight);
+                vwlist.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                vwRetails.setLayoutParams(vwlist);
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int incHight = 0;
+                if (rev == false) {
+                    incHight = (_yDelta - Y) + 400;
+                } else {
+                    incHight = ht - (Y - _yDelta);
+                }
+                if (incHight < 0) incHight = 0;
+                Log.d("Y:", String.valueOf(Y) + " _yDelta:" + String.valueOf(_yDelta) + "=" + (Y - _yDelta) + " inc:" + String.valueOf(incHight));
+                if (incHight > 634) {
+                    RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, incHight);
+                    rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    vwRetails.setLayoutParams(rel_btn);
+                    Log.d("=>Height:", String.valueOf(vwRetails.getHeight()) + "=" + String.valueOf(mapView.getHeight()));
+
+                }
+               /* RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vwRetails.getLayoutParams();
+                layoutParams.topMargin = Y - _yDelta;*/
+                // vwRetails.setLayoutParams(layoutParams);
+                break;
+        }
+        //_root.invalidate();
+        return true;
+    }
 }
