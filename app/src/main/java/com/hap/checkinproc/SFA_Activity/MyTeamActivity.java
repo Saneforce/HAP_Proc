@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -298,6 +299,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                             mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy));
                             rvTeamDetail.setAdapter(mapAdapter);
 
+                            getInfoWindow(marker);
+
                         }
                         break;
                 }
@@ -307,6 +310,24 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
         }
     }
+
+    public View getInfoWindow(Marker marker) {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View popup = layoutInflater.inflate(R.layout.team_loc_detail_layout, null);
+        double lat = marker.getPosition().latitude;
+        double lng = marker.getPosition().longitude;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(Double.valueOf(lat), Double.valueOf(lng), 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        String alamat = addresses.get(0).getAddressLine(0);
+        ((TextView) popup.findViewById(R.id.tvSfName)).setText("SF NAME");
+        return popup;
+    }
+
 
 
     @Override
