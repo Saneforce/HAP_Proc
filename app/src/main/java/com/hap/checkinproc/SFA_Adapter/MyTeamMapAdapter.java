@@ -48,11 +48,6 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
         return new ViewHolder(itemView);
     }
 
-    public void notifyData(JSONArray array) {
-        this.array = array;
-        notifyDataSetChanged();
-
-    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -104,8 +99,7 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
         String key = "key=" + context.getString(R.string.map_api_key);
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + key;
-        // Output format
-        String output = "json";
+
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
         return url;

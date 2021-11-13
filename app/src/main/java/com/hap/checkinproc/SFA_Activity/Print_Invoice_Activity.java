@@ -586,6 +586,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             int total_qtytext = 0;
             double subTotalVal = 0.00;
+
             for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
 
                 total_qtytext += ivl.getQuantity();
@@ -603,7 +604,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             totalitem.setText("" + Order_Outlet_Filter.size());
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
-            tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(0).getPaidAmount())));
+            String paidAmt="0";
+            if(!Common_Class.isNullOrEmpty(Order_Outlet_Filter.get(0).getPaidAmount()))
+                paidAmt=Order_Outlet_Filter.get(0).getPaidAmount();
+            tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(paidAmt)));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 

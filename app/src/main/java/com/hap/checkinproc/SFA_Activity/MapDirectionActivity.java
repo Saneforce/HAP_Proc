@@ -102,13 +102,11 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 currentLocation = location;
                 fetchLocation();
 
-                if (getIntent().getStringExtra(Constants.MAP_ROUTE).equalsIgnoreCase("")) {
 
-                } else {
                     DownloadTask downloadTask = new DownloadTask();
                     // Start downloading json data from Google Directions API
                     downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
-                }
+
 
 
             }
@@ -585,90 +583,5 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     }
 
-
-   /* public String makeURL(double sourcelat, double sourcelog, double destlat, double destlog) {
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("https://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");// from
-        urlString.append(Double.toString(sourcelat));
-        urlString.append(",");
-        urlString
-                .append(Double.toString(sourcelog));
-        urlString.append("&destination=");// to
-        urlString
-                .append(Double.toString(destlat));
-        urlString.append(",");
-        urlString.append(Double.toString(destlog));
-        urlString.append("&sensor=false&mode=two-wheeler&alternatives=true");
-        urlString.append("&key=" + getString(R.string.map_api_key));
-        return urlString.toString();
-    }
-
-
-    private void getDirection() {
-        //Getting the URL
-        String url = makeURL(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong, Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-
-        //Showing a dialog till we get the route
-        final ProgressDialog loading = ProgressDialog.show(this, "Getting Route", "Please wait...", false, false);
-
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        loading.dismiss();
-                        //Calling the method drawPath to draw the path
-                        drawPath(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
-                    }
-                });
-
-        //Adding the request to request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
-    //The parameter is the server response
-    public void drawPath(String result) {
-        //Getting both the coordinates
-        LatLng from = new LatLng(fromLatitude, fromLongitude);
-        LatLng to = new LatLng(toLatitude, toLongitude);
-
-        //Calculating the distance in meters
-        Double distance = SphericalUtil.computeDistanceBetween(from, to);
-
-        //Displaying the distance
-      //  Toast.makeText(this, String.valueOf(distance + " Meters"), Toast.LENGTH_SHORT).show();
-
-
-        try {
-            //Parsing json
-            final JSONObject json = new JSONObject(result);
-            JSONArray routeArray = json.getJSONArray("routes");
-            JSONObject routes = routeArray.getJSONObject(0);
-            JSONObject overviewPolylines = routes.getJSONObject("overview_polyline");
-            String encodedString = overviewPolylines.getString("points");
-            List<LatLng> list = decodePoly(encodedString);
-            Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-                    .addAll(list)
-                    .width(8)
-                    .color(Color.BLUE)
-                    .geodesic(true)
-            );
-
-            LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-            Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                    .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-        } catch (JSONException e) {
-
-        }
-    }*/
 
 }

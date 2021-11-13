@@ -53,13 +53,10 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
                 @Override
                 public void onClick(View v) {
                     try {
-                        JsonObject data = new JsonObject();
-                        data.addProperty("sfcode", Shared_Common_Pref.Sf_Code);
-                        data.addProperty("date", "2021-11-10");
-                        data.addProperty("type", AryDta.get(position).getName());
-                        common_class.getDb_310Data(Constants.MYTEAM_LOCATION, MyTeamActivity.myTeamActivity, data);
 
-                        MyTeamActivity.selectedPos=position;
+                        MyTeamActivity.myTeamActivity.getTeamLoc(AryDta.get(position).getName());
+
+                        MyTeamActivity.selectedPos = position;
                         if (pholder != null) {
                             pholder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
                             pholder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
@@ -68,8 +65,8 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
                         }
                         pholder = holder;
                         holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
-                        pholder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
-                        pholder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
+                        holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
 
                     } catch (Exception e) {
@@ -78,6 +75,19 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
                 }
             });
 
+            if (position == MyTeamActivity.selectedPos) {
+
+                holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
+                holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
+                holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+                pholder = holder;
+            } else {
+                holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
+                holder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
+                holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+            }
 
 
         } catch (Exception e) {

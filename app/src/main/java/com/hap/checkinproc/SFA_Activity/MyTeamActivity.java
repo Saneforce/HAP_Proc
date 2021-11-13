@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -79,9 +80,11 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     List<Category_Universe_Modal> categoryList = new ArrayList<>();
     MyTeamCategoryAdapter adapter;
 
-    public static int selectedPos = 0;
+    public static int selectedPos = 4;
     RelativeLayout vwRetails;
     MyTeamMapAdapter mapAdapter;
+
+    private String mType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,14 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             adapter = new MyTeamCategoryAdapter(categoryList, R.layout.myteam_category_adapter_layout, this);
             rvCategory.setAdapter(adapter);
 
+
+//            SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+//            assert supportMapFragment != null;
+//            supportMapFragment.getMapAsync(googleMap -> {
+//                GoogleMapHelper.defaultMapSettings(googleMap);
+//                setUpClusterManager(googleMap);
+//            });
+
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
 
@@ -164,10 +175,11 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
         getTeamLoc("ALL");
     }
 
-    void getTeamLoc(String type) {
+    public void getTeamLoc(String type) {
+        mType = type;
         JsonObject data = new JsonObject();
         data.addProperty("sfcode", Shared_Common_Pref.Sf_Code);
-        data.addProperty("date", "2021-11-10");
+        data.addProperty("date", Common_Class.GetDatewothouttime());
         data.addProperty("type", type);
         common_class.getDb_310Data(Constants.MYTEAM_LOCATION, this, data);
 
@@ -198,21 +210,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.llZSM:
-                getTeamLoc("ZSM");
-                break;
-            case R.id.llRSM:
-                getTeamLoc("RSM");
-                break;
-            case R.id.llSDM:
-                getTeamLoc("SDM");
-                break;
-            case R.id.llSDE:
-                getTeamLoc("SDE");
-                break;
-            case R.id.llAll:
-                getTeamLoc("ALL");
-                break;
+
         }
     }
 
@@ -255,12 +253,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
 
-            JsonObject data = new JsonObject();
-            data.addProperty("sfcode", Shared_Common_Pref.Sf_Code);
-            data.addProperty("date", "2021-11-10");
-            data.addProperty("type", "ALL");
-            common_class.getDb_310Data(Constants.MYTEAM_LOCATION, this, data);
-
+            getTeamLoc("ALL");
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -279,25 +272,33 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     case Constants.MYTEAM_LOCATION:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
-
+                            if (mark != null && map != null) {
+                                for (int i = 0; i < mark.size(); i++) {
+                                    mark.get(i).remove();
+                                }
+                            }
                             JSONArray arr = jsonObject.getJSONArray("Data");
 
+                            JSONArray arr1 = new JSONArray();
                             for (int i = 0; i < arr.length(); i++) {
                                 JSONObject arrObj = arr.getJSONObject(i);
                                 LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
                                         Double.parseDouble(arrObj.getString("Lon")));
 
-                                marker = map.addMarker(new MarkerOptions().position(latLng)
-                                        .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                                mark.add(marker);
+                                if (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL")) {
+                                    marker = map.addMarker(new MarkerOptions().position(latLng)
+                                            .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                                    mark.add(marker);
+
+
+                                    arr1.put(arr.getJSONObject(i));
+                                }
                             }
 
-                            mapAdapter = new MyTeamMapAdapter(this, arr, String.valueOf(laty), String.valueOf(lngy));
+                            mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy));
                             rvTeamDetail.setAdapter(mapAdapter);
 
                         }
-
-
                         break;
                 }
             }
