@@ -1011,8 +1011,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     //draw route
     private void drawRoute(String mDestination) {
         // Getting URL to the Google Directions API
-        String url = getDirectionsUrl(mDestination);
-
+        String url = common_class.getDirectionsUrl(mDestination);
         Intent intent = new Intent(getApplicationContext(), MapDirectionActivity.class);
         intent.putExtra(Constants.MAP_ROUTE, url);
         intent.putExtra(Constants.DEST_LAT, dest_lat);
@@ -1044,24 +1043,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onRestart() {
         super.onRestart();
-        // drDetail();
-
     }
 
-    private String getDirectionsUrl(String dest) {
-        // Origin of route
-        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
-        // Destination of route
-        String str_dest = "destination=" + dest;
-        // Key
-        String key = "key=" + getString(R.string.map_api_key);
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + key;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
-        return url;
-    }
-    //draw route
 }

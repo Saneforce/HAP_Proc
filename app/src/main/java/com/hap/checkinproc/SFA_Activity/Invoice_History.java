@@ -655,7 +655,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             common_class.CommonIntentwithFinish(Dashboard_Route.class);
             overridePendingTransition(R.anim.in, R.anim.out);
 

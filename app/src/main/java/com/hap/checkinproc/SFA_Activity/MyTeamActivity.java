@@ -1,10 +1,13 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -28,7 +31,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -57,7 +59,7 @@ import java.util.Locale;
 public class MyTeamActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, UpdateResponseUI, Master_Interface, View.OnTouchListener {
 
 
-    Common_Class common_class;
+    public Common_Class common_class;
     TextView Createoutlet, latitude, longitude, availableoutlets, cAddress;
 
     public static Shared_Common_Pref shared_common_pref;
@@ -81,11 +83,12 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     List<Category_Universe_Modal> categoryList = new ArrayList<>();
     MyTeamCategoryAdapter adapter;
 
-    public static int selectedPos = 4;
+    public static int selectedPos;
     RelativeLayout vwRetails;
     MyTeamMapAdapter mapAdapter;
 
-    private String mType = "";
+    public String mType = "";
+    private int locPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,22 +136,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            categoryList.add(new Category_Universe_Modal("", "ZSM", "", "", "", ""));
-            categoryList.add(new Category_Universe_Modal("", "RSM", "", "", "", ""));
-            categoryList.add(new Category_Universe_Modal("", "SDM", "", "", "", ""));
-            categoryList.add(new Category_Universe_Modal("", "SDE", "", "", "", ""));
-            categoryList.add(new Category_Universe_Modal("", "ALL", "", "", "", ""));
-
-            adapter = new MyTeamCategoryAdapter(categoryList, R.layout.myteam_category_adapter_layout, this);
-            rvCategory.setAdapter(adapter);
-
-
-//            SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-//            assert supportMapFragment != null;
-//            supportMapFragment.getMapAsync(googleMap -> {
-//                GoogleMapHelper.defaultMapSettings(googleMap);
-//                setUpClusterManager(googleMap);
-//            });
 
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
@@ -177,15 +164,68 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void getTeamLoc(String type) {
-        mType = type;
-        JsonObject data = new JsonObject();
-        data.addProperty("sfcode", Shared_Common_Pref.Sf_Code);
-        data.addProperty("date", Common_Class.GetDatewothouttime());
-        data.addProperty("type", type);
-        common_class.getDb_310Data(Constants.MYTEAM_LOCATION, this, data);
+
+        if (mType.equalsIgnoreCase("")) {
+            mType = type;
+            JsonObject data = new JsonObject();
+            data.addProperty("sfcode", Shared_Common_Pref.Sf_Code);
+            data.addProperty("date", Common_Class.GetDatewothouttime());
+            data.addProperty("type", type);
+
+            common_class.getDb_310Data(Constants.MYTEAM_LOCATION, this, data);
+        } else {
+            mType = type;
+            setAdapter(shared_common_pref.getvalue(Constants.MYTEAM_LOCATION));
+        }
+
 
     }
 
+    void setAdapter(String apiDataResponse) {
+        try {
+            JSONObject jsonObject = new JSONObject(apiDataResponse);
+            if (jsonObject.getBoolean("success")) {
+                if (mark != null && map != null) {
+                    for (int i = 0; i < mark.size(); i++) {
+                        mark.get(i).remove();
+                    }
+                }
+                JSONArray arr = jsonObject.getJSONArray("Data");
+
+                JSONArray arr1 = new JSONArray();
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject arrObj = arr.getJSONObject(i);
+                    LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
+                            Double.parseDouble(arrObj.getString("Lon")));
+
+                    if (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL")) {
+                        marker = map.addMarker(new MarkerOptions().position(latLng)
+                                .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        mark.add(marker);
+
+
+                        arr1.put(arr.getJSONObject(i));
+                    }
+                }
+
+                mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy));
+                rvTeamDetail.setAdapter(mapAdapter);
+
+
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker mMark) {
+                        showDialog(mMark.getPosition(), arr1);
+                        return false;
+                    }
+                });
+
+
+            }
+        } catch (Exception e) {
+
+        }
+    }
 
     void init() {
         mapView = (MapView) findViewById(R.id.mapview);
@@ -254,6 +294,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
 
+
             getTeamLoc("ALL");
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -271,37 +312,23 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             if (apiDataResponse != null) {
                 switch (key) {
                     case Constants.MYTEAM_LOCATION:
+
+
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
-                            if (mark != null && map != null) {
-                                for (int i = 0; i < mark.size(); i++) {
-                                    mark.get(i).remove();
-                                }
-                            }
-                            JSONArray arr = jsonObject.getJSONArray("Data");
 
-                            JSONArray arr1 = new JSONArray();
-                            for (int i = 0; i < arr.length(); i++) {
-                                JSONObject arrObj = arr.getJSONObject(i);
-                                LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
-                                        Double.parseDouble(arrObj.getString("Lon")));
-
-                                if (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL")) {
-                                    marker = map.addMarker(new MarkerOptions().position(latLng)
-                                            .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                                    mark.add(marker);
+                            JSONArray arr = jsonObject.getJSONArray("Designation");
+                            arr.put(arr.length() + 1, "ALL");
+                            adapter = new MyTeamCategoryAdapter(arr, R.layout.myteam_category_adapter_layout, this);
+                            rvCategory.setAdapter(adapter);
 
 
-                                    arr1.put(arr.getJSONObject(i));
-                                }
-                            }
+                            selectedPos = arr.length() - 1;
 
-                            mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy));
-                            rvTeamDetail.setAdapter(mapAdapter);
-
-                            getInfoWindow(marker);
-
+                            setAdapter(apiDataResponse);
                         }
+
+
                         break;
                 }
             }
@@ -311,24 +338,62 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public View getInfoWindow(Marker marker) {
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        final View popup = layoutInflater.inflate(R.layout.team_loc_detail_layout, null);
-        double lat = marker.getPosition().latitude;
-        double lng = marker.getPosition().longitude;
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List addresses = null;
+    private void showDialog(LatLng markPos, JSONArray array) {
         try {
-            addresses = geocoder.getFromLocation(Double.valueOf(lat), Double.valueOf(lng), 1);
+            locPos = -1;
+            LayoutInflater inflater = LayoutInflater.from(this);
+
+            final View view = inflater.inflate(R.layout.team_loc_detail_layout, null);
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            //alertDialog.setCancelable(false);
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            LinearLayout llDir = (LinearLayout) view.findViewById(R.id.llDirection);
+            TextView tvSfName = (TextView) view.findViewById(R.id.tvSfName);
+            TextView tvDesig = (TextView) view.findViewById(R.id.tvDesig);
+            TextView tvMobile = (TextView) view.findViewById(R.id.txMobile);
+
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject arrObj = array.getJSONObject(i);
+                LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
+                        Double.parseDouble(arrObj.getString("Lon")));
+
+                if (latLng.equals(markPos)) {
+                    locPos = i;
+                }
+
+            }
+
+            JSONObject obj = array.getJSONObject(locPos);
+            tvSfName.setText(obj.getString("Sf_Name"));
+            tvDesig.setText(obj.getString("Designation_Name"));
+            tvMobile.setText(obj.getString("SF_Mobile"));
+
+            llDir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        alertDialog.dismiss();
+                        String url = common_class.getDirectionsUrl(obj.getString("Lat") + "," + obj.getString("Lon"));
+                        Intent intent = new Intent(MyTeamActivity.this, MapDirectionActivity.class);
+                        intent.putExtra(Constants.MAP_ROUTE, url);
+                        intent.putExtra(Constants.DEST_LAT, obj.getString("Lat"));
+                        intent.putExtra(Constants.DEST_LNG, obj.getString("Lon"));
+                        intent.putExtra(Constants.DEST_NAME, obj.getString("HQ_Name"));
+                        startActivity(intent);
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+
+            alertDialog.setView(view);
+            alertDialog.show();
+
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
-//        String alamat = addresses.get(0).getAddressLine(0);
-        ((TextView) popup.findViewById(R.id.tvSfName)).setText("SF NAME");
-        return popup;
     }
-
-
 
     @Override
     public void onResume() {

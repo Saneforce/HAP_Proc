@@ -12,24 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
-import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 
-import java.util.List;
+import org.json.JSONArray;
 
 public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAdapter.MyViewHolder> {
-    List<Category_Universe_Modal> AryDta;
+    JSONArray AryDta;
     private Context context;
     Common_Class common_class;
     int salRowDetailLayout;
     MyTeamCategoryAdapter.MyViewHolder pholder;
 
-    public MyTeamCategoryAdapter(List<Category_Universe_Modal> jAryDta, int rowLayout, Context mContext) {
+    public MyTeamCategoryAdapter(JSONArray jAryDta, int rowLayout, Context mContext) {
         AryDta = jAryDta;
         context = mContext;
         salRowDetailLayout = rowLayout;
@@ -46,28 +42,27 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
     @Override
     public void onBindViewHolder(@NonNull MyTeamCategoryAdapter.MyViewHolder holder, int position) {
         try {
-            Category_Universe_Modal itm = AryDta.get(position);
-            holder.txCatname.setText(itm.getName());
+            String itm = AryDta.getString(position);
+            holder.txCatname.setText(itm);
 
             holder.llTeamType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
 
-                        MyTeamActivity.myTeamActivity.getTeamLoc(AryDta.get(position).getName());
+                        MyTeamActivity.myTeamActivity.getTeamLoc(itm);
 
-                        MyTeamActivity.selectedPos = position;
+
                         if (pholder != null) {
                             pholder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
                             pholder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
                             pholder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
                         }
                         pholder = holder;
+                        MyTeamActivity.selectedPos = position;
                         holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
                         holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
                         holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-
 
                     } catch (Exception e) {
 
@@ -88,16 +83,30 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void updateUI(MyTeamCategoryAdapter.MyViewHolder holder, int pos) {
+        if (pos == MyTeamActivity.selectedPos) {
+
+            holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
+            holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
+            holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+        } else {
+            holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
+            holder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
+            holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+        }
+
+    }
+
     @Override
     public int getItemCount() {
-        return AryDta.size();
+        return AryDta.length();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

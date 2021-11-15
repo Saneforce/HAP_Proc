@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
+import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     Context context;
     String laty, lngy;
     JSONObject json;
+    public static String TAG = "MyTeamMapAdapter";
 
     public MyTeamMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
 
@@ -42,9 +45,7 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View itemView = mInflater.inflate(R.layout.team_loc_detail_layout, parent, false);
-
         return new ViewHolder(itemView);
     }
 
@@ -52,16 +53,13 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
-
             json = array.getJSONObject(position);
-
-            holder.tvSfName.setText(json.getString("Sf_Name"));
+            holder.tvSfName.setText(MyTeamActivity.myTeamActivity.mType.equalsIgnoreCase("ALL") ?
+                    json.getString("Sf_Name") + "(" + json.getString("shortname") + ")" : json.getString("Sf_Name"));
             holder.tvDesig.setText(json.getString("Designation_Name"));
             holder.tvMobile.setText(json.getString("SF_Mobile"));
 
         } catch (Exception e) {
-
-
             e.printStackTrace();
         }
 
@@ -70,18 +68,18 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
             @Override
             public void onClick(View v) {
                 try {
-
-                    String url = getDirectionsUrl(array.getJSONObject(position).getString("Lat") + "," + array.getJSONObject(position).getString("Lon"));
+                    json = array.getJSONObject(position);
+                    String url = MyTeamActivity.myTeamActivity.common_class.getDirectionsUrl(json.getString("Lat") + "," + json.getString("Lon"));
                     Intent intent = new Intent(context, MapDirectionActivity.class);
                     intent.putExtra(Constants.MAP_ROUTE, url);
-                    intent.putExtra(Constants.DEST_LAT, array.getJSONObject(position).getString("Lat"));
-                    intent.putExtra(Constants.DEST_LNG, array.getJSONObject(position).getString("Lon"));
-                    intent.putExtra(Constants.DEST_NAME, array.getJSONObject(position).getString("HQ_Name"));
+                    intent.putExtra(Constants.DEST_LAT, json.getString("Lat"));
+                    intent.putExtra(Constants.DEST_LNG, json.getString("Lon"));
+                    intent.putExtra(Constants.DEST_NAME, json.getString("HQ_Name"));
                     context.startActivity(intent);
 
 
                 } catch (Exception e) {
-
+                    Log.v(TAG, e.getMessage());
                 }
 
             }
@@ -89,23 +87,6 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
 
 
     }
-
-    private String getDirectionsUrl(String dest) {
-        // Origin of route
-        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
-        // Destination of route
-        String str_dest = "destination=" + dest;
-        // Key
-        String key = "key=" + context.getString(R.string.map_api_key);
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + key;
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
-        return url;
-    }
-    //draw route
-
 
     @Override
     public int getItemCount() {
@@ -129,6 +110,5 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
             llDir = (LinearLayout) itemView.findViewById(R.id.llDirection);
         }
     }
-
 
 }

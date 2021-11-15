@@ -70,6 +70,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     String sb;
     private Polyline mPolyline;
     Marker currentLocationMarker;
+    public static String TAG = "MapDirectionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +104,9 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 fetchLocation();
 
 
-                    DownloadTask downloadTask = new DownloadTask();
-                    // Start downloading json data from Google Directions API
-                    downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
-
+                DownloadTask downloadTask = new DownloadTask();
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
 
 
             }
@@ -145,37 +145,41 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        mGoogleMap = googleMap;
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        //  Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude())));
+        try {
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            mGoogleMap = googleMap;
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+            //  Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude())));
 
-        Double laty = Shared_Common_Pref.Outletlat;
-        Double lngy = Shared_Common_Pref.Outletlong;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            Double laty = Shared_Common_Pref.Outletlat;
+            Double lngy = Shared_Common_Pref.Outletlong;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mGoogleMap.setMyLocationEnabled(true);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
+            AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+
+            if (currentLocationMarker != null)
+                currentLocationMarker.remove();
+            currentLocationMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+                    .title(("your location")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+
+            distance();
+        } catch (Exception e) {
+            Log.v(TAG, e.getMessage());
         }
-        mGoogleMap.setMyLocationEnabled(true);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-        AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
-
-
-        if (currentLocationMarker != null)
-            currentLocationMarker.remove();
-        currentLocationMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                .title(("your location")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
-
-        distance();
 
 
         //new
@@ -293,28 +297,32 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imag_back:
-                finish();
-                break;
-            case R.id.tvStartDirection:
+        try {
+            switch (v.getId()) {
+                case R.id.imag_back:
+                    finish();
+                    break;
+                case R.id.tvStartDirection:
 
-                if (ReachedOutlet.getText().toString().contains("START")) {
-                    try {
-                        shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
-                    } catch (Exception e) {
+                    if (ReachedOutlet.getText().toString().contains("START")) {
+                        try {
+                            shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
+                        } catch (Exception e) {
+                        }
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + getIntent().getStringExtra(Constants.DEST_LAT) + "," + getIntent().getStringExtra(Constants.DEST_LNG) + "&mode=l");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivityForResult(mapIntent, 1000);
+                    } else {
+                        sb = shared_common_pref.getvalue(Constants.PLACE_ID_URL);
+                        if (common_class.isNetworkAvailable(this))
+                            new findPlaceDetail().execute();
                     }
-                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + getIntent().getStringExtra(Constants.DEST_LAT) + "," + getIntent().getStringExtra(Constants.DEST_LNG) + "&mode=l");
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivityForResult(mapIntent, 1000);
-                } else {
-                    sb = shared_common_pref.getvalue(Constants.PLACE_ID_URL);
-                    if (common_class.isNetworkAvailable(this))
-                        new findPlaceDetail().execute();
-                }
-                break;
+                    break;
 
+            }
+        } catch (Exception e) {
+            Log.v(TAG,e.getMessage());
         }
     }
 

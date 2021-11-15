@@ -1001,6 +1001,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
+                        selectedPos = holder.getAdapterPosition();
                         showOrderItemList(holder.getAdapterPosition(), "");
                         holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));

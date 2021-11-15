@@ -18,12 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
-import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -227,6 +227,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 @Override
                 public void onClick(View v) {
                     String sOutletName = mRetailer_Modal_List.getName();
+
                     drawRoute(sOutletName, mRetailer_Modal_List.getLat(), mRetailer_Modal_List.getLong());
                 }
             });
@@ -331,7 +332,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         // Getting URL to the Google Directions API
 
         String mDestination = sLat + "," + sLng;
-        String url = getDirectionsUrl(mDestination);
+        String url = Dashboard_Route.common_class.getDirectionsUrl(mDestination);
 
         Intent intent = new Intent(context.getApplicationContext(), MapDirectionActivity.class);
         intent.putExtra(Constants.MAP_ROUTE, url);
@@ -340,22 +341,6 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         intent.putExtra(Constants.DEST_NAME, OutletName);
         context.startActivity(intent);
 
-    }
-
-    private String getDirectionsUrl(String dest) {
-        // Origin of route
-        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
-        // Destination of route
-        String str_dest = "destination=" + dest;
-        // Key
-        String key = "key=" + context.getString(R.string.map_api_key);
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + key;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
-        return url;
     }
 
     public void getMnthlyDta(Route_View_Adapter.MyViewHolder holder, String CusId, String Mnth) {
