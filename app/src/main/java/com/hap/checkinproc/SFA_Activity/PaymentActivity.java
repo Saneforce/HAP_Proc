@@ -278,7 +278,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                         JSONArray jsonArray = jsonObject.getJSONArray("Data");
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            outstandAmt = Double.valueOf(formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
+                            outstandAmt = jsonArray.getJSONObject(i).getDouble("Outstanding");
+                            if (outstandAmt < 0) outstandAmt = Math.abs(outstandAmt);
+                            else outstandAmt = 0 - outstandAmt;
                             tvOutStandAmt.setText("₹" + formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
 
                         }

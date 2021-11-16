@@ -1348,7 +1348,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             }
 
-
                             updateToTALITEMUI();
 
 

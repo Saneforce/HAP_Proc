@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -99,10 +98,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     GoogleMap map;
     Boolean rev = false;
     ArrayList<Marker> mark = new ArrayList<>();
-    private HashMap<Marker, Integer> mHashMap = new HashMap<Marker, Integer>();
 
     StringBuilder sb, place;
-    static String googlePlacesData, placeDetail;
+    static String googlePlacesData;
     double laty = 0.0, lngy = 0.0;
     JSONArray resData;
     RelativeLayout vwRetails, tabExplore;
@@ -353,14 +351,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                     if (explore == null) {
 
 
-//                                        for (int i = 0; i < resData.length(); i++) {
-//
-//                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
-//                                                resData.remove(i);
-//                                            }
-//                                        }
-
-
                                         resData = removeDuplicateItem(resData, placeIds);
 
 
@@ -385,14 +375,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                         resData = removeDuplicateItem(resData, placeIds);
 
                                         Log.v("markedPlace:2", "success: " + resData.length());
-
-
-//                                        for (int i = 0; i < resData.length(); i++) {
-//
-//                                            if (placeIds.indexOf(resData.getJSONObject(i).getString("place_id")) > 0) {
-//                                                resData.remove(i);
-//                                            }
-//                                        }
 
                                         Log.v("markedPlace:2", "filter: " + resData.length());
 
@@ -433,6 +415,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
 
     }
+
     private void SearchRetailers() {
         JsonArray srhOutlets = new JsonArray();
         for (int sr = 0; sr < jOutlets.size(); sr++) {
@@ -579,7 +562,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.ivFilterKeysMenu:
-                common_class.showCommonDialog(mapKeyList,1000,this);
+                common_class.showCommonDialog(mapKeyList, 1000, this);
                 break;
 
 
@@ -791,29 +774,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
 
             shared_common_pref.save(Constants.PLACE_ID_URL, sb.toString());
-//
-//
-//            JSONArray jsonA = resData.getJSONObject(position).getJSONArray("photos");
-//
-//
-//            if (jsonA != null & jsonA.length() > 0) {
-//                JSONObject jo = jsonA.getJSONObject(0);
-//
-//                StringBuilder bu = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?photoreference=");
-//                bu.append(jo.getString("photo_reference"));
-//                bu.append("&sensor=false");
-//                bu.append("&maxheight=" + jo.getString("height"));
-//                bu.append("&maxwidth=" + jo.getString("width"));
-//                bu.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
-//
-//                shared_common_pref.save(Constants.SHOP_PHOTO, bu.toString());
-//            } else {
-//                shared_common_pref.save(Constants.SHOP_PHOTO, "");
-//
-//            }
+
         } catch (Exception e) {
             shared_common_pref.save(Constants.PLACE_ID_URL, "");
-            // shared_common_pref.save(Constants.SHOP_PHOTO, "");
+
         }
     }
 
@@ -1046,13 +1010,13 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     //draw route
     private void drawRoute(String mDestination) {
         // Getting URL to the Google Directions API
-        String url = getDirectionsUrl(mDestination);
-
+        String url = common_class.getDirectionsUrl(mDestination);
         Intent intent = new Intent(getApplicationContext(), MapDirectionActivity.class);
         intent.putExtra(Constants.MAP_ROUTE, url);
         intent.putExtra(Constants.DEST_LAT, dest_lat);
         intent.putExtra(Constants.DEST_LNG, dest_lng);
         intent.putExtra(Constants.DEST_NAME, dest_name);
+        intent.putExtra(Constants.NEW_OUTLET, "new");
         startActivity(intent);
 
     }
@@ -1079,24 +1043,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onRestart() {
         super.onRestart();
-        // drDetail();
-
     }
 
-    private String getDirectionsUrl(String dest) {
-        // Origin of route
-        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
-        // Destination of route
-        String str_dest = "destination=" + dest;
-        // Key
-        String key = "key=" + getString(R.string.map_api_key);
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + key;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
-        return url;
-    }
-    //draw route
 }

@@ -289,11 +289,14 @@ public class Product_Details_Modal {
     @SerializedName("Off_Pro_Unit")
     @Expose
     private String Off_Pro_Unit;
+    @SerializedName("PaidAmount")
+    @Expose
+    private String PaidAmount;
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, Double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
-                                 Integer RegularQty, Double Amount,List<Product_Details_Modal> productDetailsModal) {
+                                 Integer RegularQty, Double Amount,List<Product_Details_Modal> productDetailsModal,String PaidAmount) {
         this.id = id;
         this.name = name;
         this.productCatCode = productCatCode;
@@ -308,6 +311,7 @@ public class Product_Details_Modal {
         this.RegularQty = RegularQty;
         this.Amount = Amount;
         this.productDetailsModal=productDetailsModal;
+        this.PaidAmount=PaidAmount;
     }
 
     public Product_Details_Modal(String id, String name, String sku, int price, int Qty, double amount, String scheme) {
@@ -578,5 +582,13 @@ public class Product_Details_Modal {
 
     public void setConversionFactor(String conversionFactor) {
         ConversionFactor = conversionFactor;
+    }
+
+    public String getPaidAmount() {
+        return PaidAmount;
+    }
+
+    public void setPaidAmount(String paidAmount) {
+        PaidAmount = paidAmount;
     }
 }

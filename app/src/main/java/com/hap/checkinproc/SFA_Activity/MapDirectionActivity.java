@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -70,6 +71,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     String sb;
     private Polyline mPolyline;
     Marker currentLocationMarker;
+    public static String TAG = "MapDirectionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 // clocation=location;
                 currentLocation = location;
                 fetchLocation();
+
+
                 DownloadTask downloadTask = new DownloadTask();
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
@@ -142,37 +146,41 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        mGoogleMap = googleMap;
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        //  Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude())));
+        try {
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            mGoogleMap = googleMap;
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+            //  Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude())));
 
-        Double laty = Shared_Common_Pref.Outletlat;
-        Double lngy = Shared_Common_Pref.Outletlong;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            Double laty = Shared_Common_Pref.Outletlat;
+            Double lngy = Shared_Common_Pref.Outletlong;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mGoogleMap.setMyLocationEnabled(true);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
+            AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+
+            if (currentLocationMarker != null)
+                currentLocationMarker.remove();
+            currentLocationMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+                    .title(("your location")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+
+            distance();
+        } catch (Exception e) {
+            Log.v(TAG, e.getMessage());
         }
-        mGoogleMap.setMyLocationEnabled(true);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-        AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
-
-
-        if (currentLocationMarker != null)
-            currentLocationMarker.remove();
-        currentLocationMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                .title(("your location")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
-
-        distance();
 
 
         //new
@@ -290,27 +298,32 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imag_back:
-                finish();
-                break;
-            case R.id.tvStartDirection:
+        try {
+            switch (v.getId()) {
+                case R.id.imag_back:
+                    finish();
+                    break;
+                case R.id.tvStartDirection:
 
-                if (ReachedOutlet.getText().toString().contains("START")) {
-                    try {
-                        shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
-                    }catch (Exception e){}
-                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + getIntent().getStringExtra(Constants.DEST_LAT) + "," + getIntent().getStringExtra(Constants.DEST_LNG) + "&mode=l");
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivityForResult(mapIntent, 1000);
-                } else {
-                    sb = shared_common_pref.getvalue(Constants.PLACE_ID_URL);
-                    if (common_class.isNetworkAvailable(this))
-                        new findPlaceDetail().execute();
-                }
-                break;
+                    if (ReachedOutlet.getText().toString().contains("START")) {
+                        try {
+                            shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
+                        } catch (Exception e) {
+                        }
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + getIntent().getStringExtra(Constants.DEST_LAT) + "," + getIntent().getStringExtra(Constants.DEST_LNG) + "&mode=l");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivityForResult(mapIntent, 1000);
+                    } else {
+                        sb = shared_common_pref.getvalue(Constants.PLACE_ID_URL);
+                        if (common_class.isNetworkAvailable(this))
+                            new findPlaceDetail().execute();
+                    }
+                    break;
 
+            }
+        } catch (Exception e) {
+            Log.v(TAG, e.getMessage());
         }
     }
 
@@ -334,11 +347,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         Location endPoint = new Location("point B");
         endPoint.setLatitude(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)));
         endPoint.setLongitude(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-
         double distance = startPoint.distanceTo(endPoint);
 
 
-        if (distance > 200) {
+        if (distance > 200 || !getIntent().getStringExtra(Constants.NEW_OUTLET).equalsIgnoreCase("new")) {
             ReachedOutlet.setText("START ");
         } else {
             ReachedOutlet.setText("Create Outlet ");
@@ -346,7 +358,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
 
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -567,10 +578,17 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     }
                     mPolyline = mGoogleMap.addPolyline(lineOptions);
 
+                    LatLng currentLatLng = new LatLng(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
 
                     LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
                     Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
                             .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(currentLatLng);
+                    builder.include(latLng);
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
 
                 } else
@@ -581,90 +599,5 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     }
 
-
-   /* public String makeURL(double sourcelat, double sourcelog, double destlat, double destlog) {
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("https://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");// from
-        urlString.append(Double.toString(sourcelat));
-        urlString.append(",");
-        urlString
-                .append(Double.toString(sourcelog));
-        urlString.append("&destination=");// to
-        urlString
-                .append(Double.toString(destlat));
-        urlString.append(",");
-        urlString.append(Double.toString(destlog));
-        urlString.append("&sensor=false&mode=two-wheeler&alternatives=true");
-        urlString.append("&key=" + getString(R.string.map_api_key));
-        return urlString.toString();
-    }
-
-
-    private void getDirection() {
-        //Getting the URL
-        String url = makeURL(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong, Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-
-        //Showing a dialog till we get the route
-        final ProgressDialog loading = ProgressDialog.show(this, "Getting Route", "Please wait...", false, false);
-
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        loading.dismiss();
-                        //Calling the method drawPath to draw the path
-                        drawPath(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
-                    }
-                });
-
-        //Adding the request to request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
-    //The parameter is the server response
-    public void drawPath(String result) {
-        //Getting both the coordinates
-        LatLng from = new LatLng(fromLatitude, fromLongitude);
-        LatLng to = new LatLng(toLatitude, toLongitude);
-
-        //Calculating the distance in meters
-        Double distance = SphericalUtil.computeDistanceBetween(from, to);
-
-        //Displaying the distance
-      //  Toast.makeText(this, String.valueOf(distance + " Meters"), Toast.LENGTH_SHORT).show();
-
-
-        try {
-            //Parsing json
-            final JSONObject json = new JSONObject(result);
-            JSONArray routeArray = json.getJSONArray("routes");
-            JSONObject routes = routeArray.getJSONObject(0);
-            JSONObject overviewPolylines = routes.getJSONObject("overview_polyline");
-            String encodedString = overviewPolylines.getString("points");
-            List<LatLng> list = decodePoly(encodedString);
-            Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-                    .addAll(list)
-                    .width(8)
-                    .color(Color.BLUE)
-                    .geodesic(true)
-            );
-
-            LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-            Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                    .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-        } catch (JSONException e) {
-
-        }
-    }*/
 
 }

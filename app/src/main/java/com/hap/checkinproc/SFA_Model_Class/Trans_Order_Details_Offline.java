@@ -84,6 +84,10 @@ public class Trans_Order_Details_Offline {
     @Expose
     private String fieldCode;
 
+    @SerializedName("PaidAmount")
+    @Expose
+    private String PaidAmount;
+
     public String getTransOrderNo() {
         return transOrderNo;
     }
@@ -284,5 +288,13 @@ public class Trans_Order_Details_Offline {
 
     public void setFieldCode(String fieldCode) {
         this.fieldCode = fieldCode;
+    }
+
+    public String getPaidAmount() {
+        return PaidAmount;
+    }
+
+    public void setPaidAmount(String paidAmount) {
+        PaidAmount = paidAmount;
     }
 }

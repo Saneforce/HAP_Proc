@@ -443,6 +443,13 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.MYTEAM_LOCATION:
+                        axnname = "get/myteamlocation";
+                        data.put("sfcode", jparam.get("sfcode").getAsString());
+                      //  data.put("date", jparam.get("date").getAsString());
+                        data.put("date", "2021-11-10");
+                        data.put("type", jparam.get("type").getAsString());
+                        break;
                     case Constants.PrimaryTAXList:
                         axnname = "get/primaryproducttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -694,6 +701,21 @@ public class Common_Class {
 
     }
 
+    public String getDirectionsUrl(String dest) {
+        // Origin of route
+        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
+        // Destination of route
+        String str_dest = "destination=" + dest;
+        // Key
+        String key = "key=" + context.getString(R.string.map_api_key);
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + key;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
+        return url;
+    }
 
 //    public boolean checkValueStore(Activity activity, String key) {
 //        DatabaseHandler db = new DatabaseHandler(activity);

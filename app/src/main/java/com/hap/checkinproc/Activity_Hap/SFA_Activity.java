@@ -42,6 +42,7 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
+import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
@@ -63,7 +64,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
-    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary;
+    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary, linMyTeam;
     Gson gson;
 
     private SANGPSTracker mLUService;
@@ -108,6 +109,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
         linPrimary = findViewById(R.id.Lin_primary);
+        linMyTeam = findViewById(R.id.lin_myteam);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -122,6 +124,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         Logout.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
         linPrimary.setOnClickListener(this);
+        linMyTeam.setOnClickListener(this);
         gson = new Gson();
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
@@ -268,6 +271,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.lin_myteam:
+                common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
+                break;
             case R.id.Lin_primary:
                 common_class.getDb_310Data(Constants.PrimaryTAXList, this);
                 break;

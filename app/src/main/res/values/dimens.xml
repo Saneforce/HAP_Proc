@@ -18,6 +18,7 @@
     <dimen name="C18dp">18dp</dimen>
     <dimen name="C19dp">19dp</dimen>
     <dimen name="C100dp">100dp</dimen>
+    <dimen name="C150dp">150dp</dimen>
     <dimen name="C10dp">10dp</dimen>
     <dimen name="C20dp">20dp</dimen>
     <dimen name="C30dp">30dp</dimen>

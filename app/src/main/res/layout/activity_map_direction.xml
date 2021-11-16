@@ -59,8 +59,10 @@
 
         <TextView
             android:id="@+id/tvStartDirection"
-            style="@style/ButtonStyle"
+            style="@style/BottomButton"
             android:text="Start" />
+
+
     </LinearLayout>
 
 </FrameLayout>
