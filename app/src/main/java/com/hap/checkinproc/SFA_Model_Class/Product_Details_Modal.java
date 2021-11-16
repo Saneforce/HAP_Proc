@@ -39,6 +39,19 @@ public class Product_Details_Modal {
     @SerializedName("Unit_code")
     @Expose
     private String unitCode;
+
+    public String getERP_Code() {
+        return ERP_Code;
+    }
+
+    public void setERP_Code(String ERP_Code) {
+        this.ERP_Code = ERP_Code;
+    }
+
+    @SerializedName("ERP_Code")
+    @Expose
+    private String ERP_Code;
+
     @SerializedName("Default_UOMQty")
     @Expose
     private Double defaultUOMQty;

@@ -96,13 +96,13 @@
         <entry key="app/src/main/res/drawable/round_status_blue.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/shape_user.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/drawable/sign_bg.xml" value="0.21197916666666666" />
-        <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.32689655172413795" />
         <entry key="app/src/main/res/layout/activity_allowance.xml" value="0.11956521739130435" />
         <entry key="app/src/main/res/layout/activity_allowance_two.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />
-        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.3673012318029115" />
+        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_dashboard__two.xml" value="0.1644021739130435" />
         <entry key="app/src/main/res/layout/activity_deviation_entry.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/activity_dist__locations.xml" value="0.18432971014492755" />
@@ -114,10 +114,11 @@
         <entry key="app/src/main/res/layout/activity_leave__request.xml" value="0.12228260869565218" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />
-        <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.15489130434782608" />
+        <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_other_brand_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_outlet__info_.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_pop_layout.xml" value="0.18432971014492755" />
+        <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.2558613659531091" />
         <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_q_r_code_scanner.xml" value="0.24592391304347827" />
         <entry key="app/src/main/res/layout/activity_qps.xml" value="0.18432971014492755" />
@@ -136,8 +137,10 @@
         <entry key="app/src/main/res/layout/custom_dialog_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/custom_toolbar_help.xml" value="0.1" />
         <entry key="app/src/main/res/layout/explorelist.xml" value="0.16394927536231885" />
+        <entry key="app/src/main/res/layout/fragment_outletdata_info.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_tab_outlet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fruit_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.5" />
         <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
         <entry key="app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.3559322033898305" />

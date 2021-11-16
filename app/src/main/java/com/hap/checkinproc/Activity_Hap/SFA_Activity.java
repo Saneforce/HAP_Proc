@@ -3,11 +3,15 @@ package com.hap.checkinproc.Activity_Hap;
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 
 import android.app.DatePickerDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -42,6 +48,8 @@ import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.LocationReceiver;
+import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,6 +65,10 @@ import retrofit2.Response;
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary;
     Gson gson;
+
+    private SANGPSTracker mLUService;
+    private LocationReceiver myReceiver;
+    private boolean mBound = false;
 
     public static final String UserDetail = "MyPrefs";
     Common_Class common_class;
@@ -250,6 +262,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         recyclerView = findViewById(R.id.gvOutlet);
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
+
     }
 
     @Override
@@ -497,6 +510,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private final ServiceConnection mServiceConection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mLUService = null;
+            mBound = false;
+        }
+    };
 }
 
   /*  private void getDashboardDataFromAPI() {

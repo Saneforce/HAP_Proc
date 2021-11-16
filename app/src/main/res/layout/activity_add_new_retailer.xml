@@ -147,21 +147,23 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C5dp"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginBottom="3dp"
                                     android:text="Distributor"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+                                    android:textSize="13dp"/>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
 
                             </LinearLayout>
@@ -179,43 +181,35 @@
                                     android:layout_height="wrap_content"
                                     android:hint="@string/select_distributor"
                                     android:padding="5dp"
-                                    android:textSize="13dp" />
-
+                                    android:textSize="13sp" />
                                 <ImageView
-
                                     android:id="@+id/ivDistSpinner"
                                     android:layout_width="@dimen/C10dp"
                                     android:layout_height="@dimen/C10dp"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_marginRight="@dimen/C10dp"
-                                    android:src="@drawable/spin_down_arrow"></ImageView>
+                                    android:src="@drawable/spin_down_arrow"/>
                             </RelativeLayout>
-
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
+                                android:orientation="horizontal"
+                                android:layout_marginTop="10dp">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginBottom="3dp"
                                     android:text="@string/route"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
-
+                                    android:textSize="13dp"/>
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
-
                             </LinearLayout>
-
-
                             <RelativeLayout
                                 android:id="@+id/rl_route"
                                 android:layout_width="match_parent"
@@ -239,10 +233,9 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_marginRight="@dimen/C10dp"
-                                    android:src="@drawable/spin_down_arrow"></ImageView>
+                                    android:src="@drawable/spin_down_arrow"/>
 
                             </RelativeLayout>
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -250,7 +243,7 @@
                             android:id="@+id/retailercodevisible"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="8dp"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -261,21 +254,16 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:text="Retailer Code "
+                                    android:text="Retailer Code"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
-
+                                    android:textSize="13dp"/>
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
-
                             </LinearLayout>
-
-
                             <TextView
                                 android:id="@+id/retailercode"
                                 android:layout_width="match_parent"
@@ -285,14 +273,12 @@
                                 android:hint="code"
                                 android:padding="10dp"
                                 android:textSize="13dp" />
-
                         </LinearLayout>
-
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_marginTop="@dimen/C10dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -308,32 +294,25 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="10dp"
                                         android:orientation="vertical">
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:orientation="horizontal">
-
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="10dp"
-                                                android:layout_marginBottom="10dp"
-                                                android:text="New Retailer "
+                                                android:text="New Retailer"
                                                 android:textColor="@android:color/black"
-                                                android:textSize="13dp"></TextView>
-
+                                                android:textSize="13dp"/>
                                             <ImageView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="12dp"
+                                                android:layout_marginTop="@dimen/C3dp"
+                                                android:layout_marginLeft="@dimen/C2dp"
                                                 android:src="@drawable/mandatory" />
-
                                         </LinearLayout>
-
-
                                         <EditText
                                             android:id="@+id/edt_new_name"
                                             android:layout_width="match_parent"
@@ -361,21 +340,18 @@
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="10dp"
-                                                android:layout_marginBottom="10dp"
-                                                android:text="Owner Name "
+                                                android:text="Owner Name"
                                                 android:textColor="@android:color/black"
-                                                android:textSize="13dp"></TextView>
+                                                android:textSize="13dp"/>
 
                                             <ImageView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="12dp"
+                                                android:layout_marginTop="@dimen/C3dp"
+                                                android:layout_marginLeft="@dimen/C2dp"
                                                 android:src="@drawable/mandatory" />
 
                                         </LinearLayout>
-
-
                                         <EditText
                                             android:id="@+id/owner_name"
                                             android:layout_width="match_parent"
@@ -394,22 +370,15 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_margin="5dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
                                     android:layout_weight="1.5"
                                     android:orientation="vertical">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="end"
-                                        android:layout_marginTop="12dp"
-                                        android:src="@drawable/mandatory" />
-
-
                                     <androidx.cardview.widget.CardView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:layout_marginRight="@dimen/C10dp"
+                                        android:layout_marginRight="@dimen/C5dp"
+                                        android:layout_marginLeft="@dimen/C5dp"
                                         android:background="@color/white"
                                         app:cardCornerRadius="@dimen/C8dp">
 
@@ -417,14 +386,12 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:orientation="vertical">
-
-
                                             <ImageView
                                                 android:id="@+id/ivShopPhoto"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:scaleType="fitXY"
-                                                android:src="@drawable/profile_img"></ImageView>
+                                                android:src="@drawable/profile_img"/>
 
 
                                         </LinearLayout>
@@ -441,7 +408,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="8dp"
                             android:orientation="vertical">
 
 
@@ -452,17 +419,17 @@
 
                                 <TextView
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
+                                    android:layout_height="match_parent"
                                     android:text="Address"
+                                    android:gravity="center_vertical"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+                                    android:textSize="13sp"/>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
                                 <Space
                                     android:layout_width="match_parent"
@@ -479,7 +446,8 @@
                                     android:paddingLeft="15dp"
                                     android:paddingRight="15dp"
                                     android:text="Refresh Location"
-                                    android:textSize="13sp"
+                                    android:textSize="12sp"
+                                    android:letterSpacing="0.09"
                                     android:theme="@style/BluePrimaryButton"
                                     app:finalCornerAngle="50dp"
                                     app:initialCornerAngle="10dp"
@@ -499,7 +467,7 @@
                                 android:gravity="start"
                                 android:hint="Enter the Address"
                                 android:padding="10dp"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                         </LinearLayout>
 
@@ -513,8 +481,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical">
-
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -523,15 +489,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="State"
                                     android:textColor="@android:color/black"></TextView>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
 
                             </LinearLayout>
@@ -565,31 +530,26 @@
                             </RelativeLayout>
 
                         </LinearLayout>
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical">
-
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
-
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="City"
                                     android:textColor="@android:color/black"></TextView>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
 
                             </LinearLayout>
@@ -603,7 +563,7 @@
                                 android:gravity="start"
                                 android:hint="Enter the City"
                                 android:padding="10dp"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                         </LinearLayout>
 
@@ -623,8 +583,6 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="Pin code"
                                     android:textColor="@android:color/black"></TextView>
 
@@ -659,10 +617,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="GST"
-                                    android:textColor="@android:color/black"></TextView>
+                                    android:textColor="@android:color/black"/>
 
 
                             </LinearLayout>
@@ -676,7 +632,7 @@
                                 android:gravity="start"
                                 android:hint="Enter the gst"
                                 android:padding="10dp"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                         </LinearLayout>
 
@@ -695,16 +651,15 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="Phone"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+                                    android:textSize="13sp"/>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
 
                             </LinearLayout>
@@ -719,7 +674,7 @@
                                 android:hint="Enter the Phone No"
                                 android:inputType="phone"
                                 android:padding="10dp"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                         </LinearLayout>
 
@@ -739,17 +694,15 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="Second Phone No"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+                                    android:textSize="13sp"/>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    android:src="@drawable/mandatory"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:visibility="gone" />
 
                             </LinearLayout>
@@ -764,7 +717,7 @@
                                 android:hint="Enter the Second Phone No"
                                 android:inputType="phone"
                                 android:padding="10dp"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                         </LinearLayout>
 
@@ -780,20 +733,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
-
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="Email"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
-
-
+                                    android:textSize="13sp"/>
                             </LinearLayout>
-
-
                             <EditText
                                 android:id="@+id/edt_new_email"
                                 android:layout_width="match_parent"
@@ -804,7 +750,6 @@
                                 android:inputType="textEmailAddress"
                                 android:padding="10dp"
                                 android:textSize="13dp" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -827,23 +772,18 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginBottom="10dp"
                                         android:text="@string/retailer_class"
                                         android:textColor="@android:color/black"
-                                        android:textSize="13dp"></TextView>
-
-
+                                        android:textSize="13sp"/>
                                     <ImageView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="12dp"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:layout_marginLeft="@dimen/C2dp"
                                         android:src="@drawable/mandatory" />
-
                                 </LinearLayout>
 
                                 <LinearLayout
-
                                     android:id="@+id/linear_retailer_class"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -857,34 +797,26 @@
                                         android:layout_height="wrap_content"
                                         android:hint="@string/retailer_class"
                                         android:padding="5dp"
-                                        android:textSize="13dp" />
+                                        android:textSize="13sp" />
                                 </LinearLayout>
                             </LinearLayout>
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
-
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="@string/retailer_channel"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp" />
-
-
+                                    android:textSize="13sp" />
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginLeft="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
-
                             </LinearLayout>
-
-
                             <RelativeLayout
                                 android:id="@+id/linear_retailer_channel"
                                 android:layout_width="match_parent"
@@ -920,16 +852,15 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
                                     android:text="Delivery Type"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+                                    android:textSize="13sp"/>
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_marginStart="@dimen/C2dp"
                                     android:src="@drawable/mandatory" />
 
                             </LinearLayout>
@@ -947,7 +878,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="Delivery Type"
                                     android:padding="5dp"
-                                    android:textSize="13dp" />
+                                    android:textSize="13sp" />
 
                                 <ImageView
                                     android:layout_width="@dimen/C10dp"
@@ -969,22 +900,20 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp"
                                     android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginBottom="10dp"
                                         android:text="Outlet Type"
                                         android:textColor="@android:color/black"
-                                        android:textSize="13dp"/>
+                                        android:textSize="13sp"/>
 
                                     <ImageView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="12dp"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:layout_marginStart="@dimen/C2dp"
                                         android:src="@drawable/mandatory" />
 
                                 </LinearLayout>
@@ -1002,17 +931,50 @@
                                         android:layout_height="wrap_content"
                                         android:hint="Outlet Type"
                                         android:padding="5dp"
-                                        android:textSize="13dp" />
+                                        android:textSize="13sp" />
 
                                     <ImageView
                                         android:layout_width="@dimen/C10dp"
                                         android:layout_height="@dimen/C10dp"
                                         android:layout_alignParentEnd="true"
                                         android:layout_centerVertical="true"
-                                        android:layout_marginRight="@dimen/C10dp"
-                                        android:src="@drawable/spin_down_arrow"></ImageView>
+                                        android:layout_marginEnd="@dimen/C10dp"
+                                        android:src="@drawable/spin_down_arrow"/>
                                 </RelativeLayout>
 
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/linClsRmks"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Reason for Close"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp"/>
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:layout_marginStart="@dimen/C2dp"
+                                        android:src="@drawable/mandatory" />
+                                </LinearLayout>
+                                <EditText
+                                    android:id="@+id/edtClsRetRmk"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:background="@drawable/text_bg_grey"
+                                    android:gravity="start"
+                                    android:hint="Enter the Reason for Closed."
+                                    android:inputType="text"
+                                    android:padding="10dp"
+                                    android:textSize="13sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -1028,20 +990,13 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal">
-
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginBottom="10dp"
                                         android:text="@string/outstanding_amt"
                                         android:textColor="@android:color/black"
-                                        android:textSize="13dp"></TextView>
-
-
+                                        android:textSize="13sp"/>
                                 </LinearLayout>
-
-
                                 <EditText
                                     android:id="@+id/edt_retailer_outstanding"
                                     android:layout_width="match_parent"
@@ -1051,8 +1006,7 @@
                                     android:hint="@string/retailer_outstand_hint"
                                     android:inputType="numberDecimal"
                                     android:padding="10dp"
-                                    android:textSize="13dp" />
-
+                                    android:textSize="13sp" />
                             </LinearLayout>
 
 
@@ -1106,14 +1060,23 @@
         <!--            </LinearLayout>-->
         <!--        </LinearLayout>-->
 
-        <Button
+        <!--<Button
 
             android:id="@+id/submit_button"
             style="@style/BottomButton"
             android:text="Save"
 
-            />
-
+            />-->
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/submit_button"
+            style="@style/BottomButton"
+            android:text="Save"
+            android:theme="@style/BluePrimaryButton"
+            app:finalCornerAngle="50dp"
+            app:initialCornerAngle="0dp"
+            app:spinning_bar_color="#FFFFFFFF"
+            app:spinning_bar_padding="5dp"
+            app:spinning_bar_width="5dp" />
 
     </LinearLayout>
 

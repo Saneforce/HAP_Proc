@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import static android.widget.Toast.LENGTH_LONG;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -257,11 +258,16 @@ public class Login extends AppCompatActivity {
 
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if (DAMode == true) {
-                    bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
-                            Context.BIND_AUTO_CREATE);
-                    LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
-                            new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
-                    mLUService.requestLocationUpdates();
+
+                    if (isMyServiceRunning(SANGPSTracker.class)==false) {
+                        try{
+                            bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
+                                    Context.BIND_AUTO_CREATE);
+                            LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
+                                    new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+                            mLUService.requestLocationUpdates();
+                        }catch (Exception e){}
+                    }
                 }
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 Login.this.startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -317,9 +323,13 @@ public class Login extends AppCompatActivity {
 
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if (DAMode == true) {
-                    Intent playIntent = new Intent(this, SANGPSTracker.class);
-                    bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
-                    startService(playIntent);
+                    if (isMyServiceRunning(SANGPSTracker.class)==false) {
+                        try{
+                            Intent playIntent = new Intent(this, SANGPSTracker.class);
+                            bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
+                            startService(playIntent);
+                        }catch (Exception e){}
+                    }
                 }
             }
 
@@ -485,17 +495,29 @@ public class Login extends AppCompatActivity {
             // that since this activity is in the foreground, the service can exit foreground mode.
 
             Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
-            if (DAMode == true) {
-                bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
-                        Context.BIND_AUTO_CREATE);
-                LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
-                        new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+            if (DAMode == true ) {
+                if (isMyServiceRunning(SANGPSTracker.class)==false) {
+                    try{
+                        bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
+                                Context.BIND_AUTO_CREATE);
+                        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
+                                new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+                    }catch (Exception e){}
+                }
             }
             Log.e("Loaction_Check", "Loaction_Check");
-
         }
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -549,12 +571,13 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
-
         //eMail = "ciadmin@hap.in";
-        eMail = "1005675@hap.in";
+
+        //eMail = "testhap3@hap.in";
+        eMail = "1006178@hap.in";
         //eMail = "haptest3@hap.in";
 
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,BuildConfig.VERSION_NAME, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -573,6 +596,7 @@ public class Login extends AppCompatActivity {
                             shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                             shared_common_pref.save(Constants.CUTOFF_TIME, response.body().getData().get(0).getCutoffTime());
+                            shared_common_pref.save(Constants.DistributorERP, response.body().getData().get(0).getSfEmpId());
                             Shared_Common_Pref.LOGINTYPE=Constants.DISTRIBUTER_TYPE;
                             //   editor.putString("Sf_Type", response.body().getData().get(0).getDistCode());
                             userEditor.putString("Sfcode", response.body().getData().get(0).getDistCode());

@@ -699,6 +699,7 @@
         </androidx.cardview.widget.CardView>
 
 
+
         <RelativeLayout
 
             android:id="@+id/rlTakeOrder"
@@ -764,12 +765,26 @@
 
             </LinearLayout>
 
-            <TextView
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/takeorder"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF"
+                android:textColor="@color/white"
                 android:layout_alignParentRight="true"
+                android:text="PROCEED TO CART"
+                android:theme="@style/BluePrimaryButton"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="0dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp" />
+            <TextView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/C15dp"
                 android:drawableTint="@color/white"
                 android:text="PROCEED TO CART"

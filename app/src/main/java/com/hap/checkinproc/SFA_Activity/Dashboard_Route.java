@@ -18,9 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,9 +90,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Gson gson;
     Type userTypeRetailor, userTypeReport;
     TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate,
-            txSrvOtlt, txUniOtlt, txSrvOtltCnt, txUniOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
+            txSrvOtlt, txUniOtlt,txClsOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
-    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, undrUni, undrServ;
+    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
     Common_Model Model_Pojo;
     List<Common_Model> distributor_master = new ArrayList<>();
     List<Common_Model> FRoute_Master = new ArrayList<>();
@@ -107,8 +109,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    Switch swACOutlet,swOTHOutlet;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-    int CountUR = 0, CountSR = 0;
+    int CountUR = 0, CountSR = 0,CountCls=0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
@@ -182,11 +185,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llInvoice = findViewById(R.id.llInv);
             txSearchRet = findViewById(R.id.txSearchRet);
             txSrvOtlt = findViewById(R.id.txSrvOtlt);
+            txUniOtlt = findViewById(R.id.txUniOtlt);
+            txClsOtlt = findViewById(R.id.txClsOtlt);
             txSrvOtltCnt = findViewById(R.id.txSrvOtltCnt);
             txUniOtltCnt = findViewById(R.id.txUniOtltCnt);
-            txUniOtlt = findViewById(R.id.txUniOtlt);
+            txClsOtltCnt = findViewById(R.id.txClsOtltCnt);
             btSrvOtlt = findViewById(R.id.btSrvOtlt);
             btUniOtlt = findViewById(R.id.btUniOtlt);
+            btClsOtlt = findViewById(R.id.btClsOtlt);
             ivBtnRpt = findViewById(R.id.ivBtnRpt);
             txtOrdDate = findViewById(R.id.txtOrdDate);
 
@@ -198,6 +204,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             undrServ = findViewById(R.id.undrServ);
             undrUni = findViewById(R.id.undrUni);
+            undrCls = findViewById(R.id.undrCls);
+
+            swACOutlet = findViewById(R.id.swACOutlet);
+            swOTHOutlet = findViewById(R.id.swOTHOutlet);
+
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
             tabLayout = findViewById(R.id.tabs);
@@ -213,6 +224,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llNoOrder.setOnClickListener(this);
             llInvoice.setOnClickListener(this);
 
+            txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            txSrvOtlt.setTypeface(null, Typeface.BOLD);
+
+            undrServ.setVisibility(View.VISIBLE);
+            undrUni.setVisibility(View.INVISIBLE);
+            undrCls.setVisibility(View.INVISIBLE);
+
+            txUniOtlt.setTypeface(null, Typeface.NORMAL);
+            txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+            txClsOtlt.setTypeface(null, Typeface.NORMAL);
+            txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
             ivBtnRpt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -220,16 +243,46 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 }
             });
             txtOrdDate.setText(DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
+
+            swACOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swOTHOutlet.setChecked(false);
+                }
+            });
+            swACOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    setPagerAdapter(false);
+                }
+            });
+            swOTHOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swACOutlet.setChecked(false);
+                }
+            });
+            swOTHOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    setPagerAdapter(false);
+                }
+            });
             btSrvOtlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     RetType = "1";
                     txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     txSrvOtlt.setTypeface(null, Typeface.BOLD);
+
                     undrServ.setVisibility(View.VISIBLE);
                     undrUni.setVisibility(View.INVISIBLE);
+                    undrCls.setVisibility(View.INVISIBLE);
+
                     txUniOtlt.setTypeface(null, Typeface.NORMAL);
                     txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     setPagerAdapter(false);
                     // SearchRetailers();
                 }
@@ -242,8 +295,29 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     txUniOtlt.setTypeface(null, Typeface.BOLD);
                     undrUni.setVisibility(View.VISIBLE);
                     undrServ.setVisibility(View.INVISIBLE);
+                    undrCls.setVisibility(View.INVISIBLE);
                     txSrvOtlt.setTypeface(null, Typeface.NORMAL);
                     txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                    setPagerAdapter(false);
+                }
+            });
+            btClsOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RetType = "2";
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txClsOtlt.setTypeface(null, Typeface.BOLD);
+                    undrCls.setVisibility(View.VISIBLE);
+                    undrUni.setVisibility(View.INVISIBLE);
+                    undrServ.setVisibility(View.INVISIBLE);
+
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
 
                     setPagerAdapter(false);
                 }
@@ -725,6 +799,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     void setPagerAdapter(boolean isFilter) {
         try {
 
+            if (shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
@@ -733,18 +811,33 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Retailer_Modal_ListFilter.clear();
             CountUR = 0;
             CountSR = 0;
+            CountCls = 0;
 
             for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+                boolean ACTrue = false;
+                if (swACOutlet.isChecked()) {
+                    if (Retailer_Modal_List.get(i).getDelivType() != null && Retailer_Modal_List.get(i).getDelivType().equalsIgnoreCase("AC"))
+                        ACTrue = true;
+                } else if (swOTHOutlet.isChecked()) {
+                    if (!(Retailer_Modal_List.get(i).getDelivType() != null && Retailer_Modal_List.get(i).getDelivType().equalsIgnoreCase("AC")))
+                        ACTrue = true;
+                } else {
+                    ACTrue = true;
+                }
                 if (Retailer_Modal_List.get(i).getType() == null)
                     Retailer_Modal_List.get(i).setType("0");
-                if (!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
-                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
-
+                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("0") && ACTrue) CountUR++;
+                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1") && ACTrue) CountSR++;
+                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("2") && ACTrue) CountCls++;
+                if(ACTrue){
+                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                }
             }
             txUniOtltCnt.setText(String.valueOf(CountUR));
             txSrvOtltCnt.setText(String.valueOf(CountSR));
+            txClsOtltCnt.setText(String.valueOf(CountCls));
 
-            Retailer_Modal_ListFilter = Retailer_Modal_List;
+            // Retailer_Modal_ListFilter = Retailer_Modal_List;
 
             if (isFilter) {
                 adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType);

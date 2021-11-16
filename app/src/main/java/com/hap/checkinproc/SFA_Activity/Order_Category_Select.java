@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -60,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,7 +77,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder, Out_Let_Name, Category_Nametext,
+    CircularProgressButton takeorder;
+    TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvTimer;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
     Common_Class common_class;
@@ -476,6 +480,25 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     }
 
+    public void ResetSubmitBtn(int resetMode) {
+        common_class.ProgressdialogShow(0, "");
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        } else {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                takeorder.stopAnimation();
+                takeorder.revertAnimation();
+            }
+        }, dely);
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -511,33 +534,29 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 try {
 
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                        String startTime = "17:05:00";
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                        Date d1 = sdf.parse(Common_Class.GetTime());
-                        Date d2 = sdf.parse(startTime);
-                        long elapsed = d2.getTime() - d1.getTime();
-                        System.out.println("time difference: " + elapsed);
-
-
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-
-
-                            String sLoc = sharedCommonPref.getvalue("CurrLoc");
-                            if (sLoc.equalsIgnoreCase("")) {
-                                new LocationFinder(getApplication(), new LocationEvents() {
-                                    @Override
-                                    public void OnLocationRecived(Location location) {
-                                        strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                            Log.d("RepeatAni",String.valueOf(takeorder.isAnimating()));
+                            if(takeorder.isAnimating()) return;
+                            takeorder.startAnimation();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                                    if (sLoc.equalsIgnoreCase("")) {
+                                        new LocationFinder(getApplication(), new LocationEvents() {
+                                            @Override
+                                            public void OnLocationRecived(Location location) {
+                                                strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                                SaveOrder();
+                                            }
+                                        });
+                                    } else {
+                                        strLoc = sLoc.split(":");
                                         SaveOrder();
                                     }
-                                });
-                            } else {
-                                strLoc = sLoc.split(":");
-                                SaveOrder();
-                            }
-
-
+                                }
+                            }, 500);
                         } else {
                             common_class.showMsg(this, "Your Cart is empty...");
                         }
@@ -586,6 +605,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         HeadItem.put("UKey", Ukey);
                         HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();
@@ -714,6 +734,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
+                                    ResetSubmitBtn(1);
                                     if (san.equals("true")) {
                                         common_class.showMsg(Order_Category_Select.this, "Order Submitted Successfully");
                                         common_class.CommonIntentwithFinish(Invoice_History.class);
@@ -721,7 +742,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                                 } catch (Exception e) {
                                     common_class.ProgressdialogShow(0, "");
-
+                                    ResetSubmitBtn(2);
                                 }
                             }
                         }
@@ -730,6 +751,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             common_class.ProgressdialogShow(0, "");
                             Log.e("SUBMIT_VALUE", "ERROR");
+                            ResetSubmitBtn(2);
                         }
                     });
 
@@ -738,10 +760,12 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 @Override
                 public void NegativeMethod(DialogInterface dialog, int id) {
                     dialog.dismiss();
+                    ResetSubmitBtn(0);
                 }
             });
         } else {
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            ResetSubmitBtn(0);
         }
     }
 

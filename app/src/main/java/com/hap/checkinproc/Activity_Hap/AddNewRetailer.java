@@ -85,10 +85,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     ImageView imgBack;
     EditText toolSearch ;
     GoogleMap mGoogleMap;
-    Button mSubmit;
     ApiInterface service;
     RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel;
-    LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible;
+    LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible,linClsRmks;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
             txDelvryType, txOutletType, tvStateName,retailercode;
     Type userType;
@@ -98,7 +97,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail,
-            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding;
+            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding,edtClsRetRmk;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -124,7 +123,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-    CircularProgressButton btnRefLoc;
+    CircularProgressButton btnRefLoc,mSubmit;
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
@@ -162,6 +161,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerEmail = findViewById(R.id.edt_new_email);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+
+            linClsRmks = findViewById(R.id.linClsRmks);
+            edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
+
             rlDelvryType = findViewById(R.id.rlDelvryType);
             txDelvryType = findViewById(R.id.txDelvryType);
             rlOutletType = findViewById(R.id.rlOutletType);
@@ -200,12 +203,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             outletTypeList.add(mCommon_model_spinner);
             mCommon_model_spinner = new Common_Model("0", "Universal", "flag");
             outletTypeList.add(mCommon_model_spinner);
+            mCommon_model_spinner = new Common_Model("2", "Closed", "flag");
+            outletTypeList.add(mCommon_model_spinner);
 
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     common_class.showCommonDialog(outletTypeList, 13, AddNewRetailer.this);
-
                 }
             });
             copypaste.setOnClickListener(this);
@@ -285,6 +289,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
                 if (iOutletTyp == 0)
                     txOutletType.setText("Universal");
+                else if (iOutletTyp == 2)
+                    txOutletType.setText("Closed");
                 else
                     txOutletType.setText("Service");
                 txDelvryType.setText(Retailer_Modal_List.get(getOutletPosition()).getDelivType());
@@ -465,11 +471,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
                     } else if (txOutletType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
+                    } else if(iOutletTyp==2 && edtClsRetRmk.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(getApplicationContext(), "Enter the reason for close outlet", Toast.LENGTH_SHORT).show();
+                        linClsRmks.requestFocus();
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        addNewRetailers();
+                        if(mSubmit.isAnimating()) return;
+                        mSubmit.startAnimation();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                addNewRetailers();
+                            }
+                        }, 500);
                     }
 
                 }
@@ -825,7 +841,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("VechType", txDelvryType.getText().toString());
             reportObject.put("OutletTypeNm", txOutletType.getText().toString());
             reportObject.put("OutletTypeCd", iOutletTyp);
-
+            reportObject.put("OutletTypeRmks", edtClsRetRmk.getText());
 
             reportObject.put("unlisted_doctor_areaname", "''");
             reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
@@ -890,6 +906,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
                     }
 
+                    ResetSubmitBtn(1);
                     if (Shared_Common_Pref.FromActivity == "Outlets") {
                         Shared_Common_Pref.FromActivity = "";
                         common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
@@ -904,14 +921,34 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    ResetSubmitBtn(0);
 
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+            ResetSubmitBtn(2);
         }
     }
 
+    public void ResetSubmitBtn(int resetMode) {
+        common_class.ProgressdialogShow(0, "");
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
+            mSubmit.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        } else {
+            mSubmit.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSubmit.stopAnimation();
+                mSubmit.revertAnimation();
+            }
+        }, dely);
+
+    }
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         common_class.dismissCommonDialog();
@@ -946,6 +983,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             case 13:
                 txOutletType.setText(myDataset.get(position).getName());
                 iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
+                linClsRmks.setVisibility(View.GONE);
+                if(iOutletTyp==2){linClsRmks.setVisibility(View.VISIBLE);}
                 break;
         }
     }

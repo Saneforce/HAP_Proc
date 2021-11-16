@@ -36,7 +36,7 @@ import retrofit2.http.QueryMap;
 public interface ApiInterface {
 
     @GET("Db_v300.php?")
-    Call<Model> login(@Query("axn") String axn, @Query("Email") String Email, @Query("DvID") String deveiceId);
+    Call<Model> login(@Query("axn") String axn, @Query("Email") String Email,@Query("AppVer") String AppVer, @Query("DvID") String deveiceId);
 
 
     @POST("db_new_activity.php?")
@@ -435,7 +435,7 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
-    @POST("db_v310.php?axn=save/primaryorder")
+    @POST("db_v310_1.php?axn=save/primaryorder")
     Call<JsonObject> savePrimaryOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
