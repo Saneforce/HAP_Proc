@@ -13,10 +13,12 @@
         android:orientation="vertical">
 
         <include
+
             android:id="@+id/tool_header"
             layout="@layout/sfatoolbar"></include>
 
         <TextView
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/blue_bg"
@@ -29,27 +31,21 @@
             android:textSize="18dp"
             android:textStyle="bold" />
 
-        <include
-            android:id="@+id/tool_header"
-            layout="@layout/myteam_category_layout"
-            android:visibility="gone"></include>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/rvTeamCategory"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTeamCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </LinearLayout>
 
         <RelativeLayout
+
             android:id="@+id/tabExplore"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,18 +56,21 @@
                 android:id="@+id/mapview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+
+                >
 
             </com.google.android.gms.maps.MapView>
 
             <RelativeLayout
+
                 android:id="@+id/vwRetails"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="@dimen/C150dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/C1dp"
                 android:layout_marginRight="@dimen/C1dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="visible">
 
 
                 <LinearLayout

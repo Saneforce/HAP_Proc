@@ -82,6 +82,7 @@ public class Constants {
     public static final String PRIMARY_ORDER = "primaryOrder";
     public static final String CUTOFF_TIME = "cutOffTime";
     public static final String GetTodayPrimaryOrder_List = "getTodayPrimaryOrderList";
-    public static final String TodayPrimaryOrderDetails_List="todayPrimaryOrderDetail";
-    public static final String MYTEAM_LOCATION ="myTeamLocation" ;
+    public static final String TodayPrimaryOrderDetails_List = "todayPrimaryOrderDetail";
+    public static final String MYTEAM_LOCATION = "myTeamLocation";
+    public static String NEW_OUTLET = "newOutlet";
 }

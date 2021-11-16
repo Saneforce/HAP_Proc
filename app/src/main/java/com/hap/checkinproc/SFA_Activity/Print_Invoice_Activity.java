@@ -575,7 +575,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     void orderInvoiceDetailData(String response) {
         try {
-
             billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
             userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
             }.getType();
@@ -610,17 +609,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(paidAmt)));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
-
             mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter);
             printrecyclerview.setAdapter(mReportViewAdapter);
 
             cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
             gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
 
-
         } catch (Exception e) {
             Log.e("PRINT:getData ", e.getMessage());
-
         }
     }
 }

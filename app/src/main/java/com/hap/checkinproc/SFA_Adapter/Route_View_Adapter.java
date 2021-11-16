@@ -339,6 +339,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         intent.putExtra(Constants.DEST_LAT, sLat);
         intent.putExtra(Constants.DEST_LNG, sLng);
         intent.putExtra(Constants.DEST_NAME, OutletName);
+        intent.putExtra(Constants.NEW_OUTLET, "");
         context.startActivity(intent);
 
     }

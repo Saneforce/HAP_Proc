@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
     private Context context;
     Common_Class common_class;
     int salRowDetailLayout;
-    MyTeamCategoryAdapter.MyViewHolder pholder;
+    public static String TAG = "MyTeamCategoryAdapter";
 
     public MyTeamCategoryAdapter(JSONArray jAryDta, int rowLayout, Context mContext) {
         AryDta = jAryDta;
@@ -51,57 +52,37 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
                     try {
 
                         MyTeamActivity.myTeamActivity.getTeamLoc(itm);
-
-
-                        if (pholder != null) {
-                            pholder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
-                            pholder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
-                            pholder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-                        }
-                        pholder = holder;
                         MyTeamActivity.selectedPos = position;
-                        holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
-                        holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
-                        holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        notifyDataSetChanged();
 
                     } catch (Exception e) {
-
+                        Log.v(TAG, e.getMessage());
                     }
                 }
             });
 
             if (position == MyTeamActivity.selectedPos) {
-
                 holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
                 holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-
-                pholder = holder;
             } else {
                 holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
                 holder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void updateUI(MyTeamCategoryAdapter.MyViewHolder holder, int pos) {
-        if (pos == MyTeamActivity.selectedPos) {
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
-            holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
-            holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
-            holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-
-        } else {
-            holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
-            holder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
-            holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
-        }
-
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override

@@ -33,6 +33,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
@@ -77,10 +78,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     public static MyTeamActivity myTeamActivity;
 
     private Marker marker;
-    LinearLayout llZSM, llRSM, llSDM, llSDE, llALL;
-
     RecyclerView rvCategory, rvTeamDetail;
-    List<Category_Universe_Modal> categoryList = new ArrayList<>();
     MyTeamCategoryAdapter adapter;
 
     public static int selectedPos;
@@ -107,11 +105,21 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             mapView.onCreate(savedInstanceState);
             mapView.getMapAsync(this);
             vwRetails.setOnTouchListener(this);
+
+
             RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, 400);
+                    RelativeLayout.LayoutParams.MATCH_PARENT, 435);
+
             rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             vwRetails.setLayoutParams(rel_btn);
-            Log.d("Height:", String.valueOf(vwRetails.getHeight()));
+
+
+            RelativeLayout.LayoutParams mapLayout = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
+            mapLayout.setMargins(0, 0, 0, 435);
+
+            mapView.setLayoutParams(mapLayout);
 
 
             common_class = new Common_Class(this);
@@ -164,7 +172,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void getTeamLoc(String type) {
-
         if (mType.equalsIgnoreCase("")) {
             mType = type;
             JsonObject data = new JsonObject();
@@ -193,18 +200,23 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                 JSONArray arr = jsonObject.getJSONArray("Data");
 
                 JSONArray arr1 = new JSONArray();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject arrObj = arr.getJSONObject(i);
-                    LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
-                            Double.parseDouble(arrObj.getString("Lon")));
+
 
                     if (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL")) {
+                        LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
+                                Double.parseDouble(arrObj.getString("Lon")));
                         marker = map.addMarker(new MarkerOptions().position(latLng)
                                 .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                         mark.add(marker);
 
 
                         arr1.put(arr.getJSONObject(i));
+
+                        builder.include(latLng);
                     }
                 }
 
@@ -220,6 +232,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
+                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+
 
             }
         } catch (Exception e) {
@@ -232,19 +246,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
         rvCategory = findViewById(R.id.rvTeamCategory);
         rvTeamDetail = findViewById(R.id.rvTeamDetail);
         vwRetails = findViewById(R.id.vwRetails);
-
-        llZSM = findViewById(R.id.llZSM);
-        llRSM = findViewById(R.id.llRSM);
-        llSDM = findViewById(R.id.llSDM);
-        llSDE = findViewById(R.id.llSDE);
-        llALL = findViewById(R.id.llAll);
-
-        llZSM.setOnClickListener(this);
-        llRSM.setOnClickListener(this);
-        llSDM.setOnClickListener(this);
-        llSDE.setOnClickListener(this);
-        llALL.setOnClickListener(this);
-
     }
 
     @Override
@@ -312,23 +313,15 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             if (apiDataResponse != null) {
                 switch (key) {
                     case Constants.MYTEAM_LOCATION:
-
-
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
-
                             JSONArray arr = jsonObject.getJSONArray("Designation");
-                            arr.put(arr.length() + 1, "ALL");
+                            arr.put(arr.length() , "ALL");
                             adapter = new MyTeamCategoryAdapter(arr, R.layout.myteam_category_adapter_layout, this);
                             rvCategory.setAdapter(adapter);
-
-
                             selectedPos = arr.length() - 1;
-
                             setAdapter(apiDataResponse);
                         }
-
-
                         break;
                 }
             }
@@ -380,6 +373,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                         intent.putExtra(Constants.DEST_LAT, obj.getString("Lat"));
                         intent.putExtra(Constants.DEST_LNG, obj.getString("Lon"));
                         intent.putExtra(Constants.DEST_NAME, obj.getString("HQ_Name"));
+                        intent.putExtra(Constants.NEW_OUTLET, "");
                         startActivity(intent);
                     } catch (Exception e) {
 
@@ -451,29 +445,26 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
         final int Y = (int) event.getRawY();
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
                 _yDelta = Y;
-                if (Y < 500) {
+                if (Y < 200) {
                     ht = vwRetails.getHeight();
                     rev = true;
                 } else {
                     rev = false;
                 }
-                Log.d("Y:", String.valueOf(Y) + " _yDelta:" + String.valueOf(_yDelta));
                 break;
             case MotionEvent.ACTION_UP:
-                Log.d("Height:", String.valueOf(vwRetails.getHeight()) + "=" + String.valueOf(mapView.getHeight()));
-                int Hight = 400;
+                int Hight = 435;
                 if (rev == false) {
-                    Hight = 400;
-                    if (vwRetails.getHeight() > 700) {
-                        Hight = mapView.getHeight();
+                    Hight = 435;
+                    if (vwRetails.getHeight() > 500) {
+                        Hight = mapView.getHeight() + 435;
                     }
                 }
                 if (rev == true) {
-                    Hight = mapView.getHeight();
-                    if (vwRetails.getHeight() < (mapView.getHeight() - 100)) {
-                        Hight = 400;
+                    Hight = mapView.getHeight() + 435;
+                    if (vwRetails.getHeight() < ((mapView.getHeight() + 435) - 100)) {
+                        Hight = 435;
                     }
                 }
                 RelativeLayout.LayoutParams vwlist = new RelativeLayout.LayoutParams(
@@ -488,26 +479,24 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             case MotionEvent.ACTION_MOVE:
                 int incHight = 0;
                 if (rev == false) {
-                    incHight = (_yDelta - Y) + 400;
+                    incHight = (_yDelta - Y) + 435;
                 } else {
                     incHight = ht - (Y - _yDelta);
                 }
                 if (incHight < 0) incHight = 0;
                 Log.d("Y:", String.valueOf(Y) + " _yDelta:" + String.valueOf(_yDelta) + "=" + (Y - _yDelta) + " inc:" + String.valueOf(incHight));
-                if (incHight > 634) {
+                if (incHight > 434) {
                     RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, incHight);
                     rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     vwRetails.setLayoutParams(rel_btn);
-                    Log.d("=>Height:", String.valueOf(vwRetails.getHeight()) + "=" + String.valueOf(mapView.getHeight()));
 
                 }
-               /* RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vwRetails.getLayoutParams();
-                layoutParams.topMargin = Y - _yDelta;*/
-                // vwRetails.setLayoutParams(layoutParams);
+
                 break;
         }
         //_root.invalidate();
         return true;
     }
+
 }

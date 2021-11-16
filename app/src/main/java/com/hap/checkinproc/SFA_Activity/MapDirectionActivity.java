@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -322,7 +323,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
             }
         } catch (Exception e) {
-            Log.v(TAG,e.getMessage());
+            Log.v(TAG, e.getMessage());
         }
     }
 
@@ -346,11 +347,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         Location endPoint = new Location("point B");
         endPoint.setLatitude(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)));
         endPoint.setLongitude(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-
         double distance = startPoint.distanceTo(endPoint);
 
 
-        if (distance > 200) {
+        if (distance > 200 || !getIntent().getStringExtra(Constants.NEW_OUTLET).equalsIgnoreCase("new")) {
             ReachedOutlet.setText("START ");
         } else {
             ReachedOutlet.setText("Create Outlet ");
@@ -358,7 +358,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
 
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -579,9 +578,18 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     }
                     mPolyline = mGoogleMap.addPolyline(lineOptions);
 
+                    LatLng currentLatLng = new LatLng(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
+
                     LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
                     Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
                             .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(currentLatLng);
+                    builder.include(latLng);
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+
 
                 } else
                     Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();

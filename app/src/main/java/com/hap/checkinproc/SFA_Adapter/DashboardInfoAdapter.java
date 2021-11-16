@@ -59,16 +59,15 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
     public void onBindViewHolder(DashboardInfoAdapter.MyViewHolder holder, int position) {
         try {
             JSONObject mObj = mDate.getJSONObject(position);
-
             holder.tvOutletName.setText(mObj.getString("OutletName"));
 
-            if (DistName.contains(mObj.getString("FranchiseName")))
-                holder.tvDistName.setVisibility(View.GONE);
-            else {
-                DistName = DistName + mObj.getString("FranchiseName");
+//            if (DistName.contains(mObj.getString("FranchiseName")))
+//                holder.tvDistName.setVisibility(View.GONE);
+//            else {
+            // DistName = DistName + mObj.getString("FranchiseName");
 
-                holder.tvDistName.setText(mObj.getString("FranchiseName"));
-            }
+            holder.tvDistName.setText(mObj.getString("FranchiseName"));
+            //}
 
             if (Shared_Common_Pref.SALES_MODE.equals("noorder")) {
                 holder.tvStatus.setText(mObj.getString("Remarks"));
@@ -90,7 +89,6 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
     public int getItemCount() {
         return mDate.length();
     }
-
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvId, tvStatus, tvAmount, tvOutletName, tvDistName;

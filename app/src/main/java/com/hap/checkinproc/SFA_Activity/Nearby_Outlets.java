@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -99,10 +98,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     GoogleMap map;
     Boolean rev = false;
     ArrayList<Marker> mark = new ArrayList<>();
-    private HashMap<Marker, Integer> mHashMap = new HashMap<Marker, Integer>();
 
     StringBuilder sb, place;
-    static String googlePlacesData, placeDetail;
+    static String googlePlacesData;
     double laty = 0.0, lngy = 0.0;
     JSONArray resData;
     RelativeLayout vwRetails, tabExplore;
@@ -417,6 +415,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
 
     }
+
     private void SearchRetailers() {
         JsonArray srhOutlets = new JsonArray();
         for (int sr = 0; sr < jOutlets.size(); sr++) {
@@ -563,7 +562,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.ivFilterKeysMenu:
-                common_class.showCommonDialog(mapKeyList,1000,this);
+                common_class.showCommonDialog(mapKeyList, 1000, this);
                 break;
 
 
@@ -1017,6 +1016,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         intent.putExtra(Constants.DEST_LAT, dest_lat);
         intent.putExtra(Constants.DEST_LNG, dest_lng);
         intent.putExtra(Constants.DEST_NAME, dest_name);
+        intent.putExtra(Constants.NEW_OUTLET, "new");
         startActivity(intent);
 
     }
