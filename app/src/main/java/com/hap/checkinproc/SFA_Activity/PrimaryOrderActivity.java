@@ -77,8 +77,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvTimer;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd;
+            tvTimer,txBalAmt,txAmtWalt,txAvBal;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd,btnRefACBal;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -87,8 +87,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Prodct_Adapter mProdct_Adapter;
     String TAG = "PRIMARY_ORDER";
     DatabaseHandler db;
-    RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose;
+    RelativeLayout rlCategoryItemSearch,balDetwin;
+    ImageView ivClose,btnClose;
     EditText etCategoryItemSearch;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
@@ -124,6 +124,12 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             ivClose = findViewById(R.id.ivClose);
             llTdPriOrd = findViewById(R.id.llTodayPriOrd);
             tvACBal = findViewById(R.id.tvACBal);
+            txAvBal = findViewById(R.id.txAvBal);
+            txAmtWalt = findViewById(R.id.txAmtWalt);
+            txBalAmt = findViewById(R.id.txBalAmt);
+            btnRefACBal = findViewById(R.id.btnRefACBal);
+            balDetwin = findViewById(R.id.balDetwin);
+            btnClose = findViewById(R.id.btnClose);
             Out_Let_Name.setText("Hi! "+sharedCommonPref.getvalue(Constants.Distributor_name,""));
             getACBalance(0);
 
@@ -154,7 +160,24 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
             common_class.getDb_310Data(Constants.PRIMARY_SCHEME, this);
-
+            tvACBal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    balDetwin.setVisibility(View.VISIBLE);
+                }
+            });
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    balDetwin.setVisibility(View.GONE);
+                }
+            });
+            btnRefACBal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getACBalance(0);
+                }
+            });
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -192,6 +215,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         JSONObject jParam = new JSONObject();
         try {
             jParam.put("StkERP", sharedCommonPref.getvalue(Constants.DistributorERP));
+            tvACBal.setText("₹0.00");
+            txBalAmt.setText("₹0.00");
+            txAmtWalt.setText("₹0.00");
+            txAvBal.setText("₹0.00");
+
 
             ApiClient.getClient().create(ApiInterface.class)
                     .getDataArrayList("get/custbalance", jParam.toString())
@@ -201,10 +229,14 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             try {
                                 JsonArray res = response.body();
                                 JsonObject jItem = res.get(0).getAsJsonObject();
-
-                                ACBalance=jItem.get("LC_BAL").getAsDouble();
+                                double ActBAL=jItem.get("LC_BAL").getAsDouble();
+                                ACBalance=jItem.get("Balance").getAsDouble();
                                 if(ACBalance<=0) ACBalance=Math.abs(ACBalance); else ACBalance=0-ACBalance;
+                                if(ActBAL<=0) ActBAL=Math.abs(ActBAL); else ActBAL=0-ActBAL;
                                 tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
+                                txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
                                 if(Mode==1){
                                     SubmitPrimaryOrder();
                                 }
@@ -1028,7 +1060,7 @@ public void SubmitPrimaryOrder(){
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty * Double.valueOf(Product_Details_Modalitem.get(position).getConversionFactor()));
+                            double totQty = (enterQty * Double.valueOf(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()));
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1258,7 +1290,7 @@ public void SubmitPrimaryOrder(){
 
                             if (CategoryType == -1) {
                                 if (holder.Amount.getText().toString().equals("₹0.00")) {
-                                    Product_Details_Modalitem.remove(position);
+                                    Product_Details_Modalitem.remove(holder.getAdapterPosition());
                                     notifyDataSetChanged();
                                 }
 
