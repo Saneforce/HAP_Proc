@@ -52,7 +52,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             common_class = new Common_Class(this);
 
             outlet_name = findViewById(R.id.outlet_name);
-            outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            outlet_name.setText(sharedCommonPref.getvalue(Constants.Distributor_name, ""));
 
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
 

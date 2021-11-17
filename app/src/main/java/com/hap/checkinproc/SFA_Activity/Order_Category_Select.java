@@ -1230,9 +1230,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code(product_details_modalArrayList.get(i).getOff_Pro_code());
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name(product_details_modalArrayList.get(i).getOff_Pro_name());
@@ -1333,9 +1330,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code("");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name("");
@@ -1381,23 +1375,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                                     ((jsonObject1.getDouble("Tax_Val") / 100));
 
                                             wholeTax += taxCal;
-
-
-                                            // List<Product_Details_Modal> taxList = new ArrayList<>();
-
-
-                                            switch (jsonObject1.getString("Tax_Type")) {
-                                                case "CGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(taxCal);
-                                                    break;
-                                                case "SGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(taxCal);
-                                                    break;
-                                                case "IGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(taxCal);
-                                                    break;
-                                            }
-
 
                                             taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
                                                     jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));

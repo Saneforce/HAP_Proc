@@ -812,7 +812,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/C50dp"
             android:layout_margin="@dimen/C5dp"
-            android:background="@drawable/button_blueg"
+            android:background="@drawable/bottom_button"
             android:padding="@dimen/C5dp"
             android:visibility="visible">
 

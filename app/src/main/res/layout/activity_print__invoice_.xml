@@ -580,10 +580,12 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:layout_marginBottom="@dimen/C5dp"
+
+                        android:id="@+id/cvPayDetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C5dp"
+                        android:layout_marginBottom="@dimen/C5dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -684,8 +686,6 @@
 
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>

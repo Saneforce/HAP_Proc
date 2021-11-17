@@ -1176,9 +1176,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code(product_details_modalArrayList.get(i).getOff_Pro_code());
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name(product_details_modalArrayList.get(i).getOff_Pro_name());
@@ -1279,9 +1276,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code("");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name("");

@@ -117,6 +117,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
+                findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                 tvOrderType.setText("PRIMARY ORDER");
                 common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
 
@@ -603,9 +604,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             totalitem.setText("" + Order_Outlet_Filter.size());
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
-            String paidAmt="0";
-            if(!Common_Class.isNullOrEmpty(Order_Outlet_Filter.get(0).getPaidAmount()))
-                paidAmt=Order_Outlet_Filter.get(0).getPaidAmount();
+            String paidAmt = "0";
+            if (!Common_Class.isNullOrEmpty(Order_Outlet_Filter.get(0).getPaidAmount()))
+                paidAmt = Order_Outlet_Filter.get(0).getPaidAmount();
             tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(paidAmt)));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);

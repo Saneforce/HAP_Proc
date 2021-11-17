@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -77,8 +78,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvTimer,txBalAmt,txAmtWalt,txAvBal;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd,btnRefACBal;
+            tvTimer, txBalAmt, txAmtWalt, txAvBal;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd, btnRefACBal;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -87,18 +88,18 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Prodct_Adapter mProdct_Adapter;
     String TAG = "PRIMARY_ORDER";
     DatabaseHandler db;
-    RelativeLayout rlCategoryItemSearch,balDetwin;
-    ImageView ivClose,btnClose;
+    RelativeLayout rlCategoryItemSearch, balDetwin;
+    ImageView ivClose, btnClose;
     EditText etCategoryItemSearch;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
     private int selectedPos = 0;
-    private TextView tvTotalAmount,tvACBal;
+    private TextView tvTotalAmount, tvACBal;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
-    double ACBalance=0.0;
+    double ACBalance = 0.0;
     final Handler handler = new Handler();
 
     @Override
@@ -130,7 +131,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             btnRefACBal = findViewById(R.id.btnRefACBal);
             balDetwin = findViewById(R.id.balDetwin);
             btnClose = findViewById(R.id.btnClose);
-            Out_Let_Name.setText("Hi! "+sharedCommonPref.getvalue(Constants.Distributor_name,""));
+            Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
             getACBalance(0);
 
             etCategoryItemSearch = findViewById(R.id.searchView);
@@ -211,6 +212,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         }
     }
+
     private void getACBalance(int Mode) {
         JSONObject jParam = new JSONObject();
         try {
@@ -229,15 +231,17 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             try {
                                 JsonArray res = response.body();
                                 JsonObject jItem = res.get(0).getAsJsonObject();
-                                double ActBAL=jItem.get("LC_BAL").getAsDouble();
-                                ACBalance=jItem.get("Balance").getAsDouble();
-                                if(ACBalance<=0) ACBalance=Math.abs(ACBalance); else ACBalance=0-ACBalance;
-                                if(ActBAL<=0) ActBAL=Math.abs(ActBAL); else ActBAL=0-ActBAL;
+                                double ActBAL = jItem.get("LC_BAL").getAsDouble();
+                                ACBalance = jItem.get("Balance").getAsDouble();
+                                if (ACBalance <= 0) ACBalance = Math.abs(ACBalance);
+                                else ACBalance = 0 - ACBalance;
+                                if (ActBAL <= 0) ActBAL = Math.abs(ActBAL);
+                                else ActBAL = 0 - ActBAL;
                                 tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
                                 txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
                                 txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
                                 txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
-                                if(Mode==1){
+                                if (Mode == 1) {
                                     SubmitPrimaryOrder();
                                 }
                             } catch (Exception e) {
@@ -307,14 +311,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             FilterProduct();
 
     }
-public void SubmitPrimaryOrder(){
-    try {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        Date d1 = sdf.parse(Common_Class.GetTime());
-        Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
-        long elapsed = d2.getTime() - d1.getTime();
-        if(ACBalance>=totalvalues) {
-            //if (elapsed >= 0) {
+
+    public void SubmitPrimaryOrder() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date d1 = sdf.parse(Common_Class.GetTime());
+            Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
+            long elapsed = d2.getTime() - d1.getTime();
+            if (ACBalance >= totalvalues) {
+                //if (elapsed >= 0) {
                 String sLoc = sharedCommonPref.getvalue("CurrLoc");
                 if (sLoc.equalsIgnoreCase("")) {
                     new LocationFinder(getApplication(), new LocationEvents() {
@@ -329,17 +334,18 @@ public void SubmitPrimaryOrder(){
                     SaveOrder();
                 }
 
-            //} else {
-             //   common_class.showMsg(this, "Time UP...");
-            //}
-        } else {
-            common_class.showMsg(this, "Low A/C Balance...");
+                //} else {
+                //   common_class.showMsg(this, "Time UP...");
+                //}
+            } else {
+                common_class.showMsg(this, "Low A/C Balance...");
+            }
+        } catch (Exception e) {
+
         }
-    }catch (Exception e) {
 
     }
 
-}
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -367,7 +373,7 @@ public void SubmitPrimaryOrder(){
 
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-                            if(takeorder.isAnimating()) return;
+                            if (takeorder.isAnimating()) return;
                             takeorder.startAnimation();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -456,7 +462,7 @@ public void SubmitPrimaryOrder(){
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
-                            ProdItem.put("Product_ERP",Getorder_Array_List.get(z).getERP_Code());
+                            ProdItem.put("Product_ERP", Getorder_Array_List.get(z).getERP_Code());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", 0);
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty()
@@ -552,13 +558,14 @@ public void SubmitPrimaryOrder(){
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
+                                    ResetSubmitBtn(1);
                                     common_class.showMsg(PrimaryOrderActivity.this, jsonObjects.getString("Msg"));
                                     if (san.equals("true")) {
                                         finish();
                                     }
 
                                 } catch (Exception e) {
-
+                                    ResetSubmitBtn(2);
                                 }
                             }
                         }
@@ -566,6 +573,7 @@ public void SubmitPrimaryOrder(){
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e("SUBMIT_VALUE", "ERROR");
+                            ResetSubmitBtn(2);
                         }
                     });
 
@@ -574,11 +582,33 @@ public void SubmitPrimaryOrder(){
                 @Override
                 public void NegativeMethod(DialogInterface dialog, int id) {
                     dialog.dismiss();
+                    ResetSubmitBtn(0);
                 }
             });
         } else {
+
+            ResetSubmitBtn(0);
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void ResetSubmitBtn(int resetMode) {
+        common_class.ProgressdialogShow(0, "");
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        } else {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                takeorder.stopAnimation();
+                takeorder.revertAnimation();
+            }
+        }, dely);
+
     }
 
     private void FilterProduct() {
@@ -826,20 +856,13 @@ public void SubmitPrimaryOrder(){
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-
-
         takeorder.setText("PROCEED TO CART");
-
         showOrderItemList(selectedPos, "");
-
-
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
         Context context;
-        LayoutInflater inflter;
         MyViewHolder pholder;
-        private int rowLayout;
 
         public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
             this.context = applicationContext;
@@ -985,17 +1008,15 @@ public void SubmitPrimaryOrder(){
 
 
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
-
-
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getSBRate()));
+                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getSBRate() * (Integer.parseInt(Product_Details_Modal.getConversionFactor()))));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
 
                 if (CategoryType >= 0) {
 
                     holder.totalQty.setText("Total Qty : " + (
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1009,7 +1030,7 @@ public void SubmitPrimaryOrder(){
                     }
 
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getSBRate() * Product_Details_Modal.getQty()));
+                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getSBRate() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())) * Product_Details_Modal.getQty()));
 
 
                 }
@@ -1068,7 +1089,7 @@ public void SubmitPrimaryOrder(){
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate()));
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * (Integer.parseInt(Product_Details_Modal.getConversionFactor())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate()));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
                             }
 
@@ -1092,9 +1113,6 @@ public void SubmitPrimaryOrder(){
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code(product_details_modalArrayList.get(i).getOff_Pro_code());
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name(product_details_modalArrayList.get(i).getOff_Pro_name());
@@ -1195,9 +1213,6 @@ public void SubmitPrimaryOrder(){
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code("");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name("");
@@ -1243,23 +1258,6 @@ public void SubmitPrimaryOrder(){
                                                     ((jsonObject1.getDouble("Tax_Val") / 100));
 
                                             wholeTax += taxCal;
-
-
-                                            // List<Product_Details_Modal> taxList = new ArrayList<>();
-
-
-                                            switch (jsonObject1.getString("Tax_Type")) {
-                                                case "CGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(taxCal);
-                                                    break;
-                                                case "SGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(taxCal);
-                                                    break;
-                                                case "IGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(taxCal);
-                                                    break;
-                                            }
-
 
                                             taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
                                                     jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
