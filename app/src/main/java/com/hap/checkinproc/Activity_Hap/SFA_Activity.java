@@ -132,9 +132,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         init();
         setOnClickListener();
 
-        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
+            linMyTeam.setVisibility(View.VISIBLE);
             common_class.getDb_310Data(Constants.Distributor_List, this);
-        else {
+        }else {
             findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }

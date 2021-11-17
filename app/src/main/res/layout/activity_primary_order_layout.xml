@@ -84,14 +84,14 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_home" />
         </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/C5dp"
-            android:paddingRight="@dimen/C5dp"
             android:background="@color/colorPrimaryDark"
-            >
+            android:paddingLeft="@dimen/C5dp"
+            android:paddingRight="@dimen/C5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,6 +100,7 @@
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/tvTimer"
                 android:layout_width="wrap_content"
@@ -113,72 +114,77 @@
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/txACBalInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/C5dp"
             app:cardUseCompatPadding="true">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingTop="3dp"
-    android:paddingBottom="3dp"
-    android:paddingStart="@dimen/C5dp"
-    android:paddingEnd="@dimen/C5dp"
-    >
 
-    <TextView
-        android:id="@+id/outlet_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Hi! Apporva Store"
-        android:textColor="@color/black"
-        android:layout_gravity="center_vertical"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/C5dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="@dimen/C5dp"
+                android:paddingBottom="3dp">
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/tvACBal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="sans-serif"
-        android:textAlignment="textEnd"
-        android:text="0.00"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        tools:ignore="RtlCompat" />
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/outlet_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="Hi! Apporva Store"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvCapACBal"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:fontFamily="sans-serif"
-        android:text="Your AC Balance"
-        android:gravity="center_vertical"
-        android:textSize="9sp" />
-    <ImageView
-        android:layout_width="@dimen/C15dp"
-        android:layout_height="@dimen/C15dp"
-        android:src="@drawable/ic_baseline_refresh_24"
-        app:tint="@color/black"
-        />
-</LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-</LinearLayout>
-</LinearLayout>
+                    <TextView
+                        android:id="@+id/tvACBal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center_vertical"
+                        android:text="0.00"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
+
+                    <LinearLayout
+                        android:id="@+id/btnRefACBal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvCapACBal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:text="Your AC Balance"
+                            android:textSize="9sp" />
+
+                        <ImageView
+                            android:layout_width="@dimen/C15dp"
+                            android:layout_height="@dimen/C15dp"
+                            android:src="@drawable/ic_baseline_refresh_24"
+                            app:tint="@color/black" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
+
         <LinearLayout
             android:id="@+id/lin_gridcategory"
             android:layout_width="match_parent"
@@ -393,11 +399,11 @@
 
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:id="@+id/llRegular"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:id="@+id/RegularQty"
@@ -864,6 +870,7 @@
 
 
             </LinearLayout>
+
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/takeorder"
                 android:layout_width="wrap_content"
@@ -900,6 +907,121 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/balDetwin"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="end"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="130dp"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="10dp"
+        android:visibility="gone">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/linACDets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/C5dp"
+            android:paddingRight="@dimen/C5dp"
+            android:paddingTop="@dimen/C2dp"
+            android:paddingBottom="@dimen/C2dp"
+            android:text="Balance Details"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"/>
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="@dimen/C3dp"
+            android:src="@drawable/close_btn"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/C5dp"
+        android:padding="@dimen/C2dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/C5dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:textSize="12sp"
+            android:text="Available Balance"/>
+        <TextView
+            android:id="@+id/txAvBal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/C5dp"
+            android:fontFamily="sans-serif"
+            android:textSize="12sp"
+            android:text="0.00"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/C2dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/C5dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:textSize="12sp"
+            android:text="Amount Blocked"/>
+        <TextView
+            android:id="@+id/txAmtWalt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:fontFamily="sans-serif"
+            android:textSize="12sp"
+            android:paddingRight="@dimen/C5dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/C2dp"
+        android:background="@color/grey_200"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/C2dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/C5dp"
+        android:layout_weight="1"
+        android:text="Balance"
+        android:fontFamily="sans-serif"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"/>
+    <TextView
+        android:id="@+id/txBalAmt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:fontFamily="sans-serif"
+        android:textSize="12sp"
+        android:paddingRight="@dimen/C5dp"
+        android:textColor="@color/colorPrimaryDark"/>
+    </LinearLayout>
+
+</LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
 
