@@ -74,6 +74,11 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             } else {
                 holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
             }
+            holder.icAC.setVisibility(View.GONE);
+            if(jItem.get("DelivType").getAsString().equalsIgnoreCase("AC"))
+            {
+                holder.icAC.setVisibility(View.VISIBLE);
+            }
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,7 +213,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName, txRetailCode, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txDistance, txTdyDt, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo;
-        LinearLayout parent_layout;
+        LinearLayout parent_layout,icAC;
         RecyclerView lstTdyView, lstPreView;
         ImageView icMob;
         ImageView ivEdit;
@@ -244,6 +249,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 lstTdyView.setLayoutManager(new LinearLayoutManager(context));
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
                 ivEdit = view.findViewById(R.id.btnEditRet);
+                icAC = view.findViewById(R.id.icAC);
 
 
                 ivEdit.setVisibility(View.GONE);

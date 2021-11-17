@@ -54,6 +54,8 @@ public class TimerService extends Service {
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
     private Boolean UpdtFlag = false;
+    private int intMin = 0;
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -447,6 +449,39 @@ public class TimerService extends Service {
                         }
                     } catch(Exception e){}
 
+                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    if (UserDetails.getString("Sfcode", "") != "") {
+                        Log.d("Minitue",String.valueOf(intMin));
+                        if(intMin>=(60*1)) {
+                            DatabaseHandler db = new DatabaseHandler(context);
+                            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                            JSONArray locations = db.getAllPendingTrackDetails();
+                            if (locations.length() > 0 && UpdtFlag == false) {
+                                try {
+                                    UpdtFlag = true;
+                                    Call<JsonObject> call = apiInterface.JsonSave("save/trackall", "3", UserDetails.getString("Sfcode", ""), "", "", locations.toString());
+                                    call.enqueue(new Callback<JsonObject>() {
+                                        @Override
+                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                            // Get result Repo from response.body()
+                                            db.deleteAllTrackDetails();
+                                            UpdtFlag = false;
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                                            Log.d("LocationUpdate", "onFailure Local Location");
+                                            UpdtFlag = false;
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            intMin=0;
+                        }
+                        intMin++;
+                    }
                     if (context != null) {
                         if (isTimeAutomatic(context) != true ) {
                             if(HAPApp.activeActivity.getClass()!= Block_Information.class){
@@ -457,11 +492,9 @@ public class TimerService extends Service {
                         }
                     }
 
-
                     SharedPreferences CheckInDetails = getSharedPreferences("CheckInDetail", Context.MODE_PRIVATE);
                     String ACutOff=CheckInDetails.getString("ShiftCutOff","");
                     if(!ACutOff.equalsIgnoreCase("")){
-                        DatabaseHandler db = new DatabaseHandler(context);
                         Common_Class Dt=new Common_Class();
                         Date CutOff=Dt.getDate(ACutOff);
                         String sDt=Dt.GetDateTime(getApplicationContext(),"yyyy-MM-dd HH:mm:ss");
@@ -471,35 +504,7 @@ public class TimerService extends Service {
                             Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(TimerService.this);
                             sharedCommonPref.save("ActivityStart","false");
                             sharedCommonPref.save(sharedCommonPref.DCRMode, "");
-                            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                            JSONArray locations=db.getAllPendingTrackDetails();
-                            if(locations.length()>0 && UpdtFlag==false){
-                                try {
-                                    UpdtFlag=true;
-                                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-                                    if (UserDetails.getString("Sfcode", "") != "") {
-                                        Call<JsonObject> call = apiInterface.JsonSave("save/trackall", "3", UserDetails.getString("Sfcode", ""), "", "", locations.toString());
-                                        call.enqueue(new Callback<JsonObject>() {
-                                            @Override
-                                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                                // Get result Repo from response.body()
-                                                db.deleteAllTrackDetails();
-                                                UpdtFlag=false;
-                                            }
 
-                                            @Override
-                                            public void onFailure(Call<JsonObject> call, Throwable t) {
-                                                Log.d("LocationUpdate", "onFailure Local Location");
-                                                UpdtFlag=false;
-                                            }
-                                        });
-                                    }
-                                }catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = UserDetails.edit();
                             editor.putBoolean("Login", false);
                             editor.apply();

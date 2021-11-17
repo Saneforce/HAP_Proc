@@ -28,9 +28,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -58,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +75,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder, Out_Let_Name, Category_Nametext,
+    CircularProgressButton takeorder;
+    TextView Out_Let_Name, Category_Nametext,
             tvTimer;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd;
     Common_Class common_class;
@@ -90,10 +94,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
     private int selectedPos = 0;
-    private TextView tvTotalAmount;
+    private TextView tvTotalAmount,tvACBal;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
+    double ACBalance=0.0;
     final Handler handler = new Handler();
 
     @Override
@@ -118,7 +123,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
             llTdPriOrd = findViewById(R.id.llTodayPriOrd);
-
+            tvACBal = findViewById(R.id.tvACBal);
+            Out_Let_Name.setText("Hi! "+sharedCommonPref.getvalue(Constants.Distributor_name,""));
+            getACBalance(0);
 
             etCategoryItemSearch = findViewById(R.id.searchView);
             tvTimer = findViewById(R.id.tvTimer);
@@ -181,6 +188,42 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         }
     }
+    private void getACBalance(int Mode) {
+        JSONObject jParam = new JSONObject();
+        try {
+            jParam.put("StkERP", sharedCommonPref.getvalue(Constants.DistributorERP));
+
+            ApiClient.getClient().create(ApiInterface.class)
+                    .getDataArrayList("get/custbalance", jParam.toString())
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
+                                JsonArray res = response.body();
+                                JsonObject jItem = res.get(0).getAsJsonObject();
+
+                                ACBalance=jItem.get("LC_BAL").getAsDouble();
+                                if(ACBalance<=0) ACBalance=Math.abs(ACBalance); else ACBalance=0-ACBalance;
+                                tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                if(Mode==1){
+                                    SubmitPrimaryOrder();
+                                }
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                            Log.d("InvHistory", String.valueOf(t));
+                        }
+                    });
+        } catch (JSONException e) {
+
+        }
+    }
 
     private void GetJsonData(String jsonResponse, String type) {
 
@@ -232,7 +275,39 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             FilterProduct();
 
     }
+public void SubmitPrimaryOrder(){
+    try {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date d1 = sdf.parse(Common_Class.GetTime());
+        Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
+        long elapsed = d2.getTime() - d1.getTime();
+        if(ACBalance>=totalvalues) {
+            //if (elapsed >= 0) {
+                String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                if (sLoc.equalsIgnoreCase("")) {
+                    new LocationFinder(getApplication(), new LocationEvents() {
+                        @Override
+                        public void OnLocationRecived(Location location) {
+                            strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                            SaveOrder();
+                        }
+                    });
+                } else {
+                    strLoc = sLoc.split(":");
+                    SaveOrder();
+                }
 
+            //} else {
+             //   common_class.showMsg(this, "Time UP...");
+            //}
+        } else {
+            common_class.showMsg(this, "Low A/C Balance...");
+        }
+    }catch (Exception e) {
+
+    }
+
+}
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -257,35 +332,18 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             case R.id.takeorder:
                 try {
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                        Date d1 = sdf.parse(Common_Class.GetTime());
-                        Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
-                        long elapsed = d2.getTime() - d1.getTime();
-                        System.out.println("time difference: " + elapsed);
-
 
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-
-                            if (elapsed >= 0) {
-
-                                String sLoc = sharedCommonPref.getvalue("CurrLoc");
-                                if (sLoc.equalsIgnoreCase("")) {
-                                    new LocationFinder(getApplication(), new LocationEvents() {
-                                        @Override
-                                        public void OnLocationRecived(Location location) {
-                                            strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                            SaveOrder();
-                                        }
-                                    });
-                                } else {
-                                    strLoc = sLoc.split(":");
-                                    SaveOrder();
+                            if(takeorder.isAnimating()) return;
+                            takeorder.startAnimation();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getACBalance(1);
                                 }
-                            } else {
-                                common_class.showMsg(this, "Time UP...");
+                            }, 500);
 
-                            }
                         } else {
                             common_class.showMsg(this, "Your Cart is empty...");
                         }
@@ -334,6 +392,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         HeadItem.put("UKey", Ukey);
                         HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();
@@ -365,6 +424,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
+                            ProdItem.put("Product_ERP",Getorder_Array_List.get(z).getERP_Code());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", 0);
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty()

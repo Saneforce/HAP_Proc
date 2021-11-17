@@ -52,7 +52,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         public TextView textviewname, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection;
+        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection,icAC;
         ImageView icMob, btnEditRet;
         RecyclerView lstTdyView, lstPreView;
 
@@ -94,6 +94,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
+                icAC = view.findViewById(R.id.icAC);
 
 
                 linDistance.setVisibility(View.GONE);
@@ -158,12 +159,18 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             if (mRetailer_Modal_List.getPrimary_No().equalsIgnoreCase("")) {
                 holder.icMob.setVisibility(View.GONE);
             }
+            holder.icAC.setVisibility(View.INVISIBLE);
+            if(mRetailer_Modal_List.getDelivType() != null && mRetailer_Modal_List.getDelivType().equalsIgnoreCase("AC"))
+            {
+                holder.icAC.setVisibility(View.VISIBLE);
+            }
 
 
-            if (mRetailer_Modal_List.getInvoiceDate().equalsIgnoreCase("-"))
-                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            else
-                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_round_fiber_new_24, 0);
+
+//            if (mRetailer_Modal_List.getInvoiceDate().equalsIgnoreCase("-"))
+//                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//            else
+//                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_round_fiber_new_24, 0);
 
 
 //            if (mRetailer_Modal_List.getStatusname() != null) {

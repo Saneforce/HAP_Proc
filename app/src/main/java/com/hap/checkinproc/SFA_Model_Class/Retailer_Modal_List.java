@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Retailer_Modal_List {
-
-
     public Retailer_Modal_List(String cust_Code, String mnth, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
         Cust_Code = cust_Code;
         Mnth = mnth;
@@ -109,6 +107,10 @@ public class Retailer_Modal_List {
     @SerializedName("CurdVal")
     @Expose
     private double CurdVal;
+
+    @SerializedName("ClosedRmks")
+    @Expose
+    private String ClosedRemarks;
 
     @SerializedName("OrderFlg")
     @Expose
@@ -859,5 +861,11 @@ public class Retailer_Modal_List {
 
     public void setPrimary_No(String primary_No) {
         Primary_No = primary_No;
+    }
+    public String getClosedRemarks() {
+        return ClosedRemarks;
+    }
+    public void setClosedRemarks(String closedRemarks) {
+        ClosedRemarks = closedRemarks;
     }
 }

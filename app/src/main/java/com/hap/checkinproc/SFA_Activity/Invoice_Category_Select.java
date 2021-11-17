@@ -35,6 +35,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -420,6 +421,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             case R.id.takeorder:
                 if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                     if (Getorder_Array_List != null && Getorder_Array_List.size() > 0) {
+                        if(takeorder.isAnimating()) return;
                         takeorder.startAnimation();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -438,7 +440,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     SaveOrder();
                                 }
                             }
-                        }, 100);
+                        }, 500);
                     } else {
                         common_class.showMsg(this, "Your Cart is empty...");
                     }
@@ -503,6 +505,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         HeadItem.put("UKey", Ukey);
                         HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();

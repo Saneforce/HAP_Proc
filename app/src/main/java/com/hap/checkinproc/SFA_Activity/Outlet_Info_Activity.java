@@ -5,6 +5,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,8 +14,10 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,9 +59,12 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
     DatabaseHandler db;
-    String TAG = "OUTLET_INFO_Activity:";
+    String TAG = "OUTLET_INFO_Activity:",viewType="-1";;
     private TextView distributor_text;
-    Switch swACOutlet;
+    Switch swACOutlet,swOTHOutlet;
+    int CountUR = 0, CountSR = 0,CountCls=0;
+    TextView txSrvOtlt, txUniOtlt,txClsOtlt,txAllOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt;
+    LinearLayout btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +82,25 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             TotalOutlets = findViewById(R.id.TotalOutlets);
             distributor_text = findViewById(R.id.distributor_text);
 
+            txSrvOtlt = findViewById(R.id.txSrvOtlt);
+            txUniOtlt = findViewById(R.id.txUniOtlt);
+            txClsOtlt = findViewById(R.id.txClsOtlt);
+            txSrvOtltCnt = findViewById(R.id.txSrvOtltCnt);
+            txUniOtltCnt = findViewById(R.id.txUniOtltCnt);
+            txClsOtltCnt = findViewById(R.id.txClsOtltCnt);
+            btSrvOtlt = findViewById(R.id.btSrvOtlt);
+            btUniOtlt = findViewById(R.id.btUniOtlt);
+            btClsOtlt = findViewById(R.id.btClsOtlt);
+
+            txAllOtlt = findViewById(R.id.txAllOtlt);
+
+            undrServ = findViewById(R.id.undrServ);
+            undrUni = findViewById(R.id.undrUni);
+            undrCls = findViewById(R.id.undrCls);
+
             txSearchRet = findViewById(R.id.txSearchRet);
             swACOutlet = findViewById(R.id.swACOutlet);
+            swOTHOutlet = findViewById(R.id.swOTHOutlet);
 
             route_text.setOnClickListener(this);
             reachedoutlets.setOnClickListener(this);
@@ -133,12 +156,125 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                     reloadData();
                 }
             });
+
+            swACOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swOTHOutlet.setChecked(false);
+                }
+            });
             swACOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     reloadData();
                 }
             });
+            swOTHOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swACOutlet.setChecked(false);
+                }
+            });
+            swOTHOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reloadData();
+                }
+            });
+            btSrvOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewType = "1";
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txSrvOtlt.setTypeface(null, Typeface.BOLD);
+
+                    undrServ.setVisibility(View.VISIBLE);
+                    undrUni.setVisibility(View.INVISIBLE);
+                    undrCls.setVisibility(View.INVISIBLE);
+
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txAllOtlt.setTypeface(null, Typeface.NORMAL);
+                    txAllOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    reloadData();
+                    // SearchRetailers();
+                }
+            });
+            btUniOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewType = "0";
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txUniOtlt.setTypeface(null, Typeface.BOLD);
+                    undrUni.setVisibility(View.VISIBLE);
+                    undrServ.setVisibility(View.INVISIBLE);
+                    undrCls.setVisibility(View.INVISIBLE);
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txAllOtlt.setTypeface(null, Typeface.NORMAL);
+                    txAllOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                    reloadData();
+                }
+            });
+            btClsOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewType = "2";
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txClsOtlt.setTypeface(null, Typeface.BOLD);
+                    undrCls.setVisibility(View.VISIBLE);
+                    undrUni.setVisibility(View.INVISIBLE);
+                    undrServ.setVisibility(View.INVISIBLE);
+
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txAllOtlt.setTypeface(null, Typeface.NORMAL);
+                    txAllOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                    reloadData();
+                }
+            });
+
+            txAllOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewType = "-1";
+                    txAllOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txAllOtlt.setTypeface(null, Typeface.BOLD);
+                    undrCls.setVisibility(View.INVISIBLE);
+                    undrUni.setVisibility(View.INVISIBLE);
+                    undrServ.setVisibility(View.INVISIBLE);
+
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                    reloadData();
+                }
+            });
+
+            txAllOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            txAllOtlt.setTypeface(null, Typeface.BOLD);
+            undrCls.setVisibility(View.INVISIBLE);
+            undrUni.setVisibility(View.INVISIBLE);
+            undrServ.setVisibility(View.INVISIBLE);
+
+            txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+            txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+            txUniOtlt.setTypeface(null, Typeface.NORMAL);
+            txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+            txClsOtlt.setTypeface(null, Typeface.NORMAL);
+            txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                 distributor_text.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
@@ -153,25 +289,54 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     public void reloadData() {
 
         Retailer_Modal_ListFilter.clear();
-
+        if (sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
+            Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
         String routeId = sharedCommonPref.getvalue(Route_Id);
-        for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
-            String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
-            String sSchText = txSearchRet.getText().toString().toUpperCase();
-            boolean ACTrue=false;
-            if(swACOutlet.isChecked()) {
-               if(Retailer_Modal_List.get(sr).getDelivType()!=null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
-                ACTrue=true;
-            }else{
-                ACTrue=true;
-            }
-            if (ACTrue==true && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
-                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
+
+        CountUR = 0;
+        CountSR = 0;
+        CountCls = 0;
+        if(Retailer_Modal_List!=null) {
+            for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
+                String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
+                String sSchText = txSearchRet.getText().toString().toUpperCase();
+                boolean ACTrue = false;
+                if (swACOutlet.isChecked()) {
+                    if (Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
+                        ACTrue = true;
+                } else if (swOTHOutlet.isChecked()) {
+                    if (!(Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC")))
+                        ACTrue = true;
+                } else {
+                    ACTrue = true;
+                }
+                boolean FiltrType = false;
+                String outletType = Retailer_Modal_List.get(sr).getType() == null ? "0" : Retailer_Modal_List.get(sr).getType();
+                if (viewType.equalsIgnoreCase("-1"))
+                    FiltrType = true;
+                else if (outletType.equalsIgnoreCase(viewType))
+                    FiltrType = true;
+
+                if (ACTrue && FiltrType && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
+                }
+                if (ACTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                    if (Retailer_Modal_List.get(sr).getType() == null)
+                        Retailer_Modal_List.get(sr).setType("0");
+                    if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("0")) CountUR++;
+                    if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("1")) CountSR++;
+                    if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("2")) CountCls++;
+                }
             }
         }
         TotalOutlets.setText(String.valueOf(Retailer_Modal_ListFilter.size()));
+        txUniOtltCnt.setText(String.valueOf(CountUR));
+        txSrvOtltCnt.setText(String.valueOf(CountSR));
+        txClsOtltCnt.setText(String.valueOf(CountCls));
 
         if (Retailer_Modal_ListFilter != null) {
 
@@ -311,4 +476,9 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadData();
+    }
 }

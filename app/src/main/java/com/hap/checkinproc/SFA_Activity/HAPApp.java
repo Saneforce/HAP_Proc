@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -34,6 +36,7 @@ public class HAPApp extends Application {
     private ApiComponent mApiComponent;
     public static Activity activeActivity;
     private BroadcastReceiver mNetworkReceiver;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     SharedPreferences CommUserDetails;
     public static final String UserDetail = "MyPrefs";
@@ -90,6 +93,9 @@ public class HAPApp extends Application {
             @Override
             public void onActivityPaused(Activity activity) {
                 //  activeActivity = null;
+                Log.v("LOG_IN_LOCATION", "ONPAUSE");
+                LocalBroadcastManager.getInstance(activeActivity).unregisterReceiver(mRegistrationBroadcastReceiver);
+
             }
 
             @Override

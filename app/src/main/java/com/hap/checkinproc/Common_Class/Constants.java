@@ -6,6 +6,7 @@ public class Constants {
     public static final String PLACE_ID = "placeId";
     public static final String Distributor_name = "distributorName";
     public static final String Distributor_Id = "distributorId";
+    public static final String DistributorERP = "distributorERP";
 
 
     public static final String Retailer_OutletList = "retailerOutletList";
