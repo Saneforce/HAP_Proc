@@ -23,7 +23,7 @@ public class Product_Details_Modal {
     private String name;
 
     private String sku;
-    private int price;
+    private double price;
     @SerializedName("Product_Cat_Code")
     @Expose
     private Integer productCatCode;
@@ -314,7 +314,7 @@ public class Product_Details_Modal {
         this.PaidAmount=PaidAmount;
     }
 
-    public Product_Details_Modal(String id, String name, String sku, int price, int Qty, double amount, String scheme) {
+    public Product_Details_Modal(String id, String name, String sku, double price, int Qty, double amount, String scheme) {
         this.id = id;
         this.name = name;
         this.sku = sku;
@@ -512,11 +512,11 @@ public class Product_Details_Modal {
         this.defaultUOM = defaultUOM;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

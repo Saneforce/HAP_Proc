@@ -30,7 +30,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.QPSActivity;
 import com.hap.checkinproc.common.FileUploadService;
 
 import org.json.JSONArray;
@@ -130,14 +129,12 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-
                     AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
                         @Override
                         public void OnImageDelete(String Mode, int ImgCount) {
 
                         }
                     });
-
 
                     Intent stat = new Intent(context, AttachementActivity.class);
                     stat.putExtra("qps_localData", mData.get(position).getsNo() + "~key");

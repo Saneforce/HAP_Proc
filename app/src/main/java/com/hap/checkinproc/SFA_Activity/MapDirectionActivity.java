@@ -584,12 +584,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
                             .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
                     builder.include(currentLatLng);
                     builder.include(latLng);
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
-
 
                 } else
                     Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();

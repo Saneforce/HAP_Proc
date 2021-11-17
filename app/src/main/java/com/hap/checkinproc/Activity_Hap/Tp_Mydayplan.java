@@ -223,6 +223,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             Sf_name.setText("" + Shared_Common_Pref.Tp_Sf_name);
             Sf_name.setVisibility(View.VISIBLE);
             Approvereject.setVisibility(View.VISIBLE);
+
         }
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
