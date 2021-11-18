@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,8 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C5dp"
-        app:cardCornerRadius="@dimen/C10dp">
+        android:layout_marginLeft="@dimen/C5dp"
+        android:layout_marginRight="@dimen/C5dp"
+        app:cardUseCompatPadding="true">
 
 
         <LinearLayout
@@ -36,11 +36,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_marginLeft="@dimen/sno"
+                        android:layout_marginLeft="3dp"
                         android:gravity="left"
                         android:text="OrderID"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="13sp"></TextView>
                 </LinearLayout>
 
 
@@ -57,7 +57,7 @@
                         android:gravity="center"
                         android:text="54"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="13sp"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -73,7 +73,7 @@
                         android:gravity="center"
                         android:text="Value"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="13sp"></TextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -89,7 +89,7 @@
                         android:gravity="center"
                         android:text=""
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="13sp"></TextView>
                 </LinearLayout>
 
             </LinearLayout>
@@ -100,33 +100,34 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:layout_marginTop="-3dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/sno">
+                    android:layout_marginLeft="3dp">
 
                     <ImageView
                         android:id="@+id/ivDate"
                         android:layout_width="@dimen/C10dp"
                         android:layout_height="@dimen/C10dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_baseline_date_range_24"></ImageView>
+                        android:src="@drawable/ic_baseline_date_range_24"
+                        android:visibility="gone"></ImageView>
 
                     <TextView
                         android:id="@+id/txt_date"
                         android:layout_width="@dimen/header_width1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C3dp"
                         android:layout_toRightOf="@+id/ivDate"
                         android:text="OrderDate"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="10sp"></TextView>
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/sno">
+                    android:layout_marginLeft="3dp">
 
                     <ImageView
                         android:id="@+id/ivStatus"
@@ -144,7 +145,8 @@
                         android:layout_toRightOf="@+id/ivStatus"
                         android:text="Complete"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="11sp"
+                        android:textStyle="bold"></TextView>
 
                 </RelativeLayout>
             </LinearLayout>

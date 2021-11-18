@@ -43,13 +43,15 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     @Override
     public void onBindViewHolder(Invoice_History_Adapter.MyViewHolder holder, int position) {
         if (mDate.get(position).getInvoice_Flag().equals("1")) {
-            holder.Statusinvoice.setText("COMPLETED");
+            holder.Statusinvoice.setText("Invoice Complete.");
+            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
             holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
 
             // holder.parent_layout.setBackgroundResource(R.color.white);
         } else {
-            holder.Statusinvoice.setText("PENDING");
-            holder.ivStatus.setImageResource(R.drawable.ic_round_pending_24);
+            holder.Statusinvoice.setText("Order received.Pending for Invoice.");
+            holder.ivStatus.setImageResource(R.drawable.ic_baseline_fiber_manual_record_24);
+            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.checkout));
 
             //  holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
         }

@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,6 +60,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -78,7 +81,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvTimer, txBalAmt, txAmtWalt, txAvBal;
+            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate,tvDeliveryDate;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd, btnRefACBal;
     Common_Class common_class;
     String Ukey;
@@ -101,6 +104,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     private TextView tvBillTotItem;
     double ACBalance = 0.0;
     final Handler handler = new Handler();
+    private DatePickerDialog fromDatePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +135,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             btnRefACBal = findViewById(R.id.btnRefACBal);
             balDetwin = findViewById(R.id.balDetwin);
             btnClose = findViewById(R.id.btnClose);
+            tvDistId = findViewById(R.id.tvDistId);
+            tvDate = findViewById(R.id.tvDate);
+            tvDeliveryDate=findViewById(R.id.tvDeliveryDate);
             Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
             getACBalance(0);
 
@@ -146,6 +153,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             rlAddProduct.setOnClickListener(this);
             llTdPriOrd.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
+            tvDeliveryDate.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
@@ -207,6 +215,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             }, 1000);
 
 
+            tvDistId.setText("" + sharedCommonPref.getvalue(Constants.Distributor_Id));
+            tvDate.setText("" + Common_Class.GetDatewothouttime());
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -349,6 +359,19 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvDeliveryDate:
+                Calendar newCalendar = Calendar.getInstance();
+                fromDatePickerDialog = new DatePickerDialog(PrimaryOrderActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int month = monthOfYear + 1;
+
+                        tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
+                    }
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.show();
+
+                break;
             case R.id.llTodayPriOrd:
                 startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
                 break;
@@ -445,6 +468,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                         OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                         OutletItem.put("ordertype", "order");
+                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);

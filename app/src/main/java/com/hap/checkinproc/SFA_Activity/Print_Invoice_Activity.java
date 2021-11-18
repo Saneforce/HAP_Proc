@@ -22,8 +22,6 @@ import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -31,14 +29,12 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Print_Invoice_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -48,13 +44,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Print_Invoice_Adapter mReportViewAdapter;
     RecyclerView printrecyclerview;
     Shared_Common_Pref sharedCommonPref;
-    Type userType;
-    Gson gson;
     Common_Class common_class;
-    List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Product_Details_Modal> Order_Outlet_Filter;
     TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
-            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt;
+            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader;
 
     ImageView ok, ivPrint;
 
@@ -71,11 +64,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             mPrint_invoice_activity = this;
             setContentView(R.layout.activity_print__invoice_);
             printrecyclerview = findViewById(R.id.printrecyclerview);
-            gson = new Gson();
+
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
             common_class = new Common_Class(this);
-
-
             netamount = findViewById(R.id.netamount);
             back = findViewById(R.id.back);
             cashdiscount = findViewById(R.id.cashdiscount);
@@ -97,6 +88,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
             tvOutstanding = findViewById(R.id.tvOutstanding);
             tvPaidAmt = findViewById(R.id.tvPaidAmt);
+            tvHeader = findViewById(R.id.tvHeader);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -112,8 +104,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
+                findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                 tvOrderType.setText("ORDER");
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
+                common_class.getDb_310Data(Constants.OUTSTANDING, this);
+
             } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
@@ -125,14 +120,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 tvOrderType.setText("INVOICE");
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
+                common_class.getDb_310Data(Constants.OUTSTANDING, this);
             }
+
+            tvHeader.setText("Sales " + sharedCommonPref.getvalue(Constants.FLAG));
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
             retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
             invoicedate.setText(Common_Class.GetDatewothouttime());
-            common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
         } catch (Exception e) {
 
@@ -163,10 +160,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     public void printBill() {
         try {
-
             Bitmap logo = Printama.getBitmapFromVector(this, R.drawable.hap_logo);
-
-
             Printama.with(this).connect(printama -> {
 
                 printama.printImage(Printama.RIGHT, logo, 170);
@@ -577,26 +571,26 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     void orderInvoiceDetailData(String response) {
         try {
             billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
-            userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
-            }.getType();
-            InvoiceorderDetails_List = gson.fromJson(response, userType);
             Order_Outlet_Filter = new ArrayList<>();
             Order_Outlet_Filter.clear();
 
-
             int total_qtytext = 0;
             double subTotalVal = 0.00;
-
-            for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-
-                total_qtytext += ivl.getQuantity();
-                subTotalVal += ivl.getValue();
-
+            JSONArray arr = new JSONArray(response);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
                 List<Product_Details_Modal> taxList = new ArrayList<>();
+                total_qtytext += obj.getInt("Quantity");
+                subTotalVal += obj.getDouble("value");
+                String paidAmt = "0";
+                try {
+                    paidAmt = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? "0" : obj.getString("PaidAmount");
+                } catch (Exception e) {
+                }
 
-                Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                        "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(),
-                        ivl.getQty(), ivl.getValue(), taxList, ivl.getPaidAmount()));
+                Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
+                        "1", "5", "i", 7.99, 1.8, obj.getDouble("Rate"),
+                        obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt));
 
 
             }
@@ -604,13 +598,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             totalitem.setText("" + Order_Outlet_Filter.size());
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
-            String paidAmt = "0";
-            if (!Common_Class.isNullOrEmpty(Order_Outlet_Filter.get(0).getPaidAmount()))
-                paidAmt = Order_Outlet_Filter.get(0).getPaidAmount();
-            tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(paidAmt)));
+
+            tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(0).getPaidAmount())));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
-            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter);
+            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, arr);
             printrecyclerview.setAdapter(mReportViewAdapter);
 
             cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));

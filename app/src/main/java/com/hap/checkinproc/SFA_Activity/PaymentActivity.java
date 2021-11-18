@@ -45,7 +45,7 @@ import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
 
-    TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt, tvOutstandDate;
+    TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt, tvOutstandDate, tvRetailorPhone, retaileAddress;
     CircularProgressButton btnSubmit;
     EditText etRefNo, etAmtRec;
     private DatePickerDialog fromDatePickerDialog;
@@ -74,6 +74,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
         tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
+        tvRetailorPhone.setText(shared_common_pref.getvalue(Constants.Retailor_PHNo));
+        retaileAddress.setText(shared_common_pref.getvalue(Constants.Retailor_Address));
 
         etAmtRec.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,6 +124,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         rvPayMode = findViewById(R.id.rvPayMode);
         tvOutStandAmt = findViewById(R.id.tvPayOutStandAmt);
         tvOutstandDate = findViewById(R.id.tvOutstandLabel);
+        retaileAddress = findViewById(R.id.retaileAddress);
+        tvRetailorPhone = findViewById(R.id.retailePhoneNum);
 
         btnSubmit.setOnClickListener(this);
         etDate.setOnClickListener(this);

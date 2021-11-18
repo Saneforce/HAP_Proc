@@ -1,116 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
     <androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/C5dp"
         android:layout_marginRight="@dimen/C5dp"
-    app:cardUseCompatPadding="true">
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/C10dp">
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        app:cardUseCompatPadding="true">
 
-            <TextView
-                android:id="@+id/txtCustNm"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/C10dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Sekar Store"
-                android:textSize="15sp"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:textColor="#333333"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:fontFamily="sans-serif"
-                    android:id="@+id/txtOBAmt"
+                    android:id="@+id/txtCustNm"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="13sp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="@dimen/C3dp"
-                    android:textAlignment="textEnd"
-                    android:textColor="#333333"/>
+                    android:gravity="center_vertical"
+                    android:text="Sekar Store"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Opening Outstanding"
-                    android:textSize="8sp"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:layout_marginTop="-8dp"
-                    android:textColor="#333333"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtOBAmt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/C3dp"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif"
+                        android:text="0.00"
+                        android:textAlignment="textEnd"
+                        android:textColor="#333333"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-8dp"
+                        android:layout_weight="1"
+                        android:text="Opening Outstanding"
+                        android:textColor="#333333"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="@dimen/C3dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grey_400"
-                />
+                android:layout_marginTop="@dimen/C3dp"
+                android:background="@color/grey_400" />
+
             <TextView
                 android:id="@+id/txtRecNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="No Details"
-                android:textColor="@color/grey_500"
-                />
+                android:textColor="@color/grey_500" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ryclLedger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_marginTop="@dimen/C5dp"
                 android:layout_marginBottom="@dimen/C5dp"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grey_400"
-                />
+                android:background="@color/grey_400" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Outstanding"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
                     android:layout_weight="1"
                     android:paddingTop="@dimen/C5dp"
                     android:paddingBottom="@dimen/C5dp"
-                    android:textColor="#333333"/>
+                    android:text="Total Outstanding"
+                    android:textColor="#333333"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:fontFamily="sans-serif"
                     android:id="@+id/txtCBAmt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="13sp"
                     android:layout_weight="1"
-                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
                     android:padding="@dimen/C5dp"
+                    android:text="0.00"
                     android:textAlignment="textEnd"
-                    android:textColor="#333333"/>
+                    android:textColor="#333333"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </LinearLayout>
