@@ -599,6 +599,12 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         break;
+                    case Constants.Primary_Product_List:
+                        axnname = "get/prodprimarydets";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
                 }
 
                 QueryString.put("axn", axnname);

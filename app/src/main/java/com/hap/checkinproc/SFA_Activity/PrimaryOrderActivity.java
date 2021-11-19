@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
@@ -81,7 +82,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate,tvDeliveryDate;
+            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate, tvDeliveryDate;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd, btnRefACBal;
     Common_Class common_class;
     String Ukey;
@@ -137,7 +138,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             btnClose = findViewById(R.id.btnClose);
             tvDistId = findViewById(R.id.tvDistId);
             tvDate = findViewById(R.id.tvDate);
-            tvDeliveryDate=findViewById(R.id.tvDeliveryDate);
+            tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
             Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
             getACBalance(0);
 
@@ -163,7 +164,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             categorygrid.setLayoutManager(layoutManager);
 
             common_class.getDb_310Data(Constants.Category_List, this);
-            common_class.getDb_310Data(Constants.Product_List, this);
+            common_class.getDb_310Data(Constants.Primary_Product_List, this);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -247,7 +248,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                 else ACBalance = 0 - ACBalance;
                                 if (ActBAL <= 0) ActBAL = Math.abs(ActBAL);
                                 else ActBAL = 0 - ActBAL;
-                                tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+
+                                // tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                tvACBal.setText(format1.format(ACBalance));
                                 txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
                                 txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
                                 txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
@@ -805,8 +809,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             Category_Modal);
                     categorygrid.setAdapter(customAdapteravail);
                     break;
-                case Constants.Product_List:
-                    String OrdersTable = sharedCommonPref.getvalue(Constants.Product_List);
+                case Constants.Primary_Product_List:
+                    String OrdersTable = sharedCommonPref.getvalue(Constants.Primary_Product_List);
                     userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
                     }.getType();
                     Product_Modal = gson.fromJson(OrdersTable, userType);

@@ -96,7 +96,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         Getorder_Array_List = new ArrayList<>();
 
 
-        Getorder_Array_List.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
+        Getorder_Array_List.add(new Product_Details_Modal("", "", "", 0, 0, 0, ""));
 
         otherBrandAdapter = new OtherBrandAdapter(Getorder_Array_List, R.layout.other_brand_order_recyclerview,
                 this);
@@ -126,7 +126,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.tvAddBrand:
-                Getorder_Array_List.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
+                Getorder_Array_List.add(new Product_Details_Modal("", "", "", 0, 0, 0, ""));
                 otherBrandAdapter.notifyData(Getorder_Array_List);
                 break;
             case R.id.btnSubmit:
@@ -139,7 +139,22 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         List<Product_Details_Modal> submitBrandList = new ArrayList<>();
         submitBrandList.clear();
         for (int i = 0; i < Getorder_Array_List.size(); i++) {
-            if (!Getorder_Array_List.get(i).getName().equals("") && !Getorder_Array_List.get(i).getSku().equals("") &&
+
+            if (Getorder_Array_List.get(i).getName().equals("")) {
+                common_class.showMsg(this, "Other Brand name in position " + (i + 1) + " is blank.");
+                return;
+            } else if (Getorder_Array_List.get(i).getSku().equals("")) {
+                common_class.showMsg(this, "SKU position " + (i + 1) + " is blank.");
+                return;
+
+            } else if (Getorder_Array_List.get(i).getAmount().equals("")) {
+                common_class.showMsg(this, "No Amount in position " + (i + 1));
+                return;
+
+            } else if (Getorder_Array_List.get(i).getScheme().equals("")) {
+                common_class.showMsg(this, "Scheme position " + (i + 1) + " is blank.");
+                return;
+            } else if (!Getorder_Array_List.get(i).getName().equals("") && !Getorder_Array_List.get(i).getSku().equals("") &&
                     Getorder_Array_List.get(i).getAmount() > 0 &&
                     !Getorder_Array_List.get(i).getScheme().equals("")) {
                 submitBrandList.add(Getorder_Array_List.get(i));
