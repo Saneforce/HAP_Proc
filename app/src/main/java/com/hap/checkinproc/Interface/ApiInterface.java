@@ -537,6 +537,10 @@ public interface ApiInterface {
                                          @Field("data") String data);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=approve/cisentry")
+    Call<JsonObject> approveCIEntry(@Field("data") String toString);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?axn=approve/qpsentry")
     Call<JsonObject> approveQPSEntry(@Field("data") String toString);
 

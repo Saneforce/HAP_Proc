@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.MyViewHolder> {
@@ -28,6 +29,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
     int selectdPos = -1;
     AlertDialog.Builder builder;
 
+    public static String TAG = "OtherBrandAdapter";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView productname, Rate, Amount, Disc, lblAddQty;
@@ -94,35 +96,18 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start,
                                           int before, int count) {
+                    try {
+                        double price = holder.etPrice.getText().toString().equals("") ? 0 : Double.parseDouble(holder.etPrice.getText().toString());
+                        int qty = charSequence.toString().equals("") ? 0 : Integer.parseInt(charSequence.toString());
 
-
-                    if (!charSequence.toString().equals("")) {
-
-                        int price = 0;
-
-
-                        if (!holder.etPrice.getText().toString().equals(""))
-                            price = Integer.parseInt(holder.etPrice.getText().toString());
-
-
-                        holder.Amount.setText("₹ " + (Integer.parseInt(holder.Qty.getText().toString()) *
+                        holder.Amount.setText("₹ " + new DecimalFormat("##0.00").format(qty *
                                 price));
 
-
-                        Double amount = Double.valueOf(Integer.parseInt(holder.Qty.getText().toString()) *
-                                price);
-
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(Integer.valueOf(charSequence.toString()));
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(amount);
-
-                    } else {
-                        holder.Amount.setText("₹ 0");
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(0);
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(0.0);
-
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(qty);
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(qty * price);
+                    } catch (Exception e) {
+                        Log.v(TAG + " qty:", e.getMessage());
                     }
-
-
                 }
 
                 @Override
@@ -161,29 +146,17 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                    if (!charSequence.toString().equals("")) {
-                        int qty = 0;
+                    try {
+                        int qty = holder.Qty.getText().toString().equals("") ? 0 : Integer.parseInt(holder.Qty.getText().toString());
+                        double price = charSequence.toString().equals("") ? 0 : Double.parseDouble(charSequence.toString());
 
-                        if (!holder.Qty.getText().toString().equals(""))
-                            qty = Integer.parseInt(holder.Qty.getText().toString());
+                        holder.Amount.setText("₹ " + new DecimalFormat("##0.00").format(qty * price));
 
-
-                        holder.Amount.setText("₹ " + (qty * Integer.parseInt(holder.etPrice.getText().toString())));
-
-                        Double amount = Double.valueOf(qty *
-                                Integer.parseInt(holder.etPrice.getText().toString()));
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(amount);
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setPrice(Integer.parseInt(charSequence.toString()));
-
-                    } else {
-                        holder.Amount.setText("₹ 0");
-                        holder.etPrice.setHint("0");
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setPrice(0);
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(0.0);
-
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(qty * price);
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setPrice(price);
+                    } catch (Exception e) {
+                        Log.v(TAG + " :price: ", e.getMessage());
                     }
-
-
                 }
 
                 @Override

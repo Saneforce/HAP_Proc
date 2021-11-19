@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,9 +59,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -79,8 +80,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvTimer;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvDeliveryDate, tvRetailorPhone, retaileAddress;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct,llCalMob;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -101,6 +102,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     private Integer totalQty;
     private TextView tvBillTotItem;
     final Handler handler = new Handler();
+    private DatePickerDialog fromDatePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +132,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvQPS = (TextView) findViewById(R.id.tvQPS);
             tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
             etCategoryItemSearch = findViewById(R.id.searchView);
-            tvTimer = findViewById(R.id.tvTimer);
+            retaileAddress = findViewById(R.id.retaileAddress);
+            tvRetailorPhone = findViewById(R.id.retailePhoneNum);
+            tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
+
+            llCalMob = findViewById(R.id.btnCallMob);
+            llCalMob.setOnClickListener(this);
+
+
 
             JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
@@ -168,6 +177,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
+            tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
+            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
@@ -192,6 +203,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvPOP.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
+            tvDeliveryDate.setOnClickListener(this);
 
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
 
@@ -502,6 +514,24 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btnCallMob:
+                common_class.showCalDialog(Order_Category_Select.this,"Do you want to Call this Outlet?",
+                        tvRetailorPhone.getText().toString().replaceAll(",", ""));
+
+            break;
+            case R.id.tvDeliveryDate:
+                Calendar newCalendar = Calendar.getInstance();
+                fromDatePickerDialog = new DatePickerDialog(Order_Category_Select.this, new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int month = monthOfYear + 1;
+
+                        tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
+                    }
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.show();
+
+                break;
             case R.id.rlAddProduct:
                 moveProductScreen();
                 break;
@@ -536,8 +566,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-                            Log.d("RepeatAni",String.valueOf(takeorder.isAnimating()));
-                            if(takeorder.isAnimating()) return;
+                            Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
+                            if (takeorder.isAnimating()) return;
                             takeorder.startAnimation();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -622,6 +652,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "order");
+                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -1230,9 +1261,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code(product_details_modalArrayList.get(i).getOff_Pro_code());
                                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name(product_details_modalArrayList.get(i).getOff_Pro_name());
@@ -1333,9 +1361,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax("0.00");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax_value("0.00");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(0.00);
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code("");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name("");
@@ -1381,23 +1406,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                                     ((jsonObject1.getDouble("Tax_Val") / 100));
 
                                             wholeTax += taxCal;
-
-
-                                            // List<Product_Details_Modal> taxList = new ArrayList<>();
-
-
-                                            switch (jsonObject1.getString("Tax_Type")) {
-                                                case "CGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCGST(taxCal);
-                                                    break;
-                                                case "SGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setSGST(taxCal);
-                                                    break;
-                                                case "IGST":
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setIGST(taxCal);
-                                                    break;
-                                            }
-
 
                                             taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
                                                     jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));

@@ -5,7 +5,6 @@ import static com.hap.checkinproc.SFA_Activity.Nearby_Outlets.shared_common_pref
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -103,8 +102,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 // clocation=location;
                 currentLocation = location;
                 fetchLocation();
-
-
                 DownloadTask downloadTask = new DownloadTask();
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
@@ -330,16 +327,13 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == 1000) {
             fetchLocation();
-
-
         }
     }
 
 
-    void distance() {
+    double distance() {
         Location startPoint = new Location("point A");
         startPoint.setLatitude(currentLocation.getLatitude());
         startPoint.setLongitude(currentLocation.getLongitude());
@@ -356,7 +350,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             ReachedOutlet.setText("Create Outlet ");
         }
 
-
+        return distance;
     }
 
     @Override
@@ -568,7 +562,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     // Adding all the points in the route to LineOptions
                     lineOptions.addAll(points);
                     lineOptions.width(8);
-                    lineOptions.color(Color.BLUE);
+                    lineOptions.color(getResources().getColor(R.color.colorPrimaryDark));
                 }
 
                 // Drawing polyline in the Google Map for the i-th route
@@ -585,11 +579,12 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                             .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
 
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    builder.include(currentLatLng);
-                    builder.include(latLng);
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
-
+                    if (distance() > 200) {
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        builder.include(currentLatLng);
+                        builder.include(latLng);
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+                    }
 
                 } else
                     Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();
@@ -598,6 +593,4 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         }
 
     }
-
-
 }

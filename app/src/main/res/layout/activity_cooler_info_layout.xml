@@ -93,6 +93,7 @@
                                     android:text="Tag No" />
 
                                 <EditText
+                                    android:id="@+id/etTagNo"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
@@ -114,6 +115,7 @@
                                     android:text="Make" />
 
                                 <EditText
+                                    android:id="@+id/etMake"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
@@ -135,6 +137,7 @@
                                     android:text="Cooler Type" />
 
                                 <EditText
+                                    android:id="@+id/etCoolerType"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
@@ -199,11 +202,13 @@
                                     android:visibility="gone">
 
                                     <ImageView
-                                        app:tint="@color/colorPrimaryDark"
+                                        android:id="@+id/ivPurityCapture"
                                         style="@style/TextStyle"
-                                        android:src="@drawable/ic_round_photo_camera_24" />
+                                        android:src="@drawable/ic_round_photo_camera_24"
+                                        app:tint="@color/colorPrimaryDark" />
 
                                     <ImageView
+                                        android:id="@+id/ivPurityPreview"
                                         style="@style/TextStyle"
                                         android:src="@drawable/image_preview_24"
                                         app:tint="@color/colorPrimaryDark" />
@@ -244,12 +249,14 @@
                                     android:visibility="gone">
 
                                     <ImageView
-                                        app:tint="@color/colorPrimaryDark"
-
+                                        android:id="@+id/ivFTCapture"
                                         style="@style/TextStyle"
-                                        android:src="@drawable/ic_round_photo_camera_24" />
+
+                                        android:src="@drawable/ic_round_photo_camera_24"
+                                        app:tint="@color/colorPrimaryDark" />
 
                                     <ImageView
+                                        android:id="@+id/ivFTPreview"
                                         style="@style/TextStyle"
                                         android:src="@drawable/image_preview_24"
                                         app:tint="@color/colorPrimaryDark" />
@@ -278,7 +285,7 @@
                 android:id="@+id/btnSubmit"
                 style="@style/BottomButton"
                 android:layout_alignParentBottom="true"
-                android:text="Submit"/>
+                android:text="Submit" />
         </RelativeLayout>
 
     </LinearLayout>

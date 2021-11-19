@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,16 +11,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
@@ -45,7 +49,7 @@ import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
 
-    TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt, tvOutstandDate;
+    TextView tvRemainAmt, etDate, tvRetailorName, tvOutStandAmt, tvOutstandDate, tvRetailorPhone, retaileAddress;
     CircularProgressButton btnSubmit;
     EditText etRefNo, etAmtRec;
     private DatePickerDialog fromDatePickerDialog;
@@ -61,6 +65,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public String payModeLabel = "cash";
     public static PaymentActivity paymentActivity;
     final Handler handler = new Handler();
+    LinearLayout llCalMob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
         tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
+        tvRetailorPhone.setText(shared_common_pref.getvalue(Constants.Retailor_PHNo));
+        retaileAddress.setText(shared_common_pref.getvalue(Constants.Retailor_Address));
 
         etAmtRec.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,6 +129,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         rvPayMode = findViewById(R.id.rvPayMode);
         tvOutStandAmt = findViewById(R.id.tvPayOutStandAmt);
         tvOutstandDate = findViewById(R.id.tvOutstandLabel);
+        retaileAddress = findViewById(R.id.retaileAddress);
+        tvRetailorPhone = findViewById(R.id.retailePhoneNum);
+        llCalMob = findViewById(R.id.btnCallMob);
+        llCalMob.setOnClickListener(this);
 
         btnSubmit.setOnClickListener(this);
         etDate.setOnClickListener(this);
@@ -257,6 +268,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 fromDatePickerDialog.show();
 
 
+                break;
+
+            case R.id.btnCallMob:
+                common_class.showCalDialog(PaymentActivity.this,"Do you want to Call this Outlet?",tvRetailorPhone.getText().toString().replaceAll(",", ""));
                 break;
 
 

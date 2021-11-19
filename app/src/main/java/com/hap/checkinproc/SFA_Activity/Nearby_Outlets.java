@@ -36,6 +36,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -73,7 +74,6 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -821,6 +821,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             resData = jsonObject.getJSONArray("results");
             nextPageToken = jsonObject.optString("next_page_token");
             Log.e(TAG, "nextPageToken:" + nextPageToken);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
 
             for (int i = 0; i < resData.length(); i++) {
@@ -854,8 +855,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                         .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 mark.add(marker);
 
+                builder.include(latLng);
 
             }
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
             //  drDetail();
             removeMarkedPlaces();
