@@ -16,22 +16,25 @@
 
             android:id="@+id/tool_header"
             layout="@layout/sfatoolbar"></include>
-
+<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:paddingLeft="@dimen/C5dp"
+            android:paddingRight="@dimen/C5dp">
         <TextView
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/blue_bg"
-            android:fontFamily="@font/basic"
-            android:padding="@dimen/C8dp"
             android:text="My Team"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textAllCaps="true"
-            android:textColor="#FFF"
-            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:paddingLeft="@dimen/C5dp"
             android:textStyle="bold" />
 
-
+</LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
 
@@ -74,25 +77,60 @@
 
 
                 <LinearLayout
-                    android:layout_width="25dp"
-                    android:layout_height="4dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:background="@color/grey_300"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvTeamDetail"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="25dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="25dp"
+                            android:layout_height="4dp"
+                            android:layout_margin="@dimen/C5dp"
+                            android:background="@color/grey_300"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:layout_marginTop="@dimen/C2dp"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:layout_marginBottom="@dimen/C5dp"
+                        android:background="@drawable/hash_border">
+
+                        <ImageView
+                            android:layout_width="@dimen/C20dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/C3dp"
+                            android:src="@drawable/ic_search_icon"
+                            app:tint="@color/colorPrimaryDark" />
+
+                        <EditText
+                            android:id="@+id/txSearchRet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:hint="Search"
+                            android:padding="@dimen/C5dp"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTeamDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/C2dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
 
-                </androidx.recyclerview.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
 

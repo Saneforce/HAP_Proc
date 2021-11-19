@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_popup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,23 +31,80 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvSfName"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rajasekar"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvDesig"
+                        <TextView
+                            android:id="@+id/tvSfName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Rajasekar"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/tvEMPId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Rajasekar"
+                            android:textSize="10sp"
+                            android:layout_marginTop="-5dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDesig"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Field Supervisor" />
+
+                        <TextView
+                            android:id="@+id/tvHQ"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Field Supervisor"
+                            />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+                        <LinearLayout
+                            android:id="@+id/llDirection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:orientation="vertical">
+
+                            <ImageView
+
+                                android:layout_width="@dimen/C50dp"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/C5dp"
+                                android:src="@drawable/ic_round_assistant_direction_24"
+                                android:text="Direction"
+                                android:visibility="visible" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Field Supervisor" />
-
+                    android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/btnCallMob"
                     android:layout_width="wrap_content"
@@ -70,31 +128,20 @@
                         android:text="9876543210"
                         android:textSize="12sp" />
                 </LinearLayout>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/llDirection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
-
-                <ImageView
-
-                    android:layout_width="@dimen/C50dp"
+                <TextView
+                    android:id="@+id/txDtTm"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/C5dp"
-                    android:src="@drawable/ic_round_assistant_direction_24"
-                    android:text="Direction"
-                    android:visibility="visible" />
-
-
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:layout_gravity="bottom"
+                    android:textSize="9sp"
+                    android:text=""
+                    tools:ignore="RtlCompat" /></LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
 
