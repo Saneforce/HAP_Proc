@@ -47,7 +47,6 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.MyTeamCategoryAdapter;
 import com.hap.checkinproc.SFA_Adapter.MyTeamMapAdapter;
-import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
@@ -232,8 +231,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
-                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
             }
         } catch (Exception e) {
@@ -316,7 +315,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
                             JSONArray arr = jsonObject.getJSONArray("Designation");
-                            arr.put(arr.length() , "ALL");
+                            arr.put(arr.length(), "ALL");
                             adapter = new MyTeamCategoryAdapter(arr, R.layout.myteam_category_adapter_layout, this);
                             rvCategory.setAdapter(adapter);
                             selectedPos = arr.length() - 1;

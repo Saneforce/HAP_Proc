@@ -60,7 +60,7 @@
                     android:layout_toRightOf="@+id/tvStatus"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_round_done_outline_24"
-                    app:tint="@color/greenColor"></ImageView>
+                   ></ImageView>
             </RelativeLayout>
 
 

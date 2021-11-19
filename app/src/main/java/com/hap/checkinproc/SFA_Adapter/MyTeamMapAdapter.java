@@ -85,6 +85,14 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
             }
         });
 
+        holder.llMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common_Class common_class = new Common_Class(MyTeamActivity.myTeamActivity);
+                common_class.showCalDialog(MyTeamActivity.myTeamActivity, "Do you want to Call this Outlet?", holder.tvMobile.getText().toString().replaceAll(",", ""));
+            }
+        });
+
 
     }
 

@@ -5,7 +5,6 @@ import static com.hap.checkinproc.SFA_Activity.Nearby_Outlets.shared_common_pref
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -580,12 +579,12 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                             .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
 
-//                    if (distance() > 200) {
-//                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//                        builder.include(currentLatLng);
-//                        builder.include(latLng);
-//                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
-//                    }
+                    if (distance() > 200) {
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        builder.include(currentLatLng);
+                        builder.include(latLng);
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+                    }
 
                 } else
                     Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();

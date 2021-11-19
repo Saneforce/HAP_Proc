@@ -81,7 +81,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvDeliveryDate, tvRetailorPhone, retaileAddress;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct,llCalMob;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -135,6 +135,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
             tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
+
+            llCalMob = findViewById(R.id.btnCallMob);
+            llCalMob.setOnClickListener(this);
+
+
 
             JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
@@ -509,6 +514,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btnCallMob:
+                common_class.showCalDialog(Order_Category_Select.this,"Do you want to Call this Outlet?",
+                        tvRetailorPhone.getText().toString().replaceAll(",", ""));
+
+            break;
             case R.id.tvDeliveryDate:
                 Calendar newCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(Order_Category_Select.this, new DatePickerDialog.OnDateSetListener() {

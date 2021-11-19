@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Common_Class;
 
 
+import static android.Manifest.permission.CALL_PHONE;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 import static com.hap.checkinproc.Activity_Hap.SFA_Activity.sfa_date;
@@ -47,6 +48,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -446,7 +448,7 @@ public class Common_Class {
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
-                      //  data.put("date", jparam.get("date").getAsString());
+                        //  data.put("date", jparam.get("date").getAsString());
                         data.put("date", "2021-11-10");
                         data.put("type", jparam.get("type").getAsString());
                         break;
@@ -601,8 +603,6 @@ public class Common_Class {
 
                 QueryString.put("axn", axnname);
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-
                 Call<ResponseBody> call = service.GetRouteObject310(QueryString, data.toString());
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -654,7 +654,25 @@ public class Common_Class {
         toast.show();
     }
 
+    public void showCalDialog(Activity activity,String msg,String num){
+        AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+                } else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    activity.startActivity(callIntent);
+                }            }
 
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+
+            }
+        });
+    }
     public String datePicker(Activity activity, TextView view) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {

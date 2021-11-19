@@ -17,7 +17,6 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -53,9 +52,7 @@ public class HistorySalesInfoAdapter extends RecyclerView.Adapter<HistorySalesIn
     @Override
     public HistorySalesInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-//        if (viewType == 3)
-//            listItem = layoutInflater.inflate(R.layout.history_orderinvoice_adapter_layout, null, false);
-//        else
+
         listItem = layoutInflater.inflate(rowlayout, null, false);
         return new HistorySalesInfoAdapter.MyViewHolder(listItem);
     }
@@ -74,54 +71,8 @@ public class HistorySalesInfoAdapter extends RecyclerView.Adapter<HistorySalesIn
     @Override
     public void onBindViewHolder(HistorySalesInfoAdapter.MyViewHolder holder, int position) {
         try {
-//            holder.tvId.setText("" + mDate.get(position).getOrderNo());
             holder.tvDate.setText("" + mDate.get(position).getOrderDate());
             holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
-//            holder.tvStatus.setText(mDate.get(position).getStatus());
-//
-//
-//            if (mDate.get(position).getStatus().equals("Completed")) {
-//
-//                holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
-//
-//            } else {
-//                holder.ivStatus.setImageResource(R.drawable.ic_round_pending_24);
-//            }
-//            holder.tvAmount.setText("₹ " + formatter.format(mDate.get(position).getOrderValue()));
-//
-//            StringBuilder value = new StringBuilder();
-//            //  holder.tvName.setText("" + mDate.get(position).getNo_Of_items());
-//            if (mDate.get(position).getProduct_details_modal() != null && mDate.get(position).getProduct_details_modal().size() > 0) {
-//                for (int i = 0; i < mDate.get(position).getProduct_details_modal().size(); i++) {
-//                    Product_Details_Modal pm = mDate.get(position).getProduct_details_modal().get(i);
-//                    if((i+1)==mDate.get(position).getProduct_details_modal().size())
-//                        value.append(pm.getName() + " x " + pm.getQty() );
-//                    else
-//                    value.append(pm.getName() + " x " + pm.getQty() + ", ");
-//
-//                }
-//
-//                holder.tvName.setText("" + value);
-//            } else
-//                holder.tvName.setText("");
-
-
-//            holder.btnReOrder.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Gson gson = new Gson();
-//
-//                    shared_common_pref.save(Constants.PreOrderQtyList, gson.toJson(mDate.get(position).getProduct_details_modal()));
-//
-//
-//                    if (tab == 1)
-//                        context.startActivity(new Intent(context, Order_Category_Select.class));
-//                    else
-//                        context.startActivity(new Intent(context, Invoice_Category_Select.class));
-//
-//                }
-//            });
-
         } catch (Exception e) {
             Log.e("History_Adapter:", e.getMessage());
         }
@@ -134,22 +85,12 @@ public class HistorySalesInfoAdapter extends RecyclerView.Adapter<HistorySalesIn
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvId, tvDate, tvStatus, tvAmount, tvAddress, tvOutletName, tvInvDate, tvInvStatus, tvInvId, tvInvAmt, tvInvProducts;
-        ImageView ivStatus;
-        Button btnReOrder;
+        TextView tvDate, tvOutletName;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvOutletName = itemView.findViewById(R.id.retailername);
-//            tvName = itemView.findViewById(R.id.tvProductName);
-//            tvId = itemView.findViewById(R.id.tvOrderId);
-//            tvStatus = itemView.findViewById(R.id.tvStatus);
-//            tvAmount = itemView.findViewById(R.id.tvAmount);
-//            tvAddress = itemView.findViewById(R.id.tvAddress);
-//            ivStatus = itemView.findViewById(R.id.ivStatus);
-            tvDate = itemView.findViewById(R.id.tvDate);
-//            btnReOrder = itemView.findViewById(R.id.btnReOrder);
-//
+          tvDate = itemView.findViewById(R.id.tvDate);
 
         }
     }
