@@ -62,11 +62,13 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
             });
 
             if (position == MyTeamActivity.selectedPos) {
-                holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
-                holder.txCatname.setTextColor(context.getResources().getColor(R.color.black));
+                //holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
+                holder.llTeamType.setBackground(context.getResources().getDrawable(R.drawable.cardbtnprimary));
+                holder.txCatname.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
-                holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
+                //holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
+                holder.llTeamType.setBackground(context.getResources().getDrawable(R.drawable.cardbutton));
                 holder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }

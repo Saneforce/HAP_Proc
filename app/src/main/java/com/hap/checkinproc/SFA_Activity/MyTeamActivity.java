@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static android.Manifest.permission.CALL_PHONE;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,11 +13,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,6 +31,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,12 +48,14 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.MyTeamCategoryAdapter;
 import com.hap.checkinproc.SFA_Adapter.MyTeamMapAdapter;
+import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
@@ -83,9 +92,11 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     public static int selectedPos;
     RelativeLayout vwRetails;
     MyTeamMapAdapter mapAdapter;
+    EditText txSearchRet;
 
     public String mType = "";
     private int locPos;
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +134,22 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
             common_class = new Common_Class(this);
 
+            txSearchRet.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    setAdapter(shared_common_pref.getvalue(Constants.MYTEAM_LOCATION));
+                }
+            });
             new LocationFinder(getApplication(), new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
@@ -203,9 +229,14 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject arrObj = arr.getJSONObject(i);
+                    boolean addItmflg=false;
+                    if(txSearchRet.getText().toString().equalsIgnoreCase("") ||
+                            (";"+arrObj.getString("Sf_Name").toLowerCase()).indexOf(";"+txSearchRet.getText().toString().toLowerCase())>-1)
+                    {
+                        addItmflg=true;
+                    }
 
-
-                    if (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL")) {
+                    if (addItmflg && (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL"))) {
                         LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
                                 Double.parseDouble(arrObj.getString("Lon")));
                         marker = map.addMarker(new MarkerOptions().position(latLng)
@@ -219,7 +250,25 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
 
-                mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy));
+                mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(JsonObject item, int Name) {
+
+                    }
+
+                    @Override
+                    public void CallMobile(String MobileNo) {
+                        Log.d("Event", "CAll Mobile");
+                        int readReq = ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE);
+                        if (readReq != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                        } else {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
+                            startActivity(callIntent);
+                        }
+                    }
+                });
                 rvTeamDetail.setAdapter(mapAdapter);
 
 
@@ -231,8 +280,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
+                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
-                map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
             }
         } catch (Exception e) {
@@ -245,6 +294,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
         rvCategory = findViewById(R.id.rvTeamCategory);
         rvTeamDetail = findViewById(R.id.rvTeamDetail);
         vwRetails = findViewById(R.id.vwRetails);
+        txSearchRet = findViewById(R.id.txSearchRet);
     }
 
     @Override
@@ -314,11 +364,11 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     case Constants.MYTEAM_LOCATION:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
-                            JSONArray arr = jsonObject.getJSONArray("Designation");
-                            arr.put(arr.length(), "ALL");
+                            String Desgs="[\"ALL\","+jsonObject.getJSONArray("Designation").join(",")+"]";
+                            JSONArray arr = new JSONArray(Desgs);//jsonObject.getJSONArray("Designation");
                             adapter = new MyTeamCategoryAdapter(arr, R.layout.myteam_category_adapter_layout, this);
                             rvCategory.setAdapter(adapter);
-                            selectedPos = arr.length() - 1;
+                            selectedPos = 0;
                             setAdapter(apiDataResponse);
                         }
                         break;
@@ -343,6 +393,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             TextView tvSfName = (TextView) view.findViewById(R.id.tvSfName);
             TextView tvDesig = (TextView) view.findViewById(R.id.tvDesig);
             TextView tvMobile = (TextView) view.findViewById(R.id.txMobile);
+            TextView txDtTm = (TextView) view.findViewById(R.id.txDtTm);
 
 
             for (int i = 0; i < array.length(); i++) {
@@ -360,6 +411,23 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             tvSfName.setText(obj.getString("Sf_Name"));
             tvDesig.setText(obj.getString("Designation_Name"));
             tvMobile.setText(obj.getString("SF_Mobile"));
+            txDtTm.setText(obj.getString("dttm"));
+            tvMobile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d("Event", "CAll Mobile");
+                    int readReq = ContextCompat.checkSelfPermission(MyTeamActivity.this, CALL_PHONE);
+                    if (readReq != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                    } else {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + tvMobile.getText()));//change the number
+                        startActivity(callIntent);
+                    }
+                }
+            });
+
 
             llDir.setOnClickListener(new View.OnClickListener() {
                 @Override

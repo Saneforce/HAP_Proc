@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
@@ -29,15 +30,17 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     Context context;
     String laty, lngy;
     JSONObject json;
+    AdapterOnClick mAdapterOnClick;
     public static String TAG = "MyTeamMapAdapter";
 
-    public MyTeamMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
+    public MyTeamMapAdapter(Activity context, JSONArray array, String laty, String lngy, AdapterOnClick mAdapterOnClick) {
 
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.array = array;
         this.laty = laty;
         this.lngy = lngy;
+        this.mAdapterOnClick = mAdapterOnClick;
 
     }
 
@@ -54,10 +57,21 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
             json = array.getJSONObject(position);
-            holder.tvSfName.setText(MyTeamActivity.myTeamActivity.mType.equalsIgnoreCase("ALL") ?
-                    json.getString("Sf_Name") + "(" + json.getString("shortname") + ")" : json.getString("Sf_Name"));
+            holder.tvSfName.setText((MyTeamActivity.myTeamActivity.mType.equalsIgnoreCase("ALL") ?
+                    json.getString("Sf_Name") + " (" + json.getString("shortname") + ")" : json.getString("Sf_Name"))+" - "+json.getString("sf_emp_id"));
+            //holder.txEMPId.setText(json.getString("sf_emp_id"));
+            holder.txEMPId.setVisibility(View.GONE);
             holder.tvDesig.setText(json.getString("Designation_Name"));
             holder.tvMobile.setText(json.getString("SF_Mobile"));
+            holder.txDtTm.setText(json.getString("dttm"));
+            holder.txHQ.setText(json.getString("HQ_Name"));
+            holder.tvMobile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterOnClick.CallMobile(holder.tvMobile.getText().toString().replaceAll(",", ""));
+                }
+            });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,7 +118,7 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView tvSfName, tvDesig, tvMobile;
+        TextView tvSfName,txEMPId, tvDesig, tvMobile,txDtTm,txHQ;
         LinearLayout llDir, llMobile;
 
 
@@ -112,8 +126,11 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
             super(itemView);
 
             tvSfName = (TextView) itemView.findViewById(R.id.tvSfName);
+            txEMPId = (TextView) itemView.findViewById(R.id.tvEMPId);
             tvDesig = (TextView) itemView.findViewById(R.id.tvDesig);
             tvMobile = (TextView) itemView.findViewById(R.id.txMobile);
+            txDtTm = (TextView) itemView.findViewById(R.id.txDtTm);
+            txHQ = (TextView) itemView.findViewById(R.id.tvHQ);
             llMobile = (LinearLayout) itemView.findViewById(R.id.btnCallMob);
             llDir = (LinearLayout) itemView.findViewById(R.id.llDirection);
         }
