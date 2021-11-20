@@ -128,7 +128,7 @@
                         android:drawableRight="@drawable/ic_search_icon"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/C10dp"
-                        android:text="AM SNACKS BAR"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="16dp"
                         android:textStyle="bold"

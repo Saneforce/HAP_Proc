@@ -122,7 +122,6 @@
                                 android:id="@+id/Qty"
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentRight="true"
                                 android:background="@color/white"
                                 android:gravity="center_vertical"
                                 android:hint="0"
@@ -214,8 +213,7 @@
                             android:layout_toLeftOf="@+id/Disc"
                             android:gravity="center_vertical"
                             android:text="Discount : "
-                            android:textColor="@color/grey_800"
-                            android:visibility="gone" />
+                            android:textColor="@color/grey_800" />
 
 
                         <TextView
@@ -226,12 +224,10 @@
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:hint=""
-
                             android:inputType="number"
                             android:text="₹0"
                             android:textColor="@color/color_red"
-                            android:textStyle="bold"
-                            android:visibility="gone" />
+                            android:textStyle="bold" />
 
 
                     </RelativeLayout>
