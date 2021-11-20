@@ -556,6 +556,11 @@ public class Common_Class {
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         break;
+                    case Constants.PrePrimaryOrderQtyList:
+                        axnname = "get/prevorderqty";
+                        data.put("distributorid", Shared_Common_Pref.OutletCode);
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        break;
                     case Constants.CUMULATIVEDATA:
                         axnname = "get/cumulativevalues";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -660,86 +665,91 @@ public class Common_Class {
         toast.show();
     }
 
-    public void showCalDialog(Activity activity,String msg,String num){
+    public void showCalDialog(Activity activity, String msg, String num) {
         AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
-                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
-                if (readReq != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
-                } else {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + num));//change the number
-                    activity.startActivity(callIntent);
-                }            }
-
-            @Override
-            public void NegativeMethod(DialogInterface dialog, int id) {
-
+                callMob(activity,num);
             }
-        });
-    }
-    public String datePicker(Activity activity, TextView view) {
-        Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void NegativeMethod (DialogInterface dialog,int id){
 
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                int month = monthOfYear + 1;
-
-                pickDate = ("" + dayOfMonth + "/" + month + "/" + year);
+                }
+            });
+        }
 
 
+        public void callMob (Activity activity, String num){
+            int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+            if (readReq != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+            } else {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + num));//change the number
+                activity.startActivity(callIntent);
             }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        fromDatePickerDialog.show();
+        }
+        public String datePicker (Activity activity, TextView view){
+            Calendar newCalendar = Calendar.getInstance();
+            fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
 
-        return pickDate;
-    }
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    int month = monthOfYear + 1;
 
-    public void commonDialog(Activity activity, Class moveActivity, String name) {
-        AlertDialogBox.showDialog(activity, "HAP Check-In", "Do you confirm to cancel " + name,
-                "Yes", "No", false, new AlertBox() {
-                    @Override
-                    public void PositiveMethod(DialogInterface dialog, int id) {
-                        CommonIntentwithFinish(moveActivity);
-                    }
+                    pickDate = ("" + dayOfMonth + "/" + month + "/" + year);
 
-                    @Override
-                    public void NegativeMethod(DialogInterface dialog, int id) {
 
-                    }
-                });
-    }
+                }
+            }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+            fromDatePickerDialog.show();
 
-    public void showCommonDialog(List<Common_Model> dataList, int type, Activity activity) {
-        customDialog = new CustomListViewDialog(activity, dataList, type);
-        Window windowww = customDialog.getWindow();
-        windowww.setGravity(Gravity.CENTER);
-        windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-    }
+            return pickDate;
+        }
 
-    public void dismissCommonDialog() {
-        if (customDialog != null)
-            customDialog.dismiss();
+        public void commonDialog (Activity activity, Class moveActivity, String name){
+            AlertDialogBox.showDialog(activity, "HAP Check-In", "Do you confirm to cancel " + name,
+                    "Yes", "No", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            CommonIntentwithFinish(moveActivity);
+                        }
 
-    }
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
 
-    public String getDirectionsUrl(String dest) {
-        // Origin of route
-        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
-        // Destination of route
-        String str_dest = "destination=" + dest;
-        // Key
-        String key = "key=" + context.getString(R.string.map_api_key);
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + key;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
-        return url;
-    }
+                        }
+                    });
+        }
+
+        public void showCommonDialog (List < Common_Model > dataList,int type, Activity activity){
+            customDialog = new CustomListViewDialog(activity, dataList, type);
+            Window windowww = customDialog.getWindow();
+            windowww.setGravity(Gravity.CENTER);
+            windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            customDialog.show();
+        }
+
+        public void dismissCommonDialog () {
+            if (customDialog != null)
+                customDialog.dismiss();
+
+        }
+
+        public String getDirectionsUrl (String dest){
+            // Origin of route
+            String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
+            // Destination of route
+            String str_dest = "destination=" + dest;
+            // Key
+            String key = "key=" + context.getString(R.string.map_api_key);
+            // Building the parameters to the web service
+            String parameters = str_origin + "&" + str_dest + "&" + key;
+            // Output format
+            String output = "json";
+            // Building the url to the web service
+            String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
+            return url;
+        }
 
 //    public boolean checkValueStore(Activity activity, String key) {
 //        DatabaseHandler db = new DatabaseHandler(activity);
@@ -793,201 +803,202 @@ public class Common_Class {
          TastyToast.makeText(Ac, MSg,
                  TastyToast.LENGTH_SHORT, s);
      }*/
-    public static boolean isNullOrEmpty(String str) {
-        if (str != null && !str.isEmpty())
-            return false;
-        return true;
-    }
-
-    public void CommonIntentwithNEwTask(Class classname) {
-        intent = new Intent(activity, classname);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
-    }
-
-    public static String GetEkey() {
-        DateFormat dateformet = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Calendar calander = Calendar.getInstance();
-        return "EK" + Shared_Common_Pref.Sf_Code + dateformet.format(calander.getTime()).hashCode();
-
-    }
-
-    public void hideKeybaord(View v, Context context) {
-        this.context = context;
-        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-    }
-
-    public static String addquote(String s) {
-        return new StringBuilder()
-                .append('\'')
-                .append(s)
-                .append('\'')
-                .toString();
-    }
-
-    public String GetMonthname(int s) {
-        String[] montharray = activity.getResources().getStringArray(R.array.MonthArray);
-        Calendar cal = Calendar.getInstance();
-        if (s == 12) {
-            s = 0;
-
-        }
-        String currrentmonth = montharray[s];
-        return currrentmonth;
-    }
-
-    public void CommonIntentwithoutFinishputextra(Class classname, String key, String value) {
-        intent = new Intent(activity, classname);
-        intent.putExtra(key, value);
-        Log.e("commanclasstitle", value);
-        activity.startActivity(intent);
-    }
-
-    public void CommonIntentwithoutFinishputextratwo(Class classname, String key, String value, String key2, String value2) {
-        intent = new Intent(activity, classname);
-        intent.putExtra(key, value);
-        intent.putExtra(key2, value2);
-        Log.e("commanclasstitle", value);
-        activity.startActivity(intent);
-    }
-
-    public String getintentValues(String name) {
-        Intent intent = activity.getIntent();
-        return intent.getStringExtra(name);
-    }
-
-    public static String GetDate() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String plantime = dpln.format(c.getTime());
-        return plantime;
-    }
-
-    public static String GetTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dpln = new SimpleDateFormat("HH:mm:ss");
-        String plantime = dpln.format(c.getTime());
-        return plantime;
-    }
-
-    public void GetTP_Result(String name, String values, int Month, int year) {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        JSONObject sp = new JSONObject();
-        try {
-            jsonObject.put(name, sp);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        jsonArray.put(jsonObject);
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(year), jsonArray.toString());
-        Log.e("Log_Tp_SELECT", jsonArray.toString());
-        mCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-
-                try {
-                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    Result = jsonObject.getString("success");
-                    Toast.makeText(activity, "Send to Approval", Toast.LENGTH_SHORT).show();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-    }
-
-    public void GetTP_Result(String name, String values, String Month, String year) {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        JSONObject sp = new JSONObject();
-        try {
-            jsonObject.put(name, sp);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        jsonArray.put(jsonObject);
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(year), jsonArray.toString());
-
-        mCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-
-                try {
-                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    Result = jsonObject.getString("success");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-    }
-
-
-    public static class InputFilterMinMax implements InputFilter {
-
-        private int min, max;
-
-        public InputFilterMinMax(int min, int max) {
-            this.min = min;
-            this.max = max;
+        public static boolean isNullOrEmpty (String str){
+            if (str != null && !str.isEmpty())
+                return false;
+            return true;
         }
 
+        public void CommonIntentwithNEwTask (Class classname){
+            intent = new Intent(activity, classname);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+        }
 
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+        public static String GetEkey () {
+            DateFormat dateformet = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Calendar calander = Calendar.getInstance();
+            return "EK" + Shared_Common_Pref.Sf_Code + dateformet.format(calander.getTime()).hashCode();
+
+        }
+
+        public void hideKeybaord (View v, Context context){
+            this.context = context;
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+        }
+
+        public static String addquote (String s){
+            return new StringBuilder()
+                    .append('\'')
+                    .append(s)
+                    .append('\'')
+                    .toString();
+        }
+
+        public String GetMonthname ( int s){
+            String[] montharray = activity.getResources().getStringArray(R.array.MonthArray);
+            Calendar cal = Calendar.getInstance();
+            if (s == 12) {
+                s = 0;
+
+            }
+            String currrentmonth = montharray[s];
+            return currrentmonth;
+        }
+
+        public void CommonIntentwithoutFinishputextra (Class classname, String key, String value){
+            intent = new Intent(activity, classname);
+            intent.putExtra(key, value);
+            Log.e("commanclasstitle", value);
+            activity.startActivity(intent);
+        }
+
+        public void CommonIntentwithoutFinishputextratwo (Class classname, String key, String
+        value, String key2, String value2){
+            intent = new Intent(activity, classname);
+            intent.putExtra(key, value);
+            intent.putExtra(key2, value2);
+            Log.e("commanclasstitle", value);
+            activity.startActivity(intent);
+        }
+
+        public String getintentValues (String name){
+            Intent intent = activity.getIntent();
+            return intent.getStringExtra(name);
+        }
+
+        public static String GetDate () {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String plantime = dpln.format(c.getTime());
+            return plantime;
+        }
+
+        public static String GetTime () {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dpln = new SimpleDateFormat("HH:mm:ss");
+            String plantime = dpln.format(c.getTime());
+            return plantime;
+        }
+
+        public void GetTP_Result (String name, String values,int Month, int year){
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            JSONObject sp = new JSONObject();
             try {
-                int input = Integer.parseInt(dest.toString() + source.toString());
-                if (isInRange(min, max, input))
-                    return null;
-            } catch (NumberFormatException nfe) {
+                jsonObject.put(name, sp);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            return "";
+            jsonArray.put(jsonObject);
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(year), jsonArray.toString());
+            Log.e("Log_Tp_SELECT", jsonArray.toString());
+            mCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        Result = jsonObject.getString("success");
+                        Toast.makeText(activity, "Send to Approval", Toast.LENGTH_SHORT).show();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                }
+            });
         }
 
-        private boolean isInRange(int a, int b, int c) {
-            return b > a ? c >= a && c <= b : c >= b && c <= a;
+        public void GetTP_Result (String name, String values, String Month, String year){
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            JSONObject sp = new JSONObject();
+            try {
+                jsonObject.put(name, sp);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArray.put(jsonObject);
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(year), jsonArray.toString());
+
+            mCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        Result = jsonObject.getString("success");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                }
+            });
         }
 
-    }
+
+        public static class InputFilterMinMax implements InputFilter {
+
+            private int min, max;
+
+            public InputFilterMinMax(int min, int max) {
+                this.min = min;
+                this.max = max;
+            }
 
 
-    public void gotoHomeScreen(Context context, View ivToolbarHome) {
-        ivToolbarHome.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                try {
+                    int input = Integer.parseInt(dest.toString() + source.toString());
+                    if (isInRange(min, max, input))
+                        return null;
+                } catch (NumberFormatException nfe) {
+                }
+                return "";
+            }
+
+            private boolean isInRange(int a, int b, int c) {
+                return b > a ? c >= a && c <= b : c >= b && c <= a;
+            }
+
+        }
+
+
+        public void gotoHomeScreen (Context context, View ivToolbarHome){
+            ivToolbarHome.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                    if (CheckIn == true) {
 //                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
 //                        Dashboard.putExtra("Mode", "CIN");
 //                        startActivity(Dashboard);
-                    CommonIntentwithoutFinish(SFA_Activity.class);
-                } else
-                    context.startActivity(new Intent(context, Dashboard.class));
+                        CommonIntentwithoutFinish(SFA_Activity.class);
+                    } else
+                        context.startActivity(new Intent(context, Dashboard.class));
 
-            }
-        });
+                }
+            });
+
+
+        }
 
 
     }
-
-
-}
 

@@ -87,4 +87,5 @@ public class Constants {
     public static final String TodayPrimaryOrderDetails_List = "todayPrimaryOrderDetail";
     public static final String MYTEAM_LOCATION = "myTeamLocation";
     public static String NEW_OUTLET = "newOutlet";
+    public static final String PrePrimaryOrderQtyList="prePrimaryOrderQty";
 }
