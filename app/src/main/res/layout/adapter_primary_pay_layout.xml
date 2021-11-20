@@ -12,25 +12,25 @@
         android:id="@+id/row_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/C3dp"
         android:layout_marginTop="@dimen/C5dp"
-
-        android:layout_marginRight="@dimen/C3dp"
         android:orientation="vertical"
-
         tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
+            android:layout_marginStart="@dimen/C5dp"
+            android:layout_marginEnd="@dimen/C5dp"
             >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/C5dp"
+                android:layout_marginEnd="@dimen/C5dp"
+                >
 
                 <TextView
                     android:id="@+id/productname"
@@ -40,14 +40,18 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="@dimen/C13dp"
-                    android:textStyle="bold"></TextView>
+                    android:textStyle="bold"
+                    />
             </LinearLayout>
 
             <LinearLayout
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/C5dp"
+                android:layout_marginEnd="@dimen/C5dp"
+                >
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -65,48 +69,37 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
-
                     <TextView
                         android:enabled="false"
                         android:id="@+id/Rate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="sans-serif"
-                        android:gravity="end"
-                        android:text="Value"
+                        android:gravity="center_vertical|start"
+                        android:text=""
+                        android:hint="Rate"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
-
-
+                        android:textSize="@dimen/C13dp"
+                        />
                 </LinearLayout>
-
-
-
-
-
-
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/C15dp"
                     android:background="@drawable/order_qty_backround">
-
                     <ImageView
-                        android:id="@+id/ivQtyPls"
+                        android:id="@+id/ivQtyMns"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:padding="6dp"
-                        android:src="@drawable/plus"
-                        app:tint="@color/green" />
-
+                        android:src="@drawable/disable_minus"
+                        app:tint="@color/color_red" />
                     <EditText
 
                         android:id="@+id/Qty"
@@ -114,7 +107,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:background="@color/white"
-                        android:enabled="false"
+                        android:enabled="true"
                         android:gravity="center_vertical"
                         android:hint="0"
                         android:inputType="number"
@@ -126,20 +119,18 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"
                         tools:ignore="RtlCompat" />
-
                     <ImageView
-                        android:id="@+id/ivQtyMns"
+                        android:id="@+id/ivQtyPls"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:padding="6dp"
-                        android:src="@drawable/disable_minus"
-                        app:tint="@color/color_red" />
+                        android:src="@drawable/plus"
+                        app:tint="@color/green" />
+
                 </LinearLayout>
-
-
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1">
 
                     <TextView
@@ -147,10 +138,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="sans-serif"
-                        android:gravity="end"
+                        android:gravity="center_vertical|end"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="@dimen/C13dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -173,7 +164,7 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1">
 
                     <TextView
@@ -181,10 +172,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="sans-serif"
-                        android:gravity="end"
+                        android:gravity="center_vertical|end"
                         android:text="Value"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="@dimen/C13dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

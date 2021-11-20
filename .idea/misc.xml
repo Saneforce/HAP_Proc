@@ -139,7 +139,7 @@
         <entry key="app/src/main/res/layout/activity_other_brand_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_outlet__info_.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_pop_layout.xml" value="0.18432971014492755" />
-        <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.40471118909668696" />
         <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_q_r_code_scanner.xml" value="0.24592391304347827" />
         <entry key="app/src/main/res/layout/activity_qps.xml" value="0.18432971014492755" />
@@ -152,6 +152,8 @@
         <entry key="app/src/main/res/layout/activity_t_a_claim.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/activity_t_a_view_status.xml" value="0.11296296296296296" />
         <entry key="app/src/main/res/layout/activity_t_l_cliam__apprval.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/adapter_primary_pay_layout.xml" value="0.17592592592592593" />
+        <entry key="app/src/main/res/layout/adapter_primary_product.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/category_order_horizantal_universe_gridview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/categorywise_sales_adp.xml" value="0.5508345978755691" />
         <entry key="app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.23505434782608695" />
@@ -164,6 +166,7 @@
         <entry key="app/src/main/res/layout/myteam_category_adapter_layout.xml" value="0.21" />
         <entry key="app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.5" />
         <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
+        <entry key="app/src/main/res/layout/product_free_recyclerview.xml" value="4.316222932399262" />
         <entry key="app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.3559322033898305" />
         <entry key="app/src/main/res/layout/product_pay_recyclerview.xml" value="0.13802083333333334" />

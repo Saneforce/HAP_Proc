@@ -51,7 +51,7 @@
         android:layout_marginLeft="@dimen/C10dp"
         android:layout_marginTop="@dimen/C10dp"
         android:ellipsize="end"
-        android:text="AM SNACKS BAR"
+        android:text=""
         android:textColor="@android:color/black"
         android:textSize="14dp"
         android:textStyle="bold"
