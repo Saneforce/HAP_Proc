@@ -574,7 +574,8 @@ public class Login extends AppCompatActivity {
 
         //eMail = "nallathambi.a@hap.in";
         eMail = "1005985@hap.in";
-        //eMail = "haptest3@hap.in";
+        eMail = "haptest3@hap.in";
+        // eMail = "johnkennedy.i@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,BuildConfig.VERSION_NAME, deviceToken);
         modelCall.enqueue(new Callback<Model>() {

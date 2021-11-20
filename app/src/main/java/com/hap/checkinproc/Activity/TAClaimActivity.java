@@ -3829,7 +3829,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                 jsnLdgSve.put("emp_Dept", txtJNDept.getText().toString());
                 jsnLdgSve.put("emp_HQ", txtJNHQ.getText().toString());
                 jsnLdgSve.put("emp_Mob", txtJNMob.getText().toString());
-                jsnLdgSve.put("emp_ldg_amt", strJNMyEli.substring(0, intJNMyEli));
+              //  jsnLdgSve.put("emp_ldg_amt", strJNMyEli.substring(0, intJNMyEli));
+                jsnLdgSve.put("emp_ldg_amt", txtJNMyEli.getText().toString().replace("₹",""));
+
                 ldgArySve.put(jsnLdgSve);
             }
             ldgSave.put("Loding_Emp", ldgArySve);

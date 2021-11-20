@@ -46,7 +46,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
+    TextView netamount, cashdiscount, gstLabel,gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
             retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader;
 
     ImageView ok, ivPrint;
@@ -89,6 +89,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvOutstanding = findViewById(R.id.tvOutstanding);
             tvPaidAmt = findViewById(R.id.tvPaidAmt);
             tvHeader = findViewById(R.id.tvHeader);
+            gstLabel=findViewById(R.id.gstLabel);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -607,6 +608,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
             gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
+//            gstLabel.setText("CGST"+"\n"+"SGST"+"\n"+"IGST");
+//            gstrate.setText("₹2.89"+"\n"+"₹10.56"+"\n"+"₹1.89" );
 
         } catch (Exception e) {
             Log.e("PRINT:getData ", e.getMessage());

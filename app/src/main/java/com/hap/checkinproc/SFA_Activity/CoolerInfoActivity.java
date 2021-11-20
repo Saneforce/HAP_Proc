@@ -51,13 +51,13 @@ import retrofit2.Response;
 
 public class CoolerInfoActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tvOrder, tvOtherBrand, tvQPS, tvPOP, tvRetailorName, tvReceivedDate;
-    EditText etTagNo, etMake, etCoolerType;
+    EditText etTagNo, etMake, etCoolerType, etRemarks;
     Common_Class common_class;
-    CheckBox cbPurity, cbFrontage;
+    CheckBox cbPurity, cbFrontage, cbNoWrk, cbAvail;
     Button btnSubmit;
     private DatePickerDialog fromDatePickerDialog;
 
-    ImageView ivPurityCapture, ivPurityPreview, ivFTCapture, ivFTPreview, ivToolbarHome;
+    ImageView ivPurityCapture, ivPurityPreview, ivFTCapture, ivFTPreview, ivNowrkCapture, ivNoWrkPreview, ivToolbarHome;
     Gson gson;
     List<QPS_Modal> qpsModalList = new ArrayList<>();
     Shared_Common_Pref shared_common_pref;
@@ -101,6 +101,17 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+        cbNoWrk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    findViewById(R.id.llNoWrkOpt).setVisibility(View.VISIBLE);
+                else {
+                    clearFiles("noWrk~key");
+                    findViewById(R.id.llNoWrkOpt).setVisibility(View.GONE);
+                }
+            }
+        });
 
     }
 
@@ -176,17 +187,22 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         tvPOP = (TextView) findViewById(R.id.tvPOP);
         cbPurity = (CheckBox) findViewById(R.id.cbPurity);
         cbFrontage = (CheckBox) findViewById(R.id.cbFrontage);
+        cbNoWrk = (CheckBox) findViewById(R.id.cbNoWorking);
+        cbAvail = (CheckBox) findViewById(R.id.cbNoAvail);
         tvReceivedDate = (TextView) findViewById(R.id.tvReceivedDate);
         ivPurityCapture = (ImageView) findViewById(R.id.ivPurityCapture);
         ivPurityPreview = (ImageView) findViewById(R.id.ivPurityPreview);
         ivFTCapture = (ImageView) findViewById(R.id.ivFTCapture);
         ivFTPreview = (ImageView) findViewById(R.id.ivFTPreview);
+        ivNowrkCapture = (ImageView) findViewById(R.id.ivNoWrkCapture);
+        ivNoWrkPreview = (ImageView) findViewById(R.id.ivNoWrkPreview);
         tvRetailorName = findViewById(R.id.Category_Nametext);
         ivToolbarHome = findViewById(R.id.toolbar_home);
         btnSubmit = findViewById(R.id.btnSubmit);
         etTagNo = findViewById(R.id.etTagNo);
         etMake = findViewById(R.id.etMake);
         etCoolerType = findViewById(R.id.etCoolerType);
+        etRemarks = findViewById(R.id.edt_remarks);
 
         tvOrder.setOnClickListener(this);
         tvOtherBrand.setOnClickListener(this);
@@ -198,6 +214,8 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         ivPurityPreview.setOnClickListener(this);
         ivFTCapture.setOnClickListener(this);
         ivFTPreview.setOnClickListener(this);
+        ivNowrkCapture.setOnClickListener(this);
+        ivNoWrkPreview.setOnClickListener(this);
     }
 
     @Override
@@ -254,6 +272,12 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.ivFTPreview:
                 showPic("FT~key");
+                break;
+            case R.id.ivNoWrkCapture:
+                addPic("noWrk~key");
+                break;
+            case R.id.ivNoWrkPreview:
+                showPic("noWrk~key");
                 break;
             case R.id.tvReceivedDate:
                 Calendar newCalendar = Calendar.getInstance();
@@ -320,6 +344,9 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
             HeadItem.put("cbPurity", cbPurity.isChecked());
 
             HeadItem.put("cbFrontage", cbFrontage.isChecked());
+            HeadItem.put("cbNotAvailable", cbAvail.isChecked());
+            HeadItem.put("cbNotWorking", cbNoWrk.isChecked());
+            HeadItem.put("remarks", etRemarks.getText().toString());
 
             ActivityData.put("Cooler_Header", HeadItem);
             JSONArray Order_Details = new JSONArray();
@@ -348,7 +375,6 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
                         if (jsonObjects.getBoolean("success")) {
                             Toast.makeText(CoolerInfoActivity.this, jsonObjects.getString("Msg"), Toast.LENGTH_SHORT).show();
-                            qpsActivity.common_class.getDb_310Data(Constants.QPS_STATUS, qpsActivity);
                         }
                     } catch (Exception e) {
 
