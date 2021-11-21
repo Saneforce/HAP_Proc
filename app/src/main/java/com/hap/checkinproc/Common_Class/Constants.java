@@ -12,6 +12,7 @@ public class Constants {
     public static final String Retailer_OutletList = "retailerOutletList";
     public static final String Distributor_List = "distributorList";
     public static final String Product_List = "productList";
+    public static final String Primary_Product_List = "primaryproList";
     public static final String Category_List = "categoryList";
     public static final String ProdTypes_List = "ProdTypeList";
     public static final String ProdGroups_List = "ProdGroupList";
@@ -85,5 +86,6 @@ public class Constants {
     public static final String GetTodayPrimaryOrder_List = "getTodayPrimaryOrderList";
     public static final String TodayPrimaryOrderDetails_List = "todayPrimaryOrderDetail";
     public static final String MYTEAM_LOCATION = "myTeamLocation";
-    public static String NEW_OUTLET = "newOutlet";
+    public static final String NEW_OUTLET = "newOutlet";
+    public static final String PrePrimaryOrderQty = "prePrimaryOrderQty";
 }

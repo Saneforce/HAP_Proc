@@ -25,13 +25,34 @@
                 android:layout_height="@dimen/C45dp"
                 android:background="@drawable/button_white">
 
+
+                <TextView
+                    android:id="@+id/tvOBPos"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:background="@drawable/bugetoutletno"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/C4dp"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
                 <TextView
                     android:id="@+id/productname"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:layout_toRightOf="@+id/tvOBPos"
                     android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/C10dp"
-                    android:text="thirumalai"
+                    android:paddingTop="4dp"
+                    android:text=""
+                    android:textColorHint="@color/black"
+                    android:hint="SELECT THE OTHER BRAND"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     android:textStyle="bold" />
@@ -158,14 +179,14 @@
                             android:textSize="14sp" />
 
                         <TextView
-                            android:maxLines="1"
-                            android:ellipsize="end"
                             android:id="@+id/Amount"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:ellipsize="end"
                             android:fontFamily="sans-serif"
                             android:gravity="center"
+                            android:maxLines="1"
                             android:text=""
                             android:textColor="@color/txt_color_black"
                             android:textSize="@dimen/C15dp"

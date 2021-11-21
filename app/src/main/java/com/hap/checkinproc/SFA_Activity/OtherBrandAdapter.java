@@ -32,7 +32,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
     public static String TAG = "OtherBrandAdapter";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView productname, Rate, Amount, Disc, lblAddQty;
+        public TextView productname, Rate, Amount, Disc, lblAddQty, tvPos;
 
         EditText Qty, etPrice, Free, sku;
         RelativeLayout rlOtherBrand;
@@ -50,6 +50,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
             sku = view.findViewById(R.id.sku);
             rlDeleteBrand = view.findViewById(R.id.rlDeleteBrand);
             rlOtherBrand = view.findViewById(R.id.rlOtherBrand);
+            tvPos = view.findViewById(R.id.tvOBPos);
 
 
         }
@@ -90,6 +91,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
             holder.Free.setText("" + Product_Details_Modal.getScheme());
             holder.sku.setText("" + Product_Details_Modal.getSku());
             holder.Qty.setText("" + Product_Details_Modal.getQty());
+            holder.tvPos.setText("" + (position + 1));
 
 
             holder.Qty.addTextChangedListener(new TextWatcher() {
@@ -241,7 +243,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                         Product_Details_Modalitem.remove(pos);
 
                         if (Product_Details_Modalitem.size() == 0) {
-                            Product_Details_Modalitem.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
+                            Product_Details_Modalitem.add(new Product_Details_Modal("", "", "", 0, 0, 0, ""));
                         }
 
                         notifyDataSetChanged();

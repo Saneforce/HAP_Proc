@@ -264,6 +264,105 @@
 
                                 </LinearLayout>
 
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingTop="@dimen/C10dp">
+
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <CheckBox
+                                        android:id="@+id/cbNoAvail"
+                                        style="@style/TextStyle" />
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="Not Available" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingTop="@dimen/C10dp">
+
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <CheckBox
+                                        android:id="@+id/cbNoWorking"
+                                        style="@style/TextStyle" />
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="Not Working" />
+                                </LinearLayout>
+
+
+                                <LinearLayout
+
+                                    android:id="@+id/llNoWrkOpt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/ivNoWrkCapture"
+                                        style="@style/TextStyle"
+                                        android:src="@drawable/ic_round_photo_camera_24"
+                                        app:tint="@color/colorPrimaryDark" />
+
+                                    <ImageView
+                                        android:id="@+id/ivNoWrkPreview"
+                                        style="@style/TextStyle"
+                                        android:src="@drawable/image_preview_24"
+                                        app:tint="@color/colorPrimaryDark" />
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/TextStyle"
+                                    android:paddingTop="@dimen/C10dp"
+                                    android:text="Remarks" />
+
+                                <EditText
+                                    android:id="@+id/edt_remarks"
+                                    style="@style/TextStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/C100dp"
+                                    android:background="@drawable/textbox_bg"
+                                    android:elevation="5dp"
+                                    android:gravity="start"
+                                    android:hint="Enter Remarks here"
+                                    android:padding="@dimen/C8dp" />
+
+
                             </LinearLayout>
 
 

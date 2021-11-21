@@ -345,6 +345,9 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
+                case Constants.PrePrimaryOrderQty:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
@@ -378,7 +381,7 @@ public class Common_Class {
             QueryString.put("desig", "stockist");
             QueryString.put(Constants.Distributor_Id, shared_common_pref.getvalue(Constants.Distributor_Id));
 
-            callAPI(QuerySTring1, QueryString, key, activity, boolRefresh);
+            callAPI(QuerySTring1, QueryString, key, activity);
         } else {
             Toast.makeText(activity, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
         }
@@ -386,7 +389,7 @@ public class Common_Class {
 
     }
 
-    void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity, Boolean boolRefresh) {
+    void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity) {
         try {
             DatabaseHandler db = new DatabaseHandler(activity);
             ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -556,6 +559,11 @@ public class Common_Class {
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         break;
+//                    case Constants.PrePrimaryOrderQtyList:
+//                        axnname = "get/prevorderqty";
+//                        data.put("distributorid", Shared_Common_Pref.OutletCode);
+//                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+//                        break;
                     case Constants.CUMULATIVEDATA:
                         axnname = "get/cumulativevalues";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -595,6 +603,12 @@ public class Common_Class {
                         break;
                     case Constants.Product_List:
                         axnname = "get/prodDets";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
+                    case Constants.Primary_Product_List:
+                        axnname = "get/prodprimarydets";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
@@ -654,18 +668,12 @@ public class Common_Class {
         toast.show();
     }
 
-    public void showCalDialog(Activity activity,String msg,String num){
+    public void showCalDialog(Activity activity, String msg, String num) {
         AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
-                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
-                if (readReq != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
-                } else {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + num));//change the number
-                    activity.startActivity(callIntent);
-                }            }
+                callMob(activity, num);
+            }
 
             @Override
             public void NegativeMethod(DialogInterface dialog, int id) {
@@ -673,6 +681,19 @@ public class Common_Class {
             }
         });
     }
+
+
+    public void callMob(Activity activity, String num) {
+        int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+        if (readReq != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+        } else {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + num));//change the number
+            activity.startActivity(callIntent);
+        }
+    }
+
     public String datePicker(Activity activity, TextView view) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
@@ -838,7 +859,8 @@ public class Common_Class {
         activity.startActivity(intent);
     }
 
-    public void CommonIntentwithoutFinishputextratwo(Class classname, String key, String value, String key2, String value2) {
+    public void CommonIntentwithoutFinishputextratwo(Class classname, String key, String
+            value, String key2, String value2) {
         intent = new Intent(activity, classname);
         intent.putExtra(key, value);
         intent.putExtra(key2, value2);

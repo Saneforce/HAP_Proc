@@ -153,11 +153,11 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_marginTop="-3dp"
                                 android:id="@+id/tvDistId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
+                                android:layout_marginTop="-3dp"
                                 android:fontFamily="sans-serif"
                                 android:text=""
                                 android:textColor="@color/txt_color_black"
@@ -184,7 +184,7 @@
                             android:orientation="vertical">
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/btnRepeat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/bottom_button"
@@ -341,14 +341,16 @@
                         android:layout_marginRight="@dimen/C5dp"
                         android:src="@drawable/ic_baseline_close_24"></ImageView>
                 </RelativeLayout>
+
                 <LinearLayout
                     android:id="@+id/llBillHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginStart="@dimen/C5dp"
                     android:layout_marginEnd="@dimen/C5dp"
+                    android:orientation="vertical"
                     android:visibility="gone">
+
                     <LinearLayout
                         android:id="@+id/rlAddProduct"
                         android:layout_width="wrap_content"
@@ -379,13 +381,15 @@
 
 
                     </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C5dp"
                         android:background="@color/black"
-                        android:outlineAmbientShadowColor="@color/statuscolor"/>
+                        android:outlineAmbientShadowColor="@color/statuscolor" />
+
                     <LinearLayout
                         android:id="@+id/row_report"
                         android:layout_width="match_parent"
@@ -396,8 +400,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="@dimen/header_width1"
@@ -414,13 +417,14 @@
                                     android:text="SKU"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -438,6 +442,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -451,8 +456,9 @@
                                         android:textAlignment="textStart"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"/>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:id="@+id/llRegular"
                                     android:layout_width="0dp"
@@ -471,6 +477,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="@dimen/C100dp"
                                     android:layout_height="wrap_content">
@@ -486,6 +493,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -500,6 +508,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -515,6 +524,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -534,23 +544,28 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C5dp"
-                        android:background="@color/black"/>
+                        android:background="@color/black" />
                 </LinearLayout>
+
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/orderrecyclerview"
                                 android:layout_width="match_parent"
@@ -558,6 +573,7 @@
                                 android:visibility="visible"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                         </LinearLayout>
+
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cdFreeQtyParent"
                             android:layout_width="match_parent"
@@ -615,6 +631,7 @@
                                 </LinearLayout>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
+
                         <LinearLayout
                             android:id="@+id/llPayNetAmountDetail"
                             android:layout_width="match_parent"
@@ -821,6 +838,7 @@
                                 android:visibility="visible"></View>
 
                             <RelativeLayout
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp"
@@ -855,7 +873,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp"
-
                                 android:fontFamily="sans-serif"
                                 android:text=""
                                 android:textColor="@color/green"
@@ -911,6 +928,7 @@
                 android:layout_margin="@dimen/C3dp"
                 android:layout_toRightOf="@+id/tvCart"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
@@ -921,6 +939,7 @@
                     android:textSize="11sp">
 
                 </TextView>
+
                 <TextView
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
@@ -941,11 +960,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/C15dp"
                 android:background="#00000000"
-                android:textAlignment="textEnd"
                 android:drawableTint="@color/white"
                 android:gravity="center_vertical"
                 android:padding="@dimen/C5dp"
                 android:text="PROCEED TO CART"
+                android:textAlignment="textEnd"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"
