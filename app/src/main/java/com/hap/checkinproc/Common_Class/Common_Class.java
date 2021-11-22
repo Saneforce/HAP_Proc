@@ -289,6 +289,7 @@ public class Common_Class {
 
     public void getDataFromApi(String key, Activity activity, Boolean boolRefresh) {
 
+        updateUi = ((UpdateResponseUI) activity);
         if (isNetworkAvailable(activity)) {
             String QuerySTring1 = "";
             Map<String, String> QueryString = new HashMap<>();
@@ -383,6 +384,7 @@ public class Common_Class {
 
             callAPI(QuerySTring1, QueryString, key, activity);
         } else {
+            updateUi.onErrorData("Please check your internet connection.");
             Toast.makeText(activity, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
         }
 
@@ -391,6 +393,7 @@ public class Common_Class {
 
     void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity) {
         try {
+            updateUi = ((UpdateResponseUI) activity);
             DatabaseHandler db = new DatabaseHandler(activity);
             ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
@@ -419,16 +422,20 @@ public class Common_Class {
 
                     } catch (Exception e) {
 
+                        updateUi = ((UpdateResponseUI) activity);
+                        updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
                         Log.e("Common class:", key + " response: " + e.getMessage());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Object> call, Throwable t) {
+                    updateUi.onErrorData(t.getMessage());
                     Log.e("api response ex:", t.getMessage());
                 }
             });
         } catch (Exception e) {
+            updateUi.onErrorData(e.getMessage());
             Log.e("api response ex:", e.getMessage());
         }
     }
