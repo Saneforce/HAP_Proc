@@ -316,7 +316,6 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
             mIntent.putExtra("mFilePath", qpsModalList.get(i).getFilePath());
             mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
             mIntent.putExtra("FileName", qpsModalList.get(i).getFileName());
-            //   mIntent.putExtra("Mode", "ExpClaim;" + qpsModalList.get(i).getFileKey());
             mIntent.putExtra("Mode", "cooler");
             FileUploadService.enqueueWork(this, mIntent);
         }
@@ -374,7 +373,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         Log.e("Success_Message", san);
 
                         if (jsonObjects.getBoolean("success")) {
-                            Toast.makeText(CoolerInfoActivity.this, jsonObjects.getString("Msg"), Toast.LENGTH_SHORT).show();
+                           common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
                         }
                     } catch (Exception e) {
 

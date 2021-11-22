@@ -13,16 +13,14 @@
         tools:ignore="MissingConstraints">
 
         <LinearLayout
-            android:layout_margin="@dimen/C1dp"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-            android:weightSum="4">
+            android:layout_margin="@dimen/C1dp">
 
             <LinearLayout
-                android:layout_width="@dimen/header_width1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1.5">
 
                 <TextView
                     android:id="@+id/productname"
@@ -35,9 +33,24 @@
                     android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/productUom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/sno1"
+                    android:gravity="end"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C13dp"></TextView>
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_width="@dimen/header_width2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -53,7 +66,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="@dimen/header_width2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -69,7 +82,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="@dimen/header_width2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -89,8 +102,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:layout_weight="1"
-            >
+            android:layout_weight="1">
 
         </RelativeLayout>
 

@@ -98,7 +98,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     ImageView ivClose, btnClose;
     EditText etCategoryItemSearch;
     double cashDiscount;
-    boolean bRmRow=false;
+    boolean bRmRow = false;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
     private int selectedPos = 0;
@@ -1309,10 +1309,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                                         //Rs
                                                         if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
                                                             double freePer = (totQty / highestScheme);
-
                                                             double freeVal = freePer * (product_details_modalArrayList.
                                                                     get(i).getDiscount());
-
                                                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(freeVal);
                                                         } else {
                                                             int val = (int) (totQty / highestScheme);

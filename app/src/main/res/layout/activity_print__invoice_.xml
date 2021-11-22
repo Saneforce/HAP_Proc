@@ -148,6 +148,27 @@
 
                             </RelativeLayout>
 
+                            <TextView
+                                android:id="@+id/tvDistId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="-5dp"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:visibility="gone"
+                                android:id="@+id/tvAdd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="-5dp"
+                                android:textColor="@color/grey_600"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
 
                             <RelativeLayout
                                 android:id="@+id/rlDistributorPhone"
@@ -301,6 +322,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/llDelivery"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/C10dp"
@@ -342,9 +364,9 @@
                                 android:padding="@dimen/C1dp">
 
                                 <LinearLayout
-                                    android:layout_width="@dimen/header_width1"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1.5">
 
                                     <TextView
                                         android:id="@+id/itemstextview"
@@ -358,9 +380,25 @@
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
 
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="UOM"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
 
                                 <LinearLayout
-                                    android:layout_width="@dimen/header_width2"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
 
@@ -377,7 +415,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:layout_width="@dimen/header_width2"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
 
@@ -393,7 +431,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:layout_width="@dimen/header_width2"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
 
@@ -542,7 +580,7 @@
                                     android:id="@+id/gstLabel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TAX"
+                                    android:text="TAX\n"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"></TextView>
@@ -586,7 +624,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginTop="@dimen/C5dp"
+                                android:layout_marginTop="-15dp"
                                 android:background="@color/background"></View>
 
                             <RelativeLayout

@@ -331,8 +331,10 @@ public class Common_Class {
                     break;
                 case Constants.GetTodayPrimaryOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+//                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+//                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("fromdate", "2021-11-21");
+                    QueryString.put("todate", "2021-11-21");
                     break;
 
                 case Constants.Outlet_Total_Orders:
@@ -356,10 +358,8 @@ public class Common_Class {
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
 
-
                 case Constants.Competitor_List:
                     QuerySTring1 = "{\"tableName\":\"get_compititordetails\"}";
-
                     break;
                 case Constants.Todaydayplanresult:
                     axnname = "Get/dayplanresult";
@@ -369,8 +369,6 @@ public class Common_Class {
                     QuerySTring1 = "{\"tableName\":\"gettotalalldaysoutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
-
-
                     break;
             }
 
