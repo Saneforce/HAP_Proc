@@ -12,6 +12,29 @@ public class Datum {
     @SerializedName("sf_emp_id")
     @Expose
     private String sfEmpId;
+    @SerializedName("ERP_Code")
+    @Expose
+    private String ERP_Code;
+
+    public String getERP_Code() {
+        return ERP_Code;
+    }
+
+    public void setERP_Code(String ERP_Code) {
+        this.ERP_Code = ERP_Code;
+    }
+
+    public String getStockist_Address() {
+        return Stockist_Address;
+    }
+
+    public void setStockist_Address(String stockist_Address) {
+        Stockist_Address = stockist_Address;
+    }
+
+    @SerializedName("Stockist_Address")
+    @Expose
+    private String Stockist_Address;
     @SerializedName("DeptName")
     @Expose
     private String deptName;

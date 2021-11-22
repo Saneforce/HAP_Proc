@@ -46,8 +46,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    TextView netamount, cashdiscount, gstLabel,gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
-            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader;
+    TextView netamount, cashdiscount, gstLabel, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
+            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt,
+            tvHeader, tvDistId, tvDistAdd;
 
     ImageView ok, ivPrint;
 
@@ -89,7 +90,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvOutstanding = findViewById(R.id.tvOutstanding);
             tvPaidAmt = findViewById(R.id.tvPaidAmt);
             tvHeader = findViewById(R.id.tvHeader);
-            gstLabel=findViewById(R.id.gstLabel);
+            gstLabel = findViewById(R.id.gstLabel);
+            tvDistAdd = findViewById(R.id.tvAdd);
+            tvDistId = findViewById(R.id.tvDistId);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -114,9 +117,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
                 findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
+                tvDistAdd.setVisibility(View.VISIBLE);
+                tvDistId.setVisibility(View.VISIBLE);
                 tvOrderType.setText("PRIMARY ORDER");
                 common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
-
+                findViewById(R.id.llDelivery).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 tvOrderType.setText("INVOICE");
@@ -131,6 +136,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
             invoicedate.setText(Common_Class.GetDatewothouttime());
+            tvDistId.setText(sharedCommonPref.getvalue(Constants.DistributorERP));
+            tvDistAdd.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
         } catch (Exception e) {
 
@@ -548,12 +555,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     case Constants.OUTSTANDING:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
-
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(
                                         jsonArray.getJSONObject(i).getDouble("Outstanding")));
-
                             }
 
                         } else {
@@ -578,9 +583,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             int total_qtytext = 0;
             double subTotalVal = 0.00;
             JSONArray arr = new JSONArray(response);
+            List<Product_Details_Modal> taxList = new ArrayList<>();
+
+
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                List<Product_Details_Modal> taxList = new ArrayList<>();
                 total_qtytext += obj.getInt("Quantity");
                 subTotalVal += obj.getDouble("value");
                 String paidAmt = "0";
@@ -589,6 +596,32 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 } catch (Exception e) {
                 }
 
+                JSONArray taxArr = obj.getJSONArray("TAX_details");
+                for (int tax = 0; tax < taxArr.length(); tax++) {
+                    JSONObject taxObj = taxArr.getJSONObject(tax);
+                    String label = taxObj.getString("Tax_Name");
+                    Double amt = taxObj.getDouble("Tax_Amt");
+                    if (taxList.size() == 0) {
+                        taxList.add(new Product_Details_Modal(label, amt));
+                    } else {
+
+                        boolean isDuplicate = false;
+                        for (int totTax = 0; totTax < taxList.size(); totTax++) {
+                            if (taxList.get(totTax).getTax_Type().equals(label)) {
+                                double oldAmt = taxList.get(totTax).getTax_Amt();
+                                isDuplicate = true;
+                                taxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+
+                            }
+                        }
+
+                        if (!isDuplicate) {
+                            taxList.add(new Product_Details_Modal(label, amt));
+
+                        }
+                    }
+
+                }
                 Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
                         "1", "5", "i", 7.99, 1.8, obj.getDouble("Rate"),
                         obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt));
@@ -604,12 +637,21 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
             mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, arr);
+            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, arr);
             printrecyclerview.setAdapter(mReportViewAdapter);
 
             cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
             gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
-//            gstLabel.setText("CGST"+"\n"+"SGST"+"\n"+"IGST");
-//            gstrate.setText("₹2.89"+"\n"+"₹10.56"+"\n"+"₹1.89" );
+
+            String label = "";
+            String amt = "";
+            for (int i = 0; i < taxList.size(); i++) {
+                label = label + taxList.get(i).getTax_Type() + "\n";
+                amt = amt + "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";
+            }
+
+            gstLabel.setText(label);
+            gstrate.setText(amt);
 
         } catch (Exception e) {
             Log.e("PRINT:getData ", e.getMessage());

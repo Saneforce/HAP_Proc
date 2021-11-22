@@ -365,6 +365,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
                             String Desgs="[\"ALL\","+jsonObject.getJSONArray("Designation").join(",")+"]";
+                           // Log.v(TAG,"loc list:")
                             JSONArray arr = new JSONArray(Desgs);//jsonObject.getJSONArray("Designation");
                             adapter = new MyTeamCategoryAdapter(arr, R.layout.myteam_category_adapter_layout, this);
                             rvCategory.setAdapter(adapter);

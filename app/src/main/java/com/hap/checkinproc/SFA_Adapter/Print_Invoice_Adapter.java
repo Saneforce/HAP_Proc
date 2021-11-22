@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -38,6 +37,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
         try {
             holder.productname.setText("" + mDate.getJSONObject(position).getString("Product_Name"));
             holder.productqty.setText("" + mDate.getJSONObject(position).getInt("qty"));
+            holder.productUOM.setText("" + mDate.getJSONObject(position).getString("UOM"));
             holder.productrate.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("Rate")));
             holder.producttotal.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("value")));
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView productname, productqty, productrate, producttotal;
+        TextView productname, productqty, productrate, producttotal, productUOM;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +58,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
             productqty = itemView.findViewById(R.id.productqty);
             productrate = itemView.findViewById(R.id.productrate);
             producttotal = itemView.findViewById(R.id.producttotal);
+            productUOM = itemView.findViewById(R.id.productUom);
 
         }
     }

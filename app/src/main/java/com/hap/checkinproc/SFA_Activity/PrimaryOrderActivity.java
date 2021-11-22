@@ -96,7 +96,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     RelativeLayout rlCategoryItemSearch, balDetwin;
     ImageView ivClose, btnClose;
     EditText etCategoryItemSearch;
-    int cashDiscount;
+    double cashDiscount;
     boolean bRmRow = false;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
@@ -775,7 +775,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             if (Product_Modal.get(pm).getQty() > 0) {
 
-                cashDiscount += (int) Product_Modal.get(pm).getDiscount();
+                cashDiscount += (double) Product_Modal.get(pm).getDiscount();
 
                 totalvalues += Product_Modal.get(pm).getAmount();
 
@@ -809,7 +809,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
 
         if (cashDiscount > 0) {
-            tvSaveAmt.setVisibility(View.GONE);
+            tvSaveAmt.setVisibility(View.VISIBLE);
             tvSaveAmt.setText("You will save ₹ " + cashDiscount + " on this order");
         } else
             tvSaveAmt.setVisibility(View.GONE);
@@ -1291,20 +1291,19 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                                         )) / 100);
 
 
-                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((Math.round(discountVal)));
+                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(((discountVal)));
 
                                                     } else {
+
                                                         //Rs
                                                         if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
                                                             double freePer = (totQty / highestScheme);
-
                                                             double freeVal = freePer * (product_details_modalArrayList.
                                                                     get(i).getDiscount());
-
-                                                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((Math.round(freeVal)));
+                                                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(freeVal);
                                                         } else {
                                                             int val = (int) (totQty / highestScheme);
-                                                            int freeVal = (int) (val * (product_details_modalArrayList.get(i).getDiscount()));
+                                                            double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
                                                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((freeVal));
                                                         }
                                                     }
