@@ -125,7 +125,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
-            common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
@@ -319,7 +318,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
 
-
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
             if (Product_Modal.get(pm).getQty() > 0) {
@@ -332,7 +330,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "Order is empty", Toast.LENGTH_SHORT).show();
         else
-            FilterProduct();
+            FilterProduct(Getorder_Array_List);
 
     }
 
@@ -411,7 +409,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 try {
                     bRmRow = false;
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
                             if (takeorder.isAnimating()) return;
@@ -427,18 +424,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             common_class.showMsg(this, "Your Cart is empty...");
                         }
                     } else {
-                        if (Shared_Common_Pref.Invoicetoorder != null) {
-                            if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                                FilterProduct();
-                            } else if (Shared_Common_Pref.Invoicetoorder.equals("2")) {
-                                FilterProduct();
-                            } else {
-                                showOrderList();
-                            }
-                        } else {
-                            showOrderList();
-                        }
-
+                        showOrderList();
                     }
                 } catch (Exception e) {
 
@@ -665,7 +651,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    private void FilterProduct() {
+    private void FilterProduct(List<Product_Details_Modal> orderList) {
 
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -676,28 +662,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
-
-
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
-
-
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
         btnRepeat.setVisibility(View.GONE);
-
-        Getorder_Array_List = new ArrayList<>();
-        Getorder_Array_List.clear();
-        for (Product_Details_Modal pm : Product_Modal) {
-            if (pm.getQty() > 0) {
-                Getorder_Array_List.add(pm);
-            }
-
-        }
         sumofTax();
 
-        mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.adapter_primary_pay_layout, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.adapter_primary_pay_layout, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
 
@@ -1510,7 +1483,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                     }
                 });
-
 
                 updateToTALITEMUI();
             } catch (Exception e) {

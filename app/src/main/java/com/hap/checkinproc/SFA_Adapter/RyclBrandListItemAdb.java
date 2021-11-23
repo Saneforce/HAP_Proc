@@ -20,14 +20,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHolder> {
+public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItemAdb.ViewHolder> {
     private static final String TAG = "RecycleItem";
     private JSONArray mlist = new JSONArray();
     private Context mContext;
     static onListItemClick itemClick;
-    RyclListItemAdb.ViewHolder pholder;
+    RyclBrandListItemAdb.ViewHolder pholder;
 
-    public RyclListItemAdb(JSONArray mlist, Context mContext, onListItemClick mItemClick) {
+    public RyclBrandListItemAdb(JSONArray mlist, Context mContext, onListItemClick mItemClick) {
         this.mlist = mlist;
         this.mContext = mContext;
         this.itemClick = mItemClick;
@@ -35,15 +35,15 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
 
     @NonNull
     @Override
-    public RyclListItemAdb.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RyclBrandListItemAdb.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_order_types_ryclv, parent, false);
-        RyclListItemAdb.ViewHolder holder = new RyclListItemAdb.ViewHolder(view);
+        RyclBrandListItemAdb.ViewHolder holder = new RyclBrandListItemAdb.ViewHolder(view);
         return holder;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RyclListItemAdb.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RyclBrandListItemAdb.ViewHolder holder, int position) {
 
         JSONObject itm = null;
         try {
@@ -67,14 +67,15 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
                         pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     }
                     pholder = holder;
-                    Order_Category_Select.order_category_select.grpPos = holder.getAdapterPosition();
+                    Order_Category_Select.order_category_select.brandPos = holder.getAdapterPosition();
+                    //  showOrderItemList(holder.getAdapterPosition(), "");
                     holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                 }
             });
 
-            if (position == Order_Category_Select.order_category_select.grpPos) {
+            if (position == Order_Category_Select.order_category_select.brandPos) {
 
                 holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbtnprimary));
                 holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
@@ -86,7 +87,6 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
                 holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             }
-
             holder.iv.setVisibility(View.GONE);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -105,12 +105,12 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
         LinearLayout gridcolor;
         ImageView iv;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.textView);
             gridcolor = itemView.findViewById(R.id.gridcolor);
             iv=itemView.findViewById(R.id.ivCategoryIcon);
+
         }
     }
 }

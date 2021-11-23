@@ -139,7 +139,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
-            common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
             cashdiscount = findViewById(R.id.cashdiscount);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
@@ -783,7 +782,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         if (cashDiscount > 0) {
             tvSaveAmt.setVisibility(View.GONE);
-            tvSaveAmt.setText("You will save ₹ " + cashDiscount + " on this order");
+            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
         } else
             tvSaveAmt.setVisibility(View.GONE);
 

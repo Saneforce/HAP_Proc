@@ -78,7 +78,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     List<Common_Model> ldgRemarks = new ArrayList<>();
     Button btnSbmtNOrd;
     ImageView btnRmkClose;
-
+    public static String TAG = "Invoice_History";
 
     //Updateed
     @Override
@@ -181,13 +181,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
             getOutstanding();
 
-            if(sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
                 findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
         } catch (Exception e) {
 
         }
 
     }
+
     public void getProductDetails() {
         if (common_class.isNetworkAvailable(this)) {
             JSONObject jParam = new JSONObject();
@@ -199,6 +200,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v(TAG, response.toString());
                         db.deleteMasterData(Constants.ProdGroups_List);
                         db.addMasterData(Constants.ProdGroups_List, response.body());
                     }
