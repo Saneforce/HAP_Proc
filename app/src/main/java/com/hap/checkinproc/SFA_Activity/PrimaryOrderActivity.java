@@ -818,7 +818,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         if (cashDiscount > 0) {
             tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save ₹ " + cashDiscount + " on this order");
+            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order.");
         } else
             tvSaveAmt.setVisibility(View.GONE);
 
