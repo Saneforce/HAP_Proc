@@ -519,6 +519,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty()
                             );
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+                            ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getSBRate()));
 
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
@@ -1191,6 +1192,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                 if (CategoryType >= 0) {
 
+                    holder.tvMRP.setText("₹" + ProductItem.getMRP());
                     holder.totalQty.setText("Total Qty : " + oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
 
                     if (!ProductItem.getPImage().equalsIgnoreCase("")) {
@@ -1526,7 +1528,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, lblRQty, productQty,
-                    QtyAmt, totalQty, tvTaxLabel;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
@@ -1549,6 +1551,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     lblRQty = view.findViewById(R.id.status);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+                    tvMRP = view.findViewById(R.id.MrpRate);
                 }
 
 

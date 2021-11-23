@@ -90,7 +90,7 @@
                                     android:layout_marginLeft="@dimen/C10dp"
                                     android:fontFamily="sans-serif"
                                     android:gravity="center_vertical"
-                                    android:text="₹0"
+                                    android:text=""
                                     android:textColor="@color/txt_color_black"
                                     android:textSize="@dimen/C15dp"
                                     android:textStyle="bold" />
