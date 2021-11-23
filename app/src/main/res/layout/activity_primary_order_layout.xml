@@ -182,6 +182,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/C10dp"
                             android:orientation="horizontal">
+
                             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                                 android:id="@+id/btnRepeat"
                                 android:layout_width="wrap_content"
@@ -189,19 +190,19 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="@dimen/C10dp"
                                 android:background="@drawable/bottom_button"
-                                android:textColor="@color/white"
+                                android:letterSpacing="0.09"
                                 android:paddingStart="15dp"
                                 android:paddingEnd="15dp"
                                 android:text="Repeat Order"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
                                 android:textSize="11sp"
-                                android:letterSpacing="0.09"
                                 android:theme="@style/BluePrimaryButton"
                                 app:finalCornerAngle="50dp"
                                 app:initialCornerAngle="10dp"
                                 app:spinning_bar_color="#FFFFFFFF"
                                 app:spinning_bar_padding="5dp"
                                 app:spinning_bar_width="5dp"
-                                android:textAlignment="center"
                                 tools:ignore="RtlCompat" />
                         </LinearLayout>
 
@@ -763,10 +764,10 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-
+                                    android:id="@+id/tvTaxLabel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TAX"
+                                    android:text=""
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"></TextView>
@@ -776,7 +777,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
-                                    android:text="0.00"
+                                    android:text=""
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"></TextView>
@@ -808,6 +809,7 @@
 
 
                             <View
+                                android:layout_marginTop="-15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="3dp"
                                 android:background="@color/black"

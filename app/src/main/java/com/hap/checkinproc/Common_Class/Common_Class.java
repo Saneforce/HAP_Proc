@@ -331,10 +331,9 @@ public class Common_Class {
                     break;
                 case Constants.GetTodayPrimaryOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-//                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-//                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                    QueryString.put("fromdate", "2021-11-21");
-                    QueryString.put("todate", "2021-11-21");
+                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+
                     break;
 
                 case Constants.Outlet_Total_Orders:
@@ -456,8 +455,8 @@ public class Common_Class {
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
-                        //  data.put("date", jparam.get("date").getAsString());
-                        data.put("date", "2021-11-10");
+                        data.put("date", jparam.get("date").getAsString());
+                        //data.put("date", "2021-11-10");
                         data.put("type", jparam.get("type").getAsString());
                         break;
                     case Constants.PrimaryTAXList:
