@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -666,6 +667,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     private void FilterProduct() {
 
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
 
@@ -719,6 +723,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
                 }
+
                 Log.d("RListOfTAX", taxList.toString());
             }
 
