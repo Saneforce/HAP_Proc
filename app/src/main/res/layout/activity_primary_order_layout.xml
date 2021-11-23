@@ -181,19 +181,28 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/C10dp"
-                            android:orientation="vertical">
-
-                            <Button
+                            android:orientation="horizontal">
+                            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                                 android:id="@+id/btnRepeat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="@dimen/C10dp"
                                 android:background="@drawable/bottom_button"
-                                android:padding="@dimen/C5dp"
-                                android:text="Repeat Order"
                                 android:textColor="@color/white"
-                                android:textFontWeight="900"
-                                android:textSize="11sp" />
-
+                                android:paddingStart="15dp"
+                                android:paddingEnd="15dp"
+                                android:text="Repeat Order"
+                                android:textSize="11sp"
+                                android:letterSpacing="0.09"
+                                android:theme="@style/BluePrimaryButton"
+                                app:finalCornerAngle="50dp"
+                                app:initialCornerAngle="10dp"
+                                app:spinning_bar_color="#FFFFFFFF"
+                                app:spinning_bar_padding="5dp"
+                                app:spinning_bar_width="5dp"
+                                android:textAlignment="center"
+                                tools:ignore="RtlCompat" />
                         </LinearLayout>
 
 
@@ -995,11 +1004,10 @@
         android:id="@+id/balDetwin"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="130dp"
-        android:layout_marginRight="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:background="@color/white"
-        android:gravity="end"
+        android:gravity="center_horizontal"
         android:paddingBottom="10dp"
         android:visibility="gone">
 
