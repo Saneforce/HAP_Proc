@@ -455,8 +455,8 @@ public class Common_Class {
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
-                        //  data.put("date", jparam.get("date").getAsString());
-                        data.put("date", "2021-11-10");
+                        data.put("date", jparam.get("date").getAsString());
+                        //data.put("date", "2021-11-10");
                         data.put("type", jparam.get("type").getAsString());
                         break;
                     case Constants.PrimaryTAXList:

@@ -323,7 +323,7 @@
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvTaxLabel"
+                            android:layout_toRightOf="@+id/tvTaxTotAmt"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
 
@@ -335,7 +335,7 @@
 
 
                         <TextView
-                            android:id="@+id/tvTaxLabel"
+                            android:id="@+id/tvTaxTotAmt"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
