@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/custom_toolbar_help"></include>
+        <include layout="@layout/sfatoolbar"></include>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
