@@ -259,15 +259,14 @@ public class Login extends AppCompatActivity {
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if (DAMode == true) {
 
-                    if (isMyServiceRunning(SANGPSTracker.class) == false) {
-                        try {
+                    if (isMyServiceRunning(SANGPSTracker.class)==false) {
+                        try{
                             bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
                                     Context.BIND_AUTO_CREATE);
                             LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
                                     new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
                             mLUService.requestLocationUpdates();
-                        } catch (Exception e) {
-                        }
+                        }catch (Exception e){}
                     }
                 }
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
@@ -324,13 +323,12 @@ public class Login extends AppCompatActivity {
 
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if (DAMode == true) {
-                    if (isMyServiceRunning(SANGPSTracker.class) == false) {
-                        try {
+                    if (isMyServiceRunning(SANGPSTracker.class)==false) {
+                        try{
                             Intent playIntent = new Intent(this, SANGPSTracker.class);
                             bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                             startService(playIntent);
-                        } catch (Exception e) {
-                        }
+                        }catch (Exception e){}
                     }
                 }
             }
@@ -497,15 +495,14 @@ public class Login extends AppCompatActivity {
             // that since this activity is in the foreground, the service can exit foreground mode.
 
             Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
-            if (DAMode == true) {
-                if (isMyServiceRunning(SANGPSTracker.class) == false) {
-                    try {
+            if (DAMode == true ) {
+                if (isMyServiceRunning(SANGPSTracker.class)==false) {
+                    try{
                         bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
                                 Context.BIND_AUTO_CREATE);
                         LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
                                 new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
-                    } catch (Exception e) {
-                    }
+                    }catch (Exception e){}
                 }
             }
             Log.e("Loaction_Check", "Loaction_Check");
@@ -521,7 +518,6 @@ public class Login extends AppCompatActivity {
         }
         return false;
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -577,12 +573,11 @@ public class Login extends AppCompatActivity {
         }
 
         //eMail = "nallathambi.a@hap.in";
-       // eMail = "1005985@hap.in";
+        //eMail = "1005985@hap.in";
         //eMail = "haptest3@hap.in";
-      //  eMail = "ciadmin@hap.in";
-       // eMail = "rajkumar@hap.in";
-        //eMail = "dharmesh.s@hap.in";
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
+         //eMail = "ciadmin@hap.in";
+
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,BuildConfig.VERSION_NAME, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {

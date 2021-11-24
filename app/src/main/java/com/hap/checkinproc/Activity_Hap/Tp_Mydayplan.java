@@ -425,7 +425,10 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     private void Tp_Submit(String Submit_Flag) {
-
+        if(worktype_id==null){
+            Toast.makeText(this, "Work Type Not Selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Savejointwork = Jointworklistview;
         Log.e("Savejointwork_SIZE", String.valueOf(Savejointwork.size()));
         String jointwork = "";
@@ -575,7 +578,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
     public boolean vali() {
         if (worktype_text.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Required Field " + worktype_text.getText().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "select the Work Type", Toast.LENGTH_SHORT).show();
             return false;
         }
         for (int i = 0; i < dynamicarray.size(); i++) {
