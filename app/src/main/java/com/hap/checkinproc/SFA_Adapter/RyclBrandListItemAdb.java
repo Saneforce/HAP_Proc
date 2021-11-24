@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Order_Category_Select;
@@ -26,11 +27,13 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
     private Context mContext;
     static onListItemClick itemClick;
     RyclBrandListItemAdb.ViewHolder pholder;
+    Common_Class common_class;
 
     public RyclBrandListItemAdb(JSONArray mlist, Context mContext, onListItemClick mItemClick) {
         this.mlist = mlist;
         this.mContext = mContext;
         this.itemClick = mItemClick;
+        common_class = new Common_Class(mContext);
     }
 
     @NonNull
@@ -67,7 +70,7 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
                         pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     }
                     pholder = holder;
-                    Order_Category_Select.order_category_select.brandPos = holder.getAdapterPosition();
+                    common_class.brandPos = holder.getAdapterPosition();
                     //  showOrderItemList(holder.getAdapterPosition(), "");
                     holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
@@ -75,7 +78,7 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
                 }
             });
 
-            if (position == Order_Category_Select.order_category_select.brandPos) {
+            if (position == common_class.brandPos) {
 
                 holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbtnprimary));
                 holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
@@ -87,7 +90,6 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
                 holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             }
-            holder.iv.setVisibility(View.GONE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -103,13 +105,11 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView icon;
         LinearLayout gridcolor;
-        ImageView iv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.textView);
             gridcolor = itemView.findViewById(R.id.gridcolor);
-            iv=itemView.findViewById(R.id.ivCategoryIcon);
 
         }
     }

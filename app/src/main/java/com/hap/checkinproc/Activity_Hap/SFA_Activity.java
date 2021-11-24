@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,13 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -53,6 +50,7 @@ import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -135,7 +133,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             linMyTeam.setVisibility(View.VISIBLE);
             common_class.getDb_310Data(Constants.Distributor_List, this);
-        }else {
+        } else {
             findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }
@@ -149,6 +147,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         getNoOrderRemarks();
         showDashboardData();
+     //   getProductDetails();
 
     }
 
@@ -451,6 +450,60 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
 
         }
+    }
+
+    public void getProductDetails() {
+        if (common_class.isNetworkAvailable(this)) {
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", Shared_Common_Pref.DistributorCode);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("prodGroup:", response.toString());
+                        db.deleteMasterData(Constants.ProdGroups_List);
+                        db.addMasterData(Constants.ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("prodTypes:", response.toString());
+                        db.deleteMasterData(Constants.ProdTypes_List);
+                        db.addMasterData(Constants.ProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("TAG", ":cat:" + response.toString());
+                        db.deleteMasterData(Constants.Category_List);
+                        db.addMasterData(Constants.Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public class OutletDashboardInfoAdapter extends RecyclerView.Adapter<OutletDashboardInfoAdapter.MyViewHolder> {

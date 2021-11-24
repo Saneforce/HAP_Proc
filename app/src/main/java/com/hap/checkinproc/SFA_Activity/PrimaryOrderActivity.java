@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -47,7 +48,10 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
+import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -100,7 +104,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     double cashDiscount;
     boolean bRmRow = false;
     NumberFormat formatter = new DecimalFormat("##0.00");
-    private RecyclerView recyclerView, categorygrid, freeRecyclerview;
+    private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
     private int selectedPos = 0;
     private TextView tvTotalAmount, tvACBal;
     private double totalvalues, taxVal;
@@ -111,6 +115,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     private DatePickerDialog fromDatePickerDialog;
     PrimaryOrderActivity.CategoryAdapter categoryAdapter;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+    public static final String UserDetail = "MyPrefs";
+    SharedPreferences UserDetails;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -120,12 +126,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             setContentView(R.layout.activity_primary_order_layout);
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(PrimaryOrderActivity.this);
+            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
             common_class = new Common_Class(this);
+            getProductDetails();
 
             categorygrid = findViewById(R.id.category);
+            Grpgrid = findViewById(R.id.PGroup);
+            Brndgrid = findViewById(R.id.PBrnd);
             takeorder = findViewById(R.id.takeorder);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
             Out_Let_Name = findViewById(R.id.outlet_name);
@@ -170,7 +179,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            common_class.getDb_310Data(Constants.Category_List, this);
             common_class.getDb_310Data(Constants.Primary_Product_List, this);
 
 
@@ -224,6 +232,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             tvDistId.setText("" + sharedCommonPref.getvalue(Constants.DistributorERP));
             tvDate.setText(DT.GetDateTime(getApplicationContext(), "dd-MMM-yyyy"));
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
+
+
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
         }
@@ -284,7 +295,99 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void GetJsonData(String jsonResponse, String type) {
+    private void FilterTypes(String GrpID) {
+        try {
+            JSONArray TypGroups = new JSONArray();
+            JSONArray tTypGroups = db.getMasterData(Constants.ProdTypes_List);
+            LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
+            TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            Brndgrid.setLayoutManager(TypgridlayManager);
+            for (int i = 0; i < tTypGroups.length(); i++) {
+
+                JSONObject ritm = tTypGroups.getJSONObject(i);
+                if (ritm.getString("GroupId").equalsIgnoreCase(GrpID)) {
+                    TypGroups.put(ritm);
+                }
+            }
+
+            String filterId = "";
+            if (TypGroups.length() > 0)
+                filterId = TypGroups.getJSONObject(0).getString("id");
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", filterId);
+
+            RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+                    try {
+                        GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", item.getString("id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            Brndgrid.setAdapter(TyplistItems);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getProductDetails() {
+        if (common_class.isNetworkAvailable(this)) {
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v(TAG, response.toString());
+                        db.deleteMasterData(Constants.ProdGroups_List);
+                        db.addMasterData(Constants.ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v(TAG, ":types:" + response.toString());
+                        db.deleteMasterData(Constants.ProdTypes_List);
+                        db.addMasterData(Constants.ProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v(TAG, ":cat:" + response.toString());
+                        db.deleteMasterData(Constants.Category_List);
+                        db.addMasterData(Constants.Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void GetJsonData(String jsonResponse, String type, String filter) {
 
         //type =1 product category data values
         try {
@@ -299,7 +402,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     String Cat_Image = jsonObject1.optString("Cat_Image");
                     String sampleQty = jsonObject1.optString("sampleQty");
                     String colorflag = jsonObject1.optString("colorflag");
-                    Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
+                    String typeId = String.valueOf(jsonObject1.optInt("TypID"));
+                    if (filter.equalsIgnoreCase(typeId))
+                        Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
                 } else {
                     Route_Code = jsonObject1.optString("cluster");
                     Dirtributor_Cod = jsonObject1.optString("stockist");
@@ -307,6 +412,18 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     Distributor_Name = jsonObject1.optString("StkName");
                 }
             }
+
+            if (type.equals("1")) {
+
+                selectedPos = 0;
+
+                PrimaryOrderActivity.CategoryAdapter customAdapteravail = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
+                        Category_Modal);
+                categorygrid.setAdapter(customAdapteravail);
+
+                showOrderItemList(selectedPos, "");
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -330,7 +447,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "Order is empty", Toast.LENGTH_SHORT).show();
         else
-            FilterProduct(Getorder_Array_List);
+            FilterProduct();
 
     }
 
@@ -651,7 +768,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    private void FilterProduct(List<Product_Details_Modal> orderList) {
+    private void FilterProduct() {
 
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -670,7 +787,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         btnRepeat.setVisibility(View.GONE);
         sumofTax();
 
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.adapter_primary_pay_layout, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.adapter_primary_pay_layout, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
 
@@ -841,9 +958,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             amt = amt + "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";
         }
 
-        tvTaxLabel.setText(label);
-        tvTax.setText(amt);
-
+        if (taxList.size() == 0) {
+            tvTaxLabel.setVisibility(View.INVISIBLE);
+            tvTax.setVisibility(View.INVISIBLE);
+        } else {
+            tvTaxLabel.setVisibility(View.VISIBLE);
+            tvTax.setVisibility(View.VISIBLE);
+            tvTaxLabel.setText(label);
+            tvTax.setText(amt);
+        }
     }
 
     public void showOrderItemList(int categoryPos, String filterString) {
@@ -922,20 +1045,43 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     }
 
                     ResetSubmitBtn(0);
-                    showOrderItemList(selectedPos, "");
+                   // showOrderItemList(selectedPos, "");
+                    showOrderList();
+
                     break;
-                case Constants.Category_List:
-                    GetJsonData(sharedCommonPref.getvalue(Constants.Category_List), "1");
-                    categoryAdapter = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
-                            Category_Modal);
-                    categorygrid.setAdapter(categoryAdapter);
-                    break;
+//                case Constants.Category_List:
+//                    GetJsonData(sharedCommonPref.getvalue(Constants.Category_List), "1");
+//                    categoryAdapter = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
+//                            Category_Modal);
+//                    categorygrid.setAdapter(categoryAdapter);
+//                    break;
                 case Constants.Primary_Product_List:
                     String OrdersTable = sharedCommonPref.getvalue(Constants.Primary_Product_List);
                     userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
                     }.getType();
                     Product_Modal = gson.fromJson(OrdersTable, userType);
-                    showOrderItemList(0, "");
+
+                    JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+                    LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
+                    GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    Grpgrid.setLayoutManager(GrpgridlayManager);
+
+                    RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+                        @Override
+                        public void onItemClick(JSONObject item) {
+
+                            try {
+                                FilterTypes(item.getString("id"));
+                                common_class.brandPos = 0;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    Grpgrid.setAdapter(grplistItems);
+
+                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+
                     break;
 
                 case Constants.PRIMARY_SCHEME:

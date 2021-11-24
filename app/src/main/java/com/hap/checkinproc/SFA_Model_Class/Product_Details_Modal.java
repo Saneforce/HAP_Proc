@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product_Details_Modal {
@@ -87,7 +88,7 @@ public class Product_Details_Modal {
     @SerializedName("SGST")
     @Expose
     private Double SGST;
-    private List<Product_Details_Modal> productDetailsModal;
+    private List<Product_Details_Modal> productDetailsModal = new ArrayList<>();
 
 
     public String getMRP() {
@@ -127,7 +128,6 @@ public class Product_Details_Modal {
     @SerializedName("IGST")
     @Expose
     private Double IGST;
-
 
 
     @SerializedName("free")

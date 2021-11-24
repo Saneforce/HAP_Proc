@@ -371,7 +371,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                     txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
                     addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
-                    retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
+                    retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
                     if (Retailer_Modal_List.get(getOutletPosition()).getSecondary_No() != null)
                         etPhoneNo2.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSecondary_No());
                     if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
@@ -406,7 +406,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
                 txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
                 addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
-                retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
+                retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
 
 

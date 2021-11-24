@@ -106,6 +106,7 @@ public class Common_Class {
     private CustomListViewDialog customDialog;
     SharedPreferences UserDetails;
     public static final String UserDetail = "MyPrefs";
+    public int brandPos = 0, grpPos = 0;
 
 
     public void CommonIntentwithFinish(Class classname) {
