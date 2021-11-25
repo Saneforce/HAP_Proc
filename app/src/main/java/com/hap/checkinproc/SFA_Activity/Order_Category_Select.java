@@ -339,18 +339,23 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             Log.v(TAG, " order oncreate:j " + preOrderList);
 
-            if (preOrderList != null && preOrderList.length() > 4) {
+            if (preOrderList != null && preOrderList.length() > 4 && !Common_Class.isNullOrEmpty(taxRes)) {
                 for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
                     double wholeTax = 0;
-                    if (!Common_Class.isNullOrEmpty(taxRes)) {
+                    if (Product_Modal.get(pmTax).getRegularQty() > 0) {
+                        Log.v(TAG, " order oncreate:taxRes--> " + pmTax);
+
                         JSONObject jsonObject = new JSONObject(taxRes);
                         JSONArray jsonArray = jsonObject.getJSONArray("Data");
                         List<Product_Details_Modal> taxList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
+                            Log.v(TAG, " order oncreate:taxList--> " + i);
+
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
 
                             if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
+
 
                                 if (jsonObject1.getDouble("Tax_Val") > 0) {
 
@@ -365,6 +370,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                                 }
+
                             }
                         }
 
@@ -497,10 +503,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
     void showOrderList() {
-
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
-
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
@@ -918,7 +922,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
         if (cashDiscount > 0) {
-            tvSaveAmt.setVisibility(View.GONE);
+            tvSaveAmt.setVisibility(View.VISIBLE);
             tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
         } else
             tvSaveAmt.setVisibility(View.GONE);
