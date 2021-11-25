@@ -34,7 +34,12 @@
             android:text="Demo"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="@dimen/C10dp" />
+            android:textSize="10sp"
+            android:paddingTop="@dimen/C3dp"
+            android:paddingBottom="@dimen/C3dp"
+            android:paddingLeft="@dimen/C15dp"
+            android:paddingRight="@dimen/C15dp"
+            />
 
         <LinearLayout
             android:id="@+id/undrCate"
