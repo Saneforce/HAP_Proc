@@ -199,10 +199,10 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
                                 JSONObject jsonObject = new JSONObject(is.toString());
 
                                 if (jsonObject.getBoolean("success")) {
-                                    common_class.showMsg(Nearby_Outlets.nearby_outlets, jsonObject.getString("Msg"));
                                     array.remove(pos);
                                     notifyDataSetChanged();
                                 }
+                                common_class.showMsg(Nearby_Outlets.nearby_outlets, jsonObject.getString("Msg"));
 
                             }
 

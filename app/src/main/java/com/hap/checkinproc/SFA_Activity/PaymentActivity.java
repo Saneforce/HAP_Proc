@@ -180,10 +180,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                                 JSONObject jsonObject = new JSONObject(is.toString());
 
                                 if (jsonObject.getBoolean("success")) {
-                                    common_class.showMsg(PaymentActivity.this, jsonObject.getString("Msg"));
                                     ResetSubmitBtn(1);
                                     finish();
                                 }
+                                common_class.showMsg(PaymentActivity.this, jsonObject.getString("Msg"));
 
                             }
 

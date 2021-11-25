@@ -259,10 +259,10 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                                         String san = jsonObjects.getString("success");
                                         Log.e("Success_Message", san);
                                         if (san.equals("true")) {
-                                            common_class.showMsg(POPActivity.this, "Submitted Successfully");
                                             startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                             finish();
                                         }
+                                        common_class.showMsg(POPActivity.this, jsonObjects.getString("Msg"));
 
                                     } catch (Exception e) {
 

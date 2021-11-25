@@ -470,12 +470,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                                 try {
                                     Log.e("JSON_VALUES", response.body().toString());
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
                                     linNoOrderRmks.setVisibility(View.GONE);
-                                    if (san.equals("true")) {
-                                        Toast.makeText(Invoice_History.this, "No Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                    }
+                                    common_class.showMsg(Invoice_History.this, jsonObjects.getString("Msg"));
 
                                 } catch (Exception e) {
 
@@ -545,7 +541,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                                     product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
                                             jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
                                             Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
-                                            jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
+                                            jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
                                             jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
 
 

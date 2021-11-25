@@ -216,10 +216,10 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                                         String san = jsonObjects.getString("success");
                                         Log.e("Success_Message", san);
                                         if (san.equals("true")) {
-                                            Toast.makeText(OtherBrandActivity.this, "Other brand Submitted Successfully", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                             finish();
                                         }
+                                        common_class.showMsg(OtherBrandActivity.this, jsonObjects.getString("Msg"));
 
                                     } catch (Exception e) {
 

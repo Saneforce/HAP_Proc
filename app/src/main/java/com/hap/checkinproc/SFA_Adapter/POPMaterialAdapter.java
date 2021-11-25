@@ -269,15 +269,12 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                     try {
 
                         JSONObject jsonObjects = new JSONObject(response.body().toString());
-                        String san = jsonObjects.getString("success");
-                        Log.e("Success_Message", san);
 
                         if (jsonObjects.getBoolean("success")) {
-                            Toast.makeText(context, jsonObjects.getString("Msg"), Toast.LENGTH_SHORT).show();
-                            // QPSActivity.qpsActivity.getQPSStatus();
                             common_class.getDb_310Data(Constants.POP_ENTRY_STATUS, POPActivity.popActivity);
-
                         }
+                        Toast.makeText(context, jsonObjects.getString("Msg"), Toast.LENGTH_SHORT).show();
+
                     } catch (Exception e) {
 
                     }
