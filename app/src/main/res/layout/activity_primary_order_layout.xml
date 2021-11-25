@@ -265,11 +265,57 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/lin_gridtype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/PGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="@dimen/C2dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/C5dp"
+                    android:background="@color/grey_500"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/PBrnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:layout_marginBottom="@dimen/C5dp"
+                android:background="@color/grey_300" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
@@ -767,7 +813,6 @@
                                     android:id="@+id/tvTaxLabel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text=""
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"></TextView>
@@ -777,7 +822,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
-                                    android:text=""
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"></TextView>

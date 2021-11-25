@@ -174,11 +174,10 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                                 JSONObject jsonObject = new JSONObject(is.toString());
 
                                 if (jsonObject.getBoolean("success")) {
-                                    Toast.makeText(getApplicationContext(), jsonObject.getString("Msg"), Toast.LENGTH_SHORT).
-                                            show();
                                     startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                     finish();
                                 }
+                                common_class.showMsg(QPSActivity.this, jsonObject.getString("Msg"));
 
                             }
 

@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product_Details_Modal {
@@ -87,7 +88,7 @@ public class Product_Details_Modal {
     @SerializedName("SGST")
     @Expose
     private Double SGST;
-    private List<Product_Details_Modal> productDetailsModal;
+    private List<Product_Details_Modal> productDetailsModal = new ArrayList<>();
 
 
     public String getMRP() {
@@ -127,7 +128,6 @@ public class Product_Details_Modal {
     @SerializedName("IGST")
     @Expose
     private Double IGST;
-
 
 
     @SerializedName("free")
@@ -189,10 +189,8 @@ public class Product_Details_Modal {
 
     @SerializedName("tax")
     @Expose
-    private String tax;
-    @SerializedName("tax_value")
-    @Expose
-    private String tax_value;
+    private double tax;
+
     @SerializedName("Off_Pro_code")
     @Expose
     private String Off_Pro_code;
@@ -247,21 +245,14 @@ public class Product_Details_Modal {
         this.PImage = PImage;
     }
 
-    public String getTax() {
+    public double getTax() {
         return tax;
     }
 
-    public void setTax(String tax) {
+    public void setTax(double tax) {
         this.tax = tax;
     }
 
-    public String getTax_value() {
-        return tax_value;
-    }
-
-    public void setTax_value(String tax_value) {
-        this.tax_value = tax_value;
-    }
 
     public String getOff_Pro_code() {
         return Off_Pro_code;
@@ -360,7 +351,7 @@ public class Product_Details_Modal {
     }
 
     public Product_Details_Modal(String id, String scheme, String free, double discount, String discount_type, String Package
-            , String tax, String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
+            , double tax, String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
         this.id = id;
         this.scheme = scheme;
         this.free = free;

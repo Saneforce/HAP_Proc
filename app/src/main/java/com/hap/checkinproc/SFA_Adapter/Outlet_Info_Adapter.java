@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,9 +24,10 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, status, invoice,outletAddress,textId,clsdRmks,txCustStatus;
+        public TextView textviewname, textviewdate, status, invoice, outletAddress, textId, clsdRmks, txCustStatus;
         //ImageView ;
-public LinearLayout retStaBdg,icAC;
+        public LinearLayout retStaBdg, icAC;
+
         public MyViewHolder(View view) {
             super(view);
             textviewname = view.findViewById(R.id.retailername);
@@ -59,21 +59,21 @@ public LinearLayout retStaBdg,icAC;
     @Override
     public void onBindViewHolder(Outlet_Info_Adapter.MyViewHolder holder, int position) {
         Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
-        String typ=Retailer_Modal_List.getType();
+        String typ = Retailer_Modal_List.getType();
 
-        holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase() );
-        holder.textId.setText("" + Retailer_Modal_List.getId());
+        holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
+        // holder.textId.setText("" + Retailer_Modal_List.getId());
+        holder.textId.setText("" + Retailer_Modal_List.getERP_Code());
         holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
         holder.clsdRmks.setText("" + Retailer_Modal_List.getClosedRemarks());
         holder.icAC.setVisibility(View.INVISIBLE);
-        if(Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC"))
-        {
+        if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
             holder.icAC.setVisibility(View.VISIBLE);
         }
-        holder.txCustStatus.setText((typ.equalsIgnoreCase("2")?"Closed":(typ.equalsIgnoreCase("1")?"Service":"Universal")));
-        if(typ.equalsIgnoreCase("2")){
+        holder.txCustStatus.setText((typ.equalsIgnoreCase("2") ? "Closed" : (typ.equalsIgnoreCase("1") ? "Service" : "Universal")));
+        if (typ.equalsIgnoreCase("2")) {
             holder.retStaBdg.setBackground(context.getDrawable(R.drawable.round_status_blue));
-        } else if(typ.equalsIgnoreCase("1")){
+        } else if (typ.equalsIgnoreCase("1")) {
             holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_green));
         } else {
             holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_blueg));
