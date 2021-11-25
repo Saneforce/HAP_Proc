@@ -56,6 +56,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     Button btnInvoice;
     NumberFormat formatter = new DecimalFormat("##0.00");
+    private String label, amt;
+    private ArrayList<Product_Details_Modal> taxList;
 
 
     @Override
@@ -224,11 +226,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     String qty = "        " + qtyValue;
                     qty = qty.substring(qtyValue.length(), qty.length());
 
-                    String rateValue = String.valueOf(Order_Outlet_Filter.get(i).getRate());
+                    String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
                     String rate = "           " + rateValue;
                     rate = (rate.substring(rateValue.length(), rate.length()));
 
-                    String amtValue = String.valueOf(Order_Outlet_Filter.get(i).getAmount());
+                    String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
                     String amt = "           " + amtValue;
                     amt = (amt.substring(amtValue.length(), amt.length()));
 
@@ -246,9 +248,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 String subTotal = "           " + subtotal.getText().toString();
                 String totItem = "           " + totalitem.getText().toString();
                 String totqty = "           " + totalqty.getText().toString();
-                String gst = "           " + gstrate.getText().toString();
                 String discount = "           " + cashdiscount.getText().toString();
-
                 String outstand = "           " + tvOutstanding.getText().toString();
 
                 printama.printText("SubTotal" + "                       " + subTotal.substring(subtotal.getText().toString().length(), subTotal.length()));
@@ -257,9 +257,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.addNewLine();
                 printama.printText("Total Qty" + "                      " + totqty.substring(totalqty.getText().toString().length(), totqty.length()));
                 printama.addNewLine();
-                printama.printText("Gst Rate" + "                       " + gst.substring(gstrate.getText().toString().length(), gst.length()));
-                printama.addNewLine();
-                printama.printText("Outstanding" + "                    " + gst.substring(tvOutstanding.getText().toString().length(),
+                //  printama.printText("Gst Rate" + "                       " + gst.substring(gstrate.getText().toString().length(), gst.length()));
+                for (int i = 0; i < taxList.size(); i++) {
+                    String val = "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt()));
+                    String amt = "           " + val;
+                    printama.printText(taxList.get(i).getTax_Type() + "                       " + amt.substring(val.length(), amt.length()));
+                    printama.addNewLine();
+
+                }
+                printama.printText("Outstanding" + "                    " + outstand.substring(tvOutstanding.getText().toString().length(),
                         outstand.length()));
                 printama.addNewLine();
                 printama.printText("Cash Discount" + "                  " + discount.substring(cashdiscount.getText().toString().length(), discount.length()));
@@ -413,11 +419,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 String qty = "     " + qtyValue;
                 qty = qty.substring(qtyValue.length(), qty.length());
 
-                String rateValue = String.valueOf(Order_Outlet_Filter.get(i).getRate());
+                String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
                 String rate = "           " + rateValue;
                 rate = (rate.substring(rateValue.length(), rate.length()));
 
-                String amtValue = String.valueOf(Order_Outlet_Filter.get(i).getAmount());
+                String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
                 String amt = "           " + amtValue;
                 amt = (amt.substring(amtValue.length(), amt.length()));
 
@@ -428,8 +434,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getName(), x, y, paint);
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), (widthSize / 2) + 20, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getRate(), (widthSize / 2) + 70, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getAmount(), (widthSize / 2) + 150, y, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), (widthSize / 2) + 70, y, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), (widthSize / 2) + 150, y, paint);
 
 
             }
@@ -451,9 +457,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             y = y + 30;
             canvas.drawText("Total Qty", x, y, paint);
             canvas.drawText(totalqty.getText().toString(), (widthSize / 2) + 150, y, paint);
-            y = y + 30;
-            canvas.drawText("Gst Rate", x, y, paint);
-            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
+//            y = y + 30;
+//            canvas.drawText("Gst Rate", x, y, paint);
+//            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
+//
+            for (int i = 0; i < taxList.size(); i++) {
+                y = y + 30;
+                canvas.drawText(taxList.get(i).getTax_Type(), x, y, paint);
+                canvas.drawText("₹" + formatter.format(taxList.get(i).getTax_Amt()), (widthSize / 2) + 150, y, paint);
+
+            }
 
             y = y + 30;
             canvas.drawText("Outstanding", x, y, paint);
@@ -583,7 +596,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             int total_qtytext = 0;
             double subTotalVal = 0.00;
             JSONArray arr = new JSONArray(response);
-            List<Product_Details_Modal> taxList = new ArrayList<>();
+            taxList = new ArrayList<>();
+            taxList.clear();
 
 
             for (int i = 0; i < arr.length(); i++) {
@@ -643,8 +657,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
             gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
 
-            String label = "";
-            String amt = "";
+            label = "";
+            amt = "";
             for (int i = 0; i < taxList.size(); i++) {
                 label = label + taxList.get(i).getTax_Type() + "\n";
                 amt = amt + "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";

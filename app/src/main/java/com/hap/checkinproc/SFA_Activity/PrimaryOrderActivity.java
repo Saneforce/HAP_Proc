@@ -249,7 +249,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             txAmtWalt.setText("₹0.00");
             txAvBal.setText("₹0.00");
 
-
             ApiClient.getClient().create(ApiInterface.class)
                     .getDataArrayList("get/custbalance", jParam.toString())
                     .enqueue(new Callback<JsonArray>() {
@@ -569,9 +568,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
-
-
-                    // String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
@@ -899,14 +895,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
         }
 
+        tvTaxLabel.setText(label);
+        tvTax.setText(amt);
         if (orderTotTax.size() == 0) {
             tvTaxLabel.setVisibility(View.INVISIBLE);
             tvTax.setVisibility(View.INVISIBLE);
         } else {
             tvTaxLabel.setVisibility(View.VISIBLE);
             tvTax.setVisibility(View.VISIBLE);
-            tvTaxLabel.setText(label);
-            tvTax.setText(amt);
+
         }
     }
 

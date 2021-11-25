@@ -893,14 +893,16 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             amt = amt + "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";
 
         }
+
+        tvTaxLabel.setText(label);
+        tvTax.setText(amt);
         if (taxList.size() == 0) {
             tvTaxLabel.setVisibility(View.INVISIBLE);
             tvTax.setVisibility(View.INVISIBLE);
         } else {
             tvTaxLabel.setVisibility(View.VISIBLE);
             tvTax.setVisibility(View.VISIBLE);
-            tvTaxLabel.setText(label);
-            tvTax.setText(amt);
+
         }
     }
 

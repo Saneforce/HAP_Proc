@@ -938,14 +938,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             label = label + orderTotTax.get(i).getTax_Type() + "\n";
             amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
         }
+        tvTaxLabel.setText(label);
+        tvTax.setText(amt);
         if (orderTotTax.size() == 0) {
             tvTaxLabel.setVisibility(View.INVISIBLE);
             tvTax.setVisibility(View.INVISIBLE);
         } else {
             tvTaxLabel.setVisibility(View.VISIBLE);
             tvTax.setVisibility(View.VISIBLE);
-            tvTaxLabel.setText(label);
-            tvTax.setText(amt);
+
         }
 
 
