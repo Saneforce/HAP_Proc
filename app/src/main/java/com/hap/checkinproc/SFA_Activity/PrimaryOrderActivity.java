@@ -987,10 +987,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         try {
             switch (key) {
                 case Constants.PrePrimaryOrderQty:
-                    String productList = sharedCommonPref.getvalue(Constants.Primary_Product_List);
-                    userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                    }.getType();
-                    Product_Modal = gson.fromJson(productList, userType);
+                    Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.Primary_Product_List), userType);
+
                     JSONArray jsonArray1 = new JSONArray(apiDataResponse);
                     if (jsonArray1 != null && jsonArray1.length() > 0) {
                         for (int pm = 0; pm < Product_Modal.size(); pm++) {

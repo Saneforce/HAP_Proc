@@ -59,7 +59,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     @Override
     public void onBindViewHolder(Outlet_Info_Adapter.MyViewHolder holder, int position) {
         Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
-        String typ = Retailer_Modal_List.getType();
+        String typ = Retailer_Modal_List.getType() == null ? "0" : Retailer_Modal_List.getType();
 
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
         // holder.textId.setText("" + Retailer_Modal_List.getId());
