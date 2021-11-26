@@ -34,7 +34,7 @@
                 android:id="@+id/outlet_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="7Hills Milk centre"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/C17dp"
                 android:textStyle="bold"
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-5dp"
-                android:text="76,Lotus Colony,Nandanam,Chennai 600028."
+                android:text=""
                 android:textColor="@color/grey_600"
                 android:textSize="@dimen/C12dp"
                 android:textStyle="italic">
