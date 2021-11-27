@@ -62,12 +62,10 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
             });
 
             if (position == MyTeamActivity.selectedPos) {
-                //holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark));
                 holder.llTeamType.setBackground(context.getResources().getDrawable(R.drawable.cardbtnprimary));
                 holder.txCatname.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
-                //holder.ivIcon.setColorFilter(context.getResources().getColor(R.color.grey_600));
                 holder.llTeamType.setBackground(context.getResources().getDrawable(R.drawable.cardbutton));
                 holder.txCatname.setTextColor(context.getResources().getColor(R.color.grey_800));
                 holder.txCatname.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
@@ -95,13 +93,11 @@ public class MyTeamCategoryAdapter extends RecyclerView.Adapter<MyTeamCategoryAd
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView txCatname;
         LinearLayout llTeamType;
-        ImageView ivIcon;
 
         public MyViewHolder(View view) {
             super(view);
             txCatname = view.findViewById(R.id.tvCategoryName);
             llTeamType = view.findViewById(R.id.llTeamType);
-            ivIcon = view.findViewById(R.id.ivCategoryIcon);
 
         }
     }

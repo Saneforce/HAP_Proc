@@ -229,7 +229,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
 

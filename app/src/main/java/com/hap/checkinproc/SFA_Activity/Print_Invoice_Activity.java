@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     private String label, amt, storeName = "", address = "", phone = "";
     private ArrayList<Product_Details_Modal> taxList;
     double cashDisc, subTotalVal, outstandAmt;
+    LinearLayout llDistCal, llRetailCal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             gstLabel = findViewById(R.id.gstLabel);
             tvDistAdd = findViewById(R.id.tvAdd);
             tvDistId = findViewById(R.id.tvDistId);
-
+            llDistCal = findViewById(R.id.llDistCall);
+            llRetailCal = findViewById(R.id.llRetailCal);
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             ivPrint = findViewById(R.id.ivPrint);
@@ -123,6 +126,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ok.setOnClickListener(this);
             ivPrint.setOnClickListener(this);
             btnInvoice.setOnClickListener(this);
+            llDistCal.setOnClickListener(this);
+            llRetailCal.setOnClickListener(this);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -133,6 +138,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
+
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
+                llDistCal.setVisibility(View.GONE);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Retailor_PHNo)))
+                llRetailCal.setVisibility(View.GONE);
             retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
             invoicedate.setText(Common_Class.GetDatewothouttime());
@@ -197,6 +207,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             case R.id.btnInvoice:
                 Shared_Common_Pref.Invoicetoorder = "4";
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                break;
+
+            case R.id.llDistCall:
+                common_class.showCalDialog(this, "Do you want to Call this Distributor?", sharedCommonPref.getvalue(Constants.Distributor_phone));
+                break;
+            case R.id.llRetailCal:
+                common_class.showCalDialog(this, "Do you want to Call this Outlet?", sharedCommonPref.getvalue(Constants.Retailor_PHNo));
                 break;
         }
     }

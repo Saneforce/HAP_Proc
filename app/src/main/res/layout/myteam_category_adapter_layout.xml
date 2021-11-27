@@ -19,14 +19,6 @@
         android:paddingStart="@dimen/C10dp"
         android:paddingEnd="@dimen/C10dp">
 
-        <ImageView
-            android:id="@+id/ivCategoryIcon"
-            android:layout_width="@dimen/C30dp"
-            android:layout_height="@dimen/C30dp"
-            android:gravity="center"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_baseline_person_24"
-            android:visibility="gone" />
 
 
         <TextView
@@ -41,14 +33,6 @@
 
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="1dp"
-        android:layout_height="@dimen/C50dp"
-        android:layout_toRightOf="@+id/llTeamType"
-        android:background="@color/background"
-android:visibility="gone"
-        />
 
 
 </RelativeLayout>
