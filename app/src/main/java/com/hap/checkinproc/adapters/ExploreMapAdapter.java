@@ -35,7 +35,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.ViewHolder> {
-
     private LayoutInflater mInflater;
     private JSONArray array;
     Context context;
@@ -43,7 +42,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     JSONObject json;
 
     public ExploreMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
-
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.array = array;
@@ -52,13 +50,10 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View itemView = mInflater.inflate(R.layout.explorelist, parent, false);
-
         return new ViewHolder(itemView);
     }
 
@@ -212,11 +207,9 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
                         }
                     }
-
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.v("fail>>", t.toString());
-
 
                     }
                 });
@@ -263,6 +256,5 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
         }
     }
-
 
 }

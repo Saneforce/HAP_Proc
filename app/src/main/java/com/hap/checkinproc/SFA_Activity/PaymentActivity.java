@@ -278,7 +278,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {

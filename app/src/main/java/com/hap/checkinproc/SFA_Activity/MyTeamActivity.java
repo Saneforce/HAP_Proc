@@ -435,9 +435,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                 public void onClick(View v) {
                     try {
                         alertDialog.dismiss();
-                        String url = common_class.getDirectionsUrl(obj.getString("Lat") + "," + obj.getString("Lon"));
                         Intent intent = new Intent(MyTeamActivity.this, MapDirectionActivity.class);
-                        intent.putExtra(Constants.MAP_ROUTE, url);
                         intent.putExtra(Constants.DEST_LAT, obj.getString("Lat"));
                         intent.putExtra(Constants.DEST_LNG, obj.getString("Lon"));
                         intent.putExtra(Constants.DEST_NAME, obj.getString("HQ_Name"));

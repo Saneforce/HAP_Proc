@@ -607,35 +607,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                     case Constants.PreOrderQtyList:
                         JSONObject jsonObjectPreOrder = new JSONObject(apiDataResponse);
-
-
                         if (jsonObjectPreOrder.getBoolean("success")) {
-
-                            Gson gson = new Gson();
-                            List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-
-
-                            JSONArray jsonArray = jsonObjectPreOrder.getJSONArray("Data");
-
-                            if (jsonArray != null && jsonArray.length() > 0) {
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                    product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
-                                            "", "", jsonObject1.getInt("Qty"), ""));
-
-
-                                }
-                            }
-
-                            sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
-
-
+                            sharedCommonPref.save(Constants.PreOrderQtyList, apiDataResponse);
                             common_class.CommonIntentwithFinish(Order_Category_Select.class);
                             overridePendingTransition(R.anim.in, R.anim.out);
-                            Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
-
                         } else {
                             sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
                             Log.v("PreOrderList: ", "" + "not success");
@@ -649,7 +624,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
         }
     }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

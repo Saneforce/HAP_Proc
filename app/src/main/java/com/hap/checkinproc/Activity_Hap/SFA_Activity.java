@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -147,7 +148,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         getNoOrderRemarks();
         showDashboardData();
-     //   getProductDetails();
+        //   getProductDetails();
 
     }
 
@@ -183,14 +184,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     tvProCalls.setText("" + proCall);
                     tvCumProCalls.setText("" + cumProCall);
                     tvNewProCalls.setText("" + newProCall);
-
-
                 }
-
 
                 if (todayCall > 0 || proCall > 0)
                     tvAvgTodayCalls.setText("" + (todayCall + proCall) / 2);
-
                 if (cumTodayCall > 0 || cumProCall > 0)
                     tvAvgCumCalls.setText("" + (cumTodayCall + cumProCall) / 2);
                 if (newTodayCall > 0 || newProCall > 0)
@@ -199,7 +196,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
         } catch (Exception e) {
             Log.v("fail>>", e.getMessage());
-
 
         }
     }
@@ -232,7 +228,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
 
     public void init() {
 //visitData
@@ -358,12 +353,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     @Override
     public void onBackPressed() {
         Log.v("CHECKING", "CHECKING");
     }
-
 
     void showDashboardData() {
         common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
@@ -373,7 +366,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -382,6 +374,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
                         common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case Constants.CUMULATIVEDATA:
                         getCumulativeDataFromAPI(apiDataResponse);
@@ -538,6 +531,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 try {
                     holder.tvDesc.setText("" + listt.get(position).getDesc());
                     holder.tvValue.setText("" + listt.get(position).getValue());
+//                    holder.pbVisitCount.setMax(listt.get(position).getValue());
+//                    holder.pbVisitCount.setProgress(position);
                 } catch (Exception e) {
                     Log.e("adaptergetView: ", e.getMessage());
                 }
@@ -557,11 +552,13 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
             TextView tvDesc, tvValue;
+            ProgressBar pbVisitCount;
 
             public MyViewHolder(View view) {
                 super(view);
                 tvDesc = view.findViewById(R.id.tvDesc);
                 tvValue = view.findViewById(R.id.tvValue);
+                pbVisitCount = view.findViewById(R.id.pbVisitCount);
 
 
             }

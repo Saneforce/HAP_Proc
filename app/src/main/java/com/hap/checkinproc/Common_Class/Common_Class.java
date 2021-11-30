@@ -746,18 +746,15 @@ public class Common_Class {
 
     }
 
-    public String getDirectionsUrl(String dest) {
+    public String getDirectionsUrl(String dest,Activity activity) {
         // Origin of route
         String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
         // Destination of route
         String str_dest = "destination=" + dest;
         // Key
-        String key = "key=" + context.getString(R.string.map_api_key);
+        String key = "key=" + activity.getString(R.string.map_api_key);
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + key;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
         return url;
     }

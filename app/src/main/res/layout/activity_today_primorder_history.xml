@@ -50,60 +50,46 @@
             <LinearLayout
                 android:id="@+id/row_report"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/blue_bg">
-
-                <LinearLayout
-                    android:layout_width="@dimen/header_width1"
-                    android:layout_height="@dimen/C40dp"
-                    android:layout_weight="0.5">
-
-                    <TextView
-                        android:id="@+id/txt_order"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/sno"
-                        android:gravity="center"
-                        android:text="Invoice ID"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/C14dp"></TextView>
-                </LinearLayout>
+                android:layout_height="@dimen/C40dp"
+                android:background="@drawable/blue_bg"
+                android:weightSum="3.3">
 
 
-                <LinearLayout
-                    android:layout_width="@dimen/header_width2"
-                    android:layout_height="@dimen/C40dp"
-                    android:layout_weight="1">
+                <TextView
+                    android:id="@+id/txt_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sno"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Invoice ID"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/C14dp"></TextView>
 
-                    <TextView
-                        android:id="@+id/Itemcount"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Status"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/C14dp"></TextView>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="@dimen/header_width2"
-                    android:layout_height="@dimen/C40dp"
-                    android:layout_weight="1">
+                <TextView
+                    android:id="@+id/Itemcount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Status"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/C14dp"></TextView>
 
-                    <TextView
-                        android:id="@+id/txt_total"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Value"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/C14dp"></TextView>
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/txt_total"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Value"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/C14dp"></TextView>
 
             </LinearLayout>
 

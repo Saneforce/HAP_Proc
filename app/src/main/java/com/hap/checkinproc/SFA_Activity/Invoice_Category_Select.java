@@ -124,6 +124,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private double payAmt;
 
     final Handler handler = new Handler();
+    List<Product_Details_Modal> orderTotTax;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -618,7 +619,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         }
                         JSONArray Order_Details = new JSONArray();
                         JSONArray totTaxArr = new JSONArray();
-                        ArrayList<Product_Details_Modal> totTaxList = new ArrayList<>();
 
                         for (int z = 0; z < Getorder_Array_List.size(); z++) {
                             JSONObject ProdItem = new JSONObject();
@@ -655,31 +655,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     taxData.put("Tax_Amt", amt);
                                     tax_Details.put(taxData);
 
-
-                                    if (totTaxList.size() == 0) {
-                                        totTaxList.add(new Product_Details_Modal(label, amt));
-                                    } else {
-
-                                        boolean isDuplicate = false;
-                                        for (int totTax = 0; totTax < totTaxList.size(); totTax++) {
-                                            if (totTaxList.get(totTax).getTax_Type().equals(label)) {
-                                                double oldAmt = totTaxList.get(totTax).getTax_Amt();
-                                                isDuplicate = true;
-                                                totTaxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
-
-                                            }
-                                        }
-
-                                        if (!isDuplicate) {
-                                            totTaxList.add(new Product_Details_Modal(label, amt));
-
-                                        }
-                                    }
-
-
                                 }
-
-
                             }
 
                             ProdItem.put("TAX_details", tax_Details);
@@ -687,14 +663,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             Order_Details.put(ProdItem);
                         }
-                        for (int i = 0; i < totTaxList.size(); i++) {
+                        for (int i = 0; i < orderTotTax.size(); i++) {
                             JSONObject totTaxObj = new JSONObject();
-
-
-                            totTaxObj.put("Tax_Type", totTaxList.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", totTaxList.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
+                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
                             totTaxArr.put(totTaxObj);
-
                         }
                         OutletItem.put("TOT_TAX_details", totTaxArr);
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
@@ -856,29 +829,29 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         } else
             tvSaveAmt.setVisibility(View.GONE);
 
-        List<Product_Details_Modal> taxList = new ArrayList<>();
-        taxList.clear();
+        orderTotTax = new ArrayList<>();
+        orderTotTax.clear();
 
         for (int l = 0; l < Getorder_Array_List.size(); l++) {
             for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
                 String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
                 Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
-                if (taxList.size() == 0) {
-                    taxList.add(new Product_Details_Modal(label, amt));
+                if (orderTotTax.size() == 0) {
+                    orderTotTax.add(new Product_Details_Modal(label, amt));
                 } else {
 
                     boolean isDuplicate = false;
-                    for (int totTax = 0; totTax < taxList.size(); totTax++) {
-                        if (taxList.get(totTax).getTax_Type().equals(label)) {
-                            double oldAmt = taxList.get(totTax).getTax_Amt();
+                    for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
+                        if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
+                            double oldAmt = orderTotTax.get(totTax).getTax_Amt();
                             isDuplicate = true;
-                            taxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+                            orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
 
                         }
                     }
 
                     if (!isDuplicate) {
-                        taxList.add(new Product_Details_Modal(label, amt));
+                        orderTotTax.add(new Product_Details_Modal(label, amt));
 
                     }
                 }
@@ -886,21 +859,22 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             }
         }
 
-        String label = "";
-        String amt = "";
-        for (int i = 0; i < taxList.size(); i++) {
-            label = label + taxList.get(i).getTax_Type() + "\n";
-            amt = amt + "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";
+        String label = "", amt = "";
+        for (int i = 0; i < orderTotTax.size(); i++) {
+            label = label + orderTotTax.get(i).getTax_Type() + "\n";
+            amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
 
         }
-        if (taxList.size() == 0) {
+
+        tvTaxLabel.setText(label);
+        tvTax.setText(amt);
+        if (orderTotTax.size() == 0) {
             tvTaxLabel.setVisibility(View.INVISIBLE);
             tvTax.setVisibility(View.INVISIBLE);
         } else {
             tvTaxLabel.setVisibility(View.VISIBLE);
             tvTax.setVisibility(View.VISIBLE);
-            tvTaxLabel.setText(label);
-            tvTax.setText(amt);
+
         }
     }
 
@@ -925,7 +899,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         recyclerView.setAdapter(mProdct_Adapter);
 
     }
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
