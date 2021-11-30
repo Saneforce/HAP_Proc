@@ -89,7 +89,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate,
+    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate,OvrAll,
             txSrvOtlt, txUniOtlt,txClsOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
@@ -115,6 +115,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
+    String ViewDist;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
@@ -127,6 +128,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
         dashboard_route = this;
         StopedUpdate = false;
+
+        ViewDist="";
 
         db = new DatabaseHandler(this);
 
@@ -156,7 +159,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         new MyFirebaseMessagingService().setOnLiveUpdateListener(new OnLiveUpdateListener() {
             @Override
             public void onUpdate(String mode) {
@@ -174,6 +176,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
             tvDistributor = findViewById(R.id.tvDistributer);
+            OvrAll=findViewById(R.id.OvrAll);
             textViewname = findViewById(R.id.textViewname);
             ReachedOutlet = findViewById(R.id.ReachedOutlet);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
@@ -344,7 +347,36 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             });
             gson = new Gson();
 
+            tvDistributor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ViewDist=shared_common_pref.getvalue(Constants.Distributor_Id);
+                    Constants.View_SUMMARY_MODE=ViewDist;
+                    getSalesCounts();
+                    tvDistributor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
+                    tvDistributor.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    OvrAll.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                    OvrAll.setTextColor(getResources().getColor(R.color.black));
 
+                }
+            });
+            OvrAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ViewDist="";
+                    getSalesCounts();
+                    Constants.View_SUMMARY_MODE="";
+                    OvrAll.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
+                    OvrAll.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    tvDistributor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
+                    tvDistributor.setTextColor(getResources().getColor(R.color.black));
+
+                }
+            });
+            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
+            {
+                tvDistributor.setVisibility(View.GONE);
+            }
             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             // GetJsonData(shared_common_pref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
@@ -438,6 +470,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         JSONObject jParam = new JSONObject();
         try {
             jParam.put("SF", UserDetails.getString("Sfcode", ""));
+            jParam.put("Stk", ViewDist);
             jParam.put("div", UserDetails.getString("Divcode", ""));
             jParam.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
 

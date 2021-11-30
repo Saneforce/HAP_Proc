@@ -296,6 +296,7 @@
                                     android:layout_width="@dimen/C50dp"
                                     android:layout_height="@dimen/C50dp"
                                  android:layout_marginRight="@dimen/C8dp"
+                                    android:visibility="gone"
                                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                                     />
 
@@ -310,6 +311,7 @@
 
                                     <TextView
                                         style="@style/TextStyle"
+                                        android:textColor="#ffffff"
                                         android:text="Photo" />
 
                                 </LinearLayout>

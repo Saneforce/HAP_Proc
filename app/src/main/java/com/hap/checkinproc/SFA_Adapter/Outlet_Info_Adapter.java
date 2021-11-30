@@ -24,12 +24,14 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, status, invoice, outletAddress, textId, clsdRmks, txCustStatus;
+        public TextView textviewname, textviewdate, status, invoice, outletAddress, textId, clsdRmks, txCustStatus,lupdDt;
         //ImageView ;
-        public LinearLayout retStaBdg, icAC;
+        public LinearLayout retStaBdg, icAC,layparent;
 
         public MyViewHolder(View view) {
             super(view);
+
+            layparent = view.findViewById(R.id.layparent);
             textviewname = view.findViewById(R.id.retailername);
             textId = view.findViewById(R.id.txCustID);
             clsdRmks = view.findViewById(R.id.txClsdRmks);
@@ -39,6 +41,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
             status = view.findViewById(R.id.status);
             invoice = view.findViewById(R.id.invoice);
             icAC = view.findViewById(R.id.icAC);
+            lupdDt = view.findViewById(R.id.lupdDt);
         }
     }
 
@@ -66,6 +69,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         holder.textId.setText("" + Retailer_Modal_List.getERP_Code());
         holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
         holder.clsdRmks.setText("" + Retailer_Modal_List.getClosedRemarks());
+        holder.lupdDt.setText((Retailer_Modal_List.getLastUpdt_Date().equalsIgnoreCase(""))?"":"Last Updated On "+Retailer_Modal_List.getLastUpdt_Date());
         holder.icAC.setVisibility(View.INVISIBLE);
         if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
             holder.icAC.setVisibility(View.VISIBLE);
@@ -78,7 +82,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         } else {
             holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_blueg));
         }
-        holder.textviewname.setOnClickListener(new View.OnClickListener() {
+        holder.layparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(holder.getAdapterPosition());

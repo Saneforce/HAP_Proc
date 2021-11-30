@@ -617,7 +617,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         if (!isDuplicate) {
                             taxList.add(new Product_Details_Modal(label, amt));
-
                         }
                     }
 

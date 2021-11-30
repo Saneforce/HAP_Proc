@@ -628,7 +628,7 @@
                         android:elevation="@dimen/C4dp"
                         android:text="@string/txt_submit"
                         android:textAllCaps="false"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         app:cornerRadius="@dimen/C4dp">
 
                     </Button>
