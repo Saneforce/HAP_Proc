@@ -83,9 +83,7 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
             public void onClick(View v) {
                 try {
                     json = array.getJSONObject(position);
-                    String url = MyTeamActivity.myTeamActivity.common_class.getDirectionsUrl(json.getString("Lat") + "," + json.getString("Lon"));
                     Intent intent = new Intent(context, MapDirectionActivity.class);
-                    intent.putExtra(Constants.MAP_ROUTE, url);
                     intent.putExtra(Constants.DEST_LAT, json.getString("Lat"));
                     intent.putExtra(Constants.DEST_LNG, json.getString("Lon"));
                     intent.putExtra(Constants.DEST_NAME, json.getString("HQ_Name"));

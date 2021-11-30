@@ -41,35 +41,16 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 public class Print_Invoice_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Print_Invoice_Adapter mReportViewAdapter;
     RecyclerView printrecyclerview;
     Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    TextView netamount;
-    TextView cashdiscount;
-    TextView gstLabel;
-    TextView gstrate;
-    TextView totalfreeqty;
-    TextView totalqty;
-    TextView totalitem;
-    TextView subtotal;
-    TextView invoicedate;
-    TextView retaileAddress;
-    TextView billnumber;
-    TextView retailername;
-    TextView retailerroute;
-    TextView back;
-    TextView tvOrderType;
-    TextView tvRetailorPhone;
-    TextView tvDistributorPh;
-    TextView tvDistributorName;
-    TextView tvOutstanding;
-    TextView tvPaidAmt;
-    TextView tvHeader;
-    TextView tvDistId;
-    TextView tvDistAdd;
+    TextView netamount,cashdiscount,gstLabel,gstrate,totalfreeqty,totalqty,totalitem,subtotal,invoicedate,retaileAddress,billnumber,retailername,
+            retailerroute,back,tvOrderType,tvRetailorPhone,tvDistributorPh,tvDistributorName,tvOutstanding,tvPaidAmt,tvHeader,tvDistId,tvDistAdd;
 
     ImageView ok, ivPrint;
 
@@ -88,6 +69,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             super.onCreate(savedInstanceState);
             mPrint_invoice_activity = this;
             setContentView(R.layout.activity_print__invoice_);
+            ButterKnife.inject(this);
             printrecyclerview = findViewById(R.id.printrecyclerview);
 
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
@@ -122,6 +104,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             ivPrint = findViewById(R.id.ivPrint);
+
             back.setOnClickListener(this);
             ok.setOnClickListener(this);
             ivPrint.setOnClickListener(this);
@@ -152,7 +135,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
                 findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
-                tvOrderType.setText("ORDER");
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
                 common_class.getDb_310Data(Constants.OUTSTANDING, this);
                 storeName = retailername.getText().toString();
@@ -165,7 +147,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                 tvDistAdd.setVisibility(View.VISIBLE);
                 tvDistId.setVisibility(View.VISIBLE);
-                tvOrderType.setText("PRIMARY ORDER");
                 common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
                 findViewById(R.id.llDelivery).setVisibility(View.GONE);
                 storeName = tvDistributorName.getText().toString();
@@ -174,7 +155,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
-                tvOrderType.setText("INVOICE");
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
                 common_class.getDb_310Data(Constants.OUTSTANDING, this);
                 storeName = retailername.getText().toString();
@@ -183,12 +163,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             }
 
+            tvOrderType.setText(sharedCommonPref.getvalue(Constants.FLAG));
             cashDisc = Double.parseDouble(getIntent().getStringExtra("Discount_Amount"));
         } catch (Exception e) {
 
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -365,8 +345,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     private void createPdf() {
         try {
-
-
             int hgt = 500 + (Order_Outlet_Filter.size() * 40);
 
             // create a new document

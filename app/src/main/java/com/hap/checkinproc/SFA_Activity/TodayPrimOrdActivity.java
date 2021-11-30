@@ -25,11 +25,12 @@ import com.hap.checkinproc.SFA_Adapter.PrimaryOrder_History_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TodayPrimOrdActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
-
 
     TextView outlet_name;
     Common_Class common_class;
@@ -40,13 +41,14 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     PrimaryOrder_History_Adapter mReportViewAdapter;
     RecyclerView invoicerecyclerview;
     Shared_Common_Pref sharedCommonPref;
-
+    public static TodayPrimOrdActivity mTdPriAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_today_primorder_history);
+            mTdPriAct = this;
             gson = new Gson();
             sharedCommonPref = new Shared_Common_Pref(TodayPrimOrdActivity.this);
             common_class = new Common_Class(this);
@@ -69,10 +71,8 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
     }
 
-
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-
     }
 
     @Override
@@ -82,7 +82,6 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
         }
     }
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
@@ -104,7 +103,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                         }
 
 
-                        mReportViewAdapter = new PrimaryOrder_History_Adapter(TodayPrimOrdActivity.this, FilterOrderList, new AdapterOnClick() {
+                        mReportViewAdapter = new PrimaryOrder_History_Adapter(TodayPrimOrdActivity.this, FilterOrderList, apiDataResponse, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
                                 Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
@@ -150,4 +149,25 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
         return false;
     }
 
+    public void updateData(String orderNo) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date d1 = sdf.parse(Common_Class.GetTime());
+            Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
+            long elapsed = d2.getTime() - d1.getTime();
+            if (elapsed >= 0) {
+                Intent intent = new Intent(this, PrimaryOrderActivity.class);
+                intent.putExtra(Constants.ORDER_ID, orderNo);
+                Shared_Common_Pref.TransSlNo = orderNo;
+                startActivity(intent);
+                overridePendingTransition(R.anim.in, R.anim.out);
+            } else {
+
+                common_class.showMsg(this, "Time UP...");
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
 }

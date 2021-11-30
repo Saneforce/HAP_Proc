@@ -972,20 +972,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     void moveProductScreen() {
         lin_gridcategory.setVisibility(View.VISIBLE);
-
         findViewById(R.id.orderTypesLayout).setVisibility(View.VISIBLE);
         findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-
-
         takeorder.setText("PROCEED TO CART");
-
         showOrderItemList(selectedPos, "");
-
-
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {

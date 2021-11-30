@@ -35,7 +35,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.ViewHolder> {
-
     private LayoutInflater mInflater;
     private JSONArray array;
     Context context;
@@ -50,7 +49,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
         this.lngy = lngy;
 
     }
-
 
     @NonNull
     @Override
@@ -258,6 +256,5 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
         }
     }
-
 
 }

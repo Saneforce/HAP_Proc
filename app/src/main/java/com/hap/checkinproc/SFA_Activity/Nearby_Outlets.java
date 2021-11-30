@@ -1011,10 +1011,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     //draw route
     private void drawRoute(String mDestination) {
-        // Getting URL to the Google Directions API
-        String url = common_class.getDirectionsUrl(mDestination);
         Intent intent = new Intent(getApplicationContext(), MapDirectionActivity.class);
-        intent.putExtra(Constants.MAP_ROUTE, url);
         intent.putExtra(Constants.DEST_LAT, dest_lat);
         intent.putExtra(Constants.DEST_LNG, dest_lng);
         intent.putExtra(Constants.DEST_NAME, dest_name);

@@ -14,8 +14,6 @@ public class Category_Universe_Modal {
     @Expose
     private String ColorFlag;
 
-
-
     public Category_Universe_Modal(String id, String name, String divisionCode, String catImage, String sampleQty, String ColorFlag) {
         this.id = id;
         this.name = name;

@@ -84,8 +84,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         imag_back.setOnClickListener(this);
         ReachedOutlet.setOnClickListener(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-
         // getDirection();
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -99,12 +97,22 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         new LocationFinder(getApplication(), new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
-                // clocation=location;
-                currentLocation = location;
-                fetchLocation();
-                DownloadTask downloadTask = new DownloadTask();
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
+                try {
+                    // clocation=location;
+                    currentLocation = location;
+                    Shared_Common_Pref.Outletlat = currentLocation.getLatitude();
+                    Shared_Common_Pref.Outletlong = currentLocation.getLongitude();
+                    fetchLocation();
+                    DownloadTask downloadTask = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                    //downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
+                    String url = common_class.getDirectionsUrl(getIntent().getStringExtra(Constants.DEST_LAT) + "," +
+                            getIntent().getStringExtra(Constants.DEST_LNG),MapDirectionActivity.this);
+
+                    downloadTask.execute(url);
+                } catch (Exception e) {
+                    Log.v(TAG, e.getMessage());
+                }
 
 
             }
@@ -344,7 +352,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         double distance = startPoint.distanceTo(endPoint);
 
 
-        if (distance > 200 || !getIntent().getStringExtra(Constants.NEW_OUTLET).equalsIgnoreCase("new")) {
+        String status = getIntent().getStringExtra(Constants.NEW_OUTLET);
+        if (distance > 200 || (status != null && status.equalsIgnoreCase("new"))) {
             ReachedOutlet.setText("START ");
         } else {
             ReachedOutlet.setText("Create Outlet ");

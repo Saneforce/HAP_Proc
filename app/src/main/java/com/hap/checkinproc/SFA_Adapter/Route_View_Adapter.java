@@ -336,13 +336,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     }
 
     private void drawRoute(String OutletName, String sLat, String sLng) {
-        // Getting URL to the Google Directions API
-
-        String mDestination = sLat + "," + sLng;
-        String url = Dashboard_Route.common_class.getDirectionsUrl(mDestination);
-
         Intent intent = new Intent(context.getApplicationContext(), MapDirectionActivity.class);
-        intent.putExtra(Constants.MAP_ROUTE, url);
         intent.putExtra(Constants.DEST_LAT, sLat);
         intent.putExtra(Constants.DEST_LNG, sLng);
         intent.putExtra(Constants.DEST_NAME, OutletName);
