@@ -49,8 +49,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    TextView netamount,cashdiscount,gstLabel,gstrate,totalfreeqty,totalqty,totalitem,subtotal,invoicedate,retaileAddress,billnumber,retailername,
-            retailerroute,back,tvOrderType,tvRetailorPhone,tvDistributorPh,tvDistributorName,tvOutstanding,tvPaidAmt,tvHeader,tvDistId,tvDistAdd;
+    TextView netamount, cashdiscount, gstLabel, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber, retailername,
+            retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader, tvDistId, tvDistAdd;
 
     ImageView ok, ivPrint;
 
@@ -128,7 +128,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 llRetailCal.setVisibility(View.GONE);
             retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
-            invoicedate.setText(Common_Class.GetDatewothouttime());
+            invoicedate.setText(getIntent().getStringExtra("Invoice_Date"));
             tvDistId.setText(sharedCommonPref.getvalue(Constants.DistributorERP));
             tvDistAdd.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
@@ -269,14 +269,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.printLine();
                 printama.addNewLine(2);
 
-
-                String subTotal = "           " + subTotalVal;
+                String subTotal = "           " + formatter.format(subTotalVal);
                 String totItem = "           " + totalitem.getText().toString();
                 String totqty = "           " + totalqty.getText().toString();
                 String discount = "           " + cashDisc;
                 String outstand = "           " + outstandAmt;
 
-                printama.printText("SubTotal" + "                       " + subTotal.substring(String.valueOf(subTotalVal).length(), subTotal.length()));
+                printama.printText("SubTotal" + "                       " + subTotal.substring(String.valueOf(formatter.format(subTotalVal)).length(), subTotal.length()));
                 printama.addNewLine();
                 printama.printText("Total Item" + "                     " + totItem.substring(totalitem.getText().toString().length(), totItem.length()));
                 printama.addNewLine();
@@ -291,11 +290,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     printama.addNewLine();
 
                 }
-                if (tvOutstanding.getVisibility() == View.VISIBLE) {
-                    printama.printText("Outstanding" + "                    " + outstand.substring(String.valueOf(outstandAmt).length(),
-                            outstand.length()));
-                    printama.addNewLine();
-                }
+//                if (tvOutstanding.getVisibility() == View.VISIBLE) {
+//                    printama.printText("Outstanding" + "                    " + outstand.substring(String.valueOf(outstandAmt).length(),
+//                            outstand.length()));
+//                    printama.addNewLine();
+//                }
 
                 if (cashDisc > 0) {
                     printama.printText("Cash Discount" + "                  " + discount.substring(String.valueOf(cashDisc).length(), discount.length()));
@@ -305,7 +304,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 printama.addNewLine(2);
                 printama.setTallBold();
-                String strAmount = "           " + subTotalVal;
+                String strAmount = "           " + formatter.format(subTotalVal);
 
                 printama.printText("Net amount" + "                     " + strAmount.substring(String.valueOf(subTotalVal).length(), strAmount.length()));
                 printama.addNewLine(2);
@@ -351,7 +350,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             PdfDocument document = new PdfDocument();
 
 
-            int widthSize = 500;
+            int widthSize = 600;
             // crate a page description
             PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, hgt, 1).create();
             // start a page
@@ -426,7 +425,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             canvas.drawText("Item", x, y, paint);
             canvas.drawText("Qty", (widthSize / 2) + 20, y, paint);
             canvas.drawText("Rate", (widthSize / 2) + 70, y, paint);
-            canvas.drawText("Total", (widthSize / 2) + 150, y, paint);
+            canvas.drawText("GST", (widthSize / 2) + 150, y, paint);
+            canvas.drawText("Total", (widthSize / 2) + 200, y, paint);
 
 
             y = y + 10;
@@ -464,7 +464,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getName(), x, y, paint);
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), (widthSize / 2) + 20, y, paint);
                 canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), (widthSize / 2) + 70, y, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), (widthSize / 2) + 150, y, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getTax()), (widthSize / 2) + 150, y, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), (widthSize / 2) + 200, y, paint);
 
 
             }
@@ -499,11 +500,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             y = y + 30;
 
-            if (tvOutstanding.getVisibility() == View.VISIBLE) {
-                canvas.drawText("Outstanding", x, y, paint);
-                canvas.drawText(tvOutstanding.getText().toString(), (widthSize / 2) + 150, y, paint);
-                y = y + 30;
-            }
+//            if (tvOutstanding.getVisibility() == View.VISIBLE) {
+//                canvas.drawText("Outstanding", x, y, paint);
+//                canvas.drawText(tvOutstanding.getText().toString(), (widthSize / 2) + 150, y, paint);
+//                y = y + 30;
+//            }
 
             if (cashDisc > 0) {
                 canvas.drawText("Cash Discount", x, y, paint);
@@ -646,18 +647,21 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
                 total_qtytext += obj.getInt("Quantity");
-                subTotalVal += obj.getDouble("value");
+                subTotalVal += (obj.getDouble("value"));
                 String paidAmt = "0";
                 try {
                     paidAmt = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? "0" : obj.getString("PaidAmount");
                 } catch (Exception e) {
                 }
 
+                double taxAmt=0.00;
                 JSONArray taxArr = obj.getJSONArray("TAX_details");
                 for (int tax = 0; tax < taxArr.length(); tax++) {
                     JSONObject taxObj = taxArr.getJSONObject(tax);
                     String label = taxObj.getString("Tax_Name");
                     Double amt = taxObj.getDouble("Tax_Amt");
+
+                    taxAmt+=taxObj.getDouble("Tax_Amt");
                     if (taxList.size() == 0) {
                         taxList.add(new Product_Details_Modal(label, amt));
                     } else {
@@ -680,10 +684,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 }
                 Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
                         "1", "5", "i", 7.99, 1.8, obj.getDouble("Rate"),
-                        obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt));
+                        obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt,(taxAmt)));
 
 
             }
+            // subTotalVal = Double.parseDouble(formatter.format(subTotalVal));
+
             totalqty.setText("" + String.valueOf(total_qtytext));
             totalitem.setText("" + Order_Outlet_Filter.size());
             subtotal.setText("₹" + formatter.format(subTotalVal));

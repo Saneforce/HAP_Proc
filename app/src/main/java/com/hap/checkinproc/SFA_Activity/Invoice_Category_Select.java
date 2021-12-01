@@ -1082,11 +1082,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
-
         Context context;
-
         int CategoryType;
-
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
@@ -1121,7 +1118,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             }
         }
 
-
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
             this.Product_Details_Modalitem = Product_Details_Modalitem;
             this.rowLayout = rowLayout;
@@ -1149,16 +1145,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         @Override
         public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
             try {
-
-
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
-
-
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-
 
                 if (CategoryType >= 0) {
                     holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
@@ -1186,12 +1177,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                 holder.Qty.setText("" + Product_Details_Modal.getQty());
 
-
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
                 else
                     holder.Free.setText("" + Product_Details_Modal.getFree());
-
 
                 holder.Disc.setText("₹" + formatter.format(Product_Details_Modal.getDiscount()));
 
@@ -1421,7 +1410,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             if (CategoryType == -1) {
                                 String amt = holder.Amount.getText().toString();
+                                Log.v(TAG+position,":OUT:amt:"+amt);
                                 if (amt.equals("₹0.00")) {
+                                    Log.v(TAG+position,":IN:amt:"+amt);
                                     Product_Details_Modalitem.remove(position);
                                     notifyDataSetChanged();
                                 }
@@ -1567,16 +1558,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         @Override
         public void onBindViewHolder(Free_Adapter.MyViewHolder holder, int position) {
             try {
-
-
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-
-
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-
                 holder.Free.setText("" + Product_Details_Modal.getFree());
-
-
                 updateToTALITEMUI();
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
