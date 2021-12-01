@@ -19,18 +19,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="@dimen/C5dp"
             android:layout_marginEnd="@dimen/C5dp"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="@dimen/C5dp"
                 android:layout_marginEnd="@dimen/C5dp"
-                >
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/productname"
@@ -40,18 +38,16 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="@dimen/C13dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginStart="@dimen/C5dp"
                 android:layout_marginEnd="@dimen/C5dp"
-                >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -69,30 +65,33 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:enabled="false"
                         android:id="@+id/Rate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:enabled="false"
                         android:fontFamily="sans-serif"
                         android:gravity="center_vertical|start"
-                        android:text=""
                         android:hint="Rate"
+                        android:text=""
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"
-                        />
+                        android:textSize="@dimen/C13dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/C15dp"
                     android:background="@drawable/order_qty_backround">
+
                     <ImageView
                         android:id="@+id/ivQtyMns"
                         android:layout_width="25dp"
@@ -100,6 +99,7 @@
                         android:padding="6dp"
                         android:src="@drawable/disable_minus"
                         app:tint="@color/color_red" />
+
                     <EditText
 
                         android:id="@+id/Qty"
@@ -119,6 +119,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"
                         tools:ignore="RtlCompat" />
+
                     <ImageView
                         android:id="@+id/ivQtyPls"
                         android:layout_width="25dp"
@@ -128,9 +129,19 @@
                         app:tint="@color/green" />
 
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivDel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:padding="@dimen/C5dp"
+                    android:src="@drawable/delete_cart"></ImageView>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="-10dp"
                     android:layout_weight="1">
 
                     <TextView
@@ -141,7 +152,7 @@
                         android:gravity="center_vertical|end"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"/>
+                        android:textSize="@dimen/C13dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -175,7 +186,7 @@
                         android:gravity="center_vertical|end"
                         android:text="Value"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"/>
+                        android:textSize="@dimen/C13dp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

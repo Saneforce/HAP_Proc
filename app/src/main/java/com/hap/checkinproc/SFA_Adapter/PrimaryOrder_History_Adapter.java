@@ -1,7 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +11,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOrder_History_Adapter.MyViewHolder> {
 
     Context context;
-    List<OutletReport_View_Modal> mDate;
+    JSONArray mDate;
     AdapterOnClick mAdapterOnClick;
     String mResponse;
 
-    public PrimaryOrder_History_Adapter(Context context, List<OutletReport_View_Modal> mDate, String mResponse, AdapterOnClick mAdapterOnClick) {
+    public PrimaryOrder_History_Adapter(Context context, JSONArray mDate, String mResponse, AdapterOnClick mAdapterOnClick) {
         this.context = context;
         this.mDate = mDate;
         this.mAdapterOnClick = mAdapterOnClick;
@@ -47,30 +48,66 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
 
     @Override
     public void onBindViewHolder(PrimaryOrder_History_Adapter.MyViewHolder holder, int position) {
+        try {
+            JSONObject obj = mDate.getJSONObject(position);
+            holder.txtOrderDate.setText("" + obj.getString("Order_Date"));
+            holder.txtOrderID.setText(obj.getString("OrderNo"));
+            holder.txtValue.setText("" + new DecimalFormat("##0.00").format(Double.parseDouble(obj.getString("Order_Value"))));
+            holder.Itemcountinvoice.setText(obj.getString("Status"));
 
-        holder.txtOrderDate.setText("" + mDate.get(position).getOrderDate());
-        holder.txtOrderID.setText(mDate.get(position).getOrderNo());
-        holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
-        holder.Itemcountinvoice.setText("" + mDate.get(position).getStatus());
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterOnClick.onIntentClick(position);
-            }
-        });
+            if (isToday(obj.getString("Order_Date")) == 0)
+                holder.llEdit.setVisibility(View.VISIBLE);
+            else
+                holder.llEdit.setVisibility(View.INVISIBLE);
 
-        holder.llEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TodayPrimOrdActivity.mTdPriAct.updateData(mDate.get(position).getOrderNo());
 
-            }
-        });
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterOnClick.onIntentClick(position);
+                }
+            });
+
+            holder.llEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        TodayPrimOrdActivity.mTdPriAct.updateData(mDate.getJSONObject(position).getString("Trans_Sl_No"),
+                                mDate.getJSONObject(position).getString("cutoff_time"));
+                    } catch (Exception e) {
+
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            Log.v("primAdapter:", e.getMessage());
+        }
+    }
+
+    public int isToday(String date) {
+        int result = -1;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date date1 = sdf.parse(date);
+            Calendar c = Calendar.getInstance();
+            String plantime = sdf.format(c.getTime());
+            Date date2 = sdf.parse(plantime);
+
+            System.out.println("date1 : " + sdf.format(date1));
+            System.out.println("date2 : " + sdf.format(date2));
+
+            result = date1.compareTo(date2);
+            System.out.println("result: " + result);
+        } catch (Exception e) {
+
+        }
+        return result;
     }
 
     @Override
     public int getItemCount() {
-        return mDate.size();
+        return mDate.length();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
