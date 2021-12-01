@@ -380,9 +380,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
                     if (jsonObject1.getString("Product_Detail_Code").equals(Product_Details_Modalitem.get(pos).getId())) {
-
                         if (jsonObject1.getDouble("Tax_Val") > 0) {
                             double taxCal = Product_Details_Modalitem.get(pos).getAmount() *
                                     ((jsonObject1.getDouble("Tax_Val") / 100));
@@ -401,8 +399,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()
                         + wholeTax)));
                 Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
-
-
             }
         } catch (Exception e) {
 

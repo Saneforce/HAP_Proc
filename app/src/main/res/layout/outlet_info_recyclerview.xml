@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -112,7 +113,19 @@
             android:textColor="@color/checkout"
             android:paddingLeft="@dimen/C5dp"
             android:paddingRight="@dimen/C5dp"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="5dp"
+    android:gravity="end">
+    <TextView
+        android:id="@+id/lupdDt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="9sp"/>
 
+</LinearLayout>
     </LinearLayout>
 
     <RelativeLayout

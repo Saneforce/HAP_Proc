@@ -61,7 +61,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     DatabaseHandler db;
     String TAG = "OUTLET_INFO_Activity:",viewType="-1";;
     private TextView distributor_text;
-    Switch swACOutlet,swOTHOutlet;
+    Switch swACOutlet,swOTHOutlet,swUpdOutlet,swUpdNoOutlet;
     int CountUR = 0, CountSR = 0,CountCls=0;
     TextView txSrvOtlt, txUniOtlt,txClsOtlt,txAllOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt;
     LinearLayout btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
@@ -101,6 +101,9 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             txSearchRet = findViewById(R.id.txSearchRet);
             swACOutlet = findViewById(R.id.swACOutlet);
             swOTHOutlet = findViewById(R.id.swOTHOutlet);
+
+            swUpdOutlet = findViewById(R.id.swUpdOutlet);
+            swUpdNoOutlet= findViewById(R.id.swUpdNoOutlet);
 
             route_text.setOnClickListener(this);
             reachedoutlets.setOnClickListener(this);
@@ -157,6 +160,30 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 }
             });
 
+            swUpdOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swUpdNoOutlet.setChecked(false);
+                }
+            });
+            swUpdOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reloadData();
+                }
+            });
+            swUpdNoOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swUpdOutlet.setChecked(false);
+                }
+            });
+            swUpdNoOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reloadData();
+                }
+            });
             swACOutlet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -304,6 +331,16 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
                 String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
                 String sSchText = txSearchRet.getText().toString().toUpperCase();
+                boolean UpdTrue = false;
+                if (swUpdOutlet.isChecked()) {
+                    if (Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase(""))
+                        UpdTrue = true;
+                } else if (swUpdNoOutlet.isChecked()) {
+                    if (!(Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase("")))
+                        UpdTrue = true;
+                } else {
+                    UpdTrue = true;
+                }
                 boolean ACTrue = false;
                 if (swACOutlet.isChecked()) {
                     if (Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
@@ -321,10 +358,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 else if (outletType.equalsIgnoreCase(viewType))
                     FiltrType = true;
 
-                if (ACTrue && FiltrType && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                if (UpdTrue && ACTrue && FiltrType && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
                     Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
                 }
-                if (ACTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                if (UpdTrue && ACTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
                     if (Retailer_Modal_List.get(sr).getType() == null)
                         Retailer_Modal_List.get(sr).setType("0");
                     if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("0")) CountUR++;

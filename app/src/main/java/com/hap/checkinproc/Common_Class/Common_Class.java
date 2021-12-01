@@ -90,7 +90,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.1";
+    public static String Version_Name = "ver 3.2.4";
     public static String Work_Type = "0";
     public static int count;
 
@@ -468,6 +468,7 @@ public class Common_Class {
                     case Constants.SALES_SUMMARY:
                         axnname = "get/salessummarydetails";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("mode", Shared_Common_Pref.SALES_MODE);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;

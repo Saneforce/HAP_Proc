@@ -286,7 +286,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
-                                    android:text="Photo"  />
+                                    android:text="Photo"
+                                    android:textColor="@color/white"/>
 
                             </LinearLayout>
 

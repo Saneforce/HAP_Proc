@@ -38,7 +38,6 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__history.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__orderid_layout.xml" value="0.26992753623188404" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_leave__request.xml" value="0.26992753623188404" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_ledger_stmt.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_map_direction.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_more__info_.xml" value="0.27291666666666664" />
@@ -141,12 +140,17 @@
         <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_lead_.xml" value="0.45048543689320386" />
+        <entry key="app/src/main/res/layout/activity_leave__request.xml" value="0.13043478260869565" />
+        <entry key="app/src/main/res/layout/activity_missed__punch.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_mydayplan_.xml" value="0.13043478260869565" />
         <entry key="app/src/main/res/layout/activity_myteam_layout.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />
         <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_order_category.xml" value="0.17685185185185184" />
         <entry key="app/src/main/res/layout/activity_other_brand_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_outlet__info_.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/activity_permission__request.xml" value="0.17407407407407408" />
         <entry key="app/src/main/res/layout/activity_pop_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.40471118909668696" />
         <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.1" />

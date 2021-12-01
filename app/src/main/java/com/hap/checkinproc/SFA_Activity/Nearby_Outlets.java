@@ -247,6 +247,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             jsonObject.put("Div", UserDetails.getString("Divcode", ""));
             jsonObject.put("Lat", location.getLatitude());
             jsonObject.put("Lng", location.getLongitude());
+//            jsonObject.put("Lat", "11.5237379");
+//            jsonObject.put("Lng", "79.323381");
             ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
             service.getDataArrayList("get/fencedOutlet", jsonObject.toString()).enqueue(new Callback<JsonArray>() {
                 @Override

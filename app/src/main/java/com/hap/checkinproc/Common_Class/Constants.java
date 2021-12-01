@@ -78,6 +78,7 @@ public class Constants {
     public static final String LEDGER = "ledger";
     public static final String DASHBOARD_TYPE_INFO = "dbTypeInfo";
     public static final String SALES_SUMMARY = "salesSummary";
+    public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
     public static final String DISTRIBUTER_TYPE = "Distributor";
