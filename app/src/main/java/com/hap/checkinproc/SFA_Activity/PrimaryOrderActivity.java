@@ -157,11 +157,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             btnRepeat = findViewById(R.id.btnRepeat);
             Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
             getACBalance(0);
-
             etCategoryItemSearch = findViewById(R.id.searchView);
             tvTimer = findViewById(R.id.tvTimer);
-
-
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
@@ -237,9 +234,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             tvDate.setText(DT.GetDateTime(getApplicationContext(), "dd-MMM-yyyy"));
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
             orderId = getIntent().getStringExtra(Constants.ORDER_ID);
-            if (orderId != null) {
-                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
-            }
+//            if (orderId != null) {
+//                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
+//            }
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -427,7 +424,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     showOrderItemList(selectedPos, "");
                 } else {
                     orderId = "";
-                    loadData(sharedCommonPref.getvalue(Constants.TodayPrimaryOrderDetails_List));
+                    // loadData(sharedCommonPref.getvalue(Constants.TodayPrimaryOrderDetails_List));
+                    common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
+
                 }
 
             }
@@ -596,7 +595,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
-
             AlertDialogBox.showDialog(PrimaryOrderActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
@@ -630,9 +628,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         OutletItem.put("ordertype", "order");
                         OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
-                        String mode = getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit";
-                        OutletItem.put("orderId", "" + getIntent().getStringExtra(Constants.ORDER_ID));
-                        OutletItem.put("mode", mode);
+                        OutletItem.put("orderId", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "" : getIntent().getStringExtra(Constants.ORDER_ID));
+                        OutletItem.put("mode", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit");
                         OutletItem.put("cutoff_time", sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
 
                         if (strLoc.length > 0) {
@@ -795,12 +792,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         takeorder.setText("SUBMIT");
         btnRepeat.setVisibility(View.GONE);
         //  sumofTax();
-
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.adapter_primary_pay_layout, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
-
-
     }
 
     void showFreeQtyList() {
@@ -950,7 +944,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
             String taxRes = sharedCommonPref.getvalue(Constants.PrimaryTAXList);
-
             if (!Common_Class.isNullOrEmpty(taxRes)) {
                 JSONObject jsonObject = new JSONObject(taxRes);
 
@@ -991,7 +984,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             }
 
-
         } catch (Exception e) {
 
         }
@@ -1030,7 +1022,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     loadData(apiDataResponse);
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
-                    sharedCommonPref.save(Constants.TodayPrimaryOrderDetails_List, apiDataResponse);
+                    loadData(apiDataResponse);
+                    // sharedCommonPref.save(Constants.TodayPrimaryOrderDetails_List, apiDataResponse);
                     break;
                 case Constants.Primary_Product_List:
                     String OrdersTable = sharedCommonPref.getvalue(Constants.Primary_Product_List);
@@ -1098,8 +1091,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
 
@@ -1685,10 +1676,25 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     holder.ivDel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Product_Details_Modalitem.get(position).setQty(0);
-                            Product_Details_Modalitem.remove(position);
-                            notifyDataSetChanged();
-                            updateToTALITEMUI();
+
+                            AlertDialogBox.showDialog(PrimaryOrderActivity.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
                         }
                     });
                 }

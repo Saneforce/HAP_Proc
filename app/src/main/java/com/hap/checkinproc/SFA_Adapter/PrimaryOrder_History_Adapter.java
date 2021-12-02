@@ -93,12 +93,7 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
             Calendar c = Calendar.getInstance();
             String plantime = sdf.format(c.getTime());
             Date date2 = sdf.parse(plantime);
-
-            System.out.println("date1 : " + sdf.format(date1));
-            System.out.println("date2 : " + sdf.format(date2));
-
             result = date1.compareTo(date2);
-            System.out.println("result: " + result);
         } catch (Exception e) {
 
         }

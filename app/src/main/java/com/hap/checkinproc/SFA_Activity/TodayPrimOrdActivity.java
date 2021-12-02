@@ -224,22 +224,25 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
     public void updateData(String orderNo, String cutoff_time) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            Date d1 = sdf.parse(Common_Class.GetTime());
-            Date d2 = sdf.parse(cutoff_time);
-            long elapsed = d2.getTime() - d1.getTime();
-            if (elapsed >= 0) {
-                Intent intent = new Intent(this, PrimaryOrderActivity.class);
-                intent.putExtra(Constants.ORDER_ID, orderNo);
-                Shared_Common_Pref.TransSlNo = orderNo;
-                startActivity(intent);
-                overridePendingTransition(R.anim.in, R.anim.out);
-            } else {
-
+            if (Common_Class.isNullOrEmpty(cutoff_time)) {
                 common_class.showMsg(this, "Time UP...");
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                Date d1 = sdf.parse(Common_Class.GetTime());
+                Date d2 = sdf.parse(cutoff_time);
+                long elapsed = d2.getTime() - d1.getTime();
+                if (elapsed >= 0) {
+                    Intent intent = new Intent(this, PrimaryOrderActivity.class);
+                    intent.putExtra(Constants.ORDER_ID, orderNo);
+                    Shared_Common_Pref.TransSlNo = orderNo;
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                } else {
+                    common_class.showMsg(this, "Time UP...");
+                }
             }
         } catch (Exception e) {
-
+            Log.v("TDPrimActivity:Edit:", e.getMessage());
         }
 
     }

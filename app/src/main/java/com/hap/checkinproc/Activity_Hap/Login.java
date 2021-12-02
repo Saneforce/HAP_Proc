@@ -577,7 +577,7 @@ public class Login extends AppCompatActivity {
 
         //eMail = "anbu@saneforce.com";
         eMail = "1005985@hap.in";
-        eMail="1007120@hap.in";//test
+       // eMail="1007120@hap.in";//test
         //eMail = "haptest3@hap.in";
         //eMail = "ciadmin@hap.in";
         // eMail = "rajkumar@hap.in";
