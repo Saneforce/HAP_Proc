@@ -140,6 +140,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
+            Shared_Common_Pref.Outletlat = 0.0;
+            Shared_Common_Pref.Outletlong = 0.0;
+
             db = new DatabaseHandler(this);
             linReatilerRoute = findViewById(R.id.rl_route);
             rlDistributor = findViewById(R.id.rl_Distributor);
@@ -453,6 +456,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Enter Outlet Name", Toast.LENGTH_SHORT).show();
                     } else if (owner_name.getText().toString().equals("")) {
                         Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
+                    } else if (String.valueOf(Shared_Common_Pref.Outletlat).matches("")
+                            || String.valueOf(Shared_Common_Pref.Outletlat).matches("0")
+                            || String.valueOf(Shared_Common_Pref.Outletlat).matches("0.0")) {
+                        Toast.makeText(getApplicationContext(), "Refresh the Location Lat & Lng", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerAddress.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
                     } else if (tvStateName.getText().toString().matches("")) {
