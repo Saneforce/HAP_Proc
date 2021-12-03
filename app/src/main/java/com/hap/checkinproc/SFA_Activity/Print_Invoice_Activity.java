@@ -203,7 +203,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Bitmap logo = Printama.getBitmapFromVector(this, R.drawable.hap_logo);
             Printama.with(this).connect(printama -> {
 
-
                 printama.printImage(Printama.RIGHT, logo, 170);
                 printama.addNewLine();
                 printama.addNewLine();
@@ -213,8 +212,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.setTallBold();
                 printama.printTextln(Printama.CENTER, storeName);
                 printama.addNewLine();
-
-
                 printama.setBold();
                 printama.printTextln(Printama.LEFT, "Address :");
 

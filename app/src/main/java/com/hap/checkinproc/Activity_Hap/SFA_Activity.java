@@ -43,6 +43,7 @@ import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
+import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
@@ -63,7 +64,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
-    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary, linMyTeam;
+    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary,
+            linMyTeam,linPOS;
     Gson gson;
 
     private SANGPSTracker mLUService;
@@ -109,6 +111,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         Logout = findViewById(R.id.Logout);
         linPrimary = findViewById(R.id.Lin_primary);
         linMyTeam = findViewById(R.id.lin_myteam);
+        linPOS=findViewById(R.id.Lin_POS);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -124,6 +127,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         ivLogout.setOnClickListener(this);
         linPrimary.setOnClickListener(this);
         linMyTeam.setOnClickListener(this);
+        linPOS.setOnClickListener(this);
         gson = new Gson();
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
@@ -145,10 +149,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         sfa_date = tvDate.getText().toString();
 
+        getProductDetails();
 
         getNoOrderRemarks();
         showDashboardData();
-        //   getProductDetails();
 
     }
 
@@ -261,11 +265,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
 
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case  R.id.Lin_POS:
+                common_class.CommonIntentwithNEwTask(POSActivity.class);
+                break;
             case R.id.lin_myteam:
                 common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
                 break;
@@ -450,7 +458,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             JSONObject jParam = new JSONObject();
             try {
                 jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", Shared_Common_Pref.DistributorCode);
+                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {

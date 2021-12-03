@@ -103,6 +103,9 @@
         <activity
             android:name=".SFA_Activity.Order_Category_Select"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.POSActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".SFA_Activity.PrimaryOrderActivity"

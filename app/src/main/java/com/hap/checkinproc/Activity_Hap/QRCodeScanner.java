@@ -2,7 +2,6 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.GateEntryQREvents;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,7 +58,7 @@ public class QRCodeScanner extends AppCompatActivity {
     Button btnAction;
     String[] arrSplit;
     String latlon = "", NameValue = "", intentData = "";
-    Boolean readFlag=false;
+    Boolean readFlag = false;
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -70,30 +68,30 @@ public class QRCodeScanner extends AppCompatActivity {
         initViews();
 
         NameValue = String.valueOf(getIntent().getSerializableExtra("Name"));
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
 
-                return;
-            }
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                Log.v("Loaction", String.valueOf(location.getLatitude()));
-                                Log.v("Loaction", String.valueOf(location.getLongitude()));
-                                latlon = location.getLatitude() + "," + location.getLongitude();
-                            }
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            Log.v("Loaction", String.valueOf(location.getLatitude()));
+                            Log.v("Loaction", String.valueOf(location.getLongitude()));
+                            latlon = location.getLatitude() + "," + location.getLongitude();
                         }
-                    });
+                    }
+                });
 
         initialiseDetectorsAndSources();
 
@@ -161,16 +159,19 @@ public class QRCodeScanner extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                if (barcodes.size() != 0 && readFlag==false) {
+                if (barcodes.size() != 0 && readFlag == false) {
                     surfaceView.post(new Runnable() {
 
                         @Override
                         public void run() {
-                            if(readFlag==false) {
+                            if (readFlag == false) {
                                 intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
                                 cameraSource.release();
                                 readFlag = true;
-                                if (!intentData.equals("")) {
+                                if (getIntent().getStringExtra("scan") != null) {
+                                    Toast.makeText(getApplicationContext(), intentData.toString(), Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else if (!intentData.equals("")) {
                                     arrSplit = intentData.split(",");
                                     if (String.valueOf(arrSplit.length).equals("5")) {
                                         if ((NameValue.equalsIgnoreCase("gatein") && arrSplit[3].equals("IN")) || (NameValue.equalsIgnoreCase("gateout") && arrSplit[3].equals("Out"))) {
@@ -275,7 +276,7 @@ public class QRCodeScanner extends AppCompatActivity {
                         JsonObject jsonObject = response.body();
                         String Msg = jsonObject.get("Msg").getAsString();
                         if (Msg.equalsIgnoreCase(""))
-                            Msg="Submitted Successfully";
+                            Msg = "Submitted Successfully";
                         AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                             @Override
                             public void PositiveMethod(DialogInterface dialog, int id) {
@@ -311,6 +312,7 @@ public class QRCodeScanner extends AppCompatActivity {
             });
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -319,7 +321,7 @@ public class QRCodeScanner extends AppCompatActivity {
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
-    public static void bindEvents(GateEntryQREvents gateEntryQREvents){
-        mGateEntryQREvents=gateEntryQREvents;
+    public static void bindEvents(GateEntryQREvents gateEntryQREvents) {
+        mGateEntryQREvents = gateEntryQREvents;
     }
 }

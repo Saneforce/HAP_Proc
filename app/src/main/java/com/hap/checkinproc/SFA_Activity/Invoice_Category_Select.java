@@ -1410,9 +1410,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             if (CategoryType == -1) {
                                 String amt = holder.Amount.getText().toString();
-                                Log.v(TAG+position,":OUT:amt:"+amt);
                                 if (amt.equals("₹0.00")) {
-                                    Log.v(TAG+position,":IN:amt:"+amt);
                                     Product_Details_Modalitem.remove(position);
                                     notifyDataSetChanged();
                                 }
@@ -1429,8 +1427,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     @Override
                     public void beforeTextChanged(CharSequence s, int start,
                                                   int count, int after) {
-
-
                     }
 
                     @Override
@@ -1449,8 +1445,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
-
-
         }
 
         private void showDialog(Product_Details_Modal product_details_modal) {

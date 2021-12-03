@@ -180,7 +180,6 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                                 try {
                                     JSONObject obj = arr.getJSONObject(position);
                                     Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
-
                                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
                                     sharedCommonPref.save(Constants.FLAG, "Primary Order");
                                     intent.putExtra("Order_Values", obj.getString("Order_Value"));
