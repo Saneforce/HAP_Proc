@@ -39,6 +39,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
+import com.hap.checkinproc.SFA_Activity.FPPrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
@@ -65,7 +66,7 @@ import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary,
-            linMyTeam,linPOS;
+            linMyTeam, linPOS;
     Gson gson;
 
     private SANGPSTracker mLUService;
@@ -111,7 +112,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         Logout = findViewById(R.id.Logout);
         linPrimary = findViewById(R.id.Lin_primary);
         linMyTeam = findViewById(R.id.lin_myteam);
-        linPOS=findViewById(R.id.Lin_POS);
+        linPOS = findViewById(R.id.Lin_POS);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -271,7 +272,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case  R.id.Lin_POS:
+            case R.id.Lin_POS:
                 common_class.CommonIntentwithNEwTask(POSActivity.class);
                 break;
             case R.id.lin_myteam:
@@ -381,7 +382,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 switch (key) {
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
-                        common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
+                            common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        else
+                            common_class.CommonIntentwithoutFinish(FPPrimaryOrderActivity.class);
+
                         overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case Constants.CUMULATIVEDATA:

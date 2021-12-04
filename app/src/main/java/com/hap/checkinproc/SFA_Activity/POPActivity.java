@@ -36,8 +36,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -170,16 +168,16 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 fromDatePickerDialog.show();
                 break;
             case R.id.tvOrder:
-                common_class.commonDialog(this, Order_Category_Select.class,"Order?");
+                common_class.commonDialog(this, Order_Category_Select.class, "POP?");
                 break;
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class,"Other Brand?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "POP?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class,"QPS?");
+                common_class.commonDialog(this, QPSActivity.class, "POP?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class,"Cooler Info?");
+                common_class.commonDialog(this, CoolerInfoActivity.class, "POP?");
                 break;
             case R.id.ivAddPOP:
                 popAddList.add(new Product_Details_Modal("", "", "", 0, ""));

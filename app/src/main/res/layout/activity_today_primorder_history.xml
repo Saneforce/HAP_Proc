@@ -35,19 +35,75 @@
             android:orientation="vertical">
 
 
-            <TextView
-                android:id="@+id/outlet_name"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/C5dp"
-                android:layout_marginEnd="10dp"
-                android:paddingLeft="@dimen/C10dp"
-                android:paddingRight="@dimen/C10dp"
-                android:text="SRI RENUKAMBAL"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/C5dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/llDistributor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/distributor_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/basic"
+                        android:hint="Select Distributor"
+                        android:paddingRight="@dimen/C5dp"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/ivDistSpinner"
+                        android:layout_width="7dp"
+                        android:layout_height="7dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/spin_down_arrow"
+                        app:tint="@color/black">
+
+                    </ImageView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/btnCmbRoute"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/route_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Select the Route"
+                        android:paddingRight="@dimen/C5dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="9sp" />
+
+                    <ImageView
+                        android:id="@+id/ivRouteSpinner"
+                        android:layout_width="@dimen/C7dp"
+                        android:layout_height="@dimen/C7dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/spin_down_arrow"
+                        app:tint="@color/black">
+
+                    </ImageView>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llCustomDate"

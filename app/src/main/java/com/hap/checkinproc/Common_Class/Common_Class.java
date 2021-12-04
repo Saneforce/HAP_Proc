@@ -749,7 +749,7 @@ public class Common_Class {
 
     }
 
-    public String getDirectionsUrl(String dest,Activity activity) {
+    public String getDirectionsUrl(String dest, Activity activity) {
         // Origin of route
         String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
         // Destination of route
@@ -837,6 +837,31 @@ public class Common_Class {
         this.context = context;
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+    }
+
+    public List<Common_Model> getDistList() {
+        try {
+            List<Common_Model> distributor_master = new ArrayList<>();
+            Common_Model Model_Pojo;
+            JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String id = String.valueOf(jsonObject1.optInt("id"));
+                String name = jsonObject1.optString("name");
+                String flag = jsonObject1.optString("FWFlg");
+//                String ETabs = jsonObject1.optString("ETabs");
+//                Model_Pojo = new Common_Model(id, name, flag);
+                String Add2 = jsonObject1.optString("Addr2");
+                String Mob = jsonObject1.optString("Mobile");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
+                distributor_master.add(Model_Pojo);
+
+            }
+            return distributor_master;
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     public static String addquote(String s) {

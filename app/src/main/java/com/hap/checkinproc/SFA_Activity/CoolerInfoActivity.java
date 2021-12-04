@@ -250,16 +250,16 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         Common_Class common_class = new Common_Class(this);
         switch (v.getId()) {
             case R.id.tvOrder:
-                common_class.commonDialog(this, Order_Category_Select.class, "Order?");
+                common_class.commonDialog(this, Order_Category_Select.class, "Cooler Info?");
                 break;
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class, "Other Brand?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "Cooler Info?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class, "QPS?");
+                common_class.commonDialog(this, QPSActivity.class, "Cooler Info?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class, "POP?");
+                common_class.commonDialog(this, POPActivity.class, "Cooler Info?");
                 break;
             case R.id.ivPurityCapture:
                 addPic("purity~key");

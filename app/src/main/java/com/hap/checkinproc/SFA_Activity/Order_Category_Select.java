@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -558,16 +561,16 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class, "Other Brand?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "Order?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class, "QPS?");
+                common_class.commonDialog(this, QPSActivity.class, "Order?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class, "POP?");
+                common_class.commonDialog(this, POPActivity.class, "Order?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class, "Cooler Info?");
+                common_class.commonDialog(this, CoolerInfoActivity.class, "Order?");
                 break;
 
             case R.id.takeorder:
@@ -959,7 +962,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
-                common_class.CommonIntentwithFinish(Invoice_History.class);
+                common_class.commonDialog(this, Invoice_History.class, "Order?");
             }
             return true;
         }
@@ -976,6 +979,23 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED TO CART");
         showOrderItemList(selectedPos, "");
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
@@ -1088,8 +1108,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         Context context;
         int CategoryType;
-        private  List<Product_Details_Modal> Product_Details_Modalitem;
-        private  int rowLayout;
+        private List<Product_Details_Modal> Product_Details_Modalitem;
+        private int rowLayout;
 
 
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
@@ -1181,6 +1201,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         }
                     }
                 });
+
 
                 holder.Qty.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -1346,9 +1367,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                             if (CategoryType == -1) {
                                 String amt = holder.Amount.getText().toString();
-                                Log.v(TAG+position,":OUT:amt:"+amt);
+                                Log.v(TAG + position, ":OUT:amt:" + amt);
                                 if (amt.equals("₹0.00")) {
-                                    Log.v(TAG+position,":IN:amt:"+amt);
+                                    Log.v(TAG + position, ":IN:amt:" + amt);
                                     Product_Details_Modalitem.remove(position);
                                     notifyDataSetChanged();
                                 }
@@ -1484,8 +1505,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
         Context context;
-        private  List<Product_Details_Modal> Product_Details_Modalitem;
-        private  int rowLayout;
+        private List<Product_Details_Modal> Product_Details_Modalitem;
+        private int rowLayout;
 
 
         public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context) {

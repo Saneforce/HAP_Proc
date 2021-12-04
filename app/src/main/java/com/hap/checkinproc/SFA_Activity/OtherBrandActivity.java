@@ -113,16 +113,16 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         Common_Class common_class = new Common_Class(this);
         switch (v.getId()) {
             case R.id.tvOrder:
-                common_class.commonDialog(this, Order_Category_Select.class, "Order?");
+                common_class.commonDialog(this, Order_Category_Select.class, "Other Brand?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class, "QPS?");
+                common_class.commonDialog(this, QPSActivity.class, "Other Brand?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class, "POP?");
+                common_class.commonDialog(this, POPActivity.class, "Other Brand?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class, "Cooler Info?");
+                common_class.commonDialog(this, CoolerInfoActivity.class, "Other Brand?");
                 break;
 
             case R.id.tvAddBrand:

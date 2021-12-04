@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TodayPrimOrdActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
-    TextView outlet_name, tvStartDate, tvEndDate;
+    TextView tvStartDate, tvEndDate, distributor_text, route_text;
     Common_Class common_class;
 
     PrimaryOrder_History_Adapter mReportViewAdapter;
@@ -47,6 +51,9 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     DatePickerDialog fromDatePickerDialog;
     String date = "";
     static SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+    LinearLayout llDistributor, btnCmbRoute;
+    List<Common_Model> FRoute_Master = new ArrayList<>();
+    Common_Model Model_Pojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +64,41 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             sharedCommonPref = new Shared_Common_Pref(TodayPrimOrdActivity.this);
             common_class = new Common_Class(this);
 
-            outlet_name = findViewById(R.id.outlet_name);
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
+            distributor_text = findViewById(R.id.distributor_text);
+            llDistributor = findViewById(R.id.llDistributor);
+            btnCmbRoute = findViewById(R.id.btnCmbRoute);
+            route_text = findViewById(R.id.route_text);
+
             tvStartDate.setOnClickListener(this);
             tvEndDate.setOnClickListener(this);
+            llDistributor.setOnClickListener(this);
+            btnCmbRoute.setOnClickListener(this);
 
             stDate = Common_Class.GetDatewothouttime();
             endDate = Common_Class.GetDatewothouttime();
-            outlet_name.setText(sharedCommonPref.getvalue(Constants.Distributor_name, ""));
             tvStartDate.setText(stDate);
             tvEndDate.setText(endDate);
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
             common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, this, false);
+
+
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                btnCmbRoute.setVisibility(View.GONE);
+                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+                distributor_text.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
+            } else {
+                if (!sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
+                    common_class.getDb_310Data(Rout_List, this);
+                    distributor_text.setText(/*"Hi! " +*/ sharedCommonPref.getvalue(Constants.Distributor_name, ""));
+                } else {
+                    btnCmbRoute.setVisibility(View.GONE);
+                }
+            }
 
         } catch (Exception e) {
 
@@ -82,6 +108,30 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        common_class.dismissCommonDialog();
+        switch (type) {
+            case 2:
+                route_text.setText("");
+                sharedCommonPref.save(Constants.Route_name, "");
+                sharedCommonPref.save(Constants.Route_Id, "");
+               // btnCmbRoute.setVisibility(View.VISIBLE);
+                distributor_text.setText(myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+                sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
+                sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+                common_class.getDb_310Data(Rout_List, this);
+                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+
+                break;
+            case 3:
+                route_text.setText(myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Route_Id, myDataset.get(position).getId());
+                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+
+                break;
+        }
     }
 
     @Override
@@ -92,6 +142,15 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 break;
             case R.id.tvEndDate:
                 selectDate(2);
+                break;
+            case R.id.btnCmbRoute:
+                if (FRoute_Master != null && FRoute_Master.size() > 1) {
+                    common_class.showCommonDialog(FRoute_Master, 3, this);
+                }
+                break;
+            case R.id.llDistributor:
+                common_class.showCommonDialog(common_class.getDistList(), 2, this);
+                break;
 
 
         }
@@ -162,6 +221,19 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
         return b;
     }
 
+    public void loadroute() {
+
+        if (FRoute_Master.size() == 1) {
+            findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
+            route_text.setText(FRoute_Master.get(0).getName());
+            sharedCommonPref.save(Constants.Route_name, FRoute_Master.get(0).getName());
+            sharedCommonPref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
+
+        } else {
+            findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -169,6 +241,21 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
 
                 switch (key) {
+                    case Rout_List:
+                        JSONArray routeArr = new JSONArray(apiDataResponse);
+                        FRoute_Master.clear();
+                        for (int i = 0; i < routeArr.length(); i++) {
+                            JSONObject jsonObject1 = routeArr.getJSONObject(i);
+                            String id = String.valueOf(jsonObject1.optInt("id"));
+                            String name = jsonObject1.optString("name");
+                            String flag = jsonObject1.optString("FWFlg");
+                            Model_Pojo = new Common_Model(id, name, flag);
+                            Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
+                            FRoute_Master.add(Model_Pojo);
+
+                        }
+                        loadroute();
+                        break;
 
                     case Constants.GetTodayPrimaryOrder_List:
 
@@ -213,7 +300,10 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
+            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+                finish();
+            else
+                common_class.CommonIntentwithFinish(FPPrimaryOrderActivity.class);
             overridePendingTransition(R.anim.in, R.anim.out);
 
             return true;

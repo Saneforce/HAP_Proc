@@ -108,6 +108,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".SFA_Activity.FPPrimaryOrderActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".SFA_Activity.PrimaryOrderActivity"
             android:screenOrientation="portrait" />
 

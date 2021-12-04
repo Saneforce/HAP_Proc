@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -37,7 +39,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.QRCodeScanner;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -240,9 +241,27 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 //                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
 //            }
 
+
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     private void getACBalance(int Mode) {
@@ -1094,7 +1113,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 moveProductScreen();
 
             } else {
-                common_class.CommonIntentwithFinish(SFA_Activity.class);
+                common_class.commonDialog(this, SFA_Activity.class, "Primary Order?");
 
             }
             return true;
@@ -1464,21 +1483,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         // sumofTax();
                     }
                 });
-//                holder.Qty.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                    @Override
-//                    public void onFocusChange(View v, boolean hasFocus) {
-//                        if (holder.Qty.getText().toString().equalsIgnoreCase("")) {
-//                            try {
-//                                if (CategoryType == -1) {
-//                                    Product_Details_Modalitem.remove(position);
-//                                    notifyDataSetChanged();
-//                                }
-//                            } catch (Exception e) {
-//
-//                            }
-//                        }
-//                    }
-//                });
                 holder.Qty.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence charSequence, int start,

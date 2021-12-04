@@ -244,13 +244,13 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 common_class.getDb_310Data(Constants.QPS_STATUS, this);
                 break;
             case R.id.tvOrder:
-                common_class.commonDialog(this, Order_Category_Select.class, "Order?");
+                common_class.commonDialog(this, Order_Category_Select.class, "QPS?");
                 break;
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class, "Other Brand?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "QPS?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class, "POP?");
+                common_class.commonDialog(this, POPActivity.class, "QPS?");
                 break;
             case R.id.tvCoolerInfo:
                 common_class.commonDialog(this, CoolerInfoActivity.class, "QPS?");

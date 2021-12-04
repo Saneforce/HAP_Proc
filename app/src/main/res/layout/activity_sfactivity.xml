@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/AppTitle"
                 android:layout_width="wrap_content"
@@ -205,40 +206,36 @@
                             android:orientation="horizontal">
 
 
+                            <LinearLayout
+                                android:id="@+id/Lin_primary"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:visibility="visible">
 
 
-                                <LinearLayout
-                                    android:visibility="gone"
-                                    android:id="@+id/Lin_primary"
+                                <ImageView
+                                    android:id="@+id/imgPrimary"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:src="@drawable/ic_outline_add_chart_48"
+                                    app:tint="@color/colorPrimaryDark" />
 
-
-                                    <ImageView
-                                        android:id="@+id/imgPrimary"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:layout_gravity="center"
-                                        android:layout_weight="1"
-                                        app:tint="@color/colorPrimaryDark"
-                                        android:src="@drawable/ic_outline_add_chart_48"
-                                        />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:layout_gravity="center"
-                                        android:layout_marginTop="@dimen/C8dp"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Primary Orders"
-                                        android:textAlignment="center" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="@dimen/C8dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="Primary Orders"
+                                    android:textAlignment="center" />
 
 
                             </LinearLayout>
-
 
 
                             <LinearLayout
@@ -255,8 +252,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_assignment_48"
-                                     />
+                                    android:src="@drawable/ic_outline_assignment_48" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -321,6 +317,7 @@
                                     android:text="Dashboard"
                                     android:textAlignment="center" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/Lin_Lead"
                                 android:layout_width="match_parent"
@@ -348,6 +345,7 @@
                                     android:text="Lead"
                                     android:textAlignment="center" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/Lin_Outlet"
                                 android:layout_width="match_parent"
@@ -361,8 +359,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_baseline_storefront_24"
-                                    />
+                                    android:src="@drawable/ic_baseline_storefront_24" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -374,6 +371,7 @@
                                     android:text="Outlets"
                                     android:textAlignment="center" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/DistLocation"
 
@@ -388,8 +386,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_my_location_24"
-                                   />
+                                    android:src="@drawable/ic_outline_my_location_24" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -401,6 +398,7 @@
                                     android:text="Franchises"
                                     android:textAlignment="center" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/lin_Reports"
                                 android:layout_width="match_parent"
@@ -414,8 +412,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_report_48"
-                                    />
+                                    android:src="@drawable/ic_outline_report_48" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -432,12 +429,12 @@
 
 
                         <LinearLayout
-                            android:weightSum="4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C10dp"
                             android:layout_marginBottom="@dimen/C10dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:weightSum="5">
 
                             <LinearLayout
                                 android:id="@+id/Lin_POS"
@@ -453,8 +450,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_assignment_48"
-                                    />
+                                    android:src="@drawable/ic_outline_assignment_48" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -481,8 +477,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_baseline_groups_24"
-                                   />
+                                    android:src="@drawable/ic_baseline_groups_24" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -493,7 +488,6 @@
                                     android:text="My Team"
                                     android:textAlignment="center" />
                             </LinearLayout>
-
 
 
                             <LinearLayout
@@ -643,39 +637,43 @@
                     <include layout="@layout/fragment_outletdata_info"></include>
 
                 </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp"
                     app:cardCornerRadius="@dimen/C10dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingLeft="@dimen/C5dp"
                         android:paddingRight="@dimen/C5dp"
-                        android:paddingBottom="@dimen/C5dp"
-                        >
+                        android:paddingBottom="@dimen/C5dp">
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
+
                             <TextView
                                 style="@style/headerTextStyle"
                                 android:paddingLeft="@dimen/C15dp"
                                 android:text="Day Activity"
                                 android:textAlignment="textStart" />
                         </RelativeLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/tvPurchOrds"
                                     style="@style/mediumTextStyle"
@@ -687,6 +685,7 @@
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -695,17 +694,20 @@
                                     android:textAlignment="center"
                                     android:textSize="9sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="@dimen/C2dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="6dp"
                                 android:layout_marginBottom="6dp"
                                 android:background="@color/grey_200" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/tvSalesOrds"
                                     style="@style/mediumTextStyle"
@@ -717,6 +719,7 @@
                                     android:textColor="@color/Extended"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -726,6 +729,7 @@
                                     android:textSize="9sp" />
                             </LinearLayout>
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C2dp"
@@ -736,13 +740,14 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/tvCashout"
                                     style="@style/mediumTextStyle"
@@ -754,6 +759,7 @@
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -762,17 +768,20 @@
                                     android:textAlignment="center"
                                     android:textSize="9sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="@dimen/C2dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="6dp"
                                 android:layout_marginBottom="6dp"
                                 android:background="@color/grey_200" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/tvCashIn"
                                     style="@style/mediumTextStyle"
@@ -784,6 +793,7 @@
                                     android:textColor="@color/Extended"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -800,9 +810,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp"
-                    app:cardCornerRadius="@dimen/C10dp"
                     android:visibility="gone"
-                    >
+                    app:cardCornerRadius="@dimen/C10dp">
 
                     <include layout="@layout/fragment_salesdata_info"></include>
 
