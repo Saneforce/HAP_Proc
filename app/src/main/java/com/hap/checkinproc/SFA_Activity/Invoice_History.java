@@ -194,7 +194,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             JSONObject jParam = new JSONObject();
             try {
                 jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", Shared_Common_Pref.DistributorCode);
+                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -257,7 +257,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         JSONObject jParam = new JSONObject();
         try {
             jParam.put("SF", UserDetails.getString("Sfcode", ""));
-            jParam.put("Stk", Shared_Common_Pref.DistributorCode);
+            jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
             jParam.put("Cus", Shared_Common_Pref.OutletCode);
             jParam.put("div", UserDetails.getString("Divcode", ""));
 
@@ -437,8 +437,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         JSONObject OutletItem = new JSONObject();
                         OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
                         OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
-                        OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
+                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
                         OutletItem.put("orderValue", "0");
                         OutletItem.put("CashDiscount", "0");
                         OutletItem.put("NetAmount", "0");

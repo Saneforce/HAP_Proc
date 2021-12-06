@@ -540,7 +540,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 linReatilerRoute.setOnClickListener(this);
                 rlDistributor.setOnClickListener(this);
-                getDbstoreData();
                 common_class.getDb_310Data(Rout_List, this);
 
             }
@@ -618,28 +617,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         return strAdd;
     }
 
-    void getDbstoreData() {
-        try {
-            //  JSONArray jsonArray = db.getMasterData(listType);
-            JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = String.valueOf(jsonObject1.optInt("id"));
-                String name = jsonObject1.optString("name");
-                String flag = jsonObject1.optString("FWFlg");
-                Model_Pojo = new Common_Model(id, name, flag);
-                distributor_master.add(Model_Pojo);
-
-
-            }
-
-        } catch (Exception e) {
-
-        }
-
-
-    }
 
 
     /*Route Details*/
@@ -1077,7 +1054,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
                 break;
             case R.id.rl_Distributor:
-                common_class.showCommonDialog(distributor_master, 2, this);
+                common_class.showCommonDialog(common_class.getDistList(), 2, this);
                 break;
             case R.id.copypaste:
                 addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());

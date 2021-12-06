@@ -89,15 +89,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate,OvrAll,
-            txSrvOtlt, txUniOtlt,txClsOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
+    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll,
+            txSrvOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
-    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
+    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
     Common_Model Model_Pojo;
-    List<Common_Model> distributor_master = new ArrayList<>();
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    String Route_id;
-    String Distributor_Id;
     String DCRMode;
     String sDeptType, RetType = "1";
     SharedPreferences CheckInDetails;
@@ -109,9 +106,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    Switch swACOutlet,swOTHOutlet;
+    Switch swACOutlet, swOTHOutlet;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-    int CountUR = 0, CountSR = 0,CountCls=0;
+    int CountUR = 0, CountSR = 0, CountCls = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
@@ -129,7 +126,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         dashboard_route = this;
         StopedUpdate = false;
 
-        ViewDist="";
+        ViewDist = "";
 
         db = new DatabaseHandler(this);
 
@@ -138,7 +135,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-        getDbstoreData();
+
         getSalesCounts();
         JSONObject jParam = new JSONObject();
         try {
@@ -176,7 +173,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
             tvDistributor = findViewById(R.id.tvDistributer);
-            OvrAll=findViewById(R.id.OvrAll);
+            OvrAll = findViewById(R.id.OvrAll);
             textViewname = findViewById(R.id.textViewname);
             ReachedOutlet = findViewById(R.id.ReachedOutlet);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
@@ -350,8 +347,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             tvDistributor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewDist=shared_common_pref.getvalue(Constants.Distributor_Id);
-                    Constants.View_SUMMARY_MODE=ViewDist;
+                    ViewDist = shared_common_pref.getvalue(Constants.Distributor_Id);
+                    Constants.View_SUMMARY_MODE = ViewDist;
                     getSalesCounts();
                     tvDistributor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                     tvDistributor.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -363,9 +360,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             OvrAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewDist="";
+                    ViewDist = "";
                     getSalesCounts();
-                    Constants.View_SUMMARY_MODE="";
+                    Constants.View_SUMMARY_MODE = "";
                     OvrAll.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                     OvrAll.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     tvDistributor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
@@ -373,8 +370,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                 }
             });
-            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
-            {
+            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
                 tvDistributor.setVisibility(View.GONE);
             }
             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
@@ -398,7 +394,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
                 tvDistributor.setText(shared_common_pref.getvalue(Constants.Distributor_name));
-                Distributor_Id = shared_common_pref.getvalue(Constants.Distributor_Id);
                 loadroute();
 
 
@@ -431,11 +426,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         }
                     }
                     Retailer_Modal_ListFilter.clear();
-//                    if (shared_common_pref.getvalue(Constants.Route_Id).equals(""))
-//                        OutletFilter(shared_common_pref.getvalue(Constants.Distributor_Id), "1", true);
-//                    else
-//                        OutletFilter(shared_common_pref.getvalue(Route_Id), "0", true);
-
                     sDeptType = UserDetails.getString("DeptType", "");
                     sDeptType = "1";
                     btnCmbRoute.setVisibility(View.VISIBLE);
@@ -523,7 +513,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     protected void onResume() {
         super.onResume();
-        if (Distributor_Id != null) {
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
         }
     }
@@ -650,24 +640,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 break;
 
             case R.id.ReachedOutlet:
-                //if (Distributor_Id == null || Distributor_Id.equals("")) {
-                /*if (distributor_text.getText().toString().equals("")) {
-                    Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-                } else if (route_text.getText().toString().equals("")) {
-                    Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-                } else {*/
-                // shared_common_pref.save("RouteSelect", Route_id);
-                // shared_common_pref.save("RouteName", route_text.getText().toString());
-                // shared_common_pref.save("Distributor_ID", Distributor_Id);
-                // Shared_Common_Pref.Outler_AddFlag = "1";
                 common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
-
                 overridePendingTransition(R.anim.in, R.anim.out);
-                //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
-                //}
+
                 break;
             case R.id.distributor_text:
-                common_class.showCommonDialog(distributor_master, 2, this);
+                common_class.showCommonDialog(common_class.getDistList(), 2, this);
                 break;
             case R.id.route_text:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
@@ -702,7 +680,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             route_text.setText("");
             shared_common_pref.save(Constants.Route_name, "");
             shared_common_pref.save(Constants.Route_Id, "");
-            Distributor_Id = myDataset.get(position).getId();
             btnCmbRoute.setVisibility(View.VISIBLE);
             distributor_text.setText(myDataset.get(position).getName());
             tvDistributor.setText(myDataset.get(position).getName());
@@ -744,33 +721,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
-
-    void getDbstoreData() {
-        try {
-            // JSONArray jsonArray = db.getMasterData(listType);
-            JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = String.valueOf(jsonObject1.optInt("id"));
-                String name = jsonObject1.optString("name");
-                String flag = jsonObject1.optString("FWFlg");
-                String ETabs = jsonObject1.optString("ETabs");
-                Model_Pojo = new Common_Model(id, name, flag);
-                String Add2 = jsonObject1.optString("Addr2");
-                String Mob = jsonObject1.optString("Mobile");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
-                distributor_master.add(Model_Pojo);
-
-            }
-
-
-        } catch (Exception e) {
-
-        }
-
-
-    }
-
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
@@ -861,8 +811,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     Retailer_Modal_List.get(i).setType("0");
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("0") && ACTrue) CountUR++;
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1") && ACTrue) CountSR++;
-                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("2") && ACTrue) CountCls++;
-                if(ACTrue){
+                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("2") && ACTrue)
+                    CountCls++;
+                if (ACTrue) {
                     Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                 }
             }
@@ -911,7 +862,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 public void onIntentClick(int position) {
                     try {
 
-                        if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
                             Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
@@ -919,8 +870,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
                             Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
-                            Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
-                            Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                          //  Shared_Common_Pref.DistributorCode = shared_common_pref.getvalue(Constants.Distributor_Id);
+                          //  Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
                             // Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
                             // common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());

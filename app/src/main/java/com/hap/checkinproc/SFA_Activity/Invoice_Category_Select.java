@@ -587,8 +587,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         JSONObject OutletItem = new JSONObject();
                         OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
                         OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
-                        OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
+                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
                         OutletItem.put("orderValue", formatter.format(totalvalues));
                         OutletItem.put("CashDiscount", cashDiscount);
 

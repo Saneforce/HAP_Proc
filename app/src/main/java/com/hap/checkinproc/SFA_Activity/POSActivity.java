@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -75,7 +77,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class POSActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class POSActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, View.OnTouchListener {
     //GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -86,9 +88,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext,
-            tvDeliveryDate, tvRetailorPhone, retaileAddress, tvScanBarcode;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
+    TextView Category_Nametext, tvDeliveryDate;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -98,8 +99,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     String TAG = "Order_Category_Select";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose;
-    EditText etCategoryItemSearch;
+    ImageView ivClose, ivScanner;
+    EditText etCategoryItemSearch, etName, etPhone, etAddress;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -130,25 +131,24 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
-            Out_Let_Name = findViewById(R.id.outlet_name);
             Category_Nametext = findViewById(R.id.Category_Nametext);
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
+            rlQtyParent = findViewById(R.id.rlQtyParent);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
 
 
             etCategoryItemSearch = findViewById(R.id.searchView);
-            retaileAddress = findViewById(R.id.retaileAddress);
-            tvRetailorPhone = findViewById(R.id.retailePhoneNum);
             tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
-            tvScanBarcode = findViewById(R.id.tvScanBarcode);
+            ivScanner = findViewById(R.id.ivScanner);
+            etName = findViewById(R.id.edt_name);
+            etPhone = findViewById(R.id.edt_phone);
+            etAddress = findViewById(R.id.edtAddress);
 
-            llCalMob = findViewById(R.id.btnCallMob);
-            llCalMob.setOnClickListener(this);
-            tvScanBarcode.setOnClickListener(this);
+            ivScanner.setOnClickListener(this);
+            rlQtyParent.setOnTouchListener(this);
 
 
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             takeorder.setOnClickListener(this);
@@ -156,7 +156,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -164,8 +163,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
-            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
@@ -187,7 +184,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvDeliveryDate.setOnClickListener(this);
 
 
-
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -206,7 +202,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 }
             });
 
-            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+        /*    String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
 
             if (!Common_Class.isNullOrEmpty(preOrderList)) {
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -334,10 +330,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 }
             }
 
-            Log.v(TAG, " order oncreate:j " + preOrderList);
-
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
-                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
+            Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
@@ -369,6 +362,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         }
     }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -385,6 +379,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
         return super.dispatchTouchEvent(event);
     }
+
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
             String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
@@ -513,7 +508,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
 
         if (Getorder_Array_List.size() == 0)
-            Toast.makeText(getApplicationContext(), "Order is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "POS is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
 
@@ -542,16 +537,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvScanBarcode:
+            case R.id.ivScanner:
                 Intent intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("scan", "scan");
                 startActivity(intent);
                 break;
-            case R.id.btnCallMob:
-                common_class.showCalDialog(POSActivity.this, "Do you want to Call this Outlet?",
-                        tvRetailorPhone.getText().toString().replaceAll(",", ""));
 
-                break;
             case R.id.tvDeliveryDate:
                 Calendar newCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(POSActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -615,7 +606,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         showOrderList();
                     }
                 } catch (Exception e) {
-
+                    Log.v(TAG, e.getMessage());
                 }
                 break;
 
@@ -640,25 +631,19 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                         HeadItem.put("Daywise_Remarks", "");
                         HeadItem.put("UKey", Ukey);
-                        HeadItem.put("orderValue", formatter.format(totalvalues));
-                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();
-                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
-                        OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
-                        OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
-                        OutletItem.put("orderValue", formatter.format(totalvalues));
+                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
+                        OutletItem.put("name", etName.getText().toString());
+                        OutletItem.put("phoneNo", etPhone.getText().toString());
+                        OutletItem.put("address", etAddress.getText().toString());
                         OutletItem.put("CashDiscount", cashDiscount);
                         OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
-                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
-                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                        OutletItem.put("ordertype", "order");
+                        OutletItem.put("ordertype", "pos");
                         OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
                         if (strLoc.length > 0) {
@@ -693,8 +678,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
 
                             JSONArray tax_Details = new JSONArray();
-
-
                             if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
                                     Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
 
@@ -716,18 +699,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             }
 
                             ProdItem.put("TAX_details", tax_Details);
-
                             Order_Details.put(ProdItem);
 
                         }
 
                         for (int i = 0; i < orderTotTax.size(); i++) {
                             JSONObject totTaxObj = new JSONObject();
-
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
                             totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
                             totTaxArr.put(totTaxObj);
-
                         }
 
                         OutletItem.put("TOT_TAX_details", totTaxArr);
@@ -747,10 +727,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     common_class.ProgressdialogShow(0, "");
                                     Log.e("JSON_VALUES", response.body().toString());
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
-                                    if (san.equals("true")) {
+                                    if (jsonObjects.getString("success").equals("true")) {
                                         common_class.CommonIntentwithFinish(Invoice_History.class);
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
@@ -785,7 +763,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void FilterProduct(List<Product_Details_Modal> orderList) {
-        findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
+        findViewById(R.id.llUserDetail).setVisibility(View.GONE);
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
@@ -966,22 +944,34 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SCAN_DATA))) {
+            findViewById(R.id.rlParent).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                moveProductScreen();
+            if (findViewById(R.id.rlParent).getVisibility() == View.VISIBLE) {
+                findViewById(R.id.rlParent).setVisibility(View.GONE);
             } else {
-                common_class.commonDialog(this, SFA_Activity.class, "POS?");
+                if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+                    moveProductScreen();
+                } else {
+                    common_class.commonDialog(this, SFA_Activity.class, "POS?");
 
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }
 
     void moveProductScreen() {
         lin_gridcategory.setVisibility(View.VISIBLE);
-        findViewById(R.id.orderTypesLayout).setVisibility(View.VISIBLE);
+        findViewById(R.id.llUserDetail).setVisibility(View.VISIBLE);
         findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
@@ -989,6 +979,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED TO CART");
         showOrderItemList(selectedPos, "");
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()) {
+            case R.id.rlQtyParent:
+                findViewById(R.id.rlParent).setVisibility(View.GONE);
+                break;
+        }
+        return false;
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
@@ -1097,6 +1097,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
     }
+
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         Context context;
         int CategoryType;
@@ -1493,6 +1494,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
     }
+
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
         Context context;
         private List<Product_Details_Modal> Product_Details_Modalitem;

@@ -266,8 +266,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                     Shared_Common_Pref.Outler_AddFlag = "0";
                                     Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
                                     Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-                                    Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
-                                    Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+//                                    Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
+//                                    Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+                                    shared_common_pref.save(Constants.Distributor_Id,jItm.get("DistCode").getAsString());
+                                    shared_common_pref.save(Constants.Distributor_name,jItm.get("Distributor").getAsString());
                                     //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
                                     //common_class.CommonIntentwithFinish(Route_Product_Info.class);
                                     shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
@@ -437,8 +439,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 Shared_Common_Pref.Outler_AddFlag = "0";
                 Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
                 Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
-                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+//                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
+//                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+                shared_common_pref.save(Constants.Distributor_Id,jItm.get("DistCode").getAsString());
+                shared_common_pref.save(Constants.Distributor_name,jItm.get("Distributor").getAsString());
                 //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
                 //common_class.CommonIntentwithFinish(Route_Product_Info.class);
                 shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());

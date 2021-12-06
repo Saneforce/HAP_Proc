@@ -57,7 +57,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     Common_Model Model_Pojo;
     EditText txSearchRet;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    List<Common_Model> distributor_master = new ArrayList<>();
     DatabaseHandler db;
     String TAG = "OUTLET_INFO_Activity:",viewType="-1";;
     private TextView distributor_text;
@@ -114,7 +113,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
 
-            getDbstoreData();
 
             ImageView backView = findViewById(R.id.imag_back);
             backView.setOnClickListener(new View.OnClickListener() {
@@ -451,34 +449,9 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
                 break;
             case R.id.distributor_text:
-                common_class.showCommonDialog(distributor_master, 2, this);
+                common_class.showCommonDialog(common_class.getDistList(), 2, this);
                 break;
         }
-    }
-
-    void getDbstoreData() {
-        try {
-            //JSONArray jsonArray = db.getMasterData(listType);
-            JSONArray jsonArray = new JSONArray(sharedCommonPref.getvalue(Constants.Distributor_List));
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = String.valueOf(jsonObject1.optInt("id"));
-                String name = jsonObject1.optString("name");
-                String flag = jsonObject1.optString("FWFlg");
-                String ETabs = jsonObject1.optString("ETabs");
-                Model_Pojo = new Common_Model(id, name, flag);
-                String Add2 = jsonObject1.optString("Addr2");
-                String Mob = jsonObject1.optString("Mobile");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
-                distributor_master.add(Model_Pojo);
-
-            }
-
-        } catch (Exception e) {
-
-        }
-
-
     }
 
     @Override

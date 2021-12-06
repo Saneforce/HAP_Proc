@@ -130,7 +130,6 @@
                             android:id="@+id/RegularAmt"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
                             android:layout_marginRight="@dimen/C10dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"

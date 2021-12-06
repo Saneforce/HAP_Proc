@@ -27,6 +27,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -169,7 +170,10 @@ public class QRCodeScanner extends AppCompatActivity {
                                 cameraSource.release();
                                 readFlag = true;
                                 if (getIntent().getStringExtra("scan") != null) {
+                                    Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(QRCodeScanner.this);
+                                    shared_common_pref.save(Constants.SCAN_DATA, intentData.toString());
                                     Toast.makeText(getApplicationContext(), intentData.toString(), Toast.LENGTH_SHORT).show();
+
                                     finish();
                                 } else if (!intentData.equals("")) {
                                     arrSplit = intentData.split(",");

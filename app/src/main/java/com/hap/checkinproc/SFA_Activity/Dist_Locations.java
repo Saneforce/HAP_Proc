@@ -53,8 +53,6 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
     LinearLayout selectdistributor;
     TextView distilatitude, distilongitude, distributor_Name, capturelatlong, submit_button;
     Gson gson;
-    Common_Model Model_Pojo;
-    List<Common_Model> distributor_master = new ArrayList<>();
     Shared_Common_Pref sharedCommonPref;
     String Distributor_Id = "";
     ProgressBar progressbar;
@@ -84,7 +82,6 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
             capturelatlong.setOnClickListener(this);
 
             gson = new Gson();
-            GetJsonData();
             selectdistributor.setOnClickListener(this);
             ImageView backView = findViewById(R.id.imag_back);
             backView.setOnClickListener(new View.OnClickListener() {
@@ -113,26 +110,6 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void GetJsonData() {
-        try {
-            // JSONArray jsonArray = new JSONArray(jsonResponse);
-            JSONArray jsonArray = new JSONArray(sharedCommonPref.getvalue(Constants.Distributor_List));
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = String.valueOf(jsonObject1.optInt("id"));
-                String name = jsonObject1.optString("name");
-                String flag = jsonObject1.optString("FWFlg");
-                String ETabs = jsonObject1.optString("ETabs");
-                Model_Pojo = new Common_Model(id, name, flag);
-                distributor_master.add(Model_Pojo);
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         common_class.dismissCommonDialog();
@@ -146,7 +123,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.selectdistributor:
-                common_class.showCommonDialog(distributor_master, 2, this);
+                common_class.showCommonDialog(common_class.getDistList(), 2, this);
                 break;
             case R.id.submit_button:
                 if (distributor_Name.getText().toString().equalsIgnoreCase("")) {

@@ -149,7 +149,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
                 HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
                 HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("distributorCode", Shared_Common_Pref.DistributorCode);
+                HeadItem.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
 
                 HeadItem.put("outstandingAmt", outstandAmt);
                 HeadItem.put("payMode", payModeLabel);

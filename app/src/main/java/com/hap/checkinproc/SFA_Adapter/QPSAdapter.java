@@ -182,7 +182,7 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
             HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
             HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
 
-            HeadItem.put("distributorcode", Shared_Common_Pref.DistributorCode);
+            HeadItem.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
 
             HeadItem.put("date", Common_Class.GetDatewothouttime());
 

@@ -331,15 +331,15 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
             HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
             HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
 
-            HeadItem.put("distributorcode", Shared_Common_Pref.DistributorCode);
+            HeadItem.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
 
             HeadItem.put("date", Common_Class.GetDatewothouttime());
 
-            HeadItem.put("tagNo", Shared_Common_Pref.Div_Code);
-            HeadItem.put("make", Shared_Common_Pref.Sf_Code);
-            HeadItem.put("coolerType", Shared_Common_Pref.OutletCode);
+            HeadItem.put("tagNo", etTagNo.getText().toString());
+            HeadItem.put("make", etMake.getText().toString());
+            HeadItem.put("coolerType", etCoolerType.getText().toString());
 
-            HeadItem.put("recDate", Shared_Common_Pref.DistributorCode);
+            HeadItem.put("recDate", tvReceivedDate.getText().toString());
             HeadItem.put("cbPurity", cbPurity.isChecked());
 
             HeadItem.put("cbFrontage", cbFrontage.isChecked());

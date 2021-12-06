@@ -57,7 +57,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     private Type userTypeCompetitor;
     private TextView tvSubmit;
     Common_Class common_class;
-
+Shared_Common_Pref sharedCommonPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +68,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
 
         common_class = new Common_Class(this);
+        sharedCommonPref=new Shared_Common_Pref(this);
         common_class.getDataFromApi(Constants.Competitor_List, this, false);
 
 
@@ -181,7 +182,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                             HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
                             HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
                             HeadItem.put("CustName", Shared_Common_Pref.OutletName);
-                            HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
+                            HeadItem.put("StkCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
                             HeadItem.put("Datetime", dateTime);
                             ActivityData.put("Json_Head", HeadItem);
 

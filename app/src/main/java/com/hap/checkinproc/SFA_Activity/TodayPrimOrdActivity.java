@@ -120,6 +120,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+                common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 

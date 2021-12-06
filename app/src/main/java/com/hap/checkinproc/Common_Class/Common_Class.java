@@ -483,7 +483,7 @@ public class Common_Class {
                     case Constants.LEDGER:
                         axnname = "get/outletwiseledger";
                         data.put("SF", Shared_Common_Pref.Sf_Code);
-                        data.put("Stk", Shared_Common_Pref.DistributorCode);
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("FDT", jparam.get("FDate").getAsString());
                         data.put("TDT", jparam.get("TDate").getAsString());
                         break;
@@ -500,7 +500,7 @@ public class Common_Class {
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
-                        data.put("distributorcode", Shared_Common_Pref.DistributorCode);
+                        data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
                     case Rout_List:
                         data.put("Stk", shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
@@ -532,13 +532,13 @@ public class Common_Class {
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
-                        data.put("distributorcode", Shared_Common_Pref.DistributorCode);
+                        data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
 
                     case Constants.OUTSTANDING:
                         axnname = "get/customeroutstanding";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);
-                        data.put("distributorcode", Shared_Common_Pref.DistributorCode);
+                        data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
 
                     case Constants.POP_ENTRY_STATUS:
@@ -548,14 +548,14 @@ public class Common_Class {
 
                     case Constants.TAXList:
                         axnname = "get/producttaxdetails";
-                        data.put("distributorid", Shared_Common_Pref.DistributorCode);
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         data.put("retailorId", Shared_Common_Pref.OutletCode);
                         break;
 
                     case Constants.FreeSchemeDiscList:
                         axnname = "get/secondaryscheme";
-                        data.put("sfCode", Shared_Common_Pref.DistributorCode);
+                        data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         break;
                     case Constants.PRIMARY_SCHEME:
@@ -849,8 +849,6 @@ public class Common_Class {
                 String id = String.valueOf(jsonObject1.optInt("id"));
                 String name = jsonObject1.optString("name");
                 String flag = jsonObject1.optString("FWFlg");
-//                String ETabs = jsonObject1.optString("ETabs");
-//                Model_Pojo = new Common_Model(id, name, flag);
                 String Add2 = jsonObject1.optString("Addr2");
                 String Mob = jsonObject1.optString("Mobile");
                 Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);

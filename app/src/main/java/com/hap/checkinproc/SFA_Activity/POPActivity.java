@@ -146,12 +146,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvPOPViewStatus:
-                tvViewStatus.setVisibility(View.GONE);
-                findViewById(R.id.rlBookingDate).setVisibility(View.GONE);
-                findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
-                findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
-                ivAdd.setVisibility(View.GONE);
-                findViewById(R.id.rlPOPSubmit).setVisibility(View.GONE);
+
                 common_class.getDb_310Data(Constants.POP_ENTRY_STATUS, this);
                 break;
             case R.id.tvBookingDate:
@@ -223,7 +218,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                             HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
                             HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
                             HeadItem.put("CustName", Shared_Common_Pref.OutletName);
-                            HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
+                            HeadItem.put("StkCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                             HeadItem.put("Datetime", Common_Class.GetDate());
                             HeadItem.put("date", tvBookingDate.getText().toString());
                             ActivityData.put("Json_Head", HeadItem);
@@ -316,8 +311,17 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 case Constants.POP_ENTRY_STATUS:
                     JSONObject jsonObject = new JSONObject(apiDataResponse);
                     if (jsonObject.getBoolean("success")) {
+                        tvViewStatus.setVisibility(View.GONE);
+                        findViewById(R.id.rlBookingDate).setVisibility(View.GONE);
+                        findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
+                        findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
+                        ivAdd.setVisibility(View.GONE);
+                        findViewById(R.id.rlPOPSubmit).setVisibility(View.GONE);
                         popStatusAdapter = new POPStatusAdapter(this, jsonObject.getJSONArray("Data"));
                         rvQps.setAdapter(popStatusAdapter);
+                    }
+                    else{
+                        common_class.showMsg(POPActivity.this, jsonObject.getString("Msg"));
                     }
                     break;
                 case Constants.POP_MATERIAL:

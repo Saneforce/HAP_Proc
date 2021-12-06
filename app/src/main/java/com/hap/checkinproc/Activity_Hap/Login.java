@@ -613,7 +613,6 @@ public class Login extends AppCompatActivity {
 
                             Shared_Common_Pref.Sf_Code = response.body().getData().get(0).getDistCode();
                             Shared_Common_Pref.Div_Code = response.body().getData().get(0).getDivisionCode();
-                            Shared_Common_Pref.DistributorCode = response.body().getData().get(0).getDistCode();
 
                             shared_common_pref.save(Shared_Common_Pref.Div_Code, response.body().getData().get(0).getDivisionCode());
                             shared_common_pref.save(Shared_Common_Pref.Sf_Code, response.body().getData().get(0).getDistCode());
