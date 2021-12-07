@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,13 +82,13 @@ import retrofit2.Response;
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
     TextView toolHeader;
     ImageView imgBack;
-    EditText toolSearch ;
+    EditText toolSearch;
     GoogleMap mGoogleMap;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel;
-    LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible,linClsRmks;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, linServiceType;
+    LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible, linClsRmks;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
-            txDelvryType, txOutletType, tvStateName,retailercode;
+            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -97,7 +96,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail,
-            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding,edtClsRetRmk;
+            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -123,11 +122,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
-    CircularProgressButton btnRefLoc,mSubmit;
+    CircularProgressButton btnRefLoc, mSubmit;
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
     private ArrayList<Common_Model> stateList;
+    private ArrayList<Common_Model> serviceTypeList;
+
     private String name = "";
 
 
@@ -182,6 +183,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
             btnRefLoc = findViewById(R.id.btnRefLoc);
+            linServiceType = findViewById(R.id.linear_service_type);
+            tvServiceType = findViewById(R.id.txt_service_type);
+            linServiceType.setOnClickListener(this);
+
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
             if (mapFragment != null) {
@@ -286,6 +291,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             //  getRouteDetails();
             getRetailerClass();
             getRetailerChannel();
+            getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
 
@@ -478,14 +484,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
                     } else if (txOutletType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
-                    } else if(iOutletTyp==2 && edtClsRetRmk.getText().toString().equalsIgnoreCase("")){
+                    } else if (iOutletTyp == 2 && edtClsRetRmk.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Enter the reason for close outlet", Toast.LENGTH_SHORT).show();
                         linClsRmks.requestFocus();
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        if(mSubmit.isAnimating()) return;
+                        if (mSubmit.isAnimating()) return;
                         mSubmit.startAnimation();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -656,6 +662,48 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //    }
 
     /*Route Class*/
+
+
+    public void getServiceTypes(String id) {
+        if (common_class.isNetworkAvailable(this)) {
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", id);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                        try {
+                            Log.v(TAG+"grp", response.body().toString());
+                            JSONArray ProdGroups = new JSONArray(response.body().toString());
+                            serviceTypeList = new ArrayList<>();
+                            serviceTypeList.clear();
+                            for (int i = 0; i < ProdGroups.length(); i++) {
+                                JSONObject obj = ProdGroups.getJSONObject(i);
+                                serviceTypeList.add(new Common_Model(obj.getString("name"), obj.getString("id")));
+                            }
+
+
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
     public void getRetailerClass() {
         try {
             String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\"," +
@@ -804,6 +852,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString() + "'");
+            reportObject.put("serviceType", "'" + tvServiceType.getText().toString() + "'");
             if (edt_outstanding.getText().toString().equals(""))
                 reportObject.put("outstanding_amount", 0);
 
@@ -933,6 +982,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }, dely);
 
     }
+
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         common_class.dismissCommonDialog();
@@ -941,6 +991,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 tvStateName.setText(myDataset.get(position).getName());
                 stateCode = Integer.valueOf(myDataset.get(position).getId());
                 break;
+            case 4:
+                tvServiceType.setText(myDataset.get(position).getName());
+                break;
             case 2:
                 txtRetailerRoute.setText("");
                 routeId = "";
@@ -948,6 +1001,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 common_class.getDb_310Data(Constants.Rout_List, this);
+                getServiceTypes(myDataset.get(position).getId());
                 break;
             case 3:
                 routeId = myDataset.get(position).getId();
@@ -968,7 +1022,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 txOutletType.setText(myDataset.get(position).getName());
                 iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
                 linClsRmks.setVisibility(View.GONE);
-                if(iOutletTyp==2){linClsRmks.setVisibility(View.VISIBLE);}
+                if (iOutletTyp == 2) {
+                    linClsRmks.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
@@ -1041,6 +1097,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.linear_service_type:
+                common_class.showCommonDialog(serviceTypeList, 4, this);
+
+                break;
             case R.id.rl_state:
                 if (stateList == null || stateList.size() == 0)
                     common_class.getDb_310Data(Constants.STATE_LIST, this);

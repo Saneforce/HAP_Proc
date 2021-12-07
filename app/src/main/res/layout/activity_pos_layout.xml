@@ -993,7 +993,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/productname"
+                                    android:id="@+id/tvScanProName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/C5dp"
@@ -1013,7 +1013,7 @@
                                     android:gravity="center_vertical">
 
                                     <ImageView
-                                        android:id="@+id/ivQtyMns"
+                                        android:id="@+id/ivScanQtyMns"
                                         android:layout_width="25dp"
                                         android:layout_height="@dimen/C40dp"
                                         android:padding="6dp"
@@ -1021,8 +1021,8 @@
                                         app:tint="@color/color_red" />
 
                                     <EditText
-                                        android:id="@+id/Qty"
-                                        android:layout_width="40dp"
+                                        android:id="@+id/etScanQty"
+                                        android:layout_width="50dp"
                                         android:layout_height="@dimen/C40dp"
                                         android:layout_alignParentRight="true"
                                         android:background="@color/white"
@@ -1035,11 +1035,11 @@
                                         android:text=""
                                         android:textAlignment="center"
                                         android:textColor="@color/black"
-                                        android:textSize="@dimen/C16dp"
+                                        android:textSize="@dimen/C14dp"
                                         tools:ignore="RtlCompat" />
 
                                     <ImageView
-                                        android:id="@+id/ivQtyPls"
+                                        android:id="@+id/ivScanQtyPls"
                                         android:layout_width="25dp"
                                         android:layout_height="@dimen/C40dp"
                                         android:padding="6dp"
@@ -1051,7 +1051,7 @@
                             </RelativeLayout>
 
                             <TextView
-                                android:id="@+id/MrpRate"
+                                android:id="@+id/tvScanMRP"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_toLeftOf="@+id/llQty"

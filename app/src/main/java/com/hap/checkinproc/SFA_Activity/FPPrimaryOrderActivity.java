@@ -136,7 +136,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             sharedCommonPref = new Shared_Common_Pref(FPPrimaryOrderActivity.this);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
             common_class = new Common_Class(this);
-            getProductDetails();
+            common_class.getProductDetails(this);
 
             categorygrid = findViewById(R.id.category);
             Grpgrid = findViewById(R.id.PGroup);
@@ -354,61 +354,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
         }
     }
 
-    public void getProductDetails() {
-        if (common_class.isNetworkAvailable(this)) {
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                jParam.put("div", UserDetails.getString("Divcode", ""));
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v(TAG, response.toString());
-                        db.deleteMasterData(Constants.ProdGroups_List);
-                        db.addMasterData(Constants.ProdGroups_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v(TAG, ":types:" + response.toString());
-                        db.deleteMasterData(Constants.ProdTypes_List);
-                        db.addMasterData(Constants.ProdTypes_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v(TAG, ":cat:" + response.toString());
-                        db.deleteMasterData(Constants.Category_List);
-                        db.addMasterData(Constants.Category_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
     private void GetJsonData(String jsonResponse, String type, String filter) {
 
         //type =1 product category data values
@@ -444,7 +389,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                     showOrderItemList(selectedPos, "");
                 } else {
                     orderId = "";
-                    // loadData(sharedCommonPref.getvalue(Constants.TodayPrimaryOrderDetails_List));
                     common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
 
                 }
@@ -1318,6 +1262,8 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            common_class.getProductDetails(this);
+            common_class.getDb_310Data(Constants.Primary_Product_List, this);
             common_class.getDb_310Data(Rout_List, this);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 

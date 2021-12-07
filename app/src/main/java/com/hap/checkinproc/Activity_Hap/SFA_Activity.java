@@ -150,8 +150,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         sfa_date = tvDate.getText().toString();
 
-        getProductDetails();
-
+        common_class.getProductDetails(this);
         getNoOrderRemarks();
         showDashboardData();
 
@@ -456,60 +455,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
 
         }
-    }
-
-    public void getProductDetails() {
-        if (common_class.isNetworkAvailable(this)) {
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                jParam.put("div", UserDetails.getString("Divcode", ""));
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("prodGroup:", response.toString());
-                        db.deleteMasterData(Constants.ProdGroups_List);
-                        db.addMasterData(Constants.ProdGroups_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("prodTypes:", response.toString());
-                        db.deleteMasterData(Constants.ProdTypes_List);
-                        db.addMasterData(Constants.ProdTypes_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("TAG", ":cat:" + response.toString());
-                        db.deleteMasterData(Constants.Category_List);
-                        db.addMasterData(Constants.Category_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     public class OutletDashboardInfoAdapter extends RecyclerView.Adapter<OutletDashboardInfoAdapter.MyViewHolder> {

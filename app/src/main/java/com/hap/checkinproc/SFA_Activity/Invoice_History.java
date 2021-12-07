@@ -100,7 +100,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
             CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-            getProductDetails();
+            common_class.getProductDetails(this);
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
             outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -185,70 +185,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
         } catch (Exception e) {
 
-        }
-
-    }
-
-    public void getProductDetails() {
-        if (common_class.isNetworkAvailable(this)) {
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                jParam.put("div", UserDetails.getString("Divcode", ""));
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v(TAG, response.toString());
-                        db.deleteMasterData(Constants.ProdGroups_List);
-                        db.addMasterData(Constants.ProdGroups_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.ProdTypes_List);
-                        db.addMasterData(Constants.ProdTypes_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.Category_List);
-                        db.addMasterData(Constants.Category_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.Product_List);
-                        db.addMasterData(Constants.Product_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
 
     }

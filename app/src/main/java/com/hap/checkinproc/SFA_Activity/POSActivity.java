@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -88,7 +86,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate;
+    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -99,8 +97,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     String TAG = "Order_Category_Select";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose, ivScanner;
-    EditText etCategoryItemSearch, etName, etPhone, etAddress;
+    ImageView ivClose, ivScanner, ivMns, ivPlus;
+    EditText etCategoryItemSearch, etName, etPhone, etAddress, etQty;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -113,6 +111,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private DatePickerDialog fromDatePickerDialog;
     public static POSActivity order_category_select;
     private List<Product_Details_Modal> orderTotTax;
+    private String scanProId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +143,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             etName = findViewById(R.id.edt_name);
             etPhone = findViewById(R.id.edt_phone);
             etAddress = findViewById(R.id.edtAddress);
+
+            tvName = findViewById(R.id.tvScanProName);
+            tvMRP = findViewById(R.id.tvScanMRP);
+            ivPlus = findViewById(R.id.ivScanQtyPls);
+            ivMns = findViewById(R.id.ivScanQtyMns);
+            etQty = findViewById(R.id.etScanQty);
 
             ivScanner.setOnClickListener(this);
             rlQtyParent.setOnTouchListener(this);
@@ -948,14 +953,66 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         super.onRestart();
         if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SCAN_DATA))) {
             findViewById(R.id.rlParent).setVisibility(View.VISIBLE);
+            loadScanData();
         }
+    }
+
+    private void loadScanData() {
+        scanProId = "HAPH23101";
+        tvName.setText("22GM BUTTER CHIPLET");
+        tvMRP.setText("₹72.00");
+
+
+        for (int pm = 0; pm < Product_Modal.size(); pm++) {
+            if (Product_Modal.get(pm).getId().equals(scanProId)) {
+                etQty.setText("" + Product_Modal.get(pm).getQty());
+                break;
+            }
+        }
+
+        ivMns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sVal = etQty.getText().toString();
+                if (sVal.equalsIgnoreCase("")) sVal = "0";
+                if (Integer.parseInt(sVal) > 0) {
+                    etQty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                }
+            }
+        });
+        ivPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sVal = etQty.getText().toString();
+                if (sVal.equalsIgnoreCase("")) sVal = "0";
+                etQty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+            }
+        });
+
+        etQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (findViewById(R.id.rlParent).getVisibility() == View.VISIBLE) {
-                findViewById(R.id.rlParent).setVisibility(View.GONE);
+                updateQtyScanData();
             } else {
                 if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                     moveProductScreen();
@@ -981,11 +1038,42 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         showOrderItemList(selectedPos, "");
     }
 
+    void updateQtyScanData() {
+        findViewById(R.id.rlParent).setVisibility(View.GONE);
+        int qty = Common_Class.isNullOrEmpty(etQty.getText().toString()) ? 0 : Integer.parseInt(etQty.getText().toString());
+        for (int pm = 0; pm < Product_Modal.size(); pm++) {
+            if (Product_Modal.get(pm).getId().equals(scanProId)) {
+                Product_Modal.get(pm).setQty(qty);
+                Product_Modal.get(pm).setAmount(qty * Double.parseDouble(Product_Modal.get(pm).getMRP()));
+
+                sumofTax(Product_Modal, pm);
+            }
+        }
+
+        if (takeorder.getText().toString().equals("PROCEED TO CART")) {
+            mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), selectedPos);
+            recyclerView.setAdapter(mProdct_Adapter);
+        } else {
+
+            Getorder_Array_List = new ArrayList<>();
+            Getorder_Array_List.clear();
+
+            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
+                    Getorder_Array_List.add(Product_Modal.get(pm));
+                }
+            }
+
+            mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.product_pos_pay_recyclerview, getApplicationContext(), -1);
+            recyclerView.setAdapter(mProdct_Adapter);
+        }
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
             case R.id.rlQtyParent:
-                findViewById(R.id.rlParent).setVisibility(View.GONE);
+                updateQtyScanData();
                 break;
         }
         return false;
@@ -1343,29 +1431,20 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount((Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()) -
                                         (Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
-
                                 holder.Free.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getFree());
                                 holder.Disc.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
-
                                 holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
-
-
                             }
                             sumofTax(Product_Details_Modalitem, holder.getAdapterPosition());
                             holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
                             holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getTax()));
-
                             updateToTALITEMUI();
 
                             if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                Log.v(TAG + position, ":OUT:amt:" + amt);
-                                if (amt.equals("₹0.00")) {
-                                    Log.v(TAG + position, ":IN:amt:" + amt);
+                                if (holder.Amount.getText().toString().equals("₹0.00")) {
                                     Product_Details_Modalitem.remove(position);
                                     notifyDataSetChanged();
                                 }
-
                                 showFreeQtyList();
                             }
 
