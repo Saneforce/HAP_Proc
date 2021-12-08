@@ -46,6 +46,7 @@ import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
+import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -311,7 +312,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
                 break;
             case R.id.DistLocation:
-                common_class.CommonIntentwithNEwTask(Dist_Locations.class);
+              //  common_class.CommonIntentwithNEwTask(Dist_Locations.class);
+                common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
+
                 break;
             case R.id.lin_Reports:
                 common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);

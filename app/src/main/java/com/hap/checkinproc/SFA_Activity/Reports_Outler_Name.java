@@ -33,15 +33,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Reports_Outler_Name extends AppCompatActivity {
-    String Scode;
-    String Dcode;
-    String Rf_code;
-    List<Dashboard_View_Model> approvalList;
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    TextView headtext, textViewname;
+    TextView  textViewname;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
 
     Shared_Common_Pref shared_common_pref;
@@ -51,12 +47,9 @@ public class Reports_Outler_Name extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports__outler__name);
         shared_common_pref = new Shared_Common_Pref(this);
-        // ((MyApplication) getApplication()).getNetComponent().inject(this);
         recyclerView = findViewById(R.id.outletrecyclerview);
-        headtext = findViewById(R.id.headtext);
         textViewname = findViewById(R.id.textViewname);
         common_class = new Common_Class(this);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
         //GetAllDetails();
         ImageView backView = findViewById(R.id.imag_back);
@@ -64,14 +57,10 @@ public class Reports_Outler_Name extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-
             }
         });
-
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
-
-
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
         String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
@@ -85,14 +74,7 @@ public class Reports_Outler_Name extends AppCompatActivity {
                 Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName();
                 Intent intent = new Intent(getApplicationContext(), Outlet_Report_View.class);
                 startActivity(intent);
-                       /* Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                        intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_List.get(position).getId()));
-                        intent.putExtra("OutletName", Retailer_Modal_List.get(position).getName());
-                        intent.putExtra("OutletAddress", Retailer_Modal_List.get(position).getListedDrAddress1());
-                        intent.putExtra("OutletMobile", Retailer_Modal_List.get(position).getMobileNumber());
-                        intent.putExtra("OutletRoute", Retailer_Modal_List.get(position).getTownName());
-                        startActivity(intent);
-*/
+
             }
         }));
 
