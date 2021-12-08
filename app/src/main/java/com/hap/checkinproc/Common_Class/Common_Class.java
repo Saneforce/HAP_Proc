@@ -920,7 +920,8 @@ public class Common_Class {
                 String flag = jsonObject1.optString("FWFlg");
                 String Add2 = jsonObject1.optString("Addr2");
                 String Mob = jsonObject1.optString("Mobile");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob);
+                String ERP_Code = jsonObject1.optString("ERP_Code");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob,ERP_Code);
                 distributor_master.add(Model_Pojo);
 
             }

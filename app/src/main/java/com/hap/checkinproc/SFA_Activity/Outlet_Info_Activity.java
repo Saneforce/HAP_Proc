@@ -412,6 +412,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             distributor_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+            sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);

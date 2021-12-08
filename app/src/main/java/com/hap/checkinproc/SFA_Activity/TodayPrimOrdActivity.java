@@ -114,10 +114,11 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 route_text.setText("");
                 sharedCommonPref.save(Constants.Route_name, "");
                 sharedCommonPref.save(Constants.Route_Id, "");
-               // btnCmbRoute.setVisibility(View.VISIBLE);
+                // btnCmbRoute.setVisibility(View.VISIBLE);
                 distributor_text.setText(myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+                sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
                 common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);

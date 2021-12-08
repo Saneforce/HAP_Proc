@@ -279,8 +279,12 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                                 JsonArray res = response.body();
                                 JsonObject jItem = res.get(0).getAsJsonObject();
                                 double ActBAL = 0;
-                                if (jItem.has(String.valueOf(jItem.get("LC_BAL"))) && jItem.has(String.valueOf(jItem.get("LC_BAL") != null)))
+                                try {
                                     ActBAL = jItem.get("LC_BAL").getAsDouble();
+                                } catch (Exception e) {
+                                    common_class.showMsg(FPPrimaryOrderActivity.this, e.getMessage());
+
+                                }
                                 ACBalance = jItem.get("Balance").getAsDouble();
                                 if (ACBalance <= 0) ACBalance = Math.abs(ACBalance);
                                 else ACBalance = 0 - ACBalance;
@@ -1256,12 +1260,14 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             route_text.setText("");
             sharedCommonPref.save(Constants.Route_name, "");
             sharedCommonPref.save(Constants.Route_Id, "");
-           // btnCmbRoute.setVisibility(View.VISIBLE);
+            // btnCmbRoute.setVisibility(View.VISIBLE);
             distributor_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+            sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            getACBalance(0);
             common_class.getProductDetails(this);
             common_class.getDb_310Data(Constants.Primary_Product_List, this);
             common_class.getDb_310Data(Rout_List, this);

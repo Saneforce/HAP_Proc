@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
+    private  String ERP_Code;
     private String QPS_Code;
     private String QPS_Name;
     private int Total_Ltrs;
@@ -59,6 +60,7 @@ public class Common_Model {
         this.flag = flag;
         this.address = address;
         this.phone = phone;
+
     }
 
     public Common_Model(String name, String id, String flag, String address, Integer phone) {
