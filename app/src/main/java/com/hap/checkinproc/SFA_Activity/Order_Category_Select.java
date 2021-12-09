@@ -168,8 +168,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
-            Product_Modal = gson.fromJson(OrdersTable, userType);
 
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA)))
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+            else {
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA), userType);
+
+            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -209,7 +214,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
 
-            if (!Common_Class.isNullOrEmpty(preOrderList)) {
+            if (!Common_Class.isNullOrEmpty(preOrderList)&&Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA))) {
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
                     JSONObject jsonObjectPreOrder = new JSONObject(preOrderList);
                     JSONArray arr = jsonObjectPreOrder.getJSONArray("Data");
@@ -449,7 +454,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         //type =1 product category data values
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
-            Category_Modal.clear();
+            if (type.equals("1")) Category_Modal.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 if (type.equals("1")) {
@@ -927,6 +932,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvTax.setVisibility(View.VISIBLE);
         }
 
+        String data = gson.toJson(Product_Modal);
+        sharedCommonPref.save(Constants.LOC_SECONDARY_DATA, data);
 
     }
 

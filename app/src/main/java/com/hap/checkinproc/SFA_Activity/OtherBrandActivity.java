@@ -268,7 +268,7 @@ Shared_Common_Pref sharedCommonPref;
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         try {
             if (selectedPos >= 0) {
-                common_class.dismissCommonDialog();
+                common_class.dismissCommonDialog(type);
                 Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
                 otherBrandAdapter.notifyData(Getorder_Array_List);
 

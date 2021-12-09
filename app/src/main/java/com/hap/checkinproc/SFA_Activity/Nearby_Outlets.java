@@ -54,6 +54,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
@@ -84,7 +85,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback, Master_Interface {
+public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback, UpdateResponseUI, Master_Interface {
     List<Dashboard_View_Model> approvalList;
     Gson gson;
     private RecyclerView recyclerView, rclRetail;
@@ -255,6 +256,22 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     try {
                         jOutlets = response.body();
+
+                        if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+
+
+                            JsonArray srhOutlets = new JsonArray();
+
+                            for (int sr = 0; sr < jOutlets.size(); sr++) {
+                                JsonObject jItm = jOutlets.get(sr).getAsJsonObject();
+                                if ((shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)
+                                        || (jItm.get("DistCode").getAsString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_Id))))) {
+                                    srhOutlets.add(jItm);
+                                }
+                            }
+
+                            jOutlets = srhOutlets;
+                        }
                         availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
                         recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
                                 getApplicationContext(), new AdapterOnClick() {
@@ -268,9 +285,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                     Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
 //                                    Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
 //                                    Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                                    shared_common_pref.save(Constants.Distributor_Id,jItm.get("DistCode").getAsString());
-                                    shared_common_pref.save(Constants.Distributor_name,jItm.get("Distributor").getAsString());
-                                    //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                                    shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
+                                    shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
+                                    shared_common_pref.save(Constants.DistributorERP, jItm.get("StkERPCode").getAsString());
+//Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
                                     //common_class.CommonIntentwithFinish(Route_Product_Info.class);
                                     shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
                                     shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
@@ -278,9 +296,11 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 //                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
 //                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
 //                                        else
+
+                                    common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
                                     common_class.CommonIntentwithoutFinish(Invoice_History.class);
                                 } catch (Exception e) {
-
+Log.v(TAG+"nearbyOut:",e.getMessage());
                                 }
                             }
                         }));
@@ -425,7 +445,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             JsonObject jItm = jOutlets.get(sr).getAsJsonObject();
             String itmname = jItm.get("Name").getAsString().toUpperCase();
             String sSchText = txSearchRet.getText().toString().toUpperCase();
-            if ((";" + itmname).indexOf(";" + sSchText) > -1) {
+            if (((";" + itmname).indexOf(";" + sSchText) > -1) && (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)
+                    || (jItm.get("DistCode").getAsString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_Id))))) {
                 srhOutlets.add(jItm);
             }
         }
@@ -441,8 +462,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
 //                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
 //                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                shared_common_pref.save(Constants.Distributor_Id,jItm.get("DistCode").getAsString());
-                shared_common_pref.save(Constants.Distributor_name,jItm.get("Distributor").getAsString());
+                shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
+                shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
                 //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
                 //common_class.CommonIntentwithFinish(Route_Product_Info.class);
                 shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
@@ -452,6 +473,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 //                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
 //                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
 //                                        else
+                common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
                 common_class.CommonIntentwithoutFinish(Invoice_History.class);
             }
         }));
@@ -789,6 +811,11 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
     }
 

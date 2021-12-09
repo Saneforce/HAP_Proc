@@ -80,6 +80,9 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
 
                 }
             });
+
+            holder.tvCutoff.setText("Cutoff Time:" + obj.getString("cutoff_time"));
+
         } catch (Exception e) {
             Log.v("primAdapter:", e.getMessage());
         }
@@ -106,7 +109,7 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtOrderDate, txtOrderID, txtValue, Itemcountinvoice;
+        TextView txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, tvCutoff;
         LinearLayout linearLayout, llEdit;
 
 
@@ -118,6 +121,7 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
             linearLayout = itemView.findViewById(R.id.row_report);
             Itemcountinvoice = itemView.findViewById(R.id.Itemcountinvoice);
             llEdit = itemView.findViewById(R.id.llEdit);
+            tvCutoff = itemView.findViewById(R.id.tvCutOffTime);
 
 
         }

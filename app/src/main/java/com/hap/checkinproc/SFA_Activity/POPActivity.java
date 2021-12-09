@@ -287,7 +287,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         if (selectedPos >= 0) {
-            common_class.dismissCommonDialog();
+            common_class.dismissCommonDialog(type);
             popAddList.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(),
                     "", 0, myDataset.get(position).getFlag()));
             popAddAdapter.notifyData(popAddList);

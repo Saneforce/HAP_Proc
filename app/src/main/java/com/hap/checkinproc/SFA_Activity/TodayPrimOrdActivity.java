@@ -108,7 +108,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         switch (type) {
             case 2:
                 route_text.setText("");

@@ -985,7 +985,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
                 tvStateName.setText(myDataset.get(position).getName());

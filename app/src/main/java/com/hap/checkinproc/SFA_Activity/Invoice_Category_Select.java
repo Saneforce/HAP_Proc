@@ -962,7 +962,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         tvPayMode.setText("" + myDataset.get(position).getName());
     }
 
