@@ -3,6 +3,9 @@ package com.hap.checkinproc.SFA_Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,29 +19,37 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.SFA_Adapter.QPSFilesAdapter;
+import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 
+import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.MyViewHolder> {
-    private List<Product_Details_Modal> Product_Details_Modalitem;
+    private List<QPS_Modal> mData;
     private int rowLayout;
     private Context context;
     int selectdPos = -1;
     AlertDialog.Builder builder;
-
+    List<QPS_Modal> qpsModalList = new ArrayList<>();
+    Gson gson;
+    Shared_Common_Pref shared_common_pref;
     public static String TAG = "OtherBrandAdapter";
+    private QPSFilesAdapter qpsFilesAdapter;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView productname, Rate, Amount, Disc, lblAddQty, tvPos;
-
+        public TextView productname, Rate, Amount, Disc, tvPos;
         EditText Qty, etPrice, Free, sku;
         RelativeLayout rlOtherBrand;
-
-        ImageView rlDeleteBrand;
-
+        ImageView rlDeleteBrand, ivCapture;
+        RecyclerView rvFiles;
 
         public MyViewHolder(View view) {
             super(view);
@@ -51,16 +62,19 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
             rlDeleteBrand = view.findViewById(R.id.rlDeleteBrand);
             rlOtherBrand = view.findViewById(R.id.rlOtherBrand);
             tvPos = view.findViewById(R.id.tvOBPos);
-
+            ivCapture = view.findViewById(R.id.ivOBCapture);
+            rvFiles = view.findViewById(R.id.rvOBFiles);
 
         }
     }
 
 
-    public OtherBrandAdapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context) {
-        this.Product_Details_Modalitem = Product_Details_Modalitem;
+    public OtherBrandAdapter(List<QPS_Modal> mData, int rowLayout, Context context) {
+        this.mData = mData;
         this.rowLayout = rowLayout;
         this.context = context;
+        gson = new Gson();
+        shared_common_pref = new Shared_Common_Pref(context);
     }
 
     @Override
@@ -70,8 +84,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
     }
 
 
-    public void notifyData(List<Product_Details_Modal> Product_Details_Modalitem) {
-        this.Product_Details_Modalitem = Product_Details_Modalitem;
+    public void notifyData(List<QPS_Modal> mData) {
+        this.mData = mData;
         notifyDataSetChanged();
     }
 
@@ -79,10 +93,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-
             builder = new AlertDialog.Builder(context);
-
-            Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
+            QPS_Modal Product_Details_Modal = mData.get(position);
 
 
             holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
@@ -101,12 +113,11 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     try {
                         double price = holder.etPrice.getText().toString().equals("") ? 0 : Double.parseDouble(holder.etPrice.getText().toString());
                         int qty = charSequence.toString().equals("") ? 0 : Integer.parseInt(charSequence.toString());
-
                         holder.Amount.setText("₹ " + new DecimalFormat("##0.00").format(qty *
                                 price));
 
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(qty);
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(qty * price);
+                        mData.get(holder.getAdapterPosition()).setQty(qty);
+                        mData.get(holder.getAdapterPosition()).setAmount(qty * price);
                     } catch (Exception e) {
                         Log.v(TAG + " qty:", e.getMessage());
                     }
@@ -154,8 +165,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
                         holder.Amount.setText("₹ " + new DecimalFormat("##0.00").format(qty * price));
 
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(qty * price);
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setPrice(price);
+                        mData.get(holder.getAdapterPosition()).setAmount(qty * price);
+                        mData.get(holder.getAdapterPosition()).setPrice(price);
                     } catch (Exception e) {
                         Log.v(TAG + " :price: ", e.getMessage());
                     }
@@ -176,7 +187,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 
-                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setScheme((charSequence.toString()));
+                    mData.get(holder.getAdapterPosition()).setScheme((charSequence.toString()));
 
 
                 }
@@ -199,7 +210,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     if (charSequence.toString().equals("")) {
 
                     } else {
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setSku((charSequence.toString()));
+                        mData.get(holder.getAdapterPosition()).setSku((charSequence.toString()));
                     }
 
 
@@ -218,16 +229,61 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
                 }
             });
+
+            holder.ivCapture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                        @Override
+                        public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                            try {
+                                qpsModalList.add(new QPS_Modal(fullPath, FileName, (position + "ob~key" + System.currentTimeMillis())));
+
+                                loadFiles(qpsModalList, "" + position + "ob~key");
+
+                                mData.get(position).setFileUrls(loadFiles(qpsModalList, "" + position + "ob~key"));
+
+                                qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
+                                holder.rvFiles.setAdapter(qpsFilesAdapter);
+
+                            } catch (Exception e) {
+                                Log.v(TAG + ":capture:", e.getMessage());
+                            }
+
+                        }
+                    });
+                    Intent intent = new Intent(context, AllowancCapture.class);
+                    intent.putExtra("allowance", "TAClaim");
+                    context.startActivity(intent);
+                }
+            });
         } catch (Exception e) {
-            Log.e("OTHERBRAND_Adapter ", e.getMessage());
+            Log.e(TAG + "OTHERBRAND_Adapter ", e.getMessage());
         }
+    }
+
+    private List<String> loadFiles(List<QPS_Modal> qpsModalList, String key) {
+
+        List<String> filePaths = new ArrayList<>();
+        for (int i = 0; i < qpsModalList.size(); i++) {
+
+            if (qpsModalList.get(i).getFileKey().contains(key)) {
+                File file = new File(qpsModalList.get(i).getFilePath());
+                Uri contentUri = Uri.fromFile(file);
+
+                filePaths.add(String.valueOf(contentUri));
+            }
+        }
+
+
+        return filePaths;
+
     }
 
     @Override
     public int getItemCount() {
-        return Product_Details_Modalitem.size();
+        return mData.size();
     }
-
 
     private void deleteItem(int pos) {
 
@@ -240,10 +296,11 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Product_Details_Modalitem.remove(pos);
+                        mData.remove(pos);
+                        qpsModalList.remove(pos);
 
-                        if (Product_Details_Modalitem.size() == 0) {
-                            Product_Details_Modalitem.add(new Product_Details_Modal("", "", "", 0, 0, 0, ""));
+                        if (mData.size() == 0) {
+                            mData.add(new QPS_Modal("", "", "", 0, 0, 0, ""));
                         }
 
                         notifyDataSetChanged();
@@ -264,7 +321,5 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
         //alert.setTitle("AlertDialogExample");
         alert.show();
     }
-
-
 }
 

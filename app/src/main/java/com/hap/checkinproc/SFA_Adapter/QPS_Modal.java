@@ -6,6 +6,75 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class QPS_Modal {
+
+
+    private String p_id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    private String sku;
+    private double price;
+    @SerializedName("Amount")
+    @Expose
+    private Double Amount;
+    @SerializedName("Qty")
+    @Expose
+    private Integer Qty;
+
+    @SerializedName("Scheme")
+    @Expose
+    private String scheme;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Double getAmount() {
+        return Amount;
+    }
+
+    public void setAmount(Double amount) {
+        Amount = amount;
+    }
+
+    public Integer getQty() {
+        return Qty;
+    }
+
+    public void setQty(Integer qty) {
+        Qty = qty;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+
     public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate, String Status,
                      List<String> fileUrls) {
         this.sNo = sNo;
@@ -16,6 +85,17 @@ public class QPS_Modal {
         this.receivedDate = receivedDate;
         this.Status = Status;
         this.fileUrls = fileUrls;
+    }
+
+
+    public QPS_Modal(String p_id, String name, String sku, double price, int Qty, double amount, String scheme) {
+        this.p_id = p_id;
+        this.name = name;
+        this.sku = sku;
+        this.price = price;
+        this.Qty = Qty;
+        this.scheme = scheme;
+        this.Amount = amount;
     }
 
     @SerializedName("id")
@@ -145,5 +225,13 @@ public class QPS_Modal {
 
     public void setFileUrls(List<String> fileUrls) {
         this.fileUrls = fileUrls;
+    }
+
+    public String getP_id() {
+        return p_id;
+    }
+
+    public void setP_id(String p_id) {
+        this.p_id = p_id;
     }
 }
