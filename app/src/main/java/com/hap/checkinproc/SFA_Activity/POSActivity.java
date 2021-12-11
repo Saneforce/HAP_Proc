@@ -168,6 +168,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
+            common_class.getProductDetails(this);
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
@@ -952,24 +953,33 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     protected void onRestart() {
         super.onRestart();
         if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SCAN_DATA))) {
-            findViewById(R.id.rlParent).setVisibility(View.VISIBLE);
             loadScanData();
         }
     }
 
     private void loadScanData() {
-        scanProId = "HAPH23101";
+        //   scanProId = sharedCommonPref.getvalue(Constants.SCAN_DATA));
         tvName.setText("22GM BUTTER CHIPLET");
         tvMRP.setText("₹72.00");
 
-
+        scanProId = "";
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
-            if (Product_Modal.get(pm).getId().equals(scanProId)) {
+
+            if (!Common_Class.isNullOrEmpty(Product_Modal.get(pm).getBar_Code()) && !Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SCAN_DATA)) && Product_Modal.get(pm).getBar_Code().equals(sharedCommonPref.getvalue(Constants.SCAN_DATA))) {
+                scanProId = Product_Modal.get(pm).getId();
                 etQty.setText("" + Product_Modal.get(pm).getQty());
+                tvName.setText(Product_Modal.get(pm).getName());
+                tvMRP.setText("₹" + Product_Modal.get(pm).getMRP());
                 break;
             }
         }
 
+        if (scanProId.equals("")) {
+            common_class.showMsg(this, "No Products Found");
+        } else {
+            findViewById(R.id.rlParent).setVisibility(View.VISIBLE);
+
+        }
         ivMns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1039,6 +1049,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     void updateQtyScanData() {
+        sharedCommonPref.clear_pref(Constants.SCAN_DATA);
         findViewById(R.id.rlParent).setVisibility(View.GONE);
         int qty = Common_Class.isNullOrEmpty(etQty.getText().toString()) ? 0 : Integer.parseInt(etQty.getText().toString());
         for (int pm = 0; pm < Product_Modal.size(); pm++) {

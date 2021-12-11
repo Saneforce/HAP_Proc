@@ -955,11 +955,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
                     ResetSubmitBtn(0);
+                    common_class.showMsg(AddNewRetailer.this,t.getMessage());
 
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+            common_class.showMsg(this,e.getMessage());
             ResetSubmitBtn(2);
         }
     }

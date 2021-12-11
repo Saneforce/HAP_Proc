@@ -30,11 +30,13 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -199,6 +201,21 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                                 ProdItem.put("Price", submitBrandList.get(z).getPrice());
                                 ProdItem.put("Amt", submitBrandList.get(z).getAmount());
                                 ProdItem.put("Sch", submitBrandList.get(z).getScheme());
+
+                                JSONArray fileArr = new JSONArray();
+                                if (submitBrandList.get(z).getFileUrls() != null &&
+                                        submitBrandList.get(z).getFileUrls().size() > 0) {
+
+                                    for (int i = 0; i < submitBrandList.get(z).getFileUrls().size(); i++) {
+                                        JSONObject fileData = new JSONObject();
+                                        File file = new File(submitBrandList.get(z).getFileUrls().get(i));
+                                        fileData.put("ob_filename", file.getName());
+                                        fileArr.put(fileData);
+
+                                    }
+                                }
+
+                                ProdItem.put("file_Details", fileArr);
                                 Order_Details.put(ProdItem);
                             }
                             ActivityData.put("Entry_Details", Order_Details);
@@ -234,6 +251,22 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                                 Log.e("SUBMIT_VALUE", "ERROR");
                             }
                         });
+
+
+                        for (int i = 0; i < submitBrandList.size(); i++) {
+
+                            for (int j = 0; j < submitBrandList.get(i).getFileUrls().size(); j++) {
+                                String filePath = submitBrandList.get(i).getFileUrls().get(j);
+                                File file = new File(filePath);
+                                Intent mIntent = new Intent(OtherBrandActivity.this, FileUploadService.class);
+                                mIntent.putExtra("mFilePath", filePath);
+                                mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
+                                mIntent.putExtra("FileName", file.getName());
+                                mIntent.putExtra("Mode", "OB");
+                                FileUploadService.enqueueWork(OtherBrandActivity.this, mIntent);
+
+                            }
+                        }
 
                     }
 

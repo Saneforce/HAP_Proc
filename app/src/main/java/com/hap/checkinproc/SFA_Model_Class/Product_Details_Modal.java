@@ -10,6 +10,10 @@ public class Product_Details_Modal {
     @SerializedName("Package")
     @Expose
     private String Package;
+
+    @SerializedName("Bar_Code")
+    @Expose
+    private String Bar_Code;
     @SerializedName("MRP")
     @Expose
     private String MRP;
@@ -288,7 +292,7 @@ public class Product_Details_Modal {
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, Double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
-                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount,double tax) {
+                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax) {
         this.id = id;
         this.name = name;
         this.productCatCode = productCatCode;
@@ -304,7 +308,7 @@ public class Product_Details_Modal {
         this.Amount = Amount;
         this.productDetailsModal = productDetailsModal;
         this.PaidAmount = PaidAmount;
-        this.tax=tax;
+        this.tax = tax;
     }
 
     public Product_Details_Modal(String id, String name, String sku, double price, int Qty, double amount, String scheme) {
@@ -583,5 +587,13 @@ public class Product_Details_Modal {
 
     public void setPaidAmount(String paidAmount) {
         PaidAmount = paidAmount;
+    }
+
+    public String getBar_Code() {
+        return Bar_Code;
+    }
+
+    public void setBar_Code(String bar_Code) {
+        Bar_Code = bar_Code;
     }
 }

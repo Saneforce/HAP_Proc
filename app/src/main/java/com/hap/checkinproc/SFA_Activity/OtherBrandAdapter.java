@@ -36,9 +36,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
     private List<QPS_Modal> mData;
     private int rowLayout;
     private Context context;
-    int selectdPos = -1;
     AlertDialog.Builder builder;
-    List<QPS_Modal> qpsModalList = new ArrayList<>();
     Gson gson;
     Shared_Common_Pref shared_common_pref;
     public static String TAG = "OtherBrandAdapter";
@@ -141,7 +139,6 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                 public void onClick(View v) {
                     try {
 
-                        selectdPos = position;
                         OtherBrandActivity.otherBrandActivity.showBrandDialog(position);
 
 
@@ -237,11 +234,15 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                         @Override
                         public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
                             try {
-                                qpsModalList.add(new QPS_Modal(fullPath, FileName, (position + "ob~key" + System.currentTimeMillis())));
 
-                                loadFiles(qpsModalList, "" + position + "ob~key");
+                                List<String> list = new ArrayList<>();
+                                File file = new File(fullPath);
+                                Uri contentUri = Uri.fromFile(file);
 
-                                mData.get(position).setFileUrls(loadFiles(qpsModalList, "" + position + "ob~key"));
+                                if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
+                                    list = (mData.get(position).getFileUrls());
+                                list.add(contentUri.toString());
+                                mData.get(holder.getAdapterPosition()).setFileUrls(list);
 
                                 qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
                                 holder.rvFiles.setAdapter(qpsFilesAdapter);
@@ -257,28 +258,17 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     context.startActivity(intent);
                 }
             });
+
+
+            qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
+            holder.rvFiles.setAdapter(qpsFilesAdapter);
+
         } catch (Exception e) {
             Log.e(TAG + "OTHERBRAND_Adapter ", e.getMessage());
         }
     }
 
-    private List<String> loadFiles(List<QPS_Modal> qpsModalList, String key) {
 
-        List<String> filePaths = new ArrayList<>();
-        for (int i = 0; i < qpsModalList.size(); i++) {
-
-            if (qpsModalList.get(i).getFileKey().contains(key)) {
-                File file = new File(qpsModalList.get(i).getFilePath());
-                Uri contentUri = Uri.fromFile(file);
-
-                filePaths.add(String.valueOf(contentUri));
-            }
-        }
-
-
-        return filePaths;
-
-    }
 
     @Override
     public int getItemCount() {
@@ -297,7 +287,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     public void onClick(DialogInterface dialog, int id) {
 
                         mData.remove(pos);
-                        qpsModalList.remove(pos);
+                       // removeFiles(qpsModalList, "" + pos + "ob~key");
 
                         if (mData.size() == 0) {
                             mData.add(new QPS_Modal("", "", "", 0, 0, 0, ""));

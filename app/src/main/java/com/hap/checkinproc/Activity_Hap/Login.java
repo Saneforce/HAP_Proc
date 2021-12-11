@@ -48,6 +48,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
@@ -584,6 +585,9 @@ public class Login extends AppCompatActivity {
         // eMail = "rajkumar@hap.in";
         // eMail = "pachamuthu.m@hap.in";
         // eMail="akshay.r@hap.in";
+        eMail = "1025751@hap.in";//test
+
+        eMail = "1014700@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
@@ -596,13 +600,14 @@ public class Login extends AppCompatActivity {
 
                         if (response.body().getData().get(0).getLoginType() != null &&
                                 response.body().getData().get(0).getLoginType().equals("Distributor")) {
-
+                            Gson gson = new Gson();
                             shared_common_pref.save(Constants.Distributor_Id, response.body().getData().get(0).getDistCode());
                             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.body().getData().get(0).getDistCode());
                             shared_common_pref.save(Constants.Distributor_name, response.body().getData().get(0).getStockist_Name());
                             shared_common_pref.save(Constants.Distributor_phone, response.body().getData().get(0).getStockist_Mobile());
                             shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                             shared_common_pref.save(Constants.CUTOFF_TIME, response.body().getData().get(0).getCutoffTime());
+                            shared_common_pref.save(Constants.SlotTime, gson.toJson(response.body().getData().get(0).getSlotTime()));
                             shared_common_pref.save(Constants.DistributorERP, response.body().getData().get(0).getERP_Code());
                             shared_common_pref.save(Constants.DistributorAdd, response.body().getData().get(0).getStockist_Address());
                             Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
@@ -774,7 +779,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onFailure(Call<Model> call, Throwable t) {
 
-                Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 try {
                     mProgress.dismiss();
                 } catch (Exception e) {

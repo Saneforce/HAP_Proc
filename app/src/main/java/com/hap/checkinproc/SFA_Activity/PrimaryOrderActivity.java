@@ -51,6 +51,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
+import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
@@ -237,8 +238,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             handler.postDelayed(new Runnable() {
                 public void run() {
+                    findNearCutOfftime();
                     tvTimer.setText(Common_Class.GetTime() + "   /   " + sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
                     handler.postDelayed(this, 1000);
+
                 }
             }, 1000);
 
@@ -433,6 +436,41 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         else
             FilterProduct();
 
+    }
+
+    void findNearCutOfftime() {
+        try {
+            Type type = new TypeToken<ArrayList<Datum>>() {
+            }.getType();
+            List<Datum> slotList = gson.fromJson(sharedCommonPref.getvalue(Constants.SlotTime), type);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+            long val = 0;
+            String time = "";
+            for (int i = 0; i < slotList.size(); i++) {
+                Date d1 = sdf.parse(Common_Class.GetTime());
+                Date d2 = sdf.parse(slotList.get(i).getTm());
+                long elapsed = d2.getTime() - d1.getTime();
+                Log.v(TAG, "Elapse:" + elapsed + ":val" + val);
+                if ((val == 0 && elapsed > 0) || (elapsed < val && elapsed > 0)) {
+                    val = elapsed;
+                    time = slotList.get(i).getTm();
+                }
+
+                if (!Common_Class.isNullOrEmpty(time))
+                    sharedCommonPref.save(Constants.CUTOFF_TIME, time);
+                else if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME))) {
+                    sharedCommonPref.save(Constants.CUTOFF_TIME, "--:--:--");
+
+                }
+
+
+            }
+
+        } catch (Exception e) {
+
+        }
     }
 
     public void SubmitPrimaryOrder() {
