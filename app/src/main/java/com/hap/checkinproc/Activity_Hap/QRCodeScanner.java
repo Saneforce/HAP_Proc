@@ -172,7 +172,7 @@ public class QRCodeScanner extends AppCompatActivity {
                                 if (getIntent().getStringExtra("scan") != null) {
                                     Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(QRCodeScanner.this);
                                     shared_common_pref.save(Constants.SCAN_DATA, intentData.toString());
-                                    Toast.makeText(getApplicationContext(), intentData.toString(), Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(getApplicationContext(), intentData.toString(), Toast.LENGTH_SHORT).show();
 
                                     finish();
                                 } else if (!intentData.equals("")) {

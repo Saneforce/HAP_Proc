@@ -1238,6 +1238,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
+                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getBar_Code()))
+                    Log.v(TAG, "name:" + Product_Details_Modal.getName() + " :code:" + Product_Details_Modal.getBar_Code());
 
                 if (CategoryType >= 0) {
 

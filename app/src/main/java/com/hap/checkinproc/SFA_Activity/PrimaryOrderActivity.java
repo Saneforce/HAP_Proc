@@ -292,20 +292,24 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                             try {
                                 JsonArray res = response.body();
-                                JsonObject jItem = res.get(0).getAsJsonObject();
-                                double ActBAL = jItem.get("LC_BAL").getAsDouble();
-                                ACBalance = jItem.get("Balance").getAsDouble();
-                                if (ACBalance <= 0) ACBalance = Math.abs(ACBalance);
-                                else ACBalance = 0 - ACBalance;
-                                if (ActBAL <= 0) ActBAL = Math.abs(ActBAL);
-                                else ActBAL = 0 - ActBAL;
-                                NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+                                try {
+                                    JsonObject jItem = res.get(0).getAsJsonObject();
+                                    double ActBAL = jItem.get("LC_BAL").getAsDouble();
+                                    ACBalance = jItem.get("Balance").getAsDouble();
+                                    if (ACBalance <= 0) ACBalance = Math.abs(ACBalance);
+                                    else ACBalance = 0 - ACBalance;
+                                    if (ActBAL <= 0) ActBAL = Math.abs(ActBAL);
+                                    else ActBAL = 0 - ActBAL;
+                                    NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
 
-                                // tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
-                                tvACBal.setText(format1.format(ACBalance));
-                                txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
-                                txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
-                                txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
+                                    // tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                    tvACBal.setText(format1.format(ACBalance));
+                                    txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                    txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
+                                    txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
+                                } catch (Exception e) {
+
+                                }
                                 if (Mode == 1) {
                                     SubmitPrimaryOrder();
                                 }
@@ -443,7 +447,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             Type type = new TypeToken<ArrayList<Datum>>() {
             }.getType();
             List<Datum> slotList = gson.fromJson(sharedCommonPref.getvalue(Constants.SlotTime), type);
-
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
             long val = 0;
@@ -452,20 +455,21 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 Date d1 = sdf.parse(Common_Class.GetTime());
                 Date d2 = sdf.parse(slotList.get(i).getTm());
                 long elapsed = d2.getTime() - d1.getTime();
-                Log.v(TAG, "Elapse:" + elapsed + ":val" + val);
+                Log.v(TAG + "time:" + slotList.get(i).getTm(), "Elapse:" + elapsed + ":val" + val);
                 if ((val == 0 && elapsed > 0) || (elapsed < val && elapsed > 0)) {
                     val = elapsed;
                     time = slotList.get(i).getTm();
                 }
+            }
 
-                if (!Common_Class.isNullOrEmpty(time))
-                    sharedCommonPref.save(Constants.CUTOFF_TIME, time);
-                else if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME))) {
-                    sharedCommonPref.save(Constants.CUTOFF_TIME, "--:--:--");
+            if (slotList != null && slotList.size() > 0 && time.equals("")) {
+                time = slotList.get(0).getTm();
+            }
 
-                }
-
-
+            if (!Common_Class.isNullOrEmpty(time))
+                sharedCommonPref.save(Constants.CUTOFF_TIME, time);
+            else if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME))) {
+                sharedCommonPref.save(Constants.CUTOFF_TIME, "--:--:--");
             }
 
         } catch (Exception e) {
@@ -480,7 +484,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
             long elapsed = d2.getTime() - d1.getTime();
             if (ACBalance >= totalvalues) {
-                if (elapsed >= 0) {
+                if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME)) ||
+                        sharedCommonPref.getvalue(Constants.CUTOFF_TIME).equals("--:--:--")) {
+                    ResetSubmitBtn(0);
+                    common_class.showMsg(this, "Time UP...");
+                } else {
                     String sLoc = sharedCommonPref.getvalue("CurrLoc");
                     if (sLoc.equalsIgnoreCase("")) {
                         new LocationFinder(getApplication(), new LocationEvents() {
@@ -495,9 +503,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         SaveOrder();
                     }
 
-                } else {
-                    ResetSubmitBtn(0);
-                    common_class.showMsg(this, "Time UP...");
                 }
             } else {
                 ResetSubmitBtn(0);
@@ -735,7 +740,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                     ResetSubmitBtn(1);
                                     common_class.showMsg(PrimaryOrderActivity.this, jsonObjects.getString("Msg"));
                                     if (jsonObjects.getString("success").equals("true")) {
-                                        finish();
+                                        sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                                        common_class.CommonIntentwithFinish(SFA_Activity.class);
                                     }
 
                                 } catch (Exception e) {
@@ -1068,7 +1074,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         try {
             switch (key) {
                 case Constants.PrePrimaryOrderQty:
-                    loadData(apiDataResponse);
+                    if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
+                        ResetSubmitBtn(0);
+                        common_class.showMsg(PrimaryOrderActivity.this, "No Records Found.");
+                    } else
+                        loadData(apiDataResponse);
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     loadData(apiDataResponse);

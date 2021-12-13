@@ -323,11 +323,13 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 Date d2 = sdf.parse(cutoff_time);
                 long elapsed = d2.getTime() - d1.getTime();
                 if (elapsed >= 0) {
+                    sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
                     Intent intent = new Intent(this, PrimaryOrderActivity.class);
                     intent.putExtra(Constants.ORDER_ID, orderNo);
                     Shared_Common_Pref.TransSlNo = orderNo;
                     startActivity(intent);
                     overridePendingTransition(R.anim.in, R.anim.out);
+
                 } else {
                     common_class.showMsg(this, "Time UP...");
                 }

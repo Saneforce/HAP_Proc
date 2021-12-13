@@ -214,7 +214,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
 
-            if (!Common_Class.isNullOrEmpty(preOrderList)&&Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA))) {
+            if (!Common_Class.isNullOrEmpty(preOrderList) && Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA))) {
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
                     JSONObject jsonObjectPreOrder = new JSONObject(preOrderList);
                     JSONArray arr = jsonObjectPreOrder.getJSONArray("Data");
@@ -747,6 +747,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
+                                        sharedCommonPref.clear_pref(Constants.LOC_SECONDARY_DATA);
                                         common_class.CommonIntentwithFinish(Invoice_History.class);
                                     }
                                     common_class.showMsg(Order_Category_Select.this, jsonObjects.getString("Msg"));
