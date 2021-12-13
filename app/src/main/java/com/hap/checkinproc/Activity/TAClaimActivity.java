@@ -2072,6 +2072,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             txEligDt.setText(sadt[2]+"/"+sadt[1]+"/"+sadt[0]);
             TextCheckInDate.setText(ChoosedDate);
             ldg_coutDt.setText(ChoosedDate);
+            DateTime=ChoosedDate;
             CInDate=ChoosedDate;
             COutDate=ChoosedDate;
 

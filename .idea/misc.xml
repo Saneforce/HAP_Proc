@@ -182,6 +182,7 @@
         <entry key="app/src/main/res/layout/activity_t_a_claim.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/activity_t_a_view_status.xml" value="0.11296296296296296" />
         <entry key="app/src/main/res/layout/activity_t_l_cliam__apprval.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/activity_view_t_a_status.xml" value="0.1" />
         <entry key="app/src/main/res/layout/adapter_primary_pay_layout.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/adapter_primary_product.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/category_order_horizantal_universe_gridview.xml" value="0.2078125" />

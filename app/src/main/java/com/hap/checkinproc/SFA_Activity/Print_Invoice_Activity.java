@@ -345,8 +345,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             // create a new document
             PdfDocument document = new PdfDocument();
-
-
             int widthSize = 600;
             // crate a page description
             PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, hgt, 1).create();
