@@ -132,7 +132,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         if (type == 2) {
             route_text.setText("");
             sharedCommonPref.save(Constants.Route_Id, "");

@@ -536,6 +536,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 });
                 DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                 Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                //TA claim
                 stat.putExtra("position", txtLodgUKey.getText().toString());
                 stat.putExtra("headTravel", "LOD");
                 stat.putExtra("mode", "Room");

@@ -1,112 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
-    <include layout="@layout/sfatoolbar"></include>
-
-    <include layout="@layout/procuct_category_types"></include>
-
-
-    <RelativeLayout
-        android:id="@+id/more_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/C10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/outlet_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C15dp"
-            android:gravity="center_vertical"
-            android:text="QPS"
-            android:textColor="@color/black"
-            android:textSize="17dp"
-            android:textStyle="bold" />
-
-        <TextView
-
-            android:id="@+id/tvQPSViewStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/C10dp"
-            android:gravity="center_vertical"
-            android:text="View Status"
-            android:textColor="@color/black"
-            android:textSize="17dp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/Category_Nametext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/C10dp"
-        android:layout_marginTop="@dimen/C10dp"
-        android:ellipsize="end"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:visibility="visible" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+
+        <include layout="@layout/sfatoolbar"></include>
+
+        <include layout="@layout/procuct_category_types"></include>
+
+
+        <RelativeLayout
+            android:id="@+id/more_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/C10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/outlet_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C15dp"
+                android:gravity="center_vertical"
+                android:text="QPS"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
+            <TextView
+
+                android:id="@+id/tvQPSViewStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/C10dp"
+                android:gravity="center_vertical"
+                android:text="View Status"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/Category_Nametext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:layout_marginTop="@dimen/C10dp"
+            android:ellipsize="end"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.9">
+            android:layout_weight="1">
 
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="@dimen/C10dp"
+                    app:cardCornerRadius="@dimen/C10dp">
 
-                    <androidx.cardview.widget.CardView
+                    <LinearLayout
+                        android:id="@+id/llQPSStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/C10dp"
-                        app:cardCornerRadius="@dimen/C10dp">
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
 
                         <LinearLayout
-                            android:id="@+id/llQPSStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C10dp"
-                            android:orientation="vertical"
-                            android:visibility="visible">
+                            android:orientation="vertical">
 
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="Other Brand (ltr)" />
+
+                            <EditText
+                                android:id="@+id/etQPSotherBrand"
+                                style="@style/TextStyle"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/textbox_bg"
+                                android:digits="0123456789."
+                                android:elevation="5dp"
+                                android:hint="Enter value here"
+                                android:inputType="numberDecimal"
+                                android:padding="@dimen/C8dp" />
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="HAP Brand (ltr)" />
+
+                            <TextView
+
+                                android:id="@+id/tvQPSHapBrand"
+                                style="@style/TextStyle"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:padding="@dimen/C8dp" />
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="New Order (ltr)" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
 
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:drawableRight="@drawable/mandatory"
-                                    android:drawablePadding="@dimen/C3dp"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="Other Brand (ltr)" />
+                                >
 
                                 <EditText
-                                    android:id="@+id/etQPSotherBrand"
+                                    android:id="@+id/etNewOrder"
                                     style="@style/TextStyle"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:background="@drawable/textbox_bg"
                                     android:digits="0123456789."
                                     android:elevation="5dp"
@@ -114,290 +170,221 @@
                                     android:inputType="numberDecimal"
                                     android:padding="@dimen/C8dp" />
 
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
+                                <ImageView
+                                    android:id="@+id/ivQPSComboData"
                                     style="@style/TextStyle"
-                                    android:drawableRight="@drawable/mandatory"
-                                    android:drawablePadding="@dimen/C3dp"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="HAP Brand (ltr)" />
-
-                                <TextView
-
-                                    android:id="@+id/tvQPSHapBrand"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:background="@drawable/textbox_bg"
-                                    android:elevation="5dp"
-                                    android:padding="@dimen/C8dp" />
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:drawableRight="@drawable/mandatory"
-                                    android:drawablePadding="@dimen/C3dp"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="New Order (ltr)" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-
-                                    >
-
-                                    <EditText
-                                        android:id="@+id/etNewOrder"
-                                        style="@style/TextStyle"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/textbox_bg"
-                                        android:digits="0123456789."
-                                        android:elevation="5dp"
-                                        android:hint="Enter value here"
-                                        android:inputType="numberDecimal"
-                                        android:padding="@dimen/C8dp" />
-
-                                    <ImageView
-                                        android:id="@+id/ivQPSComboData"
-                                        style="@style/TextStyle"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="0.1"
-                                        android:scaleType="centerInside"
-                                        android:src="@drawable/eye" />
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:drawableRight="@drawable/mandatory"
-                                    android:drawablePadding="@dimen/C3dp"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="Period (days)" />
-
-                                <TextView
-                                    android:id="@+id/tvQPSPeriodDays"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:background="@drawable/textbox_bg"
-                                    android:elevation="5dp"
-                                    android:padding="@dimen/C8dp" />
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:drawableRight="@drawable/mandatory"
-                                    android:drawablePadding="@dimen/C3dp"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="Gift" />
-
-                                <TextView
-                                    android:id="@+id/tvQPSGift"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:background="@drawable/textbox_bg"
-                                    android:elevation="5dp"
-                                    android:padding="@dimen/C8dp" />
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="@dimen/C8dp">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1">
-
-                                        <RelativeLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content">
-
-                                            <TextView
-                                                style="@style/TextStyle"
-                                                android:layout_weight="1"
-                                                android:drawableRight="@drawable/mandatory"
-                                                android:drawablePadding="@dimen/C3dp"
-                                                android:text="Acheived" />
-
-                                        </RelativeLayout>
-                                    </LinearLayout>
-
-
-                                    <LinearLayout
-                                       android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1">
-
-                                        <RelativeLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content">
-
-                                            <TextView
-                                                style="@style/TextStyle"
-                                                android:layout_weight="1"
-                                                android:drawableRight="@drawable/mandatory"
-                                                android:drawablePadding="@dimen/C3dp"
-                                                android:text="Target" />
-
-                                        </RelativeLayout>
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvQpsCurrentAcheive"
-                                        style="@style/TextStyle"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/textbox_bg"
-                                        android:elevation="5dp"
-                                        android:padding="@dimen/C8dp" />
-
-                                    <TextView
-                                        android:id="@+id/tvQpsAcheive"
-                                        style="@style/TextStyle"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/textbox_bg"
-                                        android:elevation="5dp"
-                                        android:padding="@dimen/C8dp" />
-
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:drawableRight="@drawable/mandatory"
-                                    android:drawablePadding="@dimen/C3dp"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="Booking Date" />
-
-                                <TextView
-                                    android:id="@+id/etQPSBookingDate"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:background="@drawable/textbox_bg"
-                                    android:elevation="5dp"
-                                    android:hint="Enter date here"
-                                    android:padding="@dimen/C8dp" />
-
-
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0.1"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/eye" />
                             </LinearLayout>
 
 
                         </LinearLayout>
+
 
                         <LinearLayout
-                            android:id="@+id/llQPSRequestStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                            android:orientation="vertical">
 
                             <TextView
-                                android:backgroundTint="#2a9945"
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="Period (days)" />
 
+                            <TextView
+                                android:id="@+id/tvQPSPeriodDays"
+                                style="@style/TextStyle"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/button_yellow"
-                                android:gravity="center"
-                                android:padding="@dimen/C10dp"
-                                android:text="QPS Request Status"
-                                android:textAllCaps="true"
-                                android:textColor="@color/color_white"
-                                android:textSize="@dimen/C14dp"
-                                android:textStyle="bold" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rvQps"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/C10dp"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-
-                            </androidx.recyclerview.widget.RecyclerView>
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:padding="@dimen/C8dp" />
 
 
                         </LinearLayout>
-                    </androidx.cardview.widget.CardView>
 
 
-                </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-        <RelativeLayout
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="Gift" />
 
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1">
+                            <TextView
+                                android:id="@+id/tvQPSGift"
+                                style="@style/TextStyle"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:padding="@dimen/C8dp" />
 
-            <Button
-                android:id="@+id/btnSubmit"
-                style="@style/BottomButton"
-                android:layout_alignParentBottom="true"
-                android:text="Submit"/>
-        </RelativeLayout>
 
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingTop="@dimen/C8dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            style="@style/TextStyle"
+                                            android:layout_weight="1"
+                                            android:drawableRight="@drawable/mandatory"
+                                            android:drawablePadding="@dimen/C3dp"
+                                            android:text="Acheived" />
+
+                                    </RelativeLayout>
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            style="@style/TextStyle"
+                                            android:layout_weight="1"
+                                            android:drawableRight="@drawable/mandatory"
+                                            android:drawablePadding="@dimen/C3dp"
+                                            android:text="Target" />
+
+                                    </RelativeLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvQpsCurrentAcheive"
+                                    style="@style/TextStyle"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/textbox_bg"
+                                    android:elevation="5dp"
+                                    android:padding="@dimen/C8dp" />
+
+                                <TextView
+                                    android:id="@+id/tvQpsAcheive"
+                                    style="@style/TextStyle"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/textbox_bg"
+                                    android:elevation="5dp"
+                                    android:padding="@dimen/C8dp" />
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="Booking Date" />
+
+                            <TextView
+                                android:id="@+id/etQPSBookingDate"
+                                style="@style/TextStyle"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:hint="Enter date here"
+                                android:padding="@dimen/C8dp" />
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llQPSRequestStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/button_yellow"
+                            android:backgroundTint="#2a9945"
+                            android:gravity="center"
+                            android:padding="@dimen/C10dp"
+                            android:text="QPS Request Status"
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/C14dp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvQps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C10dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            style="@style/BottomButton"
+            android:text="Submit" />
 
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>

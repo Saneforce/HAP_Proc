@@ -4,25 +4,27 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.POPActivity;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHolder> {
@@ -32,13 +34,12 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
     int selectdPos = -1;
     AlertDialog.Builder builder;
     private DatePickerDialog fromDatePickerDialog;
-
+    Shared_Common_Pref shared_common_pref;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         EditText Qty;
-        TextView etBookingDate, etPopMaterial, etUOM;
-        RelativeLayout rlOtherBrand;
+        TextView etPopMaterial, etUOM;
         ImageView rlDeletePOP;
 
 
@@ -47,7 +48,6 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
             Qty = view.findViewById(R.id.etQty);
             etUOM = view.findViewById(R.id.tvUOM);
             etPopMaterial = view.findViewById(R.id.etPopMaterial);
-            etBookingDate = view.findViewById(R.id.etBookingDate);
             rlDeletePOP = view.findViewById(R.id.rlDeletePOP);
 
 
@@ -59,6 +59,7 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
         this.Product_Details_Modalitem = Product_Details_Modalitem;
         this.rowLayout = rowLayout;
         this.context = context;
+        shared_common_pref = new Shared_Common_Pref(context);
     }
 
     @Override
@@ -79,14 +80,10 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
         try {
 
             builder = new AlertDialog.Builder(context);
-
             Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-
-
             holder.etPopMaterial.setText("" + Product_Details_Modal.getName());
             holder.etUOM.setText("" + Product_Details_Modal.getUOM());
             holder.Qty.setText("" + Product_Details_Modal.getQty());
-            holder.etBookingDate.setText("" + Product_Details_Modal.getBookingDate());
 
 
             holder.Qty.addTextChangedListener(new TextWatcher() {
@@ -125,23 +122,6 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
                 }
             });
 
-            holder.etBookingDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Calendar newCalendar = Calendar.getInstance();
-                    fromDatePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            int mnth = monthOfYear + 1;
-
-                            holder.etBookingDate.setText("" + year + "-" + mnth + "-" + dayOfMonth);
-
-                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setBookingDate(holder.etBookingDate.getText().toString());
-                        }
-                    }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                    fromDatePickerDialog.show();
-                }
-            });
 
             holder.rlDeletePOP.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,6 +131,7 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
 
                 }
             });
+
         } catch (Exception e) {
             Log.e("OTHERBRAND_Adapter ", e.getMessage());
         }
@@ -160,7 +141,6 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
     public int getItemCount() {
         return Product_Details_Modalitem.size();
     }
-
 
     private void deleteItem(int pos) {
 
@@ -194,7 +174,6 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 
 }
 

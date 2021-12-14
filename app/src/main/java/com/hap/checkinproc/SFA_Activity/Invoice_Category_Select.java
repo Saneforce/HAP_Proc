@@ -687,10 +687,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         common_class.ProgressdialogShow(0, "");
                                         Log.e("JSON_VALUES", response.body().toString());
                                         JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                        String san = jsonObjects.getString("success");
-                                        Log.e("Success_Message", san);
-                                        if (san.equals("true")) {
-                                            ResetSubmitBtn(1);
+
+                                        ResetSubmitBtn(1);
+                                        if (jsonObjects.getString("success").equals("true")) {
                                             common_class.CommonIntentwithFinish(Invoice_History.class);
                                         }
                                         common_class.showMsg(Invoice_Category_Select.this, jsonObjects.getString("Msg"));
@@ -962,7 +961,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         tvPayMode.setText("" + myDataset.get(position).getName());
     }
 

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -195,6 +198,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 
     public void sumOfTotal(JSONArray AryDta, RetailerNearByADP.MyViewHolder holder) {
         try {
+            Log.v("NEARBY_OUTLETS:",AryDta.toString());
             int iQty = 0;
             double iVal = 0.0;
             for (int il = 0; il < AryDta.length(); il++) {
@@ -205,15 +209,31 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             holder.txPreTotQty.setText(String.valueOf(iQty));
             holder.txPreTotVal.setText("₹" + new DecimalFormat("##0.00").format(iVal));
 
+            holder.linDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    String sOutletName = mRetailer_Modal_List.getName();
+//
+//                    drawRoute(sOutletName, mRetailer_Modal_List.getLat(), mRetailer_Modal_List.getLong());
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+    private void drawRoute(String OutletName, String sLat, String sLng) {
+        Intent intent = new Intent(context.getApplicationContext(), MapDirectionActivity.class);
+        intent.putExtra(Constants.DEST_LAT, sLat);
+        intent.putExtra(Constants.DEST_LNG, sLng);
+        intent.putExtra(Constants.DEST_NAME, OutletName);
+        intent.putExtra(Constants.NEW_OUTLET, "");
+        context.startActivity(intent);
 
+    }
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName, txRetailCode, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txDistance, txTdyDt, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo;
-        LinearLayout parent_layout,icAC;
+        LinearLayout parent_layout,icAC,linDirection;
         RecyclerView lstTdyView, lstPreView;
         ImageView icMob;
         ImageView ivEdit;
@@ -237,7 +257,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 tvSecondMnth = view.findViewById(R.id.tvLMSecond);
                 tvThirdMnth = view.findViewById(R.id.tvLMThree);
                 txTdyDt = view.findViewById(R.id.tvDate);
-
+                linDirection = view.findViewById(R.id.linDirection);
                 txTodayTotQty = view.findViewById(R.id.tvTodayTotQty);
                 txTodayTotVal = view.findViewById(R.id.tvTodayTotVal);
                 txPreTotQty = view.findViewById(R.id.tvPreTotQty);

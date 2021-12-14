@@ -687,7 +687,7 @@ public class Common_Class {
                 service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                       // Log.v(TAG, response.toString());
+                        // Log.v(TAG, response.toString());
                         db.deleteMasterData(Constants.ProdGroups_List);
                         db.addMasterData(Constants.ProdGroups_List, response.body());
                     }
@@ -795,6 +795,15 @@ public class Common_Class {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         CommonIntentwithFinish(moveActivity);
+
+                        switch (name) {
+                            case "Primary Order?":
+                                shared_common_pref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                                break;
+                            case "Order?":
+                                shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
+                                break;
+                        }
                     }
 
                     @Override
@@ -812,9 +821,15 @@ public class Common_Class {
         customDialog.show();
     }
 
-    public void dismissCommonDialog() {
-        if (customDialog != null)
+    public void dismissCommonDialog(int type) {
+        if (customDialog != null) {
             customDialog.dismiss();
+
+            if (type == 2) {
+                shared_common_pref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
+            }
+        }
 
     }
 
@@ -921,7 +936,7 @@ public class Common_Class {
                 String Add2 = jsonObject1.optString("Addr2");
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob,ERP_Code);
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code);
                 distributor_master.add(Model_Pojo);
 
             }

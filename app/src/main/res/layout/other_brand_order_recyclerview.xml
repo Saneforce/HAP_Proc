@@ -49,11 +49,11 @@
                     android:layout_marginLeft="@dimen/C5dp"
                     android:layout_toRightOf="@+id/tvOBPos"
                     android:gravity="center_vertical"
+                    android:hint="SELECT THE OTHER BRAND"
                     android:paddingTop="4dp"
                     android:text=""
-                    android:textColorHint="@color/black"
-                    android:hint="SELECT THE OTHER BRAND"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -61,13 +61,24 @@
                 <ImageView
                     android:layout_width="@dimen/C10dp"
                     android:layout_height="@dimen/C10dp"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/C15dp"
+                    android:layout_toLeftOf="@+id/rlDeleteBrand"
                     android:src="@drawable/spin_down_arrow"
                     app:tint="@color/black">
 
                 </ImageView>
+
+                <ImageView
+                    android:id="@+id/rlDeleteBrand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/C10dp"
+                    android:paddingBottom="@dimen/C15dp"
+                    android:src="@drawable/ic_baseline_close_24"
+                    app:tint="@color/color_red"></ImageView>
 
 
             </RelativeLayout>
@@ -253,16 +264,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/C5dp">
+
                         <ImageView
-                            android:id="@+id/rlDeleteBrand"
+                            android:id="@+id/ivOBCapture"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:padding="@dimen/C10dp"
-                            android:src="@drawable/delete_cart"
-                            app:tint="@color/color_red"></ImageView>
-                    </RelativeLayout>
+                            android:layout_gravity="center_vertical"
+                            android:layout_toLeftOf="@id/ivQPSPreviewImg"
+                            android:padding="@dimen/C5dp"
+                            android:src="@drawable/ic_round_photo_camera_24"
+                            app:tint="@color/colorPrimaryDark" />
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvOBFiles"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
 
 
                 </LinearLayout>

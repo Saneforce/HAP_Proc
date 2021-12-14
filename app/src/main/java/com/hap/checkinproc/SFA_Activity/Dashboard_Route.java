@@ -675,7 +675,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
 
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         if (type == 2) {
             route_text.setText("");
             shared_common_pref.save(Constants.Route_name, "");
@@ -868,11 +868,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {
+
+                            if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId()))
+                                shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
+
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
                             Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
-                          //  Shared_Common_Pref.DistributorCode = shared_common_pref.getvalue(Constants.Distributor_Id);
-                          //  Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                            //  Shared_Common_Pref.DistributorCode = shared_common_pref.getvalue(Constants.Distributor_Id);
+                            //  Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
                             // Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
                             // common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());

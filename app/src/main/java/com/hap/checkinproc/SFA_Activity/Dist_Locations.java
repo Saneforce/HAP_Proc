@@ -112,7 +112,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         if (type == 2) {
             distributor_Name.setText(myDataset.get(position).getName());
             Distributor_Id = myDataset.get(position).getId();

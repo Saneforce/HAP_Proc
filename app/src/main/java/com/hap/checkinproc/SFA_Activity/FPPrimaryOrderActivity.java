@@ -110,7 +110,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
     private int selectedPos = 0;
-    private TextView tvTotalAmount, tvACBal;
+    private TextView tvTotalAmount, tvACBal, tvTotalItems;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
@@ -142,6 +142,9 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             takeorder = findViewById(R.id.takeorder);
+            tvTotalItems = findViewById(R.id.tvTotalItems);
+            tvTotalAmount = findViewById(R.id.tvTotalAmount);
+
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
@@ -339,7 +342,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             String filterId = "";
             if (TypGroups.length() > 0)
                 filterId = TypGroups.getJSONObject(0).getString("id");
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", filterId);
 
             RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
@@ -353,6 +355,9 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                 }
             });
             Brndgrid.setAdapter(TyplistItems);
+
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", filterId);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -796,10 +801,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
     }
 
     public void updateToTALITEMUI() {
-        TextView tvTotalItems = findViewById(R.id.tvTotalItems);
         TextView tvTotLabel = findViewById(R.id.tvTotLabel);
-
-        tvTotalAmount = findViewById(R.id.tvTotalAmount);
 
         TextView tvTax = findViewById(R.id.tvTaxVal);
 
@@ -978,8 +980,21 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
         Category_Nametext.setVisibility(View.VISIBLE);
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
+
+        if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+            lin_gridcategory.setVisibility(View.VISIBLE);
+            findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
+            findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
+            findViewById(R.id.llBillHeader).setVisibility(View.GONE);
+            findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
+            findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
+            btnRepeat.setVisibility(View.VISIBLE);
+            takeorder.setText("PROCEED TO CART");
+            takeorder.setVisibility(View.VISIBLE);
+        }
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
         recyclerView.setAdapter(mProdct_Adapter);
+
     }
 
     @Override
@@ -1255,22 +1270,24 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         if (type == 2) {
-            route_text.setText("");
+            // route_text.setText("");
+            distributor_text.setText(myDataset.get(position).getName());
+            tvTotalAmount.setText("₹ 0.00");
+            tvTotalItems.setText("Items : 0");
             sharedCommonPref.save(Constants.Route_name, "");
             sharedCommonPref.save(Constants.Route_Id, "");
             // btnCmbRoute.setVisibility(View.VISIBLE);
-            distributor_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-            getACBalance(0);
+
             common_class.getProductDetails(this);
             common_class.getDb_310Data(Constants.Primary_Product_List, this);
-            common_class.getDb_310Data(Rout_List, this);
+            getACBalance(0);  // common_class.getDb_310Data(Rout_List, this);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
         } else if (type == 3) {

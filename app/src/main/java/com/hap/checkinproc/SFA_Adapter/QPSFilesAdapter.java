@@ -69,6 +69,7 @@ public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyView
 
 
         } catch (Exception e) {
+            Log.v("Files:",e.getMessage());
             e.printStackTrace();
         }
     }

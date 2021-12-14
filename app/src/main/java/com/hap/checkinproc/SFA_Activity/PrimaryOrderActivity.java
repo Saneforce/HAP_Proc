@@ -51,6 +51,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
+import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
@@ -131,13 +132,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             sharedCommonPref = new Shared_Common_Pref(PrimaryOrderActivity.this);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
             common_class = new Common_Class(this);
-            common_class.getProductDetails(this);
 
             categorygrid = findViewById(R.id.category);
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             takeorder = findViewById(R.id.takeorder);
-            common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
             Out_Let_Name = findViewById(R.id.outlet_name);
@@ -158,7 +157,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
             btnRepeat = findViewById(R.id.btnRepeat);
             Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
-            getACBalance(0);
+
             etCategoryItemSearch = findViewById(R.id.searchView);
             tvTimer = findViewById(R.id.tvTimer);
             Product_ModalSetAdapter = new ArrayList<>();
@@ -182,8 +181,19 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            common_class.getDb_310Data(Constants.Primary_Product_List, this);
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
+            common_class.getProductDetails(this);
+            common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
+
+            getACBalance(0);
+
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA)))
+                common_class.getDb_310Data(Constants.Primary_Product_List, this);
+            else {
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA), userType);
+                loadCategoryData();
+            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -228,19 +238,21 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             handler.postDelayed(new Runnable() {
                 public void run() {
+                    findNearCutOfftime();
                     tvTimer.setText(Common_Class.GetTime() + "   /   " + sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
                     handler.postDelayed(this, 1000);
+
                 }
             }, 1000);
 
             tvDistId.setText("" + sharedCommonPref.getvalue(Constants.DistributorERP));
             tvDate.setText(DT.GetDateTime(getApplicationContext(), "dd-MMM-yyyy"));
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
             orderId = getIntent().getStringExtra(Constants.ORDER_ID);
 //            if (orderId != null) {
 //                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
 //            }
 
+            Log.v(TAG, " LOC DATA: " + sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA));
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -280,20 +292,24 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                             try {
                                 JsonArray res = response.body();
-                                JsonObject jItem = res.get(0).getAsJsonObject();
-                                double ActBAL = jItem.get("LC_BAL").getAsDouble();
-                                ACBalance = jItem.get("Balance").getAsDouble();
-                                if (ACBalance <= 0) ACBalance = Math.abs(ACBalance);
-                                else ACBalance = 0 - ACBalance;
-                                if (ActBAL <= 0) ActBAL = Math.abs(ActBAL);
-                                else ActBAL = 0 - ActBAL;
-                                NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+                                try {
+                                    JsonObject jItem = res.get(0).getAsJsonObject();
+                                    double ActBAL = jItem.get("LC_BAL").getAsDouble();
+                                    ACBalance = jItem.get("Balance").getAsDouble();
+                                    if (ACBalance <= 0) ACBalance = Math.abs(ACBalance);
+                                    else ACBalance = 0 - ACBalance;
+                                    if (ActBAL <= 0) ActBAL = Math.abs(ActBAL);
+                                    else ActBAL = 0 - ActBAL;
+                                    NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
 
-                                // tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
-                                tvACBal.setText(format1.format(ACBalance));
-                                txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
-                                txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
-                                txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
+                                    // tvACBal.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                    tvACBal.setText(format1.format(ACBalance));
+                                    txBalAmt.setText("₹" + new DecimalFormat("##0.00").format(ACBalance));
+                                    txAmtWalt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Pending").getAsDouble()));
+                                    txAvBal.setText("₹" + new DecimalFormat("##0.00").format(ActBAL));
+                                } catch (Exception e) {
+
+                                }
                                 if (Mode == 1) {
                                     SubmitPrimaryOrder();
                                 }
@@ -360,7 +376,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         //type =1 product category data values
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
-            Category_Modal.clear();
+            if (type.equals("1"))
+                Category_Modal.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 if (type.equals("1")) {
@@ -386,6 +403,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 PrimaryOrderActivity.CategoryAdapter customAdapteravail = new PrimaryOrderActivity.CategoryAdapter(getApplicationContext(),
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
+                customAdapteravail.notifyDataSetChanged();
+                Log.v(TAG, "sizeee:" + listt.size());
                 if (Common_Class.isNullOrEmpty(orderId)) {
                     showOrderItemList(selectedPos, "");
                 } else {
@@ -397,8 +416,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.v(TAG + "cat:", e.getMessage());
         }
     }
 
@@ -423,6 +442,41 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    void findNearCutOfftime() {
+        try {
+            Type type = new TypeToken<ArrayList<Datum>>() {
+            }.getType();
+            List<Datum> slotList = gson.fromJson(sharedCommonPref.getvalue(Constants.SlotTime), type);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+            long val = 0;
+            String time = "";
+            for (int i = 0; i < slotList.size(); i++) {
+                Date d1 = sdf.parse(Common_Class.GetTime());
+                Date d2 = sdf.parse(slotList.get(i).getTm());
+                long elapsed = d2.getTime() - d1.getTime();
+                Log.v(TAG + "time:" + slotList.get(i).getTm(), "Elapse:" + elapsed + ":val" + val);
+                if ((val == 0 && elapsed > 0) || (elapsed < val && elapsed > 0)) {
+                    val = elapsed;
+                    time = slotList.get(i).getTm();
+                }
+            }
+
+            if (slotList != null && slotList.size() > 0 && time.equals("")) {
+                time = slotList.get(0).getTm();
+            }
+
+            if (!Common_Class.isNullOrEmpty(time))
+                sharedCommonPref.save(Constants.CUTOFF_TIME, time);
+            else if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME))) {
+                sharedCommonPref.save(Constants.CUTOFF_TIME, "--:--:--");
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+
     public void SubmitPrimaryOrder() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -430,7 +484,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
             long elapsed = d2.getTime() - d1.getTime();
             if (ACBalance >= totalvalues) {
-                if (elapsed >= 0) {
+                if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME)) ||
+                        sharedCommonPref.getvalue(Constants.CUTOFF_TIME).equals("--:--:--")) {
+                    ResetSubmitBtn(0);
+                    common_class.showMsg(this, "Time UP...");
+                } else {
                     String sLoc = sharedCommonPref.getvalue("CurrLoc");
                     if (sLoc.equalsIgnoreCase("")) {
                         new LocationFinder(getApplication(), new LocationEvents() {
@@ -445,9 +503,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         SaveOrder();
                     }
 
-                } else {
-                    ResetSubmitBtn(0);
-                    common_class.showMsg(this, "Time UP...");
                 }
             } else {
                 ResetSubmitBtn(0);
@@ -685,7 +740,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                     ResetSubmitBtn(1);
                                     common_class.showMsg(PrimaryOrderActivity.this, jsonObjects.getString("Msg"));
                                     if (jsonObjects.getString("success").equals("true")) {
-                                        finish();
+                                        sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                                        common_class.CommonIntentwithFinish(SFA_Activity.class);
                                     }
 
                                 } catch (Exception e) {
@@ -902,6 +958,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             tvTax.setVisibility(View.VISIBLE);
 
         }
+
+        String data = gson.toJson(Product_Modal);
+        sharedCommonPref.save(Constants.LOC_PRIMARY_DATA, data);
     }
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
@@ -953,23 +1012,27 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void showOrderItemList(int categoryPos, String filterString) {
+        try {
+            Log.v(TAG + "showorder:", "" + listt.size());
+            Product_ModalSetAdapter.clear();
+            for (Product_Details_Modal personNpi : Product_Modal) {
+                if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
+                    if (Common_Class.isNullOrEmpty(filterString))
+                        Product_ModalSetAdapter.add(personNpi);
+                    else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
+                        Product_ModalSetAdapter.add(personNpi);
 
-        Product_ModalSetAdapter.clear();
-        for (Product_Details_Modal personNpi : Product_Modal) {
-            if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                if (Common_Class.isNullOrEmpty(filterString))
-                    Product_ModalSetAdapter.add(personNpi);
-                else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
-                    Product_ModalSetAdapter.add(personNpi);
-
+                }
             }
-        }
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        Category_Nametext.setVisibility(View.VISIBLE);
-        Category_Nametext.setText(listt.get(categoryPos).getName());
+            lin_orderrecyclerview.setVisibility(View.VISIBLE);
+            Category_Nametext.setVisibility(View.VISIBLE);
+            Category_Nametext.setText(listt.get(categoryPos).getName());
 
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
-        recyclerView.setAdapter(mProdct_Adapter);
+            mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
+            recyclerView.setAdapter(mProdct_Adapter);
+        } catch (Exception e) {
+            Log.v(TAG + ":showOrdList:", e.getMessage());
+        }
     }
 
     @Override
@@ -977,41 +1040,53 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         ResetSubmitBtn(2);
     }
 
+    void loadCategoryData() {
+        try {
+            //  Product_Modal = gson.fromJson(data, userType);
+
+            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
+            GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            Grpgrid.setLayoutManager(GrpgridlayManager);
+
+            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+
+                    try {
+                        FilterTypes(item.getString("id"));
+                        common_class.brandPos = 0;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            Grpgrid.setAdapter(grplistItems);
+
+            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+        } catch (Exception e) {
+            Log.v(TAG + "loadData:", e.getMessage());
+        }
+    }
+
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             switch (key) {
                 case Constants.PrePrimaryOrderQty:
-                    loadData(apiDataResponse);
+                    if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
+                        ResetSubmitBtn(0);
+                        common_class.showMsg(PrimaryOrderActivity.this, "No Records Found.");
+                    } else
+                        loadData(apiDataResponse);
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     loadData(apiDataResponse);
                     // sharedCommonPref.save(Constants.TodayPrimaryOrderDetails_List, apiDataResponse);
                     break;
                 case Constants.Primary_Product_List:
-                    String OrdersTable = sharedCommonPref.getvalue(Constants.Primary_Product_List);
-                    Product_Modal = gson.fromJson(OrdersTable, userType);
-                    JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
-                    LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
-                    GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    Grpgrid.setLayoutManager(GrpgridlayManager);
-
-                    RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
-                        @Override
-                        public void onItemClick(JSONObject item) {
-
-                            try {
-                                FilterTypes(item.getString("id"));
-                                common_class.brandPos = 0;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    Grpgrid.setAdapter(grplistItems);
-
-                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
-
+                    Product_Modal = gson.fromJson(apiDataResponse, userType);
+                    loadCategoryData();
                     break;
 
                 case Constants.PRIMARY_SCHEME:

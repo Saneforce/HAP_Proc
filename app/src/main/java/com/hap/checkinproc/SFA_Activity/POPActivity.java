@@ -108,7 +108,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
         popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
 
-        popAddAdapter = new PopAddAdapter(popAddList, R.layout.popup_add_recyclerview,
+        popAddAdapter = new PopAddAdapter(popAddList, R.layout.pop_add_recyclerview,
                 this);
 
         rvPopAdd.setAdapter(popAddAdapter);
@@ -134,7 +134,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 ivAdd.setVisibility(View.VISIBLE);
                 // btnSubmit.setText("Completed");
                 // btnSubmit.setVisibility(View.VISIBLE);
-                findViewById(R.id.rlPOPSubmit).setVisibility(View.VISIBLE);
+                findViewById(R.id.btnSubmit).setVisibility(View.VISIBLE);
             }
 
             return true;
@@ -287,7 +287,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         if (selectedPos >= 0) {
-            common_class.dismissCommonDialog();
+            common_class.dismissCommonDialog(type);
             popAddList.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(),
                     "", 0, myDataset.get(position).getFlag()));
             popAddAdapter.notifyData(popAddList);
@@ -316,11 +316,10 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                         findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
                         findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
                         ivAdd.setVisibility(View.GONE);
-                        findViewById(R.id.rlPOPSubmit).setVisibility(View.GONE);
+                        findViewById(R.id.btnSubmit).setVisibility(View.GONE);
                         popStatusAdapter = new POPStatusAdapter(this, jsonObject.getJSONArray("Data"));
                         rvQps.setAdapter(popStatusAdapter);
-                    }
-                    else{
+                    } else {
                         common_class.showMsg(POPActivity.this, jsonObject.getString("Msg"));
                     }
                     break;

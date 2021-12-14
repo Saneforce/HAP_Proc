@@ -229,7 +229,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         if (type == 1) {
             txRmksNoOrd.setText(myDataset.get(position).getName());
         }

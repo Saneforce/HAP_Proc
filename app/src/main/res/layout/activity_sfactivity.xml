@@ -437,7 +437,7 @@
                             android:weightSum="5">
 
                             <LinearLayout
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:id="@+id/Lin_POS"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"

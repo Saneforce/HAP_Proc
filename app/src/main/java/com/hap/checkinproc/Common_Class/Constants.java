@@ -79,6 +79,8 @@ public class Constants {
     public static final String DASHBOARD_TYPE_INFO = "dbTypeInfo";
     public static final String SALES_SUMMARY = "salesSummary";
     public static final String SCAN_DATA = "scanData";
+    public static final String LOC_PRIMARY_DATA ="locPrimData" ;
+    public static final String LOC_SECONDARY_DATA ="locSecData" ;
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
@@ -91,4 +93,5 @@ public class Constants {
     public static final String NEW_OUTLET = "newOutlet";
     public static final String PrePrimaryOrderQty = "prePrimaryOrderQty";
     public static final String DistributorAdd = "distAddress";
+    public static final String SlotTime="slotTime";
 }

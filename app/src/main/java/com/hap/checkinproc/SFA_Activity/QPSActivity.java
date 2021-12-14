@@ -326,7 +326,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog();
+        common_class.dismissCommonDialog(type);
         tvPeriod.setText("" + myDataset.get(position).getName());
         tvGift.setText("" + myDataset.get(position).getQPS_Name());
         tvTarget.setText("" + myDataset.get(position).getTotal_Ltrs());

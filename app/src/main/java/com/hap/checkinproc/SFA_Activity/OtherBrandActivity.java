@@ -28,13 +28,15 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,16 +50,17 @@ import retrofit2.Response;
 
 public class OtherBrandActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
 
-    List<Product_Details_Modal> Getorder_Array_List;
-    TextView tvOrder, tvQPS, tvPOP, tvCoolerInfo, tvAddBrand;
     public static OtherBrandActivity otherBrandActivity;
+    List<QPS_Modal> Getorder_Array_List;
+    TextView tvOrder, tvQPS, tvPOP, tvCoolerInfo, tvAddBrand;
     OtherBrandAdapter otherBrandAdapter;
+    Common_Class common_class;
+    Shared_Common_Pref sharedCommonPref;
     private List<Common_Model> otherBrandList = new ArrayList<>();
     private int selectedPos = -1;
     private Type userTypeCompetitor;
     private TextView tvSubmit;
-    Common_Class common_class;
-Shared_Common_Pref sharedCommonPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,7 @@ Shared_Common_Pref sharedCommonPref;
 
 
         common_class = new Common_Class(this);
-        sharedCommonPref=new Shared_Common_Pref(this);
+        sharedCommonPref = new Shared_Common_Pref(this);
         common_class.getDataFromApi(Constants.Competitor_List, this, false);
 
 
@@ -97,7 +100,7 @@ Shared_Common_Pref sharedCommonPref;
         Getorder_Array_List = new ArrayList<>();
 
 
-        Getorder_Array_List.add(new Product_Details_Modal("", "", "", 0, 0, 0, ""));
+        Getorder_Array_List.add(new QPS_Modal("", "", "", 0, 0, 0, ""));
 
         otherBrandAdapter = new OtherBrandAdapter(Getorder_Array_List, R.layout.other_brand_order_recyclerview,
                 this);
@@ -127,7 +130,7 @@ Shared_Common_Pref sharedCommonPref;
                 break;
 
             case R.id.tvAddBrand:
-                Getorder_Array_List.add(new Product_Details_Modal("", "", "", 0, 0, 0, ""));
+                Getorder_Array_List.add(new QPS_Modal("", "", "", 0, 0, 0, ""));
                 otherBrandAdapter.notifyData(Getorder_Array_List);
                 break;
             case R.id.btnSubmit:
@@ -137,7 +140,7 @@ Shared_Common_Pref sharedCommonPref;
     }
 
     private void SaveOrder() {
-        List<Product_Details_Modal> submitBrandList = new ArrayList<>();
+        List<QPS_Modal> submitBrandList = new ArrayList<>();
         submitBrandList.clear();
         for (int i = 0; i < Getorder_Array_List.size(); i++) {
 
@@ -190,7 +193,7 @@ Shared_Common_Pref sharedCommonPref;
                             JSONArray Order_Details = new JSONArray();
                             for (int z = 0; z < submitBrandList.size(); z++) {
                                 JSONObject ProdItem = new JSONObject();
-                                ProdItem.put("id", submitBrandList.get(z).getId());
+                                ProdItem.put("id", submitBrandList.get(z).getP_id());
                                 ProdItem.put("BrandNm", submitBrandList.get(z).getName());
                                 ProdItem.put("BrandSKU", submitBrandList.get(z).getSku());
                                 ProdItem.put("Qty", submitBrandList.get(z).getQty());
@@ -198,6 +201,21 @@ Shared_Common_Pref sharedCommonPref;
                                 ProdItem.put("Price", submitBrandList.get(z).getPrice());
                                 ProdItem.put("Amt", submitBrandList.get(z).getAmount());
                                 ProdItem.put("Sch", submitBrandList.get(z).getScheme());
+
+                                JSONArray fileArr = new JSONArray();
+                                if (submitBrandList.get(z).getFileUrls() != null &&
+                                        submitBrandList.get(z).getFileUrls().size() > 0) {
+
+                                    for (int i = 0; i < submitBrandList.get(z).getFileUrls().size(); i++) {
+                                        JSONObject fileData = new JSONObject();
+                                        File file = new File(submitBrandList.get(z).getFileUrls().get(i));
+                                        fileData.put("ob_filename", file.getName());
+                                        fileArr.put(fileData);
+
+                                    }
+                                }
+
+                                ProdItem.put("file_Details", fileArr);
                                 Order_Details.put(ProdItem);
                             }
                             ActivityData.put("Entry_Details", Order_Details);
@@ -234,6 +252,22 @@ Shared_Common_Pref sharedCommonPref;
                             }
                         });
 
+
+                        for (int i = 0; i < submitBrandList.size(); i++) {
+
+                            for (int j = 0; j < submitBrandList.get(i).getFileUrls().size(); j++) {
+                                String filePath = submitBrandList.get(i).getFileUrls().get(j);
+                                File file = new File(filePath);
+                                Intent mIntent = new Intent(OtherBrandActivity.this, FileUploadService.class);
+                                mIntent.putExtra("mFilePath", filePath);
+                                mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
+                                mIntent.putExtra("FileName", file.getName());
+                                mIntent.putExtra("Mode", "OB");
+                                FileUploadService.enqueueWork(OtherBrandActivity.this, mIntent);
+
+                            }
+                        }
+
                     }
 
                     @Override
@@ -268,8 +302,8 @@ Shared_Common_Pref sharedCommonPref;
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         try {
             if (selectedPos >= 0) {
-                common_class.dismissCommonDialog();
-                Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
+                common_class.dismissCommonDialog(type);
+                Getorder_Array_List.set(selectedPos, new QPS_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
                 otherBrandAdapter.notifyData(Getorder_Array_List);
 
             }

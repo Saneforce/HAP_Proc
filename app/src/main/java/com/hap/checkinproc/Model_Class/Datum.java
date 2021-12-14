@@ -3,6 +3,8 @@ package com.hap.checkinproc.Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Datum {
 
 
@@ -15,6 +17,10 @@ public class Datum {
     @SerializedName("ERP_Code")
     @Expose
     private String ERP_Code;
+
+    public Datum(String tm) {
+        Tm = tm;
+    }
 
     public String getERP_Code() {
         return ERP_Code;
@@ -67,6 +73,14 @@ public class Datum {
     @SerializedName("CutoffTime")
     @Expose
     private String CutoffTime;
+
+    @SerializedName("Tm")
+    @Expose
+    private String Tm;
+
+    @SerializedName("SlotTime")
+    @Expose
+    private List<Datum> SlotTime;
 
     @SerializedName("Stockist_Name")
     @Expose
@@ -356,7 +370,24 @@ public class Datum {
         return CutoffTime;
     }
 
+
     public void setCutoffTime(String cutoffTime) {
         CutoffTime = cutoffTime;
+    }
+
+    public List<Datum> getSlotTime() {
+        return SlotTime;
+    }
+
+    public void setSlotTime(List<Datum> slotTime) {
+        SlotTime = slotTime;
+    }
+
+    public String getTm() {
+        return Tm;
+    }
+
+    public void setTm(String tm) {
+        Tm = tm;
     }
 }
