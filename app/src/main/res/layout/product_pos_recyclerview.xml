@@ -77,8 +77,6 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
-                            android:drawableRight="@drawable/edit_small"
-                            android:drawablePadding="@dimen/C3dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"

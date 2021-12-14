@@ -179,6 +179,7 @@
         <entry key="app/src/main/res/layout/activity_outlet__info_.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_permission__request.xml" value="0.17407407407407408" />
         <entry key="app/src/main/res/layout/activity_pop_layout.xml" value="0.18432971014492755" />
+        <entry key="app/src/main/res/layout/activity_pos_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.40471118909668696" />
         <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_q_r_code_scanner.xml" value="0.24592391304347827" />
@@ -212,6 +213,8 @@
         <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.3559322033898305" />
         <entry key="app/src/main/res/layout/product_pay_recyclerview.xml" value="0.13802083333333334" />
         <entry key="app/src/main/res/layout/product_pay_recyclerview_edit.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/product_pos_pay_recyclerview.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/product_pos_recyclerview.xml" value="0.22" />
         <entry key="app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.35318559556786705" />
         <entry key="app/src/main/res/layout/sfatoolbar.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/team_loc_detail_layout.xml" value="0.494077834179357" />

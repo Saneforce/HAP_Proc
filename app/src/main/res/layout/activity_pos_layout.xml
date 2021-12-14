@@ -74,15 +74,12 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_home" />
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/llUserDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="vertical">
-
-
             <EditText
                 android:id="@+id/edt_name"
                 android:layout_width="match_parent"
@@ -91,8 +88,6 @@
                 android:hint="Enter the name"
                 android:padding="10dp"
                 android:textSize="13sp" />
-
-
             <EditText
                 android:id="@+id/edt_phone"
                 android:layout_width="match_parent"
@@ -103,8 +98,6 @@
                 android:inputType="number"
                 android:padding="10dp"
                 android:textSize="13sp" />
-
-
             <EditText
                 android:id="@+id/edtAddress"
                 android:layout_width="match_parent"
@@ -114,24 +107,44 @@
                 android:hint="Enter the Address"
                 android:padding="10dp"
                 android:textSize="13sp" />
-
-
         </LinearLayout>
-
-
+        <LinearLayout
+            android:id="@+id/llLblUserDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/lbl_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/C5dp"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/lbl_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/C5dp"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/lblAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/C5dp"
+                android:textSize="13sp" />
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/lin_gridcategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <LinearLayout
                 android:id="@+id/lin_gridtype"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="visible">
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/PGroup"
                     android:layout_width="match_parent"
@@ -141,14 +154,12 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
                 <LinearLayout
                     android:layout_width="@dimen/C2dp"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/C5dp"
                     android:background="@color/grey_500"
                     android:visibility="gone" />
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/PBrnd"
                     android:layout_width="match_parent"
@@ -159,8 +170,6 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -169,7 +178,6 @@
                 android:layout_marginRight="@dimen/C10dp"
                 android:layout_marginBottom="@dimen/C5dp"
                 android:background="@color/grey_300" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/category"
                 android:layout_width="match_parent"
@@ -179,8 +187,6 @@
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
-
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -812,10 +818,7 @@
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-
         <RelativeLayout
-
             android:id="@+id/rlTakeOrder"
             style="@style/BottomButton"
             android:layout_width="match_parent"
@@ -823,7 +826,6 @@
             android:layout_margin="@dimen/C5dp"
             android:padding="@dimen/C5dp"
             android:visibility="visible">
-
             <ImageView
 
                 android:id="@+id/ivCart"
@@ -908,10 +910,7 @@
                 android:visibility="gone" />
 
         </RelativeLayout>
-
-
     </LinearLayout>
-
     <RelativeLayout
 
         android:id="@+id/rlParent"
@@ -919,19 +918,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone">
-
-
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.9"
             android:background="@color/black">
-
         </RelativeLayout>
-
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -973,13 +966,10 @@
                             android:layout_centerVertical="true"
                             android:layout_margin="@dimen/C10dp"
                             android:layout_weight="1.5"
-                            android:background="@drawable/icon_bg"
-                            android:scaleType="centerInside"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/product_logo">
 
-                        </ImageView>
-
-
+                        </ImageView><!--android:background="@drawable/icon_bg"-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

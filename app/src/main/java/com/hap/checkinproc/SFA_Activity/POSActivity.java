@@ -86,7 +86,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP;
+    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP,lblName,lblPhone,lblAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -97,7 +97,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     String TAG = "Order_Category_Select";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose, ivScanner, ivMns, ivPlus;
+    ImageView ivClose, ivScanner, ivMns, ivPlus,ImgVProd;
     EditText etCategoryItemSearch, etName, etPhone, etAddress, etQty;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
@@ -143,12 +143,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             etName = findViewById(R.id.edt_name);
             etPhone = findViewById(R.id.edt_phone);
             etAddress = findViewById(R.id.edtAddress);
+            lblName = findViewById(R.id.lbl_name);
+            lblPhone = findViewById(R.id.lbl_phone);
+            lblAddress = findViewById(R.id.lblAddress);
 
             tvName = findViewById(R.id.tvScanProName);
             tvMRP = findViewById(R.id.tvScanMRP);
             ivPlus = findViewById(R.id.ivScanQtyPls);
             ivMns = findViewById(R.id.ivScanQtyMns);
             etQty = findViewById(R.id.etScanQty);
+            ImgVProd = findViewById(R.id.ivAddShoppingCart);
 
             ivScanner.setOnClickListener(this);
             rlQtyParent.setOnTouchListener(this);
@@ -773,9 +777,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
+        findViewById(R.id.llLblUserDetail).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
+
+        lblName.setText(etName.getText().toString());
+        lblPhone.setText(etPhone.getText().toString());
+        lblAddress.setText(etAddress.getText().toString());
         takeorder.setText("SUBMIT");
 
         mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.product_pos_pay_recyclerview, getApplicationContext(), -1);
@@ -958,10 +967,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void loadScanData() {
-        //   scanProId = sharedCommonPref.getvalue(Constants.SCAN_DATA));
-        tvName.setText("22GM BUTTER CHIPLET");
-        tvMRP.setText("₹72.00");
-
         scanProId = "";
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
@@ -969,11 +974,17 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 scanProId = Product_Modal.get(pm).getId();
                 etQty.setText("" + Product_Modal.get(pm).getQty());
                 tvName.setText(Product_Modal.get(pm).getName());
+
+                Glide.with(this)
+                        .load(Product_Modal.get(pm).getPImage())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(ImgVProd);
                 tvMRP.setText("₹" + Product_Modal.get(pm).getMRP());
                 break;
             }
         }
 
+        sharedCommonPref.save(Constants.SCAN_DATA,"");
         if (scanProId.equals("")) {
             common_class.showMsg(this, "No Products Found");
         } else {
@@ -1039,6 +1050,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     void moveProductScreen() {
         lin_gridcategory.setVisibility(View.VISIBLE);
         findViewById(R.id.llUserDetail).setVisibility(View.VISIBLE);
+        findViewById(R.id.llLblUserDetail).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
@@ -1482,12 +1494,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 });
 
 
-                holder.Rate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDialog(Product_Details_Modal);
-                    }
-                });
+//                holder.Rate.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showDialog(Product_Details_Modal);
+//                    }
+//                });
 
                 updateToTALITEMUI();
             } catch (Exception e) {
