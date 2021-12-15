@@ -94,4 +94,5 @@ public class Constants {
     public static final String PrePrimaryOrderQty = "prePrimaryOrderQty";
     public static final String DistributorAdd = "distAddress";
     public static final String SlotTime="slotTime";
+    public static final String POS_Product_List="posProductList";
 }

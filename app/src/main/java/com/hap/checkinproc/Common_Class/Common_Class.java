@@ -622,6 +622,12 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         break;
+                    case Constants.POS_Product_List:
+                        axnname = "get/posproddets";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
                 }
 
                 QueryString.put("axn", axnname);
@@ -726,6 +732,40 @@ public class Common_Class {
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                         db.deleteMasterData(Constants.Product_List);
                         db.addMasterData(Constants.Product_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void getPOSProduct(Activity activity) {
+
+        if (isNetworkAvailable(activity)) {
+            getProductDetails(activity);
+            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(activity);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                service.getDataArrayList("get/posproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("POS:", response.body().toString());
+                        db.deleteMasterData(Constants.POS_Product_List);
+                        db.addMasterData(Constants.POS_Product_List, response.body());
                     }
 
                     @Override

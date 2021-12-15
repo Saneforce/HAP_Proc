@@ -494,6 +494,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         break;
                     case Constants.TAXList:
                         JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+                        Log.v("TAX_PRIMARY:", apiDataResponse);
 
                         if (jsonObjectTax.getBoolean("success")) {
                             sharedCommonPref.save(Constants.TAXList, apiDataResponse);

@@ -86,7 +86,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP,lblName,lblPhone,lblAddress;
+    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -97,7 +97,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     String TAG = "Order_Category_Select";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose, ivScanner, ivMns, ivPlus,ImgVProd;
+    ImageView ivClose, ivScanner, ivMns, ivPlus, ImgVProd;
     EditText etCategoryItemSearch, etName, etPhone, etAddress, etQty;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
@@ -122,6 +122,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(this);
             common_class = new Common_Class(this);
+
 
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
@@ -172,10 +173,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            common_class.getProductDetails(this);
+            common_class.getPOSProduct(this);
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.POS_Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
             Product_Modal = gson.fromJson(OrdersTable, userType);
@@ -418,8 +419,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 }
 
                 Product_Details_Modalitem.get(pos).setProductDetailsModal(taxList);
-                Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()
-                        + wholeTax)));
+                Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount())));
                 Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
             }
         } catch (Exception e) {
@@ -517,7 +517,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
         }
 
-        if (Getorder_Array_List.size() == 0)
+        if (Common_Class.isNullOrEmpty(etName.getText().toString()))
+            common_class.showMsg(this, "Please Enter the name");
+        else if (Common_Class.isNullOrEmpty(etPhone.getText().toString()))
+            common_class.showMsg(this, "Please Enter the Phone No");
+        else if (Common_Class.isNullOrEmpty(etAddress.getText().toString()))
+            common_class.showMsg(this, "Please Enter the Address");
+        else if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "POS is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
@@ -586,6 +592,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 try {
 
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+
+
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
                             Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
@@ -675,12 +683,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
                                     Getorder_Array_List.get(z).getRegularQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                            //ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
-                            ProdItem.put("MRP", String.format("%.2f", Getorder_Array_List.get(z).getMRP()));
+                            ProdItem.put("Rate", formatter.format(Double.valueOf(Getorder_Array_List.get(z).getRate())));
+                            ProdItem.put("MRP", formatter.format(Double.valueOf(Getorder_Array_List.get(z).getMRP())));
 
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
-                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
-                            ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
+                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());//calculation amount
+                            ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());//api value
                             ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
                             ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
@@ -728,7 +736,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.savePOS(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -739,7 +747,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     ResetSubmitBtn(1);
                                     if (jsonObjects.getString("success").equals("true")) {
-                                        common_class.CommonIntentwithFinish(Invoice_History.class);
+                                        common_class.CommonIntentwithFinish(SFA_Activity.class);
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
 
@@ -955,7 +963,25 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
 
+
+        switch (key) {
+            case Constants.TAXList:
+                JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+
+                if (jsonObjectTax.getBoolean("success")) {
+                    sharedCommonPref.save(Constants.TAXList, apiDataResponse);
+
+                } else {
+                    sharedCommonPref.clear_pref(Constants.TAXList);
+
+                }
+                break;
+        }}
+        catch (Exception e){
+
+        }
     }
 
     @Override
@@ -984,7 +1010,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
         }
 
-        sharedCommonPref.save(Constants.SCAN_DATA,"");
+        sharedCommonPref.save(Constants.SCAN_DATA, "");
         if (scanProId.equals("")) {
             common_class.showMsg(this, "No Products Found");
         } else {

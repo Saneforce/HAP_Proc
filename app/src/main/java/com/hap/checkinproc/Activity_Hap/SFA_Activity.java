@@ -38,7 +38,6 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
-import com.hap.checkinproc.SFA_Activity.Dist_Locations;
 import com.hap.checkinproc.SFA_Activity.FPPrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
@@ -54,7 +53,6 @@ import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -142,6 +140,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             common_class.getDb_310Data(Constants.Distributor_List, this);
         } else {
             findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
+            findViewById(R.id.Lin_POS).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
@@ -273,7 +272,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Lin_POS:
-                common_class.CommonIntentwithNEwTask(POSActivity.class);
+                common_class.getDb_310Data(Constants.TAXList, this);
+
                 break;
             case R.id.lin_myteam:
                 common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
@@ -312,7 +312,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
                 break;
             case R.id.DistLocation:
-              //  common_class.CommonIntentwithNEwTask(Dist_Locations.class);
+                //  common_class.CommonIntentwithNEwTask(Dist_Locations.class);
                 common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
 
                 break;
@@ -390,6 +390,22 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                             common_class.CommonIntentwithoutFinish(FPPrimaryOrderActivity.class);
 
                         overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case Constants.TAXList:
+                        JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+                        Log.v("TAX_POS:", apiDataResponse);
+
+                        if (jsonObjectTax.getBoolean("success")) {
+                            sharedCommonPref.save(Constants.TAXList, apiDataResponse);
+
+                        } else {
+                            sharedCommonPref.clear_pref(Constants.TAXList);
+
+                        }
+                        common_class.CommonIntentwithoutFinish(POSActivity.class);
+
+                        overridePendingTransition(R.anim.in, R.anim.out);
+
                         break;
                     case Constants.CUMULATIVEDATA:
                         getCumulativeDataFromAPI(apiDataResponse);
