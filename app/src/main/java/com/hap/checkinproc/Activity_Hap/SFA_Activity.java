@@ -141,6 +141,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } else {
             findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
             findViewById(R.id.Lin_POS).setVisibility(View.VISIBLE);
+            common_class.getPOSProduct(this);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
@@ -266,13 +267,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         llGridParent = findViewById(R.id.lin_gridOutlet);
 
 
+        Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+        Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Lin_POS:
-                common_class.getDb_310Data(Constants.TAXList, this);
+
+                common_class.CommonIntentwithNEwTask(POSActivity.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
             case R.id.lin_myteam:
@@ -391,22 +398,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                         overridePendingTransition(R.anim.in, R.anim.out);
                         break;
-                    case Constants.TAXList:
-                        JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
-                        Log.v("TAX_POS:", apiDataResponse);
 
-                        if (jsonObjectTax.getBoolean("success")) {
-                            sharedCommonPref.save(Constants.TAXList, apiDataResponse);
-
-                        } else {
-                            sharedCommonPref.clear_pref(Constants.TAXList);
-
-                        }
-                        common_class.CommonIntentwithoutFinish(POSActivity.class);
-
-                        overridePendingTransition(R.anim.in, R.anim.out);
-
-                        break;
                     case Constants.CUMULATIVEDATA:
                         getCumulativeDataFromAPI(apiDataResponse);
                         break;

@@ -81,6 +81,7 @@ public class Constants {
     public static final String SCAN_DATA = "scanData";
     public static final String LOC_PRIMARY_DATA ="locPrimData" ;
     public static final String LOC_SECONDARY_DATA ="locSecData" ;
+    public static final String POS_SCHEME = "posScheme";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
@@ -95,4 +96,5 @@ public class Constants {
     public static final String DistributorAdd = "distAddress";
     public static final String SlotTime="slotTime";
     public static final String POS_Product_List="posProductList";
+    public static final String POS_TAXList="posTaxList";
 }
