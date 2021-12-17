@@ -177,7 +177,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             String OrdersTable = String.valueOf(db.getMasterData(Constants.POS_Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
-            Product_Modal = gson.fromJson(OrdersTable, userType);
+
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_POS_DATA)))
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+            else
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_POS_DATA), userType);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -210,7 +214,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 }
             });
-
 
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
@@ -744,6 +747,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     ResetSubmitBtn(1);
                                     if (jsonObjects.getString("success").equals("true")) {
+                                        sharedCommonPref.clear_pref(Constants.LOC_POS_DATA);
                                         common_class.CommonIntentwithFinish(SFA_Activity.class);
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
@@ -934,6 +938,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvTax.setVisibility(View.VISIBLE);
         }
 
+        sharedCommonPref.save(Constants.LOC_POS_DATA, gson.toJson(Product_Modal));
 
     }
 
@@ -963,51 +968,51 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         try {
 
 
-        switch (key) {
-            case Constants.POS_SCHEME:
-                Log.v(TAG+"scheme:",apiDataResponse);
-                JSONObject jsonObject = new JSONObject(apiDataResponse);
+            switch (key) {
+                case Constants.POS_SCHEME:
+                    Log.v(TAG + "scheme:", apiDataResponse);
+                    JSONObject jsonObject = new JSONObject(apiDataResponse);
 
-                if (jsonObject.getBoolean("success")) {
+                    if (jsonObject.getBoolean("success")) {
 
-                    Gson gson = new Gson();
-                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                        Gson gson = new Gson();
+                        List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                    if (jsonArray != null && jsonArray.length() > 1) {
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        if (jsonArray != null && jsonArray.length() > 1) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
-                                    jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
-                                    Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
-                                    jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
-                                    jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+                                product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                        jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                        Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
+                                        jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
+                                        jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
 
 
+                            }
                         }
+
+                        sharedCommonPref.save(Constants.POS_SCHEME, gson.toJson(product_details_modalArrayList));
+
+
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.POS_SCHEME);
+
                     }
+                    break;
+                case Constants.POS_TAXList:
+                    JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+                    if (jsonObjectTax.getBoolean("success")) {
+                        sharedCommonPref.save(Constants.POS_TAXList, apiDataResponse);
 
-                    sharedCommonPref.save(Constants.POS_SCHEME, gson.toJson(product_details_modalArrayList));
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.POS_TAXList);
 
-
-                } else {
-                    sharedCommonPref.clear_pref(Constants.POS_SCHEME);
-
-                }
-                break;
-            case Constants.POS_TAXList:
-                JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
-                if (jsonObjectTax.getBoolean("success")) {
-                    sharedCommonPref.save(Constants.POS_TAXList, apiDataResponse);
-
-                } else {
-                    sharedCommonPref.clear_pref(Constants.POS_TAXList);
-
-                }
-                break;
-        }}
-        catch (Exception e){
+                    }
+                    break;
+            }
+        } catch (Exception e) {
 
         }
     }

@@ -277,13 +277,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Lin_POS:
-
                 common_class.CommonIntentwithNEwTask(POSActivity.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
-
                 break;
             case R.id.lin_myteam:
                 common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.Lin_primary:
                 common_class.getDb_310Data(Constants.PrimaryTAXList, this);
@@ -296,7 +295,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         int month = monthOfYear + 1;
                         tvDate.setText("" + year + "-" + month + "-" + dayOfMonth);
                         sfa_date = tvDate.getText().toString();
-
                         showDashboardData();
 
                     }

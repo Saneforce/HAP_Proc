@@ -244,7 +244,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                                 list.add(contentUri.toString());
                                 mData.get(holder.getAdapterPosition()).setFileUrls(list);
 
-                                qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
+                                qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
                                 holder.rvFiles.setAdapter(qpsFilesAdapter);
 
                             } catch (Exception e) {

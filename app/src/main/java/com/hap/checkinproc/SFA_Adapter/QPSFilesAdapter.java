@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
 
@@ -67,9 +70,31 @@ public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyView
                 }
             });
 
+            holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialogBox.showDialog(context, "HAP SFA", "Are You Sure Want to DELETE?", "OK", "Cancel", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            AryDta.remove(position);
+                            notifyDataSetChanged();
+
+                        }
+
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+
+                        }
+                    });
+                }
+            });
+
 
         } catch (Exception e) {
-            Log.v("Files:",e.getMessage());
+            Log.v("Files:", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -93,11 +118,12 @@ public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivFile;
+        ImageView ivFile, ivDel;
 
         public MyViewHolder(View view) {
             super(view);
             ivFile = view.findViewById(R.id.ivFile);
+            ivDel = view.findViewById(R.id.ivDel);
 
         }
     }

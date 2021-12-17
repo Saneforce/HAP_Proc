@@ -286,7 +286,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
                 JSONArray jsonArray1 = new JSONArray(preOrderList);
 
-
                 if (jsonArray1 != null && jsonArray1.length() > 0) {
                     for (int pm = 0; pm < Product_Modal.size(); pm++) {
                         for (int i = 0; i < jsonArray1.length(); i++) {
@@ -323,6 +322,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         }
                     }
                 }
+
+            } else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA), userType);
 
             }
 
@@ -690,6 +692,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                         ResetSubmitBtn(1);
                                         if (jsonObjects.getString("success").equals("true")) {
+                                            sharedCommonPref.clear_pref(Constants.LOC_INVOICE_DATA);
                                             common_class.CommonIntentwithFinish(Invoice_History.class);
                                         }
                                         common_class.showMsg(Invoice_Category_Select.this, jsonObjects.getString("Msg"));
@@ -878,6 +881,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             tvTax.setVisibility(View.VISIBLE);
 
         }
+
+        sharedCommonPref.save(Constants.LOC_INVOICE_DATA, gson.toJson(Product_Modal));
+
     }
 
     public void showOrderItemList(int categoryPos, String filterString) {
