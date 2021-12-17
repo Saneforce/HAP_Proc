@@ -928,9 +928,9 @@
                         </RelativeLayout>
 
                         <LinearLayout
-                            android:layout_marginTop="@dimen/C10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -1049,16 +1049,52 @@
                                     android:src="@drawable/mandatory" />
                             </LinearLayout>
 
-                            <EditText
-                                android:id="@+id/edtClsRetRmk"
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="100dp"
+                                android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
-                                android:gravity="start"
-                                android:hint="Enter the Reason for Closed."
-                                android:inputType="text"
-                                android:padding="10dp"
-                                android:textSize="13sp" />
+                                android:orientation="vertical">
+
+
+                                <EditText
+                                    android:id="@+id/edtClsRetRmk"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:background="@android:color/transparent"
+                                    android:gravity="start"
+                                    android:hint="Enter the Reason for Close"
+                                    android:padding="10dp"
+                                    android:textSize="13sp" />
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:padding="@dimen/C5dp">
+
+                                    <ImageView
+                                        android:id="@+id/ivRetailCapture"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_toLeftOf="@id/ivQPSPreviewImg"
+                                        android:padding="@dimen/C5dp"
+                                        android:src="@drawable/ic_round_photo_camera_24"
+                                        app:tint="@color/colorPrimaryDark" />
+
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rvFiles"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+                                </LinearLayout>
+
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <LinearLayout

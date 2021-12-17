@@ -173,13 +173,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            common_class.getPOSProduct(this);
-
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.POS_Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
-            Product_Modal = gson.fromJson(OrdersTable, userType);
+
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_POS_DATA)))
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+            else
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_POS_DATA), userType);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -213,7 +215,34 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 }
             });
 
-        /*    String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
+
+
+            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
+            GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            Grpgrid.setLayoutManager(GrpgridlayManager);
+
+            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+
+                    try {
+                        FilterTypes(item.getString("id"));
+                        common_class.brandPos = 0;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            Grpgrid.setAdapter(grplistItems);
+
+            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+            common_class.getDb_310Data(Constants.POS_TAXList, this);
+            common_class.getDb_310Data(Constants.POS_SCHEME, this);
+
+   /*    String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
 
             if (!Common_Class.isNullOrEmpty(preOrderList)) {
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -342,32 +371,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
-
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
-
-
-            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
-            LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
-            GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            Grpgrid.setLayoutManager(GrpgridlayManager);
-
-            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
-                @Override
-                public void onItemClick(JSONObject item) {
-
-                    try {
-                        FilterTypes(item.getString("id"));
-                        common_class.brandPos = 0;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            Grpgrid.setAdapter(grplistItems);
-
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
-
-
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -393,7 +396,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
-            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+            String taxRes = sharedCommonPref.getvalue(Constants.POS_TAXList);
             if (!Common_Class.isNullOrEmpty(taxRes)) {
                 JSONObject jsonObject = new JSONObject(taxRes);
                 JSONArray jsonArray = jsonObject.getJSONArray("Data");
@@ -464,7 +467,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void GetJsonData(String jsonResponse, String type, String filter) {
-
         //type =1 product category data values
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
@@ -505,7 +507,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             e.printStackTrace();
         }
     }
-
 
     void showOrderList() {
         Getorder_Array_List = new ArrayList<>();
@@ -548,7 +549,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }, dely);
 
     }
-
 
     @Override
     public void onClick(View v) {
@@ -747,6 +747,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     ResetSubmitBtn(1);
                                     if (jsonObjects.getString("success").equals("true")) {
+                                        sharedCommonPref.clear_pref(Constants.LOC_POS_DATA);
                                         common_class.CommonIntentwithFinish(SFA_Activity.class);
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
@@ -937,6 +938,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvTax.setVisibility(View.VISIBLE);
         }
 
+        sharedCommonPref.save(Constants.LOC_POS_DATA, gson.toJson(Product_Modal));
 
     }
 
@@ -966,20 +968,51 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         try {
 
 
-        switch (key) {
-            case Constants.TAXList:
-                JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+            switch (key) {
+                case Constants.POS_SCHEME:
+                    Log.v(TAG + "scheme:", apiDataResponse);
+                    JSONObject jsonObject = new JSONObject(apiDataResponse);
 
-                if (jsonObjectTax.getBoolean("success")) {
-                    sharedCommonPref.save(Constants.TAXList, apiDataResponse);
+                    if (jsonObject.getBoolean("success")) {
 
-                } else {
-                    sharedCommonPref.clear_pref(Constants.TAXList);
+                        Gson gson = new Gson();
+                        List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                }
-                break;
-        }}
-        catch (Exception e){
+                        if (jsonArray != null && jsonArray.length() > 1) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                        jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                        Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
+                                        jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
+                                        jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+
+
+                            }
+                        }
+
+                        sharedCommonPref.save(Constants.POS_SCHEME, gson.toJson(product_details_modalArrayList));
+
+
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.POS_SCHEME);
+
+                    }
+                    break;
+                case Constants.POS_TAXList:
+                    JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+                    if (jsonObjectTax.getBoolean("success")) {
+                        sharedCommonPref.save(Constants.POS_TAXList, apiDataResponse);
+
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.POS_TAXList);
+
+                    }
+                    break;
+            }
+        } catch (Exception e) {
 
         }
     }
@@ -1357,7 +1390,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             }
 
 
-                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+                            String strSchemeList = sharedCommonPref.getvalue(Constants.POS_SCHEME);
 
                             Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
                             }.getType();

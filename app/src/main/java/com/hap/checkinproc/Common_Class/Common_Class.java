@@ -553,8 +553,21 @@ public class Common_Class {
                         data.put("retailorId", Shared_Common_Pref.OutletCode);
                         break;
 
+                    case Constants.POS_TAXList:
+                        axnname = "get/posproducttaxdetails";
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("retailorId", Shared_Common_Pref.OutletCode);
+                        break;
+
+
                     case Constants.FreeSchemeDiscList:
                         axnname = "get/secondaryscheme";
+                        data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        break;
+                    case Constants.POS_SCHEME:
+                        axnname = "get/posscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         break;
@@ -843,6 +856,12 @@ public class Common_Class {
                             case "Order?":
                                 shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
                                 break;
+                            case "POS?":
+                                shared_common_pref.clear_pref(Constants.LOC_POS_DATA);
+                                break;
+                            case "Invoice?":
+                                shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
+                                break;
                         }
                     }
 
@@ -868,6 +887,8 @@ public class Common_Class {
             if (type == 2) {
                 shared_common_pref.clear_pref(Constants.LOC_PRIMARY_DATA);
                 shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
+                shared_common_pref.clear_pref(Constants.LOC_POS_DATA);
+                shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
             }
         }
 

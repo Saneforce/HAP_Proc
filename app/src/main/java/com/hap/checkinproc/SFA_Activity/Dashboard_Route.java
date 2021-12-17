@@ -869,8 +869,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {
 
-                            if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId()))
+                            if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId())) {
                                 shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
+                                shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
+
+                            }
 
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
