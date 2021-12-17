@@ -511,13 +511,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 } else {
                     Log.v("PERMISSION", "Yes");
 
-                    if (txtLodgUKey.getText().toString().equals("")) {
-                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        Calendar calobjw = Calendar.getInstance();
-                        lodUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                        txtLodgUKey.setText(lodUKey);
-                    }
-                    lodUKey=txtLodgUKey.getText().toString();
                     popupCapture(143);
 
                 }
@@ -907,14 +900,6 @@ Log.d("DACliam","Error : "+t.getMessage());
                             oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
                             editMode = oeEditext.getText().toString();
 
-                            if (oeTxtUKeys.getText().toString().equals("")) {
-                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                Calendar calobjw = Calendar.getInstance();
-                                oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                                oeTxtUKeys.setText(oeEditCnt);
-                            }
-
-                            OeUKey = oeTxtUKeys.getText().toString();
                             popupCapture(99);
 
                         }
@@ -1060,13 +1045,6 @@ Log.d("DACliam","Error : "+t.getMessage());
                             lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                             editMode = editTexts.getText().toString();
 
-                            if (lcTxtUKeys.getText().toString().equals("")) {
-                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                Calendar calobjw = Calendar.getInstance();
-                                lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                                lcTxtUKeys.setText(lcEditcnt);
-                            }
-                            LcUKey = lcTxtUKeys.getText().toString();
                             popupCapture(786);
 
                         }
@@ -2416,13 +2394,13 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                                             Log.v("Travel_Location_imagw", editMode);
 
-                                            if (tvTxtUKeys.getText().toString().equals("")) {
+                                            /*if (tvTxtUKeys.getText().toString().equals("")) {
                                                 DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                                 Calendar calobjw = Calendar.getInstance();
                                                 tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
                                                 tvTxtUKeys.setText(tvEditcnt);
                                             }
-                                            TlUKey = tvTxtUKeys.getText().toString();
+                                            TlUKey = tvTxtUKeys.getText().toString();*/
                                             popupCapture(123);
 
 
@@ -2573,13 +2551,6 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                                         Log.v("Travel_Location_imagw", editMode);
 
-                                        if (tvTxtUKeys.getText().toString().equals("")) {
-                                            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                            Calendar calobjw = Calendar.getInstance();
-                                            tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                                            tvTxtUKeys.setText(tvEditcnt);
-                                        }
-                                        TlUKey = tvTxtUKeys.getText().toString();
                                         popupCapture(123);
 
 
@@ -3078,7 +3049,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
                         lcTxtUKey = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                         editMode = editTexts.getText().toString();
-
+/*
                         if (lcTxtUKey.getText().toString().equals("")) {
                             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             Calendar calobjw = Calendar.getInstance();
@@ -3087,7 +3058,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                         } else {
                         }
-                        LcUKey = lcTxtUKey.getText().toString();
+                        LcUKey = lcTxtUKey.getText().toString();*/
                         popupCapture(786);
                     }
 
@@ -3194,13 +3165,13 @@ Log.d("DACliam","Error : "+t.getMessage());
                         oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
                         editMode = oeEditext.getText().toString();
 
-                        if (oeTxtUKeys.getText().toString().equals("")) {
+                        /*if (oeTxtUKeys.getText().toString().equals("")) {
                             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             Calendar calobjw = Calendar.getInstance();
                             oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
                             oeTxtUKeys.setText(oeEditCnt);
                         }
-                        OeUKey = oeTxtUKeys.getText().toString();
+                        OeUKey = oeTxtUKeys.getText().toString();*/
                         popupCapture(99);
                     }
                 }
@@ -3660,14 +3631,48 @@ Log.d("DACliam","Error : "+t.getMessage());
             @Override
             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
                 String sMode="";
-
                 long nano_startTime = System.nanoTime();
                 ImageUKey = keyEk + UserDetails.getString("Sfcode","") + nano_startTime;
-                switch (reqCode){
-                    case 143: sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey;break;
-                    case 123: sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey;break;
-                    case 99: sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey;break;
-                    case 786: sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;break;
+                if(reqCode==143) {
+                    if (txtLodgUKey.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        lodUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        txtLodgUKey.setText(lodUKey);
+                    }
+                    lodUKey = txtLodgUKey.getText().toString();
+                    sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey;
+                }
+                if(reqCode==123){
+                    if (tvTxtUKeys.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        tvTxtUKeys.setText(tvEditcnt);
+                    }
+                    TlUKey = tvTxtUKeys.getText().toString();
+                    sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey;
+                }
+                if(reqCode==99){
+                    if (oeTxtUKeys.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        oeTxtUKeys.setText(oeEditCnt);
+                    }
+
+                    OeUKey = oeTxtUKeys.getText().toString();
+                    sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey;
+                }
+                if(reqCode==786){
+                    if (lcTxtUKeys.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        lcTxtUKeys.setText(lcEditcnt);
+                    }
+                    LcUKey = lcTxtUKeys.getText().toString();
+                    sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;
                 }
 
                 Intent mIntent = new Intent(TAClaimActivity.this, FileUploadService.class);
