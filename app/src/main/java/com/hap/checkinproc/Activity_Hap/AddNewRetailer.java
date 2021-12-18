@@ -847,7 +847,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             if (mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0) {
                 for (int j = 0; j < mData.get(0).getFileUrls().size(); j++) {
-                    String filePath = mData.get(0).getFileUrls().get(j);
+                    String filePath = mData.get(0).getFileUrls().get(j).replaceAll("file:/", "");
                     File file = new File(filePath);
                     Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
                     mIntent.putExtra("mFilePath", filePath);

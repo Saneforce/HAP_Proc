@@ -113,6 +113,8 @@ public class FileUploadService extends JobIntentService {
     private void onErrors(Throwable throwable) {
     //sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
         if(throwable.getMessage().indexOf("No such file or directory")>-1){
+            sendBroadcastMeaasge(throwable.getMessage());
+
             sendOtherPhotos();
         }else {
             UploadPhoto();
