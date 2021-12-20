@@ -29,14 +29,11 @@ import java.util.concurrent.TimeUnit;
 public class PayLedgerActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     public TextView tvOutletName, tvStartDate, tvEndDate;
     DatePickerDialog fromDatePickerDialog;
-
     RecyclerView rvLedger;
     PayLedger_Adapter plAdapter;
     private Common_Class common_class;
-    static SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
     private String date;
     Shared_Common_Pref sharedCommonPref;
-
     public static String ledgerFDT = "", ledgerTDT = "";
 
     @Override
@@ -87,33 +84,6 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public boolean checkDates(String stDate, String endDate) {
-        boolean b = false;
-        try {
-
-            Date date1 = dfDate.parse(stDate);
-            Date date2 = dfDate.parse(endDate);
-            long diff = date2.getTime() - date1.getTime();
-            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
-                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
-                    b = true;//If start date is before end date
-                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
-                    b = true;//If two dates are equal
-                } else {
-                    b = false; //If start date is after the end date
-                }
-
-            } else {
-                Toast.makeText(PayLedgerActivity.this, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return b;
-    }
 
     void selectDate(int val) {
 
@@ -125,7 +95,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (checkDates(date, tvEndDate.getText().toString()) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(),PayLedgerActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         ledgerFDT = tvStartDate.getText().toString();
@@ -137,7 +107,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
                 } else {
-                    if (checkDates(tvStartDate.getText().toString(), date) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date,PayLedgerActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         ledgerTDT = tvEndDate.getText().toString();

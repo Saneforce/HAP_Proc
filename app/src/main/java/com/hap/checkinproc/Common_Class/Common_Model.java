@@ -5,11 +5,13 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
-    private  String ERP_Code;
+    private String ERP_Code;
     private String QPS_Code;
     private String QPS_Name;
     private int Total_Ltrs;
     private int Per_Day_Ltrs;
+    private int CnvQty;
+
     private String Days_Period;
 
     public int getTotal_Ltrs() {
@@ -46,12 +48,12 @@ public class Common_Model {
     private String address;
     private String phone;
 
-     String checkouttime;
-     boolean ExpNeed;
-     boolean isSelected;
-     private Integer Pho;
-     private String cont;
-     private Integer MaxDays;
+    String checkouttime;
+    boolean ExpNeed;
+    boolean isSelected;
+    private Integer Pho;
+    private String cont;
+    private Integer MaxDays;
 
 
     public Common_Model(String name, String id, String flag, String address, String phone) {
@@ -100,12 +102,13 @@ public class Common_Model {
         this.JSONobject = jsonObject;
     }
 
-    public Common_Model(String id, String name, JSONObject jsonObject,Integer position) {
+    public Common_Model(String id, String name, JSONObject jsonObject, Integer position) {
         this.id = id;
         this.name = name;
         this.JSONobject = jsonObject;
         this.Pho = position;
     }
+
     public Common_Model(String id, String name, String flag, String checkouttime) {
         this.id = id;
         this.name = name;
@@ -117,6 +120,12 @@ public class Common_Model {
         this.name = name;
         this.id = id;
         this.isSelected = isSelected;
+    }
+
+    public Common_Model(String name, String id, int CnvQty) {
+        this.name = name;
+        this.id = id;
+        this.CnvQty = CnvQty;
     }
 
     public String getCheckouttime() {
@@ -254,5 +263,13 @@ public class Common_Model {
 
     public void setQPS_Code(String QPS_Code) {
         this.QPS_Code = QPS_Code;
+    }
+
+    public int getCnvQty() {
+        return CnvQty;
+    }
+
+    public void setCnvQty(int cnvQty) {
+        CnvQty = cnvQty;
     }
 }

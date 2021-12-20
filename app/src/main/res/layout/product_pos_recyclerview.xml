@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_weight="3"
+                    android:layout_weight="3.5"
                     android:scaleType="centerInside"
                     android:src="@drawable/product_logo">
 
@@ -76,7 +76,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_marginRight="@dimen/C5dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -128,14 +128,14 @@
                             android:id="@+id/RegularAmt"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_marginRight="@dimen/C5dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"
-                            android:gravity="center_vertical"
-                            android:textAlignment="textEnd"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/txt_color_black"
                             android:textStyle="bold"
                             android:visibility="visible" />
@@ -155,7 +155,7 @@
                             android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
-                            android:text="New Qty : "
+                            android:text="Qty  : "
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout
@@ -199,6 +199,36 @@
                                 app:tint="@color/green" />
                         </LinearLayout>
 
+                        <RelativeLayout
+                            android:id="@+id/rlUOM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/C3dp"
+                            android:background="@drawable/order_qty_backround">
+
+                            <TextView
+                                android:id="@+id/tvUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center_vertical"
+                                android:hint="UOM"
+                                android:inputType="number"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:textColor="@color/txt_color_black"
+                                android:textStyle="bold"
+                                android:visibility="visible" />
+
+                            <ImageView
+                                android:padding="@dimen/C1dp"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/tvUOM"
+
+                                android:src="@drawable/spin_down_arrow"></ImageView>
+                        </RelativeLayout>
 
                         <RelativeLayout
 
@@ -206,12 +236,15 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:maxLines="1"
                                 android:id="@+id/qtyAmt"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-
+                                android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_marginRight="@dimen/C5dp"
+
+                                android:autoSizeTextType="uniform"
+                                android:ellipsize="end"
                                 android:fontFamily="sans-serif"
                                 android:gravity="center_vertical"
                                 android:hint=""
@@ -228,7 +261,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:layout_marginRight="@dimen/C10dp"
+                        android:layout_marginRight="@dimen/C5dp"
                         android:orientation="horizontal"
                         android:visibility="visible">
 
@@ -330,7 +363,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_marginRight="@dimen/C5dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:hint=""
@@ -377,7 +410,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_marginRight="@dimen/C5dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"

@@ -86,6 +86,30 @@ public class Product_Details_Modal {
     @Expose
     private String ConversionFactor;
 
+    public String getUOM_Id() {
+        return UOM_Id;
+    }
+
+    public void setUOM_Id(String UOM_Id) {
+        this.UOM_Id = UOM_Id;
+    }
+
+    public String getUOM_Nm() {
+        return UOM_Nm;
+    }
+
+    public void setUOM_Nm(String UOM_Nm) {
+        this.UOM_Nm = UOM_Nm;
+    }
+
+    @SerializedName("UOM_Id")
+    @Expose
+    private String UOM_Id;
+
+    @SerializedName("UOM_Nm")
+    @Expose
+    private String UOM_Nm;
+
     @SerializedName("CGST")
     @Expose
     private Double CGST;

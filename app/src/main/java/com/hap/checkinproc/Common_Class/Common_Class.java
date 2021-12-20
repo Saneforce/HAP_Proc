@@ -71,6 +71,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -456,6 +457,10 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.UOM:
+                        axnname = "get/productuom";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
@@ -797,6 +802,35 @@ public class Common_Class {
         Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    public boolean checkDates(String stDate, String endDate, Activity activity) {
+        boolean b = false;
+        try {
+            SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date date1 = dfDate.parse(stDate);
+            Date date2 = dfDate.parse(endDate);
+            long diff = date2.getTime() - date1.getTime();
+            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
+                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
+                    b = true;//If start date is before end date
+                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
+                    b = true;//If two dates are equal
+                } else {
+                    b = false; //If start date is after the end date
+                }
+
+            } else {
+                Toast.makeText(activity, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return b;
     }
 
     public void showCalDialog(Activity activity, String msg, String num) {
