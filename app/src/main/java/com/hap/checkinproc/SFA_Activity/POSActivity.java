@@ -114,7 +114,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private List<Product_Details_Modal> orderTotTax;
     private String scanProId = "";
     private ArrayList<Common_Model> uomList;
-    private int cf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,7 +220,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
-            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            JSONArray ProdGroups = db.getMasterData(Constants.POS_ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -375,11 +374,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
 
-            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.UOM))) {
-
-                loadUOMData();
-            }
-            common_class.getDb_310Data(Constants.UOM, this);
+//            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.UOM))) {
+//
+//                loadUOMData();
+//            }
+//            common_class.getDb_310Data(Constants.UOM, this);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -460,7 +459,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private void FilterTypes(String GrpID) {
         try {
             JSONArray TypGroups = new JSONArray();
-            JSONArray tTypGroups = db.getMasterData(Constants.ProdTypes_List);
+            JSONArray tTypGroups = db.getMasterData(Constants.POS_ProdTypes_List);
             LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
             TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Brndgrid.setLayoutManager(TypgridlayManager);
@@ -474,13 +473,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             String filterId = "";
             if (TypGroups.length() > 0)
                 filterId = TypGroups.getJSONObject(0).getString("id");
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", filterId);
+            GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", filterId);
 
             RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
                     try {
-                        GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", item.getString("id"));
+                        GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", item.getString("id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -707,9 +706,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            int cf = 1;
-                            if (!Common_Class.isNullOrEmpty(Getorder_Array_List.get(z).getConversionFactor()))
-                                cf = Integer.parseInt(Getorder_Array_List.get(z).getConversionFactor());
+                            double cf = (Getorder_Array_List.get(z).getCnvQty());
                             ProdItem.put("Product_Total_Qty", cf > 0 ? Getorder_Array_List.get(z).getQty() *
                                     cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
@@ -725,7 +722,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
 
-                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getConversionFactor());
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
                             ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
                             ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
@@ -766,11 +763,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.savePOS(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.savePOSTest(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -1207,10 +1204,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
-                Product_ModalSetAdapter.get(uomPos).setConversionFactor(myDataset.get(position).getPhone());
+                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble(myDataset.get(position).getPhone()));
                 Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                 Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-
                 mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
                 break;
         }
@@ -1368,14 +1364,22 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             try {
 
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
-                cf = 1;
-                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getConversionFactor()))
-                    cf = Integer.parseInt(Product_Details_Modal.getConversionFactor());
+
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * cf));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+                else {
+                    holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+
+
+                }
+
+                holder.Rate.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
+
                 //  holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getBar_Code()))
@@ -1384,7 +1388,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 if (CategoryType >= 0) {
 
                     holder.totalQty.setText("Total Qty : " + (
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * cf)));
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1398,17 +1402,27 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     }
 
 
-                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(cf * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
+                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getQty() * cf));
+                    holder.QtyAmt.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
 
 
                     holder.rlUOM.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             uomPos = position;
-                            // showUOMDialog();
-                            common_class.showCommonDialog(uomList, 1, POSActivity.this);
+                            uomList = new ArrayList<>();
+
+                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+
+                                }
+                                common_class.showCommonDialog(uomList, 1, POSActivity.this);
+                            } else {
+                                common_class.showMsg(POSActivity.this, "No Records Found.");
+                            }
                         }
                     });
 
@@ -1455,7 +1469,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty * cf);
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1463,8 +1477,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP()))));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
+                                holder.totalQty.setText("Total Qty : " + totQty);
                             }
 
 

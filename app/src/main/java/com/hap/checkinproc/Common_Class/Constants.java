@@ -99,4 +99,7 @@ public class Constants {
     public static final String SlotTime="slotTime";
     public static final String POS_Product_List="posProductList";
     public static final String POS_TAXList="posTaxList";
+    public static final String POS_Category_List="posCategoryList";
+    public static final String POS_ProdTypes_List="posProTypeList";
+    public static final String POS_ProdGroups_List="posProGrpList";
 }

@@ -1131,6 +1131,295 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="FSSAI Number"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/edt_retailer_fssai"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="start"
+                                android:hint="Enter the FSSAI Number"
+                                android:padding="10dp"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PAN Number"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/edt_retailer_pan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="start"
+                                android:hint="Enter the PAN Number"
+                                android:padding="10dp"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freezer Make"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/edt_retailer_freezerMake"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="start"
+                                android:hint="Enter the Freezer Make"
+                                android:padding="10dp"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freezer Tag Number"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/edt_retailer_freezerTagNo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="start"
+                                android:hint="Enter the Freezer Tag Number"
+                                android:padding="10dp"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Freezer status"
+                                android:textColor="@android:color/black"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/C2dp"
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rlFreezerStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg_grey"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/txFreezerStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Freezer status"
+                                android:padding="5dp"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="@dimen/C10dp"
+                                android:layout_height="@dimen/C10dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:src="@drawable/spin_down_arrow"></ImageView>
+                        </RelativeLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Freezer Capacity (Ltr)"
+                                android:textColor="@android:color/black"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/C2dp"
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rlFreezerCapacity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg_grey"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/txFreezerCapacity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Freezer Capacity"
+                                android:padding="5dp"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="@dimen/C10dp"
+                                android:layout_height="@dimen/C10dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:src="@drawable/spin_down_arrow"></ImageView>
+                        </RelativeLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freezer Photo Upload"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <ImageView
+                                    android:visibility="invisible"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/C2dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:src="@drawable/mandatory" />
+                            </LinearLayout>
+
+
+
+                                <LinearLayout
+                                    android:layout_marginBottom="@dimen/C20dp"
+                                    android:background="@drawable/text_bg_grey"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:padding="@dimen/C5dp">
+
+                                    <ImageView
+                                        android:id="@+id/ivFreezerCapture"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:padding="@dimen/C5dp"
+                                        android:src="@drawable/ic_round_photo_camera_24"
+                                        app:tint="@color/colorPrimaryDark" />
+
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rvFreezerFiles"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+                                </LinearLayout>
+
+
+                        </LinearLayout>
+
+
 
                     </LinearLayout>
 
