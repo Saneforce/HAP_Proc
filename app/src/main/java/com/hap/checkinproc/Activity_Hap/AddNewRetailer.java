@@ -55,7 +55,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
-import com.hap.checkinproc.SFA_Adapter.QPSFilesAdapter;
+import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -110,7 +110,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     SharedPreferences UserDetails, CheckInDetails;
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
-    ImageView copypaste, ivCapture;
+    ImageView copypaste, ivCapture, ivFreezerCapture;
     String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
 
@@ -133,9 +133,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private ArrayList<Common_Model> serviceTypeList;
 
     private String name = "";
-    RecyclerView rvFiles;
+    RecyclerView rvFiles, rvFreezerFiles;
     List<QPS_Modal> mData = new ArrayList<>();
-    private QPSFilesAdapter filesAdapter;
+    List<QPS_Modal> mFreezerData = new ArrayList<>();
+
+    private FilesAdapter filesAdapter;
 
 
     @Override
@@ -162,7 +164,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
             copypaste = findViewById(R.id.copypaste);
             ivCapture = findViewById(R.id.ivRetailCapture);
+            ivFreezerCapture = findViewById(R.id.ivFreezerCapture);
             rvFiles = findViewById(R.id.rvFiles);
+            rvFreezerFiles = findViewById(R.id.rvFreezerFiles);
             edt_gst = findViewById(R.id.edt_gst);
             headtext = findViewById(R.id.headtext);
             addRetailerName = findViewById(R.id.edt_new_name);
@@ -195,6 +199,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             tvServiceType = findViewById(R.id.txt_service_type);
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
+            ivFreezerCapture.setOnClickListener(this);
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
@@ -570,6 +575,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             common_class.getDb_310Data(Constants.STATE_LIST, this);
             mData.add(new QPS_Modal("", "", ""));
+            mFreezerData.add(new QPS_Modal("", "", ""));
 
 
         } catch (Exception e) {
@@ -859,6 +865,20 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             }
 
+            if (mFreezerData.get(0).getFileUrls() != null && mFreezerData.get(0).getFileUrls().size() > 0) {
+                for (int j = 0; j < mFreezerData.get(0).getFileUrls().size(); j++) {
+                    String filePath = mFreezerData.get(0).getFileUrls().get(j).replaceAll("file:/", "");
+                    File file = new File(filePath);
+                    Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
+                    mIntent.putExtra("mFilePath", filePath);
+                    mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                    mIntent.putExtra("FileName", file.getName());
+                    mIntent.putExtra("Mode", "freezer");
+                    FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
+                }
+
+            }
+
             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calobjw = Calendar.getInstance();
             KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
@@ -934,6 +954,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
             }
             reportObject.put("file_Details", fileArr);
+
+            JSONArray freezerFileArr = new JSONArray();
+            if (mFreezerData.get(0).getFileUrls() != null && mFreezerData.get(0).getFileUrls().size() > 0) {
+                for (int i = 0; i < mFreezerData.get(0).getFileUrls().size(); i++) {
+                    JSONObject fileData = new JSONObject();
+                    File file = new File(mFreezerData.get(0).getFileUrls().get(i));
+                    fileData.put("freezer_filename", file.getName());
+                    freezerFileArr.put(fileData);
+                }
+            }
+            reportObject.put("freezer_file_Details", freezerFileArr);
 
             docMasterObject.put("unlisted_doctor_master", reportObject);
 
@@ -1135,7 +1166,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivRetailCapture:
-                captureImg();
+                captureImg(mData, rvFiles);
+                break;
+            case R.id.ivFreezerCapture:
+                captureImg(mFreezerData, rvFreezerFiles);
                 break;
             case R.id.linear_service_type:
                 common_class.showCommonDialog(serviceTypeList, 4, this);
@@ -1180,7 +1214,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
     }
 
-    private void captureImg() {
+    private void captureImg(List<QPS_Modal> mModal, RecyclerView rv) {
         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
             @Override
             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
@@ -1191,13 +1225,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     File file = new File(fullPath);
                     Uri contentUri = Uri.fromFile(file);
 
-                    if (mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0)
-                        list = (mData.get(0).getFileUrls());
+                    if (mModal.get(0).getFileUrls() != null && mModal.get(0).getFileUrls().size() > 0)
+                        list = (mModal.get(0).getFileUrls());
                     list.add(contentUri.toString());
-                    mData.get(0).setFileUrls(list);
+                    mModal.get(0).setFileUrls(list);
 
-                    filesAdapter = new QPSFilesAdapter(mData.get(0).getFileUrls(), R.layout.adapter_local_files_layout, AddNewRetailer.this);
-                    rvFiles.setAdapter(filesAdapter);
+                    filesAdapter = new FilesAdapter(mModal.get(0).getFileUrls(), R.layout.adapter_local_files_layout, AddNewRetailer.this);
+                    rv.setAdapter(filesAdapter);
 
                 } catch (Exception e) {
                     Log.v(TAG + ":capture:", e.getMessage());

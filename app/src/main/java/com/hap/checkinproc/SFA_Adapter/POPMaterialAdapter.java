@@ -51,7 +51,7 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
 
     List<QPS_Modal> qpsModalList = new ArrayList<>();
 
-    QPSFilesAdapter qpsFilesAdapter;
+    FilesAdapter filesAdapter;
     ArrayList<List<String>> fileList = new ArrayList<>();
     private String key = "";
     Common_Class common_class;
@@ -214,9 +214,9 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
 
 
             if (fileList != null && fileList.size() > position && fileList.get(position).size() > 0) {
-                qpsFilesAdapter = new QPSFilesAdapter(fileList.get(position), R.layout.adapter_qps_files_layout, context);
+                filesAdapter = new FilesAdapter(fileList.get(position), R.layout.adapter_qps_files_layout, context);
 
-                holder.rvFile.setAdapter(qpsFilesAdapter);
+                holder.rvFile.setAdapter(filesAdapter);
             }
         } catch (Exception e) {
             Log.e("POPMAterialAdaptr:", e.getMessage());

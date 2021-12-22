@@ -1,10 +1,12 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
+import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +41,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
     int salRowDetailLayout;
     private double ACBalance = 0.0;
     Shared_Common_Pref shared_common_pref;
+
 
     public DistributerListAdapter(JSONArray jAryDta, int rowLayout, Context mContext) {
         AryDta = jAryDta;
@@ -127,6 +133,28 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
 
             }
 
+            holder.llDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Common_Class common_class = new Common_Class(context);
+                        JSONObject itm = AryDta.getJSONObject(position);
+                        if (Common_Class.isNullOrEmpty(itm.getString("lat")) || Common_Class.isNullOrEmpty(itm.getString("lon"))) {
+                            common_class.showMsg(Reports_Distributor_Name.reports_distributor_name, "No route is found");
+                        } else {
+                            Intent intent = new Intent(context, MapDirectionActivity.class);
+                            intent.putExtra(Constants.DEST_LAT, itm.getString("lat"));
+                            intent.putExtra(Constants.DEST_LNG, itm.getString("long"));
+                            intent.putExtra(Constants.DEST_NAME, itm.getString("name"));
+                            context.startActivity(intent);
+                        }
+                    } catch (Exception e) {
+
+                    }
+
+                }
+            });
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -151,6 +179,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvDistName, tvbal, tvAvailBal, tvAmtBlk;
         RelativeLayout rlRefresh;
+        LinearLayout llDirection;
 
         public MyViewHolder(View view) {
             super(view);
@@ -159,6 +188,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
             tvAvailBal = view.findViewById(R.id.tvAvailBal);
             tvAmtBlk = view.findViewById(R.id.tvAmtBlk);
             rlRefresh = view.findViewById(R.id.rlRefBal);
+            llDirection = view.findViewById(R.id.llDirection);
 
         }
     }
