@@ -146,6 +146,12 @@ public class Common_Class {
         return plantime;
     }
 
+    public static String GetDatemonthyearTimeformat() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
     public void CommonIntentwithoutFinish(Class classname) {
         intent = new Intent(activity, classname);
         activity.startActivity(intent);

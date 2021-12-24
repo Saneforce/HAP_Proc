@@ -20,7 +20,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -133,11 +137,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private ArrayList<Common_Model> serviceTypeList;
 
     private String name = "";
-    RecyclerView rvFiles, rvFreezerFiles;
+    RecyclerView rvFiles, rvFreezerFiles, rvCategoryTypes;
     List<QPS_Modal> mData = new ArrayList<>();
     List<QPS_Modal> mFreezerData = new ArrayList<>();
 
     private FilesAdapter filesAdapter;
+    public String categoryType = "";
 
 
     @Override
@@ -167,6 +172,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             ivFreezerCapture = findViewById(R.id.ivFreezerCapture);
             rvFiles = findViewById(R.id.rvFiles);
             rvFreezerFiles = findViewById(R.id.rvFreezerFiles);
+            rvCategoryTypes = findViewById(R.id.rvCategoryTypes);
             edt_gst = findViewById(R.id.edt_gst);
             headtext = findViewById(R.id.headtext);
             addRetailerName = findViewById(R.id.edt_new_name);
@@ -223,10 +229,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             outletTypeList = new ArrayList<>();
             mCommon_model_spinner = new Common_Model("1", "Service", "flag");
             outletTypeList.add(mCommon_model_spinner);
-            mCommon_model_spinner = new Common_Model("0", "Universal", "flag");
+            mCommon_model_spinner = new Common_Model("0", "Non Service", "flag");
             outletTypeList.add(mCommon_model_spinner);
             mCommon_model_spinner = new Common_Model("2", "Closed", "flag");
             outletTypeList.add(mCommon_model_spinner);
+
+            serviceTypeList = new ArrayList<>();
+            serviceTypeList.add(new Common_Model("-18", "1"));
+            serviceTypeList.add(new Common_Model("+4", "2"));
+            serviceTypeList.add(new Common_Model("Ambient", "3"));
+
+            Category_Adapter categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
+            rvCategoryTypes.setAdapter(categoryAdapter);
+
 
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -305,13 +320,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             //  getRouteDetails();
             getRetailerClass();
             getRetailerChannel();
-            getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
+            // getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
 
                 iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
                 if (iOutletTyp == 0)
-                    txOutletType.setText("Universal");
+                    txOutletType.setText("Non Service");
                 else if (iOutletTyp == 2)
                     txOutletType.setText("Closed");
                 else
@@ -896,7 +911,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString() + "'");
-            reportObject.put("serviceType", "'" + tvServiceType.getText().toString() + "'");
+            reportObject.put("CategoryType", "'" + categoryType + "'");
             if (edt_outstanding.getText().toString().equals(""))
                 reportObject.put("outstanding_amount", 0);
 
@@ -1069,7 +1084,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 common_class.getDb_310Data(Constants.Rout_List, this);
-                getServiceTypes(myDataset.get(position).getId());
+                // getServiceTypes(myDataset.get(position).getId());
                 break;
             case 3:
                 routeId = myDataset.get(position).getId();
@@ -1312,4 +1327,100 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
 
     }
+
+    public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.MyViewHolder> {
+        Context context;
+        private List<Common_Model> list;
+        private int rowLayout, lastCheckedPos;
+        private CheckBox lastChecked;
+
+
+        public Category_Adapter(List<Common_Model> list, int rowLayout, Context context) {
+            this.list = list;
+            this.rowLayout = rowLayout;
+            this.context = context;
+
+
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            try {
+
+                holder.name.setText(list.get(position).getName());
+
+                holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        CheckBox cb = (CheckBox) buttonView;
+                        int clickedPos = holder.getAdapterPosition();
+
+
+                        if (cb.isChecked()) {
+                            if (lastChecked != null) {
+                                lastChecked.setChecked(false);
+                                list.get(lastCheckedPos).setSelected(false);
+                            }
+
+                            lastChecked = cb;
+                            lastCheckedPos = clickedPos;
+
+                            list.get(clickedPos).setSelected(cb.isSelected());
+
+                            categoryType = list.get(position).getName();
+
+
+                        } else {
+                            lastChecked = null;
+                            categoryType = "";
+
+                        }
+                    }
+                });
+
+//                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
+//                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+//                holder.Free.setText("" + Product_Details_Modal.getFree());
+//                updateToTALITEMUI();
+            } catch (Exception e) {
+                Log.e(TAG, "adapterProduct: " + e.getMessage());
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView name;
+            CheckBox cbType;
+
+            public MyViewHolder(View view) {
+                super(view);
+                name = view.findViewById(R.id.tvCategoryName);
+                cbType = view.findViewById(R.id.cbCategory);
+
+            }
+        }
+    }
+
 }
