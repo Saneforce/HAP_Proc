@@ -233,6 +233,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             outletTypeList.add(mCommon_model_spinner);
             mCommon_model_spinner = new Common_Model("2", "Closed", "flag");
             outletTypeList.add(mCommon_model_spinner);
+            mCommon_model_spinner = new Common_Model("3", "Duplicate", "flag");
+            outletTypeList.add(mCommon_model_spinner);
 
             serviceTypeList = new ArrayList<>();
             serviceTypeList.add(new Common_Model("-18", "1"));
@@ -1368,29 +1370,46 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        CheckBox cb = (CheckBox) buttonView;
-                        int clickedPos = holder.getAdapterPosition();
+                        try {
+                            if (isChecked) {
+                                categoryType = categoryType + list.get(position).getName() + ",";
+                            } else {
+                                String val = list.get(position).getName();
+//                                val = val.replaceAll("\\+", "9");
+//                                Log.v("adapterProductType:111", val);
+//
+                                categoryType = categoryType.replaceAll(val, "");
 
-
-                        if (cb.isChecked()) {
-                            if (lastChecked != null) {
-                                lastChecked.setChecked(false);
-                                list.get(lastCheckedPos).setSelected(false);
                             }
-
-                            lastChecked = cb;
-                            lastCheckedPos = clickedPos;
-
-                            list.get(clickedPos).setSelected(cb.isSelected());
-
-                            categoryType = list.get(position).getName();
-
-
-                        } else {
-                            lastChecked = null;
-                            categoryType = "";
+                            Log.v("adapterProductType:222", categoryType);
+                        } catch (Exception e) {
+                            Log.e(TAG, "adapterProductEx: " + e.getMessage());
 
                         }
+
+//                        CheckBox cb = (CheckBox) buttonView;
+//                        int clickedPos = holder.getAdapterPosition();
+//
+//
+//                        if (cb.isChecked()) {
+//                            if (lastChecked != null) {
+//                                lastChecked.setChecked(false);
+//                                list.get(lastCheckedPos).setSelected(false);
+//                            }
+//
+//                            lastChecked = cb;
+//                            lastCheckedPos = clickedPos;
+//
+//                            list.get(clickedPos).setSelected(cb.isSelected());
+//
+//                            categoryType = list.get(position).getName();
+//
+//
+//                        } else {
+//                            lastChecked = null;
+//                            categoryType = "";
+//
+//                        }
                     }
                 });
 

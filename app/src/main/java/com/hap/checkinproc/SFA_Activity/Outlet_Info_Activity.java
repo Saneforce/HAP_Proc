@@ -418,6 +418,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);
+            sharedCommonPref.save(Constants.DivERP,myDataset.get(position).getDivERP());
+
         } else if (type == 3) {
             route_text.setText(myDataset.get(position).getName());
             sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());

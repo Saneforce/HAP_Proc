@@ -200,6 +200,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C10dp"
@@ -222,7 +223,7 @@
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:src="@drawable/ic_outline_add_chart_48"
-                                    app:tint="@color/colorPrimaryDark" />
+                                   />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -264,6 +265,33 @@
                                     android:text="Secondary Orders"
                                     android:textAlignment="center" />
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_vanSales"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"
+                                    android:src="@drawable/ic_outline_local_shipping_24" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="@dimen/C8dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="Van Sales"
+                                    android:textAlignment="center" />
+                            </LinearLayout>
+
 
                             <LinearLayout
                                 android:id="@+id/Lin_Route"
@@ -438,12 +466,12 @@
 
                             <LinearLayout
 
-                                android:visibility="gone"
                                 android:id="@+id/Lin_POS"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
 
                                 <ImageView
@@ -490,6 +518,7 @@
                                     android:text="My Team"
                                     android:textAlignment="center" />
                             </LinearLayout>
+
 
 
                             <LinearLayout

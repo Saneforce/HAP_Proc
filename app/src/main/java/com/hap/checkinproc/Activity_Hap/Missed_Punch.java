@@ -53,7 +53,6 @@ import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.MissedPunch;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.FileUploadService;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -224,13 +223,12 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             visbleMOde = params.getString("Aflag");
 
 
-
             if (visbleMOde.equalsIgnoreCase("1")) {
                 linMode.setVisibility(View.VISIBLE);
-                Log.v("VISIBLE_MODE_VISIBLE",visbleMOde);
+                Log.v("VISIBLE_MODE_VISIBLE", visbleMOde);
             } else {
                 linMode.setVisibility(View.GONE);
-                Log.v("VISIBLE_MODE_GONE",visbleMOde);
+                Log.v("VISIBLE_MODE_GONE", visbleMOde);
             }
 
 
@@ -241,7 +239,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         }
         leaveTypeMethod();
 
-      //  Log.d(Tag, String.valueOf(params));
+        //  Log.d(Tag, String.valueOf(params));
 
 
         mButtonSubmit = (Button) findViewById(R.id.submit_missed);
@@ -250,7 +248,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             public void onClick(View v) {
 
 
-                Log.v("VISIBLE_MODE_VALUE",visbleMOde);
+                Log.v("VISIBLE_MODE_VALUE", visbleMOde);
 
                 if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
                     if (visbleMOde.equalsIgnoreCase("1")) {
@@ -510,8 +508,8 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                         @Override
                         public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
                             Photo_Name = FileName;
-                            imageConvert=fullPath;
-                            EndedImage="file://"+fullPath;
+                            imageConvert = fullPath;
+                            EndedImage = "file://" + fullPath;
                             EndedKmImage.setImageBitmap(image);
                         }
                     });
@@ -630,7 +628,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             count = myDataset.get(position).getPho();
             visbleMOde = myDataset.get(position).getCont();
 
-            Log.v("VISIBLE_COUNT",visbleMOde);
+            Log.v("VISIBLE_COUNT", visbleMOde);
 
             if (visbleMOde.equalsIgnoreCase("1")) {
 
@@ -670,7 +668,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
 */
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
-                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde);
+                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde, "");
                 missed_punch.add(Model_Pojo);
                 if (missedDates != null) {
                     if (missedDates.equalsIgnoreCase(Model_Pojo.getId())) {
@@ -705,7 +703,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                         count = Model_Pojo.getPho();
                         visbleMOde = Model_Pojo.getCont();
 
-                        Log.v("VISIBLE_COUNT",Model_Pojo.getCont());
+                        Log.v("VISIBLE_COUNT", Model_Pojo.getCont());
 
                         if (visbleMOde.equalsIgnoreCase("1")) {
                             linMode.setVisibility(View.VISIBLE);
@@ -727,11 +725,11 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
         Intent mIntent = new Intent(this, FileUploadService.class);
         mIntent.putExtra("mFilePath", imageConvert);
-        mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
+        mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
         mIntent.putExtra("FileName", Photo_Name);
         mIntent.putExtra("Mode", "Travel");
         FileUploadService.enqueueWork(this, mIntent);
-        
+
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
@@ -781,12 +779,12 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            if (jsonObjecta.get("MsgID").getAsString().equalsIgnoreCase("2")){
+                            if (jsonObjecta.get("MsgID").getAsString().equalsIgnoreCase("2")) {
                                 Intent mIntent = new Intent(Missed_Punch.this, Leave_Request.class);
                                 mIntent.putExtra("EDt", missedDates);
                                 startActivity(mIntent);
                                 finish();
-                            }else if (jsonObjecta.get("success").getAsBoolean() == true)
+                            } else if (jsonObjecta.get("success").getAsBoolean() == true)
                                 startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));//openHome();
 
                         }

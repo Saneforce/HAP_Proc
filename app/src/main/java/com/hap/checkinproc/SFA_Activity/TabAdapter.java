@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +9,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.SFA_Activity.Dashboard_Route.AllDataFragment;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import java.util.ArrayList;
@@ -20,12 +20,16 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     private int mTabPos = -1;
     private String mSearchText = "";
     private String mRetType = "1";
+    String mActivityName;
 
+    Context mContext;
 
-    public TabAdapter(FragmentManager fm, int tabPos, List<Retailer_Modal_List> retailer_Modal_List, String RetType) {
+    public TabAdapter(FragmentManager fm, int tabPos, List<Retailer_Modal_List> retailer_Modal_List, String RetType, Context context, String name) {
         super(fm);
         this.mRetailer_Modal_List = retailer_Modal_List;
         this.mRetType = RetType;
+        this.mContext = context;
+        this.mActivityName = name;
         Log.v("tabAdapter: ", "pos:" + tabPos);
     }
 
@@ -34,7 +38,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = null;
         OutletFilter(position);
-        fragment = new AllDataFragment(Retailer_Modal_ListFilter, position);
+        if (mActivityName.equalsIgnoreCase("Dashboard_Route"))
+            fragment = new Dashboard_Route.AllDataFragment(Retailer_Modal_ListFilter, position);
+        else
+            fragment = new VanSalesDashboardRoute.AllDataFragment(Retailer_Modal_ListFilter, position);
         return fragment;
     }
 
@@ -70,7 +77,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     public void OutletFilter(int flag) {
 
-        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(Dashboard_Route.dashboard_route);
+        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(mContext);
         Retailer_Modal_ListFilter = new ArrayList<>();
         String Route_id = shared_common_pref.getvalue(Constants.Route_Id);
 

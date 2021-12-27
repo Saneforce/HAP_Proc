@@ -82,8 +82,11 @@ public class Constants {
 
     public static final String LOC_PRIMARY_DATA ="locPrimData" ;
     public static final String LOC_SECONDARY_DATA ="locSecData" ;
+    public static final String LOC_VANSALES_DATA ="locVansalesData" ;
+
     public static final String POS_SCHEME = "posScheme";
     public static final String UOM ="uom" ;
+    public static final String VAN_SALES_MODE = "vanSalesMode";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
@@ -102,4 +105,5 @@ public class Constants {
     public static final String POS_Category_List="posCategoryList";
     public static final String POS_ProdTypes_List="posProTypeList";
     public static final String POS_ProdGroups_List="posProGrpList";
+    public static final String DivERP="divERP";
 }

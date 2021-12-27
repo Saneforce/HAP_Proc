@@ -77,10 +77,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface, UpdateResponseUI {
+public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface, UpdateResponseUI {
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
-    public static Dashboard_Route dashboard_route;
+    public static VanSalesDashboardRoute dashboard_route;
     public static Common_Class common_class;
     public static TextView distributor_text;
     public static Shared_Common_Pref shared_common_pref;
@@ -89,7 +89,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll,
+    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll, tvStockLoad, tvStockUnload,
             txSrvOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
@@ -119,7 +119,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard__route);
+        setContentView(R.layout.activity_vansales_dashboard__route);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -212,6 +212,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
             tabLayout = findViewById(R.id.tabs);
+            tvStockLoad = findViewById(R.id.tvStockLoad);
+            tvStockUnload = findViewById(R.id.tvStockUnload);
 
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
@@ -223,6 +225,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llNewOrder.setOnClickListener(this);
             llNoOrder.setOnClickListener(this);
             llInvoice.setOnClickListener(this);
+            tvStockLoad.setOnClickListener(this);
+            tvStockUnload.setOnClickListener(this);
 
             txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             txSrvOtlt.setTypeface(null, Typeface.BOLD);
@@ -578,7 +582,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     }
                 });
             } else {
-                common_class.showMsg(Dashboard_Route.dashboard_route, "Please check your internet connection");
+                common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
             }
         } catch (Exception e) {
             Log.v("fail>>", e.getMessage());
@@ -588,7 +592,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -606,6 +610,19 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     intent.putExtra("type", "Orders");
                     startActivity(intent);
                 }
+                break;
+            case R.id.tvStockLoad:
+                Intent load = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
+                Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
+                load.putExtra(Constants.VAN_SALES_MODE, "LOAD");
+                startActivity(load);
+                break;
+            case R.id.tvStockUnload:
+
+                Intent unload = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
+                Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
+                unload.putExtra(Constants.VAN_SALES_MODE, "UnLOAD");
+                startActivity(unload);
                 break;
             case R.id.llNewOrder:
                 if (smryNOrd.getText().toString().equals("0"))
@@ -673,7 +690,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     @Override
-    public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
 
         common_class.dismissCommonDialog(type);
         if (type == 2) {
@@ -823,12 +840,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             txSrvOtltCnt.setText(String.valueOf(CountSR));
             txClsOtltCnt.setText(String.valueOf(CountCls));
 
-            // Retailer_Modal_ListFilter = Retailer_Modal_List;
-
             if (isFilter) {
                 adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType);
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
@@ -880,37 +895,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
                             Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
-                            //  Shared_Common_Pref.DistributorCode = shared_common_pref.getvalue(Constants.Distributor_Id);
-                            //  Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                            // Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
-                            // common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+
                             shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
                             shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());
                             shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() /*+ "~"
                                     + mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
-//                            if (mRetailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-//                                    || mRetailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
-//
-//                                Intent intent = new Intent(context, AddNewRetailer.class);
-//                                Shared_Common_Pref.Outlet_Info_Flag = "0";
-//                                Shared_Common_Pref.Editoutletflag = "1";
-//                                Shared_Common_Pref.Outler_AddFlag = "0";
-//                                Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_ListFilter.get(position).getId());
-//                                intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_ListFilter.get(position).getId()));
-//                                intent.putExtra("OutletName", mRetailer_Modal_ListFilter.get(position).getName());
-//                                intent.putExtra("OutletAddress", mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
-//                                intent.putExtra("OutletMobile", mRetailer_Modal_ListFilter.get(position).getMobileNumber());
-//                                intent.putExtra("OutletRoute", mRetailer_Modal_ListFilter.get(position).getTownName());
-//                                startActivity(intent);
-//                                getActivity().finish();
-//
-//                            } else {
-                            //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                            Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
+
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
+                            Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                             common_class.CommonIntentwithFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
-                            //}
+
 
                         }
                     } catch (Exception e) {

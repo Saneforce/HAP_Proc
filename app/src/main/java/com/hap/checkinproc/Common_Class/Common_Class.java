@@ -152,6 +152,7 @@ public class Common_Class {
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
+
     public void CommonIntentwithoutFinish(Class classname) {
         intent = new Intent(activity, classname);
         activity.startActivity(intent);
@@ -941,6 +942,9 @@ public class Common_Class {
                             case "Invoice?":
                                 shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
                                 break;
+                            case "Van Sales?":
+                                shared_common_pref.clear_pref(Constants.LOC_VANSALES_DATA);
+                                break;
                         }
                     }
 
@@ -1068,6 +1072,7 @@ public class Common_Class {
             List<Common_Model> distributor_master = new ArrayList<>();
             Common_Model Model_Pojo;
             JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+            Log.v("distList:", jsonArray.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -1076,7 +1081,8 @@ public class Common_Class {
                 String Add2 = jsonObject1.optString("Addr2");
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code);
+                String DivERP = jsonObject1.optString("DivERP");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code,DivERP);
                 distributor_master.add(Model_Pojo);
 
             }

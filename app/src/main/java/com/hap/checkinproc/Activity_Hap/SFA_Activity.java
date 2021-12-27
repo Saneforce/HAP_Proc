@@ -48,6 +48,7 @@ import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
+import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -65,7 +66,7 @@ import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary,
-            linMyTeam, linPOS;
+            linMyTeam, linPOS, linVanSales;
     Gson gson;
 
     private SANGPSTracker mLUService;
@@ -112,6 +113,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linPrimary = findViewById(R.id.Lin_primary);
         linMyTeam = findViewById(R.id.lin_myteam);
         linPOS = findViewById(R.id.Lin_POS);
+        linVanSales = findViewById(R.id.lin_vanSales);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -128,6 +130,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linPrimary.setOnClickListener(this);
         linMyTeam.setOnClickListener(this);
         linPOS.setOnClickListener(this);
+        linVanSales.setOnClickListener(this);
         gson = new Gson();
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
@@ -312,6 +315,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
+
+            case R.id.lin_vanSales:
+                //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+                sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
+                startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                overridePendingTransition(R.anim.in, R.anim.out);
+                break;
+
 
             case R.id.Lin_Outlet:
                 common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);

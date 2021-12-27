@@ -62,7 +62,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static final String UserDetail = "MyPrefs";
 
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt;
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt, linVanSales;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -123,7 +123,9 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             btnRmkClose = (ImageView) findViewById(R.id.btnRmkClose);
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
             linRpt = (LinearLayout) findViewById(R.id.llRpt);
+            linVanSales = findViewById(R.id.lin_vanSales);
             tvOutstanding = findViewById(R.id.txOutstanding);
+
             txPrvBal = findViewById(R.id.PrvOutAmt);
             txSalesAmt = findViewById(R.id.SalesAmt);
             txPayment = findViewById(R.id.PaymentAmt);
@@ -139,6 +141,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvCoolerInfo.setOnClickListener(this);
             linPayment.setOnClickListener(this);
             linRpt.setOnClickListener(this);
+            linVanSales.setOnClickListener(this);
 
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
@@ -181,8 +184,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
             getOutstanding();
 
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
-                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
+//            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+//                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
+
+
+            if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
+                linVanSales.setVisibility(View.VISIBLE);
         } catch (Exception e) {
 
         }
@@ -276,6 +283,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 Shared_Common_Pref.Invoicetoorder = "2";
                 //getInvoiceOrderQty();
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
+
+                break;
+            case R.id.lin_vanSales:
+                startActivity(new Intent(getApplicationContext(), VanSalesOrderActivity.class));
                 overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
@@ -547,6 +559,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         if (jsonObjectPreOrder.getBoolean("success")) {
                             sharedCommonPref.save(Constants.PreOrderQtyList, apiDataResponse);
                             common_class.CommonIntentwithFinish(Order_Category_Select.class);
+
                             overridePendingTransition(R.anim.in, R.anim.out);
                         } else {
                             sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
@@ -561,10 +574,15 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common_class.CommonIntentwithFinish(Dashboard_Route.class);
+            if (linVanSales.getVisibility() == View.VISIBLE)
+                common_class.CommonIntentwithFinish(VanSalesDashboardRoute.class);
+
+            else
+                common_class.CommonIntentwithFinish(Dashboard_Route.class);
             overridePendingTransition(R.anim.in, R.anim.out);
 
             return true;

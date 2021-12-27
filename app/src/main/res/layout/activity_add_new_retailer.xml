@@ -188,16 +188,15 @@
                         </RelativeLayout>
 
                         <LinearLayout
+                            android:layout_marginTop="@dimen/C10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="3dp"
-                                android:text="@string/route"
+                                android:text="Outlet Name"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
 
@@ -209,32 +208,150 @@
                                 android:src="@drawable/mandatory" />
                         </LinearLayout>
 
-                        <RelativeLayout
-                            android:id="@+id/rl_route"
+                        <EditText
+                            android:id="@+id/edt_new_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
-                            android:orientation="vertical"
-                            android:padding="5dp">
+                            android:gravity="start"
+                            android:hint="Enter the Outlet Name"
+                            android:maxLines="2"
+                            android:padding="10dp"
+                            android:textSize="13dp" />
 
-                            <TextView
-                                android:id="@+id/retailer_type"
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Outlet Type"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/C2dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:src="@drawable/mandatory" />
+
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlOutletType"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="@string/select_route"
-                                android:padding="5dp"
-                                android:textSize="13dp" />
+                                android:background="@drawable/text_bg_grey"
+                                android:orientation="vertical"
+                                android:padding="5dp">
 
-                            <ImageView
-                                android:id="@+id/ivRouteSpinner"
-                                android:layout_width="@dimen/C10dp"
-                                android:layout_height="@dimen/C10dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:src="@drawable/spin_down_arrow" />
+                                <TextView
+                                    android:id="@+id/txOutletType"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Outlet Type"
+                                    android:padding="5dp"
+                                    android:textSize="13sp" />
 
-                        </RelativeLayout>
+                                <ImageView
+                                    android:layout_width="@dimen/C10dp"
+                                    android:layout_height="@dimen/C10dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="@dimen/C10dp"
+                                    android:src="@drawable/spin_down_arrow" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/linClsRmks"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Reason for Close"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/C2dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:src="@drawable/mandatory" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:orientation="vertical">
+
+
+                                <EditText
+                                    android:id="@+id/edtClsRetRmk"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:background="@android:color/transparent"
+                                    android:gravity="start"
+                                    android:hint="Enter the Reason for Close"
+                                    android:padding="10dp"
+                                    android:textSize="13sp" />
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:padding="@dimen/C5dp">
+
+                                    <ImageView
+                                        android:id="@+id/ivRetailCapture"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_toLeftOf="@id/ivQPSPreviewImg"
+                                        android:padding="@dimen/C5dp"
+                                        android:src="@drawable/ic_round_photo_camera_24"
+                                        app:tint="@color/colorPrimaryDark" />
+
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rvFiles"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
 
 
                     </LinearLayout>
@@ -255,7 +372,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Retailer Code"
+                                android:text="Outlet Code"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
 
@@ -280,61 +397,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Outlet Type"
-                                android:textColor="@android:color/black"
-                                android:textSize="13sp" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/C2dp"
-                                android:layout_marginTop="@dimen/C3dp"
-                                android:src="@drawable/mandatory" />
-
-                        </LinearLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/rlOutletType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/text_bg_grey"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:id="@+id/txOutletType"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Outlet Type"
-                                android:padding="5dp"
-                                android:textSize="13sp" />
-
-                            <ImageView
-                                android:layout_width="@dimen/C10dp"
-                                android:layout_height="@dimen/C10dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginEnd="@dimen/C10dp"
-                                android:src="@drawable/spin_down_arrow" />
-                        </RelativeLayout>
-
-                    </LinearLayout>
 
 
                     <LinearLayout
@@ -359,15 +421,18 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
 
+
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
                                         android:orientation="horizontal">
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="New Retailer"
+                                            android:layout_marginBottom="3dp"
+                                            android:text="@string/route"
                                             android:textColor="@android:color/black"
                                             android:textSize="13dp" />
 
@@ -379,16 +444,35 @@
                                             android:src="@drawable/mandatory" />
                                     </LinearLayout>
 
-                                    <EditText
-                                        android:id="@+id/edt_new_name"
+                                    <RelativeLayout
+                                        android:id="@+id/rl_route"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@drawable/text_bg_grey"
-                                        android:gravity="start"
-                                        android:hint="Enter the Name"
-                                        android:maxLines="2"
-                                        android:padding="10dp"
-                                        android:textSize="13dp" />
+                                        android:orientation="vertical"
+                                        android:padding="5dp">
+
+                                        <TextView
+                                            android:id="@+id/retailer_type"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="@string/select_route"
+                                            android:padding="5dp"
+                                            android:textSize="13dp" />
+
+                                        <ImageView
+                                            android:id="@+id/ivRouteSpinner"
+                                            android:layout_width="@dimen/C10dp"
+                                            android:layout_height="@dimen/C10dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginRight="@dimen/C10dp"
+                                            android:src="@drawable/spin_down_arrow" />
+
+                                    </RelativeLayout>
+
+
+
 
                                 </LinearLayout>
 
@@ -516,7 +600,7 @@
                                 android:letterSpacing="0.09"
                                 android:paddingLeft="15dp"
                                 android:paddingRight="15dp"
-                                android:text="Refresh Location"
+                                android:text="Get Location"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="12sp"
@@ -1030,79 +1114,6 @@
                         </RelativeLayout>
 
 
-                        <LinearLayout
-                            android:id="@+id/linClsRmks"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Reason for Close"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="13sp" />
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/C2dp"
-                                    android:layout_marginTop="@dimen/C3dp"
-                                    android:src="@drawable/mandatory" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/text_bg_grey"
-                                android:orientation="vertical">
-
-
-                                <EditText
-                                    android:id="@+id/edtClsRetRmk"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="100dp"
-                                    android:background="@android:color/transparent"
-                                    android:gravity="start"
-                                    android:hint="Enter the Reason for Close"
-                                    android:padding="10dp"
-                                    android:textSize="13sp" />
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/C5dp">
-
-                                    <ImageView
-                                        android:id="@+id/ivRetailCapture"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_toLeftOf="@id/ivQPSPreviewImg"
-                                        android:padding="@dimen/C5dp"
-                                        android:src="@drawable/ic_round_photo_camera_24"
-                                        app:tint="@color/colorPrimaryDark" />
-
-
-                                    <androidx.recyclerview.widget.RecyclerView
-                                        android:id="@+id/rvFiles"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:orientation="horizontal"
-                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"

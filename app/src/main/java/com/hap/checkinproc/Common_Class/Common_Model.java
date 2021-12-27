@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
+    private String DivERP;
     private String ERP_Code;
     private String QPS_Code;
     private String QPS_Name;
@@ -73,13 +74,14 @@ public class Common_Model {
         this.Pho = phone;
     }
 
-    public Common_Model(String name, String id, String flag, String address, String phone, String cont) {
+    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP) {
         this.name = name;
         this.id = id;
         this.flag = flag;
         this.address = address;
         this.phone = phone;
         this.cont = cont;
+        this.DivERP = DivERP;
     }
 
     public Common_Model(String id, String name, String flag, String checkouttime, Boolean ExpNeed) {
@@ -271,5 +273,13 @@ public class Common_Model {
 
     public void setCnvQty(int cnvQty) {
         CnvQty = cnvQty;
+    }
+
+    public String getDivERP() {
+        return DivERP;
+    }
+
+    public void setDivERP(String divERP) {
+        DivERP = divERP;
     }
 }

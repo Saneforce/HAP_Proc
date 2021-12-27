@@ -127,6 +127,9 @@
             android:name=".SFA_Activity.Invoice_History"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SFA_Activity.VanSalesOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.More_Info_Activity"
             android:screenOrientation="portrait" />
         <activity
@@ -140,6 +143,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.Dashboard_Route"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.VanSalesDashboardRoute"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.Dashboard_View_Activity"
