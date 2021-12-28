@@ -16,6 +16,7 @@ import com.hap.checkinproc.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyViewHolder> {
@@ -24,7 +25,7 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
     Shared_Common_Pref shared_common_pref;
 
 
-    POPMaterialAdapter popMaterialAdapter;
+    POPMaterialAdapterSample popMaterialAdapter;
 
     JSONArray jsonArray;
 
@@ -46,16 +47,30 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
     @Override
     public void onBindViewHolder(POPStatusAdapter.MyViewHolder holder, int position) {
         try {
-            JSONObject itm=jsonArray.getJSONObject(position);
+            JSONObject itm = jsonArray.getJSONObject(position);
 
             holder.sNo.setText("" + itm.getString("SlNo"));
             holder.requestNo.setText("" + itm.getString("Requset_No"));
             holder.bookingDate.setText("" + itm.getString("Booking_Date"));
 
 
+            List<QPS_Modal> statusList = new ArrayList<>();
+            JSONArray arr = itm.getJSONArray("Details");
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(position);
+                statusList.add(new QPS_Modal(obj.getString("POP_ID"), obj.getString("POP_Status"), obj.getString("Received_Date"), obj.getString("Images")
+                        , obj.getString("POP_Req_ID"), obj.getString("Trans_Sl_No")));
+            }
 
+//            holder.receivedDate.setText("" + itm.getString("Received_Date"));
+//            holder.status.setText("" + itm.getString("POP_Status"));
+//            holder.materialName.setText("" + itm.getString("POP_ID"));
+            //    String images = itm.getString("Images");
+            popMaterialAdapter = new POPMaterialAdapterSample(context, statusList);
 
-            popMaterialAdapter = new POPMaterialAdapter(context,itm.getJSONArray("Details"));
+            //  popMaterialAdapter = new POPMaterialAdapter(context, itm.getJSONArray("Details"));
+
+//            popMaterialAdapter = new POPMaterialAdapter(context, itm.getJSONArray("Details"));
 
             holder.rvMaterials.setAdapter(popMaterialAdapter);
 
@@ -71,6 +86,7 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
     public int getItemCount() {
         return jsonArray.length();
     }
+
     @Override
     public int getItemViewType(int position) {
         return position;

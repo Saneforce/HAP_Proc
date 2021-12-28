@@ -324,7 +324,7 @@
                                 android:drawableRight="@drawable/mandatory"
                                 android:drawablePadding="@dimen/C3dp"
                                 android:paddingTop="@dimen/C10dp"
-                                android:text="Booking Date" />
+                                android:text="Date" />
 
                             <TextView
                                 android:id="@+id/etQPSBookingDate"

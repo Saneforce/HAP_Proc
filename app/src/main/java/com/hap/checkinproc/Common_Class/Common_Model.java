@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
+    private  int icon;
     private String DivERP;
     private String ERP_Code;
     private String QPS_Code;
@@ -128,6 +129,11 @@ public class Common_Model {
         this.name = name;
         this.id = id;
         this.CnvQty = CnvQty;
+    }
+
+    public Common_Model(String name, int icon) {
+        this.name = name;
+        this.icon = icon;
     }
 
     public String getCheckouttime() {
@@ -281,5 +287,13 @@ public class Common_Model {
 
     public void setDivERP(String divERP) {
         DivERP = divERP;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 }

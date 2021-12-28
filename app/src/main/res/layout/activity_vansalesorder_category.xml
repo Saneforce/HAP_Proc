@@ -63,7 +63,6 @@
                     android:id="@+id/retailePhoneNum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9786543201"
                     android:textColor="@color/grey_600"
                     android:textSize="@dimen/C12dp"
                     android:textStyle="bold">
@@ -292,16 +291,7 @@
                                 android:layout_weight="1"
                                 android:visibility="visible">
 
-                                <TextView
-                                    android:id="@+id/itemstextview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="left"
-                                    android:gravity="left"
-                                    android:text="SKU"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"></TextView>
+                               >
                             </LinearLayout>
 
                             <LinearLayout
@@ -309,6 +299,18 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
+
+                                <TextView
+                                    android:id="@+id/itemstextview"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1.5"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:text="SKU"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"
+                                    android:textStyle="bold"/>
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -328,6 +330,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -413,6 +416,7 @@
 
 
                                 <LinearLayout
+                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">

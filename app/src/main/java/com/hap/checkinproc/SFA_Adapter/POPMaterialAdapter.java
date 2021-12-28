@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.hap.checkinproc.common.FileUploadService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +112,7 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
 
             holder.receivedDate.setText("" + itm.getString("Received_Date"));
             holder.status.setText("" + itm.getString("POP_Status"));
-            holder.materialName.setText("" + itm.getString("POP_Name"));
+            holder.materialName.setText("" + itm.getString("POP_ID"));
 
 
             getCurrentList();
@@ -122,7 +124,7 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
             } else {
                 holder.btnComplete.setVisibility(View.VISIBLE);
                 holder.ivCaptureImg.setVisibility(View.VISIBLE);
-                holder.ivAttachImg.setVisibility(View.VISIBLE);
+                //   holder.ivAttachImg.setVisibility(View.VISIBLE);
             }
 
 
@@ -130,26 +132,61 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
-                        getCurrentList();
+                       // getCurrentList();
 
                         key = itm.getString("POP_Req_ID") + "~POPkey";
-                        if (isCheckExceed(key)) {
+                    //    if (isCheckExceed(key)) {
                             AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                                 @Override
                                 public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
 
 
-                                    qpsModalList.add(new QPS_Modal(fullPath, FileName, (key + System.currentTimeMillis())));
+//                                    qpsModalList.add(new QPS_Modal(fullPath, FileName, (key + System.currentTimeMillis())));
+//
+//                                    shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+//
+//
+//                                    List<String> list = new ArrayList<>();
+//
+//
+//                                    for (int i = 0; i < qpsModalList.size(); i++) {
+//                                        if (qpsModalList.get(i).getFileKey().contains((key))) {
+//
+//                                            File file = new File(qpsModalList.get(i).getFilePath());
+//                                            Uri contentUri = Uri.fromFile(file);
+//                                            list.add(contentUri.toString());
+//
+//                                        }
+//                                    }
+//
+//                                    filesAdapter = new FilesAdapter(list, R.layout.adapter_local_files_layout, context);
+//                                    holder.rvFile.setAdapter(filesAdapter);
 
-                                    shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+                                    if (qpsModalList.get(holder.getAdapterPosition()).getFileUrls() != null && qpsModalList.get(holder.getAdapterPosition()).getFileUrls().size() >= 3) {
+                                        Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        List<String> list = new ArrayList<>();
+                                        File file = new File(fullPath);
+                                        Uri contentUri = Uri.fromFile(file);
+
+                                        if (qpsModalList.get(holder.getAdapterPosition()).getFileUrls() != null && qpsModalList.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
+                                            list = (qpsModalList.get(position).getFileUrls());
+                                        list.add(contentUri.toString());
+                                        qpsModalList.get(holder.getAdapterPosition()).setFileUrls(list);
+
+                                        filesAdapter = new FilesAdapter(qpsModalList.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
+                                        holder.rvFile.setAdapter(filesAdapter);
+
+                                    }
                                 }
                             });
                             Intent intent = new Intent(context, AllowancCapture.class);
                             intent.putExtra("allowance", "TAClaim");
                             context.startActivity(intent);
-                        } else {
-                            Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
-                        }
+//                        } else {
+//                            Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
+//                        }
                     } catch (Exception e) {
 
                     }
@@ -213,9 +250,8 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
             });
 
 
-            if (fileList != null && fileList.size() > position && fileList.get(position).size() > 0) {
+            if (fileList != null && fileList.size() > position && fileList.get(position).size() > 0 && itm.getString("POP_Status").equalsIgnoreCase("Approved")) {
                 filesAdapter = new FilesAdapter(fileList.get(position), R.layout.adapter_qps_files_layout, context);
-
                 holder.rvFile.setAdapter(filesAdapter);
             }
         } catch (Exception e) {

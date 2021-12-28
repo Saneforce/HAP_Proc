@@ -161,7 +161,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Retailor_PHNo)))
+                llCalMob.setVisibility(View.GONE);
+            else
+                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
@@ -341,9 +344,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
 
             Log.v(TAG, " order oncreate:j " + preOrderList);
-
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
-                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 

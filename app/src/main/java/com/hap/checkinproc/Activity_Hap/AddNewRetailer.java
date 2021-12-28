@@ -237,9 +237,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             outletTypeList.add(mCommon_model_spinner);
 
             serviceTypeList = new ArrayList<>();
-            serviceTypeList.add(new Common_Model("-18", "1"));
-            serviceTypeList.add(new Common_Model("+4", "2"));
-            serviceTypeList.add(new Common_Model("Ambient", "3"));
+            serviceTypeList.add(new Common_Model("-18", "1", false));
+            serviceTypeList.add(new Common_Model("+4", "2", false));
+            serviceTypeList.add(new Common_Model("Ambient", "3", false));
 
             Category_Adapter categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
             rvCategoryTypes.setAdapter(categoryAdapter);
@@ -913,6 +913,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString() + "'");
+            categoryType = "";
+            for (int i = 0; i < serviceTypeList.size(); i++) {
+                if (serviceTypeList.get(i).isSelected())
+                    categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
+            }
+
+            Log.v(TAG + ":CategoryType:", categoryType);
             reportObject.put("CategoryType", "'" + categoryType + "'");
             if (edt_outstanding.getText().toString().equals(""))
                 reportObject.put("outstanding_amount", 0);
@@ -1333,16 +1340,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.MyViewHolder> {
         Context context;
         private List<Common_Model> list;
-        private int rowLayout, lastCheckedPos;
-        private CheckBox lastChecked;
-
+        private int rowLayout;
 
         public Category_Adapter(List<Common_Model> list, int rowLayout, Context context) {
             this.list = list;
             this.rowLayout = rowLayout;
             this.context = context;
-
-
         }
 
         @Override
@@ -1366,57 +1369,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             try {
 
                 holder.name.setText(list.get(position).getName());
-
                 holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         try {
-                            if (isChecked) {
-                                categoryType = categoryType + list.get(position).getName() + ",";
-                            } else {
-                                String val = list.get(position).getName();
-//                                val = val.replaceAll("\\+", "9");
-//                                Log.v("adapterProductType:111", val);
-//
-                                categoryType = categoryType.replaceAll(val, "");
 
-                            }
-                            Log.v("adapterProductType:222", categoryType);
+                            list.get(position).setSelected(isChecked);
+
                         } catch (Exception e) {
                             Log.e(TAG, "adapterProductEx: " + e.getMessage());
 
                         }
-
-//                        CheckBox cb = (CheckBox) buttonView;
-//                        int clickedPos = holder.getAdapterPosition();
-//
-//
-//                        if (cb.isChecked()) {
-//                            if (lastChecked != null) {
-//                                lastChecked.setChecked(false);
-//                                list.get(lastCheckedPos).setSelected(false);
-//                            }
-//
-//                            lastChecked = cb;
-//                            lastCheckedPos = clickedPos;
-//
-//                            list.get(clickedPos).setSelected(cb.isSelected());
-//
-//                            categoryType = list.get(position).getName();
-//
-//
-//                        } else {
-//                            lastChecked = null;
-//                            categoryType = "";
-//
-//                        }
-                    }
+                 }
                 });
 
-//                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-//                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-//                holder.Free.setText("" + Product_Details_Modal.getFree());
-//                updateToTALITEMUI();
+
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }

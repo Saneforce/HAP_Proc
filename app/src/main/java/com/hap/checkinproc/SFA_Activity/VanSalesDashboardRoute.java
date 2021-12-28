@@ -616,6 +616,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                 load.putExtra(Constants.VAN_SALES_MODE, "LOAD");
                 startActivity(load);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvStockUnload:
 
@@ -623,6 +624,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                 unload.putExtra(Constants.VAN_SALES_MODE, "UnLOAD");
                 startActivity(unload);
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.llNewOrder:
                 if (smryNOrd.getText().toString().equals("0"))
@@ -705,6 +707,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             shared_common_pref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            shared_common_pref.save(Constants.DistributorAdd, myDataset.get(position).getAddress());
+
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
             getLastInvoiceData();
             common_class.getDataFromApi(Retailer_OutletList, this, false);

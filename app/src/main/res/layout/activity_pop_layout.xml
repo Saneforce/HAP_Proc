@@ -75,6 +75,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvLabelNmae"
                 style="@style/TextStyle"
                 android:drawableRight="@drawable/mandatory"
                 android:drawablePadding="@dimen/C3dp"
@@ -83,13 +84,13 @@
 
 
             <TextView
-                android:gravity="center"
                 android:id="@+id/tvBookingDate"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_marginRight="@dimen/C5dp"
                 android:layout_toLeftOf="@+id/ivDate"
                 android:background="@drawable/textbox_bg"
+                android:gravity="center"
                 android:hint="Enter date here"
                 android:padding="@dimen/C8dp" />
 
@@ -98,73 +99,74 @@
                 android:layout_width="@dimen/C20dp"
                 android:layout_height="@dimen/C20dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:src="@drawable/ic_baseline_date_range_24"
                 app:tint="@color/colorPrimaryDark"
                ></ImageView>
 
 
-        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C10dp"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_marginTop="@dimen/C10dp"
+                android:layout_below="@+id/tvLabelNmae"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/rlOtherBrand"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/C40dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_whitebg">
-
-
-                <TextView
-                    android:id="@+id/productname"
+                <RelativeLayout
+                    android:id="@+id/rlOtherBrand"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/C5dp"
-                    android:gravity="center_vertical"
-                    android:hint="SELECT THE POP GROUP"
-                    android:paddingTop="4dp"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:layout_height="@dimen/C40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_whitebg">
 
+
+                    <TextView
+                        android:id="@+id/productname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:gravity="center_vertical"
+                        android:hint="SELECT THE POP GROUP"
+                        android:paddingTop="4dp"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+
+                        android:layout_width="@dimen/C10dp"
+                        android:layout_height="@dimen/C10dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/C10dp"
+                        android:src="@drawable/spin_down_arrow"
+                        app:tint="@color/black">
+
+                    </ImageView>
+
+
+                </RelativeLayout>
 
                 <ImageView
-
-                    android:layout_width="@dimen/C10dp"
-                    android:layout_height="@dimen/C10dp"
+                    android:id="@+id/ivAddPOP"
+                    android:layout_width="@dimen/C30dp"
+                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:src="@drawable/spin_down_arrow"
-                    app:tint="@color/black">
+                    android:layout_gravity="end"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/C5dp"
+                    android:src="@drawable/ic_round_add_circle_24"
+                    app:tint="@color/colorPrimaryDark" />
 
-                </ImageView>
+            </LinearLayout>
 
+        </RelativeLayout>
 
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/ivAddPOP"
-                android:layout_width="@dimen/C30dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="end"
-                android:layout_marginRight="@dimen/C10dp"
-                android:gravity="center_vertical"
-                android:padding="@dimen/C5dp"
-                android:src="@drawable/ic_round_add_circle_24"
-                app:tint="@color/colorPrimaryDark" />
-
-        </LinearLayout>
 
 
         <ScrollView

@@ -8,9 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/C10dp"
         android:layout_marginLeft="@dimen/C10dp"
         android:layout_marginRight="@dimen/C10dp"
+        android:layout_marginBottom="@dimen/C10dp"
         android:background="@drawable/button_whitebg"
         android:orientation="vertical">
 
@@ -91,7 +91,8 @@
                 android:id="@+id/rvFiles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/tvPhotoLabel"
+                android:layout_marginTop="@dimen/C10dp"
                 android:orientation="horizontal"
                 android:padding="@dimen/C5dp"
                 android:visibility="visible"
@@ -118,15 +119,16 @@
                 android:layout_toLeftOf="@+id/btnComplete"
                 android:padding="@dimen/C5dp"
                 android:src="@drawable/image_preview_24"
+                android:visibility="gone"
                 app:tint="@color/colorPrimaryDark" />
 
             <Button
-                android:layout_marginTop="@dimen/C5dp"
                 android:id="@+id/btnComplete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/C5dp"
                 android:background="@drawable/blue_bg"
                 android:elevation="@dimen/C5dp"
                 android:gravity="center_vertical"
