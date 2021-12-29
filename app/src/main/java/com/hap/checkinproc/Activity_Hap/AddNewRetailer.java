@@ -144,6 +144,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private FilesAdapter filesAdapter;
     public String categoryType = "";
 
+    String divERP = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -594,6 +596,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             mData.add(new QPS_Modal("", "", ""));
             mFreezerData.add(new QPS_Modal("", "", ""));
 
+
+            divERP = shared_common_pref.getvalue(Constants.DivERP);
+            getFreezerData(divERP);
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -1093,6 +1098,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 common_class.getDb_310Data(Constants.Rout_List, this);
+
+                divERP = myDataset.get(position).getDivERP();
+
+                getFreezerData(divERP);
+
                 // getServiceTypes(myDataset.get(position).getId());
                 break;
             case 3:
@@ -1118,6 +1128,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     linClsRmks.setVisibility(View.VISIBLE);
                 }
                 break;
+        }
+    }
+
+    private void getFreezerData(String divERP) {
+        if (divERP.equals("21")) {
+            findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
+            findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
+            findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.llCategoryType).setVisibility(View.GONE);
+            findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
+            findViewById(R.id.llFreezer).setVisibility(View.GONE);
         }
     }
 
@@ -1380,7 +1402,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             Log.e(TAG, "adapterProductEx: " + e.getMessage());
 
                         }
-                 }
+                    }
                 });
 
 

@@ -88,6 +88,10 @@ public class Constants {
     public static final String UOM ="uom" ;
     public static final String VAN_SALES_MODE = "vanSalesMode";
     public static final String LOGIN_DATA = "loginData";
+    public static final String DB_TWO_GET_NOTIFY ="dashboardTwoNotify" ;
+    public static final String DB_TWO_GET_DYREPORTS ="dashboardTwoDyReports" ;
+    public static final String DB_TWO_GET_MREPORTS ="dashboardMnthReports" ;
+    public static final String LOGIN_DATE = "loginDate";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";

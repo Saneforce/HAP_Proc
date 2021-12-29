@@ -30,11 +30,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -48,9 +51,7 @@ import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -110,6 +111,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String TAG = "Dashboard_Two:LOG ";
     DatabaseHandler db;
     private String key;
+    Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
             mShimmerViewContainer.startShimmerAnimation();
             db = new DatabaseHandler(this);
+            gson = new Gson();
 
 
             mShared_common_pref = new Shared_Common_Pref(this);
@@ -302,10 +305,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             if (sSFType.equals("0"))
                 StActivity.setVisibility(View.GONE);
 
-            getNotify();
-            getDyReports();
-            getMnthReports(0);
-            GetMissedPunch();
+
             if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
                 btnGateIn.setVisibility(View.VISIBLE);
                 btnGateOut.setVisibility(View.VISIBLE);
@@ -331,6 +331,21 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     mOnBackPressedDispatcher.onBackPressed();
                 }
             });
+
+            String currentDate = DT.getDateWithFormat(new Date(), "dd/MM/yyyy");
+            String loginDate = mShared_common_pref.getvalue(Constants.LOGIN_DATE);
+            if (!loginDate.equalsIgnoreCase(currentDate)) {
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
+            }
+
+            getNotify();
+            getDyReports();
+            getMnthReports(0);
+            GetMissedPunch();
+
+
         } catch (Exception e) {
 
         }
@@ -344,43 +359,56 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     }
 
     private void getNotify() {
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/notify",
-                UserDetails.getString("Divcode", ""),
-                UserDetails.getString("Sfcode", ""), "", "", null);
-        rptCall.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                try {
-                    JsonArray res = response.body();
-                    Log.d(TAG + "getNotify", String.valueOf(response.body()));
+        if (Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_TWO_GET_NOTIFY))) {
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/notify",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), "", "", null);
+            rptCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    try {
+                        JsonArray res = response.body();
+                        Log.d(TAG + "getNotify", String.valueOf(response.body()));
 
-                    //  Log.d("NotifyMsg", response.body().toString());
-                    TextView txt = findViewById(R.id.MRQtxt);
-                    txt.setText("");
-                    txt.setVisibility(View.GONE);
-                    String sMsg = "";
-                    txt.setSelected(true);
-                    for (int il = 0; il < res.size(); il++) {
-                        JsonObject Itm = res.get(il).getAsJsonObject();
-                        sMsg += Itm.get("NtfyMsg").getAsString();
+                        //  Log.d("NotifyMsg", response.body().toString());
+                        assignGetNotify(res);
+                        mShared_common_pref.save(Constants.DB_TWO_GET_NOTIFY, gson.toJson(response.body()));
+                    } catch (Exception e) {
+
                     }
-                    if (!sMsg.equalsIgnoreCase("")) {
-                        txt.setText(Html.fromHtml(sMsg));
-                        txt.setVisibility(View.VISIBLE);
-                    }
-                } catch (Exception e) {
 
                 }
 
-            }
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Log.d(Tag, String.valueOf(t));
+                }
+            });
+        } else {
+            Type userType = new TypeToken<JsonArray>() {
+            }.getType();
+            JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_NOTIFY), userType));
+            assignGetNotify(arr);
+        }
+    }
 
-                Log.d(Tag, String.valueOf(t));
-            }
-        });
+
+    void assignGetNotify(JsonArray res) {
+        TextView txt = findViewById(R.id.MRQtxt);
+        txt.setText("");
+        txt.setVisibility(View.GONE);
+        String sMsg = "";
+        txt.setSelected(true);
+        for (int il = 0; il < res.size(); il++) {
+            JsonObject Itm = res.get(il).getAsJsonObject();
+            sMsg += Itm.get("NtfyMsg").getAsString();
+        }
+        if (!sMsg.equalsIgnoreCase("")) {
+            txt.setText(Html.fromHtml(sMsg));
+            txt.setVisibility(View.VISIBLE);
+        }
     }
 
     private void getMnthReports(int m) {
@@ -403,147 +431,100 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         txUserName.setText("23," + mns[fmn - 1] + " - 22," + mns[tmn - 1]);
 
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> rptMnCall = apiInterface.getDataArrayList("get/AttndMn", m,
-                UserDetails.getString("Divcode", ""),
-                UserDetails.getString("Sfcode", ""), UserDetails.getString("Sfcode", ""), "", "", null);
-        rptMnCall.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                try {
-                    JsonArray res = response.body();
-                    Log.d(TAG + "getMnthReports", String.valueOf(response.body()));
-                    JsonArray dyRpt = new JsonArray();
-                    for (int il = 0; il < res.size(); il++) {
-                        JsonObject Itm = res.get(il).getAsJsonObject();
-                        JsonObject newItem = new JsonObject();
-                        newItem.addProperty("name", Itm.get("Status").getAsString());
-                        newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
-                        newItem.addProperty("Link", true);
-                        newItem.addProperty("Priod", m);
-                        newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
-                        dyRpt.add(newItem);
-                    }
-
-                    recyclerView = (RecyclerView) findViewById(R.id.Rv_MnRpt);
-                    mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
-
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
-                    recyclerView.setAdapter(mAdapter);
-                    Log.d(Tag, String.valueOf(response.body()));
-                    LoadingCnt++;
-                    hideShimmer();
-                } catch (Exception e) {
+        if (Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_TWO_GET_MREPORTS))) {
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptMnCall = apiInterface.getDataArrayList("get/AttndMn", m,
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), UserDetails.getString("Sfcode", ""), "", "", null);
+            rptMnCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    assignMnthReports(response.body(), m);
+                    mShared_common_pref.save(Constants.DB_TWO_GET_MREPORTS, gson.toJson(response.body()));
 
                 }
 
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Log.d(Tag, String.valueOf(t));
+                    LoadingCnt++;
+                    hideShimmer();
+                }
+            });
+        } else {
+            Type userType = new TypeToken<JsonArray>() {
+            }.getType();
+            JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_MREPORTS), userType));
+            assignMnthReports(arr, m);
+        }
+    }
+
+    private void assignMnthReports(JsonArray res, int m) {
+        try {
+//            JsonArray res = response.body();
+//            Log.d(TAG + "getMnthReports", String.valueOf(response.body()));
+            JsonArray dyRpt = new JsonArray();
+            for (int il = 0; il < res.size(); il++) {
+                JsonObject Itm = res.get(il).getAsJsonObject();
+                JsonObject newItem = new JsonObject();
+                newItem.addProperty("name", Itm.get("Status").getAsString());
+                newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
+                newItem.addProperty("Link", true);
+                newItem.addProperty("Priod", m);
+                newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
+                dyRpt.add(newItem);
             }
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d(Tag, String.valueOf(t));
-                LoadingCnt++;
-                hideShimmer();
-            }
-        });
+            recyclerView = (RecyclerView) findViewById(R.id.Rv_MnRpt);
+            mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(mAdapter);
+            // Log.d(Tag, String.valueOf(res));
+            LoadingCnt++;
+            hideShimmer();
+        } catch (Exception e) {
+
+        }
+
     }
 
     private void getDyReports() {
+
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/AttnDySty",
-                UserDetails.getString("Divcode", ""),
-                UserDetails.getString("Sfcode", ""), "", "", null);
-        Log.v("View_Request", rptCall.request().toString());
-        rptCall.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+        if (Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_TWO_GET_DYREPORTS))) {
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/AttnDySty",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), "", "", null);
+            Log.v("View_Request", rptCall.request().toString());
+            rptCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    try {
+                        assignDyReports(response.body());
+                        mShared_common_pref.save(Constants.DB_TWO_GET_DYREPORTS, gson.toJson(response.body()));
+                    } catch (Exception e) {
 
-                try {
-                    JsonArray res = response.body();
-                    //  Log.v(TAG + "getDyReports", res.toString());
-                    if (res.size() < 1) {
-                        Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
-
-                        LoadingCnt++;
-                        hideShimmer();
-                        return;
                     }
-                    JsonObject fItm = res.get(0).getAsJsonObject();
-                    TextView txDyDet = findViewById(R.id.lTDyTx);
-                    txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
-                    JsonArray dyRpt = new JsonArray();
-                    JsonObject newItem = new JsonObject();
-                    newItem.addProperty("name", "Shift");
-                    newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
-                    newItem.addProperty("Link", false);
-                    newItem.addProperty("color", "#333333");
-                    dyRpt.add(newItem);
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Status");
-                    newItem.addProperty("value", fItm.get("DayStatus").getAsString());
-                    newItem.addProperty("color", fItm.get("StaColor").getAsString());
-                    dyRpt.add(newItem);
-
-                    if (!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
-                        newItem = new JsonObject();
-                        newItem.addProperty("name", "Location");
-                        newItem.addProperty("value", fItm.get("HQNm").getAsString());
-                        newItem.addProperty("color", fItm.get("StaColor").getAsString());
-                        newItem.addProperty("type", "geo");
-                        dyRpt.add(newItem);
-                    }
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Check-In");
-                    newItem.addProperty("value", fItm.get("AttTm").getAsString());
-                    newItem.addProperty("color", "#333333");
-                    dyRpt.add(newItem);
-                    if (!fItm.get("ET").isJsonNull()) {
-                        newItem = new JsonObject();
-                        newItem.addProperty("name", "Last Check-Out");
-                        newItem.addProperty("value", fItm.get("ET").getAsString());
-                        newItem.addProperty("color", "#333333");
-                        dyRpt.add(newItem);
-                    }
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Geo In");
-                    newItem.addProperty("value", fItm.get("GeoIn").getAsString());
-                    newItem.addProperty("color", "#333333");
-                    /*newItem.addProperty("type", "geo");*/
-                    dyRpt.add(newItem);
-
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Geo Out");
-                    newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
-                    newItem.addProperty("color", "#333333");
-                    /*newItem.addProperty("type", "geo");*/
-                    dyRpt.add(newItem);
-                    recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
-
-                    Log.v("Lat_Long", fItm.get("lat_long").getAsString());
-                    mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this, fItm.get("lat_long").getAsString());
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
-                    recyclerView.setAdapter(mAdapter);
-                    LoadingCnt++;
-                    hideShimmer();
-
-                } catch (Exception e) {
 
                 }
 
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d(Tag, String.valueOf(t));
-                LoadingCnt++;
-                hideShimmer();
-            }
-        });
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Log.d(Tag, String.valueOf(t));
+                    LoadingCnt++;
+                    hideShimmer();
+                }
+            });
+        } else {
+            Type userType = new TypeToken<JsonArray>() {
+            }.getType();
+            JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_DYREPORTS), userType));
+            assignDyReports(arr);
+        }
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -551,6 +532,84 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+    }
+
+    private void assignDyReports(JsonArray res) {
+        try {
+            // JsonArray res = response.body();
+            //  Log.v(TAG + "getDyReports", res.toString());
+            if (res.size() < 1) {
+                Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
+
+                LoadingCnt++;
+                hideShimmer();
+                return;
+            }
+            JsonObject fItm = res.get(0).getAsJsonObject();
+            TextView txDyDet = findViewById(R.id.lTDyTx);
+            txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
+
+            mShared_common_pref.save(Constants.LOGIN_DATE, fItm.get("AttDate").getAsString());
+            JsonArray dyRpt = new JsonArray();
+            JsonObject newItem = new JsonObject();
+            newItem.addProperty("name", "Shift");
+            newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
+            newItem.addProperty("Link", false);
+            newItem.addProperty("color", "#333333");
+            dyRpt.add(newItem);
+            newItem = new JsonObject();
+            newItem.addProperty("name", "Status");
+            newItem.addProperty("value", fItm.get("DayStatus").getAsString());
+            newItem.addProperty("color", fItm.get("StaColor").getAsString());
+            dyRpt.add(newItem);
+
+            if (!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Location");
+                newItem.addProperty("value", fItm.get("HQNm").getAsString());
+                newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                newItem.addProperty("type", "geo");
+                dyRpt.add(newItem);
+            }
+            newItem = new JsonObject();
+            newItem.addProperty("name", "Check-In");
+            newItem.addProperty("value", fItm.get("AttTm").getAsString());
+            newItem.addProperty("color", "#333333");
+            dyRpt.add(newItem);
+            if (!fItm.get("ET").isJsonNull()) {
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Last Check-Out");
+                newItem.addProperty("value", fItm.get("ET").getAsString());
+                newItem.addProperty("color", "#333333");
+                dyRpt.add(newItem);
+            }
+            newItem = new JsonObject();
+            newItem.addProperty("name", "Geo In");
+            newItem.addProperty("value", fItm.get("GeoIn").getAsString());
+            newItem.addProperty("color", "#333333");
+            /*newItem.addProperty("type", "geo");*/
+            dyRpt.add(newItem);
+
+            newItem = new JsonObject();
+            newItem.addProperty("name", "Geo Out");
+            newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
+            newItem.addProperty("color", "#333333");
+            /*newItem.addProperty("type", "geo");*/
+            dyRpt.add(newItem);
+            recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
+
+            Log.v("Lat_Long", fItm.get("lat_long").getAsString());
+            mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this, fItm.get("lat_long").getAsString());
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(mAdapter);
+            LoadingCnt++;
+            hideShimmer();
+
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -791,7 +850,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 //                                    }
 
 
-
 //                                    JSONArray jsonArray = db.getMasterData(Distributor_List);
 //
 //                                    ApiClient.getClient().create(ApiInterface.class)
@@ -852,6 +910,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 editor.putBoolean("Login", false);
                 editor.apply();
                 CheckInDetails.edit().clear().commit();
+
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
+
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 stopService(playIntent);
                 finishAffinity();
