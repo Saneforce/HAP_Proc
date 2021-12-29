@@ -74,7 +74,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
             holder.icAC.setVisibility(View.VISIBLE);
         }
-        holder.txCustStatus.setText((typ.equalsIgnoreCase("2") ? "Closed" : (typ.equalsIgnoreCase("1") ? "Service" : "Universal")));
+        holder.txCustStatus.setText((typ.equalsIgnoreCase("2") ? "Closed" : (typ.equalsIgnoreCase("1") ? "Service" : "Non Service")));
         if (typ.equalsIgnoreCase("2")) {
             holder.retStaBdg.setBackground(context.getDrawable(R.drawable.round_status_blue));
         } else if (typ.equalsIgnoreCase("1")) {

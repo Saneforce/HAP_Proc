@@ -445,7 +445,7 @@
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="@dimen/C5dp"
                                     android:textAlignment="center"
-                                    android:text="Universal "
+                                    android:text="Non Service "
                                     android:textSize="13sp"/>
 
                                 <LinearLayout
