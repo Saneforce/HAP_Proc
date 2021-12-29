@@ -746,7 +746,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.savePOSTest(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.savePOS(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

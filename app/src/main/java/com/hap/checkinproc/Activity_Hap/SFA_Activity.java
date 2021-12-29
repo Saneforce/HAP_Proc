@@ -167,19 +167,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         showDashboardData();
 
 
-        menuList.add(new Common_Model("Primary Orders", R.drawable.ic_outline_add_chart_48));
-        menuList.add(new Common_Model("Secondary Orders", R.drawable.ic_outline_assignment_48));
-        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
-        menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
-        menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
-        menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
-
-
-        RecyclerView.LayoutManager manager = new GridLayoutManager(this, 5);
-        rvMenu.setLayoutManager(manager);
-      //  rvMenu.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        menuAdapter=new MenuAdapter(this,menuList);
-        rvMenu.setAdapter(menuAdapter);
+//        menuList.add(new Common_Model("Primary Orders", R.drawable.ic_outline_add_chart_48));
+//        menuList.add(new Common_Model("Secondary Orders", R.drawable.ic_outline_assignment_48));
+//        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+//        menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+//        menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
+//        menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+//
+//
+//        RecyclerView.LayoutManager manager = new GridLayoutManager(this, 5);
+//        rvMenu.setLayoutManager(manager);
+//      //  rvMenu.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+//        menuAdapter=new MenuAdapter(this,menuList);
+//        rvMenu.setAdapter(menuAdapter);
     }
 
 

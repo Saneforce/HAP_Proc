@@ -87,6 +87,7 @@ public class Constants {
     public static final String POS_SCHEME = "posScheme";
     public static final String UOM ="uom" ;
     public static final String VAN_SALES_MODE = "vanSalesMode";
+    public static final String LOGIN_DATA = "loginData";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
