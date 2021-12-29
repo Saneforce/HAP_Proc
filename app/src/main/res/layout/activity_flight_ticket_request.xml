@@ -68,7 +68,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="One way" />
+                                    android:text="One way"
+                                    android:checked="true"/>
 
                                 <RadioButton
                                     android:id="@+id/radio_twoway"
@@ -88,7 +89,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/C5dp">
+                                android:layout_margin="@dimen/C5dp"
+                                android:visibility="gone">
 
                                 <TextView
                                     style="@style/TextStyle"
@@ -229,14 +231,6 @@
                                 </LinearLayout>
 
                             </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/grey_200"
-    android:layout_marginTop="@dimen/C8dp"
-    android:layout_marginStart="25dp"
-    android:layout_marginEnd="25dp"
-    />
                             <LinearLayout
                                 android:id="@+id/lin_return"
                                 android:layout_width="match_parent"
@@ -245,6 +239,14 @@
                                 android:orientation="vertical"
                                 android:visibility="visible">
 
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/grey_200"
+                                    android:layout_marginTop="@dimen/C8dp"
+                                    android:layout_marginStart="25dp"
+                                    android:layout_marginEnd="25dp"
+                                    />
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -416,7 +418,8 @@
                             android:textSize="12sp"
                             android:textColor="@color/grey_600"
                             android:layout_marginTop="-5dp"
-                            android:layout_marginStart="@dimen/C10dp"/>
+                            android:layout_marginStart="@dimen/C10dp"
+                            android:layout_marginEnd="@dimen/C10dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -426,24 +429,30 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         />
+                    <LinearLayout
+                        android:id="@+id/TrvlrList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="@dimen/C5dp"
+                        android:layout_marginEnd="@dimen/C5dp">
+
+                    </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:gravity="center_horizontal">
+
                             <TextView
-                                android:layout_width="match_parent"
+                                android:id="@+id/addTrvlr"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Name"
-                                android:layout_marginStart="@dimen/C5dp"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Name"
-                                android:layout_marginStart="@dimen/C5dp"
-                                />
+                                android:background="@drawable/button_blueg"
+                                android:textColor="#fff"
+                                android:text="Add Traveller"
+                                android:textSize="12sp"
+                                android:paddingStart="@dimen/C10dp"
+                                android:paddingEnd="@dimen/C10dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -454,11 +463,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <Button
-                style="@style/BottomButton"
-                android:text="submit" />
-
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                android:id="@+id/save_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/C40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/button_blueg"
+                android:layout_marginStart="@dimen/C2dp"
+                android:layout_marginEnd="@dimen/C2dp"
+                android:padding="10dp"
+                android:text="Submit for Approval"
+                android:textColor="@android:color/white"
+                android:theme="@style/BluePrimaryButton"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="10dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
         </LinearLayout>
     </LinearLayout>
 

@@ -518,13 +518,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
         }
 
-        if (Common_Class.isNullOrEmpty(etName.getText().toString()))
+        /*if (Common_Class.isNullOrEmpty(etName.getText().toString()))
             common_class.showMsg(this, "Please Enter the name");
         else if (Common_Class.isNullOrEmpty(etPhone.getText().toString()))
             common_class.showMsg(this, "Please Enter the Phone No");
         else if (Common_Class.isNullOrEmpty(etAddress.getText().toString()))
             common_class.showMsg(this, "Please Enter the Address");
-        else if (Getorder_Array_List.size() == 0)
+        else*/
+        if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "POS is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
@@ -619,9 +620,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             }, 500);
                         } else {
                             common_class.showMsg(this, "Your Cart is empty...");
+                            ResetSubmitBtn(0);
                         }
                     } else {
                         showOrderList();
+                        ResetSubmitBtn(0);
                     }
                 } catch (Exception e) {
                     Log.v(TAG, e.getMessage());
@@ -962,7 +965,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            ResetSubmitBtn(0);
+        }
+    }
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
