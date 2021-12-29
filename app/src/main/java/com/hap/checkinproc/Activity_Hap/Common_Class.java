@@ -30,7 +30,11 @@ public class Common_Class {
             return android.provider.Settings.System.getInt(c.getContentResolver(), android.provider.Settings.System.AUTO_TIME, 0) == 1;
         }
     }
-
+    public static boolean isNullOrEmpty(String str) {
+        if (str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
     public Date GetCurrDateTime(Context context) {
         if (isTimeAutomatic(context) == false) {
 

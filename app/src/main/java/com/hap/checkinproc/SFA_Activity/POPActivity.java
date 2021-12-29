@@ -181,7 +181,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.btnSubmit:
                 if (tvBookingDate.getText().toString().equals(""))
-                    common_class.showMsg(this, "Enter Booking Date");
+                    common_class.showMsg(this, "Enter Date");
                 else
                     SaveOrder();
                 break;
@@ -249,9 +249,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                                     try {
                                         Log.e("JSON_VALUES", response.body().toString());
                                         JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                        String san = jsonObjects.getString("success");
-                                        Log.e("Success_Message", san);
-                                        if (san.equals("true")) {
+                                        if (jsonObjects.getString("success").equals("true")) {
                                             startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                             finish();
                                         }

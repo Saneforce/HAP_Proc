@@ -1,7 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,12 +17,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
@@ -79,7 +76,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
         tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
-        tvRetailorPhone.setText(shared_common_pref.getvalue(Constants.Retailor_PHNo));
+        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Retailor_PHNo)))
+            llCalMob.setVisibility(View.GONE);
+        else
+            tvRetailorPhone.setText(shared_common_pref.getvalue(Constants.Retailor_PHNo));
         retaileAddress.setText(shared_common_pref.getvalue(Constants.Retailor_Address));
 
         etAmtRec.addTextChangedListener(new TextWatcher() {
@@ -271,7 +271,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.btnCallMob:
-                common_class.showCalDialog(PaymentActivity.this,"Do you want to Call this Outlet?",tvRetailorPhone.getText().toString().replaceAll(",", ""));
+                common_class.showCalDialog(PaymentActivity.this, "Do you want to Call this Outlet?", tvRetailorPhone.getText().toString().replaceAll(",", ""));
                 break;
 
 

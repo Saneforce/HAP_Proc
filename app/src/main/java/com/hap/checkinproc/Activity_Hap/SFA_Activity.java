@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -48,6 +51,7 @@ import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
+import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -65,7 +69,7 @@ import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary,
-            linMyTeam, linPOS;
+            linMyTeam, linPOS, linVanSales;
     Gson gson;
 
     private SANGPSTracker mLUService;
@@ -90,6 +94,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     public static String sfa_date = "";
 
+    MenuAdapter menuAdapter;
+    RecyclerView rvMenu;
+    private List<Common_Model> menuList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +120,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linPrimary = findViewById(R.id.Lin_primary);
         linMyTeam = findViewById(R.id.lin_myteam);
         linPOS = findViewById(R.id.Lin_POS);
+        linVanSales = findViewById(R.id.lin_vanSales);
+        rvMenu=findViewById(R.id.rvMenu);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -128,6 +138,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linPrimary.setOnClickListener(this);
         linMyTeam.setOnClickListener(this);
         linPOS.setOnClickListener(this);
+        linVanSales.setOnClickListener(this);
         gson = new Gson();
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
@@ -155,6 +166,20 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         getNoOrderRemarks();
         showDashboardData();
 
+
+//        menuList.add(new Common_Model("Primary Orders", R.drawable.ic_outline_add_chart_48));
+//        menuList.add(new Common_Model("Secondary Orders", R.drawable.ic_outline_assignment_48));
+//        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+//        menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+//        menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
+//        menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+//
+//
+//        RecyclerView.LayoutManager manager = new GridLayoutManager(this, 5);
+//        rvMenu.setLayoutManager(manager);
+//      //  rvMenu.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+//        menuAdapter=new MenuAdapter(this,menuList);
+//        rvMenu.setAdapter(menuAdapter);
     }
 
 
@@ -312,6 +337,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
+
+            case R.id.lin_vanSales:
+                //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+                sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
+                startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                overridePendingTransition(R.anim.in, R.anim.out);
+                break;
+
 
             case R.id.Lin_Outlet:
                 common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
@@ -533,6 +566,71 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+    public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
+        Context context;
+        private List<Common_Model> listt;
+
+        public MenuAdapter(Context applicationContext, List<Common_Model> list) {
+            this.context = applicationContext;
+            this.listt = list;
+        }
+
+        @Override
+        public MenuAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view = layoutInflater.inflate(R.layout.sfa_menu_layout, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public void onBindViewHolder(MenuAdapter.MyViewHolder holder, int position) {
+            try {
+                try {
+                    holder.tvName.setText("" + listt.get(position).getName());
+                    holder.ivIcon.setImageResource(listt.get(position).getIcon());
+                } catch (Exception e) {
+                    Log.e("adaptergetView: ", e.getMessage());
+                }
+
+
+            } catch (Exception e) {
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return listt.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            TextView tvName;
+            ImageView ivIcon;
+
+            public MyViewHolder(View view) {
+                super(view);
+                tvName = view.findViewById(R.id.tvMenuName);
+                ivIcon = view.findViewById(R.id.ivMenuIcon);
+
+            }
+        }
+
+
+    }
+
 
     private final ServiceConnection mServiceConection = new ServiceConnection() {
         @Override

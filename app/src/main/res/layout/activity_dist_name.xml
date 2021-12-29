@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SFA_Activity.Dashboard_Route">
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:progress="10"
+        android:visibility="gone" />
+
 
     <LinearLayout
         android:id="@+id/db1_root"
@@ -29,7 +38,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/basic"
                 android:paddingLeft="@dimen/C5dp"
-                android:text="Distributor Info"
+                android:text="Distributors"
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
                 android:textColor="#FFF"
@@ -38,6 +47,33 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:layout_marginRight="@dimen/C10dp"
+            android:layout_marginBottom="@dimen/C1dp"
+            android:background="@drawable/hash_border">
+            <ImageView
+                android:layout_width="@dimen/C20dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/C3dp"
+                android:src="@drawable/ic_search_icon"/>
+            <EditText
+                android:id="@+id/etSearchDist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/C5dp"
+                android:textSize="12sp"
+                android:hint="Search"
+                />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,4 +101,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

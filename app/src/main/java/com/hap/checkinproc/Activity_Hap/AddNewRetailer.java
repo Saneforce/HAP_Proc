@@ -20,7 +20,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,7 +59,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
-import com.hap.checkinproc.SFA_Adapter.QPSFilesAdapter;
+import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -110,7 +114,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     SharedPreferences UserDetails, CheckInDetails;
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
-    ImageView copypaste, ivCapture;
+    ImageView copypaste, ivCapture, ivFreezerCapture;
     String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
 
@@ -133,9 +137,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private ArrayList<Common_Model> serviceTypeList;
 
     private String name = "";
-    RecyclerView rvFiles;
+    RecyclerView rvFiles, rvFreezerFiles, rvCategoryTypes;
     List<QPS_Modal> mData = new ArrayList<>();
-    private QPSFilesAdapter filesAdapter;
+    List<QPS_Modal> mFreezerData = new ArrayList<>();
+
+    private FilesAdapter filesAdapter;
+    public String categoryType = "";
 
 
     @Override
@@ -162,7 +169,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
             copypaste = findViewById(R.id.copypaste);
             ivCapture = findViewById(R.id.ivRetailCapture);
+            ivFreezerCapture = findViewById(R.id.ivFreezerCapture);
             rvFiles = findViewById(R.id.rvFiles);
+            rvFreezerFiles = findViewById(R.id.rvFreezerFiles);
+            rvCategoryTypes = findViewById(R.id.rvCategoryTypes);
             edt_gst = findViewById(R.id.edt_gst);
             headtext = findViewById(R.id.headtext);
             addRetailerName = findViewById(R.id.edt_new_name);
@@ -195,6 +205,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             tvServiceType = findViewById(R.id.txt_service_type);
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
+            ivFreezerCapture.setOnClickListener(this);
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
@@ -218,10 +229,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             outletTypeList = new ArrayList<>();
             mCommon_model_spinner = new Common_Model("1", "Service", "flag");
             outletTypeList.add(mCommon_model_spinner);
-            mCommon_model_spinner = new Common_Model("0", "Universal", "flag");
+            mCommon_model_spinner = new Common_Model("0", "Non Service", "flag");
             outletTypeList.add(mCommon_model_spinner);
             mCommon_model_spinner = new Common_Model("2", "Closed", "flag");
             outletTypeList.add(mCommon_model_spinner);
+            mCommon_model_spinner = new Common_Model("3", "Duplicate", "flag");
+            outletTypeList.add(mCommon_model_spinner);
+
+            serviceTypeList = new ArrayList<>();
+            serviceTypeList.add(new Common_Model("-18", "1", false));
+            serviceTypeList.add(new Common_Model("+4", "2", false));
+            serviceTypeList.add(new Common_Model("Ambient", "3", false));
+
+            Category_Adapter categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
+            rvCategoryTypes.setAdapter(categoryAdapter);
+
 
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -300,13 +322,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             //  getRouteDetails();
             getRetailerClass();
             getRetailerChannel();
-            getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
+            // getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
 
                 iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
                 if (iOutletTyp == 0)
-                    txOutletType.setText("Universal");
+                    txOutletType.setText("Non Service");
                 else if (iOutletTyp == 2)
                     txOutletType.setText("Closed");
                 else
@@ -570,6 +592,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             common_class.getDb_310Data(Constants.STATE_LIST, this);
             mData.add(new QPS_Modal("", "", ""));
+            mFreezerData.add(new QPS_Modal("", "", ""));
 
 
         } catch (Exception e) {
@@ -847,13 +870,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             if (mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0) {
                 for (int j = 0; j < mData.get(0).getFileUrls().size(); j++) {
-                    String filePath = mData.get(0).getFileUrls().get(j);
+                    String filePath = mData.get(0).getFileUrls().get(j).replaceAll("file:/", "");
                     File file = new File(filePath);
                     Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
                     mIntent.putExtra("mFilePath", filePath);
                     mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
                     mIntent.putExtra("FileName", file.getName());
                     mIntent.putExtra("Mode", "Outlet_Close");
+                    FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
+                }
+
+            }
+
+            if (mFreezerData.get(0).getFileUrls() != null && mFreezerData.get(0).getFileUrls().size() > 0) {
+                for (int j = 0; j < mFreezerData.get(0).getFileUrls().size(); j++) {
+                    String filePath = mFreezerData.get(0).getFileUrls().get(j).replaceAll("file:/", "");
+                    File file = new File(filePath);
+                    Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
+                    mIntent.putExtra("mFilePath", filePath);
+                    mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                    mIntent.putExtra("FileName", file.getName());
+                    mIntent.putExtra("Mode", "freezer");
                     FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
                 }
 
@@ -876,7 +913,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString() + "'");
-            reportObject.put("serviceType", "'" + tvServiceType.getText().toString() + "'");
+            categoryType = "";
+            for (int i = 0; i < serviceTypeList.size(); i++) {
+                if (serviceTypeList.get(i).isSelected())
+                    categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
+            }
+
+            Log.v(TAG + ":CategoryType:", categoryType);
+            reportObject.put("CategoryType", "'" + categoryType + "'");
             if (edt_outstanding.getText().toString().equals(""))
                 reportObject.put("outstanding_amount", 0);
 
@@ -934,6 +978,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
             }
             reportObject.put("file_Details", fileArr);
+
+            JSONArray freezerFileArr = new JSONArray();
+            if (mFreezerData.get(0).getFileUrls() != null && mFreezerData.get(0).getFileUrls().size() > 0) {
+                for (int i = 0; i < mFreezerData.get(0).getFileUrls().size(); i++) {
+                    JSONObject fileData = new JSONObject();
+                    File file = new File(mFreezerData.get(0).getFileUrls().get(i));
+                    fileData.put("freezer_filename", file.getName());
+                    freezerFileArr.put(fileData);
+                }
+            }
+            reportObject.put("freezer_file_Details", freezerFileArr);
 
             docMasterObject.put("unlisted_doctor_master", reportObject);
 
@@ -1038,7 +1093,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 common_class.getDb_310Data(Constants.Rout_List, this);
-                getServiceTypes(myDataset.get(position).getId());
+                // getServiceTypes(myDataset.get(position).getId());
                 break;
             case 3:
                 routeId = myDataset.get(position).getId();
@@ -1135,7 +1190,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivRetailCapture:
-                captureImg();
+                captureImg(mData, rvFiles);
+                break;
+            case R.id.ivFreezerCapture:
+                captureImg(mFreezerData, rvFreezerFiles);
                 break;
             case R.id.linear_service_type:
                 common_class.showCommonDialog(serviceTypeList, 4, this);
@@ -1180,7 +1238,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
     }
 
-    private void captureImg() {
+    private void captureImg(List<QPS_Modal> mModal, RecyclerView rv) {
         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
             @Override
             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
@@ -1191,13 +1249,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     File file = new File(fullPath);
                     Uri contentUri = Uri.fromFile(file);
 
-                    if (mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0)
-                        list = (mData.get(0).getFileUrls());
+                    if (mModal.get(0).getFileUrls() != null && mModal.get(0).getFileUrls().size() > 0)
+                        list = (mModal.get(0).getFileUrls());
                     list.add(contentUri.toString());
-                    mData.get(0).setFileUrls(list);
+                    mModal.get(0).setFileUrls(list);
 
-                    filesAdapter = new QPSFilesAdapter(mData.get(0).getFileUrls(), R.layout.adapter_local_files_layout, AddNewRetailer.this);
-                    rvFiles.setAdapter(filesAdapter);
+                    filesAdapter = new FilesAdapter(mModal.get(0).getFileUrls(), R.layout.adapter_local_files_layout, AddNewRetailer.this);
+                    rv.setAdapter(filesAdapter);
 
                 } catch (Exception e) {
                     Log.v(TAG + ":capture:", e.getMessage());
@@ -1278,4 +1336,77 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
 
     }
+
+    public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.MyViewHolder> {
+        Context context;
+        private List<Common_Model> list;
+        private int rowLayout;
+
+        public Category_Adapter(List<Common_Model> list, int rowLayout, Context context) {
+            this.list = list;
+            this.rowLayout = rowLayout;
+            this.context = context;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            try {
+
+                holder.name.setText(list.get(position).getName());
+                holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        try {
+
+                            list.get(position).setSelected(isChecked);
+
+                        } catch (Exception e) {
+                            Log.e(TAG, "adapterProductEx: " + e.getMessage());
+
+                        }
+                 }
+                });
+
+
+            } catch (Exception e) {
+                Log.e(TAG, "adapterProduct: " + e.getMessage());
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView name;
+            CheckBox cbType;
+
+            public MyViewHolder(View view) {
+                super(view);
+                name = view.findViewById(R.id.tvCategoryName);
+                cbType = view.findViewById(R.id.cbCategory);
+
+            }
+        }
+    }
+
 }

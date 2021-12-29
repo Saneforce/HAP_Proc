@@ -317,7 +317,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
             common_class.showMsg(this, "Please choose any scheme from eye icon");
             return false;
         } else if (etBookingDate.getText().toString().equals("")) {
-            common_class.showMsg(this, "Enter Booking Date");
+            common_class.showMsg(this, "Enter Date");
             return false;
         }
 

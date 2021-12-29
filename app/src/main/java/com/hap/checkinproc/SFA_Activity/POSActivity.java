@@ -43,12 +43,14 @@ import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -75,7 +77,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class POSActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, View.OnTouchListener {
+public class POSActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, View.OnTouchListener, Master_Interface {
     //GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -102,23 +104,22 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
-    public int selectedPos = 0;
+    public int selectedPos = 0, uomPos;
     private TextView tvTotalAmount;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
     final Handler handler = new Handler();
     private DatePickerDialog fromDatePickerDialog;
-    public static POSActivity order_category_select;
     private List<Product_Details_Modal> orderTotTax;
     private String scanProId = "";
+    private ArrayList<Common_Model> uomList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_pos_layout);
-            order_category_select = this;
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(this);
             common_class = new Common_Class(this);
@@ -219,7 +220,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
-            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            JSONArray ProdGroups = db.getMasterData(Constants.POS_ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -371,11 +372,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
+
+
+
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
         }
     }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -433,7 +438,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private void FilterTypes(String GrpID) {
         try {
             JSONArray TypGroups = new JSONArray();
-            JSONArray tTypGroups = db.getMasterData(Constants.ProdTypes_List);
+            JSONArray tTypGroups = db.getMasterData(Constants.POS_ProdTypes_List);
             LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
             TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Brndgrid.setLayoutManager(TypgridlayManager);
@@ -447,13 +452,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             String filterId = "";
             if (TypGroups.length() > 0)
                 filterId = TypGroups.getJSONObject(0).getString("id");
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", filterId);
+            GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", filterId);
 
             RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
                     try {
-                        GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", item.getString("id"));
+                        GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", item.getString("id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -513,7 +518,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         Getorder_Array_List.clear();
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
-            if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
+            if (Product_Modal.get(pm).getQty() > 0) {
                 Getorder_Array_List.add(Product_Modal.get(pm));
             }
         }
@@ -683,8 +688,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
-                                    Getorder_Array_List.get(z).getRegularQty());
+                            double cf = (Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("Product_Total_Qty", cf > 0 ? Getorder_Array_List.get(z).getQty() *
+                                    cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("Rate", formatter.format(Double.valueOf(Getorder_Array_List.get(z).getRate())));
                             ProdItem.put("MRP", formatter.format(Double.valueOf(Getorder_Array_List.get(z).getMRP())));
@@ -697,6 +703,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
+                            ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
                             JSONArray tax_Details = new JSONArray();
                             if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
@@ -735,7 +745,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -810,7 +820,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         for (Product_Details_Modal pm : Product_Modal) {
 
-            if (pm.getRegularQty() != null) {
+            if (pm.getQty() > 0) {
                 if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
                     freeQty_Array_List.add(pm);
 
@@ -853,24 +863,24 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
-            if (Product_Modal.get(pm).getRegularQty() != null) {
-                if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
 
-                    cashDiscount += (int) Product_Modal.get(pm).getDiscount();
+            if (Product_Modal.get(pm).getQty() > 0) {
 
-                    totalvalues += Product_Modal.get(pm).getAmount();
+                cashDiscount += (int) Product_Modal.get(pm).getDiscount();
 
-                    totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
+                totalvalues += Product_Modal.get(pm).getAmount();
 
-                    if (Product_Modal.get(pm).getTax() > 0)
-                        taxVal += Product_Modal.get(pm).getTax();
+                totalQty += Product_Modal.get(pm).getQty();
 
-
-                    Getorder_Array_List.add(Product_Modal.get(pm));
+                if (Product_Modal.get(pm).getTax() > 0)
+                    taxVal += Product_Modal.get(pm).getTax();
 
 
-                }
+                Getorder_Array_List.add(Product_Modal.get(pm));
+
+
             }
+
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
@@ -978,6 +988,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
             switch (key) {
+
                 case Constants.POS_SCHEME:
                     Log.v(TAG + "scheme:", apiDataResponse);
                     JSONObject jsonObject = new JSONObject(apiDataResponse);
@@ -1150,7 +1161,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Getorder_Array_List.clear();
 
             for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
+                if (Product_Modal.get(pm).getQty() > 0) {
                     Getorder_Array_List.add(Product_Modal.get(pm));
                 }
             }
@@ -1168,6 +1179,19 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        common_class.dismissCommonDialog(type);
+        switch (type) {
+            case 1:
+                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble(myDataset.get(position).getPhone()));
+                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
+                break;
+        }
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
@@ -1292,6 +1316,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         }
 
+        public void notify(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
+            this.Product_Details_Modalitem = Product_Details_Modalitem;
+            this.rowLayout = rowLayout;
+            this.context = context;
+            this.CategoryType = categoryType;
+            notifyDataSetChanged();
+
+        }
+
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
@@ -1311,20 +1344,33 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             try {
+
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP())));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
-                holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
+                    holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+                else {
+                    holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+
+
+                }
+
+                holder.Rate.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
+
+                //  holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getBar_Code()))
                     Log.v(TAG, "name:" + Product_Details_Modal.getName() + " :code:" + Product_Details_Modal.getBar_Code());
 
                 if (CategoryType >= 0) {
 
-                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Qty : " + (
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1338,10 +1384,29 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     }
 
 
-                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
+                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getQty()));
+                    holder.QtyAmt.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
 
+
+                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            uomPos = position;
+                            uomList = new ArrayList<>();
+
+                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+
+                                }
+                                common_class.showCommonDialog(uomList, 1, POSActivity.this);
+                            } else {
+                                common_class.showMsg(POSActivity.this, "No Records Found.");
+                            }
+                        }
+                    });
 
                 }
 
@@ -1386,7 +1451,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty());
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1394,8 +1459,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP()))));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
+                                holder.totalQty.setText("Total Qty : " + totQty);
                             }
 
 
@@ -1577,6 +1642,24 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         }
 
+        private void showUOMDialog() {
+
+            LayoutInflater inflater = LayoutInflater.from(POSActivity.this);
+
+            final View view = inflater.inflate(R.layout.fruit_item, null);
+            android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(POSActivity.this).create();
+//            alertDialog.setTitle("HAP Check-In");
+//            alertDialog.setMessage(Html.fromHtml(mMessage));
+//            alertDialog.setCancelable(false);
+
+//            TextView btnOthers = (TextView) view.findViewById(R.id.tvOthers);
+//            TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
+//            TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
+            alertDialog.setView(view);
+            alertDialog.show();
+
+        }
+
         @Override
         public int getItemCount() {
             return Product_Details_Modalitem.size();
@@ -1631,11 +1714,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
             LinearLayout llRegular;
+            RelativeLayout rlUOM;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -1650,6 +1734,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
+                tvUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
@@ -1658,6 +1743,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+                    rlUOM = view.findViewById(R.id.rlUOM);
                 }
 
 

@@ -52,7 +52,7 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
 
     List<QPS_Modal> qpsModalList = new ArrayList<>();
 
-    QPSFilesAdapter qpsFilesAdapter;
+    FilesAdapter filesAdapter;
     private String key = "";
 
     public QPSAdapter(Context context, List<QPS_Modal> mData) {
@@ -81,9 +81,9 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
             holder.receivedDate.setText("" + mData.get(position).getReceivedDate());
             holder.status.setText("" + mData.get(position).getStatus());
 
-            qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
+            filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
 
-            holder.rvFile.setAdapter(qpsFilesAdapter);
+            holder.rvFile.setAdapter(filesAdapter);
 
 
             getCurrentList();

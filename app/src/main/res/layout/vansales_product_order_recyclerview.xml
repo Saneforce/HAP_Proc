@@ -59,14 +59,15 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:inputType="number"
-                            android:text="MRP"
+                            android:text="Rate"
                             android:textColor="@color/grey_800"
                             android:visibility="visible" />
 
@@ -92,7 +93,8 @@
                         android:id="@+id/llRegular"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/tvRegularLabel"
@@ -148,6 +150,41 @@
                         android:layout_height="@dimen/C30dp"
                         android:orientation="horizontal">
 
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <RelativeLayout
+                                android:id="@+id/rlUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C3dp"
+                                android:background="@drawable/order_qty_backround">
+
+                                <TextView
+                                    android:id="@+id/tvUOM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="sans-serif"
+                                    android:gravity="center_vertical"
+                                    android:hint="UOM"
+                                    android:paddingLeft="@dimen/C5dp"
+                                    android:paddingRight="@dimen/C5dp"
+                                    android:textColor="@color/txt_color_black"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toRightOf="@+id/tvUOM"
+                                    android:padding="1dp"
+
+                                    android:src="@drawable/spin_down_arrow"></ImageView>
+                            </RelativeLayout>
+                        </LinearLayout>
+
                         <TextView
 
                             android:id="@+id/lblAddQty"
@@ -159,6 +196,7 @@
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout
+                            android:layout_marginRight="@dimen/C10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -199,39 +237,11 @@
                                 app:tint="@color/green" />
                         </LinearLayout>
 
+
                         <RelativeLayout
-                            android:id="@+id/rlUOM"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C3dp"
-                            android:background="@drawable/order_qty_backround">
-
-                            <TextView
-                                android:id="@+id/tvUOM"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:fontFamily="sans-serif"
-                                android:gravity="center_vertical"
-                                android:hint="UOM"
-                                android:paddingLeft="@dimen/C5dp"
-                                android:paddingRight="@dimen/C5dp"
-                                android:textColor="@color/txt_color_black"
-                                android:visibility="visible" />
-
-                            <ImageView
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/tvUOM"
-                                android:padding="1dp"
-
-                                android:src="@drawable/spin_down_arrow"></ImageView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/qtyAmt"
@@ -257,11 +267,12 @@
 
 
                     <RelativeLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_marginRight="@dimen/C5dp"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
 
@@ -326,7 +337,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -383,13 +394,15 @@
                         android:layout_marginTop="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C3dp"
                         android:layout_weight="1"
-                        android:background="@color/grey_100">
+                        android:background="@color/grey_100"
+                        android:visibility="gone">
 
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/totalqty"

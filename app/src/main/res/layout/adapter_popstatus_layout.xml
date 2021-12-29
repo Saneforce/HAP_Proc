@@ -72,7 +72,7 @@
                     <TextView
                         style="@style/DashboardTextStyle"
                         android:layout_weight="1"
-                        android:text="Booking Date" />
+                        android:text="Date" />
 
                     <TextView
                         android:id="@+id/tvBookingDate"

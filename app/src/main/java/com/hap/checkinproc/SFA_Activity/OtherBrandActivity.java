@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -254,20 +255,24 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
 
                         for (int i = 0; i < submitBrandList.size(); i++) {
+                            if (submitBrandList.get(i).getFileUrls() != null &&
+                                    submitBrandList.get(i).getFileUrls().size() > 0) {
 
-                            for (int j = 0; j < submitBrandList.get(i).getFileUrls().size(); j++) {
-                                String filePath = submitBrandList.get(i).getFileUrls().get(j);
-                                File file = new File(filePath);
-                                Intent mIntent = new Intent(OtherBrandActivity.this, FileUploadService.class);
-                                mIntent.putExtra("mFilePath", filePath);
-                                mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                                mIntent.putExtra("FileName", file.getName());
-                                mIntent.putExtra("Mode", "OB");
-                                FileUploadService.enqueueWork(OtherBrandActivity.this, mIntent);
+                                for (int j = 0; j < submitBrandList.get(i).getFileUrls().size(); j++) {
+                                    String filePath = submitBrandList.get(i).getFileUrls().get(j).replaceAll("file:/","");
+                                    File file = new File(filePath);
+                                   // Uri contentUri = Uri.fromFile(file);
 
+                                    Intent mIntent = new Intent(OtherBrandActivity.this, FileUploadService.class);
+                                    mIntent.putExtra("mFilePath", filePath);
+                                    mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
+                                    mIntent.putExtra("FileName", file.getName());
+                                    mIntent.putExtra("Mode", "OB");
+                                    FileUploadService.enqueueWork(OtherBrandActivity.this, mIntent);
+
+                                }
                             }
                         }
-
                     }
 
                     @Override

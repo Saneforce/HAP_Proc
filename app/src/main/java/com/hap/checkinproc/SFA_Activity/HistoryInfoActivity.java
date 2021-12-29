@@ -61,12 +61,9 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     Shared_Common_Pref shared_common_pref;
     DatePickerDialog fromDatePickerDialog;
     String date = "";
-    static SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
 
     String response = "";
-
     String TAG = "HistoryInfoActivity";
-    List<OutletReport_View_Modal> OutletReport_View_Modal;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
 
     RecyclerView rv;
@@ -85,10 +82,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_history_info);
         init();
 
-
-        shared_common_pref = new Shared_Common_Pref(this);
         tvOutletName.setText(shared_common_pref.getvalue(Constants.Distributor_name));
-
         tvStartDate.setText(Common_Class.GetDatewothouttime());
         tvEndDate.setText(Common_Class.GetDatewothouttime());
         stDate = tvStartDate.getText().toString();
@@ -105,8 +99,6 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         btnYesterday.setTextColor(getResources().getColor(R.color.a50white));
         btnCurrentMnth.setTypeface(null, Typeface.NORMAL);
         btnCurrentMnth.setTextColor(getResources().getColor(R.color.a50white));
-
-
         common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
 
@@ -118,6 +110,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         common_class = new Common_Class(this);
+        shared_common_pref = new Shared_Common_Pref(this);
         ivToolbarHome = (ImageView) findViewById(R.id.toolbar_home);
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
@@ -316,38 +309,6 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         dialogFragment.show(getSupportFragmentManager(), null);
     }
 
-
-    public boolean checkDates(String stDate, String endDate) {
-        boolean b = false;
-
-
-        try {
-
-            Date date1 = dfDate.parse(stDate);
-            Date date2 = dfDate.parse(endDate);
-            long diff = date2.getTime() - date1.getTime();
-            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
-                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
-                    b = true;//If start date is before end date
-                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
-                    b = true;//If two dates are equal
-                } else {
-                    b = false; //If start date is after the end date
-                }
-
-            } else {
-                Toast.makeText(HistoryInfoActivity.this, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return b;
-    }
-
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
@@ -505,7 +466,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (checkDates(date, tvEndDate.getText().toString()) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(),HistoryInfoActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
@@ -514,7 +475,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                     } else
                         common_class.showMsg(HistoryInfoActivity.this, "Please select valid date");
                 } else {
-                    if (checkDates(tvStartDate.getText().toString(), date) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date,HistoryInfoActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();

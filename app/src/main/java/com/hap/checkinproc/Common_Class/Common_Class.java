@@ -71,6 +71,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -141,6 +142,13 @@ public class Common_Class {
     public static String GetDatemonthyearformat() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+
+    public static String GetDatemonthyearTimeformat() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
@@ -456,6 +464,10 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.UOM:
+                        axnname = "get/productuom";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
@@ -773,6 +785,45 @@ public class Common_Class {
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
+                service.getDataArrayList("get/posprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        // Log.v(TAG, response.toString());
+                        db.deleteMasterData(Constants.POS_ProdGroups_List);
+                        db.addMasterData(Constants.POS_ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/posprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.POS_ProdTypes_List);
+                        db.addMasterData(Constants.POS_ProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/posprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.POS_Category_List);
+                        db.addMasterData(Constants.POS_Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+
                 service.getDataArrayList("get/posproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -797,6 +848,35 @@ public class Common_Class {
         Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    public boolean checkDates(String stDate, String endDate, Activity activity) {
+        boolean b = false;
+        try {
+            SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date date1 = dfDate.parse(stDate);
+            Date date2 = dfDate.parse(endDate);
+            long diff = date2.getTime() - date1.getTime();
+            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
+                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
+                    b = true;//If start date is before end date
+                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
+                    b = true;//If two dates are equal
+                } else {
+                    b = false; //If start date is after the end date
+                }
+
+            } else {
+                Toast.makeText(activity, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return b;
     }
 
     public void showCalDialog(Activity activity, String msg, String num) {
@@ -861,6 +941,9 @@ public class Common_Class {
                                 break;
                             case "Invoice?":
                                 shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
+                                break;
+                            case "Van Sales?":
+                                shared_common_pref.clear_pref(Constants.LOC_VANSALES_DATA);
                                 break;
                         }
                     }
@@ -989,6 +1072,7 @@ public class Common_Class {
             List<Common_Model> distributor_master = new ArrayList<>();
             Common_Model Model_Pojo;
             JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+            Log.v("distList:", jsonArray.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -997,7 +1081,8 @@ public class Common_Class {
                 String Add2 = jsonObject1.optString("Addr2");
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code);
+                String DivERP = jsonObject1.optString("DivERP");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code,DivERP);
                 distributor_master.add(Model_Pojo);
 
             }

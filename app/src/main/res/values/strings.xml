@@ -73,9 +73,9 @@
     <string name="order_type">Order Type</string>
     <string name="head_quater">Headquaters</string>
     <string name="route">Route  </string>
-    <string name="retailer">Retailer Name </string>
-    <string name="retailer_class">Retailer Class  </string>
-    <string name="retailer_channel">Retailer Channel </string>
+    <string name="retailer">Outlet Name </string>
+    <string name="retailer_class">Outlet Class  </string>
+    <string name="retailer_channel">Outlet Channel </string>
     <string name="event_capture">Event Capture</string>
     <string name="order">Orders</string>
     <string name="remark">Enter the Remarks </string>

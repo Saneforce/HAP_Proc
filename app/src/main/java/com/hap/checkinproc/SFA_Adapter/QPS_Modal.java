@@ -98,6 +98,7 @@ public class QPS_Modal {
         this.Amount = amount;
     }
 
+
     @SerializedName("id")
     @Expose
     private String sNo;
@@ -127,6 +128,21 @@ public class QPS_Modal {
         this.filePath = filePath;
         this.fileName = fileName;
         this.fileKey = fileKey;
+    }
+
+    //            holder.receivedDate.setText("" + itm.getString("Received_Date"));
+//            holder.status.setText("" + itm.getString("POP_Status"));
+//            holder.materialName.setText("" + itm.getString("POP_ID"));
+    //    String images = itm.getString("Images");
+
+
+    public QPS_Modal(String name, String Status, String receivedDate, String fileName, String p_id, String sNo) {
+        this.name = name;
+        this.Status = Status;
+        this.receivedDate = receivedDate;
+        this.fileName = fileName;
+        this.p_id = p_id;
+        this.sNo = sNo;
     }
 
     private String filePath;

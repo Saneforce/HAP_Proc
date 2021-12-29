@@ -50,7 +50,6 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     public static String stDate = "", endDate = "";
     DatePickerDialog fromDatePickerDialog;
     String date = "";
-    static SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
     LinearLayout llDistributor, btnCmbRoute;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     Common_Model Model_Pojo;
@@ -88,6 +87,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
 
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                llDistributor.setEnabled(false);
                 btnCmbRoute.setVisibility(View.GONE);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
                 distributor_text.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
@@ -159,7 +159,6 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     }
 
     void selectDate(int val) {
-
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(TodayPrimOrdActivity.this, new DatePickerDialog.OnDateSetListener() {
 
@@ -168,7 +167,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (checkDates(date, tvEndDate.getText().toString()) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(),TodayPrimOrdActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
@@ -176,7 +175,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                     } else
                         common_class.showMsg(TodayPrimOrdActivity.this, "Please select valid date");
                 } else {
-                    if (checkDates(tvStartDate.getText().toString(), date) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date,TodayPrimOrdActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();
@@ -191,36 +190,6 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
-
-
-    }
-
-    public boolean checkDates(String stDate, String endDate) {
-        boolean b = false;
-        try {
-
-            Date date1 = dfDate.parse(stDate);
-            Date date2 = dfDate.parse(endDate);
-            long diff = date2.getTime() - date1.getTime();
-            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
-                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
-                    b = true;//If start date is before end date
-                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
-                    b = true;//If two dates are equal
-                } else {
-                    b = false; //If start date is after the end date
-                }
-
-            } else {
-                Toast.makeText(TodayPrimOrdActivity.this, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return b;
     }
 
     public void loadroute() {

@@ -463,7 +463,7 @@
 
                 <LinearLayout
                     android:id="@+id/lin_order"
-                    style="@style/BottomButton"
+                    style="@style/OrderTypesButton"
                     android:layout_weight="1">
 
                     <ImageView
@@ -471,19 +471,46 @@
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_order_24"
-                        app:tint="#fff"/>
+                        app:tint="#fff" />
 
                     <TextView
 
                         android:id="@+id/Alltextclick"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/C5dp"
+                        android:paddingLeft="@dimen/C3dp"
                         android:text="ORDER"
+                        android:textColor="#fff"
                         android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:textColor="#fff"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lin_vanSales"
+                    style="@style/OrderTypesButton"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_invoice_24"
+                        app:tint="@color/white">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/C3dp"
+                        android:text="Van Sales"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/lin_repeat_order"
@@ -495,7 +522,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_blueg"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/C5dp"
+                    android:paddingLeft="@dimen/C3dp"
                     android:paddingRight="@dimen/C5dp"
                     android:visibility="gone">
 
@@ -514,7 +541,7 @@
 
                 <LinearLayout
                     android:id="@+id/lin_invoice"
-                    style="@style/BottomButton"
+                    style="@style/OrderTypesButton"
                     android:layout_weight="1">
 
                     <ImageView
@@ -531,16 +558,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/C5dp"
+                        android:paddingLeft="@dimen/C3dp"
                         android:text="INVOICE"
+                        android:textColor="@color/white"
                         android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lin_noOrder"
-                    style="@style/BottomButton"
+                    style="@style/OrderTypesButton"
                     android:layout_weight="1">
 
                     <ImageView
@@ -548,24 +575,24 @@
                         android:layout_height="15dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_noorder_24"
-                        app:tint="@color/white"/>
+                        app:tint="@color/white" />
 
                     <TextView
                         android:id="@+id/tvNoorder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/C5dp"
+                        android:paddingLeft="@dimen/C3dp"
                         android:text="No Order"
                         android:textAllCaps="true"
+                        android:textColor="@color/white"
                         android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lin_payment"
-                    style="@style/BottomButton"
+                    style="@style/OrderTypesButton"
                     android:layout_weight="1">
 
                     <ImageView
@@ -573,18 +600,18 @@
                         android:layout_height="15dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_payment_24"
-                        app:tint="@color/white"/>
+                        app:tint="@color/white" />
 
                     <TextView
                         android:id="@+id/tvPayment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/C5dp"
+                        android:paddingLeft="@dimen/C3dp"
                         android:text="PAYMENT"
+                        android:textColor="@color/white"
                         android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout

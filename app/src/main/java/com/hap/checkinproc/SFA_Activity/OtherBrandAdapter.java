@@ -24,7 +24,7 @@ import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.QPSFilesAdapter;
+import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 
 import java.io.File;
@@ -40,7 +40,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
     Gson gson;
     Shared_Common_Pref shared_common_pref;
     public static String TAG = "OtherBrandAdapter";
-    private QPSFilesAdapter qpsFilesAdapter;
+    private FilesAdapter filesAdapter;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView productname, Rate, Amount, Disc, tvPos;
@@ -244,8 +244,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                                 list.add(contentUri.toString());
                                 mData.get(holder.getAdapterPosition()).setFileUrls(list);
 
-                                qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
-                                holder.rvFiles.setAdapter(qpsFilesAdapter);
+                                filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
+                                holder.rvFiles.setAdapter(filesAdapter);
 
                             } catch (Exception e) {
                                 Log.v(TAG + ":capture:", e.getMessage());
@@ -260,8 +260,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
             });
 
 
-            qpsFilesAdapter = new QPSFilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
-            holder.rvFiles.setAdapter(qpsFilesAdapter);
+            filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
+            holder.rvFiles.setAdapter(filesAdapter);
 
         } catch (Exception e) {
             Log.e(TAG + "OTHERBRAND_Adapter ", e.getMessage());

@@ -21,13 +21,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyViewHolder> {
+public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder> {
     List<String> AryDta = new ArrayList<>();
     private Context context;
     int salRowDetailLayout;
     String itm = "";
 
-    public QPSFilesAdapter(List<String> jAryDta, int rowLayout, Context mContext) {
+    public FilesAdapter(List<String> jAryDta, int rowLayout, Context mContext) {
         AryDta = jAryDta;
         context = mContext;
         salRowDetailLayout = rowLayout;

@@ -63,6 +63,11 @@ public class Product_Details_Modal {
     @SerializedName("Default_UOM")
     @Expose
     private Double defaultUOM;
+
+    @SerializedName("Default_UOM_Name")
+    @Expose
+    private String Default_UOM_Name;
+
     @SerializedName("Rate")
     @Expose
     private Double Rate;
@@ -86,14 +91,21 @@ public class Product_Details_Modal {
     @Expose
     private String ConversionFactor;
 
+
     @SerializedName("CGST")
     @Expose
     private Double CGST;
     @SerializedName("SGST")
     @Expose
     private Double SGST;
+
+    @SerializedName("UOMList")
+    @Expose
+    private List<UOM> UOMList = new ArrayList<>();
     private List<Product_Details_Modal> productDetailsModal = new ArrayList<>();
 
+    private String UOM_Id;
+    private String UOM_Nm;
 
     public String getMRP() {
         return MRP;
@@ -288,6 +300,7 @@ public class Product_Details_Modal {
     @SerializedName("PaidAmount")
     @Expose
     private String PaidAmount;
+    private double CnvQty;
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
@@ -595,5 +608,84 @@ public class Product_Details_Modal {
 
     public void setBar_Code(String bar_Code) {
         Bar_Code = bar_Code;
+    }
+
+    public List<UOM> getUOMList() {
+        return UOMList;
+    }
+
+    public void setUOMList(List<UOM> UOMList) {
+        this.UOMList = UOMList;
+    }
+
+    public String getUOM_Id() {
+        return UOM_Id;
+    }
+
+    public void setUOM_Id(String UOM_Id) {
+        this.UOM_Id = UOM_Id;
+    }
+
+    public String getUOM_Nm() {
+        return UOM_Nm;
+    }
+
+    public void setUOM_Nm(String UOM_Nm) {
+        this.UOM_Nm = UOM_Nm;
+    }
+
+    public String getDefault_UOM_Name() {
+        return Default_UOM_Name;
+    }
+
+    public void setDefault_UOM_Name(String default_UOM_Name) {
+        Default_UOM_Name = default_UOM_Name;
+    }
+
+    public double getCnvQty() {
+        return CnvQty;
+    }
+
+    public void setCnvQty(double cnvQty) {
+        CnvQty = cnvQty;
+    }
+
+
+    public class UOM {
+        @SerializedName("CnvQty")
+        @Expose
+        private double CnvQty;
+
+        @SerializedName("UOM_Id")
+        @Expose
+        private String UOM_Id;
+
+        @SerializedName("UOM_Nm")
+        @Expose
+        private String UOM_Nm;
+
+        public String getUOM_Id() {
+            return UOM_Id;
+        }
+
+        public void setUOM_Id(String UOM_Id) {
+            this.UOM_Id = UOM_Id;
+        }
+
+        public String getUOM_Nm() {
+            return UOM_Nm;
+        }
+
+        public void setUOM_Nm(String UOM_Nm) {
+            this.UOM_Nm = UOM_Nm;
+        }
+
+        public double getCnvQty() {
+            return CnvQty;
+        }
+
+        public void setCnvQty(double cnvQty) {
+            CnvQty = cnvQty;
+        }
     }
 }
