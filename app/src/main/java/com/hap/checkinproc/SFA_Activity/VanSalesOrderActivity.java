@@ -75,7 +75,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VanSalesOrderActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
-    //GridView categorygrid,Grpgrid,Brndgrid;
+
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
     List<Product_Details_Modal> Product_ModalSetAdapter;
@@ -94,7 +94,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
-    String TAG = "Order_Category_Select";
+    String TAG = "VanSalesOrderActivity";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
@@ -109,7 +109,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     private TextView tvBillTotItem;
     final Handler handler = new Handler();
     private DatePickerDialog fromDatePickerDialog;
-    public static VanSalesOrderActivity order_category_select;
     private List<Product_Details_Modal> orderTotTax;
     private int uomPos;
     private ArrayList<Common_Model> uomList;
@@ -120,7 +119,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_vansalesorder_category);
-            order_category_select = this;
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(VanSalesOrderActivity.this);
             common_class = new Common_Class(this);
@@ -216,7 +214,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 }
             });
 
-            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+          /*  String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
 
             if (!Common_Class.isNullOrEmpty(preOrderList) && Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA))) {
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -344,7 +342,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 }
             }
 
-            Log.v(TAG, " order oncreate:j " + preOrderList);
+            Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
                 findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);

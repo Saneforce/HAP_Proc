@@ -21,18 +21,13 @@ import java.util.List;
 
 public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyViewHolder> {
     Context context;
-
-    Shared_Common_Pref shared_common_pref;
-
-
-    POPMaterialAdapterSample popMaterialAdapter;
+  POPMaterialAdapter popMaterialAdapter;
 
     JSONArray jsonArray;
 
     public POPStatusAdapter(Context context, JSONArray jsonArray) {
         this.context = context;
         this.jsonArray = jsonArray;
-        shared_common_pref = new Shared_Common_Pref(context);
 
     }
 
@@ -57,21 +52,13 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
             List<QPS_Modal> statusList = new ArrayList<>();
             JSONArray arr = itm.getJSONArray("Details");
             for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(position);
+                JSONObject obj = arr.getJSONObject(i);
                 statusList.add(new QPS_Modal(obj.getString("POP_ID"), obj.getString("POP_Status"), obj.getString("Received_Date"), obj.getString("Images")
                         , obj.getString("POP_Req_ID"), obj.getString("Trans_Sl_No")));
             }
 
-//            holder.receivedDate.setText("" + itm.getString("Received_Date"));
-//            holder.status.setText("" + itm.getString("POP_Status"));
-//            holder.materialName.setText("" + itm.getString("POP_ID"));
-            //    String images = itm.getString("Images");
-            popMaterialAdapter = new POPMaterialAdapterSample(context, statusList);
 
-            //  popMaterialAdapter = new POPMaterialAdapter(context, itm.getJSONArray("Details"));
-
-//            popMaterialAdapter = new POPMaterialAdapter(context, itm.getJSONArray("Details"));
-
+            popMaterialAdapter = new POPMaterialAdapter(context, statusList);
             holder.rvMaterials.setAdapter(popMaterialAdapter);
 
 

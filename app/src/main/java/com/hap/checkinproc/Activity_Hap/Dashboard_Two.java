@@ -911,10 +911,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 editor.apply();
                 CheckInDetails.edit().clear().commit();
 
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
-
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 stopService(playIntent);
                 finishAffinity();

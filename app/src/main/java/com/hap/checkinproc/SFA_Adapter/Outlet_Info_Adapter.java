@@ -24,9 +24,9 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, status, invoice, outletAddress, textId, clsdRmks, txCustStatus,lupdDt;
+        public TextView textviewname, textviewdate, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt;
         //ImageView ;
-        public LinearLayout retStaBdg, icAC,layparent;
+        public LinearLayout retStaBdg, icAC, layparent;
 
         public MyViewHolder(View view) {
             super(view);
@@ -69,19 +69,28 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         holder.textId.setText("" + Retailer_Modal_List.getERP_Code());
         holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
         holder.clsdRmks.setText("" + Retailer_Modal_List.getClosedRemarks());
-        holder.lupdDt.setText((Retailer_Modal_List.getLastUpdt_Date().equalsIgnoreCase(""))?"":"Last Updated On "+Retailer_Modal_List.getLastUpdt_Date());
+        holder.lupdDt.setText((Retailer_Modal_List.getLastUpdt_Date().equalsIgnoreCase("")) ? "" : "Last Updated On " + Retailer_Modal_List.getLastUpdt_Date());
         holder.icAC.setVisibility(View.INVISIBLE);
         if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
             holder.icAC.setVisibility(View.VISIBLE);
         }
-        holder.txCustStatus.setText((typ.equalsIgnoreCase("2") ? "Closed" : (typ.equalsIgnoreCase("1") ? "Service" : "Non Service")));
-        if (typ.equalsIgnoreCase("2")) {
-            holder.retStaBdg.setBackground(context.getDrawable(R.drawable.round_status_blue));
-        } else if (typ.equalsIgnoreCase("1")) {
-            holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_green));
-        } else {
-            holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_blueg));
+        holder.txCustStatus.setText((typ.equalsIgnoreCase("3") ? "Duplicate" : typ.equalsIgnoreCase("2") ? "Closed" : (typ.equalsIgnoreCase("1") ? "Service" : "Non Service")));
+
+        switch (typ){
+            case "1":
+                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_green));
+                break;
+            case "2":
+                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.round_status_blue));
+                break;
+            case "3":
+                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_yellows));
+                break;
+            default:
+                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_blueg));
+                break;
         }
+
         holder.layparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

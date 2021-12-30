@@ -329,12 +329,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
 
                 iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
-                if (iOutletTyp == 0)
-                    txOutletType.setText("Non Service");
-                else if (iOutletTyp == 2)
-                    txOutletType.setText("Closed");
-                else
-                    txOutletType.setText("Service");
+                switch (iOutletTyp) {
+                    case 0:
+                        txOutletType.setText("Non Service");
+                        break;
+                    case 2:
+                        txOutletType.setText("Closed");
+                        break;
+                    case 3:
+                        txOutletType.setText("Duplicate");
+                        break;
+                    default:
+                        txOutletType.setText("Service");
+                        break;
+                }
+
                 txDelvryType.setText(Retailer_Modal_List.get(getOutletPosition()).getDelivType());
             }
 

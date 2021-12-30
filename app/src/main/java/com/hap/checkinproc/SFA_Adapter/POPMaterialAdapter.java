@@ -16,17 +16,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
-import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.POPActivity;
@@ -36,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,15 +42,13 @@ import retrofit2.Response;
 public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.MyViewHolder> {
     Context context;
 
-    JSONArray jsonArray;
-    Shared_Common_Pref shared_common_pref;
-    Gson gson = new Gson();
 
-    List<QPS_Modal> qpsModalList = new ArrayList<>();
+    Shared_Common_Pref shared_common_pref;
+    List<QPS_Modal> mData = new ArrayList<>();
 
     FilesAdapter filesAdapter;
     ArrayList<List<String>> fileList = new ArrayList<>();
-    private String key = "";
+
     Common_Class common_class;
 
     @Override
@@ -68,17 +61,16 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
         return position;
     }
 
-    public POPMaterialAdapter(Context context, JSONArray jsonArray) {
+    public POPMaterialAdapter(Context context, List<QPS_Modal> mData) {
         this.context = context;
-        this.jsonArray = jsonArray;
+        this.mData = mData;
         shared_common_pref = new Shared_Common_Pref(context);
         common_class = new Common_Class(context);
 
         try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject itm = jsonArray.getJSONObject(i);
+            for (int i = 0; i < mData.size(); i++) {
 
-                String images = itm.getString("Images");
+                String images = mData.get(i).getFileName();
                 List<String> items = new ArrayList<>();
                 String[] res = images.split("[,]", 0);
                 for (String myStr : res) {
@@ -108,23 +100,18 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
     @Override
     public void onBindViewHolder(POPMaterialAdapter.MyViewHolder holder, int position) {
         try {
-            JSONObject itm = jsonArray.getJSONObject(position);
 
-            holder.receivedDate.setText("" + itm.getString("Received_Date"));
-            holder.status.setText("" + itm.getString("POP_Status"));
-            holder.materialName.setText("" + itm.getString("POP_ID"));
+            holder.receivedDate.setText("" + mData.get(position).getReceivedDate());
+            holder.status.setText("" + mData.get(position).getStatus());
+            holder.materialName.setText("" + mData.get(position).getName());
 
-
-            getCurrentList();
-
-            if (itm.getString("POP_Status").equalsIgnoreCase("Approved")) {
+            if (mData.get(position).getStatus().equalsIgnoreCase("Approved")) {
                 holder.btnComplete.setVisibility(View.GONE);
                 holder.ivCaptureImg.setVisibility(View.GONE);
                 holder.ivAttachImg.setVisibility(View.GONE);
             } else {
                 holder.btnComplete.setVisibility(View.VISIBLE);
                 holder.ivCaptureImg.setVisibility(View.VISIBLE);
-                //   holder.ivAttachImg.setVisibility(View.VISIBLE);
             }
 
 
@@ -132,61 +119,35 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
-                       // getCurrentList();
 
-                        key = itm.getString("POP_Req_ID") + "~POPkey";
-                    //    if (isCheckExceed(key)) {
+                        if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() >= 3) {
+                            Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
+
+                        } else {
                             AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                                 @Override
                                 public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
 
 
-//                                    qpsModalList.add(new QPS_Modal(fullPath, FileName, (key + System.currentTimeMillis())));
-//
-//                                    shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
-//
-//
-//                                    List<String> list = new ArrayList<>();
-//
-//
-//                                    for (int i = 0; i < qpsModalList.size(); i++) {
-//                                        if (qpsModalList.get(i).getFileKey().contains((key))) {
-//
-//                                            File file = new File(qpsModalList.get(i).getFilePath());
-//                                            Uri contentUri = Uri.fromFile(file);
-//                                            list.add(contentUri.toString());
-//
-//                                        }
-//                                    }
-//
-//                                    filesAdapter = new FilesAdapter(list, R.layout.adapter_local_files_layout, context);
-//                                    holder.rvFile.setAdapter(filesAdapter);
+                                    List<String> list = new ArrayList<>();
+                                    File file = new File(fullPath);
+                                    Uri contentUri = Uri.fromFile(file);
 
-                                    if (qpsModalList.get(holder.getAdapterPosition()).getFileUrls() != null && qpsModalList.get(holder.getAdapterPosition()).getFileUrls().size() >= 3) {
-                                        Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
+                                    if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
+                                        list = (mData.get(position).getFileUrls());
+                                    list.add(contentUri.toString());
+                                    mData.get(holder.getAdapterPosition()).setFileUrls(list);
 
-                                    } else {
-                                        List<String> list = new ArrayList<>();
-                                        File file = new File(fullPath);
-                                        Uri contentUri = Uri.fromFile(file);
+                                    filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
+                                    holder.rvFile.setAdapter(filesAdapter);
 
-                                        if (qpsModalList.get(holder.getAdapterPosition()).getFileUrls() != null && qpsModalList.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
-                                            list = (qpsModalList.get(position).getFileUrls());
-                                        list.add(contentUri.toString());
-                                        qpsModalList.get(holder.getAdapterPosition()).setFileUrls(list);
-
-                                        filesAdapter = new FilesAdapter(qpsModalList.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
-                                        holder.rvFile.setAdapter(filesAdapter);
-
-                                    }
                                 }
+
                             });
                             Intent intent = new Intent(context, AllowancCapture.class);
                             intent.putExtra("allowance", "TAClaim");
                             context.startActivity(intent);
-//                        } else {
-//                            Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
-//                        }
+                        }
                     } catch (Exception e) {
 
                     }
@@ -195,29 +156,6 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                 }
             });
 
-            holder.ivAttachImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-
-                        getCurrentList();
-                        AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
-                            @Override
-                            public void OnImageDelete(String Mode, int ImgCount) {
-
-                            }
-                        });
-                        key = itm.getString("POP_Req_ID") + "~POPkey";
-
-
-                        Intent stat = new Intent(context, AttachementActivity.class);
-                        stat.putExtra("qps_localData", key);
-                        context.startActivity(stat);
-                    } catch (Exception e) {
-
-                    }
-                }
-            });
 
             //working
             holder.btnComplete.setOnClickListener(new View.OnClickListener() {
@@ -225,24 +163,23 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                 public void onClick(View v) {
                     try {
 
-                        key = itm.getString("POP_Req_ID") + "~POPkey";
+                        SaveOrder(mData.get(position).getsNo(), mData.get(position).getP_id(), position);
+                        for (int i = 0; i < mData.get(position).getFileUrls().size(); i++) {
 
-                        SaveOrder(itm.getString("Trans_Sl_No"), itm.getString("POP_Req_ID"));
+                            String filePath = mData.get(position).getFileUrls().get(i).replaceAll("file:/", "");
+                            File file = new File(filePath);
 
-                        for (int i = 0; i < qpsModalList.size(); i++) {
-                            if (qpsModalList.get(i).getFileKey().contains(key)) {
-
-                                Intent mIntent = new Intent(context, FileUploadService.class);
-                                mIntent.putExtra("mFilePath", qpsModalList.get(i).getFilePath());
-                                mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                                mIntent.putExtra("FileName", qpsModalList.get(i).getFileName());
-                                //   mIntent.putExtra("Mode", "ExpClaim;" + qpsModalList.get(i).getFileKey());
-                                mIntent.putExtra("Mode", "POP");
-                                FileUploadService.enqueueWork(context, mIntent);
+                            Intent mIntent = new Intent(context, FileUploadService.class);
+                            mIntent.putExtra("mFilePath", filePath);
+                            mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
+                            mIntent.putExtra("FileName", file.getName());
+                            //   mIntent.putExtra("Mode", "ExpClaim;" + qpsModalList.get(i).getFileKey());
+                            mIntent.putExtra("Mode", "POP");
+                            FileUploadService.enqueueWork(context, mIntent);
 
 
-                            }
                         }
+
                     } catch (Exception e) {
 
                     }
@@ -250,7 +187,7 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
             });
 
 
-            if (fileList != null && fileList.size() > position && fileList.get(position).size() > 0 && itm.getString("POP_Status").equalsIgnoreCase("Approved")) {
+            if (fileList != null && fileList.size() > position && fileList.get(position).size() > 0 && mData.get(position).getStatus().equalsIgnoreCase("Approved")) {
                 filesAdapter = new FilesAdapter(fileList.get(position), R.layout.adapter_qps_files_layout, context);
                 holder.rvFile.setAdapter(filesAdapter);
             }
@@ -261,7 +198,7 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
     }
 
 
-    private void SaveOrder(String transNo, String popId) {
+    private void SaveOrder(String transNo, String popId, int pos) {
 
         JSONArray data = new JSONArray();
         JSONObject ActivityData = new JSONObject();
@@ -283,13 +220,14 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
 
             ActivityData.put("POP_Header", HeadItem);
             JSONArray Order_Details = new JSONArray();
-            for (int z = 0; z < qpsModalList.size(); z++) {
-                if (qpsModalList.get(z).getFileKey().contains(key)) {
-                    JSONObject ProdItem = new JSONObject();
-                    ProdItem.put("pop_filename", qpsModalList.get(z).getFileName());
+            for (int z = 0; z < mData.get(pos).getFileUrls().size(); z++) {
+                File file = new File(mData.get(pos).getFileUrls().get(z));
 
-                    Order_Details.put(ProdItem);
-                }
+                JSONObject ProdItem = new JSONObject();
+                ProdItem.put("pop_filename", file.getName());
+
+                Order_Details.put(ProdItem);
+
             }
             ActivityData.put("file_Details", Order_Details);
             data.put(ActivityData);
@@ -326,51 +264,11 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
 
     }
 
-
     @Override
     public int getItemCount() {
-        return jsonArray.length();
+        return mData.size();
     }
 
-    boolean isCheckExceed(String key) {
-        if (qpsModalList.size() == 0)
-            return true;
-        else {
-
-            int count = 0;
-            for (int i = 0; i < qpsModalList.size(); i++) {
-
-                if (qpsModalList.get(i).getFileKey().contains(key)) {
-
-                    count += 1;
-
-
-                }
-            }
-
-            if (count < 3)
-                return true;
-            else
-                return false;
-
-        }
-
-
-    }
-
-
-    void getCurrentList() {
-        qpsModalList.clear();
-        if (shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST).equals(""))
-            qpsModalList = new ArrayList<>();
-        else {
-            String strQPS = shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST);
-
-            Type userType = new TypeToken<ArrayList<QPS_Modal>>() {
-            }.getType();
-            qpsModalList = gson.fromJson(strQPS, userType);
-        }
-    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView requestNo, receivedDate, status, materialName;
