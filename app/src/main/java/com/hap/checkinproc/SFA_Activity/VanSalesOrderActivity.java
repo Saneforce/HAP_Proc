@@ -598,12 +598,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                             @Override
                                             public void OnLocationRecived(Location location) {
                                                 strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                                SaveOrder();
+                                               // SaveOrder();
                                             }
                                         });
                                     } else {
                                         strLoc = sLoc.split(":");
-                                        SaveOrder();
+                                        //SaveOrder();
                                     }
                                 }
                             }, 500);

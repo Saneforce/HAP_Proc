@@ -196,7 +196,7 @@
                             android:gravity="center"
                             android:letterSpacing="0.01"
                             android:padding="@dimen/C5dp"
-                            android:text="Stack Loading"
+                            android:text="Stock Loading"
                             android:textColor="@color/black"
                             tools:ignore="NestedWeights" />
 
@@ -211,7 +211,7 @@
                             android:gravity="center"
                             android:letterSpacing="0.01"
                             android:padding="@dimen/C5dp"
-                            android:text="Stack UnLoading"
+                            android:text="Stock UnLoading"
                             android:textColor="@color/black"
                             tools:ignore="NestedWeights" />
                     </LinearLayout>
