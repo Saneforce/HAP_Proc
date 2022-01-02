@@ -13,20 +13,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
-import android.hardware.Camera.Size;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.text.Html;
 import android.text.TextUtils;
@@ -48,14 +43,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.JsonArray;
@@ -450,46 +442,57 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         imgPreview.setVisibility(View.VISIBLE);
         button.setVisibility(View.GONE);
     }
+
     @Override
     public void onPictureTakenError(String message) {
 
     }
+
     @Override
     public void onSnapshotTaken(String originalPicture) {
 
     }
+
     @Override
     public void onSnapshotTakenError(String message) {
 
     }
+
     @Override
     public void onFocusSet(int pointX, int pointY) {
 
     }
+
     @Override
     public void onFocusSetError(String message) {
 
     }
+
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button Pressed...");
     }
+
     @Override
     public void onCameraStarted() {
 
     }
+
     @Override
     public void onStartRecordVideo() {
 
     }
+
     @Override
     public void onStartRecordVideoError(String message) {
 
     }
+
     @Override
     public void onStopRecordVideo(String file) {
 
     }
+
     @Override
     public void onStopRecordVideoError(String error) {
 
@@ -592,9 +595,11 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
         return result;
     }
+
     public static Bitmap applyMatrix(Bitmap source, Matrix matrix) {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
     private void ShowImgPreview() {
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -616,11 +621,13 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         }
 
     }
+
     private void CloseImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
         vwPreview.setVisibility(View.GONE);
         button.setVisibility(View.VISIBLE);
     }
+
     private void saveImgPreview() {
         try {
 
@@ -670,17 +677,17 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                     button.setVisibility(View.GONE);
                     saveCheckIn();
                 } else {*/
-                    new LocationFinder(getApplication(), new LocationEvents() {
-                        @Override
-                        public void OnLocationRecived(Location location) {
-                            mlocation = location;
-                            mProgress.setMessage("Submiting Please Wait...");
-                            vwPreview.setVisibility(View.GONE);
-                            // imgPreview.setImageURI(Uri.fromFile(file));
-                            button.setVisibility(View.GONE);
-                            saveCheckIn();
-                        }
-                    });
+                new LocationFinder(getApplication(), new LocationEvents() {
+                    @Override
+                    public void OnLocationRecived(Location location) {
+                        mlocation = location;
+                        mProgress.setMessage("Submiting Please Wait...");
+                        vwPreview.setVisibility(View.GONE);
+                        // imgPreview.setImageURI(Uri.fromFile(file));
+                        button.setVisibility(View.GONE);
+                        saveCheckIn();
+                    }
+                });
                 //}
             }
         } catch (Exception e) {
@@ -707,10 +714,12 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
             });
         }
     }
+
     public void getMulipart(String path) {
         MultipartBody.Part imgg = convertimg("file", path);
         CallApiImage(UserDetails.getString("Sfcode", ""), imgg);
     }
+
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -730,6 +739,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         Log.v("full_profile", yy + "");
         return yy;
     }
+
     public void CallApiImage(String values, MultipartBody.Part imgg) {
         Call<ResponseBody> Callto;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -766,6 +776,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
             }
         });
     }
+
     private void saveCheckIn() {
         try {
 
@@ -1007,6 +1018,10 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                                     Callto.enqueue(new Callback<JsonArray>() {
                                         @Override
                                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                            mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
+                                            mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
+                                            mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
+
                                             finishAffinity();
                                             if (response.body().size() > 0) {
                                                 Intent takePhoto = new Intent(ImageCapture.this, AllowanceActivityTwo.class);
@@ -1047,12 +1062,14 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
             e.printStackTrace();
         }
     }
+
     private void save(byte[] bytes) throws IOException {
         OutputStream outputStream = null;
         outputStream = new FileOutputStream(file);
         outputStream.write(bytes);
         outputStream.close();
     }
+
     private void setDefaultCameraId(String cam) {
         noOfCameras = Camera.getNumberOfCameras();
         int facing = cam.equalsIgnoreCase("front") ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
@@ -1067,6 +1084,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
             }
         }
     }
+
     private boolean setExposureCompensation(int exposureCompensation) {
 
 
@@ -1090,6 +1108,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
         return true;
     }
+
     private String[] getSupportedWhiteBalanceModes() {
         Camera camera = fragment.getCamera();
         Camera.Parameters params = camera.getParameters();
@@ -1124,7 +1143,8 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 whiteBalanceMode = "lock";
             } else {
                 whiteBalanceMode = camera.getParameters().getWhiteBalance();
-            };
+            }
+            ;
         } else {
             whiteBalanceMode = camera.getParameters().getWhiteBalance();
         }
@@ -1136,6 +1156,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
         return true;
     }
+
     private boolean setWhiteBalanceMode(String whiteBalanceMode) {
         Camera.Parameters params = fragment.getCamera().getParameters();
 
@@ -1162,6 +1183,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
         return true;
     }
+
     public void setCameraDisplayOrientation() {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCamId, info);
@@ -1179,7 +1201,8 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 break;
         }
     }
-    public void sendAlarmNotify(int AlmID,long AlmTm,String NotifyTitle,String NotifyMsg){
+
+    public void sendAlarmNotify(int AlmID, long AlmTm, String NotifyTitle, String NotifyMsg) {
         /*AlmTm=AlmTm.replaceAll(" ","-").replaceAll("/","-").replaceAll(":","-");
         String[] sDts= AlmTm.split("-");
         Calendar cal = Calendar.getInstance();
@@ -1193,6 +1216,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, AlmTm, pIntent);
     }
+
     private final ServiceConnection mServiceConection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

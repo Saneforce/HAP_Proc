@@ -191,14 +191,20 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     private void SaveOrder() {
 
         List<Product_Details_Modal> submitPOPList = new ArrayList<>();
-
         submitPOPList.clear();
 
         for (int i = 0; i < popAddList.size(); i++) {
-            if (!popAddList.get(i).getName().equals("") /*&& !popAddList.get(i).getBookingDate().equals("")*/ && popAddList.get(i).getQty() > 0 &&
-                    !popAddList.get(i).getUOM().equals("")) {
+            if (Common_Class.isNullOrEmpty(popAddList.get(i).getName())) {
+                common_class.showMsg(this, "Name in position " + (i + 1) + " is blank.");
+                return;
+            } else if (popAddList.get(i).getQty() <= 0) {
+                common_class.showMsg(this, "Qty in position " + (i + 1) + " is zero.");
+                return;
+            } else if (Common_Class.isNullOrEmpty(popAddList.get(i).getUOM())) {
+                common_class.showMsg(this, "UOM in position " + (i + 1) + " is blank.");
+                return;
+            } else {
                 submitPOPList.add(popAddList.get(i));
-
             }
         }
 

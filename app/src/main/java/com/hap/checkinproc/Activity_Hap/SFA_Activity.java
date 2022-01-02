@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +33,7 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -121,7 +121,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linMyTeam = findViewById(R.id.lin_myteam);
         linPOS = findViewById(R.id.Lin_POS);
         linVanSales = findViewById(R.id.lin_vanSales);
-        rvMenu=findViewById(R.id.rvMenu);
+        rvMenu = findViewById(R.id.rvMenu);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -150,13 +150,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             linMyTeam.setVisibility(View.VISIBLE);
             common_class.getDb_310Data(Constants.Distributor_List, this);
         } else {
+            DistLocation.setVisibility(View.GONE);
             findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
             findViewById(R.id.Lin_POS).setVisibility(View.VISIBLE);
             common_class.getPOSProduct(this);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }
-        if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
-            DistLocation.setVisibility(View.GONE);
 
         tvDate.setText("" + Common_Class.GetDatewothouttime());
 
@@ -167,19 +166,69 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         showDashboardData();
 
 
-//        menuList.add(new Common_Model("Primary Orders", R.drawable.ic_outline_add_chart_48));
-//        menuList.add(new Common_Model("Secondary Orders", R.drawable.ic_outline_assignment_48));
-//        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
-//        menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
-//        menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
-//        menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
-//
-//
-//        RecyclerView.LayoutManager manager = new GridLayoutManager(this, 5);
-//        rvMenu.setLayoutManager(manager);
-//      //  rvMenu.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-//        menuAdapter=new MenuAdapter(this,menuList);
-//        rvMenu.setAdapter(menuAdapter);
+        menuList.add(new Common_Model("Primary Orders", R.drawable.ic_outline_add_chart_48));
+        menuList.add(new Common_Model("Secondary Orders", R.drawable.ic_outline_assignment_48));
+        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+        menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+        menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
+
+        if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
+            menuList.add(new Common_Model("Distributors", R.drawable.ic_outline_my_location_24));
+            menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+        }
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
+            menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
+
+
+        RecyclerView.LayoutManager manager = new GridLayoutManager(this, 4);
+        rvMenu.setLayoutManager(manager);
+        //  rvMenu.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        menuAdapter = new MenuAdapter(this, menuList, new AdapterOnClick() {
+            @Override
+            public void CallMobile(String menuName) {
+                switch (menuName) {
+                    case "POS":
+                        common_class.CommonIntentwithNEwTask(POSActivity.class);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case "Primary Orders":
+                        common_class.getDb_310Data(Constants.PrimaryTAXList, SFA_Activity.this);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case "Secondary Orders":
+                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
+                        Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+
+                    case "Van Sales":
+                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
+                        startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case "Outlets":
+                        common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case "Distributors":
+                        common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case "Reports":
+                        common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                    case "My Team":
+                        common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
+                }
+            }
+        });
+        rvMenu.setAdapter(menuAdapter);
+
+
     }
 
 
@@ -312,24 +361,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             case R.id.Lin_primary:
                 common_class.getDb_310Data(Constants.PrimaryTAXList, this);
                 break;
-            case R.id.ivSFACalendar:
-                Calendar newCalendar = Calendar.getInstance();
-                fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int month = monthOfYear + 1;
-                        tvDate.setText("" + year + "-" + month + "-" + dayOfMonth);
-                        sfa_date = tvDate.getText().toString();
-                        showDashboardData();
-
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                fromDatePickerDialog.show();
-
-                break;
-            case R.id.Lin_Dashboard:
-                common_class.CommonIntentwithNEwTask(SFA_Dashboard.class);
-                break;
             case R.id.Lin_DCR:
                 //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
                 sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
@@ -360,6 +392,25 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.linorders:
                 common_class.CommonIntentwithNEwTask(Dashboard_Order_Reports.class);
+                break;
+
+            case R.id.ivSFACalendar:
+                Calendar newCalendar = Calendar.getInstance();
+                fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int month = monthOfYear + 1;
+                        tvDate.setText("" + year + "-" + month + "-" + dayOfMonth);
+                        sfa_date = tvDate.getText().toString();
+                        showDashboardData();
+
+                    }
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.show();
+
+                break;
+            case R.id.Lin_Dashboard:
+                common_class.CommonIntentwithNEwTask(SFA_Dashboard.class);
                 break;
             case R.id.Lin_Lead:
                 common_class.CommonIntentwithNEwTask(Lead_Activity.class);
@@ -570,10 +621,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
         Context context;
         private List<Common_Model> listt;
+        AdapterOnClick adapterOnClick;
 
-        public MenuAdapter(Context applicationContext, List<Common_Model> list) {
+        public MenuAdapter(Context applicationContext, List<Common_Model> list, AdapterOnClick adapterOnClick) {
             this.context = applicationContext;
             this.listt = list;
+            this.adapterOnClick = adapterOnClick;
         }
 
         @Override
@@ -599,6 +652,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 try {
                     holder.tvName.setText("" + listt.get(position).getName());
                     holder.ivIcon.setImageResource(listt.get(position).getIcon());
+
+                    holder.llParent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            adapterOnClick.CallMobile(listt.get(position).getName());
+                        }
+                    });
+
                 } catch (Exception e) {
                     Log.e("adaptergetView: ", e.getMessage());
                 }
@@ -619,11 +680,13 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
             TextView tvName;
             ImageView ivIcon;
+            LinearLayout llParent;
 
             public MyViewHolder(View view) {
                 super(view);
                 tvName = view.findViewById(R.id.tvMenuName);
                 ivIcon = view.findViewById(R.id.ivMenuIcon);
+                llParent = view.findViewById(R.id.llMenu);
 
             }
         }

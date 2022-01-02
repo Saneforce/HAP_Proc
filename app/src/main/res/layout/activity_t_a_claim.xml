@@ -689,6 +689,7 @@
                                                     android:layout_height="wrap_content"
                                                     android:padding="@dimen/C5dp"
                                                     android:text="₹"
+                                                    android:fontFamily="sans-serif"
                                                     android:textAllCaps="false"
                                                     android:textColor="@android:color/black"
                                                     android:textSize="13sp"
@@ -737,6 +738,7 @@
                                                     android:textStyle="bold"></TextView>
 
                                                 <TextView
+                                                    android:fontFamily="sans-serif"
                                                     android:id="@+id/txt_BrdAmt"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -776,6 +778,7 @@
                                                     android:textStyle="bold"></TextView>
 
                                                 <TextView
+                                                    android:fontFamily="sans-serif"
                                                     android:id="@+id/txt_DrvBrdAmt"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -873,6 +876,7 @@
                                         android:textStyle="bold"></TextView>
 
                                     <TextView
+                                        android:fontFamily="sans-serif"
                                         android:id="@+id/txt_totDA"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -1199,6 +1203,7 @@
                                                 android:layout_height="wrap_content">
 
                                                 <TextView
+                                                    android:fontFamily="sans-serif"
                                                     android:id="@+id/txt_total_amt"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="match_parent"
@@ -1513,6 +1518,7 @@
                                         android:textStyle="bold"></TextView>
 
                                     <TextView
+                                        android:fontFamily="sans-serif"
                                         android:id="@+id/txt_trav_loca"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -2232,6 +2238,7 @@
                                                         android:textSize="10sp" />
 
                                                     <TextView
+                                                        android:fontFamily="sans-serif"
                                                         android:id="@+id/txtMyEligi"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
@@ -2268,6 +2275,7 @@
                                                         android:textSize="10sp" />
 
                                                     <TextView
+                                                        android:fontFamily="sans-serif"
                                                         android:id="@+id/txtJNEligi"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
@@ -2305,6 +2313,7 @@
                                                         android:textSize="10sp" />
 
                                                     <TextView
+                                                        android:fontFamily="sans-serif"
                                                         android:id="@+id/txtDrvLgd"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
@@ -2361,6 +2370,7 @@
                                                             android:padding="5dp" />
 
                                                         <LinearLayout
+
                                                             android:id="@+id/lin_con_sty_amt"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
@@ -2383,6 +2393,7 @@
                                                         android:textSize="12sp" />
 
                                                     <TextView
+                                                        android:fontFamily="sans-serif"
                                                         android:id="@+id/txldgTdyAmt"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
@@ -2430,6 +2441,7 @@
                                                             android:textSize="10sp" />
 
                                                         <TextView
+                                                            android:fontFamily="sans-serif"
                                                             android:layout_width="match_parent"
                                                             android:layout_height="wrap_content"
                                                             android:layout_marginTop="@dimen/C10dp"
@@ -2530,6 +2542,7 @@
                                                             android:textSize="10sp" />
 
                                                         <TextView
+                                                            android:fontFamily="sans-serif"
                                                             android:id="@+id/ldgWOBBal"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
@@ -2569,6 +2582,7 @@
                                                     android:textStyle="bold" />
 
                                                 <TextView
+                                                    android:fontFamily="sans-serif"
                                                     android:id="@+id/lbl_ldg_eligi"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -2693,6 +2707,7 @@
                                             android:textStyle="bold"></TextView>
 
                                         <TextView
+                                            android:fontFamily="sans-serif"
                                             android:id="@+id/txt_local"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
@@ -2811,6 +2826,7 @@
                                             android:textStyle="bold"></TextView>
 
                                         <TextView
+                                            android:fontFamily="sans-serif"
                                             android:id="@+id/txt_oe"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
@@ -2949,6 +2965,7 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
                         <TextView
+                            android:fontFamily="sans-serif"
                             android:id="@+id/grand_total"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

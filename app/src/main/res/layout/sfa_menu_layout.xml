@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
-    <LinearLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/C10dp"
-        android:orientation="horizontal">
 
 
         <LinearLayout
+            android:padding="@dimen/C3dp"
             android:id="@+id/llMenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,10 +32,46 @@
                 android:layout_marginTop="@dimen/C8dp"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="Primary Orders"
                 android:textAlignment="center" />
 
 
         </LinearLayout>
 
-    </LinearLayout>
+
+
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/llMenu"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:visibility="visible">-->
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/ivMenuIcon"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_weight="1"-->
+<!--                android:src="@drawable/ic_outline_add_chart_48" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvMenuName"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="@dimen/C8dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Primary Order"-->
+<!--                android:textAlignment="center" />-->
+
+
+<!--        </LinearLayout>-->
+
+<!--      -->
+
 </RelativeLayout>
