@@ -411,6 +411,7 @@
                                     android:layout_gravity="center"
                                     android:layout_marginRight="@dimen/C10dp"
                                     android:onClick="ImagePdf"
+                                    android:visibility="gone"
                                     android:src="@drawable/info">
 
                                 </ImageView>
@@ -525,7 +526,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/button_yellow"
+                                    android:background="@color/colorPrimaryDark"
                                     android:orientation="vertical"
                                     android:padding="@dimen/C8dp">
 
@@ -635,7 +636,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/button_yellow"
+                                    android:background="@color/colorPrimaryDark"
                                     android:padding="@dimen/C8dp">
                                     <!--                                android:background="@color/subExpHeader"-->
 
@@ -684,6 +685,7 @@
                                                     android:textStyle="bold" />
 
                                                 <ImageView
+                                                    android:visibility="gone"
                                                     android:id="@+id/img_edit"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -704,6 +706,7 @@
                                                     android:layout_height="wrap_content"
                                                     android:padding="@dimen/C5dp"
                                                     android:text="₹"
+                                                    android:fontFamily="sans-serif"
                                                     android:textAllCaps="false"
                                                     android:textColor="@android:color/black"
                                                     android:textSize="13sp"
@@ -914,7 +917,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/button_yellow"
+                                    android:background="@color/colorPrimaryDark"
                                     android:padding="@dimen/C8dp">
 
                                     <TextView
@@ -1374,7 +1377,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="2"
-                                        android:background="@drawable/button_yellow"
+                                        android:background="@color/colorPrimaryDark"
                                         android:padding="@dimen/C8dp">
 
                                         <LinearLayout
@@ -1410,7 +1413,8 @@
                                                 android:text="+ Add"
                                                 android:textAllCaps="false"
                                                 android:textColor="#FFF"
-                                                android:textSize="12sp" />
+                                                android:textSize="12sp"
+                                                android:visibility="gone"/>
                                         </LinearLayout>
                                     </LinearLayout>
                                 </LinearLayout>
@@ -1447,7 +1451,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="2"
-                                        android:background="@drawable/button_yellow"
+                                        android:background="@color/colorPrimaryDark"
                                         android:padding="@dimen/C8dp">
 
                                         <LinearLayout
@@ -1484,7 +1488,8 @@
                                                 android:text="+ Add"
                                                 android:textAllCaps="false"
                                                 android:textColor="#FFF"
-                                                android:textSize="12sp" />
+                                                android:textSize="12sp"
+                                                android:visibility="gone"/>
                                         </LinearLayout>
                                     </LinearLayout>
                                 </LinearLayout>
@@ -1557,7 +1562,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/button_yellow"
+                                    android:background="@color/colorPrimaryDark"
                                     android:padding="@dimen/C8dp"
                                     android:visibility="visible">
 
@@ -1587,7 +1592,8 @@
                                             android:text="+ Add"
                                             android:textAllCaps="false"
                                             android:textColor="#FFF"
-                                            android:textSize="12sp" />
+                                            android:textSize="12sp"
+                                            android:visibility="gone"/>
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1913,7 +1919,8 @@
                                                     android:text="+ Add"
                                                     android:textAllCaps="true"
                                                     android:textColor="@color/colorPrimary"
-                                                    android:textSize="12sp" />
+                                                    android:textSize="12sp"
+                                                    android:visibility="gone"/>
 
                                             </LinearLayout>
 
@@ -2611,7 +2618,7 @@
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:background="@drawable/button_yellow"
+                                        android:background="@color/colorPrimaryDark"
                                         android:padding="@dimen/C8dp">
 
                                         <LinearLayout
@@ -2647,7 +2654,8 @@
                                                 android:text="+ Add"
                                                 android:textAllCaps="false"
                                                 android:textColor="#FFF"
-                                                android:textSize="12sp" />
+                                                android:textSize="12sp"
+                                                android:visibility="gone"/>
                                         </LinearLayout>
                                     </RelativeLayout>
 
@@ -2731,7 +2739,7 @@
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:background="@drawable/button_yellow"
+                                        android:background="@color/colorPrimaryDark"
                                         android:padding="@dimen/C8dp">
 
                                         <LinearLayout
@@ -2768,7 +2776,8 @@
                                                 android:text="+ Add"
                                                 android:textAllCaps="false"
                                                 android:textColor="#FFF"
-                                                android:textSize="12sp" />
+                                                android:textSize="12sp"
+                                                android:visibility="gone"/>
                                         </LinearLayout>
 
 
@@ -2853,7 +2862,7 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:background="@drawable/button_yellow"
+                                        android:background="@color/colorPrimaryDark"
                                         android:orientation="vertical"
                                         android:paddingLeft="@dimen/C8dp"
                                         android:paddingTop="@dimen/C8dp"
@@ -2873,7 +2882,7 @@
 
                                     </LinearLayout>
 
-                                    <EditText
+                                    <TextView
                                         android:id="@+id/edt_rmk"
                                         android:layout_width="match_parent"
                                         android:layout_height="@dimen/C70dp"
@@ -2896,6 +2905,7 @@
             </ScrollView>
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/lin_fare_amount"
         android:layout_width="match_parent"
@@ -2904,7 +2914,7 @@
         android:layout_marginRight="@dimen/C5dp"
         android:background="#ECEAEA"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_alignParentBottom="true">
 
         <View
@@ -2966,16 +2976,56 @@
                             android:textColor="#333"
                             android:textSize="25sp"
                             android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="11sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/color_red"
-                            android:layout_marginLeft="5dp"
-                            android:text="Please verify claim amount on before send to approval"/>
-                    </LinearLayout>
+                       </LinearLayout>
                 </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rejectonly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="@string/reason"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/txtreason"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C70dp"
+                        android:layout_marginTop="@dimen/C10dp"
+                        android:background="@drawable/round_white_backround"
+                        android:gravity="top"
+                        android:hint="@string/txt_enter_reason"
+                        android:padding="15dp"
+                        android:textSize="@dimen/C12dp"
+                        android:visibility="visible" />
+
+                    <TextView
+
+                        android:id="@+id/L_rejectsave"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:background="@drawable/blue_txt_bg"
+                        android:gravity="center"
+                        android:padding="@dimen/C5dp"
+                        android:text="Send"
+                        android:textAlignment="center"
+                        android:textColor="@color/bg_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -2998,15 +3048,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"></Space>
 
+                <LinearLayout
+                    android:id="@+id/lin_accp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                     android:id="@+id/save_button"
                     android:layout_width="100dp"
                     android:layout_height="@dimen/C40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/C10dp"
-                    android:background="@drawable/button_blueg"
+                    android:background="@drawable/button_green"
                     android:padding="10dp"
-                    android:text="Save"
+                    android:text="Approve"
+                    android:onClick="onApproval"
                     android:textColor="@android:color/white"
                     android:theme="@style/BluePrimaryButton"
                     app:finalCornerAngle="50dp"
@@ -3016,7 +3072,6 @@
                     app:spinning_bar_width="5dp"
                     android:textAlignment="center"
                     android:textStyle="bold"
-                    android:visibility="gone"
                     tools:ignore="RtlCompat" />
 
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
@@ -3025,9 +3080,9 @@
                     android:layout_height="@dimen/C40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/C10dp"
-                    android:background="@drawable/button_blueg"
+                    android:background="@drawable/button_red"
                     android:padding="10dp"
-                    android:text="Submit for Approval"
+                    android:text="Reject"
                     android:textColor="@android:color/white"
                     android:theme="@style/BluePrimaryButton"
                     app:finalCornerAngle="50dp"
@@ -3037,11 +3092,15 @@
                     app:spinning_bar_width="5dp"
                     android:textAlignment="center"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:onClick="onReject"
                     tools:ignore="RtlCompat" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+
+
     <LinearLayout
         android:id="@+id/lin_back"
         android:layout_width="match_parent"

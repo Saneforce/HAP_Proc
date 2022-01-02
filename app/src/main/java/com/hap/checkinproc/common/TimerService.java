@@ -29,6 +29,7 @@ import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.LocationServices;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -451,8 +452,8 @@ public class TimerService extends Service {
 
                     SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                     if (UserDetails.getString("Sfcode", "") != "") {
-                        Log.d("Minitue",String.valueOf(intMin));
-                        if(intMin>=(60*1)) {
+                        //Log.d("Minitue",String.valueOf(intMin));
+                        if(intMin>=(60*60)) {
                             DatabaseHandler db = new DatabaseHandler(context);
                             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                             JSONArray locations = db.getAllPendingTrackDetails();
@@ -518,6 +519,10 @@ public class TimerService extends Service {
                             cInEditor.remove("Logintime");
                             cInEditor.putBoolean("CheckIn", false);
                             cInEditor.apply();
+                            sharedCommonPref.clear_pref(Constants.LOGIN_DATA);
+                            sharedCommonPref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
+                            sharedCommonPref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
+                            sharedCommonPref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
                             Intent nwScr = new Intent(context, Login.class);
                             nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(nwScr);

@@ -32,6 +32,15 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
         this.editMode=true;
         this.TWMax_Km=twMax_Km;
         this.FWMax_Km=fwMax_Km;
+        this.editMode=true;
+    }
+    public FuelListAdapter(Context context, JsonArray jsonArray,int twMax_Km,int fwMax_Km,boolean editMode) {
+        this.context = context;
+        this.jsonArray = jsonArray;
+        this.editMode=true;
+        this.TWMax_Km=twMax_Km;
+        this.FWMax_Km=fwMax_Km;
+        this.editMode=editMode;
     }
     public FuelListAdapter(Context context, JsonArray jsonArray,boolean editMode) {
         this.context = context;

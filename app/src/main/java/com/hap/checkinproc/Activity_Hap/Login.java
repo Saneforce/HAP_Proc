@@ -589,9 +589,8 @@ public class Login extends AppCompatActivity {
                     mProgress.dismiss();
                     return;
                 }
-
-                //eMail = "mariselvam.d@hap.in";
-                //eMail = "1014700@hap.in";
+                //eMail = "srinivas.p@hap.in";
+                //eMail = "sajan@hap.in";
                 //  eMail = "1005985@hap.in";
                 //eMail = "haptest3@hap.in";
                // eMail = "ciadmin@hap.in";
