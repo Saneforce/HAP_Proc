@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -33,7 +35,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -49,8 +50,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 
 public class Tp_Calander extends AppCompatActivity implements View.OnClickListener, UpdateUi {
@@ -73,7 +72,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     ImageView backarow;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    List<Tp_View_Master> Tp_View_Master;
+    List<Tp_View_Master> Tp_View_Master = new ArrayList<>();
     Type userType;
     int SelectedMonth;
     Gson gson;
@@ -177,44 +176,57 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
 
     public void GetTp_List() {
-        Log.e("ERROR_CONTROL", String.valueOf(SelectedMonth));
-        int SM = SelectedMonth + 1;
-        String Tp_Object = "{\"tableName\":\"vwTourPlan\",\"coloumns\":\"[\\\"date\\\",\\\"remarks\\\",\\\"worktype_code\\\",\\\"worktype_name\\\",\\\"RouteCode\\\",\\\"RouteName\\\",\\\"Worked_with_Code\\\",\\\"Worked_with_Name\\\",\\\"JointWork_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        String Sf_Code = "";
-        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
-            Sf_Code = Shared_Common_Pref.Sf_Code;
-        } else {
-            Sf_Code = Shared_Common_Pref.Tp_SFCode;
-        }
-        Log.e("FIELDFORCE_SF", Sf_Code);
-        Call<Object> mCall = apiInterface.GettpRespnse(Shared_Common_Pref.Div_Code, Sf_Code, Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(SM), String.valueOf(year), Tp_Object);
-        mCall.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-                userType = new TypeToken<ArrayList<Tp_View_Master>>() {
-                }.getType();
-                Tp_View_Master = gson.fromJson(new Gson().toJson(response.body()), userType);
+        try {
+            Log.e("ERROR_CONTROL", String.valueOf(SelectedMonth));
+            int SM = SelectedMonth + 1;
+            String Tp_Object = "{\"tableName\":\"vwTourPlan\",\"coloumns\":\"[\\\"date\\\",\\\"remarks\\\",\\\"worktype_code\\\",\\\"worktype_name\\\",\\\"RouteCode\\\",\\\"RouteName\\\",\\\"Worked_with_Code\\\",\\\"Worked_with_Name\\\",\\\"JointWork_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            String Sf_Code = "";
+            if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+                Sf_Code = Shared_Common_Pref.Sf_Code;
+            } else {
+                Sf_Code = Shared_Common_Pref.Tp_SFCode;
+            }
+            Log.e("FIELDFORCE_SF", Sf_Code);
+            Call<Object> mCall = apiInterface.GettpRespnse(Shared_Common_Pref.Div_Code, Sf_Code, Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(SM), String.valueOf(year), Tp_Object);
+            mCall.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    // locationList=response.body();
+                    Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+                    Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                    userType = new TypeToken<ArrayList<Tp_View_Master>>() {
+                    }.getType();
+                    Tp_View_Master = gson.fromJson(new Gson().toJson(response.body()), userType);
 
-                month = SelectedMonth + 1;
-                /*     Log.e("TP_VIEW_LENGTH", String.valueOf(Tp_View_Master.size()));
-                 */
-                adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
+                    month = SelectedMonth + 1;
+
+                    adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
+                    adapter.notifyDataSetChanged();
+                    calendarView.setAdapter(adapter);
+
+                    nDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    nDialog.dismiss();
+                }
+            });
+
+            try {
+                adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, SelectedMonth + 1, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
                 adapter.notifyDataSetChanged();
                 calendarView.setAdapter(adapter);
-                /*  Log.e("Work_Type_Model", String.valueOf(response.body().toString()));*/
-                //Log.e("Tp_View_Master", String.valueOf(Tp_View_Master.size()));
-                nDialog.dismiss();
-            }
+            } catch (Exception e) {
+                Log.v("TP CALENDER:local", e.getMessage());
 
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                nDialog.dismiss();
             }
-        });
+        } catch (Exception e) {
+            Log.v("TP CALENDER:", e.getMessage());
+        }
+
+
     }
 
     private void setGridCellAdapterToDate(int month, int year) {

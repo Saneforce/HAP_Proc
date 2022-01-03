@@ -7,16 +7,13 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/C10dp"
-        android:layout_marginTop="@dimen/C10dp"
-        android:layout_marginEnd="@dimen/C10dp"
-        android:layout_marginBottom="@dimen/C10dp"
+       android:layout_margin="@dimen/C5dp"
         app:cardCornerRadius="@dimen/C5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C10dp"
+            android:layout_margin="@dimen/C5dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -162,7 +159,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="2dp">
+                android:paddingBottom="2dp"
+                android:visibility="gone">
 
 
                 <TextView
@@ -171,17 +169,25 @@
                     style="@style/DashboardTextStyle"
                     android:text="Photo" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvFiles"
+
+                <ImageView
+                    android:id="@+id/ivQPSPreviewImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
                     android:padding="@dimen/C5dp"
-                    android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+                    android:src="@drawable/image_preview_24"
+                    android:visibility="gone"
+                    app:tint="@color/colorPrimaryDark" />
 
-                </androidx.recyclerview.widget.RecyclerView>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/C2dp">
 
 
                 <ImageView
@@ -194,48 +200,16 @@
                     android:src="@drawable/ic_round_photo_camera_24"
                     app:tint="@color/colorPrimaryDark" />
 
-                <ImageView
-                    android:id="@+id/ivQPSPreviewImg"
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFiles"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_gravity="center_vertical"
-                    android:padding="@dimen/C5dp"
-                    android:src="@drawable/image_preview_24"
-                    app:tint="@color/colorPrimaryDark" />
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/ivFileCount"
-                        android:layout_width="@dimen/C20dp"
-                        android:layout_height="@dimen/C20dp"
-                        android:background="@drawable/circle_bg"
-                        android:gravity="center"
-                        android:paddingTop="@dimen/C3dp"
-                        android:text="5"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/C8dp"
-                        android:textStyle="bold|italic"
-                        app:tint="@color/colorPrimaryDark" />
-                </RelativeLayout>
-
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    android:background="@drawable/circle_bg"
-                    android:padding="6dp"
-                    android:text="3"
-                    android:textColor="@android:color/white"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
 
             <Button
                 android:id="@+id/btnComplete"

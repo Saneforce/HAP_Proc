@@ -1021,6 +1021,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                                             mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
                                             mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
                                             mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
+                                            mShared_common_pref.clear_pref(Constants.LOGIN_DATA);
 
                                             finishAffinity();
                                             if (response.body().size() > 0) {

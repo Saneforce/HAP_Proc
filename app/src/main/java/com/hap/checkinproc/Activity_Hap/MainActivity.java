@@ -11,7 +11,6 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN = 3000;
@@ -19,27 +18,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        try {
+            super.onCreate(savedInstanceState);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            setContentView(R.layout.activity_main);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences sharedpreferences;
-                sharedpreferences = getSharedPreferences(mypreference,
-                        Context.MODE_PRIVATE);
-                if (sharedpreferences.getString("nameKey", "") == "") {
-                    Intent intent = new Intent(MainActivity.this, PrivacyPolicy.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(MainActivity.this, Login.class);
-                    startActivity(intent);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    SharedPreferences sharedpreferences;
+                    sharedpreferences = getSharedPreferences(mypreference,
+                            Context.MODE_PRIVATE);
+                    if (sharedpreferences.getString("nameKey", "") == "") {
+                        Intent intent = new Intent(MainActivity.this, PrivacyPolicy.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, Login.class);
+                        startActivity(intent);
+                    }
+                    finish();
+
                 }
-                finish();
-
-            }
-        }, SPLASH_SCREEN);
+            }, SPLASH_SCREEN);
+        } catch (Exception e) {
+            Log.v("MAINACTIVITY:", e.getMessage());
+        }
     }
 
 

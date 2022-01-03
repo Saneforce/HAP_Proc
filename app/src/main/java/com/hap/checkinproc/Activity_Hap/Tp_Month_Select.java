@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -18,15 +20,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 import java.util.Calendar;
 
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class Tp_Month_Select extends AppCompatActivity implements View.OnClickListener {
     TextView CurrentMoth, NextMonth;
-    int CM;
+    int CM, CY;
     int NM;
     public ImageView backarow;
     Common_Class common_class;
@@ -88,9 +87,15 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
         Calendar cal = Calendar.getInstance();
 
         CM = cal.get(Calendar.MONTH);
+        CY = cal.get(Calendar.YEAR);
         NM = cal.get(Calendar.MONTH) + 1;
-        String currrentmonth = common_class.GetMonthname(CM) + "   " + 2021;
-        String nextmonth = common_class.GetMonthname(NM) + "   " + 2021;
+        String currrentmonth = common_class.GetMonthname(CM) + "   " + CY;
+        String nextmonth = "";
+        if (CM == 11) {
+            CY = CY + 1;
+            nextmonth = common_class.GetMonthname(NM) + "   " + CY;
+        } else
+            nextmonth = common_class.GetMonthname(NM) + "   " + CY;
         Log.e("CURRENT_MONTH", common_class.GetMonthname(cal.get(Calendar.MONTH)));
         Log.e("CURRENT_Example", String.valueOf(cal.get(Calendar.MONTH)));
         CurrentMoth.setText(currrentmonth);

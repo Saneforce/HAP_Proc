@@ -75,14 +75,14 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C10dp"
+                    android:layout_margin="@dimen/C8dp"
                     app:cardCornerRadius="@dimen/C10dp">
 
                     <LinearLayout
                         android:id="@+id/llQPSStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C10dp"
+                        android:layout_margin="@dimen/C5dp"
                         android:orientation="vertical"
                         android:visibility="visible">
 
@@ -366,7 +366,7 @@
                             android:id="@+id/rvQps"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C10dp"
+
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
 

@@ -59,7 +59,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C15dp"
+                    android:layout_margin="@dimen/C8dp"
                     app:cardCornerRadius="@dimen/C10dp">
 
 
@@ -67,7 +67,7 @@
                         android:id="@+id/llPOPRequestStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C15dp"
+                        android:layout_margin="@dimen/C5dp"
                         android:orientation="vertical"
                         android:visibility="visible">
 
@@ -168,9 +168,9 @@
 
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_weight="0.8"
                                 android:orientation="horizontal">
 
                                 <CheckBox
@@ -184,10 +184,10 @@
 
 
                             <LinearLayout
-
                                 android:id="@+id/purityCaptureOption"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:orientation="horizontal"
                                 android:visibility="gone">
 
@@ -201,8 +201,19 @@
                                     android:id="@+id/ivPurityPreview"
                                     style="@style/TextStyle"
                                     android:src="@drawable/image_preview_24"
+                                    android:visibility="gone"
                                     app:tint="@color/colorPrimaryDark" />
 
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvPurityFiles"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:visibility="visible"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                                </androidx.recyclerview.widget.RecyclerView>
 
                             </LinearLayout>
 
@@ -216,9 +227,9 @@
                             android:paddingTop="@dimen/C10dp">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_weight="0.8"
                                 android:orientation="horizontal">
 
 
@@ -233,8 +244,9 @@
 
                             <LinearLayout
                                 android:id="@+id/frontageCaptureOption"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:orientation="horizontal"
                                 android:visibility="gone">
 
@@ -249,7 +261,19 @@
                                     android:id="@+id/ivFTPreview"
                                     style="@style/TextStyle"
                                     android:src="@drawable/image_preview_24"
+                                    android:visibility="gone"
                                     app:tint="@color/colorPrimaryDark" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvFTFiles"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:visibility="visible"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                                </androidx.recyclerview.widget.RecyclerView>
 
 
                             </LinearLayout>
@@ -290,9 +314,9 @@
 
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_weight="0.8"
                                 android:orientation="horizontal">
 
                                 <CheckBox
@@ -308,8 +332,9 @@
                             <LinearLayout
 
                                 android:id="@+id/llNoWrkOpt"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:orientation="horizontal"
                                 android:visibility="gone">
 
@@ -323,8 +348,19 @@
                                     android:id="@+id/ivNoWrkPreview"
                                     style="@style/TextStyle"
                                     android:src="@drawable/image_preview_24"
+                                    android:visibility="gone"
                                     app:tint="@color/colorPrimaryDark" />
 
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvNWFiles"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:visibility="visible"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                                </androidx.recyclerview.widget.RecyclerView>
 
                             </LinearLayout>
 

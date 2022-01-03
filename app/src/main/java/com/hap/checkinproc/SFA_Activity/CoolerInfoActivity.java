@@ -1,10 +1,9 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import static com.hap.checkinproc.SFA_Activity.QPSActivity.qpsActivity;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,23 +15,21 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
-import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.common.FileUploadService;
 
@@ -40,7 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -56,11 +52,13 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     CheckBox cbPurity, cbFrontage, cbNoWrk, cbAvail;
     Button btnSubmit;
     private DatePickerDialog fromDatePickerDialog;
-
     ImageView ivPurityCapture, ivPurityPreview, ivFTCapture, ivFTPreview, ivNowrkCapture, ivNoWrkPreview, ivToolbarHome;
     Gson gson;
-    List<QPS_Modal> qpsModalList = new ArrayList<>();
     Shared_Common_Pref shared_common_pref;
+    List<QPS_Modal> coolerFileList = new ArrayList<>();
+
+    RecyclerView rvPurity, rvFrontage, rvNotWorking;
+    private FilesAdapter filesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +74,9 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.tvCoolerInfo).setVisibility(View.GONE);
         common_class.gotoHomeScreen(this, ivToolbarHome);
 
+        coolerFileList.add(new QPS_Modal("", "", ""));//purity
+        coolerFileList.add(new QPS_Modal("", "", ""));//Frontage
+        coolerFileList.add(new QPS_Modal("", "", ""));//Not Working
 
         cbPurity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -83,7 +84,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 if (isChecked)
                     findViewById(R.id.purityCaptureOption).setVisibility(View.VISIBLE);
                 else {
-                    clearFiles("purity~key");
+                    clearFiles(0);
                     findViewById(R.id.purityCaptureOption).setVisibility(View.GONE);
                 }
             }
@@ -95,7 +96,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 if (isChecked)
                     findViewById(R.id.frontageCaptureOption).setVisibility(View.VISIBLE);
                 else {
-                    clearFiles("FT~key");
+                    clearFiles(1);
                     findViewById(R.id.frontageCaptureOption).setVisibility(View.GONE);
                 }
             }
@@ -107,7 +108,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 if (isChecked)
                     findViewById(R.id.llNoWrkOpt).setVisibility(View.VISIBLE);
                 else {
-                    clearFiles("noWrk~key");
+                    clearFiles(2);
                     findViewById(R.id.llNoWrkOpt).setVisibility(View.GONE);
                 }
             }
@@ -115,69 +116,44 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    void showPic(String key) {
-        AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
-            @Override
-            public void OnImageDelete(String Mode, int ImgCount) {
 
-            }
-        });
-
-        Intent stat = new Intent(CoolerInfoActivity.this, AttachementActivity.class);
-        stat.putExtra("qps_localData", key);
-        startActivity(stat);
-    }
-
-    void addPic(String key) {
-        getCurrentList();
-        if (isCheckExceed(key)) {
+    void addPic(int pos) {
+        if (coolerFileList.get(pos).getFileUrls() == null || coolerFileList.get(pos).getFileUrls().size() < 3) {
             AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                 @Override
                 public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
 
-                    qpsModalList.add(new QPS_Modal(fullPath, FileName, (key + System.currentTimeMillis())));
-                    shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+                    List<String> list = new ArrayList<>();
+                    File file = new File(fullPath);
+                    Uri contentUri = Uri.fromFile(file);
+
+                    if (coolerFileList.get(pos).getFileUrls() != null && coolerFileList.get(pos).getFileUrls().size() > 0)
+                        list = (coolerFileList.get(pos).getFileUrls());
+                    list.add(contentUri.toString());
+                    coolerFileList.get(pos).setFileUrls(list);
+
+                    filesAdapter = new FilesAdapter(coolerFileList.get(pos).getFileUrls(), R.layout.adapter_local_files_layout, CoolerInfoActivity.this);
+
+                    switch (pos) {
+                        case 0:
+                            rvPurity.setAdapter(filesAdapter);
+                            break;
+                        case 1:
+                            rvFrontage.setAdapter(filesAdapter);
+                            break;
+                        case 2:
+                            rvNotWorking.setAdapter(filesAdapter);
+                            break;
+                    }
                 }
             });
             Intent intent = new Intent(CoolerInfoActivity.this, AllowancCapture.class);
             intent.putExtra("allowance", "TAClaim");
             startActivity(intent);
         } else {
-            Toast.makeText(CoolerInfoActivity.this, "Limit Exceed...", Toast.LENGTH_SHORT).show();
+            common_class.showMsg(CoolerInfoActivity.this, "Limit Exceed...");
         }
 
-    }
-
-    void getCurrentList() {
-        qpsModalList.clear();
-        if (shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST).equals(""))
-            qpsModalList = new ArrayList<>();
-        else {
-            String strQPS = shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST);
-
-            Type userType = new TypeToken<ArrayList<QPS_Modal>>() {
-            }.getType();
-            qpsModalList = gson.fromJson(strQPS, userType);
-        }
-    }
-
-    boolean isCheckExceed(String key) {
-        if (qpsModalList.size() == 0)
-            return true;
-        else {
-            int count = 0;
-            for (int i = 0; i < qpsModalList.size(); i++) {
-                if (qpsModalList.get(i).getFileKey().contains(key)) {
-                    count += 1;
-                }
-            }
-
-            if (count < 3)
-                return true;
-            else
-                return false;
-
-        }
     }
 
     void init() {
@@ -204,6 +180,10 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         etCoolerType = findViewById(R.id.etCoolerType);
         etRemarks = findViewById(R.id.edt_remarks);
 
+        rvPurity = findViewById(R.id.rvPurityFiles);
+        rvFrontage = findViewById(R.id.rvFTFiles);
+        rvNotWorking = findViewById(R.id.rvNWFiles);
+
         tvOrder.setOnClickListener(this);
         tvOtherBrand.setOnClickListener(this);
         tvQPS.setOnClickListener(this);
@@ -221,28 +201,30 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            shared_common_pref.clear_pref(Constants.QPS_LOCALPICLIST);
             common_class.CommonIntentwithFinish(Invoice_History.class);
             return true;
         }
         return false;
     }
 
-    void clearFiles(String key) {
-        if (qpsModalList != null && qpsModalList.size() > 0) {
-            List<QPS_Modal> filterList = new ArrayList<>();
-            for (int i = 0; i < qpsModalList.size(); i++) {
-                if (qpsModalList.get(i).getFileKey().contains(key)) {
-                    File file = new File(qpsModalList.get(i).getFileName());
-                    file.delete();
-                } else {
-                    filterList.add(qpsModalList.get(i));
-                }
-            }
-            qpsModalList.clear();
-            qpsModalList = filterList;
-            shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+    void clearFiles(int pos) {
+        if (coolerFileList.get(pos).getFileUrls() != null) {
+            coolerFileList.get(pos).getFileUrls().clear();
         }
+//        if (qpsModalList != null && qpsModalList.size() > 0) {
+//            List<QPS_Modal> filterList = new ArrayList<>();
+//            for (int i = 0; i < qpsModalList.size(); i++) {
+//                if (qpsModalList.get(i).getFileKey().contains(key)) {
+//                    File file = new File(qpsModalList.get(i).getFileName());
+//                    file.delete();
+//                } else {
+//                    filterList.add(qpsModalList.get(i));
+//                }
+//            }
+//            qpsModalList.clear();
+//            qpsModalList = filterList;
+//            shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+//        }
     }
 
     @Override
@@ -262,22 +244,13 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 common_class.commonDialog(this, POPActivity.class, "Cooler Info?");
                 break;
             case R.id.ivPurityCapture:
-                addPic("purity~key");
+                addPic(0);
                 break;
             case R.id.ivFTCapture:
-                addPic("FT~key");
-                break;
-            case R.id.ivPurityPreview:
-                showPic("purity~key");
-                break;
-            case R.id.ivFTPreview:
-                showPic("FT~key");
+                addPic(1);
                 break;
             case R.id.ivNoWrkCapture:
-                addPic("noWrk~key");
-                break;
-            case R.id.ivNoWrkPreview:
-                showPic("noWrk~key");
+                addPic(2);
                 break;
             case R.id.tvReceivedDate:
                 Calendar newCalendar = Calendar.getInstance();
@@ -311,13 +284,19 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     }
 
     void uploadFile() {
-        for (int i = 0; i < qpsModalList.size(); i++) {
-            Intent mIntent = new Intent(this, FileUploadService.class);
-            mIntent.putExtra("mFilePath", qpsModalList.get(i).getFilePath());
-            mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-            mIntent.putExtra("FileName", qpsModalList.get(i).getFileName());
-            mIntent.putExtra("Mode", "cooler");
-            FileUploadService.enqueueWork(this, mIntent);
+        for (int i = 0; i < coolerFileList.size(); i++) {
+            if (coolerFileList.get(i).getFileUrls() != null) {
+                for (int f = 0; f < coolerFileList.get(i).getFileUrls().size(); f++) {
+                    String filePath = coolerFileList.get(i).getFileUrls().get(f).replaceAll("file:/", "");
+                    File file = new File(filePath);
+                    Intent mIntent = new Intent(this, FileUploadService.class);
+                    mIntent.putExtra("mFilePath", filePath);
+                    mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
+                    mIntent.putExtra("FileName", file.getName());
+                    mIntent.putExtra("Mode", "cooler");
+                    FileUploadService.enqueueWork(this, mIntent);
+                }
+            }
         }
     }
 
@@ -349,10 +328,15 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
             ActivityData.put("Cooler_Header", HeadItem);
             JSONArray Order_Details = new JSONArray();
-            for (int z = 0; z < qpsModalList.size(); z++) {
-                JSONObject ProdItem = new JSONObject();
-                ProdItem.put("cooler_filename", qpsModalList.get(z).getFileName());
-                Order_Details.put(ProdItem);
+            for (int z = 0; z < coolerFileList.size(); z++) {
+
+                if (coolerFileList.get(z).getFileUrls() != null) {
+                    for (int f = 0; f < coolerFileList.get(z).getFileUrls().size(); f++) {
+                        JSONObject ProdItem = new JSONObject();
+                        ProdItem.put("cooler_filename", coolerFileList.get(z).getFileUrls().get(f));
+                        Order_Details.put(ProdItem);
+                    }
+                }
 
             }
             ActivityData.put("file_Details", Order_Details);
@@ -373,7 +357,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         Log.e("Success_Message", san);
 
                         if (jsonObjects.getBoolean("success")) {
-                           common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
+                            common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
                         }
                     } catch (Exception e) {
 

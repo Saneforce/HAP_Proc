@@ -124,7 +124,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             if (tvViewStatus.getVisibility() == View.VISIBLE) {
-                shared_common_pref.clear_pref(Constants.QPS_LOCALPICLIST);
                 common_class.CommonIntentwithFinish(Invoice_History.class);
             } else {
                 tvViewStatus.setVisibility(View.VISIBLE);

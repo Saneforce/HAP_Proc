@@ -83,9 +83,9 @@ public class AttachementActivity extends AppCompatActivity {
         ImageUKey = String.valueOf(getIntent().getSerializableExtra("Delete"));
 
 
-        if (getIntent().getStringExtra("qps_localData") != null && !getIntent().getStringExtra("qps_localData").equals("")) {
-            showLocalImgList();
-        }
+//        if (getIntent().getStringExtra("qps_localData") != null && !getIntent().getStringExtra("qps_localData").equals("")) {
+//            showLocalImgList();
+//        }
 
 
     }

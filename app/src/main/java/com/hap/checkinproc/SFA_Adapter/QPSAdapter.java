@@ -5,6 +5,7 @@ import static com.hap.checkinproc.SFA_Activity.QPSActivity.qpsActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +18,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
-import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.FileUploadService;
@@ -35,7 +32,7 @@ import com.hap.checkinproc.common.FileUploadService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +43,8 @@ import retrofit2.Response;
 public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
     Context context;
     List<QPS_Modal> mData;
-
     Shared_Common_Pref shared_common_pref;
-    Gson gson = new Gson();
-
-    List<QPS_Modal> qpsModalList = new ArrayList<>();
-
     FilesAdapter filesAdapter;
-    private String key = "";
 
     public QPSAdapter(Context context, List<QPS_Modal> mData) {
         this.context = context;
@@ -82,11 +73,8 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
             holder.status.setText("" + mData.get(position).getStatus());
 
             filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_qps_files_layout, context);
-
             holder.rvFile.setAdapter(filesAdapter);
 
-
-            getCurrentList();
 
             if (mData.get(position).getStatus().equalsIgnoreCase("Approved")) {
                 holder.btnComplete.setVisibility(View.GONE);
@@ -95,23 +83,31 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
             } else {
                 holder.btnComplete.setVisibility(View.VISIBLE);
                 holder.ivCaptureImg.setVisibility(View.VISIBLE);
-                holder.ivAttachImg.setVisibility(View.VISIBLE);
+                //holder.ivAttachImg.setVisibility(View.VISIBLE);
             }
 
 
             holder.ivCaptureImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getCurrentList();
-                    if (isCheckExceed(mData.get(position).getsNo() + "~key")) {
+
+                    if (mData.get(holder.getAdapterPosition()).getFileUrls() == null || mData.get(holder.getAdapterPosition()).getFileUrls().size() < 3) {
                         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                             @Override
                             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
 
+                                List<String> list = new ArrayList<>();
+                                File file = new File(fullPath);
+                                Uri contentUri = Uri.fromFile(file);
 
-                                qpsModalList.add(new QPS_Modal(fullPath, FileName, (mData.get(position).getsNo() + "~key" + System.currentTimeMillis())));
+                                if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
+                                    list = (mData.get(position).getFileUrls());
+                                list.add(contentUri.toString());
+                                mData.get(holder.getAdapterPosition()).setFileUrls(list);
 
-                                shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+                                filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
+                                holder.rvFile.setAdapter(filesAdapter);
+
                             }
                         });
                         Intent intent = new Intent(context, AllowancCapture.class);
@@ -125,37 +121,39 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
                 }
             });
 
-            holder.ivAttachImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
-                        @Override
-                        public void OnImageDelete(String Mode, int ImgCount) {
-
-                        }
-                    });
-
-                    Intent stat = new Intent(context, AttachementActivity.class);
-                    stat.putExtra("qps_localData", mData.get(position).getsNo() + "~key");
-                    context.startActivity(stat);
-                }
-            });
+//            holder.ivAttachImg.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+//                        @Override
+//                        public void OnImageDelete(String Mode, int ImgCount) {
+//
+//                        }
+//                    });
+//
+//                    Intent stat = new Intent(context, AttachementActivity.class);
+//                    stat.putExtra("qps_localData", mData.get(position).getsNo() + "~key");
+//                    context.startActivity(stat);
+//                }
+//            });
             //working
             holder.btnComplete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    key = mData.get(position).getsNo() + "~key";
-                    SaveOrder(holder.requestNo.getText().toString());
 
-                    for (int i = 0; i < qpsModalList.size(); i++) {
-                        if (qpsModalList.get(i).getFileKey().contains(key)) {
+                    SaveOrder(holder.requestNo.getText().toString(), position);
+
+                    if (mData.get(position).getFileUrls() != null) {
+                        for (int i = 0; i < mData.get(position).getFileUrls().size(); i++) {
+                            String filePath = mData.get(position).getFileUrls().get(i).replaceAll("file:/", "");
+                            File file = new File(filePath);
 
                             Intent mIntent = new Intent(context, FileUploadService.class);
-                            mIntent.putExtra("mFilePath", qpsModalList.get(i).getFilePath());
+                            mIntent.putExtra("mFilePath", filePath);
                             mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                            mIntent.putExtra("FileName", qpsModalList.get(i).getFileName());
+                            mIntent.putExtra("FileName", file.getName());
                             //   mIntent.putExtra("Mode", "ExpClaim;" + qpsModalList.get(i).getFileKey());
                             mIntent.putExtra("Mode", "QPS");
                             FileUploadService.enqueueWork(context, mIntent);
@@ -172,7 +170,7 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
     }
 
 
-    private void SaveOrder(String reqNo) {
+    private void SaveOrder(String reqNo, int pos) {
 
         JSONArray data = new JSONArray();
         JSONObject ActivityData = new JSONObject();
@@ -188,12 +186,14 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
 
             ActivityData.put("QPS_Header", HeadItem);
             JSONArray Order_Details = new JSONArray();
-            for (int z = 0; z < qpsModalList.size(); z++) {
-                if (qpsModalList.get(z).getFileKey().contains(key)) {
+            if (mData.get(pos).getFileUrls() != null) {
+                for (int z = 0; z < mData.get(pos).getFileUrls().size(); z++) {
+
                     JSONObject ProdItem = new JSONObject();
-                    ProdItem.put("qps_filename", qpsModalList.get(z).getFileName());
+                    ProdItem.put("qps_filename", mData.get(pos).getFileUrls().get(z));
                     ProdItem.put("qps_reqNo", reqNo);
                     Order_Details.put(ProdItem);
+
                 }
             }
             ActivityData.put("file_Details", Order_Details);
@@ -234,46 +234,6 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
     @Override
     public int getItemCount() {
         return mData.size();
-    }
-
-    boolean isCheckExceed(String key) {
-        if (qpsModalList.size() == 0)
-            return true;
-        else {
-
-            int count = 0;
-            for (int i = 0; i < qpsModalList.size(); i++) {
-
-                if (qpsModalList.get(i).getFileKey().contains(key)) {
-
-                    count += 1;
-
-
-                }
-            }
-
-            if (count < 3)
-                return true;
-            else
-                return false;
-
-        }
-
-
-    }
-
-
-    void getCurrentList() {
-        qpsModalList.clear();
-        if (shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST).equals(""))
-            qpsModalList = new ArrayList<>();
-        else {
-            String strQPS = shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST);
-
-            Type userType = new TypeToken<ArrayList<QPS_Modal>>() {
-            }.getType();
-            qpsModalList = gson.fromJson(strQPS, userType);
-        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

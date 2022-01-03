@@ -49,6 +49,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
                 itm = AryDta.get(position);
                 Picasso.with(context)
                         .load(itm)
+                        .error(R.drawable.profile_img)
                         .into(holder.ivFile);
             } else {
                 holder.ivFile.setVisibility(View.GONE);

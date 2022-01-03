@@ -173,11 +173,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
 
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
-            menuList.add(new Common_Model("Distributors", R.drawable.ic_outline_my_location_24));
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
         }
-        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE))
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
+            menuList.add(new Common_Model("Distributors", R.drawable.ic_outline_my_location_24));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
+        }
 
 
         RecyclerView.LayoutManager manager = new GridLayoutManager(this, 4);
@@ -189,41 +190,36 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 switch (menuName) {
                     case "POS":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case "Primary Orders":
                         common_class.getDb_310Data(Constants.PrimaryTAXList, SFA_Activity.this);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case "Secondary Orders":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
                         Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
                         startActivity(intent);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
 
                     case "Van Sales":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
                         startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case "Outlets":
                         common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case "Distributors":
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case "Reports":
                         common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
                     case "My Team":
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
-                        overridePendingTransition(R.anim.in, R.anim.out);
                         break;
+
+
                 }
+                overridePendingTransition(R.anim.in, R.anim.out);
             }
         });
         rvMenu.setAdapter(menuAdapter);

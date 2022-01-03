@@ -4,11 +4,11 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:padding="@dimen/C3dp"
         android:id="@+id/ivFile"
         android:layout_width="@dimen/C50dp"
         android:layout_height="@dimen/C50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="end"
+
         android:src="@drawable/profile_img"></ImageView>
     <ImageView
         android:visibility="gone"

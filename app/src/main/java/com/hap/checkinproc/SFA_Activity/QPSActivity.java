@@ -208,14 +208,12 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (tvViewStatus.getVisibility() == View.VISIBLE) {
-
                 common_class.CommonIntentwithFinish(Invoice_History.class);
-                shared_common_pref.clear_pref(Constants.QPS_LOCALPICLIST);
+
             } else {
                 tvViewStatus.setVisibility(View.VISIBLE);
                 findViewById(R.id.llQPSStatus).setVisibility(View.VISIBLE);
                 findViewById(R.id.llQPSRequestStatus).setVisibility(View.GONE);
-
                 btnSubmit.setVisibility(View.VISIBLE);
             }
 
@@ -369,7 +367,6 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 switch (key) {
                     case Constants.QPS_STATUS:
                         JSONObject stsObj = new JSONObject(apiDataResponse);
-
                         qpsModals.clear();
 
                         if (stsObj.getBoolean("success")) {
@@ -406,6 +403,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                         } else {
                             qpsModals.clear();
                             common_class.showMsg(QPSActivity.this, stsObj.getString("Msg"));
+
                         }
 
                         qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
