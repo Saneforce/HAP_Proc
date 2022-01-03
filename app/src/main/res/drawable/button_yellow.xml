@@ -9,9 +9,14 @@
         android:topRightRadius="10dp" />
 
     <gradient
+        android:startColor="@color/colorPrimaryDark"
+        android:endColor="@color/colorPrimaryDark"
+        android:angle="-360" />
+<!--
+    <gradient
         android:startColor="#5767C6"
         android:endColor="#3949AB"
-        android:angle="-360" />
+        android:angle="-360" />-->
 <!--    <gradient-->
 <!--        android:startColor="#7CB342"-->
 <!--        android:endColor="#43A047"-->

@@ -32,7 +32,7 @@
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_yellow"
+                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:padding="@dimen/C10dp"
                     android:textAllCaps="true"

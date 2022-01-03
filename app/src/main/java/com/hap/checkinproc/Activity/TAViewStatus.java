@@ -154,7 +154,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction,travelPlaces, linDailyAllowance, linback, lin,
             linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView;
-    LinearLayout viewContinue, viewContinueTotal, ViewData;
+    LinearLayout viewContinue, viewContinueTotal, ViewData,linAccept,linReject;
     RelativeLayout lnChangePlace;
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara,cardTrvPlcs;
 
@@ -166,11 +166,11 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
             lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey,
             txt_Styloc,txt_DAStyloc,txt_DATyp,txtAllwType,txtCAllwType,txEligDt,NoofNight,txldgTdyAmt,
-            edt_ldg_bill,
+            edt_ldg_bill,editTextRemarks,txtReject,
             edtRwID;
 
-    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
-             edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill,txDAOthName;
+    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
+             edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill,txDAOthName,txtreason;
 
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
             img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck,imgEdtPlace,btnDAclose;
@@ -301,6 +301,13 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         btn_sub = findViewById(R.id.btn_sub);
         linAddAllowance = findViewById(R.id.lin_travel_loaction);
         linAddplaces= findViewById(R.id.lin_travel_places);
+        linAccept= findViewById(R.id.lin_accp);
+        linReject= findViewById(R.id.rejectonly);
+        if(SlStart==null || SlStart.equalsIgnoreCase("null")|| SlStart.equalsIgnoreCase("")){
+            linAccept.setVisibility(View.GONE);
+            linReject.setVisibility(View.GONE);
+        }
+
         vwBoarding = findViewById(R.id.vwBoarding);
         vwDrvBoarding = findViewById(R.id.vwDrvBoarding);
         TravelBike = findViewById(R.id.linear_bike);
@@ -436,10 +443,19 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         TextCheckInDate = findViewById(R.id.txt_hotel_date);
         btnDAChange=findViewById(R.id.btnDAChange);
         btnDAclose=findViewById(R.id.btnDAclose);
+        txtreason=findViewById(R.id.txtreason);
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
         mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
         mFuelRecycler.setNestedScrollingEnabled(false);
+        txtReject = findViewById(R.id.L_rejectsave);
+
+        txtReject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendtpApproval(2);
+            }
+        });
 
         txtExpDt.setText("Expense For - "+ddmmyy(DateTime));
 
@@ -937,7 +953,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             ModeOfTravel = TaSharedPrefernce.getString(MOT, "");
         }
 
-        btn_sub.setOnClickListener(new View.OnClickListener() {
+       /* btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 btn_sub.startAnimation();
@@ -949,13 +965,13 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                             ResetSubmitBtn(0,btn_sub);
                             return;
                         } else {
-                            /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            *SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             String currentDateandTime = sdf.format(new Date());
                             if(DateTime.equalsIgnoreCase(currentDateandTime)){
                                 Toast.makeText(TAViewStatus.this, "Can't Send Approval on Same day", Toast.LENGTH_SHORT).show();
                                 return;
                                 //btn_sub.setVisibility(View.GONE);
-                            }*/
+                            }*
                             if(!validate()){
                                 ResetSubmitBtn(0,btn_sub);
                                 return;
@@ -989,7 +1005,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                     }
                 },100);
             }
-        });
+        });*/
         card_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1015,45 +1031,45 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
             }
         });
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonSave.startAnimation();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!validate()){
-                            ResetSubmitBtn(0,buttonSave);
-                            return;
-                        }
-                        AlertDialogBox.showDialog(TAViewStatus.this, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Save your claim as Draft.")), "Yes", "No", false, new AlertBox() {
-                            @Override
-                            public void PositiveMethod(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                                if(clocation!=null){
-                                    submitData("Save",buttonSave);
-                                }else{
-                                    new LocationFinder(getApplication(), new LocationEvents() {
-                                        @Override
-                                        public void OnLocationRecived(Location location) {
-                                            clocation=location;
-                                            submitData("Save",buttonSave);
-                                        }
-                                    });
-                                }
-
-                            }
-
-                            @Override
-                            public void NegativeMethod(DialogInterface dialog, int id) {
-                                ResetSubmitBtn(0,buttonSave);
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-                },100);
-            }
-        });
+//        buttonSave.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                buttonSave.startAnimation();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if(!validate()){
+//                            ResetSubmitBtn(0,buttonSave);
+//                            return;
+//                        }
+//                        AlertDialogBox.showDialog(TAViewStatus.this, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Save your claim as Draft.")), "Yes", "No", false, new AlertBox() {
+//                            @Override
+//                            public void PositiveMethod(DialogInterface dialog, int id) {
+//                                dialog.dismiss();
+//                                if(clocation!=null){
+//                                    submitData("Save",buttonSave);
+//                                }else{
+//                                    new LocationFinder(getApplication(), new LocationEvents() {
+//                                        @Override
+//                                        public void OnLocationRecived(Location location) {
+//                                            clocation=location;
+//                                            submitData("Save",buttonSave);
+//                                        }
+//                                    });
+//                                }
+//
+//                            }
+//
+//                            @Override
+//                            public void NegativeMethod(DialogInterface dialog, int id) {
+//                                ResetSubmitBtn(0,buttonSave);
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                    }
+//                },100);
+//            }
+//        });
 
         TaFuelEdit.onDistanceMeterWatcher(new DistanceMeterWatcher() {
             @Override
@@ -1772,7 +1788,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
-                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance,TWMax_Km,FWMax_Km);
+                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance,TWMax_Km,FWMax_Km,false);
                         mFuelRecycler.setAdapter(fuelListAdapter);
                         JsonObject jsFuel;
                         linMode.setVisibility(View.VISIBLE);
@@ -4587,6 +4603,66 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
         SumOFLodging(0);
 
+    }
+    public void onApproval(View v) {
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                SendtpApproval(1);
+            }
+        });
+    }
+
+    public void onReject(View v) {
+        linAccept.setVisibility(View.GONE);
+        linReject.setVisibility(View.VISIBLE);
+    }
+
+
+    private void SendtpApproval(int flag) {
+        JSONObject taReq = new JSONObject();
+
+        try {
+
+            taReq.put("sfCode", sfCode);
+            taReq.put("Flag", flag);
+            taReq.put("Sl_No", SlStart);
+            taReq.put("AAmount", grandTotal.getText());
+            taReq.put("Reason", txtreason.getText());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.v("TA_REQ", taReq.toString());
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.taApprove(taReq.toString());
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                try {
+                    finish();
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if (flag == 1) {
+                        Toast.makeText(getApplicationContext(), "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
 }

@@ -508,6 +508,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                         mShared_common_pref.save(Constants.DB_TWO_GET_DYREPORTS, gson.toJson(response.body()));
                     } catch (Exception e) {
 
+                        LoadingCnt++;
+                        hideShimmer();
                     }
 
                 }
@@ -608,7 +610,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             hideShimmer();
 
         } catch (Exception e) {
-
+            LoadingCnt++;
+            hideShimmer();
         }
     }
 
@@ -777,7 +780,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             }
                         }
                     } catch (Exception e) {
-
+                        LoadingCnt++;
+                        hideShimmer();
                     }
 
 
@@ -785,7 +789,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                    LoadingCnt++;
+                    hideShimmer();
                 }
 
             });
@@ -910,6 +915,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 editor.putBoolean("Login", false);
                 editor.apply();
                 CheckInDetails.edit().clear().commit();
+
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
+                mShared_common_pref.clear_pref(Constants.LOGIN_DATA);
 
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 stopService(playIntent);
