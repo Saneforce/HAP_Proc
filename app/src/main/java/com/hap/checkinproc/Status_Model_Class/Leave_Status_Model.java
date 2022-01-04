@@ -4,6 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Leave_Status_Model {
+    public Leave_Status_Model(String SFNm, String createdDate, String reason, String leaveType) {
+        this.SFNm = SFNm;
+        this.createdDate = createdDate;
+        this.reason = reason;
+        this.leaveType = leaveType;
+    }
+
     @SerializedName("SFNm")
     @Expose
     private String SFNm;

@@ -95,7 +95,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, linServiceType;
     LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible, linClsRmks;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
-            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType;
+            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType, tvFreezerCapacity, tvFreezerSta;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -103,7 +103,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail,
-            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk;
+            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -188,6 +188,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             linClsRmks = findViewById(R.id.linClsRmks);
             edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
+            edtFSSAI = findViewById(R.id.edt_retailer_fssai);
+            edtPAN = findViewById(R.id.edt_retailer_pan);
+            edtFreezerMake = findViewById(R.id.edt_retailer_freezerMake);
+            edtFreezerTag = findViewById(R.id.edt_retailer_freezerTagNo);
+            tvFreezerCapacity = findViewById(R.id.txFreezerCapacity);
+            tvFreezerSta = findViewById(R.id.txFreezerStatus);
 
             rlDelvryType = findViewById(R.id.rlDelvryType);
             txDelvryType = findViewById(R.id.txDelvryType);
@@ -882,7 +888,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 mIntent.putExtra("Mode", "Outlet");
                 FileUploadService.enqueueWork(this, mIntent);
             }
-            if (mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0) {
+            if (txOutletType.getText().toString().equalsIgnoreCase("Closed") && mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0) {
                 for (int j = 0; j < mData.get(0).getFileUrls().size(); j++) {
                     String filePath = mData.get(0).getFileUrls().get(j).replaceAll("file:/", "");
                     File file = new File(filePath);
@@ -933,9 +939,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
             }
 
-            Log.v(TAG + ":CategoryType:", categoryType);
             reportObject.put("CategoryType", "'" + categoryType + "'");
-            if (edt_outstanding.getText().toString().equals(""))
+            if (Common_Class.isNullOrEmpty(edt_outstanding.getText().toString()) || edt_outstanding.getText().toString().equalsIgnoreCase("."))
                 reportObject.put("outstanding_amount", 0);
 
             else
@@ -956,7 +961,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("VechType", txDelvryType.getText().toString());
             reportObject.put("OutletTypeNm", txOutletType.getText().toString());
             reportObject.put("OutletTypeCd", iOutletTyp);
-            reportObject.put("OutletTypeRmks", edtClsRetRmk.getText());
+            reportObject.put("OutletTypeRmks", edtClsRetRmk.getText().toString());
 
             reportObject.put("unlisted_doctor_areaname", "''");
             reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
@@ -980,10 +985,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
             reportObject.put("img_name", "'" + imageServer + "'");
+            reportObject.put("fssai_number", "'" + edtFSSAI.getText().toString() + "'");
+            reportObject.put("pan_number", "'" + edtPAN.getText().toString() + "'");
+            reportObject.put("freezer_make", "'" + edtFreezerMake.getText().toString() + "'");
+            reportObject.put("freezer_tagno", "'" + edtFreezerTag.getText().toString() + "'");
+            reportObject.put("freezer_status", "'" + tvFreezerSta.getText().toString() + "'");
+            reportObject.put("freezer_capacity", "'" + tvFreezerCapacity.getText().toString() + "'");
+            reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate")?1:0 + "'"));
+
             reportObject.put(Constants.LOGIN_TYPE, "'" + shared_common_pref.getvalue(Constants.LOGIN_TYPE) + "'");
 
+
             JSONArray fileArr = new JSONArray();
-            if (mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0) {
+            if (txOutletType.getText().toString().equalsIgnoreCase("Closed") && mData.get(0).getFileUrls() != null && mData.get(0).getFileUrls().size() > 0) {
                 for (int i = 0; i < mData.get(0).getFileUrls().size(); i++) {
                     JSONObject fileData = new JSONObject();
                     File file = new File(mData.get(0).getFileUrls().get(i));
@@ -992,6 +1006,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
             }
             reportObject.put("file_Details", fileArr);
+
 
             JSONArray freezerFileArr = new JSONArray();
             if (mFreezerData.get(0).getFileUrls() != null && mFreezerData.get(0).getFileUrls().size() > 0) {
@@ -1141,7 +1156,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
     private void getFreezerData(String divERP) {
-        if (divERP.equals("21")) {
+        if (divERP.equals("47")) {
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
             findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
@@ -1149,6 +1164,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             findViewById(R.id.llCategoryType).setVisibility(View.GONE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
             findViewById(R.id.llFreezer).setVisibility(View.GONE);
+            mFreezerData.clear();
+            mFreezerData = new ArrayList<>();
+            mFreezerData.add(new QPS_Modal("", "", ""));
+
+
         }
     }
 

@@ -167,13 +167,14 @@
                                 android:id="@+id/from_time"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/C1dp"
                                 android:background="@drawable/textbox_bg"
                                 android:clickable="false"
                                 android:elevation="@dimen/C5dp"
                                 android:focusable="false"
-                                android:layout_margin="@dimen/C1dp"
-                                android:padding="@dimen/C8dp"                                android:hint="From Time"
+                                android:hint="From Time"
                                 android:inputType="time"
+                                android:padding="@dimen/C8dp"
                                 android:textSize="@dimen/C13dp" />
                         </LinearLayout>
 
