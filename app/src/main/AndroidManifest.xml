@@ -317,6 +317,9 @@
             android:name=".Status_Activity.Leave_Status_Activity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Status_Activity.FlightBooking_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Status_Activity.Permission_Status_Activity"
             android:screenOrientation="portrait" />
         <activity

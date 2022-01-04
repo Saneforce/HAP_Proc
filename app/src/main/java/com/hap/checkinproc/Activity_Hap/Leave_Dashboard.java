@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -8,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,21 +22,19 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
+import com.hap.checkinproc.Status_Activity.FlightBooking_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
 import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Onduty_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Permission_Status_Activity;
 import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
-import com.hap.checkinproc.common.TimerService;
-
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
     LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,
-            ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus, LinearException,DaExcptStaus;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,flightBookStatus,
+            ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus, LinearException, DaExcptStaus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
 
@@ -102,6 +101,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
 
         /*Status Linear*/
         LeaveStatus = findViewById(R.id.lin_leav_sta);
+        flightBookStatus=findViewById(R.id.lin_flight_booking_status);
         PermissionStatus = findViewById(R.id.lin_per_sta);
         OnDutyStatus = findViewById(R.id.lin_duty_sta);
         MissedStatus = findViewById(R.id.lin_miss_sta);
@@ -136,8 +136,9 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         LeaveCancelStatus.setOnClickListener(this);
         LinearException.setOnClickListener(this);
         DaExcptStaus.setOnClickListener(this);
-
         MissedPunc.setOnClickListener(this);
+        flightBookStatus.setOnClickListener(this);
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +180,11 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             case R.id.lin_leav_sta:
                 //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
                 startActivity(new Intent(Leave_Dashboard.this, Leave_Status_Activity.class));
+                mShared_common_pref.save("AMod", "0");
+                break;
+            case R.id.lin_flight_booking_status:
+                //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
+                startActivity(new Intent(Leave_Dashboard.this, FlightBooking_Status_Activity.class));
                 mShared_common_pref.save("AMod", "0");
                 break;
             case R.id.lin_per_sta:
