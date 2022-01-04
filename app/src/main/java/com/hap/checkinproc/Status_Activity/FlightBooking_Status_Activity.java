@@ -27,7 +27,6 @@ import java.util.List;
 
 public class FlightBooking_Status_Activity extends AppCompatActivity implements View.OnClickListener {
     List<Leave_Status_Model> mList = new ArrayList<>();
-
     RecyclerView rv;
     FlightBooking_Status_Adapter adapter;
     TextView tvFromDate, tvToDate;
