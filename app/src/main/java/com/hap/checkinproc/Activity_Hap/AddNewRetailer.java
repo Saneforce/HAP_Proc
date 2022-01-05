@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -103,7 +104,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail,
-            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag;
+            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag, edtDistCode;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -145,6 +146,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public String categoryType = "";
 
     String divERP = "";
+    Button btnDistCode;
 
 
     @Override
@@ -185,6 +187,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerEmail = findViewById(R.id.edt_new_email);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+            edtDistCode = findViewById(R.id.edt_dist_code);
 
             linClsRmks = findViewById(R.id.linClsRmks);
             edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
@@ -211,9 +214,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             btnRefLoc = findViewById(R.id.btnRefLoc);
             linServiceType = findViewById(R.id.linear_service_type);
             tvServiceType = findViewById(R.id.txt_service_type);
+            btnDistCode = findViewById(R.id.btn_dist_enter);
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
             ivFreezerCapture.setOnClickListener(this);
+            btnDistCode.setOnClickListener(this);
+
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.route_map);
@@ -538,6 +544,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
+                    } else if (findViewById(R.id.llFreezer).getVisibility() == View.VISIBLE) {
+                        if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
+                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
+                        else if (edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
+                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer Tag Number");
+                        } else if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
+                            common_class.showMsg(AddNewRetailer.this, "Selet the Freezer Status");
+                        } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
+                            common_class.showMsg(AddNewRetailer.this, "Select the Freezer Capacity");
+                        } else if (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0)
+                            common_class.showMsg(AddNewRetailer.this, "Please take Freezer Photo");
+                        else {
+                            if (mSubmit.isAnimating()) return;
+                            mSubmit.startAnimation();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addNewRetailers();
+                                }
+                            }, 500);
+                        }
                     } else {
                         if (mSubmit.isAnimating()) return;
                         mSubmit.startAnimation();
@@ -590,12 +617,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             shared_common_pref.save(Constants.Retailor_FilePath, "");
 
+            linReatilerRoute.setOnClickListener(this);
 
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-                linReatilerRoute.setOnClickListener(this);
                 rlDistributor.setOnClickListener(this);
                 common_class.getDb_310Data(Rout_List, this);
 
+            }
+            divERP = shared_common_pref.getvalue(Constants.DivERP);
+            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("47") || divERP.equalsIgnoreCase("62")) {
+                linReatilerRoute.setEnabled(true);
+            } else {
+                linReatilerRoute.setEnabled(false);
             }
 
 
@@ -610,9 +643,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             common_class.getDb_310Data(Constants.STATE_LIST, this);
             mData.add(new QPS_Modal("", "", ""));
             mFreezerData.add(new QPS_Modal("", "", ""));
-
-
-            divERP = shared_common_pref.getvalue(Constants.DivERP);
             getFreezerData(divERP);
 
         } catch (Exception e) {
@@ -991,7 +1021,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("freezer_tagno", "'" + edtFreezerTag.getText().toString() + "'");
             reportObject.put("freezer_status", "'" + tvFreezerSta.getText().toString() + "'");
             reportObject.put("freezer_capacity", "'" + tvFreezerCapacity.getText().toString() + "'");
-            reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate")?1:0 + "'"));
+            reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate") ? 1 : 0 + "'"));
 
             reportObject.put(Constants.LOGIN_TYPE, "'" + shared_common_pref.getvalue(Constants.LOGIN_TYPE) + "'");
 
@@ -1156,18 +1186,22 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
     private void getFreezerData(String divERP) {
+
+        if (divERP.equalsIgnoreCase("62"))
+            linReatilerRoute.setEnabled(true);
         if (divERP.equals("47")) {
+            linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
             findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
         } else {
+            linReatilerRoute.setEnabled(false);
             findViewById(R.id.llCategoryType).setVisibility(View.GONE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
             findViewById(R.id.llFreezer).setVisibility(View.GONE);
             mFreezerData.clear();
             mFreezerData = new ArrayList<>();
             mFreezerData.add(new QPS_Modal("", "", ""));
-
 
         }
     }
@@ -1240,6 +1274,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_dist_enter:
+
+                List<Common_Model> list = common_class.getDistList();
+                boolean isMatch = false;
+                for (int i = 0; i < list.size(); i++) {
+                    if (edtDistCode.getText().toString().equalsIgnoreCase(list.get(i).getCont())) {
+                        isMatch = true;
+                    }
+                }
+                if (isMatch)
+                    common_class.showMsg(AddNewRetailer.this, "Valid Code");
+                else
+                    common_class.showMsg(AddNewRetailer.this, "Invalid Code");
+
+                break;
             case R.id.ivRetailCapture:
                 captureImg(mData, rvFiles);
                 break;

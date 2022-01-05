@@ -96,7 +96,8 @@
 
     </LinearLayout>
 
-    <include layout="@layout/part_view" />
+    <include layout="@layout/part_view"
+        />
 
 
 </LinearLayout>

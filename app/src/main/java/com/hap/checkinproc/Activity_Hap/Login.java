@@ -593,7 +593,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //  eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-                //eMail = "ciadmin@hap.in";
+                eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -603,9 +603,11 @@ public class Login extends AppCompatActivity {
 
                 //eMail = "1014700@hap.in";
                 // eMail = "1006208@hap.in";
-               // eMail = "1009998@hap.in";
+                // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
                 //eMail = "anbu@saneforce.com";
+                //  eMail = "1016431@hap.in";
+
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -672,6 +674,7 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Constants.CUTOFF_TIME, response.getData().get(0).getCutoffTime());
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
                 shared_common_pref.save(Constants.DistributorERP, response.getData().get(0).getERP_Code());
+                shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
                 shared_common_pref.save(Constants.DistributorAdd, response.getData().get(0).getStockist_Address());
                 Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                 userEditor.putString("Sfcode", response.getData().get(0).getDistCode());

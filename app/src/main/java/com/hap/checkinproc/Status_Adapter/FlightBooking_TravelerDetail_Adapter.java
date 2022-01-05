@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class FlightBooking_TravelerDetail_Adapter extends RecyclerView.Adapter<FlightBooking_TravelerDetail_Adapter.MyViewHolder> {
-    private List<Leave_Status_Model> Leave_Status_ModelsList;
-    private int rowLayout;
-    private Context context;
+    private JSONArray mArr;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvId, tvName, tvCompany, tvMobile, tvtype;
@@ -34,9 +34,8 @@ public class FlightBooking_TravelerDetail_Adapter extends RecyclerView.Adapter<F
     }
 
 
-    public FlightBooking_TravelerDetail_Adapter(List<Leave_Status_Model> Leave_Status_ModelsList, Context context) {
-        this.Leave_Status_ModelsList = Leave_Status_ModelsList;
-        this.context = context;
+    public FlightBooking_TravelerDetail_Adapter(JSONArray arr, Context context) {
+        this.mArr = arr;
 
     }
 
@@ -49,18 +48,22 @@ public class FlightBooking_TravelerDetail_Adapter extends RecyclerView.Adapter<F
 
     @Override
     public void onBindViewHolder(FlightBooking_TravelerDetail_Adapter.MyViewHolder holder, int position) {
-        Leave_Status_Model Leave_Status_Model = Leave_Status_ModelsList.get(position);
-        holder.tvId.setText("000" + (position + 1));
-        holder.tvName.setText(Leave_Status_Model.getCreatedDate());
-        holder.tvCompany.setText("" + Leave_Status_Model.getSFNm());
-        holder.tvMobile.setText("" + Leave_Status_Model.getReason());
-        holder.tvtype.setText("" + Leave_Status_Model.getLeaveType());
+        try {
+            JSONObject obj = mArr.getJSONObject(position);
+            holder.tvId.setText(""+obj.getString("TrvEmpID"));
+            holder.tvName.setText(""+obj.getString("TrvName"));
+            holder.tvCompany.setText("" + obj.getString("TrvComp"));
+            holder.tvMobile.setText("" + obj.getString("TrvMob"));
+            holder.tvtype.setText("" + obj.getString("TrvType"));
+        } catch (Exception e) {
+
+        }
 
 
     }
 
     @Override
     public int getItemCount() {
-        return Leave_Status_ModelsList.size();
+        return mArr.length();
     }
 }

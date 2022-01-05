@@ -524,6 +524,13 @@ public class Common_Class {
                         data.put("fdt", HistoryInfoActivity.stDate);
                         data.put("tdt", HistoryInfoActivity.endDate);
                         break;
+                    case Constants.FlightBookingStatus:
+                        axnname = "get/flightbookings";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("FDT", jparam.get("FDT").getAsString());
+                        data.put("TDT", jparam.get("TDT").getAsString());
+
+                        break;
                     case Constants.DASHBOARD_TYPE_INFO:
                         axnname = "get/orderandinvoice";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -1082,7 +1089,7 @@ public class Common_Class {
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
                 String DivERP = jsonObject1.optString("DivERP");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code,DivERP);
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP);
                 distributor_master.add(Model_Pojo);
 
             }
