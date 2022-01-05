@@ -34,6 +34,7 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -46,6 +47,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
@@ -73,7 +75,6 @@ public class FlightTicketRequest extends AppCompatActivity {
     JSONArray jTrvDets;
     Location clocation=null;
     final Handler handler = new Handler();
-
     ApiInterface apiInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,16 +237,88 @@ public class FlightTicketRequest extends AppCompatActivity {
         final View rowView = inflater.inflate(R.layout.travelleritem, null);
         TrvlrList.addView(rowView, layoutParams);
         ImageView btnDel=rowView.findViewById(R.id.btnDelete);
+        RadioGroup radHAPOTH=rowView.findViewById(R.id.radio_HAPOth);
+        LinearLayout linGetEmpId=rowView.findViewById(R.id.linGetEmpId);
+        Button btnGetEmp = rowView.findViewById(R.id.btnGetEmp);
+
         btnDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RemoveTraveller(v);
             }
         });
+        btnGetEmp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onGetEmpDetails(v);
+            }
+        });
+        radHAPOTH.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                if (null != rb && checkedId > -1) {
+                    linGetEmpId.setVisibility(View.GONE);
+                    if (rb.getText().toString().equalsIgnoreCase("HAP")) {
+                        linGetEmpId.setVisibility(View.VISIBLE);
+                    } else {
+                        linGetEmpId.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
     private void RemoveTraveller(View v){
         View pv= (View) v.getParent().getParent().getParent();
         TrvlrList.removeView(pv);
+    }
+
+    public void onGetEmpDetails(View v) {
+        EditText edtGEmpid;
+        View pv = (View) v.getParent().getParent();
+        edtGEmpid = pv.findViewById(R.id.edtGEmpid);
+        String sEmpID = String.valueOf(edtGEmpid.getText());
+
+
+            Call<JsonArray> Callto = apiInterface.getDataArrayListA("get/EmpByID",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), sEmpID, "", "", null);
+            Callto.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray res = response.body();
+                    if (res.size() < 1) {
+                        Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+
+                    JsonObject EmpDet = res.get(0).getAsJsonObject();
+                    if(EmpDet.has("Msg")){
+                        if(!EmpDet.get("Msg").getAsString().equalsIgnoreCase("")){
+                            Toast.makeText(getApplicationContext(), EmpDet.get("Msg").getAsString(), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                    EditText txtTrvName,txtTrvDept,txtTrvMob;
+
+                    txtTrvName = pv.findViewById(R.id.txTrvName);
+                    txtTrvDept = pv.findViewById(R.id.txCmpName);
+                    txtTrvMob = pv.findViewById(R.id.txTrvMobile);
+
+                    txtTrvName.setText(EmpDet.get("Name").getAsString());
+                    //txtJNDesig.setText(EmpDet.get("Desig").getAsString());
+                    txtTrvDept.setText(EmpDet.get("DeptName").getAsString());
+                    //txtJNHQ.setText(EmpDet.get("HQ").getAsString());
+                    txtTrvMob.setText(EmpDet.get("Mob").getAsString());
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Log.d("Error:", "Some Error" + t.getMessage());
+                }
+            });
     }
     public void openHome() {
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
@@ -365,9 +438,10 @@ public class FlightTicketRequest extends AppCompatActivity {
                 LinearLayout LayChild=(LinearLayout) TrvlrList.getChildAt(il);
                 RadioButton radHap = LayChild.findViewById(R.id.radio_HAP);
                 RadioButton radOth = LayChild.findViewById(R.id.radio_OTH);
+                EditText txTrvEmpid = LayChild.findViewById(R.id.edtGEmpid);
                 EditText txTrvName= LayChild.findViewById(R.id.txTrvName);
                 EditText txCmpName= LayChild.findViewById(R.id.txCmpName);
-                EditText txMobile= LayChild.findViewById(R.id.txMobile);
+                EditText txMobile= LayChild.findViewById(R.id.txTrvMobile);
                 RadioButton radGenM = LayChild.findViewById(R.id.radio_TrvGenM);
                 RadioButton radGenF = LayChild.findViewById(R.id.radio_TrvGenF);
                 JSONObject nItem=new JSONObject();
@@ -402,9 +476,10 @@ public class FlightTicketRequest extends AppCompatActivity {
                     return false;
                 }
                 nItem.put("CmpTyp",CmpCat);
+                nItem.put("EmpID",txTrvEmpid.getText().toString());
                 nItem.put("TrvName",txTrvName.getText().toString());
                 nItem.put("TrvCmp",txCmpName.getText().toString());
-                nItem.put("CmpTyp",txMobile.getText().toString());
+                nItem.put("CmpMob",txMobile.getText().toString());
                 nItem.put("CmpGen",TrvGen);
 
                 jTrvDets.put(nItem);
@@ -421,12 +496,14 @@ public class FlightTicketRequest extends AppCompatActivity {
             if(radioRound.isChecked()) TrvTyp="TWO";
             String TrvMorEve="";
             if(radoMor.isChecked()) TrvMorEve="M";
-            if(radoEve.isChecked()) TrvMorEve="F";
+            if(radoEve.isChecked()) TrvMorEve="E";
 
             String retTrvMorEve="";
             if(retradoMor.isChecked()) retTrvMorEve="M";
-            if(retradoEve.isChecked()) retTrvMorEve="F";
+            if(retradoEve.isChecked()) retTrvMorEve="E";
 
+            jObj.put("SF",UserDetails.getString("Sfcode", ""));
+            jObj.put("SFNm",UserDetails.getString("SfName", ""));
             jObj.put("TrvMdType",TrvTyp);
             jObj.put("TrvFrmPlc",FrmPlc.getText().toString());
             jObj.put("TrvToPlc",ToPlc.getText().toString());

@@ -184,7 +184,8 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
             DATE = "", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "",
-            sLocId = "",sLocName ="",sDALocId = "",sDALocName="",sDALType,CInDate="",COutDate="", SlStart = "", sfCode = "";
+            sLocId = "",sLocName ="",sDALocId = "",sDALocName="",sDALType,CInDate="",COutDate="", SlStart = "", sfCode = "",
+            SFName="", desig="" , dept="" , sEmpID="";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
@@ -275,7 +276,22 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         DateTime= String.valueOf(getIntent().getSerializableExtra("TA_Date"));
         SlStart = String.valueOf(getIntent().getSerializableExtra("Sl_No"));
         sfCode = String.valueOf(getIntent().getSerializableExtra("sfCode"));
-
+        SFName = String.valueOf(getIntent().getSerializableExtra("name"));
+        desig = String.valueOf(getIntent().getSerializableExtra("desig"));
+        dept = String.valueOf(getIntent().getSerializableExtra("dept"));
+        sEmpID = String.valueOf(getIntent().getSerializableExtra("sf_emp_id"));
+/*
+        intent.putExtra("TA_Date", jsonObject.get("id").getAsString());
+        intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
+        intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
+        intent.putExtra("head_quaters", jsonObject.get("HQ").getAsString());
+        intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
+        intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
+        intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
+        intent.putExtra("Sl_No", jsonObject.get("Sl_No").getAsString());
+        intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
+        intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
+        intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());*/
         gson = new Gson();
         temaplateList = new ArrayList<>();
         dynamicLabelList = new ArrayList<>();
@@ -395,14 +411,16 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         txtTAamt = findViewById(R.id.txt_trav_loca);
         linback = findViewById(R.id.lin_back);
         imgBck = findViewById(R.id.imag_backs);
+
         txtName = findViewById(R.id.txt_Name);
         txtDesig = findViewById(R.id.txt_desg);
         txtDept = findViewById(R.id.txt_dep);
         txtEmpId = findViewById(R.id.txt_emp_id);
-        txtName.setText(Shared_Common_Pref.Sf_Name);
-        txtDesig.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DESIG));
-        txtDept.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DEPT));
-        txtEmpId.setText("(" + mShared_common_pref.getvalue(Shared_Common_Pref.SF_EMP_ID) + ")");
+        txtName.setText(SFName);
+        txtDesig.setText(desig);
+        txtDept.setText(dept);
+        txtEmpId.setText("(" + sEmpID + ")");
+
         viw = findViewById(R.id.vw_tl);
         lin = findViewById(R.id.lin_tl);
         txtMaxKm = findViewById(R.id.max_km);

@@ -48,6 +48,33 @@
                 android:padding="@dimen/C5dp"
                 />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linGetEmpId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/edtGEmpid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Emp Code    "
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/C5dp"
+                android:layout_marginEnd="@dimen/C5dp"/>
+            <Button
+                android:id="@+id/btnGetEmp"
+                android:layout_width="@dimen/C40dp"
+                android:layout_height="28dp"
+                android:background="@color/background"
+                android:elevation="@dimen/C5dp"
+                android:padding="1dp"
+                android:text="Get"
+                android:textColor="@color/black"
+                android:textFontWeight="900"
+                android:textSize="12sp"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
         <EditText
             android:id="@+id/txTrvName"
             android:layout_width="match_parent"
@@ -76,7 +103,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <EditText
-                android:id="@+id/txMobile"
+                android:id="@+id/txTrvMobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
