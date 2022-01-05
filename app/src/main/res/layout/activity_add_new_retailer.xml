@@ -196,7 +196,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Distributor Code"
+                                android:text="Outlet Code"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
 
@@ -220,7 +220,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
-                                android:hint="Distributor Code"
+                                android:hint="Enter Code"
                                 android:maxLines="2"
                                 android:padding="10dp"
                                 android:textSize="13dp" />
@@ -236,7 +236,7 @@
                                 android:background="@drawable/bottom_button"
                                 android:padding="10dp"
 
-                                android:text="Enter"
+                                android:text="Get"
                                 android:textColor="@color/white"
                                 android:textSize="13dp" />
                         </LinearLayout>
