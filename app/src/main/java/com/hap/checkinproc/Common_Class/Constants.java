@@ -111,4 +111,5 @@ public class Constants {
     public static final String POS_ProdTypes_List="posProTypeList";
     public static final String POS_ProdGroups_List="posProGrpList";
     public static final String DivERP="divERP";
+    public static final String FlightBookingStatus="flightBookingStatus";
 }

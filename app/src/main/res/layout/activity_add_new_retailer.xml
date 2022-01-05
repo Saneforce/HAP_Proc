@@ -196,6 +196,61 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="Outlet Code"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:src="@drawable/mandatory" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/edt_dist_code"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="start"
+                                android:hint="Enter Code"
+                                android:maxLines="2"
+                                android:padding="10dp"
+                                android:textSize="13dp" />
+
+                            <Button
+
+                                android:id="@+id/btn_dist_enter"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/C5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_button"
+                                android:padding="10dp"
+
+                                android:text="Get"
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:text="Outlet Name"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
@@ -1240,6 +1295,14 @@
                                         android:text="Freezer Make"
                                         android:textColor="@android:color/black"
                                         android:textSize="13sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/C2dp"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:src="@drawable/mandatory"
+                                        android:visibility="visible" />
                                 </LinearLayout>
 
                                 <EditText
@@ -1273,6 +1336,14 @@
                                         android:text="Freezer Tag Number"
                                         android:textColor="@android:color/black"
                                         android:textSize="13sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/C2dp"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:src="@drawable/mandatory"
+                                        android:visibility="visible" />
                                 </LinearLayout>
 
                                 <EditText
@@ -1305,7 +1376,7 @@
                                     android:layout_marginStart="@dimen/C2dp"
                                     android:layout_marginTop="@dimen/C3dp"
                                     android:src="@drawable/mandatory"
-                                    android:visibility="invisible" />
+                                    android:visibility="visible" />
 
                             </LinearLayout>
 
@@ -1354,7 +1425,7 @@
                                     android:layout_marginStart="@dimen/C2dp"
                                     android:layout_marginTop="@dimen/C3dp"
                                     android:src="@drawable/mandatory"
-                                    android:visibility="invisible" />
+                                    android:visibility="visible" />
 
                             </LinearLayout>
 
@@ -1408,7 +1479,7 @@
                                         android:layout_marginStart="@dimen/C2dp"
                                         android:layout_marginTop="@dimen/C3dp"
                                         android:src="@drawable/mandatory"
-                                        android:visibility="invisible" />
+                                        android:visibility="visible" />
                                 </LinearLayout>
 
 
@@ -1426,8 +1497,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:padding="@dimen/C5dp"
-                                        android:src="@drawable/ic_round_photo_camera_24"
-                                        app:tint="@color/colorPrimaryDark" />
+                                        android:src="@drawable/ic_round_photo_camera_24"></ImageView>
 
 
                                     <androidx.recyclerview.widget.RecyclerView

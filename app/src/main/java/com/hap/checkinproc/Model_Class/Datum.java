@@ -141,6 +141,10 @@ public class Datum {
     @Expose
     private String State_Code;
 
+    @SerializedName("DivERP")
+    @Expose
+    private String DivERP;
+
     public String getSfUserName() {
         return sfUserName;
     }
@@ -389,5 +393,13 @@ public class Datum {
 
     public void setTm(String tm) {
         Tm = tm;
+    }
+
+    public String getDivERP() {
+        return DivERP;
+    }
+
+    public void setDivERP(String divERP) {
+        DivERP = divERP;
     }
 }

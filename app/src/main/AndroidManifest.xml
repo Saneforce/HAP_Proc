@@ -91,7 +91,17 @@
         <activity
             android:name=".Activity.PDFActivity"
             android:theme="@style/AppTheme.Dialogs" />
-        <activity android:name=".Activity.PdfViewerActivity" />
+        <activity android:name=".Activity.PdfViewerActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activity.FuelAllowance" />
         <activity android:name=".Activity.TL_cliam_Apprval" />
         <activity android:name=".Activity.OEClaimActivity" />

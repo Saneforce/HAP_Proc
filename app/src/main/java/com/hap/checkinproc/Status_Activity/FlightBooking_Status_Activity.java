@@ -12,23 +12,28 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.FlightBooking_Status_Adapter;
 import com.hap.checkinproc.Status_Adapter.FlightBooking_TravelerDetail_Adapter;
 import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class FlightBooking_Status_Activity extends AppCompatActivity implements View.OnClickListener {
-    List<Leave_Status_Model> mList = new ArrayList<>();
+public class FlightBooking_Status_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     RecyclerView rv;
-    FlightBooking_Status_Adapter adapter;
     TextView tvFromDate, tvToDate;
     private DatePickerDialog fromDatePickerDialog;
     Common_Class common_class;
@@ -36,18 +41,39 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        try {
+            super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_flight_booking_status);
-        init();
-        mList.add(new Leave_Status_Model("APPROVED", "03-01-2022 11:50:20", "2", "Mrs.MAHALAKSHMI"));
-        mList.add(new Leave_Status_Model("PENDING", "04-01-2022 10:40:00", "3", "Mr.RAJA"));
-        mList.add(new Leave_Status_Model("CANCEL", "01-01-2022 09:27:15", "3", "Mrs.AMUTHA"));
+            setContentView(R.layout.activity_flight_booking_status);
+            init();
 
-        adapter = new FlightBooking_Status_Adapter(mList, this);
-        rv.setAdapter(adapter);
+            JsonObject jParam = new JsonObject();
+
+            jParam.addProperty("FDT", tvFromDate.getText().toString());
+            jParam.addProperty("TDT", tvToDate.getText().toString());
+            common_class.getDb_310Data(Constants.FlightBookingStatus, this, jParam);
+
+
+            ImageView backView = findViewById(R.id.imag_back);
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnBackPressedDispatcher.onBackPressed();
+                }
+            });
+        } catch (Exception e) {
+
+        }
 
     }
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            });
+
 
     void init() {
         activity = this;
@@ -64,7 +90,7 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
 
     }
 
-    public void showTravelersDialog(int posl) {
+    public void showTravelersDialog(JSONArray arr) {
         try {
             LayoutInflater inflater = LayoutInflater.from(FlightBooking_Status_Activity.this);
 
@@ -73,15 +99,9 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             ImageView ivClose = view.findViewById(R.id.ivClose);
 
-
             RecyclerView rv = view.findViewById(R.id.rvFlightTravelers);
-            List<Leave_Status_Model> mTravList = new ArrayList<>();
 
-            mTravList.add(new Leave_Status_Model("SAN", "LAKSHMI R", "9876543210", "HAP"));
-            mTravList.add(new Leave_Status_Model("XYZ", "RAJESH P", "8907651234", "OTHER"));
-            mTravList.add(new Leave_Status_Model("ABC", "MANI M", "7890654321", "OTHER"));
-
-            rv.setAdapter(new FlightBooking_TravelerDetail_Adapter(mTravList, this));
+            rv.setAdapter(new FlightBooking_TravelerDetail_Adapter(arr, this));
 
             ivClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -120,6 +140,10 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
 
                 if (common_class.checkDates(pos == 0 ? date : tvFromDate.getText().toString(), pos == 1 ? date : tvToDate.getText().toString(), FlightBooking_Status_Activity.this)) {
                     tv.setText(date);
+                    JsonObject jParam = new JsonObject();
+                    jParam.addProperty("FDT", tvFromDate.getText().toString());
+                    jParam.addProperty("TDT", tvToDate.getText().toString());
+                    common_class.getDb_310Data(Constants.FlightBookingStatus, FlightBooking_Status_Activity.this, jParam);
                 } else {
                     common_class.showMsg(FlightBooking_Status_Activity.this, "Please select valid date");
                 }
@@ -128,4 +152,22 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
         fromDatePickerDialog.show();
     }
 
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        switch (key) {
+            case Constants.FlightBookingStatus:
+                try {
+                    JSONObject obj = new JSONObject(apiDataResponse);
+
+                    if (obj.getBoolean("success")) {
+
+                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this));
+                    }
+
+                } catch (Exception e) {
+
+                }
+                break;
+        }
+    }
 }
