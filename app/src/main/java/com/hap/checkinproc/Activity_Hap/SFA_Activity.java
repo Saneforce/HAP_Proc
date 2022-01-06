@@ -89,7 +89,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     OutletDashboardInfoAdapter cumulativeInfoAdapter;
     private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
     RecyclerView recyclerView;
-    TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls, tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls;
+    TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls,
+            tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls, tvUserName;
     private DatePickerDialog fromDatePickerDialog;
 
     public static String sfa_date = "";
@@ -161,6 +162,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         sfa_date = tvDate.getText().toString();
 
+        String sUName = UserDetails.getString("SfName", "");
+        tvUserName.setText("HI! " + sUName);
+
         common_class.getProductDetails(this);
         getNoOrderRemarks();
         showDashboardData();
@@ -174,8 +178,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
-        }
-        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
+        } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Distributors", R.drawable.ic_outline_my_location_24));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
         }
@@ -335,6 +338,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         recyclerView = findViewById(R.id.gvOutlet);
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
+        tvUserName = findViewById(R.id.tvUserName);
 
 
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");

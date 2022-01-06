@@ -492,6 +492,14 @@ public class Common_Class {
                         data.put("SF", UserDetails.getString("Sfcode", ""));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         break;
+                    case Constants.Freezer_Status:
+                        axnname = "get/freezerstatus";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
+                    case Constants.Freezer_capacity:
+                        axnname = "get/freezercapacity";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
                     case Constants.LEDGER:
                         axnname = "get/outletwiseledger";
                         data.put("SF", Shared_Common_Pref.Sf_Code);

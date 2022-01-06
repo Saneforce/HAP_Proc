@@ -156,7 +156,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             tvDate = findViewById(R.id.tvDate);
             tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
             btnRepeat = findViewById(R.id.btnRepeat);
-            Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
+            Out_Let_Name.setText("HI! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
 
             etCategoryItemSearch = findViewById(R.id.searchView);
             tvTimer = findViewById(R.id.tvTimer);
