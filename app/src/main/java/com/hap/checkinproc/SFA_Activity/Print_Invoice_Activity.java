@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -175,11 +176,25 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS"))
+                common_class.CommonIntentwithFinish(PosHistoryActivity.class);
+            else
+                finish();
+        }
+        return false;
+    }
+
+    @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.back:
-                finish();
+                if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS"))
+                    common_class.CommonIntentwithFinish(PosHistoryActivity.class);
+                else
+                    finish();
                 break;
             case R.id.ok:
                 createPdf();
@@ -657,35 +672,35 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 }
 
                 double taxAmt = 0.00;
-                try{
-                JSONArray taxArr = obj.getJSONArray("TAX_details");
-                for (int tax = 0; tax < taxArr.length(); tax++) {
-                    JSONObject taxObj = taxArr.getJSONObject(tax);
-                    String label = taxObj.getString("Tax_Name");
-                    Double amt = taxObj.getDouble("Tax_Amt");
+                try {
+                    JSONArray taxArr = obj.getJSONArray("TAX_details");
+                    for (int tax = 0; tax < taxArr.length(); tax++) {
+                        JSONObject taxObj = taxArr.getJSONObject(tax);
+                        String label = taxObj.getString("Tax_Name");
+                        Double amt = taxObj.getDouble("Tax_Amt");
 
-                    taxAmt += taxObj.getDouble("Tax_Amt");
-                    if (taxList.size() == 0) {
-                        taxList.add(new Product_Details_Modal(label, amt));
-                    } else {
+                        taxAmt += taxObj.getDouble("Tax_Amt");
+                        if (taxList.size() == 0) {
+                            taxList.add(new Product_Details_Modal(label, amt));
+                        } else {
 
-                        boolean isDuplicate = false;
-                        for (int totTax = 0; totTax < taxList.size(); totTax++) {
-                            if (taxList.get(totTax).getTax_Type().equals(label)) {
-                                double oldAmt = taxList.get(totTax).getTax_Amt();
-                                isDuplicate = true;
-                                taxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+                            boolean isDuplicate = false;
+                            for (int totTax = 0; totTax < taxList.size(); totTax++) {
+                                if (taxList.get(totTax).getTax_Type().equals(label)) {
+                                    double oldAmt = taxList.get(totTax).getTax_Amt();
+                                    isDuplicate = true;
+                                    taxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
 
+                                }
+                            }
+
+                            if (!isDuplicate) {
+                                taxList.add(new Product_Details_Modal(label, amt));
                             }
                         }
 
-                        if (!isDuplicate) {
-                            taxList.add(new Product_Details_Modal(label, amt));
-                        }
                     }
-
-                }}
-                catch (Exception e){
+                } catch (Exception e) {
 
                 }
                 Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",

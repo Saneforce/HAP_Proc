@@ -88,7 +88,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress,tvPosOrders;
+    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -155,7 +155,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ivMns = findViewById(R.id.ivScanQtyMns);
             etQty = findViewById(R.id.etScanQty);
             ImgVProd = findViewById(R.id.ivAddShoppingCart);
-            tvPosOrders=findViewById(R.id.tvPosOrders);
+            tvPosOrders = findViewById(R.id.tvPosOrders);
 
             ivScanner.setOnClickListener(this);
             rlQtyParent.setOnTouchListener(this);
@@ -374,7 +374,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
-
 
 
         } catch (Exception e) {
@@ -675,7 +674,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("ordertype", "pos");
-                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
+                      //  OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -764,9 +763,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     Log.e("JSON_VALUES", response.body().toString());
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     ResetSubmitBtn(1);
+
                                     if (jsonObjects.getString("success").equals("true")) {
                                         sharedCommonPref.clear_pref(Constants.LOC_POS_DATA);
-                                        common_class.CommonIntentwithFinish(SFA_Activity.class);
+                                        Shared_Common_Pref.TransSlNo = jsonObjects.getString("OrderID");
+                                        sharedCommonPref.save(Constants.FLAG, "POS");
+                                        common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
 
@@ -987,6 +989,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ResetSubmitBtn(0);
         }
     }
+
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {

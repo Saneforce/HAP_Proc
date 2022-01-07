@@ -19,7 +19,7 @@ public class ApiClient {
 
     public static Retrofit getClient() {
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
-            BASE_URL = "http://hapsfa.sanfmcg.com/server/";
+            BASE_URL = "http://primary.hap.in/server/";
         }
         Log.d("BaseURL", BASE_URL);
         if (retrofit == null) {

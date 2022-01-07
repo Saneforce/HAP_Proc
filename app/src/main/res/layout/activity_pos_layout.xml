@@ -818,6 +818,7 @@
                                 android:visibility="visible"></View>
 
                             <RelativeLayout
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp">

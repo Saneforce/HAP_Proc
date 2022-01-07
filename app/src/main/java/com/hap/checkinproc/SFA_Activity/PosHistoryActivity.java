@@ -25,15 +25,12 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PosOrder_History_Adapter;
-import com.hap.checkinproc.SFA_Adapter.PrimaryOrder_History_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class PosHistoryActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
@@ -269,12 +266,8 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
-                finish();
-            else
-                common_class.CommonIntentwithFinish(FPPrimaryOrderActivity.class);
+            common_class.CommonIntentwithFinish(POSActivity.class);
             overridePendingTransition(R.anim.in, R.anim.out);
-
             return true;
         }
         return false;
