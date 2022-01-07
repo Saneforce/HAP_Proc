@@ -524,7 +524,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (findViewById(R.id.llFreezer).getVisibility() == View.VISIBLE) {
+                    } else if (divERP.equalsIgnoreCase("47")) {
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
                         else if (edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
