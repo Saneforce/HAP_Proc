@@ -114,4 +114,6 @@ public class Constants {
     public static final String FlightBookingStatus = "flightBookingStatus";
     public static final String Freezer_Status = "freezerStatus";
     public static final String Freezer_capacity = "freezerCapacity";
+    public static final String GetPosOrderHistory = "getPosOrderHistory";
+    public static final String PosOrderDetails_List = "posOrderDetailList";
 }

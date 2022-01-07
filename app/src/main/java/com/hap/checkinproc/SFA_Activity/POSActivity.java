@@ -88,7 +88,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress;
+    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress,tvPosOrders;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -155,6 +155,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ivMns = findViewById(R.id.ivScanQtyMns);
             etQty = findViewById(R.id.etScanQty);
             ImgVProd = findViewById(R.id.ivAddShoppingCart);
+            tvPosOrders=findViewById(R.id.tvPosOrders);
 
             ivScanner.setOnClickListener(this);
             rlQtyParent.setOnTouchListener(this);
@@ -166,6 +167,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             rlCategoryItemSearch.setOnClickListener(this);
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
+            tvPosOrders.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
@@ -559,6 +561,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvPosOrders:
+                startActivity(new Intent(getApplicationContext(), PosHistoryActivity.class));
+                break;
             case R.id.ivScanner:
                 Intent intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("scan", "scan");

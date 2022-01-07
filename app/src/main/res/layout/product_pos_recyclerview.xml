@@ -200,13 +200,15 @@
                         </LinearLayout>
 
                         <RelativeLayout
+                            android:layout_gravity="center_vertical"
                             android:id="@+id/rlUOM"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="25dp"
                             android:layout_marginLeft="@dimen/C3dp"
                             android:background="@drawable/order_qty_backround">
 
                             <TextView
+
                                 android:id="@+id/tvUOM"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
