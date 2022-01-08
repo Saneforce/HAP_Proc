@@ -112,13 +112,13 @@ public class FileUploadService extends JobIntentService {
     }
     private void onErrors(Throwable throwable) {
     //sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
-        if(throwable.getMessage().indexOf("No such file or directory")>-1){
-            sendBroadcastMeaasge(throwable.getMessage());
+        //if(throwable.getMessage().indexOf("No such file or directory")>-1){
+            //sendBroadcastMeaasge(throwable.getMessage());
 
             sendOtherPhotos();
-        }else {
-            UploadPhoto();
-        }
+        //}else {
+            //if(Err>3)UploadPhoto();
+        //}
 
         //ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         /*apiInterface.sendUpldPhotoErrorMsg("send/photouplerr",throwable.getMessage())

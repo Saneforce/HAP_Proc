@@ -14,7 +14,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    public static String BASE_URL = "http://ff.hap.in/server/";
+    //public static String BASE_URL = "http://ff.hap.in/server/";
+    public static String BASE_URL="http://hsfa.sanfmcg.com/server/";
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {

@@ -125,7 +125,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
+<TextView
+    android:id="@+id/usrName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/basic"
+    android:hint="Select Distributor"
+    android:textAllCaps="true"
+    android:textColor="@color/black"
+    android:textColorHint="@color/black"
+    android:textSize="13sp"
+    android:paddingRight="@dimen/C5dp"
+    />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

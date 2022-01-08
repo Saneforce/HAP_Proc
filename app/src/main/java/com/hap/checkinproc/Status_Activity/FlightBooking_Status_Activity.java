@@ -2,6 +2,8 @@ package com.hap.checkinproc.Status_Activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,6 +40,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
     private DatePickerDialog fromDatePickerDialog;
     Common_Class common_class;
     public static FlightBooking_Status_Activity activity;
+    SharedPreferences  UserDetails;
+    public static final String UserInfo = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
             setContentView(R.layout.activity_flight_booking_status);
             init();
 
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
             JsonObject jParam = new JsonObject();
 
             jParam.addProperty("FDT", tvFromDate.getText().toString());
@@ -129,7 +134,12 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
                 break;
         }
     }
-
+    void RefreshData(){
+        JsonObject jParam = new JsonObject();
+        jParam.addProperty("FDT", tvFromDate.getText().toString());
+        jParam.addProperty("TDT", tvToDate.getText().toString());
+        common_class.getDb_310Data(Constants.FlightBookingStatus, FlightBooking_Status_Activity.this, jParam);
+    }
     void showDatePickerDialog(int pos, TextView tv) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(FlightBooking_Status_Activity.this, new DatePickerDialog.OnDateSetListener() {
@@ -140,11 +150,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
 
                 if (common_class.checkDates(pos == 0 ? date : tvFromDate.getText().toString(), pos == 1 ? date : tvToDate.getText().toString(), FlightBooking_Status_Activity.this)) {
                     tv.setText(date);
-                    JsonObject jParam = new JsonObject();
-                    jParam.addProperty("FDT", tvFromDate.getText().toString());
-                    jParam.addProperty("TDT", tvToDate.getText().toString());
-                    common_class.getDb_310Data(Constants.FlightBookingStatus, FlightBooking_Status_Activity.this, jParam);
-                } else {
+                    RefreshData();
+                    } else {
                     common_class.showMsg(FlightBooking_Status_Activity.this, "Please select valid date");
                 }
             }
@@ -160,8 +167,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
                     JSONObject obj = new JSONObject(apiDataResponse);
 
                     if (obj.getBoolean("success")) {
-
-                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this));
+                        String sSF=UserDetails.getString("Sfcode", "");
+                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this,sSF));
                     }
 
                 } catch (Exception e) {
