@@ -56,6 +56,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__status_);
+        mShared_common_pref = new Shared_Common_Pref(this);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -80,7 +81,6 @@ public class Leave_Status_Activity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
-        mShared_common_pref = new Shared_Common_Pref(this);
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);

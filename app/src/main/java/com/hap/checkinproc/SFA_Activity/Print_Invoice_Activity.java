@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -141,13 +142,17 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 address = retaileAddress.getText().toString();
                 phone = "Mobile:" + tvRetailorPhone.getText().toString();
 
-            } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order")) {
+            } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") || sharedCommonPref.getvalue(Constants.FLAG).equals("POS")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
                 findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                 tvDistAdd.setVisibility(View.VISIBLE);
                 tvDistId.setVisibility(View.VISIBLE);
-                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
+                if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order"))
+                    common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
+                else
+                    common_class.getDataFromApi(Constants.PosOrderDetails_List, this, false);
+
                 findViewById(R.id.llDelivery).setVisibility(View.GONE);
                 storeName = tvDistributorName.getText().toString();
                 address = tvDistAdd.getText().toString();
@@ -171,11 +176,25 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS"))
+                common_class.CommonIntentwithFinish(PosHistoryActivity.class);
+            else
+                finish();
+        }
+        return false;
+    }
+
+    @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.back:
-                finish();
+                if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS"))
+                    common_class.CommonIntentwithFinish(PosHistoryActivity.class);
+                else
+                    finish();
                 break;
             case R.id.ok:
                 createPdf();
@@ -235,7 +254,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
                     printama.setBold();
-                    printama.printTextln(Order_Outlet_Filter.get(i).getName());
+                    printama.printTextln(Order_Outlet_Filter.get(i).getName().toString().trim());
                     printama.addNewLine();
 
                     printama.setNormalText();
@@ -605,6 +624,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     case Constants.TodayPrimaryOrderDetails_List:
                         orderInvoiceDetailData(apiDataResponse);
                         break;
+                    case Constants.PosOrderDetails_List:
+                        orderInvoiceDetailData(apiDataResponse);
+                        break;
                     case Constants.OUTSTANDING:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
@@ -649,37 +671,41 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 } catch (Exception e) {
                 }
 
-                double taxAmt=0.00;
-                JSONArray taxArr = obj.getJSONArray("TAX_details");
-                for (int tax = 0; tax < taxArr.length(); tax++) {
-                    JSONObject taxObj = taxArr.getJSONObject(tax);
-                    String label = taxObj.getString("Tax_Name");
-                    Double amt = taxObj.getDouble("Tax_Amt");
+                double taxAmt = 0.00;
+                try {
+                    JSONArray taxArr = obj.getJSONArray("TAX_details");
+                    for (int tax = 0; tax < taxArr.length(); tax++) {
+                        JSONObject taxObj = taxArr.getJSONObject(tax);
+                        String label = taxObj.getString("Tax_Name");
+                        Double amt = taxObj.getDouble("Tax_Amt");
 
-                    taxAmt+=taxObj.getDouble("Tax_Amt");
-                    if (taxList.size() == 0) {
-                        taxList.add(new Product_Details_Modal(label, amt));
-                    } else {
+                        taxAmt += taxObj.getDouble("Tax_Amt");
+                        if (taxList.size() == 0) {
+                            taxList.add(new Product_Details_Modal(label, amt));
+                        } else {
 
-                        boolean isDuplicate = false;
-                        for (int totTax = 0; totTax < taxList.size(); totTax++) {
-                            if (taxList.get(totTax).getTax_Type().equals(label)) {
-                                double oldAmt = taxList.get(totTax).getTax_Amt();
-                                isDuplicate = true;
-                                taxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+                            boolean isDuplicate = false;
+                            for (int totTax = 0; totTax < taxList.size(); totTax++) {
+                                if (taxList.get(totTax).getTax_Type().equals(label)) {
+                                    double oldAmt = taxList.get(totTax).getTax_Amt();
+                                    isDuplicate = true;
+                                    taxList.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
 
+                                }
+                            }
+
+                            if (!isDuplicate) {
+                                taxList.add(new Product_Details_Modal(label, amt));
                             }
                         }
 
-                        if (!isDuplicate) {
-                            taxList.add(new Product_Details_Modal(label, amt));
-                        }
                     }
+                } catch (Exception e) {
 
                 }
                 Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
                         "1", "5", "i", 7.99, 1.8, obj.getDouble("Rate"),
-                        obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt,(taxAmt)));
+                        obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt)));
 
 
             }

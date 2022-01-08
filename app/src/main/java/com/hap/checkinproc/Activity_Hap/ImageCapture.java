@@ -1018,6 +1018,8 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                                     Callto.enqueue(new Callback<JsonArray>() {
                                         @Override
                                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                            common_class.clearLocData(ImageCapture.this);
+
                                             mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
                                             mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
                                             mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);

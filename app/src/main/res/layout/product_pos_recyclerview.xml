@@ -199,34 +199,40 @@
                                 app:tint="@color/green" />
                         </LinearLayout>
 
-                        <RelativeLayout
+                        <LinearLayout
                             android:id="@+id/rlUOM"
+                            android:layout_marginLeft="@dimen/C3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C3dp"
+                            android:layout_gravity="center_vertical"
                             android:background="@drawable/order_qty_backround">
+
+
 
                             <TextView
                                 android:id="@+id/tvUOM"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:fontFamily="sans-serif"
+                                android:background="@color/white"
                                 android:gravity="center_vertical"
                                 android:hint="UOM"
                                 android:paddingLeft="@dimen/C5dp"
                                 android:paddingRight="@dimen/C5dp"
-                                android:textColor="@color/txt_color_black"
-                                android:visibility="visible" />
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"
+                                tools:ignore="RtlCompat" />
 
                             <ImageView
+                                android:layout_toRightOf="@id/tvUOM"
+                                android:padding="@dimen/C1dp"
                                 android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/tvUOM"
-                                android:padding="1dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/spin_down_arrow"
+                                />
+                        </LinearLayout>
 
-                                android:src="@drawable/spin_down_arrow"></ImageView>
-                        </RelativeLayout>
 
                         <RelativeLayout
 

@@ -50,6 +50,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
+import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -347,6 +348,14 @@ public class Common_Class {
                     QueryString.put("todate", TodayPrimOrdActivity.endDate);
 
                     break;
+                case Constants.GetPosOrderHistory:
+                    QuerySTring1 = "{\"tableName\":\"gettotalposorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+//                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+//                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("fromdate", PosHistoryActivity.stDate);
+                    QueryString.put("todate", PosHistoryActivity.endDate);
+
+                    break;
 
                 case Constants.Outlet_Total_Orders:
                     QuerySTring1 = "{\"tableName\":\"gettotaloutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -364,6 +373,12 @@ public class Common_Class {
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+                case Constants.PosOrderDetails_List:
+                    QuerySTring1 = "{\"tableName\":\"gettotalposorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -464,6 +479,11 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.CUSTOMER_DATA:
+                        axnname = "get/customerdetails";
+                        data.put("customer_code", jparam.get("customer_code").getAsString());
+                        data.put("ERP_Code", jparam.get("ERP_Code").getAsString());
+                        break;
                     case Constants.UOM:
                         axnname = "get/productuom";
                         data.put("divisionCode", UserDetails.getString("Divcode", ""));
@@ -491,6 +511,14 @@ public class Common_Class {
                         axnname = "get/distributor";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
                         data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
+                    case Constants.Freezer_Status:
+                        axnname = "get/freezerstatus";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
+                    case Constants.Freezer_capacity:
+                        axnname = "get/freezercapacity";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.LEDGER:
                         axnname = "get/outletwiseledger";
@@ -1220,6 +1248,16 @@ public class Common_Class {
 
             }
         });
+    }
+
+    public void clearLocData(Activity activity) {
+        Shared_Common_Pref sharedCommonPref=new Shared_Common_Pref(activity);
+        sharedCommonPref.clear_pref(Constants.STATE_LIST);
+        sharedCommonPref.clear_pref(Constants.RETAIL_CHANNEL);
+        sharedCommonPref.clear_pref(Constants.RETAIL_CLASS);
+        sharedCommonPref.clear_pref(Constants.Freezer_Status);
+        sharedCommonPref.clear_pref(Constants.Freezer_capacity);
+
     }
 
 

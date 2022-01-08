@@ -132,6 +132,9 @@
         <activity
             android:name=".SFA_Activity.TodayPrimOrdActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.PosHistoryActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".SFA_Activity.Invoice_History"

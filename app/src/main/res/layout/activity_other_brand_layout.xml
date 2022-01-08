@@ -12,26 +12,33 @@
 
         <include layout="@layout/sfatoolbar"></include>
 
-        <include layout="@layout/procuct_category_types"></include>
-
-
         <LinearLayout
-            android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/C10dp"
-            android:orientation="horizontal">
+            android:background="@drawable/blue_bg"
+            android:orientation="horizontal"
+            android:padding="@dimen/C3dp">
 
             <TextView
-                android:id="@+id/outlet_name"
+
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:text="Other Brand"
-                android:textColor="@color/black"
-                android:textSize="17dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/basic"
+                android:paddingLeft="@dimen/C5dp"
+                android:text="OTHER BrAND"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
+                android:textColor="#FFF"
+                android:textSize="18dp"
+
                 android:textStyle="bold" />
+
         </LinearLayout>
+
+
+        <include layout="@layout/procuct_category_types"></include>
+
 
 
         <RelativeLayout

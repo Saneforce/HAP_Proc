@@ -12,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,28 +24,24 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.PrimaryOrder_History_Adapter;
+import com.hap.checkinproc.SFA_Adapter.PosOrder_History_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class TodayPrimOrdActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
+public class PosHistoryActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
     TextView tvStartDate, tvEndDate, distributor_text, route_text;
     Common_Class common_class;
 
-    PrimaryOrder_History_Adapter mReportViewAdapter;
+    PosOrder_History_Adapter mReportViewAdapter;
     RecyclerView invoicerecyclerview;
     Shared_Common_Pref sharedCommonPref;
-    public static TodayPrimOrdActivity mTdPriAct;
+    public static PosHistoryActivity mTdPriAct;
     public static String stDate = "", endDate = "";
     DatePickerDialog fromDatePickerDialog;
     String date = "";
@@ -58,9 +53,9 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_today_primorder_history);
+            setContentView(R.layout.activity_pos_history);
             mTdPriAct = this;
-            sharedCommonPref = new Shared_Common_Pref(TodayPrimOrdActivity.this);
+            sharedCommonPref = new Shared_Common_Pref(PosHistoryActivity.this);
             common_class = new Common_Class(this);
 
             tvStartDate = findViewById(R.id.tvStartDate);
@@ -83,7 +78,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
-            common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, this, false);
+            common_class.getDataFromApi(Constants.GetPosOrderHistory, this, false);
 
 
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
@@ -121,7 +116,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-                common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
+                common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
@@ -160,29 +155,29 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
     void selectDate(int val) {
         Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(TodayPrimOrdActivity.this, new DatePickerDialog.OnDateSetListener() {
+        fromDatePickerDialog = new DatePickerDialog(PosHistoryActivity.this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 int month = monthOfYear + 1;
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (common_class.checkDates(date, tvEndDate.getText().toString(),TodayPrimOrdActivity.this) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(), PosHistoryActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
-                        common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
+                        common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
                     } else
-                        common_class.showMsg(TodayPrimOrdActivity.this, "Please select valid date");
+                        common_class.showMsg(PosHistoryActivity.this, "Please select valid date");
                 } else {
-                    if (common_class.checkDates(tvStartDate.getText().toString(), date,TodayPrimOrdActivity.this) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date, PosHistoryActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();
-                        common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
+                        common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
 
                     } else
-                        common_class.showMsg(TodayPrimOrdActivity.this, "Please select valid date");
+                        common_class.showMsg(PosHistoryActivity.this, "Please select valid date");
 
                 }
 
@@ -228,18 +223,18 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                         loadroute();
                         break;
 
-                    case Constants.GetTodayPrimaryOrder_List:
+                    case Constants.GetPosOrderHistory:
 
                         JSONArray arr = new JSONArray(apiDataResponse);
 
-                        mReportViewAdapter = new PrimaryOrder_History_Adapter(TodayPrimOrdActivity.this, arr, apiDataResponse, new AdapterOnClick() {
+                        mReportViewAdapter = new PosOrder_History_Adapter(PosHistoryActivity.this, arr, apiDataResponse, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
                                 try {
                                     JSONObject obj = arr.getJSONObject(position);
                                     Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
                                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    sharedCommonPref.save(Constants.FLAG, "Primary Order");
+                                    sharedCommonPref.save(Constants.FLAG, "POS");
                                     intent.putExtra("Order_Values", obj.getString("Order_Value"));
                                     intent.putExtra("Invoice_Values", obj.getString("invoicevalues"));
                                     //intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
@@ -271,41 +266,11 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
-                finish();
-            else
-                common_class.CommonIntentwithFinish(FPPrimaryOrderActivity.class);
+            common_class.CommonIntentwithFinish(POSActivity.class);
             overridePendingTransition(R.anim.in, R.anim.out);
-
             return true;
         }
         return false;
     }
 
-    public void updateData(String orderNo, String cutoff_time) {
-        try {
-            if (Common_Class.isNullOrEmpty(cutoff_time)) {
-                common_class.showMsg(this, "Time UP...");
-            } else {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                Date d1 = sdf.parse(Common_Class.GetTime());
-                Date d2 = sdf.parse(cutoff_time);
-                long elapsed = d2.getTime() - d1.getTime();
-                if (elapsed >= 0) {
-                    sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
-                    Intent intent = new Intent(this, PrimaryOrderActivity.class);
-                    intent.putExtra(Constants.ORDER_ID, orderNo);
-                    Shared_Common_Pref.TransSlNo = orderNo;
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.in, R.anim.out);
-
-                } else {
-                    common_class.showMsg(this, "Time UP...");
-                }
-            }
-        } catch (Exception e) {
-            Log.v("TDPrimActivity:Edit:", e.getMessage());
-        }
-
-    }
 }

@@ -88,7 +88,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress;
+    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -100,12 +100,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose, ivScanner, ivMns, ivPlus, ImgVProd;
-    EditText etCategoryItemSearch, etName, etPhone, etAddress, etQty;
+    EditText etCategoryItemSearch, etName, etPhone, etAddress, etQty, etRecAmt;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     public int selectedPos = 0, uomPos;
-    private TextView tvTotalAmount;
+    private TextView tvTotalAmount, tvBalAmt;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
@@ -114,6 +114,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private List<Product_Details_Modal> orderTotTax;
     private String scanProId = "";
     private ArrayList<Common_Model> uomList;
+
+    private List<Common_Model> payList = new ArrayList<>();
+    private double payAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,10 +157,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ivPlus = findViewById(R.id.ivScanQtyPls);
             ivMns = findViewById(R.id.ivScanQtyMns);
             etQty = findViewById(R.id.etScanQty);
+            etRecAmt = findViewById(R.id.etRecAmt);
             ImgVProd = findViewById(R.id.ivAddShoppingCart);
+            tvPosOrders = findViewById(R.id.tvPosOrders);
+            tvPayMode = findViewById(R.id.tvPayMode);
+            tvBalAmt = findViewById(R.id.tvBalance);
+
 
             ivScanner.setOnClickListener(this);
             rlQtyParent.setOnTouchListener(this);
+            tvPayMode.setOnClickListener(this);
 
 
             Product_ModalSetAdapter = new ArrayList<>();
@@ -166,9 +175,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             rlCategoryItemSearch.setOnClickListener(this);
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
+            tvPosOrders.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
+
+
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -208,6 +220,34 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     showOrderItemList(selectedPos, s.toString());
 
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            etRecAmt.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    try {
+                        payAmt = 0;
+
+                        if (!Common_Class.isNullOrEmpty(s.toString())) {
+                            payAmt = Double.parseDouble(s.toString());
+                        }
+
+                        tvBalAmt.setText(formatter.format(( payAmt-totalvalues)));
+
+                    } catch (Exception e) {
+
+                    }
                 }
 
                 @Override
@@ -372,7 +412,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
-
 
 
         } catch (Exception e) {
@@ -559,6 +598,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvPayMode:
+                common_class.getDb_310Data(Constants.PAYMODES, this);
+                break;
+            case R.id.tvPosOrders:
+                startActivity(new Intent(getApplicationContext(), PosHistoryActivity.class));
+                break;
             case R.id.ivScanner:
                 Intent intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("scan", "scan");
@@ -670,7 +715,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("ordertype", "pos");
-                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
+                        OutletItem.put("payMode", tvPayMode.getText().toString());
+                        OutletItem.put("RecAmt",
+                                tvPayMode.getText().toString().equalsIgnoreCase("cash") ? etRecAmt.getText().toString() : "0");
+                        OutletItem.put("Balance", tvPayMode.getText().toString().equalsIgnoreCase("cash") ?
+                                tvBalAmt.getText().toString() : "0");
+                        //  OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -759,9 +809,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     Log.e("JSON_VALUES", response.body().toString());
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     ResetSubmitBtn(1);
+
                                     if (jsonObjects.getString("success").equals("true")) {
                                         sharedCommonPref.clear_pref(Constants.LOC_POS_DATA);
-                                        common_class.CommonIntentwithFinish(SFA_Activity.class);
+                                        Shared_Common_Pref.TransSlNo = jsonObjects.getString("OrderID");
+                                        sharedCommonPref.save(Constants.FLAG, "POS");
+                                        common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
 
@@ -982,12 +1035,31 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ResetSubmitBtn(0);
         }
     }
+
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
 
 
             switch (key) {
+                case Constants.PAYMODES:
+                    payList.clear();
+                    JSONObject obj = new JSONObject(apiDataResponse);
+                    if (obj.getBoolean("success")) {
+                        JSONArray jsonArray = obj.getJSONArray("Data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject dataObj = jsonArray.getJSONObject(i);
+                            payList.add(new Common_Model(dataObj.getString("Name"), dataObj.getString("Code")));
+                        }
+                    } else {
+                        common_class.showMsg(this, "No Records Found");
+                    }
+                    if (payList.size() > 0) {
+                        common_class.showCommonDialog(payList, 20, this);
+                    }
+
+                    break;
+
 
                 case Constants.POS_SCHEME:
                     Log.v(TAG + "scheme:", apiDataResponse);
@@ -1191,6 +1263,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                 mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
                 break;
+            case 20:
+                tvPayMode.setText("" + myDataset.get(position).getName());
+                if (myDataset.get(position).getName().equalsIgnoreCase("cash"))
+                    findViewById(R.id.llPayAmtDetail).setVisibility(View.VISIBLE);
+                else
+                    findViewById(R.id.llPayAmtDetail).setVisibility(View.GONE);
+                break;
+
         }
     }
 
@@ -1719,7 +1799,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             EditText Qty;
 
             LinearLayout llRegular;
-            RelativeLayout rlUOM;
+            LinearLayout rlUOM;
 
             public MyViewHolder(View view) {
                 super(view);

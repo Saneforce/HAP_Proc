@@ -1,6 +1,9 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.Common_Class.Constants.CUSTOMER_DATA;
+import static com.hap.checkinproc.Common_Class.Constants.Freezer_Status;
+import static com.hap.checkinproc.Common_Class.Constants.Freezer_capacity;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 import android.animation.ArgbEvaluator;
@@ -19,6 +22,8 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +98,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     EditText toolSearch;
     GoogleMap mGoogleMap;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, linServiceType;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, linServiceType, rlFreezerCapacity, rlFreezerSta;
     LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible, linClsRmks;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
             txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType, tvFreezerCapacity, tvFreezerSta;
@@ -115,6 +120,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     SharedPreferences UserDetails, CheckInDetails;
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
+    String outletCode = "";
     ImageView copypaste, ivCapture, ivFreezerCapture;
     String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
@@ -129,12 +135,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private String place_id = "";
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    List<Common_Model> distributor_master = new ArrayList<>();
+    List<Common_Model> freezerCapcityList = new ArrayList<>();
+    List<Common_Model> freezerStaList = new ArrayList<>();
     CircularProgressButton btnRefLoc, mSubmit;
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
-    private ArrayList<Common_Model> stateList;
+    private ArrayList<Common_Model> stateList = new ArrayList<>();
     private ArrayList<Common_Model> serviceTypeList;
 
     private String name = "";
@@ -145,9 +152,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private FilesAdapter filesAdapter;
     public String categoryType = "";
 
-    String divERP = "";
+    String divERP = "", freezerStaId = "", freezerCapId = "", distributorERP = "";
     Button btnDistCode;
-
+    Boolean isValidCode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,12 +220,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
             btnRefLoc = findViewById(R.id.btnRefLoc);
             linServiceType = findViewById(R.id.linear_service_type);
+            rlFreezerCapacity = findViewById(R.id.rlFreezerCapacity);
+            rlFreezerSta = findViewById(R.id.rlFreezerStatus);
+
             tvServiceType = findViewById(R.id.txt_service_type);
             btnDistCode = findViewById(R.id.btn_dist_enter);
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
             ivFreezerCapture.setOnClickListener(this);
             btnDistCode.setOnClickListener(this);
+            rlFreezerCapacity.setOnClickListener(this);
+            rlFreezerSta.setOnClickListener(this);
 
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -302,10 +314,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             });
 
+
             gson = new Gson();
             shared_common_pref = new Shared_Common_Pref(this);
+            outletCode = Shared_Common_Pref.OutletCode;
             service = ApiClient.getClient().create(ApiInterface.class);
-            gson = new Gson();
+
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
@@ -334,8 +348,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 headtext.setText("Outlet Info");
             }
             //  getRouteDetails();
-            getRetailerClass();
-            getRetailerChannel();
+//            getRetailerClass();
+//            getRetailerChannel();
             // getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
@@ -424,44 +438,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     //The key argument here must match that used in the other activity
                 } else {
 
-                    name = "http://hapapps.sanfmcg.com/" + Retailer_Modal_List.get(getOutletPosition()).getImagename();
-                    name = name.replaceAll(",", "");
-                    Picasso.with(AddNewRetailer.this)
-                            .load(name)
-                            .error(R.drawable.profile_img)
-                            .into(ivPhotoShop);
-                    addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
-                    addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
-                    txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                    addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
-                    retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
-                    if (Retailer_Modal_List.get(getOutletPosition()).getSecondary_No() != null)
-                        etPhoneNo2.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSecondary_No());
-                    if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
-                        addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
-                    if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
-                        addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
-                    if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
-                        owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
-                    edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
-                    edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
-                    // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
-
-
-                    if (i.getExtras().getString("Compititor_Id") != null)
-                        Compititor_Id = i.getExtras().getString("Compititor_Id");
-                    if (i.getExtras().getString("Compititor_Name") != null)
-                        Compititor_Name = i.getExtras().getString("Compititor_Name");
-                    if (i.getExtras().getString("CatUniverSelectId") != null)
-                        CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-                    if (i.getExtras().getString("AvailUniverSelectId") != null)
-                        AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-                    if (i.getExtras().getString("reason_category") != null)
-                        reason_category_remarks = i.getExtras().getString("reason_category");
+                    assignData();
                 }
 
             }
-
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
@@ -506,7 +486,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
             }
 
-
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -544,7 +523,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (findViewById(R.id.llFreezer).getVisibility() == View.VISIBLE) {
+                    } else if (divERP.equalsIgnoreCase("47")) {
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
                         else if (edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
@@ -621,6 +600,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 rlDistributor.setOnClickListener(this);
+                btnDistCode.setVisibility(View.VISIBLE);
                 common_class.getDb_310Data(Rout_List, this);
 
             }
@@ -640,10 +620,82 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
 
-            common_class.getDb_310Data(Constants.STATE_LIST, this);
+
             mData.add(new QPS_Modal("", "", ""));
             mFreezerData.add(new QPS_Modal("", "", ""));
             getFreezerData(divERP);
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_capacity)))
+                common_class.getDb_310Data(Freezer_capacity, this);
+            else {
+                JSONObject capObj = new JSONObject(shared_common_pref.getvalue(Freezer_capacity));
+                if (capObj.getBoolean("success")) {
+                    JSONArray arr = capObj.getJSONArray("Data");
+                    for (int c = 0; c < arr.length(); c++) {
+                        JSONObject obj = arr.getJSONObject(c);
+                        freezerCapcityList.add(new Common_Model(obj.getString("FCapacity"), obj.getString("ID")));
+                    }
+                }
+            }
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_Status)))
+                common_class.getDb_310Data(Freezer_Status, this);
+            else {
+                JSONObject staObj = new JSONObject(shared_common_pref.getvalue(Freezer_Status));
+                if (staObj.getBoolean("success")) {
+                    JSONArray arr = staObj.getJSONArray("Data");
+                    for (int s = 0; s < arr.length(); s++) {
+                        JSONObject obj = arr.getJSONObject(s);
+                        freezerStaList.add(new Common_Model(obj.getString("FStatus"), obj.getString("ID")));
+                    }
+                }
+            }
+
+            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
+            }.getType();
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CLASS)))
+                getRetailerClass();
+            else {
+                modelRetailClass = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CLASS), commonType);
+
+            }
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))
+                getRetailerChannel();
+            else {
+                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+            }
+
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.STATE_LIST)))
+                common_class.getDb_310Data(Constants.STATE_LIST, this);
+            else {
+                stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
+            }
+
+            distributorERP = shared_common_pref.getvalue(Constants.DistributorERP);
+
+            edtDistCode.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (btnDistCode.getText().toString().equalsIgnoreCase("Valid Code")) {
+                        btnDistCode.setText("Invalid Code");
+                        isValidCode = false;
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -817,6 +869,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
 
 
+                    if (modelRetailClass != null && modelRetailClass.size() > 0)
+                        shared_common_pref.save(Constants.RETAIL_CLASS, gson.toJson(modelRetailClass));
                 }
 
                 @Override
@@ -845,7 +899,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     public int getOutletPosition() {
         for (int i = 0; Retailer_Modal_List.size() > i; i++) {
-            if (Retailer_Modal_List.get(i).getId().equals(Shared_Common_Pref.OutletCode)) {
+            if (Retailer_Modal_List.get(i).getId().equals(outletCode)) {
                 return i;
             }
         }
@@ -883,6 +937,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
                         Log.e("LeaveType_Request", retailerClass);
                         modelRetailChannel.add(mCommon_model_spinner);
+                    }
+
+                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
                     }
                 } catch (Exception e) {
                     Log.v(TAG + " getRetailerChannel: ", e.getMessage());
@@ -1007,7 +1065,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_specialty_code", channelID);
             reportObject.put("unlisted_qulifi", "'samp'");
             reportObject.put("unlisted_class", classId);
-            reportObject.put("id", common_class.addquote(Shared_Common_Pref.OutletCode));
+            reportObject.put("id", common_class.addquote(outletCode));
+
+            reportObject.put("customer_code", isValidCode ? edtDistCode.getText().toString() : "");
+
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
@@ -1017,10 +1078,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("img_name", "'" + imageServer + "'");
             reportObject.put("fssai_number", "'" + edtFSSAI.getText().toString() + "'");
             reportObject.put("pan_number", "'" + edtPAN.getText().toString() + "'");
+
             reportObject.put("freezer_make", "'" + edtFreezerMake.getText().toString() + "'");
             reportObject.put("freezer_tagno", "'" + edtFreezerTag.getText().toString() + "'");
             reportObject.put("freezer_status", "'" + tvFreezerSta.getText().toString() + "'");
             reportObject.put("freezer_capacity", "'" + tvFreezerCapacity.getText().toString() + "'");
+            reportObject.put("freezer_statusId", "'" + freezerStaId + "'");
+            reportObject.put("freezer_capacityId", "'" + freezerCapId + "'");
+
+
             reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate") ? 1 : 0 + "'"));
 
             reportObject.put(Constants.LOGIN_TYPE, "'" + shared_common_pref.getvalue(Constants.LOGIN_TYPE) + "'");
@@ -1154,8 +1220,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 common_class.getDb_310Data(Constants.Rout_List, this);
 
                 divERP = myDataset.get(position).getDivERP();
+                distributorERP = myDataset.get(position).getCont();
 
                 getFreezerData(divERP);
+
 
                 // getServiceTypes(myDataset.get(position).getId());
                 break;
@@ -1182,6 +1250,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     linClsRmks.setVisibility(View.VISIBLE);
                 }
                 break;
+            case 14:
+                freezerCapId = myDataset.get(position).getId();
+                tvFreezerCapacity.setText(myDataset.get(position).getName());
+                break;
+            case 15:
+                freezerStaId = myDataset.get(position).getId();
+                tvFreezerSta.setText(myDataset.get(position).getName());
+                break;
         }
     }
 
@@ -1195,13 +1271,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
             findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
         } else {
-            linReatilerRoute.setEnabled(false);
+            if (!Shared_Common_Pref.Outler_AddFlag.equals("1"))
+                linReatilerRoute.setEnabled(false);
             findViewById(R.id.llCategoryType).setVisibility(View.GONE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
             findViewById(R.id.llFreezer).setVisibility(View.GONE);
             mFreezerData.clear();
             mFreezerData = new ArrayList<>();
             mFreezerData.add(new QPS_Modal("", "", ""));
+
+            edtFreezerMake.setText("");
+            edtFreezerTag.setText("");
+            tvFreezerSta.setText("");
+            tvFreezerCapacity.setText("");
+            freezerCapId = "";
+            freezerStaId = "";
 
         }
     }
@@ -1274,20 +1358,16 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.btn_dist_enter:
-
-                List<Common_Model> list = common_class.getDistList();
-                boolean isMatch = false;
-                for (int i = 0; i < list.size(); i++) {
-                    if (edtDistCode.getText().toString().equalsIgnoreCase(list.get(i).getCont())) {
-                        isMatch = true;
-                    }
+                if (Common_Class.isNullOrEmpty(edtDistCode.getText().toString()))
+                    common_class.showMsg(this, "Enter Customer Code");
+                else {
+                    JsonObject data = new JsonObject();
+                    data.addProperty("customer_code", edtDistCode.getText().toString().trim());
+                    data.addProperty("ERP_Code", distributorERP);
+                    common_class.getDb_310Data(Constants.CUSTOMER_DATA, this, data);
                 }
-                if (isMatch)
-                    common_class.showMsg(AddNewRetailer.this, "Valid Code");
-                else
-                    common_class.showMsg(AddNewRetailer.this, "Invalid Code");
-
                 break;
             case R.id.ivRetailCapture:
                 captureImg(mData, rvFiles);
@@ -1297,6 +1377,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 break;
             case R.id.linear_service_type:
                 common_class.showCommonDialog(serviceTypeList, 4, this);
+
+                break;
+            case R.id.rlFreezerCapacity:
+                common_class.showCommonDialog(freezerCapcityList, 14, this);
+                break;
+            case R.id.rlFreezerStatus:
+                common_class.showCommonDialog(freezerStaList, 15, this);
 
                 break;
             case R.id.rl_state:
@@ -1336,6 +1423,43 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
                 break;
         }
+    }
+
+    void assignData() {
+        name = ApiClient.BASE_URL + Retailer_Modal_List.get(getOutletPosition()).getImagename();
+        name = name.replaceAll(",", "");
+        Picasso.with(AddNewRetailer.this)
+                .load(name)
+                .error(R.drawable.profile_img)
+                .into(ivPhotoShop);
+        addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
+        addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
+        txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
+        addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
+        retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
+        if (Retailer_Modal_List.get(getOutletPosition()).getSecondary_No() != null)
+            etPhoneNo2.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSecondary_No());
+        if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
+            addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
+        if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
+            addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+        if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
+            owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+        edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
+        edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
+        // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
+
+
+        if (getIntent().getExtras().getString("Compititor_Id") != null)
+            Compititor_Id = getIntent().getExtras().getString("Compititor_Id");
+        if (getIntent().getExtras().getString("Compititor_Name") != null)
+            Compititor_Name = getIntent().getExtras().getString("Compititor_Name");
+        if (getIntent().getExtras().getString("CatUniverSelectId") != null)
+            CatUniverSelectId = getIntent().getExtras().getString("CatUniverSelectId");
+        if (getIntent().getExtras().getString("AvailUniverSelectId") != null)
+            AvailUniverSelectId = getIntent().getExtras().getString("AvailUniverSelectId");
+        if (getIntent().getExtras().getString("reason_category") != null)
+            reason_category_remarks = getIntent().getExtras().getString("reason_category");
     }
 
     private void captureImg(List<QPS_Modal> mModal, RecyclerView rv) {
@@ -1389,6 +1513,53 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (apiDataResponse != null) {
 
                 switch (key) {
+                    case Freezer_Status:
+
+                        JSONObject staObj = new JSONObject(apiDataResponse);
+                        if (staObj.getBoolean("success")) {
+                            JSONArray arr = staObj.getJSONArray("Data");
+                            for (int i = 0; i < arr.length(); i++) {
+                                JSONObject obj = arr.getJSONObject(i);
+                                freezerStaList.add(new Common_Model(obj.getString("FStatus"), obj.getString("ID")));
+                            }
+                        } else {
+                            freezerStaList.clear();
+                        }
+
+                        break;
+                    case Freezer_capacity:
+                        freezerCapcityList.clear();
+                        JSONObject capObj = new JSONObject(apiDataResponse);
+                        if (capObj.getBoolean("success")) {
+                            JSONArray arr = capObj.getJSONArray("Data");
+                            for (int i = 0; i < arr.length(); i++) {
+                                JSONObject obj = arr.getJSONObject(i);
+                                freezerCapcityList.add(new Common_Model(obj.getString("FCapacity"), obj.getString("ID")));
+                            }
+                        } else {
+                            freezerCapcityList.clear();
+                        }
+
+
+                        break;
+                    case CUSTOMER_DATA:
+                        JSONObject cusObj = new JSONObject(apiDataResponse);
+                        if (cusObj.getBoolean("success")) {
+                            JSONArray arr = cusObj.getJSONArray("Data");
+                            JSONObject obj = arr.getJSONObject(0);
+
+                            edtFSSAI.setText("" + obj.getString("Fssai_No"));
+                            addRetailerPhone.setText("" + obj.getString("Mobile"));
+                            addRetailerName.setText("" + obj.getString("Name"));
+                            addRetailerAddress.setText(obj.getString("Address"));
+                            edt_gst.setText("" + obj.getString("gstn"));
+
+                            btnDistCode.setText("Valid Code");
+                            isValidCode = true;
+                        } else {
+                            common_class.showMsg(this, cusObj.getString("Msg"));
+                        }
+                        break;
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
@@ -1426,6 +1597,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
                         }
+                        if (stateList.size() > 0)
+                            shared_common_pref.save(Constants.STATE_LIST, gson.toJson(stateList));
                         break;
                 }
 
