@@ -170,16 +170,16 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         showDashboardData();
 
 
-        menuList.add(new Common_Model("Primary Orders", R.drawable.ic_outline_add_chart_48));
-        menuList.add(new Common_Model("Secondary Orders", R.drawable.ic_outline_assignment_48));
+        menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
+        menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
         menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
         menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
-        menuList.add(new Common_Model("Reports", R.drawable.ic_outline_report_48));
+        menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
 
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            menuList.add(new Common_Model("Distributors", R.drawable.ic_outline_my_location_24));
+            menuList.add(new Common_Model("Franchise", R.drawable.ic_sfa_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
         }
 
@@ -194,10 +194,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "POS":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);
                         break;
-                    case "Primary Orders":
+                    case "Primary Order":
                         common_class.getDb_310Data(Constants.PrimaryTAXList, SFA_Activity.this);
                         break;
-                    case "Secondary Orders":
+                    case "Secondary Order":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
                         Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
                         startActivity(intent);
@@ -210,7 +210,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "Outlets":
                         common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
                         break;
-                    case "Distributors":
+                    case "Franchise":
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
                         break;
                     case "Reports":

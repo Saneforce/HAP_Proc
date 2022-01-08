@@ -31,14 +31,11 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.FlightBooking_Status_Adapter;
 import com.hap.checkinproc.Status_Adapter.FlightBooking_TravelerDetail_Adapter;
-import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class FlightBooking_Status_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     RecyclerView rv;
@@ -114,6 +111,7 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
         }
 
     }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -177,6 +175,12 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
                 break;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
 
     void showDatePickerDialog(int pos, TextView tv) {
         Calendar newCalendar = Calendar.getInstance();

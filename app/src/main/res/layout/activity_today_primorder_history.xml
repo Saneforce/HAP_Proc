@@ -22,7 +22,7 @@
             android:background="@drawable/blue_bg"
             android:fontFamily="@font/basic"
             android:padding="@dimen/C8dp"
-            android:text="Primary Orders"
+            android:text="Primary Order History"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="#FFF"

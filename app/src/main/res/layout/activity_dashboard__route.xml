@@ -117,7 +117,13 @@
 
                     </ImageView>
                 </LinearLayout>
+
+
+
+
             </LinearLayout>
+
+
 
             <ImageView
                 android:id="@+id/toolbar_home"
@@ -128,6 +134,31 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_home" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_bg"
+            android:orientation="horizontal"
+            android:padding="@dimen/C3dp">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/basic"
+                android:paddingLeft="@dimen/C5dp"
+                android:text="Secondary Order"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
+                android:textColor="#FFF"
+                android:textSize="18dp"
+
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.Common_Class.Constants.CUSTOMER_DATA;
 import static com.hap.checkinproc.Common_Class.Constants.Freezer_Status;
 import static com.hap.checkinproc.Common_Class.Constants.Freezer_capacity;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
@@ -21,6 +22,8 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,13 +137,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> freezerCapcityList = new ArrayList<>();
     List<Common_Model> freezerStaList = new ArrayList<>();
-
-    List<Common_Model> distributor_master = new ArrayList<>();
     CircularProgressButton btnRefLoc, mSubmit;
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
     final Handler handler = new Handler();
-    private ArrayList<Common_Model> stateList;
+    private ArrayList<Common_Model> stateList = new ArrayList<>();
     private ArrayList<Common_Model> serviceTypeList;
 
     private String name = "";
@@ -151,9 +152,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private FilesAdapter filesAdapter;
     public String categoryType = "";
 
-    String divERP = "", freezerStaId = "", freezerCapId = "";
+    String divERP = "", freezerStaId = "", freezerCapId = "", distributorERP = "";
     Button btnDistCode;
-
+    Boolean isValidCode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -347,8 +348,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 headtext.setText("Outlet Info");
             }
             //  getRouteDetails();
-            getRetailerClass();
-            getRetailerChannel();
+//            getRetailerClass();
+//            getRetailerChannel();
             // getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
@@ -442,7 +443,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             }
 
-
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
                 addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
@@ -485,7 +485,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
                 }
             }
-
 
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -621,7 +620,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
 
-            common_class.getDb_310Data(Constants.STATE_LIST, this);
+
             mData.add(new QPS_Modal("", "", ""));
             mFreezerData.add(new QPS_Modal("", "", ""));
             getFreezerData(divERP);
@@ -650,6 +649,52 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
                 }
             }
+
+            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
+            }.getType();
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CLASS)))
+                getRetailerClass();
+            else {
+                modelRetailClass = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CLASS), commonType);
+
+            }
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))
+                getRetailerChannel();
+            else {
+                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+            }
+
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.STATE_LIST)))
+                common_class.getDb_310Data(Constants.STATE_LIST, this);
+            else {
+                stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
+            }
+
+            distributorERP = shared_common_pref.getvalue(Constants.DistributorERP);
+
+            edtDistCode.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (btnDistCode.getText().toString().equalsIgnoreCase("Valid Code")) {
+                        btnDistCode.setText("Invalid Code");
+                        isValidCode = false;
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
 
         } catch (Exception e) {
@@ -824,6 +869,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
 
 
+                    if (modelRetailClass != null && modelRetailClass.size() > 0)
+                        shared_common_pref.save(Constants.RETAIL_CLASS, gson.toJson(modelRetailClass));
                 }
 
                 @Override
@@ -890,6 +937,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
                         Log.e("LeaveType_Request", retailerClass);
                         modelRetailChannel.add(mCommon_model_spinner);
+                    }
+
+                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
                     }
                 } catch (Exception e) {
                     Log.v(TAG + " getRetailerChannel: ", e.getMessage());
@@ -1015,7 +1066,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_qulifi", "'samp'");
             reportObject.put("unlisted_class", classId);
             reportObject.put("id", common_class.addquote(outletCode));
-            reportObject.put("distEnterCode", edtDistCode.getText().toString());
+
+            reportObject.put("customer_code", isValidCode ? edtDistCode.getText().toString() : "");
 
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
@@ -1168,8 +1220,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 common_class.getDb_310Data(Constants.Rout_List, this);
 
                 divERP = myDataset.get(position).getDivERP();
+                distributorERP = myDataset.get(position).getCont();
 
                 getFreezerData(divERP);
+
 
                 // getServiceTypes(myDataset.get(position).getId());
                 break;
@@ -1306,19 +1360,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         switch (v.getId()) {
 
             case R.id.btn_dist_enter:
-//                boolean isMatch = false;
-//                for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-//                    if (edtDistCode.getText().toString().equalsIgnoreCase(Retailer_Modal_List.get(i).getId())) {
-//                        isMatch = true;
-//                        outletCode = edtDistCode.getText().toString();
-//                    }
-//                }
-//                if (isMatch) {
-//                    assignData();
-//                    common_class.showMsg(AddNewRetailer.this, "Valid Code");
-//                } else
-//                    common_class.showMsg(AddNewRetailer.this, "Invalid Code");
-
+                if (Common_Class.isNullOrEmpty(edtDistCode.getText().toString()))
+                    common_class.showMsg(this, "Enter Customer Code");
+                else {
+                    JsonObject data = new JsonObject();
+                    data.addProperty("customer_code", edtDistCode.getText().toString().trim());
+                    data.addProperty("ERP_Code", distributorERP);
+                    common_class.getDb_310Data(Constants.CUSTOMER_DATA, this, data);
+                }
                 break;
             case R.id.ivRetailCapture:
                 captureImg(mData, rvFiles);
@@ -1493,6 +1542,24 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
                         break;
+                    case CUSTOMER_DATA:
+                        JSONObject cusObj = new JSONObject(apiDataResponse);
+                        if (cusObj.getBoolean("success")) {
+                            JSONArray arr = cusObj.getJSONArray("Data");
+                            JSONObject obj = arr.getJSONObject(0);
+
+                            edtFSSAI.setText("" + obj.getString("Fssai_No"));
+                            addRetailerPhone.setText("" + obj.getString("Mobile"));
+                            addRetailerName.setText("" + obj.getString("Name"));
+                            addRetailerAddress.setText(obj.getString("Address"));
+                            edt_gst.setText("" + obj.getString("gstn"));
+
+                            btnDistCode.setText("Valid Code");
+                            isValidCode = true;
+                        } else {
+                            common_class.showMsg(this, cusObj.getString("Msg"));
+                        }
+                        break;
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
@@ -1530,6 +1597,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
                         }
+                        if (stateList.size() > 0)
+                            shared_common_pref.save(Constants.STATE_LIST, gson.toJson(stateList));
                         break;
                 }
 

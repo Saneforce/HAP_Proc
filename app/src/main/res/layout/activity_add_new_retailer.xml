@@ -153,6 +153,7 @@
                                 android:textSize="13dp" />
 
                             <ImageView
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -196,7 +197,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Distributor Code"
+                                android:text="Customer Code"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
 
@@ -205,7 +206,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
                                 android:layout_marginTop="@dimen/C3dp"
-                                android:src="@drawable/mandatory" />
+                                android:src="@drawable/mandatory"
+                                android:visibility="invisible" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -220,7 +222,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
-                                android:hint="Enter Code"
+                                android:hint="Enter Customer Code"
                                 android:inputType="number"
                                 android:maxLines="2"
                                 android:padding="10dp"
@@ -235,7 +237,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/bottom_button"
                                 android:padding="10dp"
-                                android:text="Get"
+                                android:text="Check Validity"
 
                                 android:textColor="@color/white"
                                 android:textSize="13dp"

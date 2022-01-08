@@ -38,7 +38,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/basic"
                 android:paddingLeft="@dimen/C5dp"
-                android:text="Distributors"
+                android:text="Franchise"
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
                 android:textColor="#FFF"

@@ -254,7 +254,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
                     printama.setBold();
-                    printama.printTextln(Order_Outlet_Filter.get(i).getName());
+                    printama.printTextln(Order_Outlet_Filter.get(i).getName().toString().trim());
                     printama.addNewLine();
 
                     printama.setNormalText();

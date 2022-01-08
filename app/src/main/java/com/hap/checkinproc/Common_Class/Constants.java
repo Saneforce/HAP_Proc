@@ -92,6 +92,8 @@ public class Constants {
     public static final String DB_TWO_GET_DYREPORTS = "dashboardTwoDyReports";
     public static final String DB_TWO_GET_MREPORTS = "dashboardMnthReports";
     public static final String LOGIN_DATE = "loginDate";
+    public static final String RETAIL_CLASS = "retailClass";
+    public static final String CUSTOMER_DATA ="customerData" ;
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
@@ -116,4 +118,5 @@ public class Constants {
     public static final String Freezer_capacity = "freezerCapacity";
     public static final String GetPosOrderHistory = "getPosOrderHistory";
     public static final String PosOrderDetails_List = "posOrderDetailList";
+    public static final String RETAIL_CHANNEL="retailChannel";
 }

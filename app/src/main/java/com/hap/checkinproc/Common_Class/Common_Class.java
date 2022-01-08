@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.12";
+    public static String Version_Name = "ver 3.2.13";
     public static String Work_Type = "0";
     public static int count;
 
@@ -479,6 +479,11 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.CUSTOMER_DATA:
+                        axnname = "get/customerdetails";
+                        data.put("customer_code", jparam.get("customer_code").getAsString());
+                        data.put("ERP_Code", jparam.get("ERP_Code").getAsString());
+                        break;
                     case Constants.UOM:
                         axnname = "get/productuom";
                         data.put("divisionCode", UserDetails.getString("Divcode", ""));
@@ -1243,6 +1248,16 @@ public class Common_Class {
 
             }
         });
+    }
+
+    public void clearLocData(Activity activity) {
+        Shared_Common_Pref sharedCommonPref=new Shared_Common_Pref(activity);
+        sharedCommonPref.clear_pref(Constants.STATE_LIST);
+        sharedCommonPref.clear_pref(Constants.RETAIL_CHANNEL);
+        sharedCommonPref.clear_pref(Constants.RETAIL_CLASS);
+        sharedCommonPref.clear_pref(Constants.Freezer_Status);
+        sharedCommonPref.clear_pref(Constants.Freezer_capacity);
+
     }
 
 

@@ -22,7 +22,7 @@
             android:background="@drawable/blue_bg"
             android:fontFamily="@font/basic"
             android:padding="@dimen/C8dp"
-            android:text="Pos Orders"
+            android:text="Pos History"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="#FFF"
@@ -76,11 +76,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/btnCmbRoute"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/route_text"
@@ -146,8 +146,7 @@
                 android:id="@+id/row_report"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/C40dp"
-                android:background="@drawable/blue_bg"
-                >
+                android:background="@drawable/blue_bg">
 
 
                 <TextView
