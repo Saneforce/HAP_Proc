@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 
 public class Shared_Common_Pref {
     public static String SFA_MENU = "";
+    public static String CUSTOMER_CODE = "";
     public static String SALES_MODE = "";
     public static String LOGINTYPE = "";
     SharedPreferences Common_pref;

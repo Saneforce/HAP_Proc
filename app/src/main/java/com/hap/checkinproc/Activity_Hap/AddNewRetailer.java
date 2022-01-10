@@ -1292,7 +1292,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     public void loadroute(String id) {
         if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
-            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
         }
 
         if (FRoute_Master.size() == 1) {

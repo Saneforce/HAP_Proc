@@ -83,6 +83,7 @@ public class Constants {
     public static final String LOC_PRIMARY_DATA = "locPrimData";
     public static final String LOC_SECONDARY_DATA = "locSecData";
     public static final String LOC_VANSALES_DATA = "locVansalesData";
+    public static final String LOC_INTENT_DATA = "locIntentData";
 
     public static final String POS_SCHEME = "posScheme";
     public static final String UOM = "uom";
@@ -119,4 +120,8 @@ public class Constants {
     public static final String GetPosOrderHistory = "getPosOrderHistory";
     public static final String PosOrderDetails_List = "posOrderDetailList";
     public static final String RETAIL_CHANNEL="retailChannel";
+    public static final String INDENT_Product_List="dentProductList";
+    public static final String INDENT_Category_List="dentCategoryList";
+    public static final String INDENT_ProdTypes_List="dentProductTypes";
+    public static final String INDENT_ProdGroups_List="dentProductGroups";
 }

@@ -295,9 +295,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     }
 
     public void loadroute(String id) {
-        Log.e("Select the Distributor", String.valueOf(id));
+        Log.e("Select Franchise", String.valueOf(id));
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
-            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
         }
 
         FRoute_Master.clear();

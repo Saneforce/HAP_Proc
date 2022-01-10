@@ -234,7 +234,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                                     JSONObject obj = arr.getJSONObject(position);
                                     Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
                                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    sharedCommonPref.save(Constants.FLAG, "POS");
+                                    sharedCommonPref.save(Constants.FLAG, "POS INVOICE");
                                     intent.putExtra("Order_Values", obj.getString("Order_Value"));
                                     intent.putExtra("Invoice_Values", obj.getString("invoicevalues"));
                                     //intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());

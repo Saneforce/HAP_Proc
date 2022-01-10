@@ -425,7 +425,7 @@
                                         android:id="@+id/Rate"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="Rate"
+                                        android:text="Price"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C13dp"
@@ -658,6 +658,17 @@
                                     android:textStyle="bold"></TextView>
                             </RelativeLayout>
 
+                            <TextView
+                                android:letterSpacing="0.1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:fontFamily="sans-serif"
+                                android:text="Thank You!Visit Again"
+                                android:textAlignment="center"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
 
                         </LinearLayout>
 

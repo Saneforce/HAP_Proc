@@ -310,7 +310,7 @@ public class Common_Class {
 
                 case (Retailer_OutletList):
                     QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"Type\\\",\\\"DelivType\\\"," +
-                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
+                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"OrderFlg\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"CustomerCode\\\",\\\"Owner_Name\\\",\\\"Category\\\",\\\"Speciality\\\",\\\"Class\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
                             " \\\"LastUpdt_Date\\\",\\\"Primary_No\\\",\\\"Secondary_No\\\",\\\"Mobile_Number\\\",\\\"Imagename\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
@@ -805,6 +805,80 @@ public class Common_Class {
         }
 
     }
+
+    public void getDentDatas(Activity activity) {
+
+        if (isNetworkAvailable(activity)) {
+            getProductDetails(activity);
+            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(activity);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", Shared_Common_Pref.CUSTOMER_CODE);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                service.getDataArrayList("get/indentprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        // Log.v(TAG, response.toString());
+                        db.deleteMasterData(Constants.INDENT_ProdGroups_List);
+                        db.addMasterData(Constants.INDENT_ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/indentprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.INDENT_ProdTypes_List);
+                        db.addMasterData(Constants.INDENT_ProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/indentprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.INDENT_Category_List);
+                        db.addMasterData(Constants.INDENT_Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+
+                service.getDataArrayList("get/indentproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("DENT:", response.body().toString());
+                        db.deleteMasterData(Constants.INDENT_Product_List);
+                        db.addMasterData(Constants.INDENT_Product_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
     public void getPOSProduct(Activity activity) {
 

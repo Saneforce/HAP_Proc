@@ -148,7 +148,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:layout_marginBottom="3dp"
-                                android:text="Distributor"
+                                android:text="Franchise"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
 
@@ -197,7 +197,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Customer Code"
+                                android:text="Franchise Code"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp" />
 
@@ -222,7 +222,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
-                                android:hint="Enter Customer Code"
+                                android:hint="Enter Franchise Code"
                                 android:inputType="number"
                                 android:maxLines="2"
                                 android:padding="10dp"

@@ -134,7 +134,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
             try {
                 holder.tvbal.setText("" + (itm.getString("bal")));
                 holder.tvAmtBlk.setText("Amount Blocked:" + (itm.getString("blk")));
-                holder.tvAvailBal.setText("Available Balance:" + itm.getString("avail"));
+                holder.tvAvailBal.setText("Previous Order value:" + itm.getString("avail"));
                 holder.tvBalUpdTime.setText("Last Updated On " + itm.getString("balUpdatedTime"));
             } catch (Exception e) {
                 // holder.tvBalUpdTime.setText("Last Updated On " + Common_Class.GetDatemonthyearTimeformat());

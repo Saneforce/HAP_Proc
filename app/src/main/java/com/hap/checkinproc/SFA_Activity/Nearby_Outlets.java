@@ -638,7 +638,7 @@ Log.v(TAG+"nearbyOut:",e.getMessage());
             map.setMyLocationEnabled(true);
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-            getExploreDr(true);
+          //  getExploreDr(true);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

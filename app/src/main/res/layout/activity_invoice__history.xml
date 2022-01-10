@@ -314,7 +314,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/basic"
-                            android:hint="Select Distributor"
+                            android:hint="Select Franchise"
                             android:padding="@dimen/C10dp"
                             android:textAlignment="center"
                             android:textAllCaps="false"
@@ -539,6 +539,8 @@
 
                 </LinearLayout>
 
+
+
                 <LinearLayout
                     android:id="@+id/lin_invoice"
                     style="@style/OrderTypesButton"
@@ -564,6 +566,33 @@
                         android:textSize="11sp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/lin_intent"
+                    style="@style/OrderTypesButton"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_invoice_24"
+                        app:tint="@color/white">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/C3dp"
+                        android:text="INDENT"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/lin_noOrder"

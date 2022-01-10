@@ -252,7 +252,7 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
     public void loadroute(String id) {
 
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
-            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
         }
         FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {

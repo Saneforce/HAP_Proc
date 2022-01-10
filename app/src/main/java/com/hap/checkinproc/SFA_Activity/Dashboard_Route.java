@@ -785,7 +785,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         try {
 
             if (shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
-                Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
@@ -865,7 +865,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     try {
 
                         if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
-                            Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {
@@ -907,6 +907,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
+                            Shared_Common_Pref.CUSTOMER_CODE = mRetailer_Modal_ListFilter.get(position).getCustomerCode();
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
                             common_class.CommonIntentwithFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
