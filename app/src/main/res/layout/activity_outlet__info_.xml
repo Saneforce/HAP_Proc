@@ -67,7 +67,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/basic"
-                        android:hint="Select Distributor"
+                        android:hint="Select Franchise"
                         android:textAlignment="textEnd"
                         android:paddingRight="@dimen/C5dp"
                         android:textAllCaps="true"

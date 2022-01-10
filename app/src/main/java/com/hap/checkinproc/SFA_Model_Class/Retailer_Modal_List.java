@@ -143,6 +143,9 @@ public class Retailer_Modal_List {
     @Expose
     private String ERP_Code;
 
+    @SerializedName("CustomerCode")
+    @Expose
+    private String CustomerCode;
 
     public Retailer_Modal_List getRetailer_modal_list() {
         return retailer_modal_list;
@@ -867,5 +870,13 @@ public class Retailer_Modal_List {
     }
     public void setClosedRemarks(String closedRemarks) {
         ClosedRemarks = closedRemarks;
+    }
+
+    public String getCustomerCode() {
+        return CustomerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        CustomerCode = customerCode;
     }
 }

@@ -142,7 +142,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 address = retaileAddress.getText().toString();
                 phone = "Mobile:" + tvRetailorPhone.getText().toString();
 
-            } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") || sharedCommonPref.getvalue(Constants.FLAG).equals("POS")) {
+            } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ||
+                    sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
                 findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
@@ -178,7 +179,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS"))
+            if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE"))
                 common_class.CommonIntentwithFinish(PosHistoryActivity.class);
             else
                 finish();
@@ -191,7 +192,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
         switch (v.getId()) {
             case R.id.back:
-                if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS"))
+                if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE"))
                     common_class.CommonIntentwithFinish(PosHistoryActivity.class);
                 else
                     finish();
@@ -246,7 +247,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.printLine();
                 printama.addNewLine(2);
                 printama.setBold();
-                printama.printTextln("Item       " + "     Qty" + "       Rate" + "      Total");
+                printama.printTextln("Item       " + "     Qty" + "       Price" + "      Total");
                 printama.printLine();
                 printama.addNewLine();
                 printama.addNewLine();
@@ -438,7 +439,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             canvas.drawText("Item", x, y, paint);
             canvas.drawText("Qty", (widthSize / 2) + 20, y, paint);
-            canvas.drawText("Rate", (widthSize / 2) + 70, y, paint);
+            canvas.drawText("Price", (widthSize / 2) + 70, y, paint);
             canvas.drawText("GST", (widthSize / 2) + 150, y, paint);
             canvas.drawText("Total", (widthSize / 2) + 200, y, paint);
 

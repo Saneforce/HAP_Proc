@@ -315,7 +315,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
         Retailer_Modal_ListFilter.clear();
         if (sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
-            Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
             return;
         }
         String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);

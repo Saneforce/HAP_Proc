@@ -127,7 +127,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.submit_button:
                 if (distributor_Name.getText().toString().equalsIgnoreCase("")) {
-                    Toast.makeText(this, "Select Distributor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
                 } else if (distilatitude.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(this, "Capture The Lat and Long", Toast.LENGTH_SHORT).show();
                 } else {

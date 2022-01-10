@@ -50,7 +50,7 @@
                 android:drawableRight="@drawable/front_arrow"
                 android:gravity="center"
                 android:textColorHint="@color/white"
-                android:hint="Select Distributor"
+                android:hint="Select Franchise"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="18dp" />

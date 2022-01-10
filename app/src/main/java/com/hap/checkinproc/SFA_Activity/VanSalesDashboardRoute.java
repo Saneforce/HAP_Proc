@@ -806,7 +806,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         try {
 
             if (shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
-                Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
@@ -884,7 +884,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                     try {
 
                         if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
-                            Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                         } else {

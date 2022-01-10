@@ -91,7 +91,7 @@
         <activity
             android:name=".Activity.PDFActivity"
             android:theme="@style/AppTheme.Dialogs" />
-        <activity android:name=".Activity.PdfViewerActivity" >
+        <activity android:name=".Activity.PdfViewerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
 
@@ -116,6 +116,9 @@
 
         <activity
             android:name=".SFA_Activity.Order_Category_Select"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.IndentActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.POSActivity"

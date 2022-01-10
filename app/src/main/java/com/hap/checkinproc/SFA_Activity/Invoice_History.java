@@ -62,7 +62,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static final String UserDetail = "MyPrefs";
 
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt, linVanSales;
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
+            linVanSales,linintent;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -124,6 +125,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
             linRpt = (LinearLayout) findViewById(R.id.llRpt);
             linVanSales = findViewById(R.id.lin_vanSales);
+            linintent=findViewById(R.id.lin_intent);
             tvOutstanding = findViewById(R.id.txOutstanding);
 
             txPrvBal = findViewById(R.id.PrvOutAmt);
@@ -142,6 +144,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linPayment.setOnClickListener(this);
             linRpt.setOnClickListener(this);
             linVanSales.setOnClickListener(this);
+            linintent.setOnClickListener(this);
 
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +193,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
             if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
                 linVanSales.setVisibility(View.VISIBLE);
+
+            if(!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)){
+                common_class.getDentDatas(this);
+                linintent.setVisibility(View.VISIBLE);
+                lin_noOrder.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
 
         }
@@ -286,10 +295,15 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
+
             case R.id.lin_vanSales:
                 startActivity(new Intent(getApplicationContext(), VanSalesOrderActivity.class));
                 overridePendingTransition(R.anim.in, R.anim.out);
 
+                break;
+            case R.id.lin_intent:
+                startActivity(new Intent(getApplicationContext(), IndentActivity.class));
+                overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.lin_repeat_invoice:
                 break;
