@@ -1,11 +1,9 @@
 package com.hap.checkinproc.Status_Activity;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,21 +19,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity_Hap.Dashboard;
-import com.hap.checkinproc.Activity_Hap.ERT;
-import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.FlightBooking_Status_Adapter;
 import com.hap.checkinproc.Status_Adapter.FlightBooking_TravelerDetail_Adapter;
+import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class FlightBooking_Status_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     RecyclerView rv;
@@ -43,6 +40,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
     private DatePickerDialog fromDatePickerDialog;
     Common_Class common_class;
     public static FlightBooking_Status_Activity activity;
+    SharedPreferences  UserDetails;
+    public static final String UserInfo = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,7 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
             setContentView(R.layout.activity_flight_booking_status);
             init();
 
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
             JsonObject jParam = new JsonObject();
 
             jParam.addProperty("FDT", tvFromDate.getText().toString());
@@ -65,53 +65,12 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
                 public void onClick(View v) {
                     mOnBackPressedDispatcher.onBackPressed();
                 }
-
-            });
-
-            TextView txtHelp = findViewById(R.id.toolbar_help);
-            ImageView imgHome = findViewById(R.id.toolbar_home);
-            txtHelp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-                }
-            });
-            TextView txtErt = findViewById(R.id.toolbar_ert);
-            TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-
-            txtErt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), ERT.class));
-                }
-            });
-            txtPlaySlip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
-                }
-            });
-
-            ObjectAnimator textColorAnim;
-            textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-            textColorAnim.setDuration(500);
-            textColorAnim.setEvaluator(new ArgbEvaluator());
-            textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-            textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-            textColorAnim.start();
-            imgHome.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
-                }
             });
         } catch (Exception e) {
 
         }
 
     }
-
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -175,13 +134,12 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
                 break;
         }
     }
-
-    @Override
-    public void onBackPressed() {
-
+    void RefreshData(){
+        JsonObject jParam = new JsonObject();
+        jParam.addProperty("FDT", tvFromDate.getText().toString());
+        jParam.addProperty("TDT", tvToDate.getText().toString());
+        common_class.getDb_310Data(Constants.FlightBookingStatus, FlightBooking_Status_Activity.this, jParam);
     }
-
-
     void showDatePickerDialog(int pos, TextView tv) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(FlightBooking_Status_Activity.this, new DatePickerDialog.OnDateSetListener() {
@@ -192,11 +150,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
 
                 if (common_class.checkDates(pos == 0 ? date : tvFromDate.getText().toString(), pos == 1 ? date : tvToDate.getText().toString(), FlightBooking_Status_Activity.this)) {
                     tv.setText(date);
-                    JsonObject jParam = new JsonObject();
-                    jParam.addProperty("FDT", tvFromDate.getText().toString());
-                    jParam.addProperty("TDT", tvToDate.getText().toString());
-                    common_class.getDb_310Data(Constants.FlightBookingStatus, FlightBooking_Status_Activity.this, jParam);
-                } else {
+                    RefreshData();
+                    } else {
                     common_class.showMsg(FlightBooking_Status_Activity.this, "Please select valid date");
                 }
             }
@@ -212,8 +167,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
                     JSONObject obj = new JSONObject(apiDataResponse);
 
                     if (obj.getBoolean("success")) {
-
-                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this));
+                        String sSF=UserDetails.getString("Sfcode", "");
+                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this,sSF));
                     }
 
                 } catch (Exception e) {

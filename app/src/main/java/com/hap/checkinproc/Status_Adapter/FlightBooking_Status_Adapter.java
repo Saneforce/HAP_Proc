@@ -1,28 +1,47 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
+import com.hap.checkinproc.Activity_Hap.FlightTicketRequest;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Interface.AlertBox;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.FlightBooking_Status_Activity;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBooking_Status_Adapter.MyViewHolder> {
     private JSONArray mArr;
 
     private Context context;
-
+    private String sSF;
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvDate, tvStatus, tvNoOfTraveler, tvbookedBy, tvViewSta;
+        public TextView tvDate, tvStatus, tvNoOfTraveler, tvbookedBy, tvViewSta,btnCancel,
+        txFrmPlc,txToPlc,txTrvDate,txRetTrvDate,txRetFrmPlc,txRetToPlc,txRet;
 
 
         public MyViewHolder(View view) {
@@ -32,15 +51,24 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
             tvNoOfTraveler = view.findViewById(R.id.tvTravelerCount);
             tvbookedBy = view.findViewById(R.id.tvBookedBy);
             tvViewSta = view.findViewById(R.id.tvViewSta);
+            txFrmPlc = view.findViewById(R.id.tvFrom);
+            txToPlc = view.findViewById(R.id.tvTo);
+            txRetFrmPlc = view.findViewById(R.id.tvRetFrom);
+            txRetToPlc = view.findViewById(R.id.tvRetTo);
+            txRet = view.findViewById(R.id.tvReturn);
 
+            txTrvDate = view.findViewById(R.id.tvTrvDate);
+            txRetTrvDate = view.findViewById(R.id.tvRetTrvDate);
+
+            btnCancel= view.findViewById(R.id.canceltkt);
         }
     }
 
 
-    public FlightBooking_Status_Adapter(JSONArray arr, Context context) {
+    public FlightBooking_Status_Adapter(JSONArray arr, Context context,String mSF) {
         this.mArr = arr;
         this.context = context;
-
+        this.sSF=mSF;
     }
 
     @Override
@@ -59,6 +87,18 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
             holder.tvNoOfTraveler.setText("" + obj.getString("Travellers"));
             holder.tvbookedBy.setText("" + obj.getString("RequestedBy"));
 
+            holder.txFrmPlc.setText("" + obj.getString("BookFR_Plc"));
+            holder.txToPlc.setText("" + obj.getString("BookTo_Plc"));
+            holder.txRet.setText("" + obj.getString("Ret"));
+
+            holder.txRetFrmPlc.setText("" + obj.getString("BookRetFR_Plc"));
+            holder.txRetToPlc.setText("" + obj.getString("BookRetTo_Plc"));
+            holder.txTrvDate.setText("" + obj.getString("BookDt") + " - "+ obj.getString("BookSes"));
+            holder.txRetTrvDate.setText("" + obj.getString("BookRetDt") + " - "+ obj.getString("BookRetSes"));
+
+            holder.btnCancel.setVisibility(View.VISIBLE);
+            if (obj.getInt("ApprvFlg")>2) holder.btnCancel.setVisibility(View.GONE);
+
             if (obj.getString("BookingStatus").equalsIgnoreCase("Booked")) {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_green);
             } else {
@@ -76,7 +116,60 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
                     }
                 }
             });
+            holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialogBox.showDialog(context, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Submit Flight Booking Request.")), "Yes", "No", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                            JSONObject jObj=new JSONObject();
+                            try {
+                                jObj.put("SF",sSF);
+                                jObj.put("BookID",obj.getString("BookID"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            apiInterface.JsonSave("cancel/flightbook",jObj.toString()).enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                    JsonObject Res=response.body();
+                                    String Msg= Res.get("Msg").getAsString();
+                                    if(!Msg.equalsIgnoreCase("")){
+                                        AlertDialog alertDialog = new AlertDialog.Builder(context)
+                                                .setTitle("HAP Check-In")
+                                                .setMessage(Html.fromHtml(Msg))
+                                                .setCancelable(false)
+                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
 
+                                                    }
+                                                })
+                                                .show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                                }
+                            });
+
+
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
+
+                }
+            });
             holder.tvViewSta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

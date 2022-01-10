@@ -98,7 +98,7 @@ public class CateenToken extends AppCompatActivity {
         txtHQName.setText(sHQName);
         txtSFName.setText(sSFNm);
         txtEmpID.setText(EmpID);
-        String inputValue=HQCode+EmpID;
+        String inputValue=EmpID;//HQCode+EmpID;
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point point = new Point();

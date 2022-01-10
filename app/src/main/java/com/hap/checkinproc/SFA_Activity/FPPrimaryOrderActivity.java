@@ -113,7 +113,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
     private TextView tvTotalAmount, tvACBal, tvTotalItems;
     private double totalvalues, taxVal;
     private Integer totalQty;
-    private TextView tvBillTotItem;
+    private TextView tvBillTotItem,usrName;
     double ACBalance = 0.0;
     final Handler handler = new Handler();
     private DatePickerDialog fromDatePickerDialog;
@@ -144,6 +144,10 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             takeorder = findViewById(R.id.takeorder);
             tvTotalItems = findViewById(R.id.tvTotalItems);
             tvTotalAmount = findViewById(R.id.tvTotalAmount);
+
+            usrName = findViewById(R.id.usrName);
+            String sUName = UserDetails.getString("SfName", "");
+            usrName.setText("HI! " + sUName);
 
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);

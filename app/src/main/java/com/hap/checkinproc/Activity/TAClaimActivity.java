@@ -3354,6 +3354,51 @@ Log.d("DACliam","Error : "+t.getMessage());
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
+        String sMode="";
+        long nano_startTime = System.nanoTime();
+        ImageUKey = keyEk + UserDetails.getString("Sfcode","") + nano_startTime;
+        if(requestCode==144) {
+            if (txtLodgUKey.getText().toString().equals("")) {
+                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Calendar calobjw = Calendar.getInstance();
+                lodUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                txtLodgUKey.setText(lodUKey);
+            }
+            lodUKey = txtLodgUKey.getText().toString();
+            sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey;
+        }
+        if(requestCode==124){
+            if (tvTxtUKeys.getText().toString().equals("")) {
+                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Calendar calobjw = Calendar.getInstance();
+                tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                tvTxtUKeys.setText(tvEditcnt);
+            }
+            TlUKey = tvTxtUKeys.getText().toString();
+            sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey;
+        }
+        if(requestCode==100){
+            if (oeTxtUKeys.getText().toString().equals("")) {
+                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Calendar calobjw = Calendar.getInstance();
+                oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                oeTxtUKeys.setText(oeEditCnt);
+            }
+
+            OeUKey = oeTxtUKeys.getText().toString();
+            sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey;
+        }
+        if(requestCode==787){
+            if (lcTxtUKeys.getText().toString().equals("")) {
+                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Calendar calobjw = Calendar.getInstance();
+                lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                lcTxtUKeys.setText(lcEditcnt);
+            }
+            LcUKey = lcTxtUKeys.getText().toString();
+            sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;
+        }
+
 
         if (requestCode == 144) {
             if (resultCode == RESULT_OK) {
@@ -3367,7 +3412,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
                             lodgArrLst.add(fullPath);
-                            getMulipart(lodUKey, fullPath, "LOD", "", "Room", "", "");
+                            getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
 
                         }
                     } else if (data.getData() != null) {
@@ -3377,7 +3422,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         lodgArrLst.add(fullPath);
 
 
-                        getMulipart(lodUKey, fullPath, "LOD", "", "Room", "", "");
+                        getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
 
                     }
                 }
@@ -3394,7 +3439,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
 
-                        getMulipart(TlUKey, fullPath, "TL", "", editMode, "", "");
+                        getMulipart(TlUKey, fullPath, "TL", ImageUKey, editMode, "", "");
 
                     }
                 } else if (data.getData() != null) {
@@ -3403,7 +3448,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     fullPath = filepath.getPath(TAClaimActivity.this, item);
 
 
-                    getMulipart(TlUKey, fullPath, "TL", "", editMode, "", "");
+                    getMulipart(TlUKey, fullPath, "TL", ImageUKey, editMode, "", "");
 
                 }
             }
@@ -3420,7 +3465,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
 
-                            getMulipart(OeUKey, fullPath, "OE", "", editMode, "", "");
+                            getMulipart(OeUKey, fullPath, "OE", ImageUKey, editMode, "", "");
 
 
                         }
@@ -3429,7 +3474,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
-                        getMulipart(OeUKey, fullPath, "OE", "", editMode, "", "");
+                        getMulipart(OeUKey, fullPath, "OE", ImageUKey, editMode, "", "");
 
                     }
                 }
@@ -3446,7 +3491,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
 
-                            getMulipart(LcUKey, fullPath, "LC", "", editMode, "", "");
+                            getMulipart(LcUKey, fullPath, "LC", ImageUKey, editMode, "", "");
 
                         }
                     } else if (data.getData() != null) {
@@ -3455,7 +3500,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
 
-                        getMulipart(LcUKey, fullPath, "LC", "", editMode, "", "");
+                        getMulipart(LcUKey, fullPath, "LC", ImageUKey, editMode, "", "");
 
                     }
                 }
@@ -3472,7 +3517,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
 
-                            getMulipart(lodgLate, fullPath, "LOD", "", "LateMode", "", "");
+                            getMulipart(lodgLate, fullPath, "LOD", ImageUKey, "LateMode", "", "");
 
                         }
                     } else if (data.getData() != null) {
@@ -3481,7 +3526,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
 
-                        getMulipart(lodgLate, fullPath, "LOD", "", "LateMode", "", "");
+                        getMulipart(lodgLate, fullPath, "LOD", ImageUKey, "LateMode", "", "");
 
                     }
                 }
@@ -3498,7 +3543,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
 
-                            getMulipart(lodgEarly, fullPath, "LOD", "", "EarlyMode", "", "");
+                            getMulipart(lodgEarly, fullPath, "LOD", ImageUKey, "EarlyMode", "", "");
 
                         }
                     } else if (data.getData() != null) {
@@ -3507,7 +3552,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
 
-                        getMulipart(lodgEarly, fullPath, "LOD", "", "EarlyMode", "", "");
+                        getMulipart(lodgEarly, fullPath, "LOD", ImageUKey, "EarlyMode", "", "");
 
                     }
                 }

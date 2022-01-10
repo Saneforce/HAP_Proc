@@ -52,7 +52,7 @@
                         style="@style/TextStyleOne"
                         android:layout_weight="1"
                         android:padding="@dimen/C7dp"
-                        android:text="04-01-2022 10:42:00"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -78,7 +78,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="@dimen/C7dp">
-
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -98,11 +101,11 @@
                             style="@style/TextStyleOne"
                             android:text="View Ticket"
                             android:textAllCaps="true"
-                            android:textColor="@color/dark_greys"
+                            android:textColor="@color/green"
+                            android:textStyle="bold"
                             android:textSize="11dp" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -111,9 +114,12 @@
 
                             android:id="@+id/tvTravelerCount"
                             style="@style/TextStyleOne"
-                            android:layout_weight="1"
-                            android:text="3"
+                            android:text="0"
                             android:textSize="14sp"
+                            android:paddingStart="@dimen/C8dp"
+                            android:paddingEnd="@dimen/C8dp"
+                            android:paddingTop="@dimen/C2dp"
+                            android:paddingBottom="@dimen/C2dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -123,22 +129,202 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="From"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvFrom"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="To"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvTo"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="Booked By"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                            android:id="@+id/tvBookedBy"
+                            style="@style/TextStyleOne"
+                            android:text="dfdfgdfg"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="Travel Date"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvTrvDate"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="Return Booking"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvReturn"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="Return Date"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvRetTrvDate"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="From"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvRetFrom"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="To"
+                                android:textAllCaps="true"
+                                android:textColor="@color/dark_greys"
+                                android:textSize="11dp" />
+                            <TextView
+                                android:id="@+id/tvRetTo"
+                                style="@style/TextStyleOne"
+                                android:text="dfdfgdfg"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="end|bottom"
+                        android:gravity="end|bottom"
+                        android:paddingTop="5dp">
+                        <Button
+                            android:id="@+id/canceltkt"
+                            android:layout_width="130dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="right"
+                            android:background="@drawable/button_red"
+                            android:elevation="@dimen/C5dp"
+                            android:padding="1dp"
+                            android:text="Cancel Ticket"
+                            android:textColor="#ffffff"
+                            android:textFontWeight="900"
+                            android:textSize="12sp"
 
-                    <TextView
-                        style="@style/TextStyleOne"
-                        android:layout_marginTop="@dimen/C10dp"
-                        android:text="Booked By"
-                        android:textAllCaps="true"
-                        android:textColor="@color/dark_greys"
-                        android:textSize="11dp" />
-
-                    <TextView
-                        android:id="@+id/tvBookedBy"
-                        style="@style/TextStyleOne"
-                        android:text="Mr.RAJA"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
+                            />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
