@@ -118,6 +118,9 @@
             android:name=".SFA_Activity.Order_Category_Select"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SFA_Activity.Grm_Category_Select"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.IndentActivity"
             android:screenOrientation="portrait" />
         <activity

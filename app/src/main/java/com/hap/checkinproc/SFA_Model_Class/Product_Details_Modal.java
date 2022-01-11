@@ -99,6 +99,10 @@ public class Product_Details_Modal {
     @Expose
     private Double SGST;
 
+    @SerializedName("Balance")
+    @Expose
+    private Integer Balance;
+
     @SerializedName("UOMList")
     @Expose
     private List<UOM> UOMList = new ArrayList<>();
@@ -648,6 +652,14 @@ public class Product_Details_Modal {
 
     public void setCnvQty(double cnvQty) {
         CnvQty = cnvQty;
+    }
+
+    public Integer getBalance() {
+        return Balance;
+    }
+
+    public void setBalance(Integer balance) {
+        Balance = balance;
     }
 
 

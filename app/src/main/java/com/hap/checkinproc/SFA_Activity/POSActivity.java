@@ -78,6 +78,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class POSActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, View.OnTouchListener, Master_Interface {
+    final Handler handler = new Handler();
+    public int selectedPos = 0, uomPos;
     //GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -104,18 +106,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
-    public int selectedPos = 0, uomPos;
     private TextView tvTotalAmount, tvBalAmt;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
-    final Handler handler = new Handler();
     private DatePickerDialog fromDatePickerDialog;
     private List<Product_Details_Modal> orderTotTax;
     private String scanProId = "";
     private ArrayList<Common_Model> uomList;
 
-    private List<Common_Model> payList = new ArrayList<>();
+    private final List<Common_Model> payList = new ArrayList<>();
     private double payAmt;
 
     @Override
@@ -243,7 +243,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             payAmt = Double.parseDouble(s.toString());
                         }
 
-                        tvBalAmt.setText(formatter.format(( payAmt-totalvalues)));
+                        tvBalAmt.setText(formatter.format((payAmt - totalvalues)));
 
                     } catch (Exception e) {
 
@@ -413,6 +413,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
+            common_class.getDb_310Data(Constants.STOCK_DATA, this);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -598,6 +599,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.tvPayMode:
                 common_class.getDb_310Data(Constants.PAYMODES, this);
                 break;
@@ -992,7 +994,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         String label = "", amt = "";
         for (int i = 0; i < orderTotTax.size(); i++) {
             label = label + orderTotTax.get(i).getTax_Type() + "\n";
-            amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
+            amt = amt + "₹" + formatter.format(orderTotTax.get(i).getTax_Amt()) + "\n";
         }
         tvTaxLabel.setText(label);
         tvTax.setText(amt);
@@ -1042,6 +1044,24 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
             switch (key) {
+                case Constants.STOCK_DATA:
+                    JSONObject stkObj = new JSONObject(apiDataResponse);
+                    if (stkObj.getBoolean("success")) {
+                        JSONArray arr = stkObj.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject obj = arr.getJSONObject(i);
+
+                            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                                if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
+                                    Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+
+                    break;
                 case Constants.PAYMODES:
                     payList.clear();
                     JSONObject obj = new JSONObject(apiDataResponse);
@@ -1449,6 +1469,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 if (CategoryType >= 0) {
 
+                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
+                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+
                     holder.totalQty.setText("Total Qty : " + (
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
 
@@ -1507,7 +1531,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     public void onClick(View v) {
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
+                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+                        int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
+                        if (balance >= order)
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                        else {
+                            common_class.showMsg(POSActivity.this, "No stock");
+                        }
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
@@ -1533,6 +1564,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
+
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
+                                totQty = 0;
+                                enterQty = 0;
+                                holder.Qty.setText("0");
+                               // common_class.showMsg(POSActivity.this, "No stock");
+                            }
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
@@ -1617,7 +1655,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((Math.round(freeVal)));
                                                         } else {
                                                             int val = (int) (totQty / highestScheme);
-                                                            double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
+                                                            double freeVal = val * (product_details_modalArrayList.get(i).getDiscount());
                                                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((freeVal));
                                                         }
                                                     }
@@ -1755,9 +1793,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 AlertDialog alertDialog = new AlertDialog.Builder(POSActivity.this).create();
                 alertDialog.setCancelable(false);
 
-                final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
-                Button btnSave = (Button) view.findViewById(R.id.btn_save);
-                Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+                final EditText etComments = view.findViewById(R.id.et_addItem);
+                Button btnSave = view.findViewById(R.id.btn_save);
+                Button btnCancel = view.findViewById(R.id.btn_cancel);
 
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1794,7 +1832,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
@@ -1818,6 +1856,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
                 if (CategoryType >= 0) {
+                    tvStock = view.findViewById(R.id.tvStockBal);
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
                     regularAmt = view.findViewById(R.id.RegularAmt);
@@ -1835,8 +1874,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
         Context context;
-        private List<Product_Details_Modal> Product_Details_Modalitem;
-        private int rowLayout;
+        private final List<Product_Details_Modal> Product_Details_Modalitem;
+        private final int rowLayout;
 
 
         public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context) {

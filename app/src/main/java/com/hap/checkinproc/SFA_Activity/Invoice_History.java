@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,10 +63,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
-
-    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
+    public static TextView tvStartDate,tvEndDate;
+    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn,
+            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
-            linVanSales,linintent;
+            linVanSales, linintent;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -80,6 +84,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     Button btnSbmtNOrd;
     ImageView btnRmkClose;
     public static String TAG = "Invoice_History";
+    private DatePickerDialog fromDatePickerDialog;
+
 
     //Updateed
     @Override
@@ -125,12 +131,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
             linRpt = (LinearLayout) findViewById(R.id.llRpt);
             linVanSales = findViewById(R.id.lin_vanSales);
-            linintent=findViewById(R.id.lin_intent);
+            linintent = findViewById(R.id.lin_intent);
             tvOutstanding = findViewById(R.id.txOutstanding);
 
             txPrvBal = findViewById(R.id.PrvOutAmt);
             txSalesAmt = findViewById(R.id.SalesAmt);
             txPayment = findViewById(R.id.PaymentAmt);
+            tvStartDate = findViewById(R.id.tvStartDate);
+            tvEndDate = findViewById(R.id.tvEndDate);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -145,6 +153,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linRpt.setOnClickListener(this);
             linVanSales.setOnClickListener(this);
             linintent.setOnClickListener(this);
+            tvStartDate.setOnClickListener(this);
+            tvEndDate.setOnClickListener(this);
 
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +189,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
+            tvStartDate.setText(Common_Class.GetDatewothouttime());
+            tvEndDate.setText(Common_Class.GetDatewothouttime());
 
             common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
             common_class.getDb_310Data(Constants.TAXList, this);
@@ -194,16 +206,36 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
                 linVanSales.setVisibility(View.VISIBLE);
 
-            if(!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)){
+            if (!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)) {
                 common_class.getDentDatas(this);
                 linintent.setVisibility(View.VISIBLE);
                 lin_noOrder.setVisibility(View.GONE);
             }
         } catch (Exception e) {
-
+Log.v(TAG,e.getMessage());
         }
 
     }
+
+    void showDatePickerDialog(int pos, TextView tv) {
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(Invoice_History.this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                int month = monthOfYear + 1;
+                String date = ("" + year + "-" + month + "-" + dayOfMonth);
+
+                if (common_class.checkDates(pos == 0 ? date : tvStartDate.getText().toString(), pos == 1 ? date : tvEndDate.getText().toString(), Invoice_History.this)) {
+                    tv.setText(date);
+                    common_class.getDataFromApi(Constants.GetTodayOrder_List, Invoice_History.this, false);
+                } else {
+                    common_class.showMsg(Invoice_History.this, "Please select valid date");
+                }
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.show();
+    }
+
 
     private void getOutstanding() {
         JSONObject jParam = new JSONObject();
@@ -255,6 +287,13 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvStartDate:
+                showDatePickerDialog(0, tvStartDate);
+                break;
+            case R.id.tvEndDate:
+                showDatePickerDialog(1, tvEndDate);
+                break;
+
             case R.id.llRpt:
                 common_class.CommonIntentwithoutFinish(PayLedgerActivity.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
