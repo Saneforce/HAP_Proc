@@ -165,14 +165,14 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/Qty"
-                            android:layout_weight="1"
+                            android:layout_weight="0.8"
                             android:text="Inv Qty"
                             android:textColor="@color/black" />
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.8"
                             android:gravity="center">
 
 
@@ -203,7 +203,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/Qty"
-                            android:layout_weight="1"
+                            android:layout_weight="0.8"
                             android:gravity="center_vertical"
                             android:text="4"
                             android:textColor="@color/grey_800" />
@@ -211,7 +211,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:layout_weight="0.8">
 
                             <RelativeLayout
                                 android:id="@+id/rlUOM"
@@ -221,7 +221,6 @@
                                 android:background="@drawable/order_qty_backround">
 
                                 <TextView
-                                    android:text="EA"
                                     android:id="@+id/tvUOM"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -230,6 +229,7 @@
                                     android:hint="UOM"
                                     android:paddingLeft="@dimen/C5dp"
                                     android:paddingRight="@dimen/C5dp"
+                                    android:text="EA"
                                     android:textColor="@color/txt_color_black"
                                     android:visibility="visible" />
 

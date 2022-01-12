@@ -179,11 +179,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+            menuList.add(new Common_Model("GRM", R.drawable.ic_outline_assignment_turned_in_24));
+
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_sfa_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
         }
-        menuList.add(new Common_Model("GRM", R.drawable.ic_outline_assignment_turned_in_24));
 
 
         RecyclerView.LayoutManager manager = new GridLayoutManager(this, 4);

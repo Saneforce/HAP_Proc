@@ -705,7 +705,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 }
                 Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
-                        "1", "5", "i", 7.99, 1.8, obj.getDouble("Rate"),
+                        "1", "5", "i", 0, 1.8, obj.getDouble("Rate"),
                         obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt)));
 
 

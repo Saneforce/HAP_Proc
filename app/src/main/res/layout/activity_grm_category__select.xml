@@ -160,6 +160,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+
                     android:layout_marginLeft="@dimen/C10dp"
                     android:id="@+id/edt_order_no"
                     android:layout_width="wrap_content"
@@ -167,12 +168,11 @@
                     android:background="@drawable/text_bg_grey"
                     android:gravity="start"
                     android:hint="Enter Order Number"
-                    android:inputType="number"
                     android:padding="10dp"
                     android:textSize="13dp" />
 
                 <Button
-                    android:id="@+id/btn_order_enter"
+                    android:id="@+id/btn_get_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -361,6 +361,7 @@
 
 
                                 <LinearLayout
+                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -372,6 +373,22 @@
                                         android:layout_gravity="center"
                                         android:gravity="end"
                                         android:text="Regular"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="UOM"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
