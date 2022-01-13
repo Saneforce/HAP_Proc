@@ -369,6 +369,13 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
+
+                case Constants.GRN_ORDER_DATA:
+                    QuerySTring1 = "{\"tableName\":\"getorderdetailsforgrn\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
                 case Constants.PrePrimaryOrderQty:
                     QuerySTring1 = "{\"tableName\":\"getpreviousorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
@@ -415,6 +422,7 @@ public class Common_Class {
 
 
     }
+
 
     void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity) {
         try {

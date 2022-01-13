@@ -96,6 +96,7 @@ public class Constants {
     public static final String RETAIL_CLASS = "retailClass";
     public static final String CUSTOMER_DATA ="customerData" ;
     public static final String STOCK_DATA ="stockData" ;
+    public static final String GRN_ORDER_DATA ="grnOrderData" ;
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";

@@ -59,7 +59,7 @@ public class Product_Details_Modal {
 
     @SerializedName("Default_UOMQty")
     @Expose
-    private int defaultUOMQty;
+    private double defaultUOMQty;
     @SerializedName("Default_UOM")
     @Expose
     private Double defaultUOM;
@@ -332,11 +332,11 @@ public class Product_Details_Modal {
     @SerializedName("PaidAmount")
     @Expose
     private String PaidAmount;
-    private int CnvQty;
+    private double CnvQty;
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
-                                 String unitCode, int defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
+                                 String unitCode, double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
                                  Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax) {
         this.id = id;
         this.name = name;
@@ -538,11 +538,11 @@ public class Product_Details_Modal {
         this.unitCode = unitCode;
     }
 
-    public int getDefaultUOMQty() {
+    public double getDefaultUOMQty() {
         return defaultUOMQty;
     }
 
-    public void setDefaultUOMQty(int defaultUOMQty) {
+    public void setDefaultUOMQty(double defaultUOMQty) {
         this.defaultUOMQty = defaultUOMQty;
     }
 
@@ -674,11 +674,11 @@ public class Product_Details_Modal {
         Default_UOM_Name = default_UOM_Name;
     }
 
-    public int getCnvQty() {
+    public double getCnvQty() {
         return CnvQty;
     }
 
-    public void setCnvQty(int cnvQty) {
+    public void setCnvQty(double cnvQty) {
         CnvQty = cnvQty;
     }
 
@@ -702,7 +702,7 @@ public class Product_Details_Modal {
     public class UOM {
         @SerializedName("CnvQty")
         @Expose
-        private int CnvQty;
+        private double CnvQty;
 
         @SerializedName("UOM_Id")
         @Expose
@@ -728,11 +728,11 @@ public class Product_Details_Modal {
             this.UOM_Nm = UOM_Nm;
         }
 
-        public int getCnvQty() {
+        public double getCnvQty() {
             return CnvQty;
         }
 
-        public void setCnvQty(int cnvQty) {
+        public void setCnvQty(double cnvQty) {
             CnvQty = cnvQty;
         }
     }

@@ -63,7 +63,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
-    public static TextView tvStartDate,tvEndDate;
+    public static TextView tvStartDate, tvEndDate;
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn,
             txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
@@ -212,7 +212,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 lin_noOrder.setVisibility(View.GONE);
             }
         } catch (Exception e) {
-Log.v(TAG,e.getMessage());
+            Log.v(TAG, e.getMessage());
         }
 
     }

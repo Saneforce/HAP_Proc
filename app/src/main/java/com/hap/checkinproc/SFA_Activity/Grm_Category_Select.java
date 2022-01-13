@@ -400,10 +400,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.btn_get_order:
                 if (Common_Class.isNullOrEmpty(etOrderNo.getText().toString()))
-                    common_class.showMsg(this, "Please Enter Order Number");
+                    common_class.showMsg(this, "Please Enter Invoice Number");
                 else {
                     Shared_Common_Pref.TransSlNo = etOrderNo.getText().toString();
-                    common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
+                    common_class.getDataFromApi(Constants.GRN_ORDER_DATA, this, false);
                 }
                 break;
             case R.id.rlAddProduct:
@@ -526,7 +526,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                         OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                        OutletItem.put("ordertype", "grm");
+                        OutletItem.put("ordertype", "GRN");
                         OutletItem.put("orderId", etOrderNo.getText().toString());
 
 
@@ -607,8 +607,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                        Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code,
-                                sharedCommonPref.getvalue(Constants.LOGIN_TYPE), data.toString());
+                        Call<JsonObject> responseBodyCall = apiInterface.saveGrn(Shared_Common_Pref.Div_Code, data.toString());
                         responseBodyCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -835,7 +834,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
             switch (key) {
-                case Constants.TodayOrderDetails_List:
+                case Constants.GRN_ORDER_DATA:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equalsIgnoreCase("[]")) {
                         common_class.showMsg(this, "No Records Found");
                     } else {
@@ -1047,7 +1046,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM;
+                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty;
 
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty, etBatchNo, etRemarks;
@@ -1070,6 +1069,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
                 if (CategoryType >= 0) {
+                    tvInvQty = view.findViewById(R.id.tvInvQty);
                     rlUOM = view.findViewById(R.id.rlUOM);
                     tvMFG = view.findViewById(R.id.tvMFG);
                     tvEXP = view.findViewById(R.id.tvEXP);
@@ -1167,6 +1167,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (CategoryType >= 0) {
+                    holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getExp()))
                         Product_Details_Modal.setExp("");
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getMfg()))

@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/basic"
                 android:paddingLeft="@dimen/C5dp"
-                android:text="GRM"
+                android:text="GRN"
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
                 android:textColor="#FFF"
@@ -161,13 +161,13 @@
 
                 <EditText
 
-                    android:layout_marginLeft="@dimen/C10dp"
                     android:id="@+id/edt_order_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/C10dp"
                     android:background="@drawable/text_bg_grey"
                     android:gravity="start"
-                    android:hint="Enter Order Number"
+                    android:hint="Enter Invoice Number"
                     android:padding="10dp"
                     android:textSize="13dp" />
 
@@ -361,10 +361,10 @@
 
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:id="@+id/RegularQty"
