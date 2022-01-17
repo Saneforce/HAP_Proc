@@ -87,6 +87,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_other_expense.xml" value="0.26992753623188404" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet__info_.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet__report__view.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_outlet_approval.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pay_stmt.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_payment.xml" value="0.2658514492753623" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pdf_viewer.xml" value="0.27291666666666664" />
@@ -161,7 +162,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/myteam_category_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/other_brand_order_recyclerview.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/outlet_dashboardinfo_recyclerview.xml" value="0.2682291666666667" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.33" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/part_view.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/pop_add_recyclerview.xml" value="0.26992753623188404" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/popup_add_recyclerview.xml" value="0.25271739130434784" />

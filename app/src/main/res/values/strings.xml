@@ -75,7 +75,7 @@
     <string name="route">Route  </string>
     <string name="retailer">Outlet Name </string>
     <string name="retailer_class">Outlet Class  </string>
-    <string name="retailer_channel">Outlet Channel </string>
+    <string name="retailer_channel">Outlet Category </string>
     <string name="event_capture">Event Capture</string>
     <string name="order">Orders</string>
     <string name="remark">Enter the Remarks </string>

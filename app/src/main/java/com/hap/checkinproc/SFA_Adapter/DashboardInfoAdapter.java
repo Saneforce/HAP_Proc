@@ -61,6 +61,7 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
             JSONObject mObj = mDate.getJSONObject(position);
             holder.tvOutletName.setText(mObj.getString("OutletName"));
 
+
 //            if (DistName.contains(mObj.getString("FranchiseName")))
 //                holder.tvDistName.setVisibility(View.GONE);
 //            else {
@@ -79,6 +80,10 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
                 holder.tvId.setText(mObj.getString("TransactionNo"));
             }
 
+            holder.tvDistAdd.setText(""+mObj.getString("Address"));
+            holder.tvDistPh.setText(""+mObj.getString("Mobile"));
+            holder.tvDateTime.setText(""+mObj.getString("Date_Time"));
+
 
         } catch (Exception e) {
             Log.e("History_Adapter:", e.getMessage());
@@ -91,7 +96,7 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvId, tvStatus, tvAmount, tvOutletName, tvDistName;
+        TextView tvId, tvStatus, tvAmount, tvOutletName, tvDistName,tvDistAdd,tvDistPh,tvDateTime;
         ImageView ivStatus;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -102,6 +107,9 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
             tvAmount = itemView.findViewById(R.id.tvAmount);
             ivStatus = itemView.findViewById(R.id.ivStatus);
             tvDistName = itemView.findViewById(R.id.tvDistributer);
+            tvDistAdd=itemView.findViewById(R.id.tvDistAdd);
+            tvDistPh=itemView.findViewById(R.id.txMobile);
+            tvDateTime=itemView.findViewById(R.id.tvDateTime);
 
 
         }

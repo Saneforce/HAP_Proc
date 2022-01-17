@@ -16,25 +16,27 @@
 
             android:id="@+id/tool_header"
             layout="@layout/sfatoolbar"></include>
-<LinearLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:paddingLeft="@dimen/C5dp"
             android:paddingRight="@dimen/C5dp">
-        <TextView
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Team"
-            android:textAlignment="textStart"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:paddingLeft="@dimen/C5dp"
-            android:textStyle="bold" />
+            <TextView
 
-</LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/C5dp"
+                android:text="My Team"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
 
@@ -80,6 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,6 +99,7 @@
 
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -121,6 +125,7 @@
                             android:padding="@dimen/C5dp"
                             android:textSize="12sp" />
                     </LinearLayout>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvTeamDetail"
                         android:layout_width="match_parent"

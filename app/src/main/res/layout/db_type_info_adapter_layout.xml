@@ -4,29 +4,64 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <TextView
-        android:id="@+id/tvDistributer"
+    <LinearLayout
+        android:id="@+id/llDistParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/C10dp"
         android:layout_marginLeft="@dimen/C10dp"
+        android:layout_marginTop="@dimen/C10dp"
+        android:orientation="vertical">
 
-        android:ellipsize="end"
-        android:fontFamily="sans-serif"
-        android:maxLines="1"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="15dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvDistributer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDistAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/btnCallMob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/icMob"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="@dimen/C1dp"
+                android:src="@drawable/call_icon"
+                app:tint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/txMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C3dp"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cdInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDistributer"
-        android:visibility="visible"
+        android:layout_below="@+id/llDistParent"
         android:layout_margin="@dimen/C5dp"
+        android:visibility="visible"
         app:cardCornerRadius="@dimen/C5dp">
 
 
@@ -40,16 +75,12 @@
 
             <TextView
                 android:id="@+id/retailername"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:text=""
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:textColor="#333333"
                 android:textSize="15sp"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -86,15 +117,27 @@
                     app:tint="@color/greenColor"></ImageView>
             </RelativeLayout>
 
-
-            <TextView
-                android:id="@+id/tvOrderId"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/grey_600"
-                android:textSize="@dimen/C13dp" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tvOrderId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_600"
+                    android:textSize="@dimen/C13dp" />
+
+                <TextView
+                    android:id="@+id/tvDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/grey_600"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tvAmount"
