@@ -51,7 +51,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Common_Class common_class;
     List<Product_Details_Modal> Order_Outlet_Filter;
     TextView netamount, cashdiscount, gstLabel, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber, retailername,
-            retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader, tvDistId, tvDistAdd;
+            retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader, tvDistId,
+            tvDistAdd;
 
     ImageView ok, ivPrint;
 

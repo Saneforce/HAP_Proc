@@ -609,7 +609,7 @@ public class Login extends AppCompatActivity {
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
 //                eMail = "1012151@hap.in";
-              //  eMail = "1005985@hap.in";
+                //  eMail = "1005985@hap.in";
                 //eMail = "1007660@hap.in";//pranita
                 //eMail="1026508@hap.in";//alaguselvi
 
@@ -696,6 +696,7 @@ public class Login extends AppCompatActivity {
                     userEditor.putString("DesigNm", UserLastName);
                     userEditor.putString("DepteNm", UserLastName1);
                 }
+                userEditor.putString("SfName", response.getData().get(0).getStockist_Name());
 
                 userEditor.putString("url", String.valueOf(profile));
                 userEditor.apply();
