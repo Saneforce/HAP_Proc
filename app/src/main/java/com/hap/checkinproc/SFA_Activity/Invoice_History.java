@@ -131,7 +131,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linPayment = (LinearLayout) findViewById(R.id.lin_payment);
             linRpt = (LinearLayout) findViewById(R.id.llRpt);
             linVanSales = findViewById(R.id.lin_vanSales);
-            linintent = findViewById(R.id.lin_intent);
+            linintent = findViewById(R.id.lin_indent);
             tvOutstanding = findViewById(R.id.txOutstanding);
 
             txPrvBal = findViewById(R.id.PrvOutAmt);
@@ -340,7 +340,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
-            case R.id.lin_intent:
+            case R.id.lin_indent:
                 startActivity(new Intent(getApplicationContext(), IndentActivity.class));
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;

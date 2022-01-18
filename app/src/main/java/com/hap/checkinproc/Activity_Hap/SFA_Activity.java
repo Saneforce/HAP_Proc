@@ -42,7 +42,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.FPPrimaryOrderActivity;
-import com.hap.checkinproc.SFA_Activity.Grm_Category_Select;
+import com.hap.checkinproc.SFA_Activity.Grn_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
@@ -195,7 +195,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             public void CallMobile(String menuName) {
                 switch (menuName) {
                     case "GRN":
-                        common_class.CommonIntentwithNEwTask(Grm_Category_Select.class);
+                        common_class.CommonIntentwithNEwTask(Grn_Category_Select.class);
                         break;
                     case "POS":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);

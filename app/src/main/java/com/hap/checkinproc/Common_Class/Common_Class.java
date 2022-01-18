@@ -508,6 +508,12 @@ public class Common_Class {
                         //data.put("date", "2021-11-10");
                         data.put("type", jparam.get("type").getAsString());
                         break;
+
+                    case Constants.DELIVERY_SEQUENCE:
+                        axnname = "save/deliverysequence";
+                        data.put("RetailerID", jparam.get("RetailerID").getAsString());
+                        data.put("SlNo", jparam.get("SlNo").getAsString());
+                        break;
                     case Constants.PrimaryTAXList:
                         axnname = "get/primaryproducttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -875,7 +881,7 @@ public class Common_Class {
                 service.getDataArrayList("get/indentproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("DENT:", response.body().toString());
+                        Log.v("INDENT:", response.body().toString());
                         db.deleteMasterData(Constants.INDENT_Product_List);
                         db.addMasterData(Constants.INDENT_Product_List, response.body());
                     }

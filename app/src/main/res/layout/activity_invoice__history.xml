@@ -606,7 +606,7 @@
 
                 <LinearLayout
                     android:visibility="gone"
-                    android:id="@+id/lin_intent"
+                    android:id="@+id/lin_indent"
                     style="@style/OrderTypesButton"
                     android:layout_weight="1">
 

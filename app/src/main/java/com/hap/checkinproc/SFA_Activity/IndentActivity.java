@@ -114,7 +114,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_dent);
+            setContentView(R.layout.activity_indent);
             order_category_select = this;
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(IndentActivity.this);
@@ -171,10 +171,10 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INTENT_DATA)))
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA)))
                 Product_Modal = gson.fromJson(OrdersTable, userType);
             else {
-                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INTENT_DATA), userType);
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA), userType);
 
             }
 
@@ -565,16 +565,16 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class, "Dent?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "Indent?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class, "Dent?");
+                common_class.commonDialog(this, QPSActivity.class, "Indent?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class, "Dent?");
+                common_class.commonDialog(this, POPActivity.class, "Indent?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class, "Dent?");
+                common_class.commonDialog(this, CoolerInfoActivity.class, "Indent?");
                 break;
 
             case R.id.takeorder:
@@ -750,7 +750,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                                     Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_INTENT_DATA);
+                                        sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
                                         common_class.CommonIntentwithFinish(Invoice_History.class);
                                     }
                                     common_class.showMsg(IndentActivity.this, jsonObjects.getString("Msg"));
@@ -937,7 +937,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         String data = gson.toJson(Product_Modal);
-        sharedCommonPref.save(Constants.LOC_INTENT_DATA, data);
+        sharedCommonPref.save(Constants.LOC_INDENT_DATA, data);
 
     }
 
@@ -973,7 +973,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
-                common_class.commonDialog(this, Invoice_History.class, "Dent?");
+                common_class.commonDialog(this, Invoice_History.class, "Indent?");
             }
             return true;
         }

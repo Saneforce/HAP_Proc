@@ -28,7 +28,6 @@ public class HistorySalesInfoAdapter extends RecyclerView.Adapter<HistorySalesIn
     AdapterOnClick mAdapterOnClick;
     private View listItem;
     int rowlayout;
-    NumberFormat formatter = new DecimalFormat("##0.00");
 
     int tab;
 

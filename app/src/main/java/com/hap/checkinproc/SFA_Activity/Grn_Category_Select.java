@@ -76,7 +76,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Grm_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
+public class Grn_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     NumberFormat formatter = new DecimalFormat("##0.00");
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -101,7 +101,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
     Prodct_Adapter mProdct_Adapter;
     List<Product_Details_Modal> freeQty_Array_List;
 
-    String TAG = "GRM_Category_Select";
+    String TAG = "GRN_Category_Select";
     DatabaseHandler db;
     public int selectedPos = 0;
 
@@ -129,9 +129,9 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_grm_category__select);
+            setContentView(R.layout.activity_grn_category__select);
             db = new DatabaseHandler(this);
-            sharedCommonPref = new Shared_Common_Pref(Grm_Category_Select.this);
+            sharedCommonPref = new Shared_Common_Pref(Grn_Category_Select.this);
             common_class = new Common_Class(this);
             categorygrid = findViewById(R.id.category);
             Grpgrid = findViewById(R.id.PGroup);
@@ -359,7 +359,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
                 selectedPos = 0;
 
-                Grm_Category_Select.CategoryAdapter customAdapteravail = new Grm_Category_Select.CategoryAdapter(getApplicationContext(),
+                Grn_Category_Select.CategoryAdapter customAdapteravail = new Grn_Category_Select.CategoryAdapter(getApplicationContext(),
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
@@ -389,7 +389,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         }
 
         if (Getorder_Array_List.size() == 0)
-            Toast.makeText(getApplicationContext(), "GRM is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "GRN is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
 
@@ -492,7 +492,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
-            AlertDialogBox.showDialog(Grm_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+            AlertDialogBox.showDialog(Grn_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
                     common_class.ProgressdialogShow(1, "");
@@ -622,7 +622,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                                             // sharedCommonPref.clear_pref(Constants.LOC_INVOICE_DATA);
                                             common_class.CommonIntentwithFinish(SFA_Activity.class);
                                         }
-                                        common_class.showMsg(Grm_Category_Select.this, jsonObjects.getString("Msg"));
+                                        common_class.showMsg(Grn_Category_Select.this, jsonObjects.getString("Msg"));
 
                                     } catch (Exception e) {
                                         common_class.ProgressdialogShow(0, "");
@@ -666,7 +666,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.grm_pay_recyclerview, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.grn_pay_recyclerview, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
 
@@ -823,7 +823,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_grm_recyclerview, getApplicationContext(), categoryPos);
+        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_grn_recyclerview, getApplicationContext(), categoryPos);
         recyclerView.setAdapter(mProdct_Adapter);
 
     }
@@ -922,10 +922,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public class CategoryAdapter extends RecyclerView.Adapter<Grm_Category_Select.CategoryAdapter.MyViewHolder> {
+    public class CategoryAdapter extends RecyclerView.Adapter<Grn_Category_Select.CategoryAdapter.MyViewHolder> {
 
         Context context;
-        Grm_Category_Select.CategoryAdapter.MyViewHolder pholder;
+        Grn_Category_Select.CategoryAdapter.MyViewHolder pholder;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -953,10 +953,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public Grm_Category_Select.CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public Grn_Category_Select.CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.category_order_horizantal_universe_gridview, parent, false);
-            return new Grm_Category_Select.CategoryAdapter.MyViewHolder(view);
+            return new Grn_Category_Select.CategoryAdapter.MyViewHolder(view);
         }
 
         @Override
@@ -971,7 +971,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         @SuppressLint("UseCompatLoadingForDrawables")
         @Override
-        public void onBindViewHolder(Grm_Category_Select.CategoryAdapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(Grn_Category_Select.CategoryAdapter.MyViewHolder holder, int position) {
             try {
 
 
@@ -1122,13 +1122,13 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         void showDatePickerDialog(int pos, TextView tv, Product_Details_Modal pm) {
             Calendar newCalendar = Calendar.getInstance();
-            DatePickerDialog fromDatePickerDialog = new DatePickerDialog(Grm_Category_Select.this, new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog fromDatePickerDialog = new DatePickerDialog(Grn_Category_Select.this, new DatePickerDialog.OnDateSetListener() {
 
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     int month = monthOfYear + 1;
                     String date = ("" + year + "-" + month + "-" + dayOfMonth);
 
-                    //if (common_class.checkDates(pos == 0 ? date : holder.tvMFG.getText().toString(), pos == 1 ? date : holder.tvEXP.getText().toString(), Grm_Category_Select.this)) {
+                    //if (common_class.checkDates(pos == 0 ? date : holder.tvMFG.getText().toString(), pos == 1 ? date : holder.tvEXP.getText().toString(), Grn_Category_Select.this)) {
                     tv.setText(date);
 
                     if (pos == 0)
@@ -1138,7 +1138,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
 //                    } else {
-//                        common_class.showMsg(Grm_Category_Select.this, "Please select valid date");
+//                        common_class.showMsg(Grn_Category_Select.this, "Please select valid date");
 //                    }
                 }
             }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -1234,9 +1234,9 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                                         uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
                                     }
-                                    common_class.showCommonDialog(uomList, 1, Grm_Category_Select.this);
+                                    common_class.showCommonDialog(uomList, 1, Grn_Category_Select.this);
                                 } else {
-                                    common_class.showMsg(Grm_Category_Select.this, "No Records Found.");
+                                    common_class.showMsg(Grn_Category_Select.this, "No Records Found.");
                                 }
                             } catch (Exception e) {
                                 Log.v(TAG, e.getMessage());
@@ -1560,10 +1560,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             try {
 
 
-                LayoutInflater inflater = LayoutInflater.from(Grm_Category_Select.this);
+                LayoutInflater inflater = LayoutInflater.from(Grn_Category_Select.this);
 
                 final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
-                AlertDialog alertDialog = new AlertDialog.Builder(Grm_Category_Select.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(Grn_Category_Select.this).create();
                 alertDialog.setCancelable(false);
 
                 final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
@@ -1575,9 +1575,9 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                     public void onClick(View v) {
 
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
-                            common_class.showMsg(Grm_Category_Select.this, "Empty value is not allowed");
+                            common_class.showMsg(Grn_Category_Select.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(Grm_Category_Select.this, "Enter Rate is greater than MRP");
+                            common_class.showMsg(Grn_Category_Select.this, "Enter Rate is greater than MRP");
 
                         } else {
                             alertDialog.dismiss();
@@ -1686,7 +1686,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
-                common_class.commonDialog(this, SFA_Activity.class, "GRM?");
+                common_class.commonDialog(this, SFA_Activity.class, "GRN?");
 
             }
             return true;

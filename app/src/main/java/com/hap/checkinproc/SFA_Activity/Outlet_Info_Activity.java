@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Constants.DELIVERY_SEQUENCE;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -58,18 +60,21 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     EditText txSearchRet;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     DatabaseHandler db;
-    String TAG = "OUTLET_INFO_Activity:",viewType="-1";;
+    String TAG = "OUTLET_INFO_Activity:", viewType = "-1";
+    ;
     private TextView distributor_text;
-    Switch swACOutlet,swOTHOutlet,swUpdOutlet,swUpdNoOutlet;
-    int CountUR = 0, CountSR = 0,CountCls=0;
-    TextView txSrvOtlt, txUniOtlt,txClsOtlt,txAllOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt,tvApprovalSta;
-    LinearLayout btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
+    Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet;
+    int CountUR = 0, CountSR = 0, CountCls = 0;
+    TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta;
+    LinearLayout btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
+    public static Outlet_Info_Activity outlet_info_activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_outlet__info_);
+            outlet_info_activity = this;
             db = new DatabaseHandler(this);
             common_class = new Common_Class(this);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
@@ -102,8 +107,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             swOTHOutlet = findViewById(R.id.swOTHOutlet);
 
             swUpdOutlet = findViewById(R.id.swUpdOutlet);
-            swUpdNoOutlet= findViewById(R.id.swUpdNoOutlet);
-            tvApprovalSta=findViewById(R.id.tvApprovSta);
+            swUpdNoOutlet = findViewById(R.id.swUpdNoOutlet);
+            tvApprovalSta = findViewById(R.id.tvApprovSta);
             tvApprovalSta.setOnClickListener(this);
 
             route_text.setOnClickListener(this);
@@ -327,7 +332,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         CountUR = 0;
         CountSR = 0;
         CountCls = 0;
-        if(Retailer_Modal_List!=null) {
+        if (Retailer_Modal_List != null) {
             for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
                 String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
                 String sSchText = txSearchRet.getText().toString().toUpperCase();
@@ -377,7 +382,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
         if (Retailer_Modal_ListFilter != null) {
 
-            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
+            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(),"Outlets", new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {
                     try {
@@ -420,7 +425,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);
-            sharedCommonPref.save(Constants.DivERP,myDataset.get(position).getDivERP());
+            sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
 
         } else if (type == 3) {
             route_text.setText(myDataset.get(position).getName());
@@ -445,7 +450,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvApprovSta:
-                common_class.CommonIntentwithoutFinish(OutletApprovalActivity.class);
+                common_class.CommonIntentwithoutFinish(OutletApprovListActivity.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.reachedoutlets:
@@ -469,6 +474,13 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+
+                    case DELIVERY_SEQUENCE:
+                        JSONObject obj = new JSONObject(apiDataResponse);
+                        common_class.showMsg(this, obj.getString("Msg"));
+                        if (obj.getBoolean("success"))
+                            common_class.getDataFromApi(Retailer_OutletList, this, false);
+                        break;
                     case Retailer_OutletList:
                         reloadData();
                         break;
@@ -499,5 +511,12 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     protected void onResume() {
         super.onResume();
         reloadData();
+    }
+
+    public void submitSeqNo(int sequence, String outletId) {
+        JsonObject data = new JsonObject();
+        data.addProperty("RetailerID", outletId);
+        data.addProperty("SlNo", String.valueOf(sequence));
+        common_class.getDb_310Data(Constants.DELIVERY_SEQUENCE, this, data);
     }
 }
