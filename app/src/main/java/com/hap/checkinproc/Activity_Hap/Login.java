@@ -694,6 +694,7 @@ public class Login extends AppCompatActivity {
                     userEditor.putString("DesigNm", UserLastName);
                     userEditor.putString("DepteNm", UserLastName1);
                 }
+                userEditor.putString("SfName", response.getData().get(0).getStockist_Name());
 
                 userEditor.putString("url", String.valueOf(profile));
                 userEditor.apply();

@@ -111,11 +111,18 @@
         <activity android:name=".SFA_Activity.Outlet_Report_View" />
         <activity android:name=".SFA_Activity.Reports_Outler_Name" />
         <activity
+            android:name=".SFA_Activity.OutletApprovalActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".SFA_Activity.Reports_Distributor_Name"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".SFA_Activity.Order_Category_Select"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Grm_Category_Select"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.IndentActivity"

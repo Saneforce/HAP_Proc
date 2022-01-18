@@ -62,7 +62,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     private TextView distributor_text;
     Switch swACOutlet,swOTHOutlet,swUpdOutlet,swUpdNoOutlet;
     int CountUR = 0, CountSR = 0,CountCls=0;
-    TextView txSrvOtlt, txUniOtlt,txClsOtlt,txAllOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt;
+    TextView txSrvOtlt, txUniOtlt,txClsOtlt,txAllOtlt, txSrvOtltCnt, txUniOtltCnt,txClsOtltCnt,tvApprovalSta;
     LinearLayout btSrvOtlt, btUniOtlt,btClsOtlt, undrUni, undrCls, undrServ;
 
     @Override
@@ -103,6 +103,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
             swUpdOutlet = findViewById(R.id.swUpdOutlet);
             swUpdNoOutlet= findViewById(R.id.swUpdNoOutlet);
+            tvApprovalSta=findViewById(R.id.tvApprovSta);
+            tvApprovalSta.setOnClickListener(this);
 
             route_text.setOnClickListener(this);
             reachedoutlets.setOnClickListener(this);
@@ -442,6 +444,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvApprovSta:
+                common_class.CommonIntentwithoutFinish(OutletApprovalActivity.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
+                break;
             case R.id.reachedoutlets:
                 common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
                 overridePendingTransition(R.anim.in, R.anim.out);

@@ -50,6 +50,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
+import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
@@ -337,8 +338,8 @@ public class Common_Class {
 
                 case Constants.GetTodayOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
+                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
                     break;
                 case Constants.GetTodayPrimaryOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -364,6 +365,13 @@ public class Common_Class {
                     break;
                 case Constants.TodayOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
+                case Constants.GRN_ORDER_DATA:
+                    QuerySTring1 = "{\"tableName\":\"getorderdetailsforgrn\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -414,6 +422,7 @@ public class Common_Class {
 
 
     }
+
 
     void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity) {
         try {
@@ -479,6 +488,10 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.STOCK_DATA:
+                        axnname = "get/stockistledger";
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
                     case Constants.CUSTOMER_DATA:
                         axnname = "get/customerdetails";
                         data.put("customer_code", jparam.get("customer_code").getAsString());
@@ -1325,7 +1338,7 @@ public class Common_Class {
     }
 
     public void clearLocData(Activity activity) {
-        Shared_Common_Pref sharedCommonPref=new Shared_Common_Pref(activity);
+        Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(activity);
         sharedCommonPref.clear_pref(Constants.STATE_LIST);
         sharedCommonPref.clear_pref(Constants.RETAIL_CHANNEL);
         sharedCommonPref.clear_pref(Constants.RETAIL_CLASS);

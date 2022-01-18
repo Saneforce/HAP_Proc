@@ -59,7 +59,7 @@ public class Product_Details_Modal {
 
     @SerializedName("Default_UOMQty")
     @Expose
-    private Double defaultUOMQty;
+    private double defaultUOMQty;
     @SerializedName("Default_UOM")
     @Expose
     private Double defaultUOM;
@@ -99,6 +99,10 @@ public class Product_Details_Modal {
     @Expose
     private Double SGST;
 
+    @SerializedName("Balance")
+    @Expose
+    private Integer Balance;
+
     @SerializedName("UOMList")
     @Expose
     private List<UOM> UOMList = new ArrayList<>();
@@ -106,6 +110,34 @@ public class Product_Details_Modal {
 
     private String UOM_Id;
     private String UOM_Nm;
+    private String mfg = "";
+    private String exp = "";
+    private String remarks = "";
+    private String batchNo = "";
+
+    public String getExp() {
+        return exp;
+    }
+
+    public void setExp(String exp) {
+        this.exp = exp;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
+    }
 
     public String getMRP() {
         return MRP;
@@ -304,7 +336,7 @@ public class Product_Details_Modal {
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
-                                 String unitCode, Double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
+                                 String unitCode, double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
                                  Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax) {
         this.id = id;
         this.name = name;
@@ -506,11 +538,11 @@ public class Product_Details_Modal {
         this.unitCode = unitCode;
     }
 
-    public Double getDefaultUOMQty() {
+    public double getDefaultUOMQty() {
         return defaultUOMQty;
     }
 
-    public void setDefaultUOMQty(Double defaultUOMQty) {
+    public void setDefaultUOMQty(double defaultUOMQty) {
         this.defaultUOMQty = defaultUOMQty;
     }
 
@@ -648,6 +680,22 @@ public class Product_Details_Modal {
 
     public void setCnvQty(double cnvQty) {
         CnvQty = cnvQty;
+    }
+
+    public Integer getBalance() {
+        return Balance;
+    }
+
+    public void setBalance(Integer balance) {
+        Balance = balance;
+    }
+
+    public String getMfg() {
+        return mfg;
+    }
+
+    public void setMfg(String mfg) {
+        this.mfg = mfg;
     }
 
 

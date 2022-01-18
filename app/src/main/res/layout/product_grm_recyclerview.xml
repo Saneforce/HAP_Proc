@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_weight="3.5"
+                    android:layout_weight="3"
                     android:scaleType="centerInside"
                     android:src="@drawable/product_logo">
 
@@ -59,14 +59,16 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:inputType="number"
-                            android:text="MRP"
+                            android:text="Price"
                             android:textColor="@color/grey_800"
                             android:visibility="visible" />
 
@@ -76,7 +78,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginRight="@dimen/C5dp"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:drawableRight="@drawable/edit_small"
+                            android:drawablePadding="@dimen/C3dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -85,11 +89,20 @@
                             android:textStyle="bold" />
 
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/txt_color_black"
+                            android:visibility="gone" />
+
+
                     </RelativeLayout>
 
 
-                    <LinearLayout
-                        android:id="@+id/llRegular"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:orientation="horizontal"
@@ -104,17 +117,17 @@
 
                             android:hint=""
                             android:inputType="number"
-                            android:text="Regular  : "
+                            android:text="Order Qty : "
                             android:textColor="@color/grey_800"
                             android:visibility="visible" />
 
 
                         <TextView
+
                             android:id="@+id/RegularQty"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/tvRegularLabel"
-                            android:layout_weight="1"
                             android:gravity="center_vertical"
 
                             android:hint=""
@@ -125,44 +138,119 @@
 
 
                         <TextView
-
                             android:id="@+id/RegularAmt"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="@dimen/C5dp"
-                            android:layout_weight="1"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/C10dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"
-                            android:textAlignment="viewEnd"
                             android:textColor="@color/txt_color_black"
                             android:textStyle="bold"
                             android:visibility="visible" />
 
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/C30dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <TextView
 
-                            android:id="@+id/lblAddQty"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/Qty"
+                            android:layout_weight="0.8"
+                            android:text="Inv Qty"
+                            android:textColor="@color/black" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:gravity="center">
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_toLeftOf="@+id/Qty"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Rec Qty"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C30dp"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvInvQty"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/Qty"
+                            android:layout_weight="0.8"
                             android:gravity="center_vertical"
-                            android:text="Qty  : "
+                            android:text="0"
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8">
+
+                            <RelativeLayout
+                                android:id="@+id/rlUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C3dp"
+                                android:background="@drawable/order_qty_backround">
+
+                                <TextView
+                                    android:id="@+id/tvUOM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="sans-serif"
+                                    android:gravity="center_vertical"
+                                    android:hint="UOM"
+                                    android:paddingLeft="@dimen/C5dp"
+                                    android:paddingRight="@dimen/C5dp"
+                                    android:text="EA"
+                                    android:textColor="@color/txt_color_black"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toRightOf="@+id/tvUOM"
+                                    android:padding="1dp"
+
+                                    android:src="@drawable/spin_down_arrow"></ImageView>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/order_qty_backround">
 
                             <ImageView
@@ -200,42 +288,11 @@
                                 app:tint="@color/green" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/rlUOM"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/C3dp"
-                            android:background="@drawable/order_qty_backround">
-
-
-                            <TextView
-                                android:id="@+id/tvUOM"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:background="@color/white"
-                                android:gravity="center_vertical"
-                                android:hint="UOM"
-                                android:paddingLeft="@dimen/C5dp"
-                                android:paddingRight="@dimen/C5dp"
-                                android:text=""
-                                android:textAlignment="center"
-                                android:textColor="@color/black"
-                                tools:ignore="RtlCompat" />
-
-                            <ImageView
-                                android:layout_width="10dp"
-                                android:layout_height="25dp"
-                                android:layout_toRightOf="@id/tvUOM"
-                                android:padding="@dimen/C1dp"
-                                android:src="@drawable/spin_down_arrow" />
-                        </LinearLayout>
-
 
                         <RelativeLayout
-
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/qtyAmt"
@@ -259,44 +316,146 @@
 
                     </LinearLayout>
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:layout_marginRight="@dimen/C5dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C5dp"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
 
-                            android:id="@+id/tvStockLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/Qty"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="MFG"
+                            android:textColor="@color/grey_800" />
+
+                        <TextView
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/Qty"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="EXP"
+                            android:textColor="@color/grey_800" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:orientation="horizontal">
+
+
+                        <TextView
 
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Batch No : "
+                            android:textColor="@color/black" />
+
+                        <EditText
+                            android:id="@+id/etBatchNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter the Batch No"
+                            android:maxLines="2"
+                            android:padding="@dimen/C5dp"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C30dp"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MFG : "
+                            android:textColor="@color/black" />
+
+                        <TextView
+
+                            android:id="@+id/tvMFG"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="In Stock : "
-                            android:textColor="@color/grey_800"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_whitebg"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:hint="Select MFG"
+                            android:paddingLeft="@dimen/C5dp"
+                            android:paddingRight="@dimen/C5dp"
+                            android:textColor="@color/txt_color_black"
                             android:visibility="visible" />
 
                         <TextView
-                            android:id="@+id/tvStockBal"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/C5dp"
+                            android:text="EXP : "
+                            android:textColor="@color/black" />
 
+                        <TextView
+                            android:id="@+id/tvEXP"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_toRightOf="@id/tvStockLabel"
-                            android:gravity="center_vertical"
-                            android:text="0"
-                            android:textColor="@color/grey_800"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_whitebg"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:hint="Select EXP"
+                            android:paddingLeft="@dimen/C5dp"
+                            android:paddingRight="@dimen/C5dp"
+                            android:textColor="@color/txt_color_black"
                             android:visibility="visible" />
 
 
-                    </RelativeLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Remarks : "
+                            android:textColor="@color/black" />
+
+                        <EditText
+                            android:id="@+id/etRemarks"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter the Remarks"
+                            android:maxLines="2"
+                            android:padding="@dimen/C5dp"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:layout_marginRight="@dimen/C5dp"
+                        android:layout_marginRight="@dimen/C10dp"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
 
@@ -358,15 +517,18 @@
 
 
                     <RelativeLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
+
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:fontFamily="sans-serif"
+
                             android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
@@ -380,7 +542,7 @@
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvTaxLabel"
+                            android:layout_toRightOf="@+id/tvTaxTotAmt"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
 
@@ -396,7 +558,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C5dp"
+                            android:layout_marginRight="@dimen/C10dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:hint=""
@@ -418,13 +580,15 @@
                         android:layout_marginTop="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C3dp"
                         android:layout_weight="1"
-                        android:background="@color/grey_100">
+                        android:background="@color/grey_100"
+                        android:visibility="gone">
 
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/totalqty"
@@ -433,7 +597,7 @@
                             android:layout_marginTop="@dimen/C3dp"
                             android:gravity="center_vertical"
                             android:inputType="number"
-                            android:text="Total Qty : 0"
+                            android:text="Total Qty : 20"
                             android:textColor="@color/txt_color_black"
                             android:visibility="visible" />
 
@@ -443,7 +607,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C5dp"
+                            android:layout_marginRight="@dimen/C10dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"

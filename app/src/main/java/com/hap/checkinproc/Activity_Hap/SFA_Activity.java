@@ -42,6 +42,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.FPPrimaryOrderActivity;
+import com.hap.checkinproc.SFA_Activity.Grm_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
@@ -178,6 +179,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+            menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
+
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_sfa_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
@@ -191,6 +194,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void CallMobile(String menuName) {
                 switch (menuName) {
+                    case "GRN":
+                        common_class.CommonIntentwithNEwTask(Grm_Category_Select.class);
+                        break;
                     case "POS":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);
                         break;

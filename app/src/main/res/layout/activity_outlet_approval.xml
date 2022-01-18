@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+
+        android:id="@+id/tool_header"
+        layout="@layout/sfatoolbar"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_bg"
+        android:orientation="horizontal"
+        android:padding="@dimen/C3dp">
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/basic"
+            android:paddingLeft="@dimen/C5dp"
+            android:text="Outlet Creation Approval"
+            android:textAlignment="textStart"
+            android:textAllCaps="true"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/row_report"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/C40dp"
+        android:background="@color/grey_300">
+
+
+        <TextView
+            android:id="@+id/txt_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/sno"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C14dp"></TextView>
+
+
+        <TextView
+            android:id="@+id/Itemcount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Des"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C14dp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Ho"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C14dp"></TextView>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Applied Date"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C14dp"></TextView>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Click Here"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C14dp"></TextView>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

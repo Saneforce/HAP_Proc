@@ -18,6 +18,7 @@
 
 
             <ImageView
+
                 android:id="@+id/ivMenuIcon"
                 android:layout_width="@dimen/C40dp"
                 android:layout_height="@dimen/C40dp"
