@@ -90,7 +90,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvDeliveryDate, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode;
+    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -143,7 +143,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
             etCategoryItemSearch = findViewById(R.id.searchView);
-            tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
             ivScanner = findViewById(R.id.ivScanner);
             etName = findViewById(R.id.edt_name);
             etPhone = findViewById(R.id.edt_phone);
@@ -207,7 +206,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Log.v(TAG, " order oncreate:i ");
 
             Category_Nametext.setOnClickListener(this);
-            tvDeliveryDate.setOnClickListener(this);
 
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
@@ -612,19 +610,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 startActivity(intent);
                 break;
 
-            case R.id.tvDeliveryDate:
-                Calendar newCalendar = Calendar.getInstance();
-                fromDatePickerDialog = new DatePickerDialog(POSActivity.this, new DatePickerDialog.OnDateSetListener() {
 
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int month = monthOfYear + 1;
-
-                        tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                fromDatePickerDialog.show();
-
-                break;
             case R.id.rlAddProduct:
                 moveProductScreen();
                 break;
@@ -722,7 +708,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                 tvPayMode.getText().toString().equalsIgnoreCase("cash") ? etRecAmt.getText().toString() : "0");
                         OutletItem.put("Balance", tvPayMode.getText().toString().equalsIgnoreCase("cash") ?
                                 tvBalAmt.getText().toString() : "0");
-                        //  OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);

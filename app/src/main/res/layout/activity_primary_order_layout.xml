@@ -904,36 +904,7 @@
                                 android:outlineAmbientShadowColor="@color/black"
                                 android:visibility="visible"></View>
 
-                            <RelativeLayout
 
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:visibility="gone">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Delivery Date"
-                                    android:textAlignment="textStart"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"
-                                    android:textStyle="bold"></TextView>
-
-                                <TextView
-                                    android:id="@+id/tvDeliveryDate"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentEnd="true"
-                                    android:background="@drawable/cardbutton"
-                                    android:fontFamily="sans-serif"
-
-                                    android:hint="Select the Delivery Date"
-                                    android:padding="@dimen/C5dp"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
-                            </RelativeLayout>
 
                             <TextView
                                 android:id="@+id/tvSaveAmt"

@@ -27,7 +27,6 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     private Context context;
     AdapterOnClick mAdapterOnClick;
     int dummy;
-    public static int size = 0;
     String activityName;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -81,9 +80,6 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
 
         if (activityName.equalsIgnoreCase("Outlets")) {
             holder.rlSeqParent.setVisibility(View.VISIBLE);
-            if (size < Retailer_Modal_Listitem.size()) {
-                size = Retailer_Modal_Listitem.size();
-            }
         }
 
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
@@ -129,7 +125,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
 
                 } else {
                     int val = Integer.parseInt(holder.etSNo.getText().toString());
-                    if (val <= size)
+                    if (val <= Outlet_Info_Activity.retailerSize)
                         Outlet_Info_Activity.outlet_info_activity.submitSeqNo(val, Retailer_Modal_List.getId());
                     else
                         Toast.makeText(context, "Invalid Delivery Sequence", Toast.LENGTH_SHORT).show();

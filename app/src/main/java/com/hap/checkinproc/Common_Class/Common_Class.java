@@ -48,6 +48,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
@@ -340,6 +341,12 @@ public class Common_Class {
                     QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
                     QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    break;
+                case Constants.GetGrn_List:
+                    QuerySTring1 = "{\"tableName\":\"getindentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", GrnListActivity.tvStartDate.getText().toString());
+                    QueryString.put("todate", GrnListActivity.tvEndDate.getText().toString());
+                    QueryString.put(Constants.DistributorERP, shared_common_pref.getvalue(Constants.DistributorERP));
                     break;
                 case Constants.GetTodayPrimaryOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -767,6 +774,7 @@ public class Common_Class {
             try {
                 jParam.put("SF", UserDetails.getString("Sfcode", ""));
                 jParam.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                jParam.put("outletId", Shared_Common_Pref.OutletCode);
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -828,7 +836,7 @@ public class Common_Class {
     public void getDentDatas(Activity activity) {
 
         if (isNetworkAvailable(activity)) {
-            getProductDetails(activity);
+
             UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
             DatabaseHandler db = new DatabaseHandler(activity);

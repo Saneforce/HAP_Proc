@@ -92,7 +92,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
     Gson gson;
     CircularProgressButton takeorder, btnRepeat;
     TextView distributor_text, Category_Nametext,
-            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate, tvDeliveryDate, route_text;
+            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate, route_text;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd, btnRefACBal, llDistributor, btnCmbRoute;
     Common_Class common_class;
     String Ukey;
@@ -169,7 +169,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             btnClose = findViewById(R.id.btnClose);
             tvDistId = findViewById(R.id.tvDistId);
             tvDate = findViewById(R.id.tvDate);
-            tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
             btnRepeat = findViewById(R.id.btnRepeat);
             route_text = findViewById(R.id.route_text);
 
@@ -186,7 +185,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             rlAddProduct.setOnClickListener(this);
             llTdPriOrd.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
-            tvDeliveryDate.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
             llDistributor.setOnClickListener(this);
             btnCmbRoute.setOnClickListener(this);
@@ -488,19 +486,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             case R.id.llDistributor:
                 common_class.showCommonDialog(common_class.getDistList(), 2, this);
                 break;
-            case R.id.tvDeliveryDate:
-                Calendar newCalendar = Calendar.getInstance();
-                fromDatePickerDialog = new DatePickerDialog(FPPrimaryOrderActivity.this, new DatePickerDialog.OnDateSetListener() {
 
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int month = monthOfYear + 1;
-
-                        tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                fromDatePickerDialog.show();
-
-                break;
             case R.id.llTodayPriOrd:
                 startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
                 break;
@@ -610,7 +596,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                         OutletItem.put("ordertype", "order");
-                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
                         OutletItem.put("orderId", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "" : getIntent().getStringExtra(Constants.ORDER_ID));
                         OutletItem.put("mode", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit");
                         OutletItem.put("cutoff_time", sharedCommonPref.getvalue(Constants.CUTOFF_TIME));

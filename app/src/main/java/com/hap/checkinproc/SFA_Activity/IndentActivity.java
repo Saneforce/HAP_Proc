@@ -84,7 +84,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvDeliveryDate, tvRetailorPhone, retaileAddress;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo,tvRetailorPhone, retaileAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -139,7 +139,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
-            tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
 
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
@@ -191,7 +190,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             tvPOP.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
-            tvDeliveryDate.setOnClickListener(this);
 
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
 
@@ -536,19 +534,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         tvRetailorPhone.getText().toString().replaceAll(",", ""));
 
                 break;
-            case R.id.tvDeliveryDate:
-                Calendar newCalendar = Calendar.getInstance();
-                fromDatePickerDialog = new DatePickerDialog(IndentActivity.this, new DatePickerDialog.OnDateSetListener() {
 
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int month = monthOfYear + 1;
-
-                        tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                fromDatePickerDialog.show();
-
-                break;
             case R.id.rlAddProduct:
                 moveProductScreen();
                 break;
@@ -655,7 +641,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "Indent");
-                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
                         OutletItem.put("from", sharedCommonPref.getvalue(Constants.Distributor_Id));
                         OutletItem.put("to", Shared_Common_Pref.CUSTOMER_CODE);
                         OutletItem.put("distCode",Shared_Common_Pref.CUSTOMER_CODE );
@@ -1409,12 +1394,12 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 });
 
 
-                holder.Rate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDialog(Product_Details_Modal);
-                    }
-                });
+//                holder.Rate.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showDialog(Product_Details_Modal);
+//                    }
+//                });
 
                 updateToTALITEMUI();
             } catch (Exception e) {

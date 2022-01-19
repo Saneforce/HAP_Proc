@@ -1,16 +1,19 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.OutletApprovActiviy;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,6 +63,14 @@ public class OutletApprovalAdapter extends RecyclerView.Adapter<OutletApprovalAd
             holder.tvName.setText("" + obj.getString("name"));
             holder.tvHO.setText("" + obj.getString("ho"));
             holder.tvDes.setText("" + obj.getString("des"));
+
+            holder.btnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, OutletApprovActiviy.class);
+                    context.startActivity(intent);
+                }
+            });
         } catch (Exception e) {
             Log.e("OutletApprovalAdapter:", e.getMessage());
         }
@@ -73,6 +84,7 @@ public class OutletApprovalAdapter extends RecyclerView.Adapter<OutletApprovalAd
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvDate, tvName, tvDes, tvHO;
+        Button btnView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +92,7 @@ public class OutletApprovalAdapter extends RecyclerView.Adapter<OutletApprovalAd
             tvDate = itemView.findViewById(R.id.tvDate);
             tvDes = itemView.findViewById(R.id.tvDes);
             tvHO = itemView.findViewById(R.id.tvHO);
+            btnView = itemView.findViewById(R.id.btn_View);
 
         }
     }

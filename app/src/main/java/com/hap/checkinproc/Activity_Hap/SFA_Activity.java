@@ -42,6 +42,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.FPPrimaryOrderActivity;
+import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.Grn_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
@@ -173,7 +174,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
         menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
-        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+        menuList.add(new Common_Model("Van Sales", R.drawable.ic_shipment));
         menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
         menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
 
@@ -182,8 +183,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
 
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            menuList.add(new Common_Model("Franchise", R.drawable.ic_sfa_franchise));
-            menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
+            menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
+            menuList.add(new Common_Model("My Team", R.drawable.ic_myteam));
         }
 
 
@@ -195,7 +196,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             public void CallMobile(String menuName) {
                 switch (menuName) {
                     case "GRN":
-                        common_class.CommonIntentwithNEwTask(Grn_Category_Select.class);
+                        common_class.CommonIntentwithNEwTask(GrnListActivity.class);
                         break;
                     case "POS":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);

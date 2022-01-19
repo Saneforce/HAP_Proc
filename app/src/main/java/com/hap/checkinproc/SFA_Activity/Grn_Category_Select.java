@@ -282,6 +282,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
+            common_class.getDataFromApi(Constants.GRN_ORDER_DATA, this, false);
 
         } catch (Exception e) {
 

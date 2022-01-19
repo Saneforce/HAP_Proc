@@ -87,8 +87,10 @@
                     android:layout_height="20dp"
                     android:layout_marginLeft="@dimen/C5dp"
                     android:layout_marginTop="@dimen/C3dp"
+                    android:layout_marginRight="@dimen/C5dp"
                     android:paddingTop="@dimen/C5dp"
-                    android:src="@drawable/ic_air_conditioner_50" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_shipment_cooler" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,14 +145,14 @@
             android:textSize="11sp" />
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/rlSequence"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_gravity="center_vertical"
+
             android:layout_marginTop="@dimen/C5dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ivSeqIc"

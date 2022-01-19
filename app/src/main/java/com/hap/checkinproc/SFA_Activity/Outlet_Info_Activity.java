@@ -68,6 +68,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta;
     LinearLayout btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
     public static Outlet_Info_Activity outlet_info_activity;
+    public static int retailerSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -328,6 +329,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
         String routeId = sharedCommonPref.getvalue(Route_Id);
+
+        retailerSize=Retailer_Modal_List.size();
 
         CountUR = 0;
         CountSR = 0;
