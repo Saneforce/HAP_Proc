@@ -55,6 +55,7 @@ import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.PushNotification.MyFirebaseMessagingService;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.OutletCategoryFilterAdapter;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -113,8 +114,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     ApiInterface apiInterface;
     boolean updSale = true;
     String ViewDist;
+    ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
+    RecyclerView rvOutletCategory;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+    private String mCategoryName = "ALL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +216,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
             tabLayout = findViewById(R.id.tabs);
+            rvOutletCategory = findViewById(R.id.rvOutletCategory);
 
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
@@ -343,6 +348,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 }
             });
             gson = new Gson();
+            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
+            }.getType();
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))
+                getRetailerChannel();
+            else {
+                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+                setOutletCategoryAdapter();
+            }
+
 
             tvDistributor.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -452,6 +467,64 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
 
 
+    }
+
+    public void getRetailerChannel() {
+        modelRetailChannel.clear();
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
+                "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
+                shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24",
+                routeMap);
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                try {
+
+                    JsonArray jsonArray = response.body();
+                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    for (int a = 0; a < jsonArray.size(); a++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                        String className = String.valueOf(jsonObject.get("name"));
+                        String id = String.valueOf(jsonObject.get("id"));
+
+                        String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
+                        Log.e("RETAILER_Channel_NAME", retailerClass);
+                        Common_Model mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
+                        Log.e("LeaveType_Request", retailerClass);
+                        modelRetailChannel.add(mCommon_model_spinner);
+                    }
+
+                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
+                    }
+
+                    setOutletCategoryAdapter();
+
+                } catch (Exception e) {
+                    Log.v(" getRetailerChannel: ", e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+    }
+
+    void setOutletCategoryAdapter() {
+
+        modelRetailChannel.add(0, new Common_Model("ALL"));
+        rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, this, new AdapterOnClick() {
+            @Override
+            public void CallMobile(String categoryName) {
+                mCategoryName = categoryName;
+                setPagerAdapter(true);
+            }
+        }));
     }
 
 
@@ -827,7 +900,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             // Retailer_Modal_ListFilter = Retailer_Modal_List;
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType);
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, "");
             } else {
                 adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());

@@ -114,6 +114,9 @@
             android:name=".SFA_Activity.OutletApprovListActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SFA_Activity.Outlet_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.OutletApprovActiviy"
             android:screenOrientation="portrait" />
 

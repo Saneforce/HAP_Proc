@@ -61,13 +61,12 @@
                     </LinearLayout>
 
 
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
-<!--                        android:drawableRight="@drawable/ic_round_fiber_new_24"-->
+                        <!--                        android:drawableRight="@drawable/ic_round_fiber_new_24"-->
 
                         <TextView
                             android:id="@+id/retailername"
@@ -82,9 +81,6 @@
                             android:textColor="@color/black"
                             android:textSize="16dp"
                             android:textStyle="bold" />
-
-
-
 
 
                     </RelativeLayout>
@@ -141,13 +137,15 @@
                         android:id="@+id/icAC"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent">
+
                         <ImageView
-                            android:layout_marginRight="@dimen/C5dp"
-                            android:scaleType="centerCrop"
                             android:layout_width="25dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_shipment_cooler"/>
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_shipment_cooler" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -220,12 +218,26 @@
                     android:background="@color/grey_200"
                     android:padding="@dimen/C5dp" />
 
+                <Button
+                    android:layout_marginTop="@dimen/C5dp"
+                    android:layout_marginBottom="@dimen/C10dp"
+                    android:id="@+id/btn_View"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/button_blueg"
+                    android:padding="5dp"
+                    android:text="View"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
                 <LinearLayout
                     android:id="@+id/llDataParent"
+                    android:layout_marginBottom="@dimen/C10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/C10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:id="@+id/llTdDataParent"

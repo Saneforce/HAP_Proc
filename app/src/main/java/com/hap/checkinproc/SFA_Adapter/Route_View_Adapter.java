@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +24,6 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -52,17 +52,19 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         public TextView textviewname, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection,icAC;
+        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC,llDataParent;
         ImageView icMob, btnEditRet;
         RecyclerView lstTdyView, lstPreView;
+        Button btnView;
 
 
         public MyViewHolder(View view) {
             super(view);
             try {
-
+                btnView = view.findViewById(R.id.btn_View);
                 textviewname = view.findViewById(R.id.retailername);
                 parent_layout = view.findViewById(R.id.parent_layout);
+                llDataParent=view.findViewById(R.id.llDataParent);
 
                 invoicedate = view.findViewById(R.id.invoicedate);
                 tvRetailorCode = view.findViewById(R.id.retailorCode);
@@ -160,28 +162,10 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 holder.icMob.setVisibility(View.GONE);
             }
             holder.icAC.setVisibility(View.INVISIBLE);
-            if(mRetailer_Modal_List.getDelivType() != null && mRetailer_Modal_List.getDelivType().equalsIgnoreCase("AC"))
-            {
+            if (mRetailer_Modal_List.getDelivType() != null && mRetailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
                 holder.icAC.setVisibility(View.VISIBLE);
             }
 
-
-
-//            if (mRetailer_Modal_List.getInvoiceDate().equalsIgnoreCase("-"))
-//                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-//            else
-//                holder.textviewname.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_round_fiber_new_24, 0);
-
-
-//            if (mRetailer_Modal_List.getStatusname() != null) {
-//                holder.status.setText("Status :" + "\t\t" + mRetailer_Modal_List.getStatusname().toUpperCase());
-//            } else {
-//                holder.status.setText("Status :" + "\t\t" + "");
-//            }
-
-//            holder.invoice.setText("Last inv value :" + "\t\t" + mRetailer_Modal_List.getInvoiceValues());
-//            holder.values.setText("Value :" + "\t\t" + mRetailer_Modal_List.getValuesinv());
-//            holder.invoicedate.setText("Last inv date :" + "\t\t" + mRetailer_Modal_List.getInvoiceDate());
             SimpleDateFormat fdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String csDT = fdt.format(new Date());
             SimpleDateFormat f = new SimpleDateFormat("MMM");
@@ -242,6 +226,19 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 @Override
                 public void onClick(View v) {
                     mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+                }
+            });
+
+            holder.btnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.btnView.getText().toString().equalsIgnoreCase("VIEW")){
+                        holder.btnView.setText("HIDE");
+                        holder.llDataParent.setVisibility(View.VISIBLE);}
+                    else {
+                        holder.btnView.setText("VIEW");
+                        holder.llDataParent.setVisibility(View.GONE);
+                    }
                 }
             });
 

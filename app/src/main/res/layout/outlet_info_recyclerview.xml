@@ -198,7 +198,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="end"
                 android:padding="@dimen/C5dp"
-                android:text="SEND"></Button>
+                android:text="SAVE"></Button>
 
 
         </RelativeLayout>

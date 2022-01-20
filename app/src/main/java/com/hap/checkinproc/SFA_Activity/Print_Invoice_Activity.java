@@ -152,8 +152,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 tvDistId.setVisibility(View.VISIBLE);
                 if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order"))
                     common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
-                else
+                else {
+                    findViewById(R.id.tvWelcomeLabel).setVisibility(View.VISIBLE);
                     common_class.getDataFromApi(Constants.PosOrderDetails_List, this, false);
+                }
 
                 findViewById(R.id.llDelivery).setVisibility(View.GONE);
                 storeName = tvDistributorName.getText().toString();
@@ -172,6 +174,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             tvOrderType.setText(sharedCommonPref.getvalue(Constants.FLAG));
             cashDisc = Double.parseDouble(getIntent().getStringExtra("Discount_Amount"));
+
+
         } catch (Exception e) {
 
         }

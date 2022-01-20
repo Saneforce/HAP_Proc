@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,7 +63,6 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -84,7 +82,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo,tvRetailorPhone, retaileAddress;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -144,7 +142,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             llCalMob.setOnClickListener(this);
 
 
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             takeorder.setOnClickListener(this);
@@ -152,7 +150,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -167,6 +164,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
 
             String OrdersTable = String.valueOf(db.getMasterData(Constants.INDENT_Product_List));
+            // String OrdersTable = sharedCommonPref.getvalue(Constants.INDENT_Product_List);
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
@@ -643,7 +641,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         OutletItem.put("ordertype", "Indent");
                         OutletItem.put("from", sharedCommonPref.getvalue(Constants.Distributor_Id));
                         OutletItem.put("to", Shared_Common_Pref.CUSTOMER_CODE);
-                        OutletItem.put("distCode",Shared_Common_Pref.CUSTOMER_CODE );
+                        OutletItem.put("distCode", Shared_Common_Pref.CUSTOMER_CODE);
                         OutletItem.put("customerCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
 
                         if (strLoc.length > 0) {

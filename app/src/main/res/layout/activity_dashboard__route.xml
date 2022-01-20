@@ -119,10 +119,7 @@
                 </LinearLayout>
 
 
-
-
             </LinearLayout>
-
 
 
             <ImageView
@@ -228,35 +225,36 @@
                             android:id="@+id/OvrAll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:layout_marginBottom="@dimen/C5dp"
+                            android:background="@drawable/cardbtnprimary"
                             android:letterSpacing="0.09"
                             android:padding="@dimen/C2dp"
-                            android:background="@drawable/cardbtnprimary"
                             android:text="Over All"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="@dimen/C5dp"
-                            android:layout_marginRight="@dimen/C5dp"
-                            android:layout_marginBottom="@dimen/C5dp"/>
+                            android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/tvDistributer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:layout_marginBottom="@dimen/C5dp"
+                            android:background="@drawable/cardbutton"
                             android:ellipsize="end"
                             android:letterSpacing="0.09"
-                            android:text="Distributor"
                             android:padding="@dimen/C2dp"
-                            android:background="@drawable/cardbutton"
+                            android:text="Distributor"
                             android:textColor="@color/black"
                             android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="@dimen/C5dp"
-                            android:layout_marginBottom="@dimen/C5dp" />
-<Space
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    />
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -547,6 +545,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
                 app:cardCornerRadius="@dimen/C5dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -582,16 +581,18 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/txSrvOtlt"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="@dimen/C5dp"
-                                    android:textAlignment="center"
                                     android:text="Service"
+                                    android:textAlignment="center"
                                     android:textColor="@color/colorPrimaryDark"
-                                    android:textStyle="bold"
-                                    android:textSize="13sp"/>
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
                                 <LinearLayout
                                     android:id="@+id/undrServ"
                                     android:layout_width="match_parent"
@@ -599,6 +600,7 @@
                                     android:layout_marginLeft="@dimen/C5dp"
                                     android:background="@color/colorPrimaryDark"
                                     android:orientation="horizontal" />
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -616,12 +618,14 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="@dimen/C2dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
                         android:background="@color/grey_200" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -652,9 +656,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="@dimen/C5dp"
-                                    android:textAlignment="center"
                                     android:text="Non Service "
-                                    android:textSize="13sp"/>
+                                    android:textAlignment="center"
+                                    android:textSize="13sp" />
 
                                 <LinearLayout
                                     android:id="@+id/undrUni"
@@ -682,20 +686,20 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="@dimen/C2dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/grey_200"
-                        />
+                        android:background="@color/grey_200" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        >
+                        android:gravity="center_horizontal">
 
                         <LinearLayout
                             android:id="@+id/btClsOtlt"
@@ -722,7 +726,7 @@
                                     android:paddingLeft="@dimen/C5dp"
                                     android:text="Closed "
                                     android:textAlignment="center"
-                                    android:textSize="13sp"/>
+                                    android:textSize="13sp" />
 
                                 <LinearLayout
                                     android:id="@+id/undrCls"
@@ -758,60 +762,177 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
                 app:cardCornerRadius="@dimen/C5dp">
-            <LinearLayout
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/C10dp"
+                        android:layout_marginEnd="@dimen/C2dp"
+                        android:layout_marginBottom="@dimen/C5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/C5dp"
+                            android:layout_weight="1"
+                            android:letterSpacing="0.01"
+                            android:text="AC-Outlets"
+                            tools:ignore="NestedWeights" />
+
+                        <Switch
+                            android:id="@+id/swACOutlet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/C10dp"
+                        android:layout_marginEnd="@dimen/C2dp"
+                        android:layout_marginBottom="@dimen/C5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/C5dp"
+                            android:layout_weight="1"
+                            android:letterSpacing="0.01"
+                            android:text="Other-Outlets"
+                            android:textAlignment="textEnd"
+                            tools:ignore="NestedWeights" />
+
+                        <Switch
+                            android:id="@+id/swOTHOutlet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_margin="@dimen/C5dp"
+                app:cardCornerRadius="@dimen/C5dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/C10dp"
-                    android:layout_marginEnd="@dimen/C2dp"
-                    android:layout_marginBottom="@dimen/C5dp"
-                    >
-                    <TextView
-                        android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="AC-Outlets"
-                        android:letterSpacing="0.01"
+                        android:layout_marginStart="@dimen/C10dp"
+                        android:layout_marginEnd="@dimen/C2dp"
+                        android:layout_marginBottom="@dimen/C5dp"
                         android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/C5dp"
-                        tools:ignore="NestedWeights" />
-                    <Switch
-                        android:id="@+id/swACOutlet"
-                        android:layout_width="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/C5dp"
+                            android:layout_weight="1"
+                            android:letterSpacing="0.01"
+                            android:text="-18"
+                            tools:ignore="NestedWeights" />
+
+                        <Switch
+                            android:id="@+id/swMinus18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/C10dp"
-                    android:layout_marginEnd="@dimen/C2dp"
-                    android:layout_marginBottom="@dimen/C5dp"
-                    >
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Other-Outlets"
-                        android:letterSpacing="0.01"
+                        android:layout_marginStart="@dimen/C10dp"
+                        android:layout_marginEnd="@dimen/C2dp"
+                        android:layout_marginBottom="@dimen/C5dp"
                         android:layout_weight="1"
-                        android:textAlignment="textEnd"
-                        android:layout_marginEnd="@dimen/C5dp"
-                        tools:ignore="NestedWeights" />
-                    <Switch
-                        android:id="@+id/swOTHOutlet"
-                        android:layout_width="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/C5dp"
+                            android:layout_weight="1"
+                            android:letterSpacing="0.01"
+                            android:text="+4"
+                            android:textAlignment="center"
+                            tools:ignore="NestedWeights" />
+
+                        <Switch
+                            android:id="@+id/swPlus4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                        android:layout_marginStart="@dimen/C10dp"
+                        android:layout_marginEnd="@dimen/C2dp"
+                        android:layout_marginBottom="@dimen/C5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/C5dp"
+                            android:layout_weight="1"
+                            android:letterSpacing="0.01"
+                            android:text="Ambient"
+                            android:textAlignment="textEnd"
+                            tools:ignore="NestedWeights" />
+
+                        <Switch
+                            android:id="@+id/swAmbient"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
+
                 </LinearLayout>
-            </LinearLayout>
+
+
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C5dp"
+                app:cardCornerRadius="@dimen/C5dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvOutletCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C5dp"
+                    android:orientation="horizontal"
+
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+
+            </androidx.cardview.widget.CardView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

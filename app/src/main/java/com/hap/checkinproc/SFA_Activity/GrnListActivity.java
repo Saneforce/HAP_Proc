@@ -72,7 +72,7 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
             common_class.getProductDetails(this);
 
             outlet_name = findViewById(R.id.outlet_name);
-            outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            outlet_name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name));
 
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);

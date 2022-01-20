@@ -207,7 +207,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 linVanSales.setVisibility(View.VISIBLE);
 
             if (!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)) {
-                common_class.getDentDatas(this);
+                //  common_class.getDentDatas(this);
                 linintent.setVisibility(View.VISIBLE);
                 lin_noOrder.setVisibility(View.GONE);
             }
@@ -341,8 +341,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                 break;
             case R.id.lin_indent:
-                startActivity(new Intent(getApplicationContext(), IndentActivity.class));
-                overridePendingTransition(R.anim.in, R.anim.out);
+                getDentDatas();
                 break;
             case R.id.lin_repeat_invoice:
                 break;
@@ -391,6 +390,89 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         }
 
     }
+
+    public void getDentDatas() {
+
+        if (common_class.isNetworkAvailable(this)) {
+
+
+            DatabaseHandler db = new DatabaseHandler(this);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", Shared_Common_Pref.CUSTOMER_CODE);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                service.getDataArrayList("get/indentprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        // Log.v(TAG, response.toString());
+                        db.deleteMasterData(Constants.INDENT_ProdGroups_List);
+                        db.addMasterData(Constants.INDENT_ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/indentprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.INDENT_ProdTypes_List);
+                        db.addMasterData(Constants.INDENT_ProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/indentprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.INDENT_Category_List);
+                        db.addMasterData(Constants.INDENT_Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+
+                service.getDataArrayList("get/indentproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("INDENT:", response.body().toString());
+                        db.deleteMasterData(Constants.INDENT_Product_List);
+                        db.addMasterData(Constants.INDENT_Product_List, response.body());
+
+                        startActivity(new Intent(getApplicationContext(), IndentActivity.class));
+                        overridePendingTransition(R.anim.in, R.anim.out);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            common_class.showMsg(this,"No Internet Connection");
+        }
+
+    }
+
 
     private void GetJsonData(String jsonResponse, String type) {
 
@@ -506,6 +588,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
 
                 switch (key) {
+                    case Constants.INDENT_Product_List:
+                        startActivity(new Intent(getApplicationContext(), IndentActivity.class));
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                        break;
                     case Constants.OUTSTANDING:
                         JSONObject jsonObjectOutStd = new JSONObject(apiDataResponse);
                         if (jsonObjectOutStd.getBoolean("success")) {
@@ -570,6 +656,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         }
                         break;
                     case Constants.GetTodayOrder_List:
+                        FilterOrderList.clear();
                         userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
                         }.getType();
                         OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);

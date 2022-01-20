@@ -1320,6 +1320,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
 
         }
+
+        
     }
 
     public void loadroute(String id) {

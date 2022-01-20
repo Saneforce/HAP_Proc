@@ -1,7 +1,10 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,7 @@ import org.json.JSONObject;
 
 public class OutletApprovListActivity extends AppCompatActivity {
     RecyclerView rvApproval;
+    TextView tvStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,7 @@ public class OutletApprovListActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_outlet_approval_list);
             rvApproval = findViewById(R.id.rvOutletApprov);
+            tvStatus=findViewById(R.id.tvOutletSta);
 
             JSONObject student1 = new JSONObject();
 
@@ -44,6 +49,14 @@ public class OutletApprovListActivity extends AppCompatActivity {
 
             OutletApprovalAdapter adapter = new OutletApprovalAdapter(this, jsonArray, R.layout.adapter_outlet_approval);
             rvApproval.setAdapter(adapter);
+
+            tvStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                    startActivity(new Intent(getApplicationContext(),Outlet_Status_Activity.class));
+                }
+            });
 
         } catch (Exception e) {
             Log.v("OutletApprovalActivity:", e.getMessage());
