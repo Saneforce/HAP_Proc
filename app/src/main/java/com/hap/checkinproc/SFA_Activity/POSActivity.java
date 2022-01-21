@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,7 +68,6 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -1263,10 +1261,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
-                Product_ModalSetAdapter.get(uomPos).setCnvQty(Integer.parseInt((myDataset.get(position).getPhone())));
-                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
-                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
+
+                int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
+                if (Product_ModalSetAdapter.get(uomPos).getBalance() >= qty) {
+                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
+                } else {
+                    common_class.showMsg(this, "Can't exceed Stock");
+                }
                 break;
             case 20:
                 tvPayMode.setText("" + myDataset.get(position).getName());
@@ -1522,7 +1526,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         if (balance >= order)
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
                         else {
-                            common_class.showMsg(POSActivity.this, "No stock");
+                            common_class.showMsg(POSActivity.this, "Can't exceed stock");
                         }
                     }
                 });
@@ -1554,7 +1558,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                 totQty = 0;
                                 enterQty = 0;
                                 holder.Qty.setText("0");
-                               // common_class.showMsg(POSActivity.this, "No stock");
+                                // common_class.showMsg(POSActivity.this, "No stock");
                             }
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);

@@ -80,15 +80,13 @@
             <LinearLayout
                 android:id="@+id/icAC"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/C10dp">
 
                 <ImageView
-                    android:layout_width="25dp"
+                    android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/C5dp"
-                    android:layout_marginTop="@dimen/C3dp"
                     android:layout_marginRight="@dimen/C5dp"
-                    android:paddingTop="@dimen/C5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_shipment_cooler" />
             </LinearLayout>

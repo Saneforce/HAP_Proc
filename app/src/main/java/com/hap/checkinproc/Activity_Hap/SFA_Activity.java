@@ -183,7 +183,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
 
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            menuList.add(new Common_Model("Franchise", R.drawable.ic_sfa_franchise));
+            menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
         }
 
@@ -427,6 +427,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         sharedCommonPref.save("ActivityStart", "false");
+
+                        sharedCommonPref.clear_pref(Constants.Distributor_name);
+                        sharedCommonPref.clear_pref(Constants.Distributor_Id);
                         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
                             Intent intent = new Intent(SFA_Activity.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "CIN");

@@ -168,12 +168,12 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA)))
+           // if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA)))
                 Product_Modal = gson.fromJson(OrdersTable, userType);
-            else {
-                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA), userType);
-
-            }
+//            else {
+//                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA), userType);
+//
+//            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);

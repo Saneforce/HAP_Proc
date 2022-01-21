@@ -126,6 +126,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
     Button btnGetOrder;
     private ArrayList<Product_Details_Modal> grn_product;
     private String filterId = "";
+    private JSONArray ProdGroups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +172,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
 
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText("Hi! "+sharedCommonPref.getvalue(Constants.Distributor_name));
+            Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name));
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -208,7 +209,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
-            JSONArray ProdGroups = db.getMasterData(Constants.POS_ProdGroups_List);
+            ProdGroups = db.getMasterData(Constants.POS_ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -227,7 +228,6 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
             });
             Grpgrid.setAdapter(grplistItems);
 
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
             common_class.getDataFromApi(Constants.GRN_ORDER_DATA, this, false);
 
@@ -257,6 +257,9 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
             if (TypGroups.length() > 0)
                 filterId = TypGroups.getJSONObject(0).getString("id");
+
+            GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", filterId);
+
 
             RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
@@ -328,7 +331,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         for (int pm = 0; pm < grn_product.size(); pm++) {
 
             if (grn_product.get(pm).getRegularQty() != null) {
-                if (grn_product.get(pm).getQty() > 0) {
+                if (grn_product.get(pm).getRegularQty() > 0) {
                     Getorder_Array_List.add(grn_product.get(pm));
 
                 }
@@ -493,6 +496,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                            ProdItem.put("Product_InvQty", Getorder_Array_List.get(z).getRegularQty());
                             double cf = (Getorder_Array_List.get(z).getCnvQty());
                             ProdItem.put("Product_Total_Qty", cf > 0 ? Getorder_Array_List.get(z).getQty() *
                                     cf : Getorder_Array_List.get(z).getQty());
@@ -515,6 +519,8 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             ProdItem.put("exp", Getorder_Array_List.get(z).getExp());
                             ProdItem.put("batch_no", Getorder_Array_List.get(z).getBatchNo());
                             ProdItem.put("remarks", Getorder_Array_List.get(z).getRemarks());
+                            ProdItem.put("deviation", (Getorder_Array_List.get(z).getRegularQty() - (cf > 0 ? Getorder_Array_List.get(z).getQty() *
+                                    cf : Getorder_Array_List.get(z).getQty())));
 
 
                             JSONArray tax_Details = new JSONArray();
@@ -666,7 +672,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
         for (int pm = 0; pm < grn_product.size(); pm++) {
             if (grn_product.get(pm).getRegularQty() != null) {
-                if (grn_product.get(pm).getQty() > 0) {
+                if (grn_product.get(pm).getRegularQty() > 0) {
                     cashDiscount += grn_product.get(pm).getDiscount();
                     totalvalues += grn_product.get(pm).getAmount();
                     totalQty += grn_product.get(pm).getQty();
@@ -729,6 +735,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 }
 
             }
+
         }
 
         String label = "", amt = "";
@@ -824,8 +831,8 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
                                 }
                             }
+                            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
-                            GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", filterId);
                             updateToTALITEMUI();
                         }
                     }
@@ -859,15 +866,24 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog(type);
-        switch (type) {
-            case 1:
-                Product_ModalSetAdapter.get(uomPos).setCnvQty(Integer.parseInt((myDataset.get(position).getPhone())));
-                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
-                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
-                break;
+        try {
+            common_class.dismissCommonDialog(type);
+            switch (type) {
+                case 1:
+                    int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble(myDataset.get(position).getPhone()));
+                    if (Product_ModalSetAdapter.get(uomPos).getRegularQty() >= qty) {
+                        Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                        Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                        Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                        mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_grn_recyclerview, getApplicationContext(), 1);
+                    } else {
+                        common_class.showMsg(this, "Can't exceed Inv Qty");
+                    }
+                    break;
 
+            }
+        } catch (Exception e) {
+            Log.v("UOMSelect:", e.getMessage());
         }
     }
 
@@ -1015,10 +1031,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 tvUOM = view.findViewById(R.id.tvUOM);
+                tvInvQty = view.findViewById(R.id.tvInvQty);
 
 
                 if (CategoryType >= 0) {
-                    tvInvQty = view.findViewById(R.id.tvInvQty);
                     rlUOM = view.findViewById(R.id.rlUOM);
                     tvMFG = view.findViewById(R.id.tvMFG);
                     tvEXP = view.findViewById(R.id.tvEXP);
@@ -1101,6 +1117,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
+
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
                 else {
@@ -1111,12 +1128,14 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
 
                 }
+
+                Log.v("uomName:", Product_Details_Modal.getUOM_Nm());
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
 
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+                holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (CategoryType >= 0) {
-                    holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getExp()))
                         Product_Details_Modal.setExp("");
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getMfg()))
@@ -1245,9 +1264,22 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+//                        String sVal = holder.Qty.getText().toString();
+//                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+//
+//                        if (Product_Details_Modal.getRegularQty() >= ((Integer.parseInt(sVal) + 1)))
+//                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
+                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+                        int inv = Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty();
+                        if (inv >= order)
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                        else {
+                            common_class.showMsg(Grn_Category_Select.this, "Can't exceed Inv Qty");
+                        }
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
@@ -1271,7 +1303,20 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty * Product_Details_Modal.getCnvQty());
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
+
+
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty() < totQty) {
+                                totQty = 0;
+                                enterQty = 0;
+                                holder.Qty.setText("0");
+                                common_class.showMsg(Grn_Category_Select.this, "Can't exceed Inv Qty");
+                            }
+//                            double enterQty = 0;
+//                            if (!charSequence.toString().equals(""))
+//                                enterQty = Double.valueOf(charSequence.toString());
+//
+//                            double totQty = (enterQty * Product_Details_Modal.getCnvQty());
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);

@@ -448,7 +448,6 @@ public class Common_Class {
                             shared_common_pref = new Shared_Common_Pref(activity);
 
                         if (key.equals(Retailer_OutletList)) {
-                            Log.v("Res>>", response.body().toString());
                             shared_common_pref.save(key, gson.toJson(response.body()));
 
                         } else {
@@ -459,6 +458,8 @@ public class Common_Class {
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
+
+                        Log.v("Res>>", response.body().toString());
 
                     } catch (Exception e) {
 
@@ -992,7 +993,11 @@ public class Common_Class {
                 "Yes", "No", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
-                        CommonIntentwithFinish(moveActivity);
+                        if (name.equalsIgnoreCase("GRN?"))
+                            activity.finish();
+                        else
+                            CommonIntentwithFinish(moveActivity);
+
 
                         switch (name) {
                             case "Primary Order?":

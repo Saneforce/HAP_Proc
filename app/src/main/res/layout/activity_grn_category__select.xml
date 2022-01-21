@@ -395,6 +395,22 @@
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
 
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="Inv Qty"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
 
                                 <LinearLayout
                                     android:layout_width="@dimen/C100dp"
@@ -413,6 +429,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">

@@ -42,7 +42,10 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
 
     @Override
     public void onBindViewHolder(Invoice_History_Adapter.MyViewHolder holder, int position) {
+        holder.llReturnInv.setVisibility(View.GONE);
+
         if (mDate.get(position).getInvoice_Flag().equals("1")) {
+            holder.llReturnInv.setVisibility(View.VISIBLE);
             holder.Statusinvoice.setText("Invoice Complete.");
             holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
             holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
@@ -66,6 +69,13 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
                 mAdapterOnClick.onIntentClick(position);
             }
         });
+
+        holder.llReturnInv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -75,7 +85,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, txtType;
-        LinearLayout linearLayout;
+        LinearLayout linearLayout, llReturnInv;
         RelativeLayout parent_layout;
         ImageView ivStatus;
 
@@ -90,6 +100,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
             Itemcountinvoice = itemView.findViewById(R.id.Itemcountinvoice);
             ivStatus = itemView.findViewById(R.id.ivStatus);
             txtType = itemView.findViewById(R.id.txt_type);
+            llReturnInv = itemView.findViewById(R.id.llSalesReturn);
 
 
         }

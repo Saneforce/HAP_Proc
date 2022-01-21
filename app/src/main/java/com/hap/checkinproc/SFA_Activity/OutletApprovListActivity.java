@@ -25,21 +25,21 @@ public class OutletApprovListActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_outlet_approval_list);
             rvApproval = findViewById(R.id.rvOutletApprov);
-            tvStatus=findViewById(R.id.tvOutletSta);
+            tvStatus = findViewById(R.id.tvOutletSta);
 
             JSONObject student1 = new JSONObject();
 
-            student1.put("name", "haptest5");
-            student1.put("des", "BDE");
-            student1.put("ho", "Salem");
+            student1.put("name", "Abinaya Store");
+            student1.put("des", "No 4,Chemiers Road,Nandanam,Chennai.");
+            student1.put("ho", "Abinaya");
             student1.put("date", "2022-01-16");
 
 
             JSONObject student2 = new JSONObject();
 
-            student2.put("name", "ciadmin");
-            student2.put("des", "BDE");
-            student2.put("ho", "Madurai");
+            student2.put("name", "Mahalakshmi Store");
+            student2.put("des", "No 11,9th Block Street,Anna nagar,Chennai.");
+            student2.put("ho", "Lakshmi");
             student2.put("date", "2022-01-17");
 
             JSONArray jsonArray = new JSONArray();
@@ -47,14 +47,14 @@ public class OutletApprovListActivity extends AppCompatActivity {
             jsonArray.put(student1);
             jsonArray.put(student2);
 
-            OutletApprovalAdapter adapter = new OutletApprovalAdapter(this, jsonArray, R.layout.adapter_outlet_approval);
+            OutletApprovalAdapter adapter = new OutletApprovalAdapter(this, jsonArray, R.layout.adapter_outlet_approv_info);
             rvApproval.setAdapter(adapter);
 
             tvStatus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     overridePendingTransition(R.anim.in, R.anim.out);
-                    startActivity(new Intent(getApplicationContext(),Outlet_Status_Activity.class));
+                    startActivity(new Intent(getApplicationContext(), Outlet_Status_Activity.class));
                 }
             });
 

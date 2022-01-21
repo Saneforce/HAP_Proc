@@ -145,6 +145,7 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
                 switch (key) {
 
                     case Constants.GetGrn_List:
+                        FilterOrderList.clear();
                         userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
                         }.getType();
                         OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);

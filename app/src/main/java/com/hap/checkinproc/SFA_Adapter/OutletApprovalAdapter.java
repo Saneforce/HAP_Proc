@@ -6,14 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.OutletApprovActiviy;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,14 +60,25 @@ public class OutletApprovalAdapter extends RecyclerView.Adapter<OutletApprovalAd
         try {
             JSONObject obj = mArr.getJSONObject(position);
             holder.tvDate.setText("" + obj.getString("date"));
-            holder.tvName.setText("" + obj.getString("name"));
-            holder.tvHO.setText("" + obj.getString("ho"));
-            holder.tvDes.setText("" + obj.getString("des"));
+            holder.tvOutletName.setText("" + obj.getString("name"));
+            holder.tvOwnerName.setText("" + obj.getString("ho"));
+            holder.tvAdd.setText("" + obj.getString("des"));
 
-            holder.btnView.setOnClickListener(new View.OnClickListener() {
+            holder.tvView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, OutletApprovActiviy.class);
+                    Intent intent = new Intent(context, AddNewRetailer.class);
+                    intent.putExtra("approval", "status");
+//                    if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase("OutletCode")) {
+//                        Shared_Common_Pref.Editoutletflag = "1";
+//                        //  Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
+//                        intent.putExtra("OutletCode", Shared_Common_Pref.OutletCode);
+//                        intent.putExtra("OutletName", Shared_Common_Pref.OutletName);
+//                        intent.putExtra("OutletAddress", Shared_Common_Pref.OutletAddress);
+//                        intent.putExtra("OutletMobile", "9876543210");
+//                        intent.putExtra("OutletRoute", Shared_Common_Pref.Route_name);
+//                    }
+
                     context.startActivity(intent);
                 }
             });
@@ -83,16 +94,17 @@ public class OutletApprovalAdapter extends RecyclerView.Adapter<OutletApprovalAd
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate, tvName, tvDes, tvHO;
-        Button btnView;
+        TextView tvDate, tvOwnerName, tvOutletName, tvAdd, tvPhone;
+        TextView tvView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            tvDes = itemView.findViewById(R.id.tvDes);
-            tvHO = itemView.findViewById(R.id.tvHO);
-            btnView = itemView.findViewById(R.id.btn_View);
+            tvOutletName = itemView.findViewById(R.id.tvOutletName);
+            tvDate = itemView.findViewById(R.id.tvCreateDate);
+            tvOwnerName = itemView.findViewById(R.id.tvOwnerName);
+            tvAdd = itemView.findViewById(R.id.tvAddress);
+            tvPhone = itemView.findViewById(R.id.tvPhone);
+            tvView = itemView.findViewById(R.id.tvView);
 
         }
     }
