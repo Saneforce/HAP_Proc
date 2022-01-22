@@ -43,13 +43,13 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.FPPrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
-import com.hap.checkinproc.SFA_Activity.Grn_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
+import com.hap.checkinproc.SFA_Activity.Print_Invoice_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
@@ -181,6 +181,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
             menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
+            //menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
 
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
@@ -213,6 +214,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "Van Sales":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
                         startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                        break;
+                    case "Sales Return":
+                        sharedCommonPref.save(Constants.FLAG, "Return Invoice");
+                        startActivity(new Intent(SFA_Activity.this, Print_Invoice_Activity.class));
                         break;
                     case "Outlets":
                         common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);

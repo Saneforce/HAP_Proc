@@ -65,7 +65,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static final String UserDetail = "MyPrefs";
     public static TextView tvStartDate, tvEndDate;
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn,
-            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment;
+            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment,tvSalesReturn;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
             linVanSales, linintent;
     Common_Class common_class;
@@ -139,6 +139,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txPayment = findViewById(R.id.PaymentAmt);
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
+            tvSalesReturn=findViewById(R.id.tvSalesReturn);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -155,6 +156,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linintent.setOnClickListener(this);
             tvStartDate.setOnClickListener(this);
             tvEndDate.setOnClickListener(this);
+            tvSalesReturn.setOnClickListener(this);
 
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +212,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 //  common_class.getDentDatas(this);
                 linintent.setVisibility(View.VISIBLE);
                 lin_noOrder.setVisibility(View.GONE);
+                tvSalesReturn.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             Log.v(TAG, e.getMessage());
@@ -287,6 +290,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvSalesReturn:
+                if(FilterOrderList.size()>0)
+                navigatePrintScreen(0,"Return Invoice");
+                break;
             case R.id.tvStartDate:
                 showDatePickerDialog(0, tvStartDate);
                 break;
@@ -462,13 +469,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 });
 
 
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-        else {
-            common_class.showMsg(this,"No Internet Connection");
+        } else {
+            common_class.showMsg(this, "No Internet Connection");
         }
 
     }
@@ -667,25 +672,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                                 }
                             }
                         }
-
-
                         mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
-                                Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                                Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                                Shared_Common_Pref.Invoicetoorder = "1";
-                                Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-                                Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                                intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                                intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                                intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                                intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                                intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.in, R.anim.out);
+
+                                navigatePrintScreen(position, FilterOrderList.get(position).getStatus());
 
 
                             }
@@ -713,6 +704,25 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             Log.v("Invoice History: ", e.getMessage());
 
         }
+    }
+
+
+    public void navigatePrintScreen(int position, String status) {
+        Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+        Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+        Shared_Common_Pref.Invoicetoorder = "1";
+        Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+        sharedCommonPref.save(Constants.FLAG, status);
+        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+        startActivity(intent);
+        overridePendingTransition(R.anim.in, R.anim.out);
+
     }
 
     @Override

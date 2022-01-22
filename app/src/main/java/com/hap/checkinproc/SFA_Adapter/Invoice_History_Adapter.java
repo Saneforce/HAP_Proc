@@ -1,6 +1,8 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Print_Invoice_Activity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 
 import java.text.DecimalFormat;
@@ -24,11 +29,13 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     Context context;
     List<OutletReport_View_Modal> mDate;
     AdapterOnClick mAdapterOnClick;
+    Shared_Common_Pref sharedCommonPref;
 
     public Invoice_History_Adapter(Context context, List<OutletReport_View_Modal> mDate, AdapterOnClick mAdapterOnClick) {
         this.context = context;
         this.mDate = mDate;
         this.mAdapterOnClick = mAdapterOnClick;
+        sharedCommonPref=new Shared_Common_Pref(context);
     }
 
     @NonNull
@@ -42,10 +49,10 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
 
     @Override
     public void onBindViewHolder(Invoice_History_Adapter.MyViewHolder holder, int position) {
-        holder.llReturnInv.setVisibility(View.GONE);
+     //   holder.llReturnInv.setVisibility(View.GONE);
 
         if (mDate.get(position).getInvoice_Flag().equals("1")) {
-            holder.llReturnInv.setVisibility(View.VISIBLE);
+          //  holder.llReturnInv.setVisibility(View.VISIBLE);
             holder.Statusinvoice.setText("Invoice Complete.");
             holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
             holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
@@ -73,7 +80,18 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         holder.llReturnInv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.e("TRANS_SLNO", mDate.get(position).getTransSlNo());
+                Shared_Common_Pref.TransSlNo = mDate.get(position).getTransSlNo();
+                Shared_Common_Pref.Invoicetoorder = "1";
+                Intent intent = new Intent(context, Print_Invoice_Activity.class);
+                sharedCommonPref.save(Constants.FLAG, "Return Invoice");
+                intent.putExtra("Order_Values", mDate.get(position).getOrderValue() + "");
+                intent.putExtra("Invoice_Values", mDate.get(position).getInvoicevalues());
+                intent.putExtra("No_Of_Items", mDate.get(position).getNo_Of_items());
+                intent.putExtra("Invoice_Date", mDate.get(position).getOrderDate());
+                intent.putExtra("NetAmount", mDate.get(position).getNetAmount());
+                intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
+                context.startActivity(intent);
             }
         });
     }

@@ -1,15 +1,18 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,15 +27,24 @@ import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonObject;
+import com.hap.checkinproc.BuildConfig;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Print_Invoice_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -43,27 +55,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Print_Invoice_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Print_Invoice_Adapter mReportViewAdapter;
-    RecyclerView printrecyclerview;
+    RecyclerView printrecyclerview, rvReturnInv;
     Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    TextView netamount, cashdiscount, gstLabel, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber, retailername,
+    TextView netamount, returnNetAmt, cashdiscount, gstLabel, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber, retailername,
             retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName, tvOutstanding, tvPaidAmt, tvHeader, tvDistId,
-            tvDistAdd;
-
+            tvDistAdd, returngstLabel, returngstrate, returntotalqty, returntotalitem, returnsubtotal;
     ImageView ok, ivPrint;
-
     public static Print_Invoice_Activity mPrint_invoice_activity;
-
     Button btnInvoice;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private String label, amt, storeName = "", address = "", phone = "";
     private ArrayList<Product_Details_Modal> taxList;
     double cashDisc, subTotalVal, outstandAmt;
     LinearLayout llDistCal, llRetailCal;
+    String[] strLoc;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +87,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             setContentView(R.layout.activity_print__invoice_);
             ButterKnife.inject(this);
             printrecyclerview = findViewById(R.id.printrecyclerview);
+            rvReturnInv = findViewById(R.id.rvReturnInv);
 
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
             common_class = new Common_Class(this);
             netamount = findViewById(R.id.netamount);
             back = findViewById(R.id.back);
             cashdiscount = findViewById(R.id.cashdiscount);
-            gstrate = findViewById(R.id.gstrate);
             billnumber = findViewById(R.id.billnumber);
             totalfreeqty = findViewById(R.id.totalfreeqty);
             totalqty = findViewById(R.id.totalqty);
@@ -99,10 +113,19 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvPaidAmt = findViewById(R.id.tvPaidAmt);
             tvHeader = findViewById(R.id.tvHeader);
             gstLabel = findViewById(R.id.gstLabel);
+            gstrate = findViewById(R.id.gstrate);
             tvDistAdd = findViewById(R.id.tvAdd);
             tvDistId = findViewById(R.id.tvDistId);
             llDistCal = findViewById(R.id.llDistCall);
             llRetailCal = findViewById(R.id.llRetailCal);
+            returntotalqty = findViewById(R.id.returnTotalqty);
+            returntotalitem = findViewById(R.id.returnTotalitem);
+            returnsubtotal = findViewById(R.id.returnSubtotal);
+            returngstLabel = findViewById(R.id.returnInvTax);
+            returngstrate = findViewById(R.id.returnGstrate);
+            returnNetAmt = findViewById(R.id.tvReturnAmt);
+
+
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             ivPrint = findViewById(R.id.ivPrint);
@@ -165,10 +188,19 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
-                common_class.getDb_310Data(Constants.OUTSTANDING, this);
                 storeName = retailername.getText().toString();
                 address = retaileAddress.getText().toString();
                 phone = "Mobile:" + tvRetailorPhone.getText().toString();
+
+                if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Return Invoice")) {
+                    findViewById(R.id.cvReturnInvParent).setVisibility(View.VISIBLE);
+                    findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
+                    findViewById(R.id.cvSalesParent).setVisibility(View.GONE);
+                    findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
+                    btnInvoice.setText("CONFIRM");
+                } else {
+                    common_class.getDb_310Data(Constants.OUTSTANDING, this);
+                }
 
             }
 
@@ -210,8 +242,29 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btnInvoice:
-                Shared_Common_Pref.Invoicetoorder = "4";
-                common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Return Invoice")) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                            if (sLoc.equalsIgnoreCase("")) {
+                                new LocationFinder(getApplication(), new LocationEvents() {
+                                    @Override
+                                    public void OnLocationRecived(Location location) {
+                                        strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                        confirmReturnInv();
+                                    }
+                                });
+                            } else {
+                                strLoc = sLoc.split(":");
+                                confirmReturnInv();
+                            }
+                        }
+                    }, 500);
+                } else {
+                    Shared_Common_Pref.Invoicetoorder = "4";
+                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                }
                 break;
 
             case R.id.llDistCall:
@@ -220,6 +273,170 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             case R.id.llRetailCal:
                 common_class.showCalDialog(this, "Do you want to Call this Outlet?", sharedCommonPref.getvalue(Constants.Retailor_PHNo));
                 break;
+        }
+    }
+
+    private void confirmReturnInv() {
+        if (common_class.isNetworkAvailable(this)) {
+
+            AlertDialogBox.showDialog(Print_Invoice_Activity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                @Override
+                public void PositiveMethod(DialogInterface dialog, int id) {
+                    common_class.ProgressdialogShow(1, "");
+                    JSONArray data = new JSONArray();
+                    JSONObject ActivityData = new JSONObject();
+                    try {
+                        JSONObject HeadItem = new JSONObject();
+                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("Worktype_code", "");
+                        HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
+                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
+                        HeadItem.put("Daywise_Remarks", "");
+                        HeadItem.put("UKey", Common_Class.GetEkey());
+                        HeadItem.put("orderValue", formatter.format(subTotalVal));
+                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+                        ActivityData.put("Activity_Report_Head", HeadItem);
+
+                        JSONObject OutletItem = new JSONObject();
+                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
+                        OutletItem.put("modified_time", Common_Class.GetDate());
+                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
+                        OutletItem.put("orderValue", formatter.format(subTotalVal));
+                        OutletItem.put("CashDiscount", cashDisc);
+                        OutletItem.put("NetAmount", formatter.format(subTotalVal));
+                        OutletItem.put("No_Of_items", returntotalitem.getText().toString());
+                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+                        OutletItem.put("TransSlNo", "");
+                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
+                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
+                        OutletItem.put("ordertype", "Return Invoice");
+                        OutletItem.put("from", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("to", Shared_Common_Pref.CUSTOMER_CODE);
+                        OutletItem.put("distCode", Shared_Common_Pref.CUSTOMER_CODE);
+                        OutletItem.put("customerCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
+
+                        if (strLoc.length > 0) {
+                            OutletItem.put("Lat", strLoc[0]);
+                            OutletItem.put("Long", strLoc[1]);
+                        } else {
+                            OutletItem.put("Lat", "");
+                            OutletItem.put("Long", "");
+                        }
+                        JSONArray Order_Details = new JSONArray();
+                        JSONArray totTaxArr = new JSONArray();
+
+                        for (int z = 0; z < Order_Outlet_Filter.size(); z++) {
+                            JSONObject ProdItem = new JSONObject();
+                            ProdItem.put("product_Name", Order_Outlet_Filter.get(z).getName());
+                            ProdItem.put("product_code", Order_Outlet_Filter.get(z).getId());
+                            ProdItem.put("Product_Qty", Order_Outlet_Filter.get(z).getQty());
+                            ProdItem.put("Product_RegularQty", Order_Outlet_Filter.get(z).getRegularQty());
+                            ProdItem.put("Product_Total_Qty", Order_Outlet_Filter.get(z).getQty() +
+                                    Order_Outlet_Filter.get(z).getRegularQty());
+                            ProdItem.put("Product_Amount", Order_Outlet_Filter.get(z).getAmount());
+                            ProdItem.put("Rate", String.format("%.2f", Order_Outlet_Filter.get(z).getRate()));
+
+                            ProdItem.put("free", Order_Outlet_Filter.get(z).getFree());
+                            ProdItem.put("dis", Order_Outlet_Filter.get(z).getDiscount());
+                            ProdItem.put("dis_value", Order_Outlet_Filter.get(z).getDiscount_value());
+                            ProdItem.put("Off_Pro_code", Order_Outlet_Filter.get(z).getOff_Pro_code());
+                            ProdItem.put("Off_Pro_name", Order_Outlet_Filter.get(z).getOff_Pro_name());
+                            ProdItem.put("Off_Pro_Unit", Order_Outlet_Filter.get(z).getOff_Pro_Unit());
+                            ProdItem.put("Off_Scheme_Unit", Order_Outlet_Filter.get(z).getScheme());
+                            ProdItem.put("discount_type", Order_Outlet_Filter.get(z).getDiscount_type());
+
+                            JSONArray tax_Details = new JSONArray();
+
+
+                            if (Order_Outlet_Filter.get(z).getProductDetailsModal() != null &&
+                                    Order_Outlet_Filter.get(z).getProductDetailsModal().size() > 0) {
+
+                                for (int i = 0; i < Order_Outlet_Filter.get(z).getProductDetailsModal().size(); i++) {
+                                    JSONObject taxData = new JSONObject();
+
+                                    String label = Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Type();
+                                    Double amt = Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Amt();
+                                    taxData.put("Tax_Id", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Id());
+                                    taxData.put("Tax_Val", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Val());
+                                    taxData.put("Tax_Type", label);
+                                    taxData.put("Tax_Amt", amt);
+                                    tax_Details.put(taxData);
+
+
+                                }
+
+
+                            }
+
+                            ProdItem.put("TAX_details", tax_Details);
+
+                            Order_Details.put(ProdItem);
+
+                        }
+
+                        for (int i = 0; i < taxList.size(); i++) {
+                            JSONObject totTaxObj = new JSONObject();
+
+                            totTaxObj.put("Tax_Type", taxList.get(i).getTax_Type());
+                            totTaxObj.put("Tax_Amt", taxList.get(i).getTax_Amt());
+                            totTaxArr.put(totTaxObj);
+
+                        }
+
+                        OutletItem.put("TOT_TAX_details", totTaxArr);
+                        ActivityData.put("Activity_Doctor_Report", OutletItem);
+                        ActivityData.put("Order_Details", Order_Details);
+                        data.put(ActivityData);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//                    Call<JsonObject> responseBodyCall = apiInterface.saveIndent(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+//                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+//                        @Override
+//                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+//                            if (response.isSuccessful()) {
+//                                try {
+//                                    common_class.ProgressdialogShow(0, "");
+//                                    Log.e("JSON_VALUES", response.body().toString());
+//                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
+//                                    String san = jsonObjects.getString("success");
+//                                    Log.e("Success_Message", san);
+//                                    //  ResetSubmitBtn(1);
+//                                    if (san.equals("true")) {
+//                                        sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
+//                                        common_class.CommonIntentwithFinish(Invoice_History.class);
+//                                    }
+//                                    common_class.showMsg(Print_Invoice_Activity.this, jsonObjects.getString("Msg"));
+//
+//                                } catch (Exception e) {
+//                                    common_class.ProgressdialogShow(0, "");
+//                                    // ResetSubmitBtn(2);
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<JsonObject> call, Throwable t) {
+//                            common_class.ProgressdialogShow(0, "");
+//                            Log.e("SUBMIT_VALUE", "ERROR");
+//                            // ResetSubmitBtn(2);
+//                        }
+//                    });
+
+                }
+
+                @Override
+                public void NegativeMethod(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                    //ResetSubmitBtn(0);
+                }
+            });
+        } else {
+            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            // ResetSubmitBtn(0);
         }
     }
 
@@ -722,12 +939,18 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             subtotal.setText("₹" + formatter.format(subTotalVal));
             netamount.setText("₹ " + formatter.format(subTotalVal));
 
+
+            returntotalqty.setText("" + String.valueOf(total_qtytext));
+            returntotalitem.setText("" + Order_Outlet_Filter.size());
+            returnsubtotal.setText("₹" + formatter.format(subTotalVal));
+            returnNetAmt.setText("₹ " + formatter.format(subTotalVal));
+
             tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(0).getPaidAmount())));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
             mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, arr);
-            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, arr);
             printrecyclerview.setAdapter(mReportViewAdapter);
+            rvReturnInv.setAdapter(mReportViewAdapter);
 
             cashdiscount.setText("₹" + formatter.format(cashDisc));
             gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
@@ -741,6 +964,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             gstLabel.setText(label);
             gstrate.setText(amt);
+            returngstLabel.setText(label);
+            returngstrate.setText(amt);
+
 
         } catch (Exception e) {
             Log.e("PRINT:getData ", e.getMessage());
