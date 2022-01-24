@@ -331,6 +331,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
+
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
