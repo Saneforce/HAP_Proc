@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -31,13 +32,29 @@
 
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvOutletSta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/C15dp"
+            android:paddingRight="@dimen/C5dp"
+            android:text="Outlet Status"
+            android:textAlignment="textStart"
+            android:textColor="#FFF"
+            android:textSize="13dp"
+            android:textStyle="bold"
+
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/row_report"
         android:layout_width="match_parent"
         android:layout_height="@dimen/C40dp"
-        android:background="@color/grey_300">
+        android:layout_gravity="center_vertical"
+        android:background="@color/grey_300"
+        android:visibility="gone">
 
 
         <TextView
@@ -46,8 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/sno"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_weight="0.8"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="@dimen/C14dp"></TextView>
@@ -56,40 +72,36 @@
         <TextView
             android:id="@+id/Itemcount"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="0.5"
-            android:gravity="center"
             android:text="Des"
             android:textColor="@color/black"
             android:textSize="@dimen/C14dp"></TextView>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="0.5"
-            android:gravity="center"
             android:text="Ho"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/C14dp"></TextView>
+
         <TextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center"
             android:text="Applied Date"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/C14dp"></TextView>
+
         <TextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center"
             android:text="Click Here"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -98,5 +110,11 @@
 
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOutletApprov"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

@@ -139,6 +139,15 @@
 
             </RelativeLayout>
 
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_600"
+                android:textSize="9dp" />
+
             <TextView
                 android:id="@+id/tvAmount"
                 android:layout_width="match_parent"

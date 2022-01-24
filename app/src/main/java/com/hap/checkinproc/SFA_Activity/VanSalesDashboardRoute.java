@@ -845,7 +845,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             txClsOtltCnt.setText(String.valueOf(CountCls));
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType);
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType,"","");
             } else {
                 adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());

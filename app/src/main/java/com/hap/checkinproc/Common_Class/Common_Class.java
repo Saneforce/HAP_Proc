@@ -48,6 +48,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
@@ -94,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.13";
+    public static String Version_Name = "ver 3.2.14";
     public static String Work_Type = "0";
     public static int count;
 
@@ -341,6 +342,12 @@ public class Common_Class {
                     QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
                     QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
                     break;
+                case Constants.GetGrn_List:
+                    QuerySTring1 = "{\"tableName\":\"getindentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", GrnListActivity.tvStartDate.getText().toString());
+                    QueryString.put("todate", GrnListActivity.tvEndDate.getText().toString());
+                    QueryString.put(Constants.DistributorERP, shared_common_pref.getvalue(Constants.DistributorERP));
+                    break;
                 case Constants.GetTodayPrimaryOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 //                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
@@ -441,7 +448,6 @@ public class Common_Class {
                             shared_common_pref = new Shared_Common_Pref(activity);
 
                         if (key.equals(Retailer_OutletList)) {
-                            Log.v("Res>>", response.body().toString());
                             shared_common_pref.save(key, gson.toJson(response.body()));
 
                         } else {
@@ -452,6 +458,8 @@ public class Common_Class {
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
+
+                        Log.v("Res>>", response.body().toString());
 
                     } catch (Exception e) {
 
@@ -507,6 +515,12 @@ public class Common_Class {
                         data.put("date", jparam.get("date").getAsString());
                         //data.put("date", "2021-11-10");
                         data.put("type", jparam.get("type").getAsString());
+                        break;
+
+                    case Constants.DELIVERY_SEQUENCE:
+                        axnname = "save/deliverysequence";
+                        data.put("RetailerID", jparam.get("RetailerID").getAsString());
+                        data.put("SlNo", jparam.get("SlNo").getAsString());
                         break;
                     case Constants.PrimaryTAXList:
                         axnname = "get/primaryproducttaxdetails";
@@ -701,6 +715,7 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         break;
+
                 }
 
                 QueryString.put("axn", axnname);
@@ -761,6 +776,7 @@ public class Common_Class {
             try {
                 jParam.put("SF", UserDetails.getString("Sfcode", ""));
                 jParam.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                jParam.put("outletId", Shared_Common_Pref.OutletCode);
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -803,81 +819,9 @@ public class Common_Class {
                 service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("SEC_Product_List", response.body().toString());
                         db.deleteMasterData(Constants.Product_List);
                         db.addMasterData(Constants.Product_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    public void getDentDatas(Activity activity) {
-
-        if (isNetworkAvailable(activity)) {
-            getProductDetails(activity);
-            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-
-            DatabaseHandler db = new DatabaseHandler(activity);
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", Shared_Common_Pref.CUSTOMER_CODE);
-                jParam.put("div", UserDetails.getString("Divcode", ""));
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                service.getDataArrayList("get/indentprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        // Log.v(TAG, response.toString());
-                        db.deleteMasterData(Constants.INDENT_ProdGroups_List);
-                        db.addMasterData(Constants.INDENT_ProdGroups_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/indentprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.INDENT_ProdTypes_List);
-                        db.addMasterData(Constants.INDENT_ProdTypes_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-                service.getDataArrayList("get/indentprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        db.deleteMasterData(Constants.INDENT_Category_List);
-                        db.addMasterData(Constants.INDENT_Category_List, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-
-
-                service.getDataArrayList("get/indentproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("DENT:", response.body().toString());
-                        db.deleteMasterData(Constants.INDENT_Product_List);
-                        db.addMasterData(Constants.INDENT_Product_List, response.body());
                     }
 
                     @Override
@@ -896,7 +840,7 @@ public class Common_Class {
     public void getPOSProduct(Activity activity) {
 
         if (isNetworkAvailable(activity)) {
-            getProductDetails(activity);
+
             UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
             DatabaseHandler db = new DatabaseHandler(activity);
@@ -1049,7 +993,11 @@ public class Common_Class {
                 "Yes", "No", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
-                        CommonIntentwithFinish(moveActivity);
+                        if (name.equalsIgnoreCase("GRN?"))
+                            activity.finish();
+                        else
+                            CommonIntentwithFinish(moveActivity);
+
 
                         switch (name) {
                             case "Primary Order?":

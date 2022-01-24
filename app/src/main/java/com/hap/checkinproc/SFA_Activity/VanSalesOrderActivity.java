@@ -1004,7 +1004,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
-                Product_ModalSetAdapter.get(uomPos).setCnvQty(Integer.parseInt((myDataset.get(position).getPhone())));
+                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                 Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                 Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                 mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);

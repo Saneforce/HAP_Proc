@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,7 +63,6 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -84,7 +82,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvDeliveryDate, tvRetailorPhone, retaileAddress;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -114,7 +112,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_dent);
+            setContentView(R.layout.activity_indent);
             order_category_select = this;
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(IndentActivity.this);
@@ -139,13 +137,12 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
-            tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
 
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
 
 
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             takeorder.setOnClickListener(this);
@@ -153,7 +150,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -168,15 +164,16 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
 
             String OrdersTable = String.valueOf(db.getMasterData(Constants.INDENT_Product_List));
+            // String OrdersTable = sharedCommonPref.getvalue(Constants.INDENT_Product_List);
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INTENT_DATA)))
+           // if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA)))
                 Product_Modal = gson.fromJson(OrdersTable, userType);
-            else {
-                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INTENT_DATA), userType);
-
-            }
+//            else {
+//                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INDENT_DATA), userType);
+//
+//            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -191,7 +188,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             tvPOP.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
-            tvDeliveryDate.setOnClickListener(this);
 
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
 
@@ -536,19 +532,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         tvRetailorPhone.getText().toString().replaceAll(",", ""));
 
                 break;
-            case R.id.tvDeliveryDate:
-                Calendar newCalendar = Calendar.getInstance();
-                fromDatePickerDialog = new DatePickerDialog(IndentActivity.this, new DatePickerDialog.OnDateSetListener() {
 
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int month = monthOfYear + 1;
-
-                        tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                fromDatePickerDialog.show();
-
-                break;
             case R.id.rlAddProduct:
                 moveProductScreen();
                 break;
@@ -565,16 +549,16 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.tvOtherBrand:
-                common_class.commonDialog(this, OtherBrandActivity.class, "Dent?");
+                common_class.commonDialog(this, OtherBrandActivity.class, "Indent?");
                 break;
             case R.id.tvQPS:
-                common_class.commonDialog(this, QPSActivity.class, "Dent?");
+                common_class.commonDialog(this, QPSActivity.class, "Indent?");
                 break;
             case R.id.tvPOP:
-                common_class.commonDialog(this, POPActivity.class, "Dent?");
+                common_class.commonDialog(this, POPActivity.class, "Indent?");
                 break;
             case R.id.tvCoolerInfo:
-                common_class.commonDialog(this, CoolerInfoActivity.class, "Dent?");
+                common_class.commonDialog(this, CoolerInfoActivity.class, "Indent?");
                 break;
 
             case R.id.takeorder:
@@ -655,10 +639,9 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "Indent");
-                        OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
                         OutletItem.put("from", sharedCommonPref.getvalue(Constants.Distributor_Id));
                         OutletItem.put("to", Shared_Common_Pref.CUSTOMER_CODE);
-                        OutletItem.put("distCode",Shared_Common_Pref.CUSTOMER_CODE );
+                        OutletItem.put("distCode", Shared_Common_Pref.CUSTOMER_CODE);
                         OutletItem.put("customerCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
 
                         if (strLoc.length > 0) {
@@ -750,7 +733,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                                     Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_INTENT_DATA);
+                                        sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
                                         common_class.CommonIntentwithFinish(Invoice_History.class);
                                     }
                                     common_class.showMsg(IndentActivity.this, jsonObjects.getString("Msg"));
@@ -937,7 +920,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         String data = gson.toJson(Product_Modal);
-        sharedCommonPref.save(Constants.LOC_INTENT_DATA, data);
+        sharedCommonPref.save(Constants.LOC_INDENT_DATA, data);
 
     }
 
@@ -973,7 +956,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
-                common_class.commonDialog(this, Invoice_History.class, "Dent?");
+                common_class.commonDialog(this, Invoice_History.class, "Indent?");
             }
             return true;
         }
@@ -1409,12 +1392,12 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 });
 
 
-                holder.Rate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDialog(Product_Details_Modal);
-                    }
-                });
+//                holder.Rate.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showDialog(Product_Details_Modal);
+//                    }
+//                });
 
                 updateToTALITEMUI();
             } catch (Exception e) {

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -18,7 +19,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     List<Retailer_Modal_List> Retailer_Modal_ListFilter;
     List<Retailer_Modal_List> mRetailer_Modal_List;
     private int mTabPos = -1;
-    private String mSearchText = "";
+    private String mSearchText = "", mCategory = "", mCatType = "";
     private String mRetType = "1";
     String mActivityName;
 
@@ -30,6 +31,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         this.mRetType = RetType;
         this.mContext = context;
         this.mActivityName = name;
+
         Log.v("tabAdapter: ", "pos:" + tabPos);
     }
 
@@ -51,11 +53,13 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     }
 
 
-    public void notifyData(List<Retailer_Modal_List> retailer_Modal_List, int tabPos, String filterText, String RetType) {
+    public void notifyData(List<Retailer_Modal_List> retailer_Modal_List, int tabPos, String filterText, String RetType, String category, String catType) {
         this.mTabPos = tabPos;
         this.mRetType = RetType;
         this.mRetailer_Modal_List = retailer_Modal_List;
         this.mSearchText = filterText;
+        this.mCategory = category;
+        this.mCatType = catType;
         notifyDataSetChanged();
 
     }
@@ -93,7 +97,8 @@ public class TabAdapter extends FragmentStatePagerAdapter {
                         outletType.equalsIgnoreCase(mRetType)
                         && (mSearchText.equalsIgnoreCase("") || (flag == mTabPos &&
                         (";" + mRetailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + mSearchText.toLowerCase()) > -1) ||
-                        (flag != mTabPos))) {
+                        (flag != mTabPos)) && (Common_Class.isNullOrEmpty(mCategory) || mCategory.equalsIgnoreCase("ALL") ||
+                        mCategory.equalsIgnoreCase(mRetailer_Modal_List.get(i).getSpeciality()))) {
                     Retailer_Modal_ListFilter.add(mRetailer_Modal_List.get(i));
                 }
             }

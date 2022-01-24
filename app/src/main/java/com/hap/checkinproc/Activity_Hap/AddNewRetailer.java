@@ -428,9 +428,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
             addRetailerName.clearFocus();
+            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
+            }.getType();
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.STATE_LIST)))
+                common_class.getDb_310Data(Constants.STATE_LIST, this);
+            else {
+                stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
+            }
+
             Intent i = getIntent();
-            Log.e("TestOutler_AddFlag", Shared_Common_Pref.Outler_AddFlag);
+            Log.e(TAG + "1:", Shared_Common_Pref.Outler_AddFlag);
             if (i != null && i.getExtras() != null) {
+
                 if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                     Compititor_Id = i.getExtras().getString("Compititor_Id");
                     Compititor_Name = i.getExtras().getString("Compititor_Name");
@@ -448,10 +458,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     //The key argument here must match that used in the other activity
                 } else {
 
-                    assignData();
+                    if (getOutletPosition() >= 0)
+                        assignData();
                 }
 
             }
+            Log.e(TAG + "1:1", Shared_Common_Pref.Outler_AddFlag);
 
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
@@ -495,6 +507,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
                 }
             }
+            Log.e(TAG + "2:", Shared_Common_Pref.Outler_AddFlag);
 
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -567,6 +580,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 }
             });
+            Log.e(TAG + "3:", Shared_Common_Pref.Outler_AddFlag);
 
             String placeIdData = getIntent().getStringExtra(Constants.PLACE_ID);
             if (placeIdData != null) {
@@ -603,6 +617,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
                 }
             }
+            Log.e(TAG + "4:", Shared_Common_Pref.Outler_AddFlag);
 
             shared_common_pref.save(Constants.Retailor_FilePath, "");
 
@@ -634,6 +649,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             mData.add(new QPS_Modal("", "", ""));
             mFreezerData.add(new QPS_Modal("", "", ""));
             getFreezerData(divERP);
+            Log.e(TAG + "5:", Shared_Common_Pref.Outler_AddFlag);
 
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_capacity)))
                 common_class.getDb_310Data(Freezer_capacity, this);
@@ -647,6 +663,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
                 }
             }
+            Log.e(TAG + "6:", Shared_Common_Pref.Outler_AddFlag);
+
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_Status)))
                 common_class.getDb_310Data(Freezer_Status, this);
             else {
@@ -659,9 +677,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
                 }
             }
+            Log.e(TAG + "7:", Shared_Common_Pref.Outler_AddFlag);
 
-            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
-            }.getType();
 
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CLASS)))
                 getRetailerClass();
@@ -669,6 +686,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 modelRetailClass = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CLASS), commonType);
 
             }
+            Log.e(TAG + "8:", Shared_Common_Pref.Outler_AddFlag);
 
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))
                 getRetailerChannel();
@@ -676,12 +694,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
             }
 
+            Log.e(TAG + "9:", Shared_Common_Pref.Outler_AddFlag);
 
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.STATE_LIST)))
-                common_class.getDb_310Data(Constants.STATE_LIST, this);
-            else {
-                stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
-            }
+
+            Log.e(TAG + "10:", Shared_Common_Pref.Outler_AddFlag);
 
             distributorERP = shared_common_pref.getvalue(Constants.DistributorERP);
 
@@ -719,6 +735,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
             });
 
+            String val = getIntent().getStringExtra("approval");
+            Log.v(TAG, "screenname:" + val);
+            if (val != null && val.equalsIgnoreCase("status")) {
+                findViewById(R.id.llApprovParent).setVisibility(View.VISIBLE);
+                mSubmit.setVisibility(View.GONE);
+                headtext.setText("Outlet Approval");
+
+            }
+
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -736,6 +761,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         Shared_Common_Pref.Outletlat = RetLat;
         Shared_Common_Pref.Outletlong = RetLng;
         getCompleteAddressString(RetLat, RetLng);
+
         centreMapOnLocation("Your Location");
         btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
 
@@ -779,87 +805,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             //  Log.w("My Current loction address", "Canont get Address!");
         }
         return strAdd;
-    }
-
-
-
-    /*Route Details*/
-//    public void getRouteDetails() {
-//
-//        String routeMap = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
-//        call.enqueue(new Callback<JsonArray>() {
-//            @Override
-//            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-//
-//                Log.e("Route_response", response.body().toString());
-//
-//                JsonArray jsonArray = response.body();
-//                for (int a = 0; a < jsonArray.size(); a++) {
-//                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-//                    String className = String.valueOf(jsonObject.get("name"));
-//                    String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
-//                    String id = String.valueOf(jsonObject.get("id"));
-//                    Log.e("RETAILER_CLASS_NAME", retailerClass);
-//
-//
-//                    mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
-//                    Log.e("LeaveType_Request", retailerClass);
-//                    modelRetailDetails.add(mCommon_model_spinner);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonArray> call, Throwable t) {
-//                Log.e("Route_response", "ERROR");
-//
-//            }
-//        });
-//    }
-
-    /*Route Class*/
-
-
-    public void getServiceTypes(String id) {
-        if (common_class.isNetworkAvailable(this)) {
-            JSONObject jParam = new JSONObject();
-            try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", id);
-                jParam.put("div", UserDetails.getString("Divcode", ""));
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-
-                        try {
-                            Log.v(TAG + "grp", response.body().toString());
-                            JSONArray ProdGroups = new JSONArray(response.body().toString());
-                            serviceTypeList = new ArrayList<>();
-                            serviceTypeList.clear();
-                            for (int i = 0; i < ProdGroups.length(); i++) {
-                                JSONObject obj = ProdGroups.getJSONObject(i);
-                                serviceTypeList.add(new Common_Model(obj.getString("name"), obj.getString("id")));
-                            }
-
-
-                        } catch (Exception e) {
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-            } catch (Exception e) {
-
-            }
-        }
     }
 
     public void getRetailerClass() {
@@ -1297,7 +1242,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
         if (divERP.equalsIgnoreCase("62"))
             linReatilerRoute.setEnabled(true);
-        if (divERP.equals("47") ) {
+        if (divERP.equals("47")) {
             linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
@@ -1321,6 +1266,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
 
         }
+
+
     }
 
     public void loadroute(String id) {
@@ -1420,9 +1367,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 break;
             case R.id.rl_state:
-                if (stateList == null || stateList.size() == 0)
-                    common_class.getDb_310Data(Constants.STATE_LIST, this);
-                //else
                 common_class.showCommonDialog(stateList, 1, this);
                 break;
 
@@ -1481,6 +1425,16 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
         edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
         // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
+
+        if (stateList.size() > 0) {
+            for (int i = 0; i < stateList.size(); i++) {
+                if (stateList.get(i).getId().equalsIgnoreCase(Retailer_Modal_List.get(getOutletPosition()).getStateCode())) {
+                    tvStateName.setText(stateList.get(i).getName());
+                    stateCode = Integer.valueOf(stateList.get(i).getId());
+
+                }
+            }
+        }
 
 
         if (getIntent().getExtras().getString("Compititor_Id") != null)
@@ -1609,6 +1563,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         loadroute(shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
                         break;
                     case Constants.STATE_LIST:
+                        Log.v(TAG, "state:" + apiDataResponse);
                         JSONObject stateObj = new JSONObject(apiDataResponse);
                         if (stateObj.getBoolean("success")) {
                             stateList = new ArrayList<>();
@@ -1620,11 +1575,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 JSONObject obj = array.getJSONObject(i);
                                 stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
 
-                                if (!Shared_Common_Pref.Outler_AddFlag.equals("1") && (Retailer_Modal_List.get(getOutletPosition()).getStateCode() != null && obj.getString("State_Code").equals
-                                        (Retailer_Modal_List.get(getOutletPosition()).getStateCode()))) {
+                                try {
+                                    if (!Shared_Common_Pref.Outler_AddFlag.equals("1") && getOutletPosition() >= 0 && (Retailer_Modal_List.get(getOutletPosition()).getStateCode() != null && obj.getString("State_Code").equals
+                                            (Retailer_Modal_List.get(getOutletPosition()).getStateCode()))) {
 
-                                    tvStateName.setText("" + obj.getString("StateName"));
-                                    stateCode = Integer.valueOf(obj.getString("State_Code"));
+                                        tvStateName.setText("" + obj.getString("StateName"));
+                                        stateCode = Integer.valueOf(obj.getString("State_Code"));
+                                    }
+                                } catch (Exception e) {
+
                                 }
                             }
 
@@ -1638,7 +1597,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
 
         } catch (Exception e) {
-
+            Log.v(TAG + "stateRes:", e.getMessage());
         }
 
     }

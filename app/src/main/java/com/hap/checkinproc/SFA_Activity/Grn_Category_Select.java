@@ -76,7 +76,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Grm_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
+public class Grn_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     NumberFormat formatter = new DecimalFormat("##0.00");
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -101,7 +101,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
     Prodct_Adapter mProdct_Adapter;
     List<Product_Details_Modal> freeQty_Array_List;
 
-    String TAG = "GRM_Category_Select";
+    String TAG = "GRN_Category_Select";
     DatabaseHandler db;
     public int selectedPos = 0;
 
@@ -124,14 +124,17 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
     private int uomPos;
     ArrayList<Common_Model> uomList;
     Button btnGetOrder;
+    private ArrayList<Product_Details_Modal> grn_product;
+    private String filterId = "";
+    private JSONArray ProdGroups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_grm_category__select);
+            setContentView(R.layout.activity_grn_category__select);
             db = new DatabaseHandler(this);
-            sharedCommonPref = new Shared_Common_Pref(Grm_Category_Select.this);
+            sharedCommonPref = new Shared_Common_Pref(Grn_Category_Select.this);
             common_class = new Common_Class(this);
             categorygrid = findViewById(R.id.category);
             Grpgrid = findViewById(R.id.PGroup);
@@ -158,7 +161,6 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             rlAddProduct = findViewById(R.id.rlAddProduct);
 
 
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             takeorder.setOnClickListener(this);
@@ -170,7 +172,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            Out_Let_Name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name));
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -184,10 +186,6 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
-
-
-            // showOrderItemList(0, "");
-
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -209,59 +207,9 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             });
 
 
-//            if (Shared_Common_Pref.Invoicetoorder.equals("4")) {
-//                orderId = Shared_Common_Pref.TransSlNo;
-//                Shared_Common_Pref.Invoicetoorder = "2";
-//
-//                String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
-//                JSONArray jsonArray1 = new JSONArray(preOrderList);
-//
-//                if (jsonArray1 != null && jsonArray1.length() > 0) {
-//                    for (int pm = 0; pm < Product_Modal.size(); pm++) {
-//                        for (int i = 0; i < jsonArray1.length(); i++) {
-//                            JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
-//
-//                            if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
-//                                Product_Modal.get(pm).setRegularQty
-//                                        (jsonObject1.getInt("Quantity"));
-//                                Product_Modal.get(pm).setQty(
-//                                        jsonObject1.getInt("Quantity"));
-//                                Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
-//                                Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
-////                                Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("free")));
-//                                Product_Modal.get(pm).setRate((jsonObject1.getDouble("Rate")));
-//
-//                                JSONArray taxArr = jsonObject1.getJSONArray("TAX_details");
-//                                List<Product_Details_Modal> taxList = new ArrayList<>();
-//                                double wholeTax = 0;
-//                                for (int tax = 0; tax < taxArr.length(); tax++) {
-//                                    JSONObject taxObj = taxArr.getJSONObject(tax);
-//                                    taxList.add(new Product_Details_Modal(taxObj.getString("Tax_Code"), taxObj.getString("Tax_Name"), taxObj.getDouble("Tax_Val"),
-//                                            taxObj.getDouble("Tax_Amt")));
-//                                    wholeTax += taxObj.getDouble("Tax_Amt");
-//
-//                                }
-//
-//                                Product_Modal.get(pm).setProductDetailsModal(taxList);
-//                                Product_Modal.get(pm).setTax(Double.parseDouble(formatter.format(wholeTax)));
-//
-//
-//                            }
-//
-//
-//                        }
-//                    }
-//                }
-//
-//            }
-//            else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
-//                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA), userType);
-//
-//            }
-
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
-            JSONArray ProdGroups = db.getMasterData(Constants.POS_ProdGroups_List);
+            ProdGroups = db.getMasterData(Constants.POS_ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -280,8 +228,8 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             });
             Grpgrid.setAdapter(grplistItems);
 
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
+            common_class.getDataFromApi(Constants.GRN_ORDER_DATA, this, false);
 
         } catch (Exception e) {
 
@@ -306,10 +254,12 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                 }
             }
 
-            String filterId = "";
+
             if (TypGroups.length() > 0)
                 filterId = TypGroups.getJSONObject(0).getString("id");
+
             GetJsonData(String.valueOf(db.getMasterData(Constants.POS_Category_List)), "1", filterId);
+
 
             RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
@@ -359,7 +309,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
                 selectedPos = 0;
 
-                Grm_Category_Select.CategoryAdapter customAdapteravail = new Grm_Category_Select.CategoryAdapter(getApplicationContext(),
+                Grn_Category_Select.CategoryAdapter customAdapteravail = new Grn_Category_Select.CategoryAdapter(getApplicationContext(),
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
@@ -378,18 +328,18 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         Getorder_Array_List.clear();
 
 
-        for (int pm = 0; pm < Product_Modal.size(); pm++) {
+        for (int pm = 0; pm < grn_product.size(); pm++) {
 
-            if (Product_Modal.get(pm).getRegularQty() != null) {
-                if (Product_Modal.get(pm).getQty() > 0) {
-                    Getorder_Array_List.add(Product_Modal.get(pm));
+            if (grn_product.get(pm).getRegularQty() != null) {
+                if (grn_product.get(pm).getRegularQty() > 0) {
+                    Getorder_Array_List.add(grn_product.get(pm));
 
                 }
             }
         }
 
         if (Getorder_Array_List.size() == 0)
-            Toast.makeText(getApplicationContext(), "GRM is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "GRN is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
 
@@ -492,7 +442,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
-            AlertDialogBox.showDialog(Grm_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+            AlertDialogBox.showDialog(Grn_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
                     common_class.ProgressdialogShow(1, "");
@@ -546,6 +496,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                            ProdItem.put("Product_InvQty", Getorder_Array_List.get(z).getRegularQty());
                             double cf = (Getorder_Array_List.get(z).getCnvQty());
                             ProdItem.put("Product_Total_Qty", cf > 0 ? Getorder_Array_List.get(z).getQty() *
                                     cf : Getorder_Array_List.get(z).getQty());
@@ -568,6 +519,8 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                             ProdItem.put("exp", Getorder_Array_List.get(z).getExp());
                             ProdItem.put("batch_no", Getorder_Array_List.get(z).getBatchNo());
                             ProdItem.put("remarks", Getorder_Array_List.get(z).getRemarks());
+                            ProdItem.put("deviation", (Getorder_Array_List.get(z).getRegularQty() - (cf > 0 ? Getorder_Array_List.get(z).getQty() *
+                                    cf : Getorder_Array_List.get(z).getQty())));
 
 
                             JSONArray tax_Details = new JSONArray();
@@ -622,7 +575,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                                             // sharedCommonPref.clear_pref(Constants.LOC_INVOICE_DATA);
                                             common_class.CommonIntentwithFinish(SFA_Activity.class);
                                         }
-                                        common_class.showMsg(Grm_Category_Select.this, jsonObjects.getString("Msg"));
+                                        common_class.showMsg(Grn_Category_Select.this, jsonObjects.getString("Msg"));
 
                                     } catch (Exception e) {
                                         common_class.ProgressdialogShow(0, "");
@@ -666,7 +619,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.grm_pay_recyclerview, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.grn_pay_recyclerview, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
 
@@ -677,7 +630,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         freeQty_Array_List = new ArrayList<>();
         freeQty_Array_List.clear();
 
-        for (Product_Details_Modal pm : Product_Modal) {
+        for (Product_Details_Modal pm : grn_product) {
 
             if (pm.getRegularQty() != null) {
                 if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
@@ -717,14 +670,14 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         cashDiscount = 0;
 
 
-        for (int pm = 0; pm < Product_Modal.size(); pm++) {
-            if (Product_Modal.get(pm).getRegularQty() != null) {
-                if (Product_Modal.get(pm).getQty() > 0 /*|| Product_Modal.get(pm).getRegularQty() > 0*/) {
-                    cashDiscount += Product_Modal.get(pm).getDiscount();
-                    totalvalues += Product_Modal.get(pm).getAmount();
-                    totalQty += Product_Modal.get(pm).getQty()/* + Product_Modal.get(pm).getRegularQty()*/;
+        for (int pm = 0; pm < grn_product.size(); pm++) {
+            if (grn_product.get(pm).getRegularQty() != null) {
+                if (grn_product.get(pm).getRegularQty() > 0) {
+                    cashDiscount += grn_product.get(pm).getDiscount();
+                    totalvalues += grn_product.get(pm).getAmount();
+                    totalQty += grn_product.get(pm).getQty();
 
-                    Getorder_Array_List.add(Product_Modal.get(pm));
+                    Getorder_Array_List.add(grn_product.get(pm));
 
 
                 }
@@ -782,6 +735,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                 }
 
             }
+
         }
 
         String label = "", amt = "";
@@ -802,14 +756,12 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         }
 
-        // sharedCommonPref.save(Constants.LOC_INVOICE_DATA, gson.toJson(Product_Modal));
 
     }
 
     public void showOrderItemList(int categoryPos, String filterString) {
-
         Product_ModalSetAdapter.clear();
-        for (Product_Details_Modal personNpi : Product_Modal) {
+        for (Product_Details_Modal personNpi : grn_product) {
             if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
                 if (Common_Class.isNullOrEmpty(filterString))
                     Product_ModalSetAdapter.add(personNpi);
@@ -823,7 +775,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_grm_recyclerview, getApplicationContext(), categoryPos);
+        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_grn_recyclerview, getApplicationContext(), categoryPos);
         recyclerView.setAdapter(mProdct_Adapter);
 
     }
@@ -842,6 +794,8 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
                         if (jsonArray1 != null && jsonArray1.length() > 0) {
+
+                            grn_product = new ArrayList<>();
                             for (int pm = 0; pm < Product_Modal.size(); pm++) {
                                 for (int i = 0; i < jsonArray1.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
@@ -871,13 +825,15 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                                         Product_Modal.get(pm).setTax(Double.parseDouble(formatter.format(wholeTax)));
 
 
+                                        grn_product.add(Product_Modal.get(pm));
                                     }
 
 
                                 }
                             }
+                            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
-                            showOrderItemList(selectedPos, "");
+                            updateToTALITEMUI();
                         }
                     }
                     break;
@@ -910,22 +866,31 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog(type);
-        switch (type) {
-            case 1:
-                Product_ModalSetAdapter.get(uomPos).setCnvQty(Integer.parseInt((myDataset.get(position).getPhone())));
-                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
-                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
-                break;
+        try {
+            common_class.dismissCommonDialog(type);
+            switch (type) {
+                case 1:
+                    int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble(myDataset.get(position).getPhone()));
+                    if (Product_ModalSetAdapter.get(uomPos).getRegularQty() >= qty) {
+                        Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                        Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                        Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                        mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_grn_recyclerview, getApplicationContext(), 1);
+                    } else {
+                        common_class.showMsg(this, "Can't exceed Inv Qty");
+                    }
+                    break;
 
+            }
+        } catch (Exception e) {
+            Log.v("UOMSelect:", e.getMessage());
         }
     }
 
-    public class CategoryAdapter extends RecyclerView.Adapter<Grm_Category_Select.CategoryAdapter.MyViewHolder> {
+    public class CategoryAdapter extends RecyclerView.Adapter<Grn_Category_Select.CategoryAdapter.MyViewHolder> {
 
         Context context;
-        Grm_Category_Select.CategoryAdapter.MyViewHolder pholder;
+        Grn_Category_Select.CategoryAdapter.MyViewHolder pholder;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -953,10 +918,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public Grm_Category_Select.CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public Grn_Category_Select.CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.category_order_horizantal_universe_gridview, parent, false);
-            return new Grm_Category_Select.CategoryAdapter.MyViewHolder(view);
+            return new Grn_Category_Select.CategoryAdapter.MyViewHolder(view);
         }
 
         @Override
@@ -971,7 +936,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         @SuppressLint("UseCompatLoadingForDrawables")
         @Override
-        public void onBindViewHolder(Grm_Category_Select.CategoryAdapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(Grn_Category_Select.CategoryAdapter.MyViewHolder holder, int position) {
             try {
 
 
@@ -1066,10 +1031,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 tvUOM = view.findViewById(R.id.tvUOM);
+                tvInvQty = view.findViewById(R.id.tvInvQty);
 
 
                 if (CategoryType >= 0) {
-                    tvInvQty = view.findViewById(R.id.tvInvQty);
                     rlUOM = view.findViewById(R.id.rlUOM);
                     tvMFG = view.findViewById(R.id.tvMFG);
                     tvEXP = view.findViewById(R.id.tvEXP);
@@ -1122,13 +1087,13 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
         void showDatePickerDialog(int pos, TextView tv, Product_Details_Modal pm) {
             Calendar newCalendar = Calendar.getInstance();
-            DatePickerDialog fromDatePickerDialog = new DatePickerDialog(Grm_Category_Select.this, new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog fromDatePickerDialog = new DatePickerDialog(Grn_Category_Select.this, new DatePickerDialog.OnDateSetListener() {
 
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     int month = monthOfYear + 1;
                     String date = ("" + year + "-" + month + "-" + dayOfMonth);
 
-                    //if (common_class.checkDates(pos == 0 ? date : holder.tvMFG.getText().toString(), pos == 1 ? date : holder.tvEXP.getText().toString(), Grm_Category_Select.this)) {
+                    //if (common_class.checkDates(pos == 0 ? date : holder.tvMFG.getText().toString(), pos == 1 ? date : holder.tvEXP.getText().toString(), Grn_Category_Select.this)) {
                     tv.setText(date);
 
                     if (pos == 0)
@@ -1138,7 +1103,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
 //                    } else {
-//                        common_class.showMsg(Grm_Category_Select.this, "Please select valid date");
+//                        common_class.showMsg(Grn_Category_Select.this, "Please select valid date");
 //                    }
                 }
             }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -1152,6 +1117,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
+
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
                 else {
@@ -1162,12 +1128,14 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
 
 
                 }
+
+                Log.v("uomName:", Product_Details_Modal.getUOM_Nm());
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
 
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+                holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (CategoryType >= 0) {
-                    holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getExp()))
                         Product_Details_Modal.setExp("");
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getMfg()))
@@ -1234,9 +1202,9 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                                         uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
                                     }
-                                    common_class.showCommonDialog(uomList, 1, Grm_Category_Select.this);
+                                    common_class.showCommonDialog(uomList, 1, Grn_Category_Select.this);
                                 } else {
-                                    common_class.showMsg(Grm_Category_Select.this, "No Records Found.");
+                                    common_class.showMsg(Grn_Category_Select.this, "No Records Found.");
                                 }
                             } catch (Exception e) {
                                 Log.v(TAG, e.getMessage());
@@ -1296,9 +1264,22 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+//                        String sVal = holder.Qty.getText().toString();
+//                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+//
+//                        if (Product_Details_Modal.getRegularQty() >= ((Integer.parseInt(sVal) + 1)))
+//                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
+                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+                        int inv = Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty();
+                        if (inv >= order)
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                        else {
+                            common_class.showMsg(Grn_Category_Select.this, "Can't exceed Inv Qty");
+                        }
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
@@ -1322,7 +1303,20 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty * Product_Details_Modal.getCnvQty());
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
+
+
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty() < totQty) {
+                                totQty = 0;
+                                enterQty = 0;
+                                holder.Qty.setText("0");
+                                common_class.showMsg(Grn_Category_Select.this, "Can't exceed Inv Qty");
+                            }
+//                            double enterQty = 0;
+//                            if (!charSequence.toString().equals(""))
+//                                enterQty = Double.valueOf(charSequence.toString());
+//
+//                            double totQty = (enterQty * Product_Details_Modal.getCnvQty());
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1560,10 +1554,10 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             try {
 
 
-                LayoutInflater inflater = LayoutInflater.from(Grm_Category_Select.this);
+                LayoutInflater inflater = LayoutInflater.from(Grn_Category_Select.this);
 
                 final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
-                AlertDialog alertDialog = new AlertDialog.Builder(Grm_Category_Select.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(Grn_Category_Select.this).create();
                 alertDialog.setCancelable(false);
 
                 final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
@@ -1575,9 +1569,9 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
                     public void onClick(View v) {
 
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
-                            common_class.showMsg(Grm_Category_Select.this, "Empty value is not allowed");
+                            common_class.showMsg(Grn_Category_Select.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(Grm_Category_Select.this, "Enter Rate is greater than MRP");
+                            common_class.showMsg(Grn_Category_Select.this, "Enter Rate is greater than MRP");
 
                         } else {
                             alertDialog.dismiss();
@@ -1686,7 +1680,7 @@ public class Grm_Category_Select extends AppCompatActivity implements View.OnCli
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
-                common_class.commonDialog(this, SFA_Activity.class, "GRM?");
+                common_class.commonDialog(this, GrnListActivity.class, "GRN?");
 
             }
             return true;
