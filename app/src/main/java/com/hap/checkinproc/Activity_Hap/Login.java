@@ -120,6 +120,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         db = new DatabaseHandler(this);
+        shared_common_pref = new Shared_Common_Pref(this);
+
+        Shared_Common_Pref.LOGINTYPE = shared_common_pref.getvalue(Constants.LOGIN_TYPE);
+
 
         JSONArray pendingPhotos = db.getAllPendingPhotos();
         if (pendingPhotos.length() > 0) {
@@ -181,7 +185,6 @@ public class Login extends AppCompatActivity {
 
         name = (TextInputEditText) findViewById(R.id.username);
         password = (TextInputEditText) findViewById(R.id.password);
-        shared_common_pref = new Shared_Common_Pref(this);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         profileImage = (ImageView) findViewById(R.id.profile_image);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -593,7 +596,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //  eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-                // eMail = "ciadmin@hap.in";
+              //  eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -609,10 +612,13 @@ public class Login extends AppCompatActivity {
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
-                 // eMail = "1026494@hap.in";
-                // eMail = "1007660@hap.in";//pranita
-                 //eMail="1026508@hap.in";//alaguselvi
-                // eMail="1012639@hap.in";//md
+                // eMail = "1026494@hap.in";
+//                eMail = "1007660@hap.in";//pranita
+//                eMail = "1026508@hap.in";//alaguselvi
+                //eMail="1012639@hap.in";//md
+                // eMail = "1006626@hap.in";
+                // eMail = "1006345@hap.in";
+
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {

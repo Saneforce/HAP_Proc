@@ -65,7 +65,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static final String UserDetail = "MyPrefs";
     public static TextView tvStartDate, tvEndDate;
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn,
-            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment,tvSalesReturn;
+            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment, tvSalesReturn;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
             linVanSales, linintent;
     Common_Class common_class;
@@ -139,7 +139,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txPayment = findViewById(R.id.PaymentAmt);
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
-            tvSalesReturn=findViewById(R.id.tvSalesReturn);
+            tvSalesReturn = findViewById(R.id.tvSalesReturn);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -291,7 +291,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvSalesReturn:
-                if(FilterOrderList.size()>0)
+//                JsonObject data = new JsonObject();
+//                //   {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
+//                data.addProperty("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+//                data.addProperty("Dt", Common_Class.GetDatewothouttime());
+//                data.addProperty("RetID", Shared_Common_Pref.OutletCode);
+//                data.addProperty("CustomerCode", Shared_Common_Pref.CUSTOMER_CODE);
+//
+//                common_class.getDb_310Data(Constants.SALES_RETURN, this, data);//                if(FilterOrderList.size()>0)
                 navigatePrintScreen(0,"Return Invoice");
                 break;
             case R.id.tvStartDate:
@@ -593,6 +600,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
 
                 switch (key) {
+                    case Constants.SALES_RETURN:
+                        break;
                     case Constants.INDENT_Product_List:
                         startActivity(new Intent(getApplicationContext(), IndentActivity.class));
                         overridePendingTransition(R.anim.in, R.anim.out);

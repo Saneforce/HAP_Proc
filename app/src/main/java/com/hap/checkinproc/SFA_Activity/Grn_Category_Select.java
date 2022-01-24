@@ -515,10 +515,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
                             ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
-                            ProdItem.put("mfg", Getorder_Array_List.get(z).getMfg());
-                            ProdItem.put("exp", Getorder_Array_List.get(z).getExp());
-                            ProdItem.put("batch_no", Getorder_Array_List.get(z).getBatchNo());
-                            ProdItem.put("remarks", Getorder_Array_List.get(z).getRemarks());
+                            ProdItem.put("mfg",  Getorder_Array_List.get(z).getMfg() == null ? "" : Getorder_Array_List.get(z).getMfg());
+                            ProdItem.put("exp",  Getorder_Array_List.get(z).getExp() == null ? "" : Getorder_Array_List.get(z).getExp());
+                            ProdItem.put("batch_no",  Getorder_Array_List.get(z).getBatchNo() == null ? "" : Getorder_Array_List.get(z).getBatchNo());
+                            ProdItem.put("remarks",  Getorder_Array_List.get(z).getRemarks() == null ? "" : Getorder_Array_List.get(z).getRemarks());
                             ProdItem.put("deviation", (Getorder_Array_List.get(z).getRegularQty() - (cf > 0 ? Getorder_Array_List.get(z).getQty() *
                                     cf : Getorder_Array_List.get(z).getQty())));
 

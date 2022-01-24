@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,7 +17,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,7 +44,6 @@ import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -54,6 +53,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,7 +70,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvDistAdd, returngstLabel, returngstrate, returntotalqty, returntotalitem, returnsubtotal;
     ImageView ok, ivPrint;
     public static Print_Invoice_Activity mPrint_invoice_activity;
-    Button btnInvoice;
+    CircularProgressButton btnInvoice;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private String label, amt, storeName = "", address = "", phone = "";
     private ArrayList<Product_Details_Modal> taxList;
@@ -224,6 +224,26 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         return false;
     }
 
+
+    public void ResetSubmitBtn(int resetMode) {
+        common_class.ProgressdialogShow(0, "");
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
+            btnInvoice.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        } else {
+            btnInvoice.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnInvoice.stopAnimation();
+                btnInvoice.revertAnimation();
+            }
+        }, dely);
+
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -243,6 +263,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             case R.id.btnInvoice:
                 if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Return Invoice")) {
+                    if (btnInvoice.isAnimating()) return;
+                    btnInvoice.startAnimation();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -282,10 +304,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             AlertDialogBox.showDialog(Print_Invoice_Activity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
-                    common_class.ProgressdialogShow(1, "");
-                    JSONArray data = new JSONArray();
-                    JSONObject ActivityData = new JSONObject();
                     try {
+                        common_class.ProgressdialogShow(1, "");
+                        JSONArray data = new JSONArray();
+                        JSONObject ActivityData = new JSONObject();
+
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("Worktype_code", "");
@@ -333,8 +356,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                             ProdItem.put("product_code", Order_Outlet_Filter.get(z).getId());
                             ProdItem.put("Product_Qty", Order_Outlet_Filter.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Order_Outlet_Filter.get(z).getRegularQty());
-                            ProdItem.put("Product_Total_Qty", Order_Outlet_Filter.get(z).getQty() +
-                                    Order_Outlet_Filter.get(z).getRegularQty());
+                            ProdItem.put("Product_Total_Qty", Order_Outlet_Filter.get(z).getQty());
                             ProdItem.put("Product_Amount", Order_Outlet_Filter.get(z).getAmount());
                             ProdItem.put("Rate", String.format("%.2f", Order_Outlet_Filter.get(z).getRate()));
 
@@ -389,54 +411,56 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//                    Call<JsonObject> responseBodyCall = apiInterface.saveIndent(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-//                    responseBodyCall.enqueue(new Callback<JsonObject>() {
-//                        @Override
-//                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                            if (response.isSuccessful()) {
-//                                try {
-//                                    common_class.ProgressdialogShow(0, "");
-//                                    Log.e("JSON_VALUES", response.body().toString());
-//                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
-//                                    String san = jsonObjects.getString("success");
-//                                    Log.e("Success_Message", san);
-//                                    //  ResetSubmitBtn(1);
-//                                    if (san.equals("true")) {
-//                                        sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
-//                                        common_class.CommonIntentwithFinish(Invoice_History.class);
-//                                    }
-//                                    common_class.showMsg(Print_Invoice_Activity.this, jsonObjects.getString("Msg"));
-//
-//                                } catch (Exception e) {
-//                                    common_class.ProgressdialogShow(0, "");
-//                                    // ResetSubmitBtn(2);
-//                                }
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<JsonObject> call, Throwable t) {
-//                            common_class.ProgressdialogShow(0, "");
-//                            Log.e("SUBMIT_VALUE", "ERROR");
-//                            // ResetSubmitBtn(2);
-//                        }
-//                    });
 
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonObject> responseBodyCall = apiInterface.saveSalesReturn(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        responseBodyCall.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        common_class.ProgressdialogShow(0, "");
+                                        Log.e("JSON_VALUES", response.body().toString());
+                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                        String san = jsonObjects.getString("success");
+                                        Log.e("Success_Message", san);
+                                        ResetSubmitBtn(1);
+                                        if (san.equals("true")) {
+                                            sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
+                                            common_class.CommonIntentwithFinish(Invoice_History.class);
+                                        }
+                                        common_class.showMsg(Print_Invoice_Activity.this, jsonObjects.getString("Msg"));
+
+                                    } catch (Exception e) {
+                                        common_class.ProgressdialogShow(0, "");
+                                        ResetSubmitBtn(2);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                common_class.ProgressdialogShow(0, "");
+                                Log.e("SUBMIT_VALUE", "ERROR");
+                                ResetSubmitBtn(2);
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ResetSubmitBtn(2);
+                    }
                 }
 
                 @Override
                 public void NegativeMethod(DialogInterface dialog, int id) {
                     dialog.dismiss();
-                    //ResetSubmitBtn(0);
+                    ResetSubmitBtn(0);
                 }
             });
         } else {
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
-            // ResetSubmitBtn(0);
+            ResetSubmitBtn(0);
         }
     }
 

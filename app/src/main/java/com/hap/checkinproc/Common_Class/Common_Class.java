@@ -496,6 +496,13 @@ public class Common_Class {
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
                 switch (key) {
+                    case Constants.SALES_RETURN:
+                        data.put("customer_code", jparam.get("customer_code").getAsString());
+                        data.put("ERP_Code", jparam.get("ERP_Code").getAsString());
+                        data.put("customer_code", jparam.get("customer_code").getAsString());
+                        data.put("ERP_Code", jparam.get("ERP_Code").getAsString());
+
+                        break;
                     case Constants.STOCK_DATA:
                         axnname = "get/stockistledger";
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
