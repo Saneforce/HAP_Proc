@@ -344,7 +344,34 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 CurrentLocationsAddress.setVisibility(View.GONE);
                 //   routeId = shared_common_pref.getvalue("RouteSelect");
                 CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
-                getCompleteAddressString(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
+               // getCompleteAddressString(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            new LocationFinder(getApplication(), new LocationEvents() {
+                                @Override
+                                public void OnLocationRecived(Location location) {
+                                    try {
+                                        if (location == null) {
+                                            Toast.makeText(AddNewRetailer.this, "Location Can't Getting Location. Try Again.", Toast.LENGTH_LONG).show();
+                                            //btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+                                            return;
+                                        } else {
+                                            refreshLocation(location);
+                                        }
+                                    } catch (Exception e) {
+                                        Log.v(TAG, "LOC1:" + e.getMessage());
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.v(TAG, "LOC3:" + e.getMessage());
+                        }
+                    }
+                }, 100);
+
                 headtext.setText("Create Outlet");
             } else {
                 retailercodevisible.setVisibility(View.VISIBLE);

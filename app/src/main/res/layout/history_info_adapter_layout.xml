@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:text="Arokya can Sm x 4, Hatsun Butter x 1, Aavin milk 500ml x 30"
             android:textColor="@color/grey_600"
-            android:textSize="9dp" />
+            android:textSize="13dp" />
 
 
         <Button

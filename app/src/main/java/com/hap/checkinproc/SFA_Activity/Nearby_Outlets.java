@@ -274,7 +274,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                         }
                         availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
                         recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
-                                getApplicationContext(), new AdapterOnClick() {
+                                Nearby_Outlets.this, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
                                 try {

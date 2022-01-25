@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.14";
+    public static String Version_Name = "ver 3.2.15";
     public static String Work_Type = "0";
     public static int count;
 
@@ -495,12 +495,15 @@ public class Common_Class {
 
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
+
                 switch (key) {
                     case Constants.SALES_RETURN:
-                        data.put("customer_code", jparam.get("customer_code").getAsString());
-                        data.put("ERP_Code", jparam.get("ERP_Code").getAsString());
-                        data.put("customer_code", jparam.get("customer_code").getAsString());
-                        data.put("ERP_Code", jparam.get("ERP_Code").getAsString());
+                   // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
+                        axnname = "get/stockreturn";
+                        data.put("Stk", jparam.get("Stk").getAsString());
+                        data.put("Dt", jparam.get("Dt").getAsString());
+                        data.put("RetID", jparam.get("RetID").getAsString());
+                        data.put("CustomerCode", jparam.get("CustomerCode").getAsString());
 
                         break;
                     case Constants.STOCK_DATA:

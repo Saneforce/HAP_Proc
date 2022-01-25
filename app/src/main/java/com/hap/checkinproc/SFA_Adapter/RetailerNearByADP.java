@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
@@ -78,8 +80,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
             }
             holder.icAC.setVisibility(View.GONE);
-            if(jItem.get("DelivType").getAsString().equalsIgnoreCase("AC"))
-            {
+            if (jItem.get("DelivType").getAsString().equalsIgnoreCase("AC")) {
                 holder.icAC.setVisibility(View.VISIBLE);
             }
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +91,33 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                     mAdapterOnClick.onIntentClick(posi);
                 }
             });
+
+
+//            holder.ivEdit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//                        JsonObject jItem = jLists.get(position).getAsJsonObject();
+//
+//                        Intent intent = new Intent(context, AddNewRetailer.class);
+//                        Shared_Common_Pref.Outlet_Info_Flag = "1";
+//                        Shared_Common_Pref.Editoutletflag = "1";
+//                        Shared_Common_Pref.Outler_AddFlag = "0";
+//                        Shared_Common_Pref.FromActivity = "Outlets";
+//                        Shared_Common_Pref.OutletCode = jItem.get("Code").getAsString();
+//                        intent.putExtra("OutletCode", jItem.get("Code").getAsString());
+//                        intent.putExtra("OutletName", jItem.get("Name").getAsString());
+//                        intent.putExtra("OutletAddress", jItem.get("Add1").getAsString());
+//                        intent.putExtra("OutletMobile", jItem.get("Mobile").getAsString());
+//                        intent.putExtra("OutletRoute", "");
+//
+//                        context.startActivity(intent);
+//                    } catch (Exception e) {
+//                        Log.v("NearByADP:", e.getMessage());
+//                    }
+//                }
+//            });
+
 
             holder.txTodayTotQty.setText("0");
             holder.txTodayTotVal.setText("₹0.00");
@@ -198,7 +226,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 
     public void sumOfTotal(JSONArray AryDta, RetailerNearByADP.MyViewHolder holder) {
         try {
-            Log.v("NEARBY_OUTLETS:",AryDta.toString());
+            Log.v("NEARBY_OUTLETS:", AryDta.toString());
             int iQty = 0;
             double iVal = 0.0;
             for (int il = 0; il < AryDta.length(); il++) {
@@ -217,10 +245,13 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 //                    drawRoute(sOutletName, mRetailer_Modal_List.getLat(), mRetailer_Modal_List.getLong());
                 }
             });
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
     private void drawRoute(String OutletName, String sLat, String sLng) {
         Intent intent = new Intent(context.getApplicationContext(), MapDirectionActivity.class);
         intent.putExtra(Constants.DEST_LAT, sLat);
@@ -230,10 +261,11 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
         context.startActivity(intent);
 
     }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName, txRetailCode, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txDistance, txTdyDt, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo;
-        LinearLayout parent_layout,icAC,linDirection;
+        LinearLayout parent_layout, icAC, linDirection;
         RecyclerView lstTdyView, lstPreView;
         ImageView icMob;
         ImageView ivEdit;
@@ -272,7 +304,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 icAC = view.findViewById(R.id.icAC);
 
 
-                ivEdit.setVisibility(View.GONE);
+                // ivEdit.setVisibility(View.GONE);
                 //txRetNo.setVisibility(View.GONE);
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");

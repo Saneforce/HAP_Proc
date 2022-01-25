@@ -10,16 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import org.json.JSONArray;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Adapter.MyViewHolder> {
     Context context;
-    JSONArray mDate;
+    List<Product_Details_Modal> mDate;
 
-    public Print_Invoice_Adapter(Context context, JSONArray mDate) {
+    public Print_Invoice_Adapter(Context context, List<Product_Details_Modal> mDate) {
         this.context = context;
         this.mDate = mDate;
     }
@@ -35,18 +37,24 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
     @Override
     public void onBindViewHolder(Print_Invoice_Adapter.MyViewHolder holder, int position) {
         try {
-            holder.productname.setText("" + mDate.getJSONObject(position).getString("Product_Name"));
-            holder.productqty.setText("" + mDate.getJSONObject(position).getInt("Quantity"));
-            holder.productUOM.setText("" + mDate.getJSONObject(position).getString("UOM"));
-            holder.productrate.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("Rate")));
-            holder.producttotal.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("value")));
+            Product_Details_Modal pm=mDate.get(position);
+            holder.productname.setText("" + pm.getName());
+            holder.productqty.setText("" + pm.getQty());
+            holder.productUOM.setText("" + pm.getUnitCode());
+            holder.productrate.setText("" + new DecimalFormat("##0.00").format(pm.getRate()));
+            holder.producttotal.setText("" + new DecimalFormat("##0.00").format(pm.getAmount()));
+//            holder.productname.setText("" + mDate.getJSONObject(position).getString("Product_Name"));
+//            holder.productqty.setText("" + mDate.getJSONObject(position).getInt("Quantity"));
+//            holder.productUOM.setText("" + mDate.getJSONObject(position).getString("UOM"));
+//            holder.productrate.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("Rate")));
+//            holder.producttotal.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("value")));
         } catch (Exception e) {
         }
     }
 
     @Override
     public int getItemCount() {
-        return mDate.length();
+        return mDate.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
