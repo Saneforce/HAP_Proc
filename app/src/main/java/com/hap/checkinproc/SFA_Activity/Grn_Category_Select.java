@@ -515,10 +515,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
                             ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
-                            ProdItem.put("mfg",  Getorder_Array_List.get(z).getMfg() == null ? "" : Getorder_Array_List.get(z).getMfg());
-                            ProdItem.put("exp",  Getorder_Array_List.get(z).getExp() == null ? "" : Getorder_Array_List.get(z).getExp());
-                            ProdItem.put("batch_no",  Getorder_Array_List.get(z).getBatchNo() == null ? "" : Getorder_Array_List.get(z).getBatchNo());
-                            ProdItem.put("remarks",  Getorder_Array_List.get(z).getRemarks() == null ? "" : Getorder_Array_List.get(z).getRemarks());
+                            ProdItem.put("mfg", Getorder_Array_List.get(z).getMfg() == null ? "" : Getorder_Array_List.get(z).getMfg());
+                            ProdItem.put("exp", Getorder_Array_List.get(z).getExp() == null ? "" : Getorder_Array_List.get(z).getExp());
+                            ProdItem.put("batch_no", Getorder_Array_List.get(z).getBatchNo() == null ? "" : Getorder_Array_List.get(z).getBatchNo());
+                            ProdItem.put("remarks", Getorder_Array_List.get(z).getRemarks() == null ? "" : Getorder_Array_List.get(z).getRemarks());
                             ProdItem.put("deviation", (Getorder_Array_List.get(z).getRegularQty() - (cf > 0 ? Getorder_Array_List.get(z).getQty() *
                                     cf : Getorder_Array_List.get(z).getQty())));
 
@@ -877,7 +877,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                         Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                         mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_grn_recyclerview, getApplicationContext(), 1);
                     } else {
-                        common_class.showMsg(this, "Can't exceed Inv Qty");
+                        common_class.showMsg(this, "Can't exceed Invoice Qty");
                     }
                     break;
 
@@ -1011,7 +1011,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty;
+                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty,tvOrderQty;
 
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty, etBatchNo, etRemarks;
@@ -1045,6 +1045,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+                    tvOrderQty=view.findViewById(R.id.tvOrderQty);
                 }
 
 
@@ -1136,6 +1137,14 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (CategoryType >= 0) {
+
+
+                    try{
+                       holder.tvOrderQty.setText(""+Product_Details_Modal.getOrderQty());
+                    }
+                    catch (Exception e){
+
+                    }
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getExp()))
                         Product_Details_Modal.setExp("");
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getMfg()))
@@ -1278,7 +1287,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                         if (inv >= order)
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
                         else {
-                            common_class.showMsg(Grn_Category_Select.this, "Can't exceed Inv Qty");
+                            common_class.showMsg(Grn_Category_Select.this, "Can't exceed Invoice Qty");
                         }
                     }
                 });
@@ -1310,7 +1319,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                 totQty = 0;
                                 enterQty = 0;
                                 holder.Qty.setText("0");
-                                common_class.showMsg(Grn_Category_Select.this, "Can't exceed Inv Qty");
+                                common_class.showMsg(Grn_Category_Select.this, "Can't exceed Invoice Qty");
                             }
 //                            double enterQty = 0;
 //                            if (!charSequence.toString().equals(""))

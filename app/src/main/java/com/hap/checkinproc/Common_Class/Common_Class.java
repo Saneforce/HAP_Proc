@@ -498,7 +498,7 @@ public class Common_Class {
 
                 switch (key) {
                     case Constants.SALES_RETURN:
-                   // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
+                        // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
                         axnname = "get/stockreturn";
                         data.put("Stk", jparam.get("Stk").getAsString());
                         data.put("Dt", jparam.get("Dt").getAsString());
@@ -509,6 +509,12 @@ public class Common_Class {
                     case Constants.STOCK_DATA:
                         axnname = "get/stockistledger";
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
+                    case Constants.OUTLET_CATEGORY:
+                        axnname = "get/outletcategory";
+                        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+
+                      //  data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.CUSTOMER_DATA:
                         axnname = "get/customerdetails";
@@ -603,7 +609,8 @@ public class Common_Class {
                         data.put("tdt", Common_Class.GetDatewothouttime());
                         break;
                     case Constants.RETAILER_STATUS:
-                        axnname = "get/retailerorderstatus";
+                        //axnname = "get/retailerorderstatus";
+                        axnname = "get/retailerorderstatusch";
                         data.put("distname", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
                     case Constants.PAYMODES:

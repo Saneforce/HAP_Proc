@@ -18,11 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
+import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,12 +40,17 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
     Context context;
     JSONObject PreSales;
     AdapterOnClick mAdapterOnClick;
+    Shared_Common_Pref shared_common_pref;
+    Common_Class common_class;
 
     public RetailerNearByADP(JsonArray jList, int rowLayout, Context mcontext, AdapterOnClick adapterOnClick) {
+
         jLists = jList;
         RowLayout = rowLayout;
         context = mcontext;
         mAdapterOnClick = adapterOnClick;
+        shared_common_pref = new Shared_Common_Pref(context);
+        common_class = new Common_Class(context);
     }
 
     @NonNull
@@ -93,30 +100,26 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             });
 
 
-//            holder.ivEdit.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        JsonObject jItem = jLists.get(position).getAsJsonObject();
-//
-//                        Intent intent = new Intent(context, AddNewRetailer.class);
-//                        Shared_Common_Pref.Outlet_Info_Flag = "1";
-//                        Shared_Common_Pref.Editoutletflag = "1";
-//                        Shared_Common_Pref.Outler_AddFlag = "0";
-//                        Shared_Common_Pref.FromActivity = "Outlets";
-//                        Shared_Common_Pref.OutletCode = jItem.get("Code").getAsString();
-//                        intent.putExtra("OutletCode", jItem.get("Code").getAsString());
-//                        intent.putExtra("OutletName", jItem.get("Name").getAsString());
-//                        intent.putExtra("OutletAddress", jItem.get("Add1").getAsString());
-//                        intent.putExtra("OutletMobile", jItem.get("Mobile").getAsString());
-//                        intent.putExtra("OutletRoute", "");
-//
-//                        context.startActivity(intent);
-//                    } catch (Exception e) {
-//                        Log.v("NearByADP:", e.getMessage());
-//                    }
-//                }
-//            });
+            holder.ivEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        JsonObject jItem = jLists.get(position).getAsJsonObject();
+
+
+                        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equalsIgnoreCase(jItem.get("DistCode").getAsString())) {
+                           Nearby_Outlets.nearby_outlets.navigateEditRetailerScreen(jItem,false);
+                        }
+                        else {
+                           Nearby_Outlets.nearby_outlets.navigateEditRetailerScreen(jItem,true);
+                        }
+
+
+                    } catch (Exception e) {
+                        Log.v("NearByADP:", e.getMessage());
+                    }
+                }
+            });
 
 
             holder.txTodayTotQty.setText("0");

@@ -225,6 +225,9 @@ public class Product_Details_Modal {
     @SerializedName("RegularQty")
     @Expose
     private Integer RegularQty;
+    @SerializedName("orderQty")
+    @Expose
+    private Integer orderQty;
 
 
     @SerializedName("bookingDate")
@@ -696,6 +699,14 @@ public class Product_Details_Modal {
 
     public void setMfg(String mfg) {
         this.mfg = mfg;
+    }
+
+    public Integer getOrderQty() {
+        return orderQty;
+    }
+
+    public void setOrderQty(Integer orderQty) {
+        this.orderQty = orderQty;
     }
 
 

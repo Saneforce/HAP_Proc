@@ -57,6 +57,10 @@ public class OutletReport_View_Modal {
     @Expose
     private String InvoiceItems = "";
 
+    @SerializedName("Indent")
+    @Expose
+    private String Indent = "";
+
     public String getInvoiceDate() {
         return InvoiceDate;
     }
@@ -310,6 +314,14 @@ public class OutletReport_View_Modal {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIndent() {
+        return Indent;
+    }
+
+    public void setIndent(String indent) {
+        Indent = indent;
     }
 }
 

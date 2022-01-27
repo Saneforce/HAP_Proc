@@ -83,7 +83,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     public static final String UserDetail = "MyPrefs";
     public static Dashboard_Route dashboard_route;
     public static Common_Class common_class;
-    public static TextView distributor_text;
+    public TextView distributor_text;
     public static Shared_Common_Pref shared_common_pref;
     List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
     List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
@@ -586,6 +586,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!distributor_text.getText().toString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_name))) {
+            route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
+            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+            tvDistributor.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+            common_class.getDb_310Data(Rout_List, this);
+        }
+
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
         }
@@ -919,6 +927,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         private Context context;
         private RecyclerView recyclerView;
 
+
         public AllDataFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int position) {
             this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
             this.tabPosition = String.valueOf(position);
@@ -989,7 +998,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                         }
                     } catch (Exception e) {
-
+                        Log.v("AllDataFragment:", e.getMessage());
                     }
                 }
 

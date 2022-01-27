@@ -413,7 +413,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             DatabaseHandler db = new DatabaseHandler(this);
             JSONObject jParam = new JSONObject();
             try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("SF", sharedCommonPref.getvalue(Constants.Distributor_Id));
                 jParam.put("Stk", Shared_Common_Pref.CUSTOMER_CODE);
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
