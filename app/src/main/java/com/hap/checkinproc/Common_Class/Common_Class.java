@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.15";
+    public static String Version_Name = "ver 3.2.18";
     public static String Work_Type = "0";
     public static int count;
 

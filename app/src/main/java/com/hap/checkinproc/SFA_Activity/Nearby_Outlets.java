@@ -305,7 +305,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                             jOutlets = srhOutlets;
                         }
                         availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
-                      setOutletsAdapter();
+                      setOutletsAdapter(jOutlets);
                     } catch (Exception e) {
 
                     }
@@ -454,29 +454,30 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             }
         }
         availableoutlets.setText("Available Outlets :" + "\t" + srhOutlets.size());
-        recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
-                getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(JsonObject item, int position) {
-                JsonObject jItm = item;
-
-                Shared_Common_Pref.Outler_AddFlag = "0";
-                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
-                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-                shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
-                shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
-                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
-                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
-
-                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
-                common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
-                common_class.CommonIntentwithoutFinish(Invoice_History.class);
-            }
-        }));
+        setOutletsAdapter(srhOutlets);
+//        recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
+//                getApplicationContext(), new AdapterOnClick() {
+//            @Override
+//            public void onIntentClick(JsonObject item, int position) {
+//                JsonObject jItm = item;
+//
+//                Shared_Common_Pref.Outler_AddFlag = "0";
+//                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+//                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+//                shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
+//                shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
+//                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+//                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+//
+//                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
+//                common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
+//                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+//            }
+//        }));
     }
 
 
-    void setOutletsAdapter(){
+    void setOutletsAdapter(JsonArray jOutlets){
         recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
                 Nearby_Outlets.this, new AdapterOnClick() {
             @Override
@@ -494,8 +495,11 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                     if (!shared_common_pref.getvalue(Constants.Distributor_Id).equalsIgnoreCase(jItm.get("DistCode").getAsString())) {
                         shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
                         shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
+                        shared_common_pref.save(Constants.Route_name, "");
+                        shared_common_pref.save(Constants.Route_Id, "");
                         shared_common_pref.save(Constants.DistributorERP, jItm.get("StkERPCode").getAsString());
-                        common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
+                        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, jItm.get("DistCode").getAsString());
+                        common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.nearby_outlets, false);
                     } else {
                         common_class.CommonIntentwithoutFinish(Invoice_History.class);
                     }

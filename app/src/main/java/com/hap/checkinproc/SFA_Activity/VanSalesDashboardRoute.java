@@ -907,7 +907,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
 
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
                             Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
-                            common_class.CommonIntentwithFinish(Invoice_History.class);
+                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
 
 

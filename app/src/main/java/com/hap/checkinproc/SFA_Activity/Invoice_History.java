@@ -763,12 +763,15 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (linVanSales.getVisibility() == View.VISIBLE)
-                common_class.CommonIntentwithFinish(VanSalesDashboardRoute.class);
+//            if (linVanSales.getVisibility() == View.VISIBLE)
+//                common_class.CommonIntentwithFinish(VanSalesDashboardRoute.class);
+//
+//            else
+//                common_class.CommonIntentwithFinish(Dashboard_Route.class);
+//            overridePendingTransition(R.anim.in, R.anim.out);
 
-            else
-                common_class.CommonIntentwithFinish(Dashboard_Route.class);
-            overridePendingTransition(R.anim.in, R.anim.out);
+
+            finish();
 
             return true;
         }

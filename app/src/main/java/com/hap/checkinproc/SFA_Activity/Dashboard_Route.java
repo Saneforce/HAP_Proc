@@ -992,7 +992,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
                             Shared_Common_Pref.CUSTOMER_CODE = mRetailer_Modal_ListFilter.get(position).getCustomerCode();
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
-                            common_class.CommonIntentwithFinish(Invoice_History.class);
+                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             //}
 

@@ -445,21 +445,64 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 double wholeTax = 0;
                 List<Product_Details_Modal> taxList = new ArrayList<>();
 
+                double totTax = 0;
+
+                JSONArray proTaxArr = new JSONArray();
+                double rate = 0;
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     if (jsonObject1.getString("Product_Detail_Code").equals(Product_Details_Modalitem.get(pos).getId())) {
                         if (jsonObject1.getDouble("Tax_Val") > 0) {
-                            double taxCal = Product_Details_Modalitem.get(pos).getAmount() *
-                                    ((jsonObject1.getDouble("Tax_Val") / 100));
+//                            double taxCal = Product_Details_Modalitem.get(pos).getAmount() *
+//                                    ((jsonObject1.getDouble("Tax_Val") / 100));
 
-                            wholeTax += taxCal;
+                            totTax = totTax + (jsonObject1.getDouble("Tax_Val"));
 
-                            taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
-                                    jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+                            JSONObject totTaxObj = new JSONObject();
+                            totTaxObj.put("Tax_Id", jsonObject1.getString("Tax_Id"));
+
+                            totTaxObj.put("Tax_Type", jsonObject1.getString("Tax_Type"));
+                            totTaxObj.put("Tax_Val", jsonObject1.getDouble("Tax_Val"));
+                            proTaxArr.put(totTaxObj);
+//                            double taxCal =  ((Product_Details_Modalitem.get(pos).getQty() * Product_Details_Modalitem.get(pos).getCnvQty() *
+//                                    Double.parseDouble(Product_Details_Modalitem.get(pos).getMRP()) * 100) /
+//                                    ((jsonObject1.getDouble("Tax_Val") + 100)));
+//                            Log.v("taxCalc:","val:"+taxCal);
+//
+//                            taxCal=(Product_Details_Modalitem.get(pos).getQty() * Product_Details_Modalitem.get(pos).getCnvQty() *
+//                                    Double.parseDouble(Product_Details_Modalitem.get(pos).getMRP())) -taxCal;
+//
+//                            wholeTax += taxCal;
+//
+//                            taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+//                                    jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
 
 
                         }
                     }
+                }
+
+
+                rate = ((
+                        Double.parseDouble(Product_Details_Modalitem.get(pos).getMRP()) * 100) /
+                        (totTax + 100));
+
+                wholeTax = (Product_Details_Modalitem.get(pos).getQty() * Product_Details_Modalitem.get(pos).getCnvQty() *
+                        Double.parseDouble(Product_Details_Modalitem.get(pos).getMRP())) - ((Product_Details_Modalitem.get(pos).getQty() * Product_Details_Modalitem.get(pos).getCnvQty() *
+                        Double.parseDouble(Product_Details_Modalitem.get(pos).getMRP()) * 100) /
+                        (totTax + 100));
+
+                Log.v("taxCalc:", "val:" + wholeTax + ":Rate:" + rate + ":totTax:" + totTax);
+
+                for (int pTax = 0; pTax < proTaxArr.length(); pTax++) {
+                    JSONObject jsonObject1 = proTaxArr.getJSONObject(pTax);
+                    double taxCal = (rate * Product_Details_Modalitem.get(pos).getQty() * Product_Details_Modalitem.get(pos).getCnvQty()) *
+                            ((jsonObject1.getDouble("Tax_Val") / 100));
+
+                    taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+                            jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+
                 }
 
                 Product_Details_Modalitem.get(pos).setProductDetailsModal(taxList);
@@ -467,7 +510,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
             }
         } catch (Exception e) {
-
+            Log.v("taxCalc:ex", e.getMessage());
         }
     }
 
@@ -1461,6 +1504,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+
+                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
+                        holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                    else
+                        holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                     holder.totalQty.setText("Total Qty : " + (
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
