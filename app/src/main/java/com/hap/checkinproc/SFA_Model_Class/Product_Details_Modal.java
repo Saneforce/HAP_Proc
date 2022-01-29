@@ -103,6 +103,10 @@ public class Product_Details_Modal {
     @Expose
     private Integer Balance;
 
+    @SerializedName("CheckStock")
+    @Expose
+    private Integer CheckStock;
+
     @SerializedName("UOMList")
     @Expose
     private List<UOM> UOMList = new ArrayList<>();
@@ -707,6 +711,14 @@ public class Product_Details_Modal {
 
     public void setOrderQty(Integer orderQty) {
         this.orderQty = orderQty;
+    }
+
+    public Integer getCheckStock() {
+        return CheckStock;
+    }
+
+    public void setCheckStock(Integer checkStock) {
+        CheckStock = checkStock;
     }
 
 

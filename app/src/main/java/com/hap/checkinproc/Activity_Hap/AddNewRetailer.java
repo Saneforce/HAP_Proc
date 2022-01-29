@@ -576,7 +576,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (divERP.equalsIgnoreCase("47")) {
+                    } else if (divERP.equalsIgnoreCase("47") && cbFreezerYes.isChecked()) {
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
                         else if (edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
@@ -760,6 +760,42 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             });
 
 
+            cbFreezerYes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        cbFreezerNo.setChecked(false);
+                        findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+
+
+                    }
+                    else {
+                        cbFreezerNo.setChecked(true);
+                        getFreezerData("");
+
+                        findViewById(R.id.llFreezer).setVisibility(View.GONE);
+                    }
+
+                }
+            });
+
+            cbFreezerNo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        cbFreezerYes.setChecked(false);
+                        findViewById(R.id.llFreezer).setVisibility(View.GONE);
+
+                        getFreezerData("");
+                    }
+                    else {
+                        cbFreezerYes.setChecked(true);
+                        findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+                    }
+
+
+                }
+            });
             cbFranchise.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1266,13 +1302,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
-            findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+           // findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
         } else {
             if (!Shared_Common_Pref.Outler_AddFlag.equals("1"))
                 linReatilerRoute.setEnabled(false);
+            if(!Common_Class.isNullOrEmpty(divERP)){
             findViewById(R.id.llCategoryType).setVisibility(View.GONE);
-            findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
-            findViewById(R.id.llFreezer).setVisibility(View.GONE);
+            findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);}
+            //findViewById(R.id.llFreezer).setVisibility(View.GONE);
             mFreezerData.clear();
             mFreezerData = new ArrayList<>();
             mFreezerData.add(new QPS_Modal("", "", ""));

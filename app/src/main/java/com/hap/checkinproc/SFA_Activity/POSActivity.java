@@ -104,7 +104,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
-    private TextView tvTotalAmount, tvBalAmt;
+    private TextView tvTotalAmount, tvBalAmt, tvNetAmtTax;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
@@ -115,6 +115,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     private final List<Common_Model> payList = new ArrayList<>();
     private double payAmt;
+    private double totTax;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -410,6 +411,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
             common_class.getDb_310Data(Constants.STOCK_DATA, this);
+            common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -745,6 +747,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("ordertype", "pos");
                         OutletItem.put("payMode", tvPayMode.getText().toString());
+                        OutletItem.put("totAmtTax", totTax);
+
                         OutletItem.put("RecAmt",
                                 tvPayMode.getText().toString().equalsIgnoreCase("cash") ? etRecAmt.getText().toString() : "0");
                         OutletItem.put("Balance", tvPayMode.getText().toString().equalsIgnoreCase("cash") ?
@@ -922,117 +926,146 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
     public void updateToTALITEMUI() {
-        TextView tvTotalItems = findViewById(R.id.tvTotalItems);
-        TextView tvTotLabel = findViewById(R.id.tvTotLabel);
-        tvTotalAmount = findViewById(R.id.tvTotalAmount);
-        TextView tvTax = findViewById(R.id.tvTaxVal);
-        TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
-        TextView tvBillSubTotal = findViewById(R.id.subtotal);
-        TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
-        tvBillTotItem = findViewById(R.id.totalitem);
-        TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
-        TextView tvBillToPay = findViewById(R.id.tvnetamount);
-        TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
-
-        Getorder_Array_List = new ArrayList<>();
-        Getorder_Array_List.clear();
-        totalvalues = 0;
-        totalQty = 0;
-        cashDiscount = 0;
-        taxVal = 0;
+        try {
+            TextView tvTotalItems = findViewById(R.id.tvTotalItems);
+            TextView tvTotLabel = findViewById(R.id.tvTotLabel);
+            tvTotalAmount = findViewById(R.id.tvTotalAmount);
+            tvNetAmtTax = findViewById(R.id.tvNetAmtTax);
+            TextView tvTax = findViewById(R.id.tvTaxVal);
+            TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
+            TextView tvBillSubTotal = findViewById(R.id.subtotal);
+            TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
+            tvBillTotItem = findViewById(R.id.totalitem);
+            TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
+            TextView tvBillToPay = findViewById(R.id.tvnetamount);
+            TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
 
 
-        for (int pm = 0; pm < Product_Modal.size(); pm++) {
+            Getorder_Array_List = new ArrayList<>();
+            Getorder_Array_List.clear();
+            totalvalues = 0;
+            totalQty = 0;
+            cashDiscount = 0;
+            taxVal = 0;
 
 
-            if (Product_Modal.get(pm).getQty() > 0) {
-
-                cashDiscount += (int) Product_Modal.get(pm).getDiscount();
-
-                totalvalues += Product_Modal.get(pm).getAmount();
-
-                totalQty += Product_Modal.get(pm).getQty();
-
-                if (Product_Modal.get(pm).getTax() > 0)
-                    taxVal += Product_Modal.get(pm).getTax();
+            for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
 
-                Getorder_Array_List.add(Product_Modal.get(pm));
+                if (Product_Modal.get(pm).getQty() > 0) {
 
+                    cashDiscount += (int) Product_Modal.get(pm).getDiscount();
+
+                    totalvalues += Product_Modal.get(pm).getAmount();
+
+                    totalQty += Product_Modal.get(pm).getQty();
+
+                    if (Product_Modal.get(pm).getTax() > 0)
+                        taxVal += Product_Modal.get(pm).getTax();
+
+
+                    Getorder_Array_List.add(Product_Modal.get(pm));
+
+
+                }
 
             }
 
-        }
+            totTax = 0;
+            try {
+                String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
+                JSONObject obj = new JSONObject(totAmtTax);
 
-        tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+                if (obj.getBoolean("success")) {
+                    JSONArray arr = obj.getJSONArray("Data");
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject taxObj = arr.getJSONObject(i);
+                        double taxCal = (totalvalues) *
+                                ((taxObj.getDouble("Value") / 100));
+                        totTax = +totTax + taxCal;
 
-        if (Getorder_Array_List.size() == 1)
-            tvTotLabel.setText("Price (1 item)");
-        else
-            tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
+                    }
+                }
+            } catch (Exception e) {
 
-        tvBillSubTotal.setText("₹ " + formatter.format(totalvalues));
-        tvBillTotItem.setText("" + Getorder_Array_List.size());
-        tvBillTotQty.setText("" + totalQty);
-        tvBillToPay.setText("₹ " + formatter.format(totalvalues));
-        tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
-        // tvTax.setText("₹ " + formatter.format(taxVal));
+            }
+
+            totalvalues = totalvalues + totTax;
+
+            tvNetAmtTax.setText("₹ " + totTax);
+
+            tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
+            tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+
+            if (Getorder_Array_List.size() == 1)
+                tvTotLabel.setText("Price (1 item)");
+            else
+                tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
+
+            tvBillSubTotal.setText("₹ " + formatter.format(totalvalues));
+            tvBillTotItem.setText("" + Getorder_Array_List.size());
+            tvBillTotQty.setText("" + totalQty);
+            tvBillToPay.setText("₹ " + formatter.format(totalvalues));
+            tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
+            // tvTax.setText("₹ " + formatter.format(taxVal));
 
 
-        if (cashDiscount > 0) {
-            tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
-        } else
-            tvSaveAmt.setVisibility(View.GONE);
-        orderTotTax = new ArrayList<>();
-        orderTotTax.clear();
+            if (cashDiscount > 0) {
+                tvSaveAmt.setVisibility(View.VISIBLE);
+                tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
+            } else
+                tvSaveAmt.setVisibility(View.GONE);
+            orderTotTax = new ArrayList<>();
+            orderTotTax.clear();
 
-        for (int l = 0; l < Getorder_Array_List.size(); l++) {
-            if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
-                for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
-                    String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
-                    Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
-                    if (orderTotTax.size() == 0) {
-                        orderTotTax.add(new Product_Details_Modal(label, amt));
-                    } else {
+            for (int l = 0; l < Getorder_Array_List.size(); l++) {
+                if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
+                    for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
+                        String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
+                        Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
+                        if (orderTotTax.size() == 0) {
+                            orderTotTax.add(new Product_Details_Modal(label, amt));
+                        } else {
 
-                        boolean isDuplicate = false;
-                        for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
-                            if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
-                                double oldAmt = orderTotTax.get(totTax).getTax_Amt();
-                                isDuplicate = true;
-                                orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+                            boolean isDuplicate = false;
+                            for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
+                                if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
+                                    double oldAmt = orderTotTax.get(totTax).getTax_Amt();
+                                    isDuplicate = true;
+                                    orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+
+                                }
+                            }
+
+                            if (!isDuplicate) {
+                                orderTotTax.add(new Product_Details_Modal(label, amt));
 
                             }
                         }
 
-                        if (!isDuplicate) {
-                            orderTotTax.add(new Product_Details_Modal(label, amt));
-
-                        }
                     }
-
                 }
             }
-        }
 
-        String label = "", amt = "";
-        for (int i = 0; i < orderTotTax.size(); i++) {
-            label = label + orderTotTax.get(i).getTax_Type() + "\n";
-            amt = amt + "₹" + formatter.format(orderTotTax.get(i).getTax_Amt()) + "\n";
-        }
-        tvTaxLabel.setText(label);
-        tvTax.setText(amt);
-        if (orderTotTax.size() == 0) {
-            tvTaxLabel.setVisibility(View.INVISIBLE);
-            tvTax.setVisibility(View.INVISIBLE);
-        } else {
-            tvTaxLabel.setVisibility(View.VISIBLE);
-            tvTax.setVisibility(View.VISIBLE);
-        }
+            String label = "", amt = "";
+            for (int i = 0; i < orderTotTax.size(); i++) {
+                label = label + orderTotTax.get(i).getTax_Type() + "\n";
+                amt = amt + "₹" + formatter.format(orderTotTax.get(i).getTax_Amt()) + "\n";
+            }
+            tvTaxLabel.setText(label);
+            tvTax.setText(amt);
+            if (orderTotTax.size() == 0) {
+                tvTaxLabel.setVisibility(View.INVISIBLE);
+                tvTax.setVisibility(View.INVISIBLE);
+            } else {
+                tvTaxLabel.setVisibility(View.VISIBLE);
+                tvTax.setVisibility(View.VISIBLE);
+            }
 
-        sharedCommonPref.save(Constants.LOC_POS_DATA, gson.toJson(Product_Modal));
+            sharedCommonPref.save(Constants.LOC_POS_DATA, gson.toJson(Product_Modal));
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -1070,6 +1103,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
             switch (key) {
+                case Constants.POS_NETAMT_TAX:
+                    Log.v("POS_NETAMT_TAX:", apiDataResponse);
+                    break;
                 case Constants.STOCK_DATA:
                     JSONObject stkObj = new JSONObject(apiDataResponse);
                     if (stkObj.getBoolean("success")) {
@@ -1306,7 +1342,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             case 1:
 
                 int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance() >= qty) {
+                if (Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
                     Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                     Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                     Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
@@ -1571,7 +1607,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if (balance >= order)
+                        if ((balance >= order) || Product_Details_Modal.getCheckStock() == 0)
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
                         else {
                             common_class.showMsg(POSActivity.this, "Can't exceed stock");
@@ -1602,7 +1638,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
-                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty &&
+                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0) {
                                 totQty = 0;
                                 enterQty = 0;
                                 holder.Qty.setText("0");

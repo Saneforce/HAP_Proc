@@ -882,6 +882,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 boolean ACTrue = false;
+
+
                 if (swACOutlet.isChecked()) {
                     if (Retailer_Modal_List.get(i).getDelivType() != null && Retailer_Modal_List.get(i).getDelivType().equalsIgnoreCase("AC"))
                         ACTrue = true;
@@ -891,6 +893,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 } else {
                     ACTrue = true;
                 }
+
+                if (DCRMode.equalsIgnoreCase("SR") && Common_Class.isNullOrEmpty(Retailer_Modal_List.get(i).getCustomerCode()))
+                    ACTrue=false;
+
                 if (Retailer_Modal_List.get(i).getType() == null)
                     Retailer_Modal_List.get(i).setType("0");
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("0") && ACTrue) CountUR++;

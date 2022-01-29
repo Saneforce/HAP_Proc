@@ -100,6 +100,7 @@ public class Constants {
     public static final String DELIVERY_SEQUENCE = "deliverySequence";
     public static final String SALES_RETURN = "salesReturn";
     public static final String OUTLET_CATEGORY = "outletCategory";
+    public static final String POS_NETAMT_TAX = "posNetAmtTax";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";

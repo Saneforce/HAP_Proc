@@ -132,6 +132,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         init();
         setOnClickListener();
 
+
+
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             common_class.getDb_310Data(Constants.Distributor_List, this);
         }
@@ -161,6 +163,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
             menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
+            menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
 
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
@@ -188,6 +191,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
                         Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
                         startActivity(intent);
+                        break;
+
+                    case "Sales Return":
+                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SR");
+                        startActivity(new Intent(SFA_Activity.this, Dashboard_Route.class));
                         break;
 
                     case "Van Sales":

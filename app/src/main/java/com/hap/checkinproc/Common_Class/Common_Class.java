@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.18";
+    public static String Version_Name = "ver 3.2.19";
     public static String Work_Type = "0";
     public static int count;
 
@@ -506,6 +506,11 @@ public class Common_Class {
                         data.put("CustomerCode", jparam.get("CustomerCode").getAsString());
 
                         break;
+                    case Constants.POS_NETAMT_TAX:
+                        axnname = "get/tcstax";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
+
                     case Constants.STOCK_DATA:
                         axnname = "get/stockistledger";
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -514,7 +519,7 @@ public class Common_Class {
                         axnname = "get/outletcategory";
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
 
-                      //  data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        //  data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.CUSTOMER_DATA:
                         axnname = "get/customerdetails";
