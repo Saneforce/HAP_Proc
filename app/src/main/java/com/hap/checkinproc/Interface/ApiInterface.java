@@ -440,8 +440,12 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
-    @POST("db_v310.php?axn=save/indentorder")
-    Call<JsonObject> saveIndent(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+    @POST("db_v310.php?")
+    Call<JsonObject> saveIndent(@Query("axn") String axn,@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=save/salesreturn")
+    Call<JsonObject> saveSalesReturn(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/posorder")

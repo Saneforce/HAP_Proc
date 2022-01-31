@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
@@ -35,7 +36,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         this.context = context;
         this.mDate = mDate;
         this.mAdapterOnClick = mAdapterOnClick;
-        sharedCommonPref=new Shared_Common_Pref(context);
+        sharedCommonPref = new Shared_Common_Pref(context);
     }
 
     @NonNull
@@ -49,10 +50,10 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
 
     @Override
     public void onBindViewHolder(Invoice_History_Adapter.MyViewHolder holder, int position) {
-     //   holder.llReturnInv.setVisibility(View.GONE);
+        //   holder.llReturnInv.setVisibility(View.GONE);
 
         if (mDate.get(position).getInvoice_Flag().equals("1")) {
-          //  holder.llReturnInv.setVisibility(View.VISIBLE);
+            //  holder.llReturnInv.setVisibility(View.VISIBLE);
             holder.Statusinvoice.setText("Invoice Complete.");
             holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
             holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
@@ -94,6 +95,14 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
                 context.startActivity(intent);
             }
         });
+
+
+        if (Common_Class.isNullOrEmpty(mDate.get(position).getIndent())) {
+
+            holder.llIndent.setVisibility(View.GONE);
+        } else {
+            holder.tvIndent.setText("" + mDate.get(position).getIndent());
+        }
     }
 
     @Override
@@ -102,8 +111,8 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, txtType;
-        LinearLayout linearLayout, llReturnInv;
+        TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, txtType, tvIndent, tvQty;
+        LinearLayout linearLayout, llReturnInv, llIndent;
         RelativeLayout parent_layout;
         ImageView ivStatus;
 
@@ -119,6 +128,9 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
             ivStatus = itemView.findViewById(R.id.ivStatus);
             txtType = itemView.findViewById(R.id.txt_type);
             llReturnInv = itemView.findViewById(R.id.llSalesReturn);
+            llIndent = itemView.findViewById(R.id.llIndent);
+            tvIndent = itemView.findViewById(R.id.txt_indent);
+            tvQty = itemView.findViewById(R.id.tvQty);
 
 
         }

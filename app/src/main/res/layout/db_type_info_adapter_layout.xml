@@ -146,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_600"
-                android:textSize="9dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/tvAmount"

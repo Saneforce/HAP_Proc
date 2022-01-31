@@ -49,7 +49,6 @@ import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
-import com.hap.checkinproc.SFA_Activity.Print_Invoice_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
@@ -70,8 +69,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
-    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary,
-            linMyTeam, linPOS, linVanSales;
+    LinearLayout Lin_Route, Lin_Lead, Lin_Dashboard, Logout, SyncButon, linorders;
     Gson gson;
 
     private SANGPSTracker mLUService;
@@ -112,36 +110,21 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         ivLogout = findViewById(R.id.toolbar_home);
         Lin_Route = findViewById(R.id.Lin_Route);
         SyncButon = findViewById(R.id.SyncButon);
-        DistLocation = findViewById(R.id.DistLocation);
         Lin_Lead = findViewById(R.id.Lin_Lead);
-        Lin_DCR = findViewById(R.id.Lin_DCR);
         Lin_Dashboard = findViewById(R.id.Lin_Dashboard);
-        Lin_Outlet = findViewById(R.id.Lin_Outlet);
         linorders = findViewById(R.id.linorders);
-        lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
-        linPrimary = findViewById(R.id.Lin_primary);
-        linMyTeam = findViewById(R.id.lin_myteam);
-        linPOS = findViewById(R.id.Lin_POS);
-        linVanSales = findViewById(R.id.lin_vanSales);
         rvMenu = findViewById(R.id.rvMenu);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
         Lin_Route.setOnClickListener(this);
-        Lin_DCR.setOnClickListener(this);
         Lin_Lead.setOnClickListener(this);
-        lin_Reports.setOnClickListener(this);
         Lin_Dashboard.setOnClickListener(this);
-        Lin_Outlet.setOnClickListener(this);
-        DistLocation.setOnClickListener(this);
         linorders.setOnClickListener(this);
         Logout.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
-        linPrimary.setOnClickListener(this);
-        linMyTeam.setOnClickListener(this);
-        linPOS.setOnClickListener(this);
-        linVanSales.setOnClickListener(this);
+
         gson = new Gson();
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
@@ -149,13 +132,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         init();
         setOnClickListener();
 
+
+
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            linMyTeam.setVisibility(View.VISIBLE);
             common_class.getDb_310Data(Constants.Distributor_List, this);
-        } else {
-            DistLocation.setVisibility(View.GONE);
-            findViewById(R.id.Lin_primary).setVisibility(View.VISIBLE);
-            findViewById(R.id.Lin_POS).setVisibility(View.VISIBLE);
+        }
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
             common_class.getPOSProduct(this);
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
         }
@@ -178,10 +160,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
         menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
 
-        if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
             menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
-            //menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
+            menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
 
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
@@ -211,13 +193,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                         break;
 
+                    case "Sales Return":
+                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SR");
+                        startActivity(new Intent(SFA_Activity.this, Dashboard_Route.class));
+                        break;
+
                     case "Van Sales":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
                         startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
-                        break;
-                    case "Sales Return":
-                        sharedCommonPref.save(Constants.FLAG, "Return Invoice");
-                        startActivity(new Intent(SFA_Activity.this, Print_Invoice_Activity.class));
                         break;
                     case "Outlets":
                         common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
@@ -362,45 +345,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.Lin_POS:
-                common_class.CommonIntentwithNEwTask(POSActivity.class);
-                overridePendingTransition(R.anim.in, R.anim.out);
-                break;
-            case R.id.lin_myteam:
-                common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
-                overridePendingTransition(R.anim.in, R.anim.out);
-                break;
-            case R.id.Lin_primary:
-                common_class.getDb_310Data(Constants.PrimaryTAXList, this);
-                break;
-
-            case R.id.Lin_DCR:
-                //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
-                sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
-                Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.in, R.anim.out);
-                break;
-
-            case R.id.lin_vanSales:
-                //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
-                sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
-                startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
-                overridePendingTransition(R.anim.in, R.anim.out);
-                break;
-
-
-            case R.id.Lin_Outlet:
-                common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
-                break;
-            case R.id.DistLocation:
-                //  common_class.CommonIntentwithNEwTask(Dist_Locations.class);
-                common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
-
-                break;
-            case R.id.lin_Reports:
-                common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
-                break;
 
             case R.id.linorders:
                 common_class.CommonIntentwithNEwTask(Dashboard_Order_Reports.class);
@@ -488,7 +432,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 switch (key) {
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
-                        if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
+                        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
                             common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
                         else
                             common_class.CommonIntentwithoutFinish(FPPrimaryOrderActivity.class);

@@ -109,6 +109,9 @@ public class Datum {
     @SerializedName("OTFlg")
     @Expose
     private Integer oTFlg;
+    @SerializedName("SalesReturnImg")
+    @Expose
+    private Integer SalesReturnImg;
     @SerializedName("HOLocation")
     @Expose
     private String hOLocation;
@@ -401,5 +404,13 @@ public class Datum {
 
     public void setDivERP(String divERP) {
         DivERP = divERP;
+    }
+
+    public Integer getSalesReturnImg() {
+        return SalesReturnImg;
+    }
+
+    public void setSalesReturnImg(Integer salesReturnImg) {
+        SalesReturnImg = salesReturnImg;
     }
 }

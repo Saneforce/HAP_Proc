@@ -65,9 +65,9 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static final String UserDetail = "MyPrefs";
     public static TextView tvStartDate, tvEndDate;
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn,
-            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment,tvSalesReturn;
+            txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment, tvSalesReturn;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
-            linVanSales, linintent;
+            linVanSales, linintent, linSalesReturn, linStockRot;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -85,7 +85,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     ImageView btnRmkClose;
     public static String TAG = "Invoice_History";
     private DatePickerDialog fromDatePickerDialog;
-
+    String type = "";
 
     //Updateed
     @Override
@@ -132,14 +132,17 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linRpt = (LinearLayout) findViewById(R.id.llRpt);
             linVanSales = findViewById(R.id.lin_vanSales);
             linintent = findViewById(R.id.lin_indent);
+            linSalesReturn = findViewById(R.id.lin_salesReturn);
+            linStockRot = findViewById(R.id.lin_stockRotation);
             tvOutstanding = findViewById(R.id.txOutstanding);
+
 
             txPrvBal = findViewById(R.id.PrvOutAmt);
             txSalesAmt = findViewById(R.id.SalesAmt);
             txPayment = findViewById(R.id.PaymentAmt);
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
-            tvSalesReturn=findViewById(R.id.tvSalesReturn);
+            tvSalesReturn = findViewById(R.id.tvSalesReturn);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -157,6 +160,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvStartDate.setOnClickListener(this);
             tvEndDate.setOnClickListener(this);
             tvSalesReturn.setOnClickListener(this);
+            linSalesReturn.setOnClickListener(this);
+            linStockRot.setOnClickListener(this);
 
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
@@ -212,8 +217,15 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 //  common_class.getDentDatas(this);
                 linintent.setVisibility(View.VISIBLE);
                 lin_noOrder.setVisibility(View.GONE);
-                tvSalesReturn.setVisibility(View.VISIBLE);
+                // tvSalesReturn.setVisibility(View.VISIBLE);
             }
+
+            if (sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode).equalsIgnoreCase("SR")) {
+                //  common_class.getDentDatas(this);
+                findViewById(R.id.llSalesParent).setVisibility(View.VISIBLE);
+                findViewById(R.id.llSecParent).setVisibility(View.GONE);
+            }
+
         } catch (Exception e) {
             Log.v(TAG, e.getMessage());
         }
@@ -290,9 +302,20 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvSalesReturn:
-                if(FilterOrderList.size()>0)
-                navigatePrintScreen(0,"Return Invoice");
+            case R.id.lin_salesReturn:
+                JsonObject data = new JsonObject();
+                //   {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
+                data.addProperty("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                data.addProperty("Dt", Common_Class.GetDatewothouttime());
+                data.addProperty("RetID", Shared_Common_Pref.OutletCode);
+                data.addProperty("CustomerCode", Shared_Common_Pref.CUSTOMER_CODE);
+
+                common_class.getDb_310Data(Constants.SALES_RETURN, this, data);//                if(FilterOrderList.size()>0)
+                //
+                break;
+            case R.id.lin_stockRotation:
+                type = "Stock Rotation";
+                getIndentDatas();
                 break;
             case R.id.tvStartDate:
                 showDatePickerDialog(0, tvStartDate);
@@ -348,7 +371,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                 break;
             case R.id.lin_indent:
-                getDentDatas();
+                type = "Indent";
+                getIndentDatas();
                 break;
             case R.id.lin_repeat_invoice:
                 break;
@@ -398,7 +422,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
     }
 
-    public void getDentDatas() {
+    public void getIndentDatas() {
 
         if (common_class.isNetworkAvailable(this)) {
 
@@ -406,7 +430,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             DatabaseHandler db = new DatabaseHandler(this);
             JSONObject jParam = new JSONObject();
             try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("SF", sharedCommonPref.getvalue(Constants.Distributor_Id));
                 jParam.put("Stk", Shared_Common_Pref.CUSTOMER_CODE);
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -453,12 +477,18 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 service.getDataArrayList("get/indentproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("INDENT:", response.body().toString());
-                        db.deleteMasterData(Constants.INDENT_Product_List);
-                        db.addMasterData(Constants.INDENT_Product_List, response.body());
+                        try {
+                            Log.v("INDENT:", response.body().toString());
+                            db.deleteMasterData(Constants.INDENT_Product_List);
+                            db.addMasterData(Constants.INDENT_Product_List, response.body());
 
-                        startActivity(new Intent(getApplicationContext(), IndentActivity.class));
-                        overridePendingTransition(R.anim.in, R.anim.out);
+                            Intent intent = new Intent(getApplicationContext(), IndentActivity.class);
+                            intent.putExtra("type", type);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.in, R.anim.out);
+                        } catch (Exception e) {
+                            common_class.showMsg(Invoice_History.this, e.getMessage());
+                        }
 
                     }
 
@@ -593,6 +623,30 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
 
                 switch (key) {
+                    case Constants.SALES_RETURN:
+                        Log.v(TAG, apiDataResponse);
+                        JSONObject obj = new JSONObject(apiDataResponse);
+                        if (obj.getBoolean("success")) {
+
+                            sharedCommonPref.save(Constants.SALES_RETURN, obj.getJSONArray("Data").toString());
+                            Shared_Common_Pref.Invoicetoorder = "1";
+                            Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                            sharedCommonPref.save(Constants.FLAG, "Return Invoice");
+                            intent.putExtra("Order_Values", "0");
+                            intent.putExtra("Invoice_Values", "0");
+                            intent.putExtra("No_Of_Items", "0");
+                            intent.putExtra("Invoice_Date", "0");
+                            intent.putExtra("NetAmount", "0");
+                            intent.putExtra("Discount_Amount", "0");
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.in, R.anim.out);
+
+                        } else {
+                            sharedCommonPref.clear_pref(Constants.SALES_RETURN);
+                            common_class.showMsg(this, obj.getString("Msg"));
+
+                        }
+                        break;
                     case Constants.INDENT_Product_List:
                         startActivity(new Intent(getApplicationContext(), IndentActivity.class));
                         overridePendingTransition(R.anim.in, R.anim.out);
@@ -728,12 +782,15 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (linVanSales.getVisibility() == View.VISIBLE)
-                common_class.CommonIntentwithFinish(VanSalesDashboardRoute.class);
+//            if (linVanSales.getVisibility() == View.VISIBLE)
+//                common_class.CommonIntentwithFinish(VanSalesDashboardRoute.class);
+//
+//            else
+//                common_class.CommonIntentwithFinish(Dashboard_Route.class);
+//            overridePendingTransition(R.anim.in, R.anim.out);
 
-            else
-                common_class.CommonIntentwithFinish(Dashboard_Route.class);
-            overridePendingTransition(R.anim.in, R.anim.out);
+
+            finish();
 
             return true;
         }

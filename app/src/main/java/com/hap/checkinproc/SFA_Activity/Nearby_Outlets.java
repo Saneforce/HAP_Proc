@@ -130,6 +130,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private JSONArray oldData;
     private Marker marker;
     JsonArray jOutlets;
+    private JsonObject editRetailJsonObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,6 +237,39 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    public void navigateEditRetailerScreen(JsonObject jItem, boolean isSameDist) {
+        editRetailJsonObj = jItem;
+
+        //  shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+        Shared_Common_Pref.Outlet_Info_Flag = "1";
+        Shared_Common_Pref.Editoutletflag = "1";
+        Shared_Common_Pref.Outler_AddFlag = "0";
+        Shared_Common_Pref.FromActivity = "Outlets";
+        Shared_Common_Pref.OutletCode = jItem.get("Code").getAsString();
+        if (isSameDist) {
+            callRetailUpdateScreen(jItem);
+        } else {
+            shared_common_pref.save(Constants.Distributor_Id, jItem.get("DistCode").getAsString());
+            shared_common_pref.save(Constants.Distributor_name, jItem.get("Distributor").getAsString());
+            shared_common_pref.save(Constants.Route_name, "");
+            shared_common_pref.save(Constants.Route_Id, "");
+            shared_common_pref.save(Constants.DistributorERP, jItem.get("StkERPCode").getAsString());
+            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, jItem.get("DistCode").getAsString());
+            common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.nearby_outlets, false);
+        }
+
+    }
+
+    void callRetailUpdateScreen(JsonObject jItem) {
+        Intent intent = new Intent(this, AddNewRetailer.class);
+        intent.putExtra("OutletCode", jItem.get("Code").getAsString());
+        intent.putExtra("OutletName", jItem.get("Name").getAsString());
+        intent.putExtra("OutletAddress", jItem.get("Add1").getAsString());
+        intent.putExtra("OutletMobile", jItem.get("Mobile").getAsString());
+        intent.putExtra("OutletRoute", "");
+        startActivity(intent);
+    }
+
     void showNearbyData(Location location) {
         Shared_Common_Pref.Outletlat = location.getLatitude();
         Shared_Common_Pref.Outletlong = location.getLongitude();
@@ -258,8 +292,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                         jOutlets = response.body();
 
                         if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
-
-
                             JsonArray srhOutlets = new JsonArray();
 
                             for (int sr = 0; sr < jOutlets.size(); sr++) {
@@ -273,37 +305,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                             jOutlets = srhOutlets;
                         }
                         availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
-                        recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
-                                getApplicationContext(), new AdapterOnClick() {
-                            @Override
-                            public void onIntentClick(int position) {
-                                try {
-                                    JsonObject jItm = jOutlets.get(position).getAsJsonObject();
-
-                                    Shared_Common_Pref.Outler_AddFlag = "0";
-                                    Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
-                                    Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-//                                    Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
-//                                    Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                                    shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
-                                    shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
-                                    shared_common_pref.save(Constants.DistributorERP, jItm.get("StkERPCode").getAsString());
-//Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
-                                    //common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                                    shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
-                                    shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
-                                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
-//                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
-//                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
-//                                        else
-
-                                    common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
-                                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                                } catch (Exception e) {
-Log.v(TAG+"nearbyOut:",e.getMessage());
-                                }
-                            }
-                        }));
+                      setOutletsAdapter(jOutlets);
                     } catch (Exception e) {
 
                     }
@@ -332,6 +334,7 @@ Log.v(TAG+"nearbyOut:",e.getMessage());
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
         getExploreDr(true);
     }
+
 
     public void removeMarkedPlaces() {
 
@@ -451,30 +454,58 @@ Log.v(TAG+"nearbyOut:",e.getMessage());
             }
         }
         availableoutlets.setText("Available Outlets :" + "\t" + srhOutlets.size());
-        recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
-                getApplicationContext(), new AdapterOnClick() {
+        setOutletsAdapter(srhOutlets);
+//        recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
+//                getApplicationContext(), new AdapterOnClick() {
+//            @Override
+//            public void onIntentClick(JsonObject item, int position) {
+//                JsonObject jItm = item;
+//
+//                Shared_Common_Pref.Outler_AddFlag = "0";
+//                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+//                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+//                shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
+//                shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
+//                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+//                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+//
+//                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
+//                common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
+//                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+//            }
+//        }));
+    }
+
+
+    void setOutletsAdapter(JsonArray jOutlets){
+        recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
+                Nearby_Outlets.this, new AdapterOnClick() {
             @Override
-            public void onIntentClick(JsonObject item, int position) {
-                JsonObject jItm = item;
+            public void onIntentClick(int position) {
+                try {
+                    editRetailJsonObj = null;
+                    JsonObject jItm = jOutlets.get(position).getAsJsonObject();
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+                    Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+                    shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+                    shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
 
-                Shared_Common_Pref.Outler_AddFlag = "0";
-                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
-                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-//                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
-//                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
-                shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
-                //Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
-                //common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
-                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
-
-                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
-//                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
-//                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
-//                                        else
-                common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
-                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                    if (!shared_common_pref.getvalue(Constants.Distributor_Id).equalsIgnoreCase(jItm.get("DistCode").getAsString())) {
+                        shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
+                        shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
+                        shared_common_pref.save(Constants.Route_name, "");
+                        shared_common_pref.save(Constants.Route_Id, "");
+                        shared_common_pref.save(Constants.DistributorERP, jItm.get("StkERPCode").getAsString());
+                        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, jItm.get("DistCode").getAsString());
+                        common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.nearby_outlets, false);
+                    } else {
+                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                    }
+                } catch (Exception e) {
+                    Log.v(TAG + "nearbyOut:", e.getMessage());
+                }
             }
         }));
     }
@@ -638,7 +669,7 @@ Log.v(TAG+"nearbyOut:",e.getMessage());
             map.setMyLocationEnabled(true);
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-          //  getExploreDr(true);
+            //  getExploreDr(true);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -816,6 +847,20 @@ Log.v(TAG+"nearbyOut:",e.getMessage());
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            switch (key) {
+                case Constants.Retailer_OutletList:
+                    if (editRetailJsonObj != null)
+                        callRetailUpdateScreen(editRetailJsonObj);
+                    else
+                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+
+                    break;
+            }
+
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -1019,6 +1064,7 @@ Log.v(TAG+"nearbyOut:",e.getMessage());
     @Override
     public void onResume() {
         mapView.onResume();
+
         super.onResume();
 
     }

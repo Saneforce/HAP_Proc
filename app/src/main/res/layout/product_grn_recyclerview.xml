@@ -185,7 +185,7 @@
                             android:layout_toLeftOf="@+id/Qty"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="Rec Qty"
+                            android:text="Delivery Qty"
                             android:textColor="@color/black" />
 
 

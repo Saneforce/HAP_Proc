@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.14";
+    public static String Version_Name = "ver 3.2.19";
     public static String Work_Type = "0";
     public static int count;
 
@@ -495,10 +495,31 @@ public class Common_Class {
 
                 UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
+
                 switch (key) {
+                    case Constants.SALES_RETURN:
+                        // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
+                        axnname = "get/stockreturn";
+                        data.put("Stk", jparam.get("Stk").getAsString());
+                        data.put("Dt", jparam.get("Dt").getAsString());
+                        data.put("RetID", jparam.get("RetID").getAsString());
+                        data.put("CustomerCode", jparam.get("CustomerCode").getAsString());
+
+                        break;
+                    case Constants.POS_NETAMT_TAX:
+                        axnname = "get/tcstax";
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        break;
+
                     case Constants.STOCK_DATA:
                         axnname = "get/stockistledger";
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
+                    case Constants.OUTLET_CATEGORY:
+                        axnname = "get/outletcategory";
+                        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+
+                        //  data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.CUSTOMER_DATA:
                         axnname = "get/customerdetails";
@@ -593,7 +614,8 @@ public class Common_Class {
                         data.put("tdt", Common_Class.GetDatewothouttime());
                         break;
                     case Constants.RETAILER_STATUS:
-                        axnname = "get/retailerorderstatus";
+                        //axnname = "get/retailerorderstatus";
+                        axnname = "get/retailerorderstatusch";
                         data.put("distname", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
                     case Constants.PAYMODES:

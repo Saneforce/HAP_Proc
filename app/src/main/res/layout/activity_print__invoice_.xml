@@ -679,7 +679,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-
+android:visibility="gone"
                         android:id="@+id/cvPayDetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -765,11 +765,11 @@
 
 
                     <androidx.cardview.widget.CardView
-                        android:visibility="gone"
                         android:id="@+id/cvReturnInvParent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C5dp"
+                        android:visibility="gone"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -1059,6 +1059,33 @@
                                     android:textStyle="bold"></TextView>
                             </RelativeLayout>
 
+                            <LinearLayout
+                                android:layout_marginTop="@dimen/C15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/C5dp">
+
+
+                                <ImageView
+                                    android:id="@+id/ivStockCapture"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_toLeftOf="@id/ivQPSPreviewImg"
+                                    android:padding="@dimen/C5dp"
+                                    android:src="@drawable/ic_round_photo_camera_24"
+                                    app:tint="@color/colorPrimaryDark" />
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvStockFiles"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+                            </LinearLayout>
+
 
                         </LinearLayout>
 
@@ -1072,18 +1099,29 @@
 
             <LinearLayout
                 android:id="@+id/llCreateInvoice"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                style="@style/BottomButton"
+                android:gravity="center">
 
                 <Button
-                    android:id="@+id/btnInvoice"
                     style="@style/BottomButton"
-                    android:text="CREATE INVOICE"></Button>
+                    android:text="CREATE INVOICE"
+                    android:visibility="gone"></Button>
 
+
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                    android:id="@+id/btnInvoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="#00FFFFFF"
+                    android:text="CREATE INVOICE"
+                    android:textColor="@color/white"
+                    android:theme="@style/BluePrimaryButton"
+                    app:finalCornerAngle="50dp"
+                    app:initialCornerAngle="0dp"
+                    app:spinning_bar_color="#FFFFFFFF"
+                    app:spinning_bar_padding="5dp"
+                    app:spinning_bar_width="5dp" />
             </LinearLayout>
 
 

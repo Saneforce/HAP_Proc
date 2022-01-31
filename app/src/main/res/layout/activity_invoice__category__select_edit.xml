@@ -41,12 +41,11 @@
 
 
         <LinearLayout
+            android:layout_margin="@dimen/C5dp"
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/C5dp"
-            android:layout_marginBottom="@dimen/C5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -54,12 +53,35 @@
                 android:id="@+id/outlet_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C15dp"
                 android:layout_weight="1"
                 android:text="Retailor"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                android:visibility="gone"
+                android:id="@+id/btnRepeat"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/C30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/C10dp"
+                android:background="@drawable/bottom_button"
+                android:letterSpacing="0.09"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="Repeat Invoice"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:theme="@style/BluePrimaryButton"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="10dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp"
+                tools:ignore="RtlCompat" />
+
 
             <LinearLayout
                 android:id="@+id/rlAddProduct"

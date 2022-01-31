@@ -98,8 +98,8 @@
                 android:layout_marginRight="@dimen/C8dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:textAllCaps="true"
                 android:text="Sales Return"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 android:visibility="gone" />
@@ -532,9 +532,9 @@
 
 
                 <LinearLayout
-                    android:layout_width="@dimen/header_width2"
+                    android:layout_width="@dimen/C80dp"
                     android:layout_height="@dimen/C40dp"
-                    android:layout_weight="1">
+                    android:layout_weight="0.5">
 
                     <TextView
                         android:id="@+id/Itemcount"
@@ -543,6 +543,21 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="Items"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/C14dp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/C80dp"
+                    android:layout_height="@dimen/C40dp"
+                    android:layout_weight="0.5">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Qty"
                         android:textColor="@color/white"
                         android:textSize="@dimen/C14dp"></TextView>
                 </LinearLayout>
@@ -595,10 +610,69 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </LinearLayout>
 
+
             <LinearLayout
+                android:id="@+id/llSalesParent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+
+                <LinearLayout
+                    android:id="@+id/lin_salesReturn"
+                    style="@style/OrderTypesButton"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_order_24"
+                        app:tint="#fff" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/C3dp"
+                        android:text="SALES RETURN"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lin_stockRotation"
+                    style="@style/OrderTypesButton"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_order_24"
+                        app:tint="#fff" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/C3dp"
+                        android:text="STOCK ROTATION"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llSecParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
 
                 <LinearLayout
                     android:id="@+id/lin_order"

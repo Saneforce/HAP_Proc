@@ -94,10 +94,14 @@ public class Constants {
     public static final String DB_TWO_GET_MREPORTS = "dashboardMnthReports";
     public static final String LOGIN_DATE = "loginDate";
     public static final String RETAIL_CLASS = "retailClass";
-    public static final String CUSTOMER_DATA ="customerData" ;
-    public static final String STOCK_DATA ="stockData" ;
-    public static final String GRN_ORDER_DATA ="grnOrderData" ;
+    public static final String CUSTOMER_DATA = "customerData";
+    public static final String STOCK_DATA = "stockData";
+    public static final String GRN_ORDER_DATA = "grnOrderData";
     public static final String DELIVERY_SEQUENCE = "deliverySequence";
+    public static final String SALES_RETURN = "salesReturn";
+    public static final String OUTLET_CATEGORY = "outletCategory";
+    public static final String POS_NETAMT_TAX = "posNetAmtTax";
+    public static final String SALES_RETURN_FILECOUNT ="salesReturnFileCnt" ;
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
@@ -122,10 +126,10 @@ public class Constants {
     public static final String Freezer_capacity = "freezerCapacity";
     public static final String GetPosOrderHistory = "getPosOrderHistory";
     public static final String PosOrderDetails_List = "posOrderDetailList";
-    public static final String RETAIL_CHANNEL="retailChannel";
-    public static final String INDENT_Product_List="indentProductList";
-    public static final String INDENT_Category_List="indentCategoryList";
-    public static final String INDENT_ProdTypes_List="inentProductTypes";
-    public static final String INDENT_ProdGroups_List="indentProductGroups";
-    public static final String GetGrn_List="getGRNList";
+    public static final String RETAIL_CHANNEL = "retailChannel";
+    public static final String INDENT_Product_List = "indentProductList";
+    public static final String INDENT_Category_List = "indentCategoryList";
+    public static final String INDENT_ProdTypes_List = "inentProductTypes";
+    public static final String INDENT_ProdGroups_List = "indentProductGroups";
+    public static final String GetGrn_List = "getGRNList";
 }

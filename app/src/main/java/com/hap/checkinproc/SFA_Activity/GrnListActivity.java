@@ -177,6 +177,20 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
                                     startActivity(intent);
                                     overridePendingTransition(R.anim.in, R.anim.out);
                                 } else {
+                                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+                                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+                                    Shared_Common_Pref.Invoicetoorder = "1";
+                                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
+                                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+                                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+                                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+                                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+                                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+                                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.in, R.anim.out);
                                 }
 
 

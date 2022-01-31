@@ -162,6 +162,22 @@
                         app:tint="@color/green" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tvStockBal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"

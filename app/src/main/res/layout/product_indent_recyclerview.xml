@@ -133,10 +133,10 @@
                             android:layout_marginRight="@dimen/C10dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"
-                            android:gravity="center_vertical"
                             android:textAlignment="textEnd"
                             android:textColor="@color/txt_color_black"
                             android:textStyle="bold"
@@ -157,7 +157,7 @@
                             android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
-                            android:text="New Qty : "
+                            android:text="Qty   : "
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout
@@ -225,6 +225,40 @@
                         </RelativeLayout>
 
                     </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlStock"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+
+                            android:id="@+id/tvStockLabel"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="In Stock : "
+                            android:textColor="@color/grey_800"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/tvStockBal"
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/tvStockLabel"
+                            android:gravity="center_vertical"
+                            android:text="0"
+                            android:textColor="@color/grey_800"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+
+
+                    </RelativeLayout>
 
 
                     <RelativeLayout

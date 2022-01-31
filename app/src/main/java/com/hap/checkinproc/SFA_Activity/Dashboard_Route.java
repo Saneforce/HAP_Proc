@@ -83,7 +83,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     public static final String UserDetail = "MyPrefs";
     public static Dashboard_Route dashboard_route;
     public static Common_Class common_class;
-    public static TextView distributor_text;
+    public TextView distributor_text;
     public static Shared_Common_Pref shared_common_pref;
     List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
     List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
@@ -586,6 +586,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!distributor_text.getText().toString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_name))) {
+            route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
+            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+            tvDistributor.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+            common_class.getDb_310Data(Rout_List, this);
+        }
+
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
         }
@@ -874,6 +882,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 boolean ACTrue = false;
+
+
                 if (swACOutlet.isChecked()) {
                     if (Retailer_Modal_List.get(i).getDelivType() != null && Retailer_Modal_List.get(i).getDelivType().equalsIgnoreCase("AC"))
                         ACTrue = true;
@@ -883,6 +893,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 } else {
                     ACTrue = true;
                 }
+
+                if (DCRMode.equalsIgnoreCase("SR") && Common_Class.isNullOrEmpty(Retailer_Modal_List.get(i).getCustomerCode()))
+                    ACTrue=false;
+
                 if (Retailer_Modal_List.get(i).getType() == null)
                     Retailer_Modal_List.get(i).setType("0");
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("0") && ACTrue) CountUR++;
@@ -918,6 +932,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
         private Context context;
         private RecyclerView recyclerView;
+
 
         public AllDataFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int position) {
             this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
@@ -983,13 +998,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
                             Shared_Common_Pref.CUSTOMER_CODE = mRetailer_Modal_ListFilter.get(position).getCustomerCode();
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
-                            common_class.CommonIntentwithFinish(Invoice_History.class);
+                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             //}
 
                         }
                     } catch (Exception e) {
-
+                        Log.v("AllDataFragment:", e.getMessage());
                     }
                 }
 

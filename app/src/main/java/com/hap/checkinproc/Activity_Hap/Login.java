@@ -120,6 +120,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         db = new DatabaseHandler(this);
+        shared_common_pref = new Shared_Common_Pref(this);
+
+        Shared_Common_Pref.LOGINTYPE = shared_common_pref.getvalue(Constants.LOGIN_TYPE);
+
 
         JSONArray pendingPhotos = db.getAllPendingPhotos();
         if (pendingPhotos.length() > 0) {
@@ -181,7 +185,6 @@ public class Login extends AppCompatActivity {
 
         name = (TextInputEditText) findViewById(R.id.username);
         password = (TextInputEditText) findViewById(R.id.password);
-        shared_common_pref = new Shared_Common_Pref(this);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         profileImage = (ImageView) findViewById(R.id.profile_image);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -593,7 +596,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //  eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-                //eMail = "ciadmin@hap.in";
+                // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -668,6 +671,8 @@ public class Login extends AppCompatActivity {
 
             if (response.getData().get(0).getLoginType() != null &&
                     response.getData().get(0).getLoginType().equals("Distributor")) {
+                shared_common_pref.save(Constants.SALES_RETURN_FILECOUNT, response.getData().get(0).getSalesReturnImg());
+
                 shared_common_pref.save(Constants.Distributor_Id, response.getData().get(0).getDistCode());
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.getData().get(0).getDistCode());
                 shared_common_pref.save(Constants.Distributor_name, response.getData().get(0).getStockist_Name());
