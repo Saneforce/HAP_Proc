@@ -55,6 +55,10 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.GoogleMap;
@@ -83,6 +87,7 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.CtrlsListModel;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Common_Class.Util;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -127,6 +132,10 @@ import retrofit2.Response;
 
 public class TAClaimActivity extends AppCompatActivity implements Master_Interface,
         OnMapReadyCallback {
+    static TransferUtility transferUtility;
+    // Reference to the utility class
+    static Util util;
+
     SharedPreferences CheckInDetails;
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
@@ -250,6 +259,59 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     final Handler handler = new Handler();
 
+    public void LateImage(View v) {
+        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+            popupCapture(343);
+            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Calendar calobjw = Calendar.getInstance();
+            lodgLate = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+
+        }
+    }
+    public void LateAttach(View v) {
+        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+        stat.putExtra("position", lodgLate);
+        stat.putExtra("headTravel", "LOD");
+        stat.putExtra("mode", "LateMode");
+        stat.putExtra("date", DateTime);
+        startActivity(stat);
+    }
+    public void EarImage(View v) {
+        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+            popupCapture(405);
+            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Calendar calobjw = Calendar.getInstance();
+            lodgEarly = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+
+        }
+    }
+    public void EarAttach(View v) {
+        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+        stat.putExtra("position", lodgEarly);
+        stat.putExtra("headTravel", "LOD");
+        stat.putExtra("mode", "EarlyMode");
+        stat.putExtra("date", DateTime);
+        startActivity(stat);
+    }
+
     private ShimmerFrameLayout mShimmerViewContainer;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -258,6 +320,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         setContentView(R.layout.activity_t_a_claim);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
         mShimmerViewContainer.startShimmerAnimation();
+
+        util = new Util();
+        transferUtility = util.getTransferUtility(this);
 
         mCommon_class = new Common_Class(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -445,13 +510,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     vwldgBillAmt.setVisibility(View.GONE);
                     ldg_coutDt.setText(DT.AddDays(DateTime+" 00:00:00",2,"yyyy-MM-dd"));
                     cnSty = 1;
-                   // ldg_cout.setText("");
-                   // ldg_coutDt.setText("");
                     SumOFLodging(1);
                     countLoding = 1;
-
                 } else {
-
                     COutDate=DT.AddDays(DateTime+" 00:00:00",1,"yyyy-MM-dd");
                     ldg_coutDt.setText(DT.AddDays(DateTime+" 00:00:00",1,"yyyy-MM-dd"));
                     SumOFLodging(0);
@@ -466,7 +527,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 NoofNight.setText(" - "+ String.valueOf(nofNght)+" Nights - ");
                 linContinueStay.setVisibility(View.VISIBLE);
                // if(DT.Daybetween(DateTime+" 00:00:00",ldg_coutDt.getText().toString()+ " 00:00:00")<=1)
-               //     linContinueStay.setVisibility(View.GONE);
+               //       linContinueStay.setVisibility(View.GONE);
                 getStayAllow();
             }
         });
@@ -553,17 +614,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             @Override
             public void onClick(View v) {
                 ldgEliAmt = 0.0;
-
                 drvldgEAra.setVisibility(View.GONE);
                 if (ldgAdd.getText().equals("+ Add")) {
                     ldgAdd.setText("- Remove");
                     lodgContvw.setVisibility(View.VISIBLE);
-
                 } else {
                     ldgAdd.setText("+ Add");
                     lodgContvw.setVisibility(View.GONE);
                     txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
-
                 }
                 SumOFLodging(0);
             }
@@ -667,7 +725,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
-Log.d("DACliam","Error : "+t.getMessage());
+                            Log.d("DACliam","Error : "+t.getMessage());
                         }
                     });
 
@@ -692,7 +750,6 @@ Log.d("DACliam","Error : "+t.getMessage());
         DA_locSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgLocations, 13);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
@@ -1476,59 +1533,6 @@ Log.d("DACliam","Error : "+t.getMessage());
     SumOFLodging(0);
 
 }
-
-    public void LateImage(View v) {
-        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
-
-        if (!cameraPermission.checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                cameraPermission.requestPermission();
-            }
-            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-        } else {
-            Log.v("PERMISSION", "PERMISSION");
-            popupCapture(343);
-            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Calendar calobjw = Calendar.getInstance();
-            lodgLate = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-
-        }
-    }
-    public void LateAttach(View v) {
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-        stat.putExtra("position", lodgLate);
-        stat.putExtra("headTravel", "LOD");
-        stat.putExtra("mode", "LateMode");
-        stat.putExtra("date", DateTime);
-        startActivity(stat);
-    }
-    public void EarImage(View v) {
-        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
-
-        if (!cameraPermission.checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                cameraPermission.requestPermission();
-            }
-            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-        } else {
-            Log.v("PERMISSION", "PERMISSION");
-            popupCapture(405);
-            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Calendar calobjw = Calendar.getInstance();
-            lodgEarly = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-
-        }
-    }
-    public void EarAttach(View v) {
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-        stat.putExtra("position", lodgEarly);
-        stat.putExtra("headTravel", "LOD");
-        stat.putExtra("mode", "EarlyMode");
-        stat.putExtra("date", DateTime);
-        startActivity(stat);
-    }
 
     public void ShowTimePicker(String str) {
         Calendar mcurrentTime = Calendar.getInstance();
@@ -3352,7 +3356,6 @@ Log.d("DACliam","Error : "+t.getMessage());
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
         String sMode="";
         long nano_startTime = System.nanoTime();
@@ -3399,7 +3402,6 @@ Log.d("DACliam","Error : "+t.getMessage());
             sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;
         }
 
-
         if (requestCode == 144) {
             if (resultCode == RESULT_OK) {
                 if (requestCode == 144) {
@@ -3420,8 +3422,6 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
                         lodgArrLst.add(fullPath);
-
-
                         getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
 
                     }
@@ -3686,7 +3686,8 @@ Log.d("DACliam","Error : "+t.getMessage());
                         txtLodgUKey.setText(lodUKey);
                     }
                     lodUKey = txtLodgUKey.getText().toString();
-                    sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey;
+                    sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey+";"+FileName;
+
                 }
                 if(reqCode==123){
                     if (tvTxtUKeys.getText().toString().equals("")) {
@@ -3696,7 +3697,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         tvTxtUKeys.setText(tvEditcnt);
                     }
                     TlUKey = tvTxtUKeys.getText().toString();
-                    sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey;
+                    sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey+";"+FileName;
                 }
                 if(reqCode==99){
                     if (oeTxtUKeys.getText().toString().equals("")) {
@@ -3707,7 +3708,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     }
 
                     OeUKey = oeTxtUKeys.getText().toString();
-                    sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey;
+                    sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey+";"+FileName;
                 }
                 if(reqCode==786){
                     if (lcTxtUKeys.getText().toString().equals("")) {
@@ -3717,8 +3718,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                         lcTxtUKeys.setText(lcEditcnt);
                     }
                     LcUKey = lcTxtUKeys.getText().toString();
-                    sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;
+                    sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey+";"+FileName;
                 }
+                UploadPhoto(fullPath,UserDetails.getString("Sfcode",""),FileName,"ExpClaim;"+sMode);
 
                 Intent mIntent = new Intent(TAClaimActivity.this, FileUploadService.class);
                 mIntent.putExtra("mFilePath", fullPath);
@@ -3726,7 +3728,6 @@ Log.d("DACliam","Error : "+t.getMessage());
                 mIntent.putExtra("FileName", FileName);
                 mIntent.putExtra("Mode", "ExpClaim;"+sMode);
                 FileUploadService.enqueueWork(TAClaimActivity.this, mIntent);
-
             }
         });
         Intent intent = new Intent(TAClaimActivity.this, AllowancCapture.class);
@@ -5193,4 +5194,91 @@ Log.d("DACliam","Error : "+t.getMessage());
             }
         });
     }
+
+
+    private void UploadPhoto(String mFilePath,String SF,String FileName,String Mode){
+        try{
+
+            File file = new File(mFilePath);
+            if (mFilePath.contains(".png") || mFilePath.contains(".jpg") || mFilePath.contains(".jpeg"))
+                file = new Compressor(getApplicationContext()).compressToFile(new File(mFilePath));
+            else
+                file = new File(mFilePath);
+
+            TransferObserver uploadObserver =
+                    transferUtility.upload("happic","TAPhotos/" + FileName , file);
+
+            uploadObserver.setTransferListener(new TransferListener() {
+
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if (TransferState.COMPLETED == state) {
+
+                        Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
+                    } else if (TransferState.FAILED == state) {
+
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                    int percentDone = (int) percentDonef;
+
+                    //tvFileName.setText("ID:" + id + "|bytesCurrent: " + bytesCurrent + "|bytesTotal: " + bytesTotal + "|" + percentDone + "%");
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+        }
+        catch (Exception e){
+           // Log.e(TAG,e.getMessage());
+        }
+    }
+    private void DownloadPhoto(ImageView ImgViewer, String FileName,String FileExt){
+        try{
+
+            final File file = File.createTempFile(FileName,"jpg");
+
+            TransferObserver downloadObserver =
+                    transferUtility.download("happic","TAPhotos/" + FileName+"."+FileExt , file);
+
+            downloadObserver.setTransferListener(new TransferListener() {
+
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if (TransferState.COMPLETED == state) {
+                        Bitmap bmp=BitmapFactory.decodeFile(file.getAbsolutePath());
+                        ImgViewer.setImageBitmap(bmp);
+                        Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
+                    } else if (TransferState.FAILED == state) {
+
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                    int percentDone = (int) percentDonef;
+
+                    //tvFileName.setText("ID:" + id + "|bytesCurrent: " + bytesCurrent + "|bytesTotal: " + bytesTotal + "|" + percentDone + "%");
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+        }
+        catch (Exception e){
+            // Log.e(TAG,e.getMessage());
+        }
+    }
+
+
 }

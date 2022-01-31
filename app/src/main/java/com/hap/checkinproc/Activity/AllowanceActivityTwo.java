@@ -33,6 +33,10 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -51,6 +55,7 @@ import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Common_Class.Util;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
@@ -82,6 +87,10 @@ import retrofit2.Response;
 
 public class AllowanceActivityTwo extends AppCompatActivity implements Master_Interface {
 
+    static TransferUtility transferUtility;
+    // Reference to the utility class
+    static Util util;
+
     TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate,TextDtTrv;
     ImageView StartedKmImage, EndedKmImage;
     CircularProgressButton submitAllowance;
@@ -104,6 +113,9 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowance_two);
+
+        util = new Util();
+        transferUtility = util.getTransferUtility(this);
 
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
@@ -604,6 +616,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 Glide.with(getApplicationContext())
                                         .load(json_oo.getString("start_Photo"))
                                         .into(StartedKmImage);
+
+
                                 maxKM = json_oo.getInt("Maxkm");
                                 Hq = json_oo.getString("dailyAllowance");
 
@@ -613,6 +627,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                                 StartedKM  = Integer.valueOf(json_oo.getString("Start_Km"));
                                 ImageStart = json_oo.getString("start_Photo");
+                                String[] FilNMs= ImageStart.split("/");
+                                String[] imgDet= FilNMs[FilNMs.length-1].split("[.]");
+                                DownloadPhoto(StartedKmImage,imgDet[0],imgDet[1]);
+
                                 StrToCode = json_oo.getString("To_Place_Id");
                                 TextToPlace.setText(json_oo.getString("To_Place"));
                                 TotalKm = StratKm + maxKM;
@@ -729,6 +747,46 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             toPlace = myDataset.get(position).getName();
             StrToCode = myDataset.get(position).getId();
             Log.e("STRTOCOD", StrToCode);
+        }
+    }
+
+
+    private void DownloadPhoto(ImageView ImgViewer, String FileName,String FileExt){
+        try{
+
+            final File file = File.createTempFile(FileName,"."+FileExt);
+
+            TransferObserver downloadObserver =
+                    transferUtility.download("happic","TAPhotos/" + FileName+"."+FileExt , file);
+
+            downloadObserver.setTransferListener(new TransferListener() {
+
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if (TransferState.COMPLETED == state) {
+                        Bitmap bmp=BitmapFactory.decodeFile(file.getAbsolutePath());
+                        ImgViewer.setImageBitmap(bmp);
+                        Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                    int percentDone = (int) percentDonef;
+
+                    //tvFileName.setText("ID:" + id + "|bytesCurrent: " + bytesCurrent + "|bytesTotal: " + bytesTotal + "|" + percentDone + "%");
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+        }
+        catch (Exception e){
+            // Log.e(TAG,e.getMessage());
         }
     }
 }
