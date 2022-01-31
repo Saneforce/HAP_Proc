@@ -157,7 +157,7 @@
                             android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
-                            android:text="New Qty : "
+                            android:text="Qty   : "
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout

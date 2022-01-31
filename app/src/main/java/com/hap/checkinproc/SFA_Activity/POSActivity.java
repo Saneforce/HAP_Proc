@@ -1607,9 +1607,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if ((balance >= order) || Product_Details_Modal.getCheckStock() == 0)
+                        if ((balance >= order) || Product_Details_Modal.getCheckStock() == 0) {
+                            if (Product_Details_Modal.getCheckStock() == 1)
+                                holder.tvStock.setText("" + (int) (balance - order));
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        else {
+                        } else {
                             common_class.showMsg(POSActivity.this, "Can't exceed stock");
                         }
                     }
@@ -1617,10 +1619,21 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal = holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        if (Integer.parseInt(sVal) > 0) {
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                        try {
+                            String sVal = holder.Qty.getText().toString();
+                            if (sVal.equalsIgnoreCase("")) sVal = "0";
+                            if (Integer.parseInt(sVal) > 0) {
+                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+
+                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+                                int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
+                                if (Product_Details_Modal.getCheckStock() == 1)
+                                    holder.tvStock.setText("" + (int) (balance - order));
+                            }
+
+                        }
+                        catch (Exception e){
+                            Log.v(TAG+"QtyMns:",e.getMessage());
                         }
                     }
                 });
@@ -1640,11 +1653,20 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                             if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty &&
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0) {
-                                totQty = 0;
-                                enterQty = 0;
-                                holder.Qty.setText("0");
+//                                totQty = 0;
+//                                enterQty = 0;
+//                                holder.Qty.setText("0");
                                 // common_class.showMsg(POSActivity.this, "No stock");
+                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
+                                enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
+                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+
+                                common_class.showMsg(POSActivity.this, "Can't exceed stock");
+
                             }
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
+                                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty));
+
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
@@ -1927,10 +1949,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
                 tvUOM = view.findViewById(R.id.tvUOM);
+                tvStock = view.findViewById(R.id.tvStockBal);
 
 
                 if (CategoryType >= 0) {
-                    tvStock = view.findViewById(R.id.tvStockBal);
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
                     regularAmt = view.findViewById(R.id.RegularAmt);

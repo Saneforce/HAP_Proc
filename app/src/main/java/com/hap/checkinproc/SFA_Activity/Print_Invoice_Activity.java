@@ -171,7 +171,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
-                findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
                 common_class.getDb_310Data(Constants.OUTSTANDING, this);
                 storeName = retailername.getText().toString();
@@ -182,7 +181,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
-                findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                 tvDistAdd.setVisibility(View.VISIBLE);
                 //  tvDistId.setVisibility(View.VISIBLE);
                 if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order"))
@@ -205,7 +203,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Return Invoice")) {
                     findViewById(R.id.cvReturnInvParent).setVisibility(View.VISIBLE);
-                    findViewById(R.id.cvPayDetails).setVisibility(View.GONE);
                     findViewById(R.id.cvSalesParent).setVisibility(View.GONE);
                     findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
                     btnInvoice.setText("CONFIRM");
@@ -213,7 +210,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 } else {
                     common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
-                    common_class.getDb_310Data(Constants.OUTSTANDING, this);
+                    if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")) {
+                        findViewById(R.id.cvPayDetails).setVisibility(View.VISIBLE);
+
+                        common_class.getDb_310Data(Constants.OUTSTANDING, this);
+                    }
                 }
 
             }
@@ -264,7 +265,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
         switch (v.getId()) {
             case R.id.ivStockCapture:
-                if (stockFileList.get(0).getFileUrls() == null || stockFileList.get(0).getFileUrls().size() < 2) {
+                if (stockFileList.get(0).getFileUrls() == null || stockFileList.get(0).getFileUrls().size() < sharedCommonPref.getIntValue(Constants.SALES_RETURN_FILECOUNT)) {
                     AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                         @Override
                         public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
@@ -304,6 +305,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             case R.id.btnInvoice:
                 if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Return Invoice")) {
+                    if (stockFileList.get(0).getFileUrls() == null || stockFileList.get(0).getFileUrls().size() == 0) {
+                        common_class.showMsg(this, "Please take picture");
+                        return;
+
+                    }
                     if (btnInvoice.isAnimating()) return;
                     btnInvoice.startAnimation();
                     handler.postDelayed(new Runnable() {
@@ -341,187 +347,183 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     private void confirmReturnInv() {
         if (common_class.isNetworkAvailable(this)) {
-
-            if (stockFileList.get(0).getFileUrls() == null || stockFileList.get(0).getFileUrls().size() == 0) {
-                common_class.showMsg(this, "Please take picture");
-            } else {
-                AlertDialogBox.showDialog(Print_Invoice_Activity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
-                    @Override
-                    public void PositiveMethod(DialogInterface dialog, int id) {
-                        try {
+            AlertDialogBox.showDialog(Print_Invoice_Activity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                @Override
+                public void PositiveMethod(DialogInterface dialog, int id) {
+                    try {
 
 
-                            common_class.ProgressdialogShow(1, "");
-                            JSONArray data = new JSONArray();
-                            JSONObject ActivityData = new JSONObject();
+                        common_class.ProgressdialogShow(1, "");
+                        JSONArray data = new JSONArray();
+                        JSONObject ActivityData = new JSONObject();
 
-                            JSONObject HeadItem = new JSONObject();
-                            HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
-                            HeadItem.put("Worktype_code", "");
-                            HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
-                            HeadItem.put("dcr_activity_date", Common_Class.GetDate());
-                            HeadItem.put("Daywise_Remarks", "");
-                            HeadItem.put("UKey", Common_Class.GetEkey());
-                            HeadItem.put("orderValue", formatter.format(subTotalVal));
-                            HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
-                            HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
-                            ActivityData.put("Activity_Report_Head", HeadItem);
+                        JSONObject HeadItem = new JSONObject();
+                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("Worktype_code", "");
+                        HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
+                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
+                        HeadItem.put("Daywise_Remarks", "");
+                        HeadItem.put("UKey", Common_Class.GetEkey());
+                        HeadItem.put("orderValue", formatter.format(subTotalVal));
+                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+                        ActivityData.put("Activity_Report_Head", HeadItem);
 
-                            JSONObject OutletItem = new JSONObject();
-                            OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
-                            OutletItem.put("modified_time", Common_Class.GetDate());
-                            OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                            OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                            OutletItem.put("orderValue", formatter.format(subTotalVal));
-                            OutletItem.put("CashDiscount", cashDisc);
-                            OutletItem.put("NetAmount", formatter.format(subTotalVal));
-                            OutletItem.put("No_Of_items", returntotalitem.getText().toString());
-                            OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-                            OutletItem.put("TransSlNo", "");
-                            OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-                            OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                            OutletItem.put("ordertype", "Return Invoice");
-                            OutletItem.put("from", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                            OutletItem.put("to", Shared_Common_Pref.CUSTOMER_CODE);
-                            OutletItem.put("distCode", Shared_Common_Pref.CUSTOMER_CODE);
-                            OutletItem.put("customerCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        JSONObject OutletItem = new JSONObject();
+                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
+                        OutletItem.put("modified_time", Common_Class.GetDate());
+                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
+                        OutletItem.put("orderValue", formatter.format(subTotalVal));
+                        OutletItem.put("CashDiscount", cashDisc);
+                        OutletItem.put("NetAmount", formatter.format(subTotalVal));
+                        OutletItem.put("No_Of_items", returntotalitem.getText().toString());
+                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+                        OutletItem.put("TransSlNo", "");
+                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
+                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
+                        OutletItem.put("ordertype", "Return Invoice");
+                        OutletItem.put("from", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("to", Shared_Common_Pref.CUSTOMER_CODE);
+                        OutletItem.put("distCode", Shared_Common_Pref.CUSTOMER_CODE);
+                        OutletItem.put("customerCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
 
-                            if (strLoc.length > 0) {
-                                OutletItem.put("Lat", strLoc[0]);
-                                OutletItem.put("Long", strLoc[1]);
-                            } else {
-                                OutletItem.put("Lat", "");
-                                OutletItem.put("Long", "");
-                            }
-                            JSONArray Order_Details = new JSONArray();
-                            JSONArray totTaxArr = new JSONArray();
-
-                            for (int z = 0; z < Order_Outlet_Filter.size(); z++) {
-                                JSONObject ProdItem = new JSONObject();
-                                ProdItem.put("product_Name", Order_Outlet_Filter.get(z).getName());
-                                ProdItem.put("product_code", Order_Outlet_Filter.get(z).getId());
-                                ProdItem.put("Product_Qty", Order_Outlet_Filter.get(z).getQty());
-                                ProdItem.put("Product_RegularQty", Order_Outlet_Filter.get(z).getRegularQty());
-                                ProdItem.put("Product_Total_Qty", Order_Outlet_Filter.get(z).getQty());
-                                ProdItem.put("Product_Amount", Order_Outlet_Filter.get(z).getAmount());
-                                ProdItem.put("Rate", String.format("%.2f", Order_Outlet_Filter.get(z).getRate()));
-
-                                ProdItem.put("free", Order_Outlet_Filter.get(z).getFree());
-                                ProdItem.put("dis", Order_Outlet_Filter.get(z).getDiscount());
-                                ProdItem.put("dis_value", Order_Outlet_Filter.get(z).getDiscount_value());
-                                ProdItem.put("Off_Pro_code", Order_Outlet_Filter.get(z).getOff_Pro_code());
-                                ProdItem.put("Off_Pro_name", Order_Outlet_Filter.get(z).getOff_Pro_name());
-                                ProdItem.put("Off_Pro_Unit", Order_Outlet_Filter.get(z).getOff_Pro_Unit());
-                                ProdItem.put("Off_Scheme_Unit", Order_Outlet_Filter.get(z).getScheme());
-                                ProdItem.put("discount_type", Order_Outlet_Filter.get(z).getDiscount_type());
-
-                                JSONArray tax_Details = new JSONArray();
-
-
-                                if (Order_Outlet_Filter.get(z).getProductDetailsModal() != null &&
-                                        Order_Outlet_Filter.get(z).getProductDetailsModal().size() > 0) {
-
-                                    for (int i = 0; i < Order_Outlet_Filter.get(z).getProductDetailsModal().size(); i++) {
-                                        JSONObject taxData = new JSONObject();
-
-                                        String label = Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Type();
-                                        Double amt = Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Amt();
-                                        taxData.put("Tax_Id", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Id());
-                                        taxData.put("Tax_Val", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Val());
-                                        taxData.put("Tax_Type", label);
-                                        taxData.put("Tax_Amt", amt);
-                                        tax_Details.put(taxData);
-
-
-                                    }
-
-
-                                }
-
-                                ProdItem.put("TAX_details", tax_Details);
-
-                                Order_Details.put(ProdItem);
-
-                            }
-
-                            for (int i = 0; i < taxList.size(); i++) {
-                                JSONObject totTaxObj = new JSONObject();
-
-                                totTaxObj.put("Tax_Type", taxList.get(i).getTax_Type());
-                                totTaxObj.put("Tax_Amt", taxList.get(i).getTax_Amt());
-                                totTaxArr.put(totTaxObj);
-
-                            }
-
-                            OutletItem.put("TOT_TAX_details", totTaxArr);
-                            ActivityData.put("Activity_Doctor_Report", OutletItem);
-                            ActivityData.put("Order_Details", Order_Details);
-
-                            JSONArray file_Details = new JSONArray();
-
-
-                            for (int f = 0; f < stockFileList.get(0).getFileUrls().size(); f++) {
-                                JSONObject ProdItem = new JSONObject();
-                                File file = new File(stockFileList.get(0).getFileUrls().get(f));
-                                ProdItem.put("SalesReturnImg", file.getName());
-                                file_Details.put(ProdItem);
-                            }
-
-
-                            ActivityData.put("file_Details", file_Details);
-
-                            data.put(ActivityData);
-
-                            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                            Call<JsonObject> responseBodyCall = apiInterface.saveSalesReturn(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                            responseBodyCall.enqueue(new Callback<JsonObject>() {
-                                @Override
-                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                    if (response.isSuccessful()) {
-                                        try {
-                                            common_class.ProgressdialogShow(0, "");
-                                            Log.e("JSON_VALUES", response.body().toString());
-                                            JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                            String san = jsonObjects.getString("success");
-                                            Log.e("Success_Message", san);
-                                            ResetSubmitBtn(1);
-                                            if (san.equals("true")) {
-                                                sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
-                                                common_class.CommonIntentwithFinish(Invoice_History.class);
-                                            }
-                                            common_class.showMsg(Print_Invoice_Activity.this, jsonObjects.getString("Msg"));
-
-                                        } catch (Exception e) {
-                                            common_class.ProgressdialogShow(0, "");
-                                            ResetSubmitBtn(2);
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<JsonObject> call, Throwable t) {
-                                    common_class.ProgressdialogShow(0, "");
-                                    Log.e("SUBMIT_VALUE", "ERROR");
-                                    ResetSubmitBtn(2);
-                                }
-                            });
-
-
-                            uploadStockFile();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            ResetSubmitBtn(2);
+                        if (strLoc.length > 0) {
+                            OutletItem.put("Lat", strLoc[0]);
+                            OutletItem.put("Long", strLoc[1]);
+                        } else {
+                            OutletItem.put("Lat", "");
+                            OutletItem.put("Long", "");
                         }
-                    }
+                        JSONArray Order_Details = new JSONArray();
+                        JSONArray totTaxArr = new JSONArray();
 
-                    @Override
-                    public void NegativeMethod(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        ResetSubmitBtn(0);
+                        for (int z = 0; z < Order_Outlet_Filter.size(); z++) {
+                            JSONObject ProdItem = new JSONObject();
+                            ProdItem.put("product_Name", Order_Outlet_Filter.get(z).getName());
+                            ProdItem.put("product_code", Order_Outlet_Filter.get(z).getId());
+                            ProdItem.put("Product_Qty", Order_Outlet_Filter.get(z).getQty());
+                            ProdItem.put("Product_RegularQty", Order_Outlet_Filter.get(z).getRegularQty());
+                            ProdItem.put("Product_Total_Qty", Order_Outlet_Filter.get(z).getQty());
+                            ProdItem.put("Product_Amount", Order_Outlet_Filter.get(z).getAmount());
+                            ProdItem.put("Rate", String.format("%.2f", Order_Outlet_Filter.get(z).getRate()));
+
+                            ProdItem.put("free", Order_Outlet_Filter.get(z).getFree());
+                            ProdItem.put("dis", Order_Outlet_Filter.get(z).getDiscount());
+                            ProdItem.put("dis_value", Order_Outlet_Filter.get(z).getDiscount_value());
+                            ProdItem.put("Off_Pro_code", Order_Outlet_Filter.get(z).getOff_Pro_code());
+                            ProdItem.put("Off_Pro_name", Order_Outlet_Filter.get(z).getOff_Pro_name());
+                            ProdItem.put("Off_Pro_Unit", Order_Outlet_Filter.get(z).getOff_Pro_Unit());
+                            ProdItem.put("Off_Scheme_Unit", Order_Outlet_Filter.get(z).getScheme());
+                            ProdItem.put("discount_type", Order_Outlet_Filter.get(z).getDiscount_type());
+
+                            JSONArray tax_Details = new JSONArray();
+
+
+                            if (Order_Outlet_Filter.get(z).getProductDetailsModal() != null &&
+                                    Order_Outlet_Filter.get(z).getProductDetailsModal().size() > 0) {
+
+                                for (int i = 0; i < Order_Outlet_Filter.get(z).getProductDetailsModal().size(); i++) {
+                                    JSONObject taxData = new JSONObject();
+
+                                    String label = Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Type();
+                                    Double amt = Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Amt();
+                                    taxData.put("Tax_Id", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Id());
+                                    taxData.put("Tax_Val", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Val());
+                                    taxData.put("Tax_Type", label);
+                                    taxData.put("Tax_Amt", amt);
+                                    tax_Details.put(taxData);
+
+
+                                }
+
+
+                            }
+
+                            ProdItem.put("TAX_details", tax_Details);
+
+                            Order_Details.put(ProdItem);
+
+                        }
+
+                        for (int i = 0; i < taxList.size(); i++) {
+                            JSONObject totTaxObj = new JSONObject();
+
+                            totTaxObj.put("Tax_Type", taxList.get(i).getTax_Type());
+                            totTaxObj.put("Tax_Amt", taxList.get(i).getTax_Amt());
+                            totTaxArr.put(totTaxObj);
+
+                        }
+
+                        OutletItem.put("TOT_TAX_details", totTaxArr);
+                        ActivityData.put("Activity_Doctor_Report", OutletItem);
+                        ActivityData.put("Order_Details", Order_Details);
+
+                        JSONArray file_Details = new JSONArray();
+
+
+                        for (int f = 0; f < stockFileList.get(0).getFileUrls().size(); f++) {
+                            JSONObject ProdItem = new JSONObject();
+                            File file = new File(stockFileList.get(0).getFileUrls().get(f));
+                            ProdItem.put("SalesReturnImg", file.getName());
+                            file_Details.put(ProdItem);
+                        }
+
+
+                        ActivityData.put("file_Details", file_Details);
+
+                        data.put(ActivityData);
+
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonObject> responseBodyCall = apiInterface.saveSalesReturn(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        responseBodyCall.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        common_class.ProgressdialogShow(0, "");
+                                        Log.e("JSON_VALUES", response.body().toString());
+                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                        String san = jsonObjects.getString("success");
+                                        Log.e("Success_Message", san);
+                                        ResetSubmitBtn(1);
+                                        if (san.equals("true")) {
+                                            sharedCommonPref.clear_pref(Constants.LOC_INDENT_DATA);
+                                            common_class.CommonIntentwithFinish(Invoice_History.class);
+                                        }
+                                        common_class.showMsg(Print_Invoice_Activity.this, jsonObjects.getString("Msg"));
+
+                                    } catch (Exception e) {
+                                        common_class.ProgressdialogShow(0, "");
+                                        ResetSubmitBtn(2);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                common_class.ProgressdialogShow(0, "");
+                                Log.e("SUBMIT_VALUE", "ERROR");
+                                ResetSubmitBtn(2);
+                            }
+                        });
+
+
+                        uploadStockFile();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ResetSubmitBtn(2);
                     }
-                });
-            }
+                }
+
+                @Override
+                public void NegativeMethod(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                    ResetSubmitBtn(0);
+                }
+            });
+
         } else {
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
             ResetSubmitBtn(0);

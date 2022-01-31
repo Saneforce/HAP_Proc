@@ -679,7 +679,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-
+android:visibility="gone"
                         android:id="@+id/cvPayDetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

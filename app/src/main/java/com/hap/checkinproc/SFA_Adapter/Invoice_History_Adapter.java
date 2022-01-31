@@ -111,7 +111,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, txtType, tvIndent;
+        TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, txtType, tvIndent, tvQty;
         LinearLayout linearLayout, llReturnInv, llIndent;
         RelativeLayout parent_layout;
         ImageView ivStatus;
@@ -130,6 +130,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
             llReturnInv = itemView.findViewById(R.id.llSalesReturn);
             llIndent = itemView.findViewById(R.id.llIndent);
             tvIndent = itemView.findViewById(R.id.txt_indent);
+            tvQty = itemView.findViewById(R.id.tvQty);
 
 
         }

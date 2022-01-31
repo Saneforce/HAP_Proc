@@ -61,6 +61,22 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_width="@dimen/C80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+
+                    <TextView
+                        android:id="@+id/tvQty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/sno1"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="13sp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="@dimen/header_width2"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -90,8 +106,7 @@
                         android:gravity="center"
                         android:text="Primary"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
-                       ></TextView>
+                        android:textSize="13sp"></TextView>
                 </LinearLayout>
 
                 <LinearLayout

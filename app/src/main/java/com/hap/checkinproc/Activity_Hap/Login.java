@@ -614,8 +614,8 @@ public class Login extends AppCompatActivity {
                 // eMail = "1025257@hap.in";
                 // eMail = "1026494@hap.in";
 //                eMail = "1007660@hap.in";//pranita
-               // eMail = "1026508@hap.in";//alaguselvi
-                //eMail="1012639@hap.in";//md
+                // eMail = "1026508@hap.in";//alaguselvi
+               // eMail = "1012639@hap.in";//md
                 //  eMail="1014022@hap.in";//rmk
 
                 // eMail = "1006626@hap.in";
@@ -680,6 +680,8 @@ public class Login extends AppCompatActivity {
 
             if (response.getData().get(0).getLoginType() != null &&
                     response.getData().get(0).getLoginType().equals("Distributor")) {
+                shared_common_pref.save(Constants.SALES_RETURN_FILECOUNT, response.getData().get(0).getSalesReturnImg());
+
                 shared_common_pref.save(Constants.Distributor_Id, response.getData().get(0).getDistCode());
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.getData().get(0).getDistCode());
                 shared_common_pref.save(Constants.Distributor_name, response.getData().get(0).getStockist_Name());

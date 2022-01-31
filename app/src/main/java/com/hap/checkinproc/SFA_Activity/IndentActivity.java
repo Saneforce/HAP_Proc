@@ -1278,20 +1278,32 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if (type.equalsIgnoreCase("INDENT") || (balance >= order))
+                        if (type.equalsIgnoreCase("INDENT") || (balance >= order)) {
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        else {
+//                            if (type.equalsIgnoreCase("Stock Rotation"))
+//                                holder.tvStock.setText("" + (balance - order));
+                        } else {
                             common_class.showMsg(IndentActivity.this, "Can't exceed stock");
                         }
+
+
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        try{
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
                         if (Integer.parseInt(sVal) > 0) {
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+//                            int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+//                            int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
+//                            if (type.equalsIgnoreCase("Stock Rotation"))
+//                                holder.tvStock.setText("" + (balance - order));
+                        }}
+                        catch (Exception e){
+
                         }
                     }
                 });
@@ -1317,6 +1329,11 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                                 holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
                                 common_class.showMsg(IndentActivity.this, "Can't exceed stock");
                             }
+
+                            if (type.equalsIgnoreCase("Stock Rotation")) {
+                                int stk=(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty);
+                                holder.tvStock.setText("" + stk);
+                            }
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
@@ -1327,7 +1344,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                             }
 
 
-                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+                            String strSchemeList = sharedCommonPref.getvalue(Constants.POS_SCHEME);
 
                             Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
                             }.getType();
@@ -1588,11 +1605,11 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
+                tvStock = view.findViewById(R.id.tvStockBal);
 
 
                 if (CategoryType >= 0) {
                     rlStock = view.findViewById(R.id.rlStock);
-                    tvStock = view.findViewById(R.id.tvStockBal);
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
                     regularAmt = view.findViewById(R.id.RegularAmt);

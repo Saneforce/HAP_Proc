@@ -96,11 +96,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <EditText
+                android:layout_weight="1"
                 android:id="@+id/edt_name"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/text_bg_grey"
                 android:hint="Enter the name"
@@ -108,10 +109,11 @@
                 android:textSize="13sp" />
 
             <EditText
+                android:layout_marginLeft="@dimen/C10dp"
                 android:id="@+id/edt_phone"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/C10dp"
                 android:background="@drawable/text_bg_grey"
                 android:hint="Enter the Phone No"
                 android:inputType="number"
@@ -119,6 +121,7 @@
                 android:textSize="13sp" />
 
             <EditText
+                android:visibility="gone"
                 android:id="@+id/edtAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
