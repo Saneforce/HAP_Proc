@@ -145,61 +145,27 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/C30dp"
                         android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <RelativeLayout
-                                android:id="@+id/rlUOM"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C3dp"
-                                android:background="@drawable/order_qty_backround">
-
-                                <TextView
-                                    android:id="@+id/tvUOM"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:fontFamily="sans-serif"
-                                    android:gravity="center_vertical"
-                                    android:hint="UOM"
-                                    android:paddingLeft="@dimen/C5dp"
-                                    android:paddingRight="@dimen/C5dp"
-                                    android:textColor="@color/txt_color_black"
-                                    android:visibility="visible" />
-
-                                <ImageView
-                                    android:layout_width="10dp"
-                                    android:layout_height="10dp"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/tvUOM"
-                                    android:padding="1dp"
-
-                                    android:src="@drawable/spin_down_arrow"></ImageView>
-                            </RelativeLayout>
-                        </LinearLayout>
 
                         <TextView
 
                             android:id="@+id/lblAddQty"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
                             android:text="Qty  : "
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout
-                            android:layout_marginRight="@dimen/C10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:layout_toRightOf="@id/lblAddQty"
                             android:background="@drawable/order_qty_backround">
 
                             <ImageView
@@ -239,6 +205,37 @@
 
 
                         <RelativeLayout
+                            android:id="@+id/rlUOM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginLeft="@dimen/C3dp"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:background="@drawable/order_qty_backround">
+
+                            <TextView
+                                android:id="@+id/tvUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center_vertical"
+                                android:hint="UOM"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:textColor="@color/txt_color_black"
+                                android:visibility="visible" />
+
+                            <ImageView
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/tvUOM"
+                                android:padding="1dp"
+
+                                android:src="@drawable/spin_down_arrow"></ImageView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="gone">
@@ -263,7 +260,7 @@
                                 android:visibility="visible" />
                         </RelativeLayout>
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
 
                     <RelativeLayout

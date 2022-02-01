@@ -283,6 +283,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             serviceTypeList.add(new Common_Model("-18", "1", false));
             serviceTypeList.add(new Common_Model("+4", "2", false));
             serviceTypeList.add(new Common_Model("Ambient", "3", false));
+            serviceTypeList.add(new Common_Model("B&C", "4", false));
 
             Category_Adapter categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
             rvCategoryTypes.setAdapter(categoryAdapter);

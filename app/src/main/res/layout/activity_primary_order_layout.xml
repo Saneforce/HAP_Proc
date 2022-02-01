@@ -1001,7 +1001,7 @@
                 android:drawableTint="@color/white"
                 android:gravity="center_vertical"
                 android:padding="@dimen/C5dp"
-                android:text="PROCEED TO CART"
+                android:text="PROCEED"
                 android:textAlignment="textEnd"
                 android:textColor="@color/white"
                 android:textSize="15sp"
@@ -1021,7 +1021,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/C15dp"
                 android:drawableTint="@color/white"
-                android:text="PROCEED TO CART"
+                android:text="PROCEED"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />-->

@@ -45,12 +45,6 @@ public class Dashboard_View_Adapter extends RecyclerView.Adapter<Dashboard_View_
     @Override
     public Dashboard_View_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        /*view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterOnClick.onIntentClick(dummy);
-            }
-        });*/
 
         return new Dashboard_View_Adapter.MyViewHolder(view);
     }

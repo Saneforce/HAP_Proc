@@ -140,6 +140,7 @@
             android:padding="@dimen/C3dp">
 
             <TextView
+                android:id="@+id/headtext"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -480,7 +481,6 @@
                         android:padding="@dimen/C8dp">
 
                         <TextView
-                            android:id="@+id/headtext"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -761,6 +761,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/C5dp">
 
                 <LinearLayout

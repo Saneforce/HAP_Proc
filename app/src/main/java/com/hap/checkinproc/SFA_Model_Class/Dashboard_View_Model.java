@@ -11,6 +11,12 @@ public class Dashboard_View_Model {
     @SerializedName("CountAll")
     @Expose
     private String CountAll;
+
+    public Dashboard_View_Model(String name, String countAll) {
+        Name = name;
+        CountAll = countAll;
+    }
+
     public String getName() {
         return Name;
     }

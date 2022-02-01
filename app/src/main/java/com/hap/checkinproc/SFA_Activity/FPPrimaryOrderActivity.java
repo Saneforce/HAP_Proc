@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,7 +69,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -113,7 +111,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
     private TextView tvTotalAmount, tvACBal, tvTotalItems;
     private double totalvalues, taxVal;
     private Integer totalQty;
-    private TextView tvBillTotItem,usrName;
+    private TextView tvBillTotItem, usrName;
     double ACBalance = 0.0;
     final Handler handler = new Handler();
     private DatePickerDialog fromDatePickerDialog;
@@ -836,7 +834,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -978,7 +976,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
             findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
             btnRepeat.setVisibility(View.VISIBLE);
-            takeorder.setText("PROCEED TO CART");
+            takeorder.setText("PROCEED");
             takeorder.setVisibility(View.VISIBLE);
         }
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
@@ -1117,7 +1115,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         btnRepeat.setVisibility(View.VISIBLE);
-        takeorder.setText("PROCEED TO CART");
+        takeorder.setText("PROCEED");
         takeorder.setVisibility(View.VISIBLE);
         showOrderItemList(selectedPos, "");
     }

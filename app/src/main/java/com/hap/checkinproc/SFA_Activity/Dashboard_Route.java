@@ -392,12 +392,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             }.getType();
             // GetJsonData(shared_common_pref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
             DCRMode = shared_common_pref.getvalue(Shared_Common_Pref.DCRMode);
-            if (DCRMode.equalsIgnoreCase("SC")) {
-                headtext.setText("SALES CALLS");
-            }
+//            if (DCRMode.equalsIgnoreCase("SC")) {
+//                headtext.setText("SALES CALLS");
+//            }
             DCRMode = shared_common_pref.getvalue(Shared_Common_Pref.DCRMode);
-            if (DCRMode.equalsIgnoreCase("VC")) {
-                headtext.setText("VAN ROUTE SUPPLY");
+//            if (DCRMode.equalsIgnoreCase("VC")) {
+//                headtext.setText("VAN ROUTE SUPPLY");
+//            }
+
+            if (DCRMode.equalsIgnoreCase("SR")) {
+                headtext.setText("SALES RETURN");
             }
 
             Retailer_Modal_ListFilter = new ArrayList<>();

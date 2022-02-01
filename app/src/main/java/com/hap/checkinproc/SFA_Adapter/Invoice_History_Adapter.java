@@ -71,6 +71,18 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
         holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
         holder.txtType.setText("" + mDate.get(position).getStatus());
+
+        if (mDate.get(position).getStatus().equalsIgnoreCase("SALES RETURN") ||
+                mDate.get(position).getStatus().equalsIgnoreCase("STOCK ROTATION") ||
+                mDate.get(position).getStatus().equalsIgnoreCase("INDENT")) {
+            holder.Statusinvoice.setText(mDate.get(position).getStatus() + " Completed.");
+            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.txt_template_color));
+            holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
+            holder.txtType.setTextColor(context.getResources().getColor(R.color.txt_template_color));
+
+        }
+
+
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +115,8 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         } else {
             holder.tvIndent.setText("" + mDate.get(position).getIndent());
         }
+
+        holder.tvQty.setText(""+mDate.get(position).getQuantity());
     }
 
     @Override

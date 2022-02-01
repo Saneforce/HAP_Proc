@@ -153,8 +153,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-
-            tvHeader.setText("Sales " + sharedCommonPref.getvalue(Constants.FLAG));
+            if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Sales return"))
+                tvHeader.setText(sharedCommonPref.getvalue(Constants.FLAG));
+            else
+                tvHeader.setText("Sales " + sharedCommonPref.getvalue(Constants.FLAG));
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));

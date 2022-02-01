@@ -871,7 +871,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1045,7 +1045,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-        takeorder.setText("PROCEED TO CART");
+        takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
     }
 
@@ -1231,7 +1231,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         holder.rlStock.setVisibility(View.VISIBLE);
 
 
-                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
+                    holder.totalQty.setText("Total Pieces : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
@@ -1340,7 +1340,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.totalQty.setText("Total Pieces : " + (int) totQty);
                             }
 
 

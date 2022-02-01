@@ -199,7 +199,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvStartDate.setText(Common_Class.GetDatewothouttime());
             tvEndDate.setText(Common_Class.GetDatewothouttime());
 
-            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
             common_class.getDb_310Data(Constants.TAXList, this);
             common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
             //common_class.getDb_310Data(Constants.OUTSTANDING, this);
@@ -224,8 +223,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 //  common_class.getDentDatas(this);
                 findViewById(R.id.llSalesParent).setVisibility(View.VISIBLE);
                 findViewById(R.id.llSecParent).setVisibility(View.GONE);
-            }
+                common_class.getDataFromApi(Constants.SR_GetTodayOrder_List, this, false);
 
+            } else {
+                common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+
+            }
         } catch (Exception e) {
             Log.v(TAG, e.getMessage());
         }
@@ -242,7 +245,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                 if (common_class.checkDates(pos == 0 ? date : tvStartDate.getText().toString(), pos == 1 ? date : tvEndDate.getText().toString(), Invoice_History.this)) {
                     tv.setText(date);
-                    common_class.getDataFromApi(Constants.GetTodayOrder_List, Invoice_History.this, false);
+                    if (sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode).equalsIgnoreCase("SR"))
+                        common_class.getDataFromApi(Constants.SR_GetTodayOrder_List, Invoice_History.this, false);
+                    else
+
+                        common_class.getDataFromApi(Constants.GetTodayOrder_List, Invoice_History.this, false);
                 } else {
                     common_class.showMsg(Invoice_History.this, "Please select valid date");
                 }
@@ -715,27 +722,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         }
                         break;
                     case Constants.GetTodayOrder_List:
-                        FilterOrderList.clear();
-                        userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-                        }.getType();
-                        OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);
-                        if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-                            for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                                if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
-                                    FilterOrderList.add(filterlist);
-                                }
-                            }
-                        }
-                        mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
-                            @Override
-                            public void onIntentClick(int position) {
+                        setHistoryAdapter(apiDataResponse);
 
-                                navigatePrintScreen(position, FilterOrderList.get(position).getStatus());
-
-
-                            }
-                        });
-                        invoicerecyclerview.setAdapter(mReportViewAdapter);
+                        break;
+                    case Constants.SR_GetTodayOrder_List:
+                        setHistoryAdapter(apiDataResponse);
 
                         break;
 
@@ -758,6 +749,31 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             Log.v("Invoice History: ", e.getMessage());
 
         }
+    }
+
+    private void setHistoryAdapter(String apiDataResponse) {
+        FilterOrderList.clear();
+        userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+        }.getType();
+        OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);
+        if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
+            for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
+                if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
+                    FilterOrderList.add(filterlist);
+                }
+            }
+        }
+        mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
+            @Override
+            public void onIntentClick(int position) {
+
+                navigatePrintScreen(position, FilterOrderList.get(position).getStatus());
+
+
+            }
+        });
+        invoicerecyclerview.setAdapter(mReportViewAdapter);
+
     }
 
 
