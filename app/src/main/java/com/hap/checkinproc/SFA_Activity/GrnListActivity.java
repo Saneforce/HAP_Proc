@@ -166,6 +166,7 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
                                     Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
                                     Shared_Common_Pref.Invoicetoorder = "1";
                                     Intent intent = new Intent(getBaseContext(), Grn_Category_Select.class);
+                                  //  sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
                                     sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
                                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
@@ -181,7 +182,8 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
                                     Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
                                     Shared_Common_Pref.Invoicetoorder = "1";
                                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
+                                 //   sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
+                                    sharedCommonPref.save(Constants.FLAG, "GRN");
                                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
                                     intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());

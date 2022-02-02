@@ -33,7 +33,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/basic"
                     android:paddingLeft="@dimen/C5dp"
-                    android:text="INDENT HISTORY"
+                    android:text="GRN"
                     android:textAlignment="textStart"
                     android:textAllCaps="true"
                     android:textColor="#FFF"

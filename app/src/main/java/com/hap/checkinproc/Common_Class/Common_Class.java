@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.19";
+    public static String Version_Name = "ver 3.2.20";
     public static String Work_Type = "0";
     public static int count;
 
@@ -464,8 +464,8 @@ public class Common_Class {
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
-
-                        Log.v("Res>>", response.body().toString());
+String res=response.body().toString();
+                        Log.v("Res>>",""+res );
 
                     } catch (Exception e) {
 

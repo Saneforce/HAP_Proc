@@ -91,13 +91,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Gson gson;
     Type userTypeRetailor, userTypeReport;
     TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll,
-            txSrvOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
+            txSrvOtlt, txTotUniOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txTotUniOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
-    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
+    LinearLayout btnCmbRoute, btTotUniOtlt, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni;
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     String DCRMode;
-    String sDeptType, RetType = "1";
+    String sDeptType, RetType = "";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     DatabaseHandler db;
@@ -109,7 +109,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     private ViewPager viewPager;
     Switch swACOutlet, swOTHOutlet;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-    int CountUR = 0, CountSR = 0, CountCls = 0;
+    int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
@@ -189,12 +189,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llInvoice = findViewById(R.id.llInv);
             txSearchRet = findViewById(R.id.txSearchRet);
             txSrvOtlt = findViewById(R.id.txSrvOtlt);
+            txTotUniOtlt = findViewById(R.id.txTotUnivOtlt);
             txUniOtlt = findViewById(R.id.txUniOtlt);
             txClsOtlt = findViewById(R.id.txClsOtlt);
             txSrvOtltCnt = findViewById(R.id.txSrvOtltCnt);
             txUniOtltCnt = findViewById(R.id.txUniOtltCnt);
+            txTotUniOtltCnt = findViewById(R.id.txTotUnivOtltCnt);
             txClsOtltCnt = findViewById(R.id.txClsOtltCnt);
             btSrvOtlt = findViewById(R.id.btSrvOtlt);
+            btTotUniOtlt = findViewById(R.id.btTotUnivOtlt);
             btUniOtlt = findViewById(R.id.btUniOtlt);
             btClsOtlt = findViewById(R.id.btClsOtlt);
             ivBtnRpt = findViewById(R.id.ivBtnRpt);
@@ -207,6 +210,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             smryInvVal = findViewById(R.id.smryInvVal);
 
             undrServ = findViewById(R.id.undrServ);
+            underTotUni = findViewById(R.id.undrTotUniv);
             undrUni = findViewById(R.id.undrUni);
             undrCls = findViewById(R.id.undrCls);
 
@@ -229,13 +233,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llNoOrder.setOnClickListener(this);
             llInvoice.setOnClickListener(this);
 
-            txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-            txSrvOtlt.setTypeface(null, Typeface.BOLD);
 
-            undrServ.setVisibility(View.VISIBLE);
+            txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            txTotUniOtlt.setTypeface(null, Typeface.BOLD);
+            underTotUni.setVisibility(View.VISIBLE);
+
+            undrServ.setVisibility(View.INVISIBLE);
             undrUni.setVisibility(View.INVISIBLE);
             undrCls.setVisibility(View.INVISIBLE);
-
+            txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+            txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txUniOtlt.setTypeface(null, Typeface.NORMAL);
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
@@ -283,13 +290,41 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     undrServ.setVisibility(View.VISIBLE);
                     undrUni.setVisibility(View.INVISIBLE);
                     undrCls.setVisibility(View.INVISIBLE);
+                    underTotUni.setVisibility(View.INVISIBLE);
 
                     txUniOtlt.setTypeface(null, Typeface.NORMAL);
                     txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     txClsOtlt.setTypeface(null, Typeface.NORMAL);
                     txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
                     setPagerAdapter(false);
                     // SearchRetailers();
+                }
+            });
+
+            btTotUniOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RetType = "";
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txTotUniOtlt.setTypeface(null, Typeface.BOLD);
+
+                    underTotUni.setVisibility(View.VISIBLE);
+                    undrServ.setVisibility(View.INVISIBLE);
+                    undrUni.setVisibility(View.INVISIBLE);
+                    undrCls.setVisibility(View.INVISIBLE);
+
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                    setPagerAdapter(false);
+
                 }
             });
             btUniOtlt.setOnClickListener(new View.OnClickListener() {
@@ -301,10 +336,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     undrUni.setVisibility(View.VISIBLE);
                     undrServ.setVisibility(View.INVISIBLE);
                     undrCls.setVisibility(View.INVISIBLE);
+                    underTotUni.setVisibility(View.INVISIBLE);
                     txSrvOtlt.setTypeface(null, Typeface.NORMAL);
                     txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     txClsOtlt.setTypeface(null, Typeface.NORMAL);
                     txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
 
                     setPagerAdapter(false);
                 }
@@ -318,11 +356,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     undrCls.setVisibility(View.VISIBLE);
                     undrUni.setVisibility(View.INVISIBLE);
                     undrServ.setVisibility(View.INVISIBLE);
+                    underTotUni.setVisibility(View.INVISIBLE);
 
                     txSrvOtlt.setTypeface(null, Typeface.NORMAL);
                     txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     txUniOtlt.setTypeface(null, Typeface.NORMAL);
                     txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
 
                     setPagerAdapter(false);
                 }
@@ -475,7 +516,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     public void getRetailerChannel() {
         modelRetailChannel.clear();
-        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
                 "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
@@ -492,10 +533,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                         String className = String.valueOf(jsonObject.get("name"));
                         String id = String.valueOf(jsonObject.get("id"));
+                        String approval = String.valueOf(jsonObject.get("NeedApproval"));
 
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                         Log.e("RETAILER_Channel_NAME", retailerClass);
-                        Common_Model mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
+                        Common_Model mCommon_model_spinner = new Common_Model(id, retailerClass, approval);
                         Log.e("LeaveType_Request", retailerClass);
                         modelRetailChannel.add(mCommon_model_spinner);
                     }
@@ -852,6 +894,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                             }
 
+                            txUniOtltCnt.setText("" + jsonArray.length());
                             shared_common_pref.save(Constants.RETAILER_STATUS, outletCode);
 
                             Log.v("statusList:", outletCode);
@@ -883,6 +926,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             CountUR = 0;
             CountSR = 0;
             CountCls = 0;
+            CountTotUni = 0;
+
 
             for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 boolean ACTrue = false;
@@ -899,7 +944,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 }
 
                 if (DCRMode.equalsIgnoreCase("SR") && Common_Class.isNullOrEmpty(Retailer_Modal_List.get(i).getCustomerCode()))
-                    ACTrue=false;
+                    ACTrue = false;
 
                 if (Retailer_Modal_List.get(i).getType() == null)
                     Retailer_Modal_List.get(i).setType("0");
@@ -907,6 +952,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1") && ACTrue) CountSR++;
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("2") && ACTrue)
                     CountCls++;
+
+                if ((Retailer_Modal_List.get(i).getType().equalsIgnoreCase("0") ||
+                        Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) && ACTrue)
+                    CountTotUni++;
                 if (ACTrue) {
                     Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                 }
@@ -914,7 +963,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             txUniOtltCnt.setText(String.valueOf(CountUR));
             txSrvOtltCnt.setText(String.valueOf(CountSR));
             txClsOtltCnt.setText(String.valueOf(CountCls));
-
+            txTotUniOtltCnt.setText(String.valueOf(CountTotUni));
             // Retailer_Modal_ListFilter = Retailer_Modal_List;
 
             if (isFilter) {

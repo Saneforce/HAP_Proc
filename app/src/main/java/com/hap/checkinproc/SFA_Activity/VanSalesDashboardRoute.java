@@ -90,13 +90,13 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     Gson gson;
     Type userTypeRetailor, userTypeReport;
     TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll, tvStockLoad, tvStockUnload,
-            txSrvOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
+            txTotUniOtlt, txTotUniOtltCnt, txSrvOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
-    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
+    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni, btTotUniOtlt;
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     String DCRMode;
-    String sDeptType, RetType = "1";
+    String sDeptType, RetType = "";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     DatabaseHandler db;
@@ -108,7 +108,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     private ViewPager viewPager;
     Switch swACOutlet, swOTHOutlet;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-    int CountUR = 0, CountSR = 0, CountCls = 0;
+    int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
@@ -214,6 +214,11 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             tabLayout = findViewById(R.id.tabs);
             tvStockLoad = findViewById(R.id.tvStockLoad);
             tvStockUnload = findViewById(R.id.tvStockUnload);
+            btTotUniOtlt = findViewById(R.id.btTotUnivOtlt);
+            txTotUniOtltCnt = findViewById(R.id.txTotUnivOtltCnt);
+            txTotUniOtlt = findViewById(R.id.txTotUnivOtlt);
+            underTotUni = findViewById(R.id.undrTotUniv);
+
 
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
@@ -228,13 +233,15 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             tvStockLoad.setOnClickListener(this);
             tvStockUnload.setOnClickListener(this);
 
-            txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-            txSrvOtlt.setTypeface(null, Typeface.BOLD);
+            txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            txTotUniOtlt.setTypeface(null, Typeface.BOLD);
+            underTotUni.setVisibility(View.VISIBLE);
 
-            undrServ.setVisibility(View.VISIBLE);
+            undrServ.setVisibility(View.INVISIBLE);
             undrUni.setVisibility(View.INVISIBLE);
             undrCls.setVisibility(View.INVISIBLE);
-
+            txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+            txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txUniOtlt.setTypeface(null, Typeface.NORMAL);
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
@@ -282,13 +289,41 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                     undrServ.setVisibility(View.VISIBLE);
                     undrUni.setVisibility(View.INVISIBLE);
                     undrCls.setVisibility(View.INVISIBLE);
+                    underTotUni.setVisibility(View.INVISIBLE);
 
                     txUniOtlt.setTypeface(null, Typeface.NORMAL);
                     txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     txClsOtlt.setTypeface(null, Typeface.NORMAL);
                     txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
                     setPagerAdapter(false);
                     // SearchRetailers();
+                }
+            });
+
+            btTotUniOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RetType = "";
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txTotUniOtlt.setTypeface(null, Typeface.BOLD);
+
+                    underTotUni.setVisibility(View.VISIBLE);
+                    undrServ.setVisibility(View.INVISIBLE);
+                    undrUni.setVisibility(View.INVISIBLE);
+                    undrCls.setVisibility(View.INVISIBLE);
+
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                    setPagerAdapter(false);
+
                 }
             });
             btUniOtlt.setOnClickListener(new View.OnClickListener() {
@@ -300,10 +335,14 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                     undrUni.setVisibility(View.VISIBLE);
                     undrServ.setVisibility(View.INVISIBLE);
                     undrCls.setVisibility(View.INVISIBLE);
+                    underTotUni.setVisibility(View.INVISIBLE);
                     txSrvOtlt.setTypeface(null, Typeface.NORMAL);
                     txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     txClsOtlt.setTypeface(null, Typeface.NORMAL);
                     txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
 
                     setPagerAdapter(false);
                 }
@@ -317,11 +356,15 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                     undrCls.setVisibility(View.VISIBLE);
                     undrUni.setVisibility(View.INVISIBLE);
                     undrServ.setVisibility(View.INVISIBLE);
+                    underTotUni.setVisibility(View.INVISIBLE);
 
                     txSrvOtlt.setTypeface(null, Typeface.NORMAL);
                     txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
                     txUniOtlt.setTypeface(null, Typeface.NORMAL);
                     txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
 
                     setPagerAdapter(false);
                 }
@@ -818,6 +861,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             CountUR = 0;
             CountSR = 0;
             CountCls = 0;
+            CountTotUni = 0;
+
 
             for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 boolean ACTrue = false;
@@ -836,6 +881,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1") && ACTrue) CountSR++;
                 if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("2") && ACTrue)
                     CountCls++;
+                if ((Retailer_Modal_List.get(i).getType().equalsIgnoreCase("0") ||
+                        Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) && ACTrue)
+                    CountTotUni++;
                 if (ACTrue) {
                     Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                 }
@@ -843,9 +891,11 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             txUniOtltCnt.setText(String.valueOf(CountUR));
             txSrvOtltCnt.setText(String.valueOf(CountSR));
             txClsOtltCnt.setText(String.valueOf(CountCls));
+            txTotUniOtltCnt.setText(String.valueOf(CountTotUni));
+
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType,"","");
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", "");
             } else {
                 adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());

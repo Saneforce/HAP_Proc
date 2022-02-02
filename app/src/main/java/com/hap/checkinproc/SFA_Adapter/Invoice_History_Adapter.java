@@ -83,6 +83,14 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         }
 
 
+
+        if (mDate.get(position).getStatus().equalsIgnoreCase("Completed")) {
+            holder.Statusinvoice.setText("GRN Complete.");
+            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
+            holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
+
+        }
+
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
