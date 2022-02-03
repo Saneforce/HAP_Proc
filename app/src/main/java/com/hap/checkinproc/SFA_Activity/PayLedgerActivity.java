@@ -2,10 +2,10 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,12 +19,10 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PayLedger_Adapter;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class PayLedgerActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     public TextView tvOutletName, tvStartDate, tvEndDate;
@@ -35,6 +33,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
     private String date;
     Shared_Common_Pref sharedCommonPref;
     public static String ledgerFDT = "", ledgerTDT = "";
+    TextView tvGrandTot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         tvOutletName = findViewById(R.id.retailername);
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
+        tvGrandTot = findViewById(R.id.txtTotCBAmt);
 
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
@@ -95,7 +95,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (common_class.checkDates(date, tvEndDate.getText().toString(),PayLedgerActivity.this) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(), PayLedgerActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         ledgerFDT = tvStartDate.getText().toString();
@@ -107,7 +107,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
                 } else {
-                    if (common_class.checkDates(tvStartDate.getText().toString(), date,PayLedgerActivity.this) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date, PayLedgerActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         ledgerTDT = tvEndDate.getText().toString();
@@ -139,12 +139,19 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                         JSONArray legList = new JSONArray(apiDataResponse);
                         plAdapter = new PayLedger_Adapter(this, legList);
                         rvLedger.setAdapter(plAdapter);
+
+                        double totAmt = 0;
+                        for (int i = 0; i < legList.length(); i++) {
+                            JSONObject obj = legList.getJSONObject(i);
+                            totAmt += obj.getDouble("ClAmt");
+                        }
+                        tvGrandTot.setText("₹" + new DecimalFormat("##0.00").format(totAmt));
                         break;
                 }
             }
 
         } catch (Exception e) {
-
+Log.v("LEDGER:",e.getMessage());
         }
     }
 }

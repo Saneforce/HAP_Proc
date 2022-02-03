@@ -1038,32 +1038,39 @@
             android:layout_weight="0.8"
             android:orientation="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/C10dp"
                 android:layout_marginRight="@dimen/C10dp"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                tools:ignore="MissingConstraints">
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/C5dp">
 
-                <RelativeLayout
+                <com.google.android.material.appbar.AppBarLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    tools:ignore="MissingConstraints">
 
-                    <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/tabs"
-                        style="@style/TabTextStyle"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        app:tabRippleColor="@color/Hap_location"
-                        android:background="@color/white"
-                        app:tabGravity="fill"
-                        app:tabIndicatorColor="@color/colorPrimaryDark"
-                        app:tabIndicatorHeight="2dp"
-                        app:tabTextColor="@color/colorPrimaryDark" />
+                        android:layout_height="wrap_content">
 
-                </RelativeLayout>
-            </com.google.android.material.appbar.AppBarLayout>
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tabs"
+                            android:background="@color/white"
+                            style="@style/TabTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/colorPrimaryDark"
+                            app:tabIndicatorHeight="2dp"
+                            app:tabRippleColor="@color/Hap_location"
+                            app:tabTextColor="@color/colorPrimaryDark" />
+
+                    </RelativeLayout>
+                </com.google.android.material.appbar.AppBarLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
