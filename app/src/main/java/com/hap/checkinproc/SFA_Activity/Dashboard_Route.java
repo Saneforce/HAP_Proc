@@ -51,8 +51,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
-import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.PushNotification.MyFirebaseMessagingService;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.OutletCategoryFilterAdapter;
@@ -78,7 +76,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface, UpdateResponseUI {
+public class Dashboard_Route extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
     public static Dashboard_Route dashboard_route;
@@ -232,6 +230,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llNewOrder.setOnClickListener(this);
             llNoOrder.setOnClickListener(this);
             llInvoice.setOnClickListener(this);
+            ivBtnRpt.setOnClickListener(this);
 
 
             txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -247,13 +246,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
             txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-
-            ivBtnRpt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
-                }
-            });
             txtOrdDate.setText(DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
 
             swACOutlet.setOnClickListener(new View.OnClickListener() {
@@ -300,7 +292,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
 
                     setPagerAdapter(false);
-                    // SearchRetailers();
+
                 }
             });
 
@@ -645,18 +637,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_PERMISSIONS_REQUEST_CODE:
-                if (grantResults.length > 0) {
-
-                }
-        }
-    }
-
-
     private void getLastInvoiceData() {
         try {
 
@@ -724,6 +704,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivBtnRpt:
+                common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
+                break;
 
             case R.id.llOrder:
                 if (smryOrd.getText().toString().equals("0"))
@@ -786,19 +769,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void hideProgress() {
-    }
-
-    @Override
-    public void setDataToRoute(ArrayList<Route_Master> noticeArrayList) {
-        Log.e("ROUTE_MASTER", String.valueOf(noticeArrayList.size()));
-    }
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
@@ -829,15 +799,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    @Override
-    public void setDataToRouteObject(Object noticeArrayList, int position) {
-    }
-
-    @Override
-    public void onResponseFailure(Throwable throwable) {
-
-
-    }
 
     public void loadroute() {
 

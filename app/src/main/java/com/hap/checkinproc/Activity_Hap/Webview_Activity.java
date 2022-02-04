@@ -30,6 +30,8 @@ public class Webview_Activity extends AppCompatActivity {
         wv1.loadUrl("https://www.google.com/maps?q=" + i.getExtras().getString("Locations"));
 
     }
+
+
     private class MyBrowser extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

@@ -133,7 +133,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         setOnClickListener();
 
 
-
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             common_class.getDb_310Data(Constants.Distributor_List, this);
         }
@@ -209,7 +208,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
                         break;
                     case "Reports":
+                        //  common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
                         common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
+
                         break;
                     case "My Team":
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);

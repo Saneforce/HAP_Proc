@@ -28,7 +28,6 @@ public class OutletApprovListActivity extends AppCompatActivity {
             tvStatus = findViewById(R.id.tvOutletSta);
 
             JSONObject student1 = new JSONObject();
-
             student1.put("name", "Abinaya Store");
             student1.put("des", "No 4,Chemiers Road,Nandanam,Chennai.");
             student1.put("ho", "Abinaya");
@@ -36,14 +35,12 @@ public class OutletApprovListActivity extends AppCompatActivity {
 
 
             JSONObject student2 = new JSONObject();
-
             student2.put("name", "Mahalakshmi Store");
             student2.put("des", "No 11,9th Block Street,Anna nagar,Chennai.");
             student2.put("ho", "Lakshmi");
             student2.put("date", "2022-01-17");
 
             JSONArray jsonArray = new JSONArray();
-
             jsonArray.put(student1);
             jsonArray.put(student2);
 

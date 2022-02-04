@@ -110,7 +110,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
-    private TextView tvTotalAmount, tvBalAmt, tvNetAmtTax,tvDate,tvDay;
+    private TextView tvTotalAmount, tvBalAmt, tvNetAmtTax, tvDate, tvDay;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
@@ -169,8 +169,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvPosOrders = findViewById(R.id.tvPosOrders);
             tvPayMode = findViewById(R.id.tvPayMode);
             tvBalAmt = findViewById(R.id.tvBalance);
-            tvDate=findViewById(R.id.tvDate);
-            tvDay=findViewById(R.id.tvDay);
+            tvDate = findViewById(R.id.tvDate);
+            tvDay = findViewById(R.id.tvDay);
 
 
             ivScanner.setOnClickListener(this);
@@ -189,9 +189,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
 
-            tvDate.setText(""+DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
+            tvDate.setText("" + DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-            tvDay.setText(""+sdf.format(new Date()));
+            tvDay.setText("" + sdf.format(new Date()));
 
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -430,7 +430,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
 
             common_class.getDb_310Data(Constants.CURRENT_STOCK, this);
-
 
 
         } catch (Exception e) {
@@ -1140,8 +1139,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                             for (int l = 0; l < list.size(); l++) {
                                 int split = list.get(l).indexOf(":");
-                                String name = list.get(l).substring(1, split-1);
-                                String cnt = list.get(l).substring(split+1, list.get(l).length());
+                                String name = list.get(l).substring(1, split - 1);
+                                String cnt = list.get(l).substring(split + 1, list.get(l).length());
+
+                                if (name.equalsIgnoreCase("SoldValue"))
+                                    cnt = "₹" + cnt;
                                 approvalList.add(new Dashboard_View_Model(name, cnt));
                             }
 
@@ -1240,7 +1242,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     break;
             }
         } catch (Exception e) {
-Log.v(TAG,e.getMessage());
+            Log.v(TAG, e.getMessage());
         }
     }
 

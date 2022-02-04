@@ -111,6 +111,13 @@
         <activity android:name=".SFA_Activity.Outlet_Report_View" />
         <activity android:name=".SFA_Activity.Reports_Outler_Name" />
         <activity
+            android:name=".SFA_Activity.ReportsListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".SFA_Activity.WebReportsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.OutletApprovListActivity"
             android:screenOrientation="portrait" />
         <activity
