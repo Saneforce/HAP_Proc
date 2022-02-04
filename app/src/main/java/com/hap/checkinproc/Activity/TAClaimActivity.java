@@ -248,7 +248,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     SharedPreferences.Editor editors;
     JsonArray jsonArray = null, ExpSetup=null, trvPlcsArray=null, jsonFuelAllowance = null, jsonExpHead = null, lcDraftArray = null, oeDraftArray = null,
     trvldArray = null, ldArray = null, travelDetails = null, LodingCon = null, StayDate = null;
-    JSONArray jLCitems,jOEitems;
+    JSONArray jLCitems,jOEitems,jArrAttach;
     RecyclerView mFuelRecycler;
     double continueStay = 0.0;
     Double fuelAmt = 0.0;
@@ -409,6 +409,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         lnChangePlace=findViewById(R.id.lnChangePlace);
         imgEdtPlace=findViewById(R.id.img_edit);
         scrlMain=findViewById(R.id.scrlMain);
+
+        jArrAttach=new JSONArray();
 
         lodgCont = findViewById(R.id.lodgCont);
         lodgContvw = findViewById(R.id.lodgContvw);
@@ -3687,7 +3689,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                     lodUKey = txtLodgUKey.getText().toString();
                     sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey+";"+FileName;
-
+                    try {
+                        JSONObject jItem=new JSONObject();
+                        jItem.put("Mode","LOD");
+                        jItem.put("DtTm",DateTime);
+                        jItem.put("UKey",lodUKey);
+                        jItem.put("Type","Room");
+                        jItem.put("IKey",ImageUKey);
+                        jItem.put("FName",FileName);
+                        jArrAttach.put(jItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if(reqCode==123){
                     if (tvTxtUKeys.getText().toString().equals("")) {
@@ -3698,6 +3711,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                     TlUKey = tvTxtUKeys.getText().toString();
                     sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey+";"+FileName;
+                    try {
+                        JSONObject jItem=new JSONObject();
+                        jItem.put("Mode","TL");
+                        jItem.put("DtTm",DateTime);
+                        jItem.put("UKey",TlUKey);
+                        jItem.put("Type",editMode);
+                        jItem.put("IKey",ImageUKey);
+                        jItem.put("FName",FileName);
+                        jArrAttach.put(jItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if(reqCode==99){
                     if (oeTxtUKeys.getText().toString().equals("")) {
@@ -3709,6 +3734,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     OeUKey = oeTxtUKeys.getText().toString();
                     sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey+";"+FileName;
+                    try {
+                        JSONObject jItem=new JSONObject();
+                        jItem.put("Mode","OE");
+                        jItem.put("DtTm",DateTime);
+                        jItem.put("UKey",OeUKey);
+                        jItem.put("Type",editMode);
+                        jItem.put("IKey",ImageUKey);
+                        jItem.put("FName",FileName);
+                        jArrAttach.put(jItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if(reqCode==786){
                     if (lcTxtUKeys.getText().toString().equals("")) {
@@ -3719,15 +3756,27 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                     LcUKey = lcTxtUKeys.getText().toString();
                     sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey+";"+FileName;
+                    try {
+                        JSONObject jItem=new JSONObject();
+                        jItem.put("Mode","LC");
+                        jItem.put("DtTm",DateTime);
+                        jItem.put("UKey",LcUKey);
+                        jItem.put("Type",editMode);
+                        jItem.put("IKey",ImageUKey);
+                        jItem.put("FName",FileName);
+                        jArrAttach.put(jItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                UploadPhoto(fullPath,UserDetails.getString("Sfcode",""),FileName,"ExpClaim;"+sMode);
+                UploadPhoto(fullPath,UserDetails.getString("Sfcode",""),FileName,"TAPhotos");
 
-                Intent mIntent = new Intent(TAClaimActivity.this, FileUploadService.class);
+              /*  Intent mIntent = new Intent(TAClaimActivity.this, FileUploadService.class);
                 mIntent.putExtra("mFilePath", fullPath);
                 mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
                 mIntent.putExtra("FileName", FileName);
                 mIntent.putExtra("Mode", "ExpClaim;"+sMode);
-                FileUploadService.enqueueWork(TAClaimActivity.this, mIntent);
+                FileUploadService.enqueueWork(TAClaimActivity.this, mIntent);*/
             }
         });
         Intent intent = new Intent(TAClaimActivity.this, AllowancCapture.class);
@@ -4100,6 +4149,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             jsonData.put("Trv_details", trDet);
             jsonData.put("Lodg_details", ldgSave);
             jsonData.put("Da_Claim", daAll);
+            jsonData.put("TAAttach",jArrAttach);
+
             transHead.put(jsonData);
 
             /*ImageStore();*/
@@ -5206,7 +5257,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 file = new File(mFilePath);
 
             TransferObserver uploadObserver =
-                    transferUtility.upload("happic","TAPhotos/" + FileName , file);
+                    transferUtility.upload("happic",Mode+"/" + FileName , file);
 
             uploadObserver.setTransferListener(new TransferListener() {
 
