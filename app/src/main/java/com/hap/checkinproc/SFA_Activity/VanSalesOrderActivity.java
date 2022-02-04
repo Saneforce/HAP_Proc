@@ -858,7 +858,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -978,7 +978,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-        takeorder.setText("PROCEED TO CART");
+        takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
     }
 

@@ -45,6 +45,7 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -53,9 +54,11 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.Dashboard_View_Adapter;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
@@ -67,7 +70,10 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -96,7 +102,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
-    String TAG = "Order_Category_Select";
+    String TAG = "POSACTIVITY";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose, ivScanner, ivMns, ivPlus, ImgVProd;
@@ -104,7 +110,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
-    private TextView tvTotalAmount, tvBalAmt, tvNetAmtTax;
+    private TextView tvTotalAmount, tvBalAmt, tvNetAmtTax,tvDate,tvDay;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
@@ -117,6 +123,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private double payAmt;
     private double totTax;
 
+    RecyclerView rvCurrentStk;
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -126,7 +135,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             sharedCommonPref = new Shared_Common_Pref(this);
             common_class = new Common_Class(this);
 
-
+            rvCurrentStk = findViewById(R.id.rvCurntStk);
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
@@ -160,6 +169,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvPosOrders = findViewById(R.id.tvPosOrders);
             tvPayMode = findViewById(R.id.tvPayMode);
             tvBalAmt = findViewById(R.id.tvBalance);
+            tvDate=findViewById(R.id.tvDate);
+            tvDay=findViewById(R.id.tvDay);
 
 
             ivScanner.setOnClickListener(this);
@@ -177,6 +188,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Ukey = Common_Class.GetEkey();
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
+
+            tvDate.setText(""+DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+            tvDay.setText(""+sdf.format(new Date()));
 
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -411,7 +426,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
             common_class.getDb_310Data(Constants.STOCK_DATA, this);
-            common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX)))
+                common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
+
+            common_class.getDb_310Data(Constants.CURRENT_STOCK, this);
+
+
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -995,7 +1015,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvNetAmtTax.setText("₹ " + totTax);
 
             tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-            tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+            tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
             if (Getorder_Array_List.size() == 1)
                 tvTotLabel.setText("Price (1 item)");
@@ -1103,6 +1123,39 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
 
             switch (key) {
+                case Constants.CURRENT_STOCK:
+                    Log.v("POS_CURRENT_STK:", apiDataResponse);
+
+                    JSONObject currStkObj = new JSONObject(apiDataResponse);
+                    List<Dashboard_View_Model> approvalList = new ArrayList<>();
+
+                    if (currStkObj.getBoolean("success")) {
+                        JSONArray arr = currStkObj.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject obj = arr.getJSONObject(i);
+                            String val = obj.toString();
+                            String result = val.replaceAll("[(){}]", "");
+
+                            List<String> list = Arrays.asList(result.split(","));
+
+                            for (int l = 0; l < list.size(); l++) {
+                                int split = list.get(l).indexOf(":");
+                                String name = list.get(l).substring(1, split-1);
+                                String cnt = list.get(l).substring(split+1, list.get(l).length());
+                                approvalList.add(new Dashboard_View_Model(name, cnt));
+                            }
+
+                        }
+                    }
+
+
+                    rvCurrentStk.setAdapter(new Dashboard_View_Adapter(approvalList, R.layout.adapter_current_stk_layout, getApplicationContext(), new AdapterOnClick() {
+                        @Override
+                        public void onIntentClick(int Name) {
+
+                        }
+                    }));
+                    break;
                 case Constants.POS_NETAMT_TAX:
                     Log.v("POS_NETAMT_TAX:", apiDataResponse);
                     break;
@@ -1187,7 +1240,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     break;
             }
         } catch (Exception e) {
-
+Log.v(TAG,e.getMessage());
         }
     }
 
@@ -1289,7 +1342,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-        takeorder.setText("PROCEED TO CART");
+        takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
     }
 
@@ -1306,7 +1359,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             }
         }
 
-        if (takeorder.getText().toString().equals("PROCEED TO CART")) {
+        if (takeorder.getText().toString().equals("PROCEED")) {
             mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), selectedPos);
             recyclerView.setAdapter(mProdct_Adapter);
         } else {
@@ -1631,9 +1684,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     holder.tvStock.setText("" + (int) (balance - order));
                             }
 
-                        }
-                        catch (Exception e){
-                            Log.v(TAG+"QtyMns:",e.getMessage());
+                        } catch (Exception e) {
+                            Log.v(TAG + "QtyMns:", e.getMessage());
                         }
                     }
                 });

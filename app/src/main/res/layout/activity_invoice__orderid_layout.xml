@@ -736,7 +736,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/C15dp"
                 android:drawableTint="@color/white"
-                android:text="PROCEED TO CART"
+                android:text="PROCEED"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold" />

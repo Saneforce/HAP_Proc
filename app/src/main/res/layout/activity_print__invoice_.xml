@@ -679,12 +679,12 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-android:visibility="gone"
                         android:id="@+id/cvPayDetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C5dp"
                         android:layout_marginBottom="@dimen/C5dp"
+                        android:visibility="gone"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -794,7 +794,7 @@ android:visibility="gone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="sans-serif-black"
-                                        android:text="Return Invoice"
+                                        android:text="Sales Return Invoice"
                                         android:textAllCaps="true"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C15dp"></TextView>
@@ -1039,7 +1039,7 @@ android:visibility="gone"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif-black"
-                                    android:text="Return Amount"
+                                    android:text="Sales Return Amount"
                                     android:textAlignment="textStart"
                                     android:textAllCaps="true"
                                     android:textColor="@color/black"
@@ -1060,9 +1060,9 @@ android:visibility="gone"
                             </RelativeLayout>
 
                             <LinearLayout
-                                android:layout_marginTop="@dimen/C15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C15dp"
                                 android:padding="@dimen/C5dp">
 
 

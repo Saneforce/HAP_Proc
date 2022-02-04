@@ -403,7 +403,7 @@
                             android:layout_marginTop="@dimen/C3dp"
                             android:gravity="center_vertical"
                             android:inputType="number"
-                            android:text="Total Qty : 0"
+                            android:text="Total Pieces : 0"
                             android:textColor="@color/txt_color_black"
                             android:visibility="visible" />
 

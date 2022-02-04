@@ -685,7 +685,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1705,7 +1705,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         rlAddProduct.setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-        takeorder.setText("PROCEED TO CART");
+        takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
 
 

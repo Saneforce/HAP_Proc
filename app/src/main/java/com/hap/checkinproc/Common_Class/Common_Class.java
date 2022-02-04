@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.19";
+    public static String Version_Name = "ver 3.2.20";
     public static String Work_Type = "0";
     public static int count;
 
@@ -342,6 +342,12 @@ public class Common_Class {
                     QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
                     QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
                     break;
+
+                case Constants.SR_GetTodayOrder_List:
+                    QuerySTring1 = "{\"tableName\":\"getsalesandstockreturn\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
+                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    break;
                 case Constants.GetGrn_List:
                     QuerySTring1 = "{\"tableName\":\"getindentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", GrnListActivity.tvStartDate.getText().toString());
@@ -458,8 +464,8 @@ public class Common_Class {
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
-
-                        Log.v("Res>>", response.body().toString());
+String res=response.body().toString();
+                        Log.v("Res>>",""+res );
 
                     } catch (Exception e) {
 
@@ -510,6 +516,13 @@ public class Common_Class {
                         axnname = "get/tcstax";
                         data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
+
+                    case Constants.CURRENT_STOCK:
+                        axnname = "get/currentstock";
+                        QueryString.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        QueryString.put("Dt", Common_Class.GetDatewothouttime());
+                        break;
+
 
                     case Constants.STOCK_DATA:
                         axnname = "get/stockistledger";

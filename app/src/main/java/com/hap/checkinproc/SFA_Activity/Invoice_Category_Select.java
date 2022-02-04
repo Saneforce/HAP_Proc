@@ -822,7 +822,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size());
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1823,7 +1823,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         rlAddProduct.setVisibility(View.GONE);
         btnRepeat.setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-        takeorder.setText("PROCEED TO CART");
+        takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
 
 

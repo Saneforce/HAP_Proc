@@ -886,7 +886,7 @@
                 android:drawableTint="@color/white"
                 android:gravity="center_vertical"
                 android:padding="@dimen/C5dp"
-                android:text="PROCEED TO CART"
+                android:text="PROCEED"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"

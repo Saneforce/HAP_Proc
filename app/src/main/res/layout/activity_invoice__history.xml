@@ -525,7 +525,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/sno"
                         android:gravity="center"
-                        android:text="Invoice ID"
+                        android:text="Description"
                         android:textColor="@color/white"
                         android:textSize="@dimen/C14dp"></TextView>
                 </LinearLayout>

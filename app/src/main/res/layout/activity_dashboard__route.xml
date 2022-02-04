@@ -140,6 +140,7 @@
             android:padding="@dimen/C3dp">
 
             <TextView
+                android:id="@+id/headtext"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -480,7 +481,6 @@
                         android:padding="@dimen/C8dp">
 
                         <TextView
-                            android:id="@+id/headtext"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -565,6 +565,75 @@
                         android:gravity="center_horizontal">
 
                         <LinearLayout
+                            android:id="@+id/btTotUnivOtlt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/C20dp"
+                                android:layout_height="@dimen/C20dp"
+                                android:padding="@dimen/C1dp"
+                                android:src="@drawable/ic_outline_shopping_cart_24" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/txTotUnivOtlt"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="@dimen/C5dp"
+                                    android:text="Universe"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:id="@+id/undrTotUniv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="2dp"
+                                    android:layout_marginLeft="@dimen/C5dp"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:orientation="horizontal" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/txTotUnivOtltCnt"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C2dp"
+                                        android:text="0"
+                                        android:textAlignment="center"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="@dimen/C2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/grey_200" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal">
+
+                        <LinearLayout
                             android:id="@+id/btSrvOtlt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -589,9 +658,7 @@
                                     android:paddingLeft="@dimen/C5dp"
                                     android:text="Service"
                                     android:textAlignment="center"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="13sp" />
 
                                 <LinearLayout
                                     android:id="@+id/undrServ"
@@ -599,7 +666,8 @@
                                     android:layout_height="2dp"
                                     android:layout_marginLeft="@dimen/C5dp"
                                     android:background="@color/colorPrimaryDark"
-                                    android:orientation="horizontal" />
+                                    android:orientation="horizontal"
+                                    android:visibility="invisible" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -692,14 +760,16 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/grey_200" />
+                        android:background="@color/grey_200"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:id="@+id/btClsOtlt"
@@ -761,6 +831,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/C5dp">
 
                 <LinearLayout
@@ -967,31 +1038,39 @@
             android:layout_weight="0.8"
             android:orientation="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/C10dp"
                 android:layout_marginRight="@dimen/C10dp"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                tools:ignore="MissingConstraints">
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/C5dp">
 
-                <RelativeLayout
+                <com.google.android.material.appbar.AppBarLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    tools:ignore="MissingConstraints">
 
-                    <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/tabs"
-                        style="@style/TabTextStyle"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:background="@drawable/blue_bg"
+                        android:layout_height="wrap_content">
 
-                        app:tabGravity="fill"
-                        app:tabIndicatorColor="@android:color/white"
-                        app:tabIndicatorHeight="2dp" />
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tabs"
+                            android:background="@color/white"
+                            style="@style/TabTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/colorPrimaryDark"
+                            app:tabIndicatorHeight="2dp"
+                            app:tabRippleColor="@color/Hap_location"
+                            app:tabTextColor="@color/colorPrimaryDark" />
 
-                </RelativeLayout>
-            </com.google.android.material.appbar.AppBarLayout>
+                    </RelativeLayout>
+                </com.google.android.material.appbar.AppBarLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"

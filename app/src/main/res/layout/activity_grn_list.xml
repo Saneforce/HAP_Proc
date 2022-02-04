@@ -33,7 +33,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/basic"
                     android:paddingLeft="@dimen/C5dp"
-                    android:text="INDENT HISTORY"
+                    android:text="GRN"
                     android:textAlignment="textStart"
                     android:textAllCaps="true"
                     android:textColor="#FFF"
@@ -178,7 +178,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/sno"
                         android:gravity="center"
-                        android:text="Invoice ID"
+                        android:text="Description"
                         android:textColor="@color/white"
                         android:textSize="@dimen/C14dp"></TextView>
                 </LinearLayout>
