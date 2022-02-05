@@ -399,7 +399,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             }.getType();
 
           //  if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
-                getRetailerChannel();
+              //  getRetailerChannel();
 
 //            else {
 //                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
@@ -449,16 +449,16 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                         modelRetailChannel.add(mCommon_model_spinner);
                     }
 
-                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
-                        rvMasterCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, Dashboard_Route.this, new AdapterOnClick() {
-                            @Override
-                            public void CallMobile(String categoryName) {
-                                setOutletCategoryAdapter();
-                            }
-                        }));
-
-                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
-                    }
+//                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+//                        rvMasterCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, Dashboard_Route.this, new AdapterOnClick() {
+//                            @Override
+//                            public void CallMobile(String categoryName) {
+//                                setOutletCategoryAdapter();
+//                            }
+//                        }));
+//
+//                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
+//                    }
 
                 } catch (Exception e) {
                     Log.v(" getRetailerChannel: ", e.getMessage());
@@ -476,14 +476,14 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
     void setOutletCategoryAdapter() {
         try {
-            ArrayList<Common_Model> list = new ArrayList<>();
+            ArrayList<String> list = new ArrayList<>();
             for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
-                list.add(new Common_Model(Retailer_Modal_ListFilter.get(i).getSpeciality()));
+                list.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
             }
             HashSet hs = new HashSet();
             hs.addAll(list);
             list.clear();
-            list.add(new Common_Model("ALL"));
+            list.add("ALL");
             list.addAll(hs);
 
             rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(list, this, new AdapterOnClick() {

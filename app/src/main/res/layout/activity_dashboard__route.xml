@@ -980,10 +980,10 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/C5dp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -1076,7 +1076,8 @@
                             app:tabIndicatorColor="@color/colorPrimaryDark"
                             app:tabIndicatorHeight="2dp"
                             app:tabRippleColor="@color/Hap_location"
-                            app:tabTextColor="@color/colorPrimaryDark" />
+                            app:tabSelectedTextColor="@color/colorPrimaryDark"
+                            app:tabTextColor="@color/grey_600" />
                     </RelativeLayout>
                 </com.google.android.material.appbar.AppBarLayout>
 

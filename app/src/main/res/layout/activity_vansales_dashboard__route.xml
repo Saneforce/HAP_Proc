@@ -993,6 +993,7 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.tabs.TabLayout
+                        app:tabSelectedTextColor="@color/colorPrimaryDark"
                         android:id="@+id/tabs"
                         style="@style/TabTextStyle"
                         android:layout_width="match_parent"
@@ -1002,7 +1003,7 @@
                         app:tabIndicatorColor="@color/colorPrimaryDark"
                         app:tabIndicatorHeight="2dp"
                         app:tabRippleColor="@color/Hap_location"
-                        app:tabTextColor="@color/colorPrimaryDark" />
+                        app:tabTextColor="@color/grey_600" />
 
                 </RelativeLayout>
             </com.google.android.material.appbar.AppBarLayout>
