@@ -1281,7 +1281,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:gravity="center_vertical"
                                     android:paddingRight="@dimen/C3dp"
-                                    android:text="yes"
+                                    android:text="Yes"
                                     android:textColor="@color/black" />
 
                                 <CheckBox

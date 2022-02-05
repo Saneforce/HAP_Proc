@@ -908,7 +908,6 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     }
 
     public static class AllDataFragment extends Fragment {
-        View mView;
         String tabPosition = "";
         List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
         private Context context;
@@ -986,7 +985,6 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             this.context = getContext();
-            mView = view;
             recyclerView = view.findViewById(R.id.recyclerView);
             updateData();
         }

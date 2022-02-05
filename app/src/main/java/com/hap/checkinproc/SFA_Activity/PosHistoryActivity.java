@@ -29,13 +29,14 @@ import com.hap.checkinproc.SFA_Adapter.PosOrder_History_Adapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class PosHistoryActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
-    TextView tvStartDate, tvEndDate, distributor_text, route_text;
+    TextView tvStartDate, tvEndDate, distributor_text, route_text,tvGrandTot;
     Common_Class common_class;
 
     PosOrder_History_Adapter mReportViewAdapter;
@@ -65,6 +66,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
             llDistributor = findViewById(R.id.llDistributor);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
             route_text = findViewById(R.id.route_text);
+            tvGrandTot=findViewById(R.id.txtTotAmt);
 
             tvStartDate.setOnClickListener(this);
             tvEndDate.setOnClickListener(this);
@@ -251,7 +253,15 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                         });
                         invoicerecyclerview.setAdapter(mReportViewAdapter);
 
+                        double totAmt=0;
+                        for (int i=0;i<arr.length();i++){
+                            JSONObject obj=arr.getJSONObject(i);
+                            totAmt+=Double.parseDouble(obj.getString("Order_Value"));
+                        }
+
+                        tvGrandTot.setText("₹" + new DecimalFormat("##0.00").format(totAmt));
                         break;
+
 
 
                 }

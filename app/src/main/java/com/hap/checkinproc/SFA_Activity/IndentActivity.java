@@ -39,12 +39,14 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -70,7 +72,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IndentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class IndentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
 
     public static IndentActivity order_category_select;
     final Handler handler = new Handler();
@@ -83,7 +85,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    CircularProgressButton takeorder,btnRepeat;
+    CircularProgressButton takeorder, btnRepeat;
     TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
@@ -108,6 +110,8 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     private DatePickerDialog fromDatePickerDialog;
     private List<Product_Details_Modal> orderTotTax;
     public String type, axnName = "";
+    private int uomPos;
+    ArrayList<Common_Model> uomList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,136 +219,6 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
-//            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
-//
-//            if (!Common_Class.isNullOrEmpty(preOrderList) && Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA))) {
-//                for (int pm = 0; pm < Product_Modal.size(); pm++) {
-//                    JSONObject jsonObjectPreOrder = new JSONObject(preOrderList);
-//                    JSONArray arr = jsonObjectPreOrder.getJSONArray("Data");
-//
-//                    for (int k = 0; k < arr.length(); k++) {
-//                        JSONObject obj = arr.getJSONObject(k);
-//
-//                        if (Product_Modal.get(pm).getId().equals(obj.getString("Product_Detail_Code"))) {
-//
-//                            Product_Modal.get(pm).setRegularQty(obj.getInt("Qty"));
-//
-//                            Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getRegularQty() * Product_Modal.get(pm).getRate())));
-//
-//
-//                            double enterQty = Product_Modal.get(pm).getRegularQty();
-//                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
-//
-//                            Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
-//                            }.getType();
-//                            List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
-//
-//                            double highestScheme = 0;
-//                            boolean haveVal = false;
-//                            if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
-//
-//                                for (int i = 0; i < product_details_modalArrayList.size(); i++) {
-//
-//                                    if (Product_Modal.get(pm).getId().equals(product_details_modalArrayList.get(i).getId())) {
-//
-//                                        haveVal = true;
-//                                        double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
-//
-//                                        if (enterQty >= schemeVal) {
-//
-//                                            if (schemeVal > highestScheme) {
-//                                                highestScheme = schemeVal;
-//
-//
-//                                                if (!product_details_modalArrayList.get(i).getFree().equals("0")) {
-//                                                    if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-//                                                        double freePer = (enterQty / highestScheme);
-//
-//                                                        double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
-//                                                                get(i).getFree());
-//
-//                                                        Product_Modal.get(pm).setFree(String.valueOf(Math.round(freeVal)));
-//                                                    } else {
-//                                                        int val = (int) (enterQty / highestScheme);
-//                                                        int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
-//                                                        Product_Modal.get(pm).setFree(String.valueOf(freeVal));
-//                                                    }
-//                                                } else {
-//
-//                                                    Product_Modal.get(pm).setFree("0");
-//
-//                                                }
-//
-//
-//                                                if (product_details_modalArrayList.get(i).getDiscount() != 0) {
-//
-//                                                    if (product_details_modalArrayList.get(i).getDiscount_type().equals("%")) {
-//                                                        double discountVal = enterQty * (((product_details_modalArrayList.get(i).getDiscount()
-//                                                        )) / 100);
-//
-//
-//                                                        Product_Modal.get(pm).setDiscount((Math.round(discountVal)));
-//
-//                                                    } else {
-//                                                        //Rs
-//                                                        if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-//                                                            double freePer = (enterQty / highestScheme);
-//
-//                                                            double freeVal = freePer * (product_details_modalArrayList.
-//                                                                    get(i).getDiscount());
-//
-//                                                            Product_Modal.get(pm).setDiscount((Math.round(freeVal)));
-//                                                        } else {
-//                                                            int val = (int) (enterQty / highestScheme);
-//                                                            double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
-//                                                            Product_Modal.get(pm).setDiscount((freeVal));
-//                                                        }
-//                                                    }
-//
-//                                                } else {
-//                                                    Product_Modal.get(pm).setDiscount(0.00);
-//
-//                                                }
-//
-//
-//                                            }
-//
-//                                        } else {
-//                                            Product_Modal.get(pm).setFree("0");
-//
-//                                            Product_Modal.get(pm).setDiscount(0.00);
-//
-//
-//                                        }
-//
-//
-//                                    }
-//
-//                                }
-//
-//
-//                            }
-//
-//                            if (!haveVal) {
-//                                Product_Modal.get(pm).setFree("0");
-//
-//                                Product_Modal.get(pm).setDiscount(0.00);
-//
-//                            } else {
-//                                Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getAmount()) -
-//                                        Double.valueOf(Product_Modal.get(pm).getDiscount()));
-//                            }
-//
-//
-//                            sumofTax(Product_Modal, pm);
-//                        }
-//                    }
-//
-//                }
-//            }
-//
-//            Log.v(TAG, " order oncreate:j " + preOrderList);
-
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
@@ -392,6 +266,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
 
         }
     }
+
     void loadData(String apiDataResponse) {
         try {
             Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.INDENT_Product_List)), userType);
@@ -828,8 +703,9 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
-                                    Getorder_Array_List.get(z).getRegularQty());
+                            double cf = (Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("Product_Total_Qty", cf > 0 ? Getorder_Array_List.get(z).getQty() *
+                                    cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
@@ -841,6 +717,9 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
+                            ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
                             JSONArray tax_Details = new JSONArray();
 
@@ -1020,7 +899,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1222,6 +1101,24 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
         return super.dispatchTouchEvent(event);
     }
 
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        try {
+            common_class.dismissCommonDialog(type);
+            switch (type) {
+                case 1:
+                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_indent_recyclerview, getApplicationContext(), 1);
+                    break;
+
+            }
+        } catch (Exception e) {
+            Log.v("UOMSelect:", e.getMessage());
+        }
+    }
+
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
         Context context;
         MyViewHolder pholder;
@@ -1332,8 +1229,8 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         Context context;
         int CategoryType;
-        private final List<Product_Details_Modal> Product_Details_Modalitem;
-        private final int rowLayout;
+        private List<Product_Details_Modal> Product_Details_Modalitem;
+        private int rowLayout;
 
 
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
@@ -1343,6 +1240,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             this.CategoryType = categoryType;
 
         }
+
 
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -1366,8 +1264,20 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
+
+                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
+                    holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+                else {
+                    holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+
+
+                }
+                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
+
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
 
@@ -1387,8 +1297,8 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                         holder.rlStock.setVisibility(View.VISIBLE);
 
 
-                    holder.totalQty.setText("Total Pieces : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Pieces : " + (((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())))*Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1402,10 +1312,33 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
 
-                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()*Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
+                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()*Product_Details_Modal.getCnvQty()));
 
+
+                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                uomPos = position;
+                                uomList = new ArrayList<>();
+
+                                if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                    for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                        Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+                                        uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+
+                                    }
+                                    common_class.showCommonDialog(uomList, 1, IndentActivity.this);
+                                } else {
+                                    common_class.showMsg(IndentActivity.this, "No Records Found.");
+                                }
+                            } catch (Exception e) {
+                                Log.v(TAG, e.getMessage());
+                            }
+                        }
+                    });
 
                 }
 
@@ -1448,17 +1381,17 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try{
-                        String sVal = holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        if (Integer.parseInt(sVal) > 0) {
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                        try {
+                            String sVal = holder.Qty.getText().toString();
+                            if (sVal.equalsIgnoreCase("")) sVal = "0";
+                            if (Integer.parseInt(sVal) > 0) {
+                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
 //                            int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
 //                            int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
 //                            if (type.equalsIgnoreCase("Stock Rotation"))
 //                                holder.tvStock.setText("" + (balance - order));
-                        }}
-                        catch (Exception e){
+                            }
+                        } catch (Exception e) {
 
                         }
                     }
@@ -1475,19 +1408,20 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty());
+                            double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())*
+                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
 
 
                             if (type.equalsIgnoreCase("Stock Rotation") &&
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
-                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
+                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()* Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
                                 enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
                                 holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
                                 common_class.showMsg(IndentActivity.this, "Can't exceed stock");
                             }
 
                             if (type.equalsIgnoreCase("Stock Rotation")) {
-                                int stk=(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty);
+                                int stk = (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty);
                                 holder.tvStock.setText("" + stk);
                             }
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1495,7 +1429,8 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()*
+                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Pieces : " + (int) totQty);
                             }
 
@@ -1692,6 +1627,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             return Product_Details_Modalitem.size();
         }
 
+
         private void showDialog(Product_Details_Modal product_details_modal) {
             try {
 
@@ -1739,14 +1675,24 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
 
+        public void notify(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
+            this.Product_Details_Modalitem = Product_Details_Modalitem;
+            this.rowLayout = rowLayout;
+            this.context = context;
+            this.CategoryType = categoryType;
+            notifyDataSetChanged();
+
+        }
+
+
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
+            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
                     QtyAmt, totalQty, tvTaxLabel, tvStock;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
             LinearLayout llRegular;
-            RelativeLayout rlStock;
+            RelativeLayout rlStock, rlUOM;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -1762,9 +1708,11 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
                 tvStock = view.findViewById(R.id.tvStockBal);
+                tvUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
+                    rlUOM = view.findViewById(R.id.rlUOM);
                     rlStock = view.findViewById(R.id.rlStock);
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
