@@ -1030,6 +1030,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:textStyle="bold"
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1041,6 +1042,7 @@
                 </TextView>
 
                 <TextView
+                    android:textStyle="bold"
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

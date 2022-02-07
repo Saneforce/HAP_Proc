@@ -49,6 +49,7 @@ import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
+import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
@@ -167,6 +168,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
+            menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
         }
 
 
@@ -214,6 +216,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case "My Team":
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
+                        break;
+                    case "Projection":
+                        common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
                         break;
 
 

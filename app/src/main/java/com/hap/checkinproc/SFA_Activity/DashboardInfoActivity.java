@@ -3,24 +3,22 @@ package com.hap.checkinproc.SFA_Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.DashboardInfoAdapter;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardInfoActivity extends AppCompatActivity implements View.OnClickListener,
         UpdateResponseUI {
@@ -30,6 +28,7 @@ public class DashboardInfoActivity extends AppCompatActivity implements View.OnC
     Common_Class common_class;
     TextView tvDistributor, tvHeaderName;
     private String sts;
+    ImageView ivToolbarHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,11 @@ public class DashboardInfoActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.toolbar_home:
+                common_class.CommonIntentwithoutFinish(SFA_Activity.class);
+                break;
+        }
     }
 
     @Override
@@ -83,6 +86,9 @@ public class DashboardInfoActivity extends AppCompatActivity implements View.OnC
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         sts = getIntent().getStringExtra("status");
+        ivToolbarHome = findViewById(R.id.toolbar_home);
+
+        ivToolbarHome.setOnClickListener(this);
     }
 
 

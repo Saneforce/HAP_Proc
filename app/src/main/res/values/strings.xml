@@ -100,4 +100,7 @@
     <string name="select_state">Select the State</string>
     <string name="select_distributor">Select the Franchise</string>
     <string name="select_route">Select the Route</string>
+
+    <string name="projection_history">History &amp; Status </string>
+
 </resources>

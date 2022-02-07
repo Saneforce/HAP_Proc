@@ -122,7 +122,11 @@ public class Login extends AppCompatActivity {
         db = new DatabaseHandler(this);
         shared_common_pref = new Shared_Common_Pref(this);
 
-        Shared_Common_Pref.LOGINTYPE = shared_common_pref.getvalue(Constants.LOGIN_TYPE);
+
+        if (com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime().equalsIgnoreCase(shared_common_pref.getvalue(Constants.LOGIN_DATE)))
+            Shared_Common_Pref.LOGINTYPE = shared_common_pref.getvalue(Constants.LOGIN_TYPE);
+        else
+            shared_common_pref.clear_pref(Constants.LOGIN_DATA);
 
 
         JSONArray pendingPhotos = db.getAllPendingPhotos();
@@ -596,7 +600,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //  eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-              //  eMail = "ciadmin@hap.in";
+                //eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -614,7 +618,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1025257@hap.in";
                 // eMail = "1026494@hap.in";
 //                eMail = "1007660@hap.in";//pranita
-               // eMail = "1026508@hap.in";//alaguselvi
+                //eMail = "1026508@hap.in";//alaguselvi
                 // eMail = "1012639@hap.in";//md
                 //  eMail="1014022@hap.in";//rmk
 
@@ -674,6 +678,9 @@ public class Login extends AppCompatActivity {
 
     void assignLoginData(Model response, int requestCode) {
         try {
+
+            shared_common_pref.save(Constants.LOGIN_DATE, com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+
             Gson gson = new Gson();
 
             SharedPreferences.Editor userEditor = UserDetails.edit();

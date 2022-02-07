@@ -116,7 +116,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
     private String mCategoryName = "ALL";
     private ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
-
+private ArrayList<String> groupOutletCategory=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -414,6 +414,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
 
             setOutletCategoryAdapter();
+            getGroupOutletCategory();
 
 
         } catch (Exception e) {
@@ -423,6 +424,56 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
 
     }
+
+    public void getGroupOutletCategory() {
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_SName as group\\\"]\"," +
+                "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"group asc\\\"]\",\"desig\":\"mgr\"}";
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
+                shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24",
+                routeMap);
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                try {
+                    modelRetailChannel.clear();
+                    JsonArray jsonArray = response.body();
+                    Log.e("RESPONSE_VALUE_GROUP", String.valueOf(jsonArray));
+                    for (int a = 0; a < jsonArray.size(); a++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                        String className = String.valueOf(jsonObject.get("name"));
+                        String id = String.valueOf(jsonObject.get("id"));
+                        String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
+                        String approval = String.valueOf(jsonObject.get("NeedApproval"));
+                        Common_Model mCommon_model_spinner = new Common_Model(id, retailerClass, approval);
+                        Log.e("LeaveType_Request", retailerClass);
+                        modelRetailChannel.add(mCommon_model_spinner);
+                    }
+
+//                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+//                        rvMasterCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, Dashboard_Route.this, new AdapterOnClick() {
+//                            @Override
+//                            public void CallMobile(String categoryName) {
+//                                setOutletCategoryAdapter();
+//                            }
+//                        }));
+//
+//                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
+//                    }
+
+                } catch (Exception e) {
+                    Log.v(" getRetailerChannel: ", e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     public void getRetailerChannel() {
         String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
