@@ -134,10 +134,10 @@
                             android:layout_marginRight="@dimen/C10dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"
-                            android:gravity="center_vertical"
                             android:textAlignment="textEnd"
                             android:textColor="@color/txt_color_black"
                             android:textStyle="bold"
@@ -151,11 +151,36 @@
                         android:layout_height="@dimen/C30dp"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <RelativeLayout
+                            android:layout_marginTop="@dimen/C2dp"
+                            android:layout_marginBottom="@dimen/C2dp"
+                            android:id="@+id/rlUOM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/C3dp"
+                            android:background="@drawable/order_qty_backround">
 
+                            <TextView
+                                android:paddingRight="@dimen/C5dp"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:id="@+id/tvUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center_vertical"
+                                android:hint="UOM"
+                               android:textColor="@color/txt_color_black"
+                                android:visibility="visible" />
+
+
+                        </RelativeLayout>
+
+
+                        <TextView
                             android:id="@+id/lblAddQty"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/C5dp"
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
                             android:text="New Qty : "

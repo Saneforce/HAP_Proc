@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.22";
+    public static String Version_Name = "ver 3.3.1";
     public static String Work_Type = "0";
     public static int count;
 
@@ -300,6 +300,74 @@ public class Common_Class {
         return ResArray;
     }
 
+    public void getDb300FromApi(String key, Activity activity, Boolean boolRefresh) {
+
+        updateUi = ((UpdateResponseUI) activity);
+        if (isNetworkAvailable(activity)) {
+            Map<String, String> QueryString = new HashMap<>();
+
+            switch (key) {
+                case Constants.PreInvOrderQty:
+                    QueryString.put("RetailerID ", Shared_Common_Pref.OutletCode);
+                    QueryString.put("distributorId ", shared_common_pref.getvalue(Constants.Distributor_Id));
+                    QueryString.put("axn", "getpreviousinvoice");
+
+                    break;
+            }
+
+
+            callAPI300(QueryString, key, activity);
+        } else {
+            updateUi.onErrorData("Please check your internet connection.");
+            Toast.makeText(activity, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
+    void callAPI300(Map<String, String> QueryString, String key, Activity activity) {
+        try {
+            updateUi = ((UpdateResponseUI) activity);
+            DatabaseHandler db = new DatabaseHandler(activity);
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+            Call<Object> call = service.GetRouteObject(QueryString);
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    try {
+                        Gson gson = new Gson();
+
+                        if (shared_common_pref == null)
+                            shared_common_pref = new Shared_Common_Pref(activity);
+                        updateUi = ((UpdateResponseUI) activity);
+                        updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
+
+                        String res = response.body().toString();
+                        Log.v(key+":Res>>", "" + res);
+
+                    } catch (Exception e) {
+
+                        updateUi = ((UpdateResponseUI) activity);
+                        updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
+                        Log.e("Common class:", key + " response: " + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    updateUi.onErrorData(t.getMessage());
+                    Log.e("api response ex:", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            updateUi.onErrorData(e.getMessage());
+            Log.e("api response ex:", e.getMessage());
+        }
+    }
+
+
     public void getDataFromApi(String key, Activity activity, Boolean boolRefresh) {
 
         updateUi = ((UpdateResponseUI) activity);
@@ -392,6 +460,12 @@ public class Common_Class {
                 case Constants.PrePrimaryOrderQty:
                     QuerySTring1 = "{\"tableName\":\"getpreviousorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
+                case Constants.PreInvOrderQty:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousinvoice\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                  //  axnname = "getpreviousinvoice";
+
+                    break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
@@ -464,8 +538,8 @@ public class Common_Class {
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
-String res=response.body().toString();
-                        Log.v("Res>>",""+res );
+                        String res = response.body().toString();
+                        Log.v("Res>>", "" + res);
 
                     } catch (Exception e) {
 
@@ -546,7 +620,7 @@ String res=response.body().toString();
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
-                      //  data.put("date", jparam.get("date").getAsString());
+                        //  data.put("date", jparam.get("date").getAsString());
                         data.put("date", "2021-09-09");
                         data.put("type", jparam.get("type").getAsString());
                         break;
@@ -768,7 +842,7 @@ String res=response.body().toString();
                                 BufferedReader bf = new BufferedReader(ip);
                                 while ((line = bf.readLine()) != null) {
                                     is.append(line);
-                                    Log.v("Res>>", is.toString());
+                                    Log.v("Res>>" + key + ": ", is.toString());
                                 }
 
 

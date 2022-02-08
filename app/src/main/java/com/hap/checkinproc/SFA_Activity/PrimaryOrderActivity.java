@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,7 +68,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -91,7 +89,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Gson gson;
     CircularProgressButton takeorder, btnRepeat;
     TextView Out_Let_Name, Category_Nametext,
-            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate;
+            tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate, tvGrpName;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd, btnRefACBal;
     Common_Class common_class;
     String Ukey;
@@ -155,6 +153,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             tvDistId = findViewById(R.id.tvDistId);
             tvDate = findViewById(R.id.tvDate);
             btnRepeat = findViewById(R.id.btnRepeat);
+            tvGrpName = findViewById(R.id.tvGrpName);
             Out_Let_Name.setText("HI! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
 
             etCategoryItemSearch = findViewById(R.id.searchView);
@@ -682,7 +681,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt",formatter.format( amt));
                                     tax_Details.put(taxData);
 
                                 }
@@ -700,7 +699,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -872,7 +871,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1037,6 +1036,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     try {
                         FilterTypes(item.getString("id"));
                         common_class.brandPos = 0;
+
+                        tvGrpName.setText("" + item.getString("name"));
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -1045,6 +1047,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             Grpgrid.setAdapter(grplistItems);
 
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+            tvGrpName.setText("" + ProdGroups.getJSONObject(0).getString("name"));
+
+
         } catch (Exception e) {
             Log.v(TAG + "loadData:", e.getMessage());
         }
@@ -1424,6 +1429,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 if (oQty <= 0) sQty = "";
                 holder.Qty.setText(sQty);
 
+                holder.tvDefUOM.setText("" + ProductItem.getProductUnit());
+
+
                 if (CategoryType >= 0) {
 
                     holder.tvMRP.setText("₹" + ProductItem.getMRP());
@@ -1443,6 +1451,17 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                     holder.QtyAmt.setText("₹" + formatter.format(oQty * ProductItem.getSBRate())); //* (Integer.parseInt(Product_Details_Modal.getConversionFactor())) * Product_Details_Modal.getQty()));
 
+
+                    String name = "";
+                    String uomQty = "";
+                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                        name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                        uomQty = uomQty + "" +(int) ((Integer.parseInt(ProductItem.getConversionFactor()) * ProductItem.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                    }
+
+                    holder.tvUomName.setText(name);
+                    holder.tvUomQty.setText(uomQty);
 
                 }
 
@@ -1503,6 +1522,19 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(ProdAmt));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
+
+                                String name = "";
+                                String uomQty = "";
+                                for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                                    name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                                    uomQty = uomQty + "" + (int)((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
+                                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                                }
+
+                                holder.tvUomName.setText(name);
+                                holder.tvUomQty.setText(uomQty);
+
                             }
 
                             String strSchemeList = sharedCommonPref.getvalue(Constants.PRIMARY_SCHEME);
@@ -1719,7 +1751,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, lblRQty, productQty,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvDefUOM, tvUomName, tvUomQty;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1735,6 +1767,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 Free = view.findViewById(R.id.Free);
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
+                tvDefUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
@@ -1743,6 +1776,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
                     tvMRP = view.findViewById(R.id.MrpRate);
+                    tvUomName = view.findViewById(R.id.tvUomName);
+                    tvUomQty = view.findViewById(R.id.tvUomQty);
 
                 } else {
                     ivDel = view.findViewById(R.id.ivDel);

@@ -88,18 +88,31 @@
         <RelativeLayout
             android:id="@+id/more_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:background="@color/colorPrimaryDark"
             android:paddingLeft="@dimen/C5dp"
             android:paddingRight="@dimen/C5dp">
 
             <TextView
+                android:id="@+id/tvHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PRIMARY ORDER"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvGrpName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_toRightOf="@+id/tvHeader"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
 
             <TextView
                 android:id="@+id/tvTimer"
@@ -521,30 +534,33 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:text="Rate"
-                                        android:textAlignment="textStart"
-                                        android:textColor="@color/black"
-                                        android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/llRegular"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:visibility="gone">
-
-                                    <TextView
-                                        android:id="@+id/RegularQty"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:layout_gravity="center"
-                                        android:gravity="end"
-                                        android:text="Regular"
+                                        android:textAlignment="center"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
+
+
+                                <LinearLayout
+                                    android:visibility="gone"
+                                    android:id="@+id/llUOM"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/UOM"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="UOM"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
 
                                 <LinearLayout
                                     android:layout_width="@dimen/C100dp"
@@ -905,7 +921,6 @@
                                 android:visibility="visible"></View>
 
 
-
                             <TextView
                                 android:id="@+id/tvSaveAmt"
                                 android:layout_width="match_parent"
@@ -968,26 +983,26 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:textStyle="bold"
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text="Items : 0   Qty : 0"
                     android:textColor="@color/white"
-                    android:textSize="11sp">
+                    android:textSize="11sp"
+                    android:textStyle="bold">
 
                 </TextView>
 
                 <TextView
-                    android:textStyle="bold"
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text=" ₹ 0"
                     android:textColor="@color/white"
-                    android:textSize="13sp">
+                    android:textSize="13sp"
+                    android:textStyle="bold">
 
                 </TextView>
             </LinearLayout>

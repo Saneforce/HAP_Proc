@@ -702,7 +702,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -721,7 +721,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -866,7 +866,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1153,6 +1153,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+                holder.tvDefUOM.setText("" + Product_Details_Modal.getProductUnit());
 
 
                 if (CategoryType >= 0) {
@@ -1176,6 +1177,20 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
 
+                    try {
+                        String name = "";
+                        String uomQty = "";
+                        for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                            name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                            uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modal.getConversionFactor()) * Product_Details_Modal.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                        }
+
+                        holder.tvUomName.setText(name);
+                        holder.tvUomQty.setText(uomQty);
+                    } catch (Exception e) {
+
+                    }
 
                 }
 
@@ -1231,6 +1246,23 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
+
+                                try {
+                                    String name = "";
+                                    String uomQty = "";
+                                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                                        name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                                        uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
+                                                (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                                    }
+
+                                    holder.tvUomName.setText(name);
+                                    holder.tvUomQty.setText(uomQty);
+                                } catch (Exception e) {
+
+                                }
+
                             }
 
 
@@ -1475,7 +1507,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel;
+                    QtyAmt, totalQty, tvTaxLabel, tvDefUOM, tvUomName, tvUomQty;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
@@ -1494,6 +1526,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
+                tvDefUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
@@ -1502,6 +1535,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+                    tvUomName = view.findViewById(R.id.tvUomName);
+                    tvUomQty = view.findViewById(R.id.tvUomQty);
+
                 }
 
 

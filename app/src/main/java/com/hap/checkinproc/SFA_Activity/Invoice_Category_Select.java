@@ -67,7 +67,9 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
@@ -451,23 +453,21 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
 
-
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
-            if (Product_Modal.get(pm).getRegularQty() != null) {
                 if (Product_Modal.get(pm).getQty() > 0) {
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
-                }
             }
         }
 
         if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "Invoice is empty", Toast.LENGTH_SHORT).show();
         else
-            FilterProduct(Getorder_Array_List);
+            FilterProduct();
 
     }
+
 
     @Override
     public void onClick(View v) {
@@ -478,7 +478,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        common_class.getDataFromApi(Constants.PrePrimaryOrderQty, Invoice_Category_Select.this, false);
+                        common_class.getDataFromApi(Constants.PreInvOrderQty,Invoice_Category_Select.this,false);
                     }
                 }, 500);
                 break;
@@ -671,7 +671,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
                                 }
@@ -685,7 +685,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         for (int i = 0; i < orderTotTax.size(); i++) {
                             JSONObject totTaxObj = new JSONObject();
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
                         }
                         OutletItem.put("TOT_TAX_details", totTaxArr);
@@ -744,7 +744,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
     }
 
-    private void FilterProduct(List<Product_Details_Modal> orderList) {
+    private void FilterProduct() {
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
@@ -754,7 +754,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
 
@@ -822,7 +822,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -922,6 +922,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         recyclerView.setAdapter(mProdct_Adapter);
 
     }
+
     void loadData(String apiDataResponse) {
         try {
             Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.Product_List)), userType);
@@ -1095,14 +1096,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     }
 
 
-
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
 
 
             switch (key) {
-                case Constants.PrePrimaryOrderQty:
+                case Constants.PreInvOrderQty:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
                         ResetSubmitBtn(0);
                         common_class.showMsg(Invoice_Category_Select.this, "No Records Found.");
@@ -1308,7 +1308,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel;
+                    QtyAmt, totalQty, tvTaxLabel, tvDefUOM, tvUomName, tvUomQty;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
@@ -1325,6 +1325,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 Free = view.findViewById(R.id.Free);
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
+                tvDefUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
@@ -1333,6 +1334,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+                    tvUomName = view.findViewById(R.id.tvUomName);
+                    tvUomQty = view.findViewById(R.id.tvUomQty);
                 }
 
 
@@ -1371,6 +1374,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+                holder.tvDefUOM.setText("" + Product_Details_Modal.getProductUnit());
 
                 if (CategoryType >= 0) {
                     holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
@@ -1392,6 +1396,20 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
 
 
+                    try {
+                        String name = "";
+                        String uomQty = "";
+                        for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                            name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                            uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modal.getConversionFactor()) * Product_Details_Modal.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                        }
+
+                        holder.tvUomName.setText(name);
+                        holder.tvUomQty.setText(uomQty);
+                    } catch (Exception e) {
+
+                    }
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
@@ -1445,6 +1463,23 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
+
+                                try {
+                                    String name = "";
+                                    String uomQty = "";
+                                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                                        name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                                        uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
+                                                (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                                    }
+
+                                    holder.tvUomName.setText(name);
+                                    holder.tvUomQty.setText(uomQty);
+
+                                } catch (Exception e) {
+
+                                }
                             }
 
 
@@ -1629,8 +1664,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                             }*/
-
-
 
 
                             updateToTALITEMUI();

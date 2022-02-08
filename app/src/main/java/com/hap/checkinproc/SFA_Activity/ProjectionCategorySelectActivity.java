@@ -1,7 +1,5 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
@@ -19,8 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,7 +61,6 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -131,7 +126,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
 
-             etCategoryItemSearch = findViewById(R.id.searchView);
+            etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
 
@@ -176,7 +171,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
             Log.v(TAG, " order oncreate:h ");
-   Log.v(TAG, " order oncreate:i ");
+            Log.v(TAG, " order oncreate:i ");
             Category_Nametext.setOnClickListener(this);
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
@@ -529,7 +524,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -548,7 +543,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -682,7 +677,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1218,7 +1213,6 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
                     }
                 });
-
 
 
                 updateToTALITEMUI();

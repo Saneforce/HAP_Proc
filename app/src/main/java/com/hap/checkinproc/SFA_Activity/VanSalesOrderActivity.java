@@ -582,12 +582,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                             @Override
                                             public void OnLocationRecived(Location location) {
                                                 strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                                // SaveOrder();
+                                                SaveOrder();
                                             }
                                         });
                                     } else {
                                         strLoc = sLoc.split(":");
-                                        //SaveOrder();
+                                        SaveOrder();
                                     }
                                 }
                             }, 500);
@@ -692,7 +692,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -711,7 +711,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -724,7 +724,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -858,7 +858,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");

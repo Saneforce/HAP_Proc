@@ -644,7 +644,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
                                 }
@@ -662,7 +662,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt",formatter.format( orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -1441,6 +1441,9 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                 if (oQty <= 0) sQty = "";
                 holder.Qty.setText(sQty);
 
+                holder.tvDefUOM.setText("" + ProductItem.getProductUnit());
+
+
                 if (CategoryType >= 0) {
 
                     holder.tvMRP.setText("₹" + ProductItem.getMRP());
@@ -1460,6 +1463,17 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
 
                     holder.QtyAmt.setText("₹" + formatter.format(oQty * ProductItem.getSBRate())); //* (Integer.parseInt(Product_Details_Modal.getConversionFactor())) * Product_Details_Modal.getQty()));
 
+
+                    String name = "";
+                    String uomQty = "";
+                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                        name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                        uomQty = uomQty + "" +(int) ((Integer.parseInt(ProductItem.getConversionFactor()) * ProductItem.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                    }
+
+                    holder.tvUomName.setText(name);
+                    holder.tvUomQty.setText(uomQty);
 
                 }
 
@@ -1520,6 +1534,19 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(ProdAmt));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
+
+                                String name = "";
+                                String uomQty = "";
+                                for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
+                                    name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                                    uomQty = uomQty + "" + (int)((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
+                                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+
+                                }
+
+                                holder.tvUomName.setText(name);
+                                holder.tvUomQty.setText(uomQty);
+
                             }
 
                             String strSchemeList = sharedCommonPref.getvalue(Constants.PRIMARY_SCHEME);
@@ -1736,7 +1763,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, lblRQty, productQty,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvDefUOM, tvUomName, tvUomQty;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1752,6 +1779,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                 Free = view.findViewById(R.id.Free);
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
+                tvDefUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
@@ -1760,6 +1788,8 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
                     tvMRP = view.findViewById(R.id.MrpRate);
+                    tvUomName = view.findViewById(R.id.tvUomName);
+                    tvUomQty = view.findViewById(R.id.tvUomQty);
 
                 } else {
                     ivDel = view.findViewById(R.id.ivDel);

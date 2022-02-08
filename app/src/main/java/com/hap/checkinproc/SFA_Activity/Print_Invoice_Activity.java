@@ -433,7 +433,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     taxData.put("Tax_Id", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -452,7 +452,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", taxList.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", taxList.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(taxList.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -1065,7 +1065,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), 1, "1",
-                            "1", "5", "", 0, 1.8, obj.getDouble("Price"),
+                            "1", "5", "", 0, "0", obj.getDouble("Price"),
                             obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, paidAmt, (taxAmt)));
 
 
@@ -1118,7 +1118,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
-                            "1", "5", obj.getString("UOM"), 0, 1.8, obj.getDouble("Rate"),
+                            "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"),
                             obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt)));
 
 

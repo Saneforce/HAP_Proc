@@ -62,7 +62,7 @@ public class Product_Details_Modal {
     private double defaultUOMQty;
     @SerializedName("Default_UOM")
     @Expose
-    private Double defaultUOM;
+    private String defaultUOM;
 
     @SerializedName("Default_UOM_Name")
     @Expose
@@ -343,7 +343,7 @@ public class Product_Details_Modal {
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
-                                 String unitCode, double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
+                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
                                  Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax) {
         this.id = id;
         this.name = name;
@@ -553,11 +553,11 @@ public class Product_Details_Modal {
         this.defaultUOMQty = defaultUOMQty;
     }
 
-    public Double getDefaultUOM() {
+    public String getDefaultUOM() {
         return defaultUOM;
     }
 
-    public void setDefaultUOM(Double defaultUOM) {
+    public void setDefaultUOM(String defaultUOM) {
         this.defaultUOM = defaultUOM;
     }
 

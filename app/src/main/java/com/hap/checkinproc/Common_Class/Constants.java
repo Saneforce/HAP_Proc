@@ -134,4 +134,5 @@ public class Constants {
     public static final String INDENT_ProdGroups_List = "indentProductGroups";
     public static final String GetGrn_List = "getGRNList";
     public static final String SR_GetTodayOrder_List="srGetOrderDetailList";
+    public static final String PreInvOrderQty="preInvoiceOrderQty";
 }

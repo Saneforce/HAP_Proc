@@ -73,13 +73,13 @@
 
 
                         <TextView
-                            android:drawablePadding="@dimen/C3dp"
                             android:id="@+id/Rate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
                             android:drawableRight="@drawable/edit_small"
+                            android:drawablePadding="@dimen/C3dp"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -158,6 +158,32 @@
                         android:layout_height="@dimen/C30dp"
                         android:orientation="horizontal">
 
+                        <RelativeLayout
+                            android:layout_marginTop="@dimen/C2dp"
+                            android:layout_marginBottom="@dimen/C2dp"
+                            android:id="@+id/rlUOM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/C3dp"
+                            android:background="@drawable/order_qty_backround">
+
+                            <TextView
+                                android:paddingRight="@dimen/C5dp"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:id="@+id/tvUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center_vertical"
+                                android:hint="UOM"
+                                android:textColor="@color/txt_color_black"
+                                android:visibility="visible" />
+
+
+                        </RelativeLayout>
+
+
+
                         <TextView
 
                             android:id="@+id/lblAddQty"
@@ -167,42 +193,46 @@
                             android:gravity="center_vertical"
                             android:text="Qty : "
                             android:textColor="@color/grey_800"></TextView>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/order_qty_backround">
+
                             <ImageView
                                 android:id="@+id/ivQtyMns"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:padding="6dp"
-                                app:tint="@color/color_red"
-                                android:src="@drawable/disable_minus"/>
+                                android:src="@drawable/disable_minus"
+                                app:tint="@color/color_red" />
+
                             <EditText
                                 android:id="@+id/Qty"
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentRight="true"
-                                android:gravity="center_vertical"
                                 android:background="@color/white"
+                                android:gravity="center_vertical"
                                 android:hint="0"
-                                android:text=""
                                 android:inputType="number"
                                 android:maxLength="4"
                                 android:paddingLeft="@dimen/C5dp"
                                 android:paddingRight="@dimen/C5dp"
+                                android:text=""
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C13dp"
-                                tools:ignore="RtlCompat"/>
+                                tools:ignore="RtlCompat" />
+
                             <ImageView
                                 android:id="@+id/ivQtyPls"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:padding="6dp"
-                                app:tint="@color/green"
-                                android:src="@drawable/plus"/>
+                                android:src="@drawable/plus"
+                                app:tint="@color/green" />
                         </LinearLayout>
 
                         <RelativeLayout
@@ -296,10 +326,10 @@
 
 
                     <RelativeLayout
-                        android:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <TextView
 
@@ -317,11 +347,11 @@
 
                         <TextView
 
-                            android:fontFamily="sans-serif"
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/tvTaxTotAmt"
+                            android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
 
                             android:hint=""

@@ -74,10 +74,10 @@
 
                     <TextView
 
-                        android:enabled="false"
                         android:id="@+id/Rate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:enabled="false"
                         android:fontFamily="sans-serif"
                         android:gravity="end"
                         android:text="Value"
@@ -89,13 +89,29 @@
 
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/RegularQty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvUOM"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="end"
