@@ -91,6 +91,7 @@
 
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:id="@+id/llRegular"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
@@ -151,29 +152,38 @@
                         android:layout_height="@dimen/C30dp"
                         android:orientation="horizontal">
 
-                        <RelativeLayout
-                            android:layout_marginTop="@dimen/C2dp"
-                            android:layout_marginBottom="@dimen/C2dp"
+                        <LinearLayout
                             android:id="@+id/rlUOM"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="@dimen/C3dp"
-                            android:background="@drawable/order_qty_backround">
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:background="@drawable/order_qty_backround"
+                            android:visibility="visible">
+
 
                             <TextView
-                                android:paddingRight="@dimen/C5dp"
-                                android:paddingLeft="@dimen/C5dp"
                                 android:id="@+id/tvUOM"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:fontFamily="sans-serif"
+                                android:background="@color/white"
                                 android:gravity="center_vertical"
                                 android:hint="UOM"
-                               android:textColor="@color/txt_color_black"
-                                android:visibility="visible" />
+                                android:paddingLeft="@dimen/C5dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                tools:ignore="RtlCompat" />
 
-
-                        </RelativeLayout>
+                            <ImageView
+                                android:layout_width="10dp"
+                                android:layout_height="25dp"
+                                android:layout_toRightOf="@id/tvUOM"
+                                android:padding="@dimen/C1dp"
+                                android:src="@drawable/spin_down_arrow" />
+                        </LinearLayout>
 
 
                         <TextView
@@ -183,7 +193,7 @@
                             android:layout_marginLeft="@dimen/C5dp"
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
-                            android:text="New Qty : "
+                            android:text="Order Qty : "
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout

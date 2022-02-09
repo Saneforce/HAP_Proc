@@ -541,20 +541,19 @@
                                 </LinearLayout>
 
 
-
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:id="@+id/llUOM"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="visible">
 
                                     <TextView
                                         android:id="@+id/UOM"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
-                                        android:gravity="end"
+                                        android:gravity="center"
                                         android:text="UOM"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
@@ -946,7 +945,7 @@
 
             android:id="@+id/rlTakeOrder"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/C50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/C5dp"
             android:background="@drawable/bottom_button"
             android:padding="@dimen/C5dp"
@@ -976,41 +975,66 @@
             </TextView>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C3dp"
                 android:layout_toRightOf="@+id/tvCart"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_marginRight="@dimen/C100dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tvCart"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvTotalAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:text=" ₹ 0"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:id="@+id/tvTotalItems"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:text="Items : 0   Qty : 0"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/tvTotalItems"
-                    android:layout_width="wrap_content"
+                    android:scrollbars="horizontal"
+
+                    android:id="@+id/tvTotUom"
+                    android:layout_marginRight="@dimen/C100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:text="Items : 0   Qty : 0"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:textStyle="bold">
 
                 </TextView>
 
-                <TextView
-                    android:id="@+id/tvTotalAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text=" ₹ 0"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold">
-
-                </TextView>
             </LinearLayout>
 
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/takeorder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/C15dp"

@@ -67,9 +67,7 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
@@ -130,6 +128,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     final Handler handler = new Handler();
     List<Product_Details_Modal> orderTotTax;
+    private ArrayList<Common_Model> uomList;
+    private int uomPos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -360,6 +361,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
 
+            common_class.getDb_310Data(Constants.STOCK_DATA, this);
+
         } catch (Exception e) {
 
             Log.e(TAG, " invoice oncreate: " + e.getMessage());
@@ -455,8 +458,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
-                if (Product_Modal.get(pm).getQty() > 0) {
-                    Getorder_Array_List.add(Product_Modal.get(pm));
+            if (Product_Modal.get(pm).getQty() > 0) {
+                Getorder_Array_List.add(Product_Modal.get(pm));
 
             }
         }
@@ -478,7 +481,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        common_class.getDataFromApi(Constants.PreInvOrderQty,Invoice_Category_Select.this,false);
+                        common_class.getDataFromApi(Constants.PreInvOrderQty, Invoice_Category_Select.this, false);
                     }
                 }, 500);
                 break;
@@ -645,7 +648,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty());
+                            double cf = (Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("Product_Total_Qty", cf > 0 ? (Getorder_Array_List.get(z).getQty()) *
+                                    cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
@@ -656,6 +661,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
+                            ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
+
+
                             JSONArray tax_Details = new JSONArray();
 
 
@@ -1102,6 +1112,24 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
             switch (key) {
+                case Constants.STOCK_DATA:
+                    JSONObject stkObj = new JSONObject(apiDataResponse);
+                    if (stkObj.getBoolean("success")) {
+                        JSONArray arr = stkObj.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject obj = arr.getJSONObject(i);
+
+                            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                                if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
+                                    Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+
+                    break;
                 case Constants.PreInvOrderQty:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
                         ResetSubmitBtn(0);
@@ -1149,7 +1177,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         common_class.showMsg(this, "No Records Found");
                     }
                     if (payList.size() > 0) {
-                        common_class.showCommonDialog(payList, 1, this);
+                        common_class.showCommonDialog(payList, 20, this);
                     }
 
                     break;
@@ -1164,7 +1192,25 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         common_class.dismissCommonDialog(type);
-        tvPayMode.setText("" + myDataset.get(position).getName());
+        switch (type) {
+            case 1:
+
+                int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
+                if (Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
+                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), 1);
+                } else {
+                    common_class.showMsg(this, "Can't exceed Stock");
+                }
+                break;
+            case 20:
+                tvPayMode.setText("" + myDataset.get(position).getName());
+
+                break;
+
+        }
     }
 
     @Override
@@ -1308,10 +1354,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvDefUOM, tvUomName, tvUomQty;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
+            LinearLayout rlUOM;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -1325,7 +1372,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 Free = view.findViewById(R.id.Free);
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
-                tvDefUOM = view.findViewById(R.id.tvUOM);
+                tvUOM = view.findViewById(R.id.tvUOM);
+                tvStock = view.findViewById(R.id.tvStockBal);
 
 
                 if (CategoryType >= 0) {
@@ -1334,8 +1382,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
-                    tvUomName = view.findViewById(R.id.tvUomName);
-                    tvUomQty = view.findViewById(R.id.tvUomQty);
+                    rlUOM = view.findViewById(R.id.rlUOM);
                 }
 
 
@@ -1349,6 +1396,16 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             this.CategoryType = categoryType;
 
         }
+
+        public void notify(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
+            this.Product_Details_Modalitem = Product_Details_Modalitem;
+            this.rowLayout = rowLayout;
+            this.context = context;
+            this.CategoryType = categoryType;
+            notifyDataSetChanged();
+
+        }
+
 
         @Override
         public Prodct_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -1371,13 +1428,23 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
+                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
+                    holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+                else {
+                    holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+
+
+                }
+                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-                holder.tvDefUOM.setText("" + Product_Details_Modal.getProductUnit());
 
                 if (CategoryType >= 0) {
-                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() *
+                            Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1391,25 +1458,41 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     }
 
 
-                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
+                            Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
+                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
 
+                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            uomPos = position;
+                            uomList = new ArrayList<>();
 
-                    try {
-                        String name = "";
-                        String uomQty = "";
-                        for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
-                            name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
-                            uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modal.getConversionFactor()) * Product_Details_Modal.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
+                                }
+                                common_class.showCommonDialog(uomList, 1, Invoice_Category_Select.this);
+                            } else {
+                                common_class.showMsg(Invoice_Category_Select.this, "No Records Found.");
+                            }
                         }
+                    });
 
-                        holder.tvUomName.setText(name);
-                        holder.tvUomQty.setText(uomQty);
-                    } catch (Exception e) {
 
-                    }
+                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
+                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+
+                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
+                        holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                    else
+                        holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
+
+
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
@@ -1429,19 +1512,39 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     public void onClick(View v) {
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
+                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+                        int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
+                        if ((balance >= order) || Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0) {
+                            if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                holder.tvStock.setText("" + (int) (balance - order));
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                        } else {
+                            common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
+                        }
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal = holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        if (Integer.parseInt(sVal) > 0) {
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                        try {
+                            String sVal = holder.Qty.getText().toString();
+                            if (sVal.equalsIgnoreCase("")) sVal = "0";
+                            if (Integer.parseInt(sVal) > 0) {
+                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+
+                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+                                int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
+                                if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                    holder.tvStock.setText("" + (int) (balance - order));
+                            }
+
+                        } catch (Exception e) {
+                            Log.v(TAG + "QtyMns:", e.getMessage());
                         }
                     }
                 });
+
 
                 holder.Qty.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -1453,7 +1556,19 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty);
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
+
+
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0 && Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
+                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
+                                enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
+                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+                                common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
+
+                            }
+
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
+                                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty));
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1461,25 +1576,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
 
-                                try {
-                                    String name = "";
-                                    String uomQty = "";
-                                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
-                                        name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
-                                        uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
-                                                (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
 
-                                    }
-
-                                    holder.tvUomName.setText(name);
-                                    holder.tvUomQty.setText(uomQty);
-
-                                } catch (Exception e) {
-
-                                }
                             }
 
 

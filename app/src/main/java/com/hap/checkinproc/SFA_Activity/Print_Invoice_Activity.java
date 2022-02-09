@@ -999,11 +999,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     JSONObject obj = arr.getJSONObject(a);
                     total_qtytext += obj.getInt("Qty");
                     double amt = 0;
-                    String paidAmt = "0";
-                    try {
-                        paidAmt = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? "0" : obj.getString("PaidAmount");
-                    } catch (Exception e) {
-                    }
 
                     double taxAmt = 0.00;
 
@@ -1066,7 +1061,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), 1, "1",
                             "1", "5", "", 0, "0", obj.getDouble("Price"),
-                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, paidAmt, (taxAmt)));
+                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt)));
 
 
                 }

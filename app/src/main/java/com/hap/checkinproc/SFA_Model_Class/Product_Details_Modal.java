@@ -114,6 +114,12 @@ public class Product_Details_Modal {
 
     private String UOM_Id;
     private String UOM_Nm;
+
+    public Product_Details_Modal(double cnvQty,String UOM_Nm) {
+       this. CnvQty = cnvQty;
+       this.UOM_Nm=UOM_Nm;
+    }
+
     private String mfg = "";
     private String exp = "";
     private String remarks = "";
