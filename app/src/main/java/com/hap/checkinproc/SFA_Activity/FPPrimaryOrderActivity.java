@@ -1447,7 +1447,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                 if (CategoryType >= 0) {
 
                     holder.tvMRP.setText("₹" + ProductItem.getMRP());
-                    holder.totalQty.setText("Total Qty : " + oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
+                    holder.totalQty.setText("Total Qty : " + (int)oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
 
                     if (!ProductItem.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();

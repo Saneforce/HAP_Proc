@@ -346,7 +346,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 //                }
 //            }
 
-           // Log.v(TAG, " order oncreate:j " + preOrderList);
+            // Log.v(TAG, " order oncreate:j " + preOrderList);
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
@@ -1204,8 +1204,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 if (CategoryType >= 0) {
 
-                    holder.totalQty.setText("Total Qty : " + (((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()))) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
+                    holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty() +
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1247,7 +1247,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
+                if (Product_Details_Modal.getQty() > 0)
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");

@@ -1236,7 +1236,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                         }
                     });
 
-                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Qty : " + ((int)(Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1260,7 +1260,8 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
 
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
+               if (Product_Details_Modal.getQty() > 0)
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");

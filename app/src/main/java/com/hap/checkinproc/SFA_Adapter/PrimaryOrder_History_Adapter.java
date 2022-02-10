@@ -58,7 +58,7 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
             if (isToday(obj.getString("Order_Date")) == 0)
                 holder.llEdit.setVisibility(View.VISIBLE);
             else
-                holder.llEdit.setVisibility(View.INVISIBLE);
+                holder.llEdit.setVisibility(View.GONE);
 
 
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {

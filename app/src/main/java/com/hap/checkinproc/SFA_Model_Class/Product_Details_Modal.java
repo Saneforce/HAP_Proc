@@ -107,6 +107,15 @@ public class Product_Details_Modal {
     @Expose
     private Integer CheckStock;
 
+
+    @SerializedName("Multiple_UOM")
+    @Expose
+    private String Multiple_UOM;
+
+    @SerializedName("Multiple_Qty")
+    @Expose
+    private Integer Multiple_Qty;
+
     @SerializedName("UOMList")
     @Expose
     private List<UOM> UOMList = new ArrayList<>();
@@ -115,9 +124,9 @@ public class Product_Details_Modal {
     private String UOM_Id;
     private String UOM_Nm;
 
-    public Product_Details_Modal(double cnvQty,String UOM_Nm) {
-       this. CnvQty = cnvQty;
-       this.UOM_Nm=UOM_Nm;
+    public Product_Details_Modal(double cnvQty, String UOM_Nm) {
+        this.CnvQty = cnvQty;
+        this.UOM_Nm = UOM_Nm;
     }
 
     private String mfg = "";
@@ -725,6 +734,22 @@ public class Product_Details_Modal {
 
     public void setCheckStock(Integer checkStock) {
         CheckStock = checkStock;
+    }
+
+    public String getMultiple_UOM() {
+        return Multiple_UOM;
+    }
+
+    public void setMultiple_UOM(String multiple_UOM) {
+        Multiple_UOM = multiple_UOM;
+    }
+
+    public Integer getMultiple_Qty() {
+        return Multiple_Qty;
+    }
+
+    public void setMultiple_Qty(Integer multiple_Qty) {
+        Multiple_Qty = multiple_Qty;
     }
 
 

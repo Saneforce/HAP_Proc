@@ -1280,12 +1280,13 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
 
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
+                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
+
 
                 if (CategoryType >= 0) {
 
 
-                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
@@ -1343,7 +1344,8 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
+               if (Product_Details_Modal.getQty() > 0)
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");

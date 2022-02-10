@@ -1583,6 +1583,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 }
 
+                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
+
+
                 holder.Rate.setText("₹" + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
 
                 //  holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
@@ -1592,16 +1596,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 if (CategoryType >= 0) {
 
-                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
-                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
-                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                         holder.tvStock.setTextColor(getResources().getColor(R.color.green));
                     else
                         holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
-                    holder.totalQty.setText("Total Qty : " + (
+                    holder.totalQty.setText("Total Qty : " + ((int)
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
@@ -1643,7 +1645,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
+               if (Product_Details_Modal.getQty() > 0)
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
@@ -1728,7 +1731,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP()))));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
-                                holder.totalQty.setText("Total Qty : " + totQty);
+                                holder.totalQty.setText("Total Qty : " +(int) totQty);
                             }
 
 
