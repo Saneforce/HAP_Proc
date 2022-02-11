@@ -509,8 +509,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
 
 
-                RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
-                RetLng = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
+                if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLat()))
+                    RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
+                if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLong()))
+                    RetLng = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
 
                 Shared_Common_Pref.Outletlat = RetLat;
                 Shared_Common_Pref.Outletlong = RetLng;
@@ -540,6 +542,25 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     if (i.getExtras().getString("categoryuniverseswitch") != null)
                         categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
                 }
+
+
+                if (Retailer_Modal_List.get(getOutletPosition()).getSpeciality() != null) {
+                    tvSubCategory.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
+                    categoryId = "" + Retailer_Modal_List.get(getOutletPosition()).getDocSpecialCode();
+                    Log.v("categoryId:",categoryId+":"+Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
+                }
+
+
+                if (Retailer_Modal_List.get(getOutletPosition()).getOutletClass() != null && !Retailer_Modal_List.get(getOutletPosition()).getOutletClass().equalsIgnoreCase("B")) {
+                    txtRetailerChannel.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getDocCatCode() != null)
+                        channelID = Retailer_Modal_List.get(getOutletPosition()).getDocCatCode();
+
+                    Log.v("categorySubId:",""+channelID+": "+Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
+
+                }
+
+
             }
             Log.e(TAG + "2:", Shared_Common_Pref.Outler_AddFlag);
 
@@ -823,7 +844,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG + "catch:", e.getMessage());
 
         }
 
@@ -895,7 +916,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     JsonArray jsonArray = response.body();
-                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    Log.e("RESPONSE_VALUE:Sub:", String.valueOf(jsonArray));
                     for (int a = 0; a < jsonArray.size(); a++) {
                         JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                         String className = String.valueOf(jsonObject.get("name"));
@@ -1082,7 +1103,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_contactperson3", "''");
             reportObject.put("unlisted_doctor_designation2", "''");
             reportObject.put("unlisted_cat_code", "null");
-            reportObject.put("unlisted_specialty_name", txtRetailerChannel.getText().toString());
+            reportObject.put("unlisted_specialty_name", tvSubCategory.getText().toString());
             reportObject.put("unlisted_specialty_code", categoryId);
             reportObject.put("unlisted_qulifi", "'samp'");
             reportObject.put("unlisted_class", classId);
@@ -1097,7 +1118,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
             reportObject.put("img_name", "'" + imageServer + "'");
-            reportObject.put("sub_category", "'" + tvSubCategory.getText().toString() + "'");
+            reportObject.put("sub_category", "'" + txtRetailerChannel.getText().toString() + "'");
             reportObject.put("sub_categoryId", "'" + channelID + "'");
             reportObject.put("expected_sales_value", "'" + edtExpcSalVal.getText().toString() + "'");
             reportObject.put("fssai_number", "'" + edtFSSAI.getText().toString() + "'");
@@ -1562,7 +1583,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     void getCategoryList(String apiDataResponse) {
         try {
             JSONObject catObj = new JSONObject(apiDataResponse);
-            Log.e("RESPONSE_VALUE", apiDataResponse);
+            Log.e("RESPONSE_VALUE:CAT:", apiDataResponse);
 
             if (catObj.getBoolean("success")) {
 

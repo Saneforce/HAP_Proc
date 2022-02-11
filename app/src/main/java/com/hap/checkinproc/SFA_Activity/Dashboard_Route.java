@@ -54,6 +54,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.PushNotification.MyFirebaseMessagingService;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.OutletCategoryFilterAdapter;
+import com.hap.checkinproc.SFA_Adapter.OutletMasterCategoryFilterAdapter;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -80,10 +81,11 @@ import retrofit2.Response;
 public class Dashboard_Route extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     public static Dashboard_Route dashboard_route;
     public static Common_Class common_class;
-    public TextView distributor_text;
     public static Shared_Common_Pref shared_common_pref;
+    public TextView distributor_text;
     List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
     List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
     List<OutletReport_View_Modal> Retailer_Order_List;
@@ -99,14 +101,10 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     DatabaseHandler db;
-
     ImageView ivToolbarHome, ivBtnRpt;
     LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder;
     TabAdapter adapter;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    Switch swACOutlet, swOTHOutlet;
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
+    Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient;
     int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
@@ -114,9 +112,14 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     String ViewDist;
     RecyclerView rvOutletCategory, rvMasterCategory;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
-    private String mCategoryName = "ALL";
-    private ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
-private ArrayList<String> groupOutletCategory=new ArrayList<>();
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private String mCategoryName = "ALL", mSubCategoryName = "ALL";
+    private final ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
+    private final ArrayList<String> groupOutletCategory = new ArrayList<>();
+
+    String categoryType = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -213,12 +216,15 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
 
             swACOutlet = findViewById(R.id.swACOutlet);
             swOTHOutlet = findViewById(R.id.swOTHOutlet);
+            swPlus4 = findViewById(R.id.swPlus4);
+            swAmbient = findViewById(R.id.swAmbient);
+            swMinus18 = findViewById(R.id.swMinus18);
 
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
             tabLayout = findViewById(R.id.tabs);
             rvOutletCategory = findViewById(R.id.rvOutletCategory);
-            rvMasterCategory = findViewById(R.id.rvMasterOutletCategory);
+            rvMasterCategory = findViewById(R.id.rvOutletMasterCategory);
 
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
@@ -273,6 +279,47 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     setPagerAdapter(false);
+                }
+            });
+
+
+            swMinus18.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if (isChecked) {
+//                        swPlus4.setChecked(false);
+//                        swAmbient.setChecked(false);
+//
+//
+//                    }
+
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
+                    //  setPagerAdapter(false);
+                }
+            });
+            swPlus4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if (isChecked) {
+//                        swMinus18.setChecked(false);
+//                        swAmbient.setChecked(false);
+//
+//                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
+                }
+            });
+
+            swAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if (isChecked) {
+//                        swPlus4.setChecked(false);
+//                        swMinus18.setChecked(false);
+//                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
                 }
             });
 
@@ -398,8 +445,8 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
             Type commonType = new TypeToken<ArrayList<Common_Model>>() {
             }.getType();
 
-          //  if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
-              //  getRetailerChannel();
+            //  if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
+            //  getRetailerChannel();
 
 //            else {
 //                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
@@ -410,7 +457,7 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
 //                    }
 //                }));
 
-           // }
+            // }
 
 
             setOutletCategoryAdapter();
@@ -423,6 +470,23 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
         }
 
 
+    }
+
+    private void getCategoryType(boolean isMinus18, boolean isPlus4, boolean isAmbient) {
+
+        categoryType = "";
+
+        if (isMinus18)
+            categoryType = "-18,";
+        if (isPlus4)
+            categoryType = categoryType + "+4,";
+        if (isAmbient)
+            categoryType = categoryType + "Ambient,";
+
+        if (categoryType.length() > 0)
+            categoryType = categoryType.substring(0, categoryType.length() - 1);
+        Log.v("categoryTypes:DR", categoryType);
+        setPagerAdapter(true);
     }
 
     public void getGroupOutletCategory() {
@@ -529,7 +593,9 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
         try {
             ArrayList<String> list = new ArrayList<>();
             for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
-                list.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
+                if (!Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getOutletClass()) && !Retailer_Modal_ListFilter.get(i).getOutletClass().equalsIgnoreCase("B")) {
+                    list.add(Retailer_Modal_ListFilter.get(i).getOutletClass());
+                }
             }
             HashSet hs = new HashSet();
             hs.addAll(list);
@@ -537,19 +603,50 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
             list.add("ALL");
             list.addAll(hs);
 
-            rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(list, this, new AdapterOnClick() {
+            rvMasterCategory.setAdapter(new OutletMasterCategoryFilterAdapter(list, this, new AdapterOnClick() {
                 @Override
                 public void CallMobile(String categoryName) {
                     mCategoryName = categoryName;
+                    setSubCatAdapter();
+
                     setPagerAdapter(true);
                 }
             }));
+
+
+            setSubCatAdapter();
+
         } catch (Exception e) {
             Log.v("Retailor List:cat ex", e.getMessage());
         }
 
     }
 
+    void setSubCatAdapter() {
+        ArrayList<String> subList = new ArrayList<>();
+        for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
+            if (mCategoryName.equalsIgnoreCase("ALL"))
+                subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
+            else if (mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass()))
+                subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
+
+        }
+        HashSet sub = new HashSet();
+        sub.addAll(subList);
+        subList.clear();
+        subList.add("ALL");
+        subList.addAll(sub);
+
+        rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(subList, this, new AdapterOnClick() {
+            @Override
+            public void CallMobile(String categoryName) {
+                mSubCategoryName = categoryName;
+                setPagerAdapter(true);
+            }
+        }));
+
+
+    }
 
     public void getSalesCounts() {
         updSale = true;
@@ -680,7 +777,7 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -836,6 +933,8 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
 
         common_class.dismissCommonDialog(type);
         if (type == 2) {
+            mCategoryName = "ALL";
+            mSubCategoryName = "ALL";
             route_text.setText("");
             shared_common_pref.save(Constants.Route_name, "");
             shared_common_pref.save(Constants.Route_Id, "");
@@ -990,9 +1089,10 @@ private ArrayList<String> groupOutletCategory=new ArrayList<>();
             txTotUniOtltCnt.setText(String.valueOf(CountTotUni));
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, "");
+                Log.v("categoryTypes:", categoryType);
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, categoryType, mSubCategoryName);
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName);
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);

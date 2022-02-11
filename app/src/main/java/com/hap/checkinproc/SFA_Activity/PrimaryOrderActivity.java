@@ -317,7 +317,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                         int cVal = (int) val;
                                         if (val - cVal > 0) {
                                             AlertDialogBox.showDialog(PrimaryOrderActivity.this, "HAP SFA",
-                                                    "Please enter valid Qty for " + Getorder_Array_List.get(i).getName().toUpperCase()
+                                                    "Enter Order Qty Multiple of : " + Getorder_Array_List.get(i).getMultiple_Qty() + " for " + Getorder_Array_List.get(i).getName().toUpperCase()
                                                     , "", "Close", false, new AlertBox() {
                                                         @Override
                                                         public void PositiveMethod(DialogInterface dialog, int id) {
