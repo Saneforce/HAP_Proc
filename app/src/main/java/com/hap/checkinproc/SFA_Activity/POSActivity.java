@@ -821,7 +821,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt",formatter.format( amt));
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -990,28 +990,28 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
             }
 
-            totTax = 0;
-            try {
-                String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
-                JSONObject obj = new JSONObject(totAmtTax);
+//            totTax = 0;
+//            try {
+//                String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
+//                JSONObject obj = new JSONObject(totAmtTax);
+//
+//                if (obj.getBoolean("success")) {
+//                    JSONArray arr = obj.getJSONArray("Data");
+//                    for (int i = 0; i < arr.length(); i++) {
+//                        JSONObject taxObj = arr.getJSONObject(i);
+//                        double taxCal = (totalvalues) *
+//                                ((taxObj.getDouble("Value") / 100));
+//                        totTax = +totTax + taxCal;
+//
+//                    }
+//                }
+//            } catch (Exception e) {
+//
+//            }
 
-                if (obj.getBoolean("success")) {
-                    JSONArray arr = obj.getJSONArray("Data");
-                    for (int i = 0; i < arr.length(); i++) {
-                        JSONObject taxObj = arr.getJSONObject(i);
-                        double taxCal = (totalvalues) *
-                                ((taxObj.getDouble("Value") / 100));
-                        totTax = +totTax + taxCal;
+           // totalvalues = totalvalues + totTax;
 
-                    }
-                }
-            } catch (Exception e) {
-
-            }
-
-            totalvalues = totalvalues + totTax;
-
-            tvNetAmtTax.setText("₹ " + totTax);
+          //  tvNetAmtTax.setText("₹ " + totTax);
 
             tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
             tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
@@ -1596,7 +1596,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 if (CategoryType >= 0) {
 
-                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                         holder.tvStock.setTextColor(getResources().getColor(R.color.green));
@@ -1604,7 +1604,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                     holder.totalQty.setText("Total Qty : " + ((int)
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()/*
+                             * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1645,7 +1646,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-               if (Product_Details_Modal.getQty() > 0)
+                if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
@@ -1731,7 +1732,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP()))));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty() * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
-                                holder.totalQty.setText("Total Qty : " +(int) totQty);
+                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
                             }
 
 

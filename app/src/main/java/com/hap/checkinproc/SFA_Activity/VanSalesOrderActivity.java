@@ -1197,8 +1197,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                 if (CategoryType >= 0) {
 
-                    holder.totalQty.setText("Total Qty : " + (int)((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty() +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())) * Product_Details_Modal.getCnvQty()));
+                    holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()/* +
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())) * Product_Details_Modal.getCnvQty()*/)));
 
 
                     holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
@@ -1228,7 +1228,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-               if (Product_Details_Modal.getQty() > 0)
+                if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
@@ -1279,7 +1279,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.totalQty.setText("Total Qty : " + (int)/* totQty*/enterQty);
                             }
 
 

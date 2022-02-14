@@ -1237,7 +1237,7 @@
                                 android:id="@+id/rvCategoryTypes"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:orientation="vertical"
                                 android:visibility="visible"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 

@@ -1204,8 +1204,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 if (CategoryType >= 0) {
 
-                    holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty() +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
+                    holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /*+
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1298,7 +1298,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
 
                             }
 

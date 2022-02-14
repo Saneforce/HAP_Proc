@@ -162,6 +162,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private String categoryId = "", approval = "";
 
     boolean isFlag = false;
+    private int typeUpdatePos = -1;
+    private Category_Adapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,12 +285,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             outletTypeList.add(mCommon_model_spinner);
 
             serviceTypeList = new ArrayList<>();
-            serviceTypeList.add(new Common_Model("-18", "1", false));
-            serviceTypeList.add(new Common_Model("+4", "2", false));
-            serviceTypeList.add(new Common_Model("Ambient", "3", false));
-            serviceTypeList.add(new Common_Model("B&C", "4", false));
+            serviceTypeList.add(new Common_Model("-18", "1", false, "", "", "", ""));
+            serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
+            serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
+            serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
 
-            Category_Adapter categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
+            categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
             rvCategoryTypes.setAdapter(categoryAdapter);
 
 
@@ -547,7 +549,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 if (Retailer_Modal_List.get(getOutletPosition()).getSpeciality() != null) {
                     tvSubCategory.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
                     categoryId = "" + Retailer_Modal_List.get(getOutletPosition()).getDocSpecialCode();
-                    Log.v("categoryId:",categoryId+":"+Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
+                    Log.v("categoryId:", categoryId + ":" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
                 }
 
 
@@ -556,7 +558,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     if (Retailer_Modal_List.get(getOutletPosition()).getDocCatCode() != null)
                         channelID = Retailer_Modal_List.get(getOutletPosition()).getDocCatCode();
 
-                    Log.v("categorySubId:",""+channelID+": "+Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
+                    Log.v("categorySubId:", "" + channelID + ": " + Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
 
                 }
 
@@ -960,7 +962,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Retailer Channel */
     public void getRetailerChannel() {
-        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"CategoryCode\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
                 "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
@@ -987,7 +989,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                         Log.e("RETAILER_Channel_NAME", retailerClass);
                         String approval = String.valueOf(jsonObject.get("NeedApproval"));
-                        mCommon_model_spinner = new Common_Model(id, retailerClass, approval);
+                        mCommon_model_spinner = new Common_Model(id, retailerClass, approval, String.valueOf(jsonObject.get("CategoryCode")));
                         Log.e("LeaveType_Request", retailerClass);
                         modelRetailChannel.add(mCommon_model_spinner);
                     }
@@ -1165,6 +1167,23 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             reportObject.put("freezer_file_Details", freezerFileArr);
 
+            JSONArray outletTypeArr = new JSONArray();
+            for (int i = 0; i < serviceTypeList.size(); i++) {
+                if (serviceTypeList.get(i).isSelected()) {
+                    JSONObject typeData = new JSONObject();
+                    typeData.put("type_name", serviceTypeList.get(i).getName());
+                    typeData.put("cat_name", serviceTypeList.get(i).getCatName());
+                    typeData.put("cat_id", serviceTypeList.get(i).getCatId());
+                    typeData.put("subcat_id", serviceTypeList.get(i).getSubCatId());
+                    typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
+
+                    outletTypeArr.put(typeData);
+                }
+            }
+
+            reportObject.put("outlet_type_Details", outletTypeArr);
+
+
             docMasterObject.put("unlisted_doctor_master", reportObject);
 
             mainArray = new JSONArray();
@@ -1257,6 +1276,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         common_class.dismissCommonDialog(type);
         switch (type) {
+            case 5:
+
+                serviceTypeList.get(typeUpdatePos).setCatId(myDataset.get(position).getId());
+                serviceTypeList.get(typeUpdatePos).setCatName(myDataset.get(position).getName());
+                categoryAdapter.notifyData(serviceTypeList, this);
+
+                break;
+            case 6:
+                serviceTypeList.get(typeUpdatePos).setSubCatId(myDataset.get(position).getId());
+                serviceTypeList.get(typeUpdatePos).setSubCatName(myDataset.get(position).getName());
+                categoryAdapter.notifyData(serviceTypeList, this);
+
+                break;
             case 1:
                 tvStateName.setText(myDataset.get(position).getName());
                 stateCode = Integer.valueOf(myDataset.get(position).getId());
@@ -1590,7 +1622,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 JSONArray arr = catObj.getJSONArray("Data");
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    categoryList.add(new Common_Model(obj.getString("CategoryName"), obj.getString("CategoryCode")));
+                    categoryList.add(new Common_Model(obj.getString("CategoryCode"), obj.getString("CategoryName"),
+                            obj.getString("OutletCategory")));
                 }
             }
         } catch (Exception e) {
@@ -1726,6 +1759,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             this.context = context;
         }
 
+        public void notifyData(List<Common_Model> list, Context context) {
+            this.list = list;
+            this.context = context;
+            notifyDataSetChanged();
+        }
+
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
@@ -1746,7 +1785,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         public void onBindViewHolder(MyViewHolder holder, int position) {
             try {
 
-                holder.name.setText(list.get(position).getName());
+                holder.type.setText(list.get(position).getName());
+                holder.category.setText(list.get(position).getCatName());
+                holder.subCategory.setText(list.get(position).getSubCatName());
+
                 holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1758,6 +1800,45 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                         } catch (Exception e) {
                             Log.e(TAG, "adapterProductEx: " + e.getMessage());
+
+                        }
+                    }
+                });
+
+                holder.category.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        typeUpdatePos = position;
+                        if (list.get(position).isSelected()) {
+                            ArrayList<Common_Model> typeCatList = new ArrayList<>();
+
+                            for (int i = 0; i < categoryList.size(); i++) {
+                                if (categoryList.get(i).getFlag().contains(list.get(position).getName()))
+                                    typeCatList.add(categoryList.get(i));
+                            }
+                            common_class.showCommonDialog(typeCatList, 5, AddNewRetailer.this);
+                        }
+                    }
+                });
+
+                holder.subCategory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            typeUpdatePos = position;
+                            if (list.get(position).isSelected() && !Common_Class.isNullOrEmpty(list.get(position).getCatId())) {
+                                ArrayList<Common_Model> typeSubCatList = new ArrayList<>();
+
+                                for (int i = 0; i < modelRetailChannel.size(); i++) {
+
+                                    String code = modelRetailChannel.get(i).getCheckouttime();
+                                    if (code.contains(list.get(position).getCatId() + ","))
+                                        typeSubCatList.add(modelRetailChannel.get(i));
+                                }
+                                common_class.showCommonDialog(typeSubCatList, 6, AddNewRetailer.this);
+                            }
+                        } catch (Exception e) {
+                            Log.v(TAG, "subCate: " + e.getMessage());
 
                         }
                     }
@@ -1777,12 +1858,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView name;
+            public TextView category, type, subCategory;
             CheckBox cbType;
 
             public MyViewHolder(View view) {
                 super(view);
-                name = view.findViewById(R.id.tvCategoryName);
+                category = view.findViewById(R.id.tvCategory);
+                type = view.findViewById(R.id.tvCategoryType);
+                subCategory = view.findViewById(R.id.tvSubCategory);
                 cbType = view.findViewById(R.id.cbCategory);
 
             }

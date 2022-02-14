@@ -121,6 +121,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     String orderId = "";
     private boolean isEditOrder = false;
+    private int inValidQty = -1;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -316,17 +317,23 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                         double val = Double.valueOf(Getorder_Array_List.get(i).getQty()) / Double.valueOf(Getorder_Array_List.get(i).getMultiple_Qty());
                                         int cVal = (int) val;
                                         if (val - cVal > 0) {
+                                            int finalI = i;
                                             AlertDialogBox.showDialog(PrimaryOrderActivity.this, "HAP SFA",
                                                     "Enter Order Qty Multiple of : " + Getorder_Array_List.get(i).getMultiple_Qty() + " for " + Getorder_Array_List.get(i).getName().toUpperCase()
                                                     , "", "Close", false, new AlertBox() {
                                                         @Override
                                                         public void PositiveMethod(DialogInterface dialog, int id) {
                                                             dialog.dismiss();
+                                                            //  mProdct_Adapter.focusQty(i);
+                                                            inValidQty = finalI;
+                                                            mProdct_Adapter.notifyDataSetChanged();
                                                         }
 
                                                         @Override
                                                         public void NegativeMethod(DialogInterface dialog, int id) {
                                                             dialog.dismiss();
+                                                            inValidQty = finalI;
+                                                            mProdct_Adapter.notifyDataSetChanged();
 
                                                         }
                                                     });
@@ -1568,7 +1575,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     holder.tvUomName.setText(name);
                     holder.tvUomQty.setText(uomQty);
 
-                    holder.tvMultiple.setText("Order Qty Multiple of : " + ProductItem.getMultiple_Qty());
+                    holder.tvMultiple.setText("Order Qty Multiple of : " + (int) (ProductItem.getMultiple_Qty()));
 
                 }
 
@@ -1587,27 +1594,65 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal = holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        int iQty = Integer.parseInt(sVal) + 1;
-                        sVal = "";
-                        if (iQty > 0) sVal = String.valueOf(iQty);
-                        holder.Qty.setText(sVal);
-                        bRmRow = true;
-                        //sumofTax();
+                        try {
+//                        String sVal = holder.Qty.getText().toString();
+//                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+//                        int iQty = Integer.parseInt(sVal) + 1;
+//                        sVal = "";
+//                        if (iQty > 0) sVal = String.valueOf(iQty);
+//                        holder.Qty.setText(sVal);
+
+                            String sVal = holder.Qty.getText().toString();
+                            if (sVal.equalsIgnoreCase("")) sVal = "0";
+                            holder.Qty.setText("" + (Integer.parseInt(sVal) + ProductItem.getMultiple_Qty()));
+
+                            double val = Double.valueOf(sVal) / Double.valueOf(ProductItem.getMultiple_Qty());
+                            int cVal = (int) (val);
+
+                            if (val - cVal > 0) {
+                                holder.Qty.setText("" + (Math.round(val+1) * ProductItem.getMultiple_Qty()));
+
+                            }
+                            Log.v("remaiVal:", "" + val + " :round:" + cVal);
+
+                        } catch (Exception e) {
+                            Log.v(TAG + "plus:", e.getMessage());
+                        }
+
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+//                        String sVal = holder.Qty.getText().toString();
+//                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+//                        int iQty = Integer.parseInt(sVal) - 1;
+//                        sVal = "";
+//                        if (iQty > 0) sVal = String.valueOf(iQty);
+//                        holder.Qty.setText(sVal);
+
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        int iQty = Integer.parseInt(sVal) - 1;
-                        sVal = "";
-                        if (iQty > 0) sVal = String.valueOf(iQty);
-                        holder.Qty.setText(sVal);
-                        bRmRow = true;
-                        // sumofTax();
+                        if (Integer.parseInt(sVal) > 0) {
+                            if (Integer.parseInt(sVal) - ProductItem.getMultiple_Qty() > 0) {
+
+                                int minVal = (Integer.parseInt(sVal) - ProductItem.getMultiple_Qty());
+                                holder.Qty.setText("" + minVal);
+
+                                double val = Double.valueOf(minVal) / Double.valueOf(ProductItem.getMultiple_Qty());
+                                int cVal = (int) (val);
+
+                                Log.v("remaiVal:", "" + val + " :round:" + cVal);
+
+                                if (val - cVal > 0) {
+                                    holder.Qty.setText("" + (Math.round(val) * ProductItem.getMultiple_Qty()));
+
+                                }
+                            } else
+                                holder.Qty.setText("0");
+
+                        }
+
                     }
                 });
                 holder.Qty.addTextChangedListener(new TextWatcher() {
@@ -1641,6 +1686,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                                 holder.tvUomName.setText(name);
                                 holder.tvUomQty.setText(uomQty);
+
+                                holder.tvMultiple.setText("Order Qty Multiple of : " + (int) (ProductItem.getMultiple_Qty()));
+
 
                             }
 
@@ -1783,16 +1831,17 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             updateToTALITEMUI();
 
 
-                            if (CategoryType == -1) {
-                                if (holder.Amount.getText().toString().equals("₹0.00")) {
-
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-
-                                }
-
-                                showFreeQtyList();
-                            }
+                            //hide for remove unwanted action (product also remove edit scenario)
+//                            if (CategoryType == -1) {
+//                                if (holder.Amount.getText().toString().equals("₹0.00")) {
+//
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//
+//                                }
+//
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1843,6 +1892,18 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 }
 
                 updateToTALITEMUI();
+
+                if (inValidQty >= 0) {
+
+                    if (position == inValidQty) {
+                        holder.Qty.requestFocus();
+                        holder.Qty.setSelection(holder.Qty.getText().length());
+
+                        InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        manager.showSoftInput(holder.Qty, InputMethodManager.SHOW_IMPLICIT);
+                        inValidQty = -1;
+                    }
+                }
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }

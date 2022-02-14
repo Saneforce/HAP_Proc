@@ -1335,7 +1335,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
                             }
 
 
