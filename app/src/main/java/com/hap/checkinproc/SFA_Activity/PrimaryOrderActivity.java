@@ -107,7 +107,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
     private int selectedPos = 0;
-    private TextView tvTotalAmount, tvACBal;
+    private TextView tvTotalAmount, tvACBal,tvNetAmtTax;
     private double totalvalues, taxVal, editTotValues;
     private Integer totalQty;
     private TextView tvBillTotItem, tvTotUOM;
@@ -122,6 +122,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     String orderId = "";
     private boolean isEditOrder = false;
     private int inValidQty = -1;
+    private double totTax;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -158,6 +159,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             btnRepeat = findViewById(R.id.btnRepeat);
             tvGrpName = findViewById(R.id.tvGrpName);
             tvTotUOM = findViewById(R.id.tvTotUom);
+            tvNetAmtTax = findViewById(R.id.tvNetAmtTax);
+
             Out_Let_Name.setText("HI! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
 
             etCategoryItemSearch = findViewById(R.id.searchView);
@@ -254,6 +257,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 //            }
 
             Log.v(TAG, " LOC DATA: " + sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA));
+
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX)))
+                common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
+
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -669,6 +676,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         OutletItem.put("orderId", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "" : getIntent().getStringExtra(Constants.ORDER_ID));
                         OutletItem.put("mode", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit");
                         OutletItem.put("cutoff_time", sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
+                        OutletItem.put("totAmtTax", formatter.format(totTax));
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -908,6 +916,30 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             }
 
         }
+
+                    totTax = 0;
+            try {
+                String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
+                JSONObject obj = new JSONObject(totAmtTax);
+
+                if (obj.getBoolean("success")) {
+                    JSONArray arr = obj.getJSONArray("Data");
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject taxObj = arr.getJSONObject(i);
+                        double taxCal = (totalvalues) *
+                                ((taxObj.getDouble("Value") / 100));
+                        totTax = +totTax + taxCal;
+
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+
+         totalvalues = totalvalues + totTax;
+
+          tvNetAmtTax.setText("₹ " + formatter.format(totTax));
+
 
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));

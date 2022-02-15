@@ -569,6 +569,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    categoryType = "";
+                    for (int i = 0; i < serviceTypeList.size(); i++) {
+                        if (serviceTypeList.get(i).isSelected())
+                            categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
+                    }
+
+
                     if (txtRetailerRoute.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerName.getText().toString().matches("")) {
@@ -591,9 +598,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
-                    else if (txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
+                    else if (!divERP.equalsIgnoreCase("47") && txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
-                    } else if (tvSubCategory.getText().toString().equalsIgnoreCase("")) {
+                    } else if (!divERP.equalsIgnoreCase("47") && tvSubCategory.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Sub Category", Toast.LENGTH_SHORT).show();
                     } else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
@@ -605,6 +612,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
+                    } else if (divERP.equalsIgnoreCase("47") && categoryType.equals("")) {
+                        common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
                     } else if (divERP.equalsIgnoreCase("47") && cbFreezerYes.isChecked()) {
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
@@ -798,7 +807,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
                     } else {
-                        cbFreezerNo.setChecked(true);
+                        // cbFreezerNo.setChecked(true);
                         getFreezerData("");
 
                         findViewById(R.id.llFreezer).setVisibility(View.GONE);
@@ -816,7 +825,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                         getFreezerData("");
                     } else {
-                        cbFreezerYes.setChecked(true);
+                        // cbFreezerYes.setChecked(true);
                         findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
                     }
 
@@ -1065,11 +1074,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString() + "'");
-            categoryType = "";
-            for (int i = 0; i < serviceTypeList.size(); i++) {
-                if (serviceTypeList.get(i).isSelected())
-                    categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
-            }
 
             reportObject.put("CategoryType", "'" + categoryType + "'");
             if (Common_Class.isNullOrEmpty(edt_outstanding.getText().toString()) || edt_outstanding.getText().toString().equalsIgnoreCase("."))
@@ -1168,16 +1172,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("freezer_file_Details", freezerFileArr);
 
             JSONArray outletTypeArr = new JSONArray();
-            for (int i = 0; i < serviceTypeList.size(); i++) {
-                if (serviceTypeList.get(i).isSelected()) {
-                    JSONObject typeData = new JSONObject();
-                    typeData.put("type_name", serviceTypeList.get(i).getName());
-                    typeData.put("cat_name", serviceTypeList.get(i).getCatName());
-                    typeData.put("cat_id", serviceTypeList.get(i).getCatId());
-                    typeData.put("subcat_id", serviceTypeList.get(i).getSubCatId());
-                    typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
 
-                    outletTypeArr.put(typeData);
+            if (divERP.equalsIgnoreCase("47")) {
+                for (int i = 0; i < serviceTypeList.size(); i++) {
+                    if (serviceTypeList.get(i).isSelected()) {
+                        JSONObject typeData = new JSONObject();
+                        typeData.put("type_name", serviceTypeList.get(i).getName());
+                        typeData.put("cat_name", serviceTypeList.get(i).getCatName());
+                        typeData.put("cat_id", serviceTypeList.get(i).getCatId());
+                        typeData.put("subcat_id", serviceTypeList.get(i).getSubCatId());
+                        typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
+
+                        outletTypeArr.put(typeData);
+                    }
                 }
             }
 
@@ -1367,6 +1374,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
+            findViewById(R.id.llSubCategory).setVisibility(View.GONE);
+            findViewById(R.id.llCategory).setVisibility(View.GONE);
+
             // findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
         } else {
             if (!Shared_Common_Pref.Outler_AddFlag.equals("1"))
@@ -1374,6 +1384,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (!Common_Class.isNullOrEmpty(divERP)) {
                 findViewById(R.id.llCategoryType).setVisibility(View.GONE);
                 findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
+                findViewById(R.id.llSubCategory).setVisibility(View.VISIBLE);
+                findViewById(R.id.llCategory).setVisibility(View.VISIBLE);
+
             }
             //findViewById(R.id.llFreezer).setVisibility(View.GONE);
             mFreezerData.clear();
@@ -1743,7 +1756,26 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
     private void updateView(String name, boolean isChecked) {
-        cbFreezerYes.setChecked(isChecked);
+        for (int i = 0; i < serviceTypeList.size(); i++) {
+            if (serviceTypeList.get(i).getName().equalsIgnoreCase("-18") && serviceTypeList.get(i).isSelected()) {
+                cbFreezerYes.setEnabled(true);
+                cbFreezerYes.setChecked(true);
+                cbFreezerNo.setChecked(false);
+                cbFreezerNo.setEnabled(false);
+                break;
+            } else if (serviceTypeList.get(i).getName().equalsIgnoreCase("+4") && serviceTypeList.get(i).isSelected()) {
+                cbFreezerYes.setEnabled(true);
+                cbFreezerNo.setEnabled(true);
+                break;
+            } else if ((serviceTypeList.get(i).getName().equalsIgnoreCase("Ambient") && serviceTypeList.get(i).isSelected()) || (serviceTypeList.get(i).getName().equalsIgnoreCase("B&C") && serviceTypeList.get(i).isSelected())) {
+                cbFreezerNo.setChecked(true);
+                cbFreezerNo.setEnabled(true);
+                cbFreezerYes.setChecked(false);
+                cbFreezerYes.setEnabled(false);
+                break;
+            }
+        }
+        // cbFreezerYes.setChecked(isChecked);
 
     }
 
@@ -1795,8 +1827,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         try {
 
                             list.get(position).setSelected(isChecked);
-                            if (list.get(position).getName().equalsIgnoreCase("-18"))
-                                AddNewRetailer.mAddNewRetailer.updateView(list.get(position).getName(), isChecked);
+                            // if (list.get(position).getName().equalsIgnoreCase("-18"))
+                            AddNewRetailer.mAddNewRetailer.updateView(list.get(position).getName(), isChecked);
 
                         } catch (Exception e) {
                             Log.e(TAG, "adapterProductEx: " + e.getMessage());

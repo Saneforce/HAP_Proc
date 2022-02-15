@@ -113,6 +113,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     private List<Product_Details_Modal> orderTotTax;
     private ArrayList<Common_Model> uomList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -185,7 +186,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            Log.v(TAG, " order oncreate:h ");
+            Log.v(TAG, " category Type:" + Shared_Common_Pref.SecOrdOutletType);
 
             // showOrderItemList(0, "");
 
@@ -352,11 +353,21 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
             JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+
+            JSONArray filterArr = new JSONArray();
+
+            for (int i = 0; i < ProdGroups.length(); i++) {
+                JSONObject obj = ProdGroups.getJSONObject(i);
+                if (Common_Class.isNullOrEmpty(Shared_Common_Pref.SecOrdOutletType) || (Shared_Common_Pref.SecOrdOutletType.contains(obj.getString("name"))))
+                    filterArr.put(obj);
+            }
+
+
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
 
-            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+            RyclListItemAdb grplistItems = new RyclListItemAdb(filterArr, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
 
@@ -370,7 +381,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             });
             Grpgrid.setAdapter(grplistItems);
 
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+            FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
 
         } catch (Exception e) {
@@ -1442,17 +1453,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                             updateToTALITEMUI();
 
-                            if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                Log.v(TAG + position, ":OUT:amt:" + amt);
-                                if (amt.equals("₹0.00")) {
-                                    Log.v(TAG + position, ":IN:amt:" + amt);
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-
-                                showFreeQtyList();
-                            }
+                            //hide code for edit scenario not working properly (remove also unwanted situation)
+//                            if (CategoryType == -1) {
+//                                String amt = holder.Amount.getText().toString();
+//                                Log.v(TAG + position, ":OUT:amt:" + amt);
+//                                if (amt.equals("₹0.00")) {
+//                                    Log.v(TAG + position, ":IN:amt:" + amt);
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1473,6 +1485,35 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     }
                 });
+
+
+                if (CategoryType == -1) {
+                    holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
+                        }
+                    });
+                }
+
 
 
                 holder.Rate.setOnClickListener(new View.OnClickListener() {
@@ -1545,7 +1586,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
                     QtyAmt, totalQty, tvTaxLabel, tvUOM/*, tvUomName, tvUomQty*/;
-            ImageView ImgVwProd, QtyPls, QtyMns;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
             LinearLayout llRegular, rlUOM;
@@ -1578,6 +1619,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 //                    tvUomName = view.findViewById(R.id.tvUomName);
 //                    tvUomQty = view.findViewById(R.id.tvUomQty);
 
+                }
+                else {
+                    ivDel = view.findViewById(R.id.ivDel);
                 }
 
 

@@ -104,7 +104,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     ImageView ivToolbarHome, ivBtnRpt;
     LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder;
     TabAdapter adapter;
-    Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient;
+    Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient, swBandC;
     int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
@@ -116,7 +116,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     private ViewPager viewPager;
     private String mCategoryName = "ALL", mSubCategoryName = "ALL";
     private final ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
-    private final ArrayList<String> groupOutletCategory = new ArrayList<>();
 
     String categoryType = "";
 
@@ -219,6 +218,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             swPlus4 = findViewById(R.id.swPlus4);
             swAmbient = findViewById(R.id.swAmbient);
             swMinus18 = findViewById(R.id.swMinus18);
+            swBandC = findViewById(R.id.swBandC);
 
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
@@ -286,14 +286,15 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             swMinus18.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    if (isChecked) {
-//                        swPlus4.setChecked(false);
-//                        swAmbient.setChecked(false);
-//
-//
-//                    }
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swAmbient.setChecked(false);
+                        swBandC.setChecked(false);
 
-                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
+                    }
+
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
 
                     //  setPagerAdapter(false);
                 }
@@ -301,12 +302,13 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             swPlus4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    if (isChecked) {
-//                        swMinus18.setChecked(false);
-//                        swAmbient.setChecked(false);
-//
-//                    }
-                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+                    if (isChecked) {
+                        swMinus18.setChecked(false);
+                        swAmbient.setChecked(false);
+                        swBandC.setChecked(false);
+
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
 
                 }
             });
@@ -314,11 +316,25 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             swAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    if (isChecked) {
-//                        swPlus4.setChecked(false);
-//                        swMinus18.setChecked(false);
-//                    }
-                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swMinus18.setChecked(false);
+                        swBandC.setChecked(false);
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
+
+                }
+            });
+
+            swBandC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swMinus18.setChecked(false);
+                        swAmbient.setChecked(false);
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
 
                 }
             });
@@ -384,6 +400,11 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                if (shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("47")) {
+                    categoryType = "-18";
+                    findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
+                } else
+                    findViewById(R.id.cvCatTypeParent).setVisibility(View.GONE);
                 common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
                 common_class.getDb_310Data(Rout_List, this);
                 getLastInvoiceData();
@@ -472,19 +493,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private void getCategoryType(boolean isMinus18, boolean isPlus4, boolean isAmbient) {
-
-        categoryType = "";
-
-        if (isMinus18)
-            categoryType = "-18,";
-        if (isPlus4)
-            categoryType = categoryType + "+4,";
-        if (isAmbient)
-            categoryType = categoryType + "Ambient,";
-
-        if (categoryType.length() > 0)
-            categoryType = categoryType.substring(0, categoryType.length() - 1);
+    private void getCategoryType(boolean isMinus18, boolean isPlus4, boolean isAmbient, boolean isBandC) {
+        categoryType = isMinus18 ? "-18" : isPlus4 ? "+4" : isAmbient ? "Ambient" : isBandC ? "B&C" : "";
         Log.v("categoryTypes:DR", categoryType);
         setPagerAdapter(true);
     }
@@ -946,6 +956,16 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             shared_common_pref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+
+            if (myDataset.get(position).getDivERP().equalsIgnoreCase("47")) {
+                findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
+                categoryType = "-18";
+            } else {
+                categoryType = "";
+                findViewById(R.id.cvCatTypeParent).setVisibility(View.GONE);
+            }
+
+
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
             getLastInvoiceData();
             common_class.getDataFromApi(Retailer_OutletList, this, false);
@@ -978,6 +998,9 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+                    case Constants.POS_NETAMT_TAX:
+                        Log.v("POS_NETAMT_TAX:", apiDataResponse);
+                        break;
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
@@ -1135,6 +1158,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                        } else if (Common_Class.isNullOrEmpty(dashboard_route.categoryType) && shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("47")) {
+                            common_class.showMsg(getActivity(), "Select the Category Type");
                         } else {
 
                             if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId())) {
@@ -1174,6 +1199,12 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 //                            } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
+                            if (dashboard_route.categoryType.equalsIgnoreCase("Ambient"))
+                                Shared_Common_Pref.SecOrdOutletType = "+4," + dashboard_route.categoryType;
+                            else if (dashboard_route.categoryType.equalsIgnoreCase("+4"))
+                                Shared_Common_Pref.SecOrdOutletType = dashboard_route.categoryType + ",Ambient";
+                            else
+                                Shared_Common_Pref.SecOrdOutletType = dashboard_route.categoryType;
                             Shared_Common_Pref.CUSTOMER_CODE = mRetailer_Modal_ListFilter.get(position).getCustomerCode();
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
                             common_class.CommonIntentwithoutFinish(Invoice_History.class);

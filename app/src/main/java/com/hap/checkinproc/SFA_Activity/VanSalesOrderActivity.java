@@ -1422,17 +1422,17 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                             updateToTALITEMUI();
 
-                            if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                Log.v(TAG + position, ":OUT:amt:" + amt);
-                                if (amt.equals("₹0.00")) {
-                                    Log.v(TAG + position, ":IN:amt:" + amt);
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-
-                                showFreeQtyList();
-                            }
+//                            if (CategoryType == -1) {
+//                                String amt = holder.Amount.getText().toString();
+//                                Log.v(TAG + position, ":OUT:amt:" + amt);
+//                                if (amt.equals("₹0.00")) {
+//                                    Log.v(TAG + position, ":IN:amt:" + amt);
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1453,6 +1453,33 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                     }
                 });
+
+                if (CategoryType == -1) {
+                    holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialogBox.showDialog(VanSalesOrderActivity.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
+                        }
+                    });
+                }
 
 
                 holder.Rate.setOnClickListener(new View.OnClickListener() {
@@ -1525,7 +1552,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
                     QtyAmt, totalQty, tvTaxLabel;
-            ImageView ImgVwProd, QtyPls, QtyMns;
+            ImageView ImgVwProd, QtyPls, QtyMns,ivDel;
             EditText Qty;
 
             LinearLayout llRegular;
@@ -1557,6 +1584,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     rlUOM = view.findViewById(R.id.rlUOM);
 
                 }
+                else {
+                    ivDel = view.findViewById(R.id.ivDel);
+                }
+
 
 
             }

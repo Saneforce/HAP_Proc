@@ -1870,13 +1870,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getTax()));
                             updateToTALITEMUI();
 
-                            if (CategoryType == -1) {
-                                if (holder.Amount.getText().toString().equals("₹0.00")) {
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-                                showFreeQtyList();
-                            }
+                            //hide code for del also unwanted edit scenario
+//                            if (CategoryType == -1) {
+//                                if (holder.Amount.getText().toString().equals("₹0.00")) {
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1897,6 +1898,33 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                     }
                 });
+
+                if (CategoryType == -1) {
+                    holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialogBox.showDialog(POSActivity.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
+                        }
+                    });
+                }
 
 
 //                holder.Rate.setOnClickListener(new View.OnClickListener() {
@@ -1987,7 +2015,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
                     QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock;
-            ImageView ImgVwProd, QtyPls, QtyMns;
+            ImageView ImgVwProd, QtyPls, QtyMns,ivDel;
             EditText Qty;
 
             LinearLayout llRegular;
@@ -2017,6 +2045,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
                     rlUOM = view.findViewById(R.id.rlUOM);
+                }
+                else {
+                    ivDel = view.findViewById(R.id.ivDel);
                 }
 
 

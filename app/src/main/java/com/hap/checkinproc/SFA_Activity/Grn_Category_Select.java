@@ -685,7 +685,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1011,9 +1011,9 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty,tvOrderQty;
+                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty, tvOrderQty;
 
-            ImageView ImgVwProd, QtyPls, QtyMns;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty, etBatchNo, etRemarks;
             RelativeLayout rlUOM;
 
@@ -1045,7 +1045,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
-                    tvOrderQty=view.findViewById(R.id.tvOrderQty);
+                } else {
+                    tvOrderQty = view.findViewById(R.id.tvOrderQty);
+                    ivDel = view.findViewById(R.id.ivDel);
+
                 }
 
 
@@ -1139,12 +1142,6 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 if (CategoryType >= 0) {
 
 
-                    try{
-                       holder.tvOrderQty.setText(""+Product_Details_Modal.getOrderQty());
-                    }
-                    catch (Exception e){
-
-                    }
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getExp()))
                         Product_Details_Modal.setExp("");
                     if (Common_Class.isNullOrEmpty(Product_Details_Modal.getMfg()))
@@ -1236,7 +1233,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                         }
                     });
 
-                    holder.totalQty.setText("Total Qty : " + ((int)(Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1256,11 +1253,19 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
 
 
+                } else {
+                    try {
+                        if (Product_Details_Modal.getOrderQty() == null)
+                            Product_Details_Modal.setOrderQty(0);
+                        holder.tvOrderQty.setText("" + Product_Details_Modal.getOrderQty());
+                    } catch (Exception e) {
+
+                    }
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
 
-               if (Product_Details_Modal.getQty() > 0)
+                if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
@@ -1520,14 +1525,14 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             updateToTALITEMUI();
 
 
-                            if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                if (amt.equals("₹0.00")) {
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-                                showFreeQtyList();
-                            }
+//                            if (CategoryType == -1) {
+//                                String amt = holder.Amount.getText().toString();
+//                                if (amt.equals("₹0.00")) {
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1546,6 +1551,35 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
                     }
                 });
+
+                if (CategoryType == -1) {
+                    holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialogBox.showDialog(Grn_Category_Select.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
+                        }
+                    });
+                }
+
+
                 holder.Rate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

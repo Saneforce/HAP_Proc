@@ -168,6 +168,14 @@
                         app:tint="@color/green" />
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/ivDel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:padding="@dimen/C5dp"
+                    android:src="@drawable/delete_cart"></ImageView>
+
                 <LinearLayout
                     android:visibility="gone"
                     android:layout_width="0dp"
