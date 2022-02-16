@@ -65,7 +65,6 @@ import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
-import com.hap.checkinproc.SFA_Activity.OutletApprovListActivity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
@@ -1231,10 +1230,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
 
                     ResetSubmitBtn(1);
-                    if (cbFreezerYes.isChecked() || approval.equalsIgnoreCase("1")) {
+                   /* if (cbFreezerYes.isChecked() || approval.equalsIgnoreCase("1")) {
                         common_class.CommonIntentwithFinish(OutletApprovListActivity.class);
                         overridePendingTransition(R.anim.in, R.anim.out);
-                    } else if (Shared_Common_Pref.FromActivity == "Outlets") {
+                    } else*/
+                    if (Shared_Common_Pref.FromActivity == "Outlets") {
                         Shared_Common_Pref.FromActivity = "";
                         common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
                     } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {

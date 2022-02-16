@@ -1183,6 +1183,13 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
 
+                if (Product_Details_Modal.getRateEdit() == 1) {
+                    holder.Rate.setEnabled(true);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
+                } else {
+                    holder.Rate.setEnabled(false);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
 
                 if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                     holder.ImgVwProd.clearColorFilter();
@@ -1552,7 +1559,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
                     QtyAmt, totalQty, tvTaxLabel;
-            ImageView ImgVwProd, QtyPls, QtyMns,ivDel;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
             LinearLayout llRegular;
@@ -1583,11 +1590,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     totalQty = view.findViewById(R.id.totalqty);
                     rlUOM = view.findViewById(R.id.rlUOM);
 
-                }
-                else {
+                } else {
                     ivDel = view.findViewById(R.id.ivDel);
                 }
-
 
 
             }

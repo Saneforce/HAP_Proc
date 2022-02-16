@@ -72,7 +72,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public Common_Class common_class;
-    TextView Createoutlet, latitude, longitude, availableoutlets, cAddress;
 
     public static Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;

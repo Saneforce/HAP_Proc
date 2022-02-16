@@ -32,6 +32,14 @@ public class Product_Details_Modal {
     @SerializedName("Product_Cat_Code")
     @Expose
     private Integer productCatCode;
+
+    @SerializedName("Product_Grp_Code")
+    @Expose
+    private Integer Product_Grp_Code;
+
+    @SerializedName("RateEdit")
+    @Expose
+    private Integer RateEdit;
     @SerializedName("row_num")
     @Expose
     private String rowNum;
@@ -750,6 +758,22 @@ public class Product_Details_Modal {
 
     public void setMultiple_Qty(Integer multiple_Qty) {
         Multiple_Qty = multiple_Qty;
+    }
+
+    public Integer getProduct_Grp_Code() {
+        return Product_Grp_Code;
+    }
+
+    public void setProduct_Grp_Code(Integer product_Grp_Code) {
+        Product_Grp_Code = product_Grp_Code;
+    }
+
+    public Integer getRateEdit() {
+        return RateEdit;
+    }
+
+    public void setRateEdit(Integer rateEdit) {
+        RateEdit = rateEdit;
     }
 
 

@@ -966,11 +966,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             Product_Modal.get(pm).setQty(
                                     jsonObject1.getInt("Quantity"));
 
-                            Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() *Product_Modal.get(pm).getQty() *
+                            Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() *
                                     Product_Modal.get(pm).getRate())));
 
 
-                            double enterQty = Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getCnvQty();
+                            double enterQty = Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getCnvQty();
                             String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
 
                             Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
@@ -1219,7 +1219,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             case 1:
 
                 int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance()==null||Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
+                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
                     Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                     Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                     Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
@@ -1378,7 +1378,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
                     QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock;
-            ImageView ImgVwProd, QtyPls, QtyMns,ivDel;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
             LinearLayout rlUOM;
@@ -1406,8 +1406,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
                     rlUOM = view.findViewById(R.id.rlUOM);
-                }
-                else {
+                } else {
                     ivDel = view.findViewById(R.id.ivDel);
                 }
 
@@ -1467,14 +1466,21 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
+                if (Product_Details_Modal.getRateEdit() == 1) {
+                    holder.Rate.setEnabled(true);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
+                } else {
+                    holder.Rate.setEnabled(false);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
 
                 if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
 
 
                 if (CategoryType >= 0) {
-                    holder.totalQty.setText("Total Qty : " + ((int)(Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /**
-                            Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
+                    holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /**
+                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1513,7 +1519,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     });
 
 
-                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                         holder.tvStock.setTextColor(getResources().getColor(R.color.green));

@@ -156,7 +156,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
         menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
-        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+        //menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
         menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
         menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
 
@@ -168,7 +168,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
-            menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
+          //  menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
         }
 
 

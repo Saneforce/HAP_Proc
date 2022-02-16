@@ -1210,6 +1210,17 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
+
+
+                if (Product_Details_Modal.getRateEdit() == 1) {
+                    holder.Rate.setEnabled(true);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
+                } else {
+                    holder.Rate.setEnabled(false);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
+
+
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
 
@@ -1515,7 +1526,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
 
 
-
                 holder.Rate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1619,8 +1629,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 //                    tvUomName = view.findViewById(R.id.tvUomName);
 //                    tvUomQty = view.findViewById(R.id.tvUomQty);
 
-                }
-                else {
+                } else {
                     ivDel = view.findViewById(R.id.ivDel);
                 }
 

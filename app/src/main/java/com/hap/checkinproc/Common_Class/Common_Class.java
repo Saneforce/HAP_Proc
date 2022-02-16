@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.4";
+    public static String Version_Name = "ver 3.3.5";
     public static String Work_Type = "0";
     public static int count;
 
@@ -299,9 +299,6 @@ public class Common_Class {
         }
         return ResArray;
     }
-
-
-
 
 
     public void getDataFromApi(String key, Activity activity, Boolean boolRefresh) {
@@ -556,9 +553,11 @@ public class Common_Class {
                     case Constants.MYTEAM_LOCATION:
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
-                        //  data.put("date", jparam.get("date").getAsString());
-                        data.put("date", "2021-09-09");
+                        data.put("date", jparam.get("date").getAsString());
+                        // data.put("date", "2021-09-09");
                         data.put("type", jparam.get("type").getAsString());
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+
                         break;
 
                     case Constants.DELIVERY_SEQUENCE:
@@ -684,6 +683,7 @@ public class Common_Class {
                         axnname = "get/secondaryscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("outletId", Shared_Common_Pref.OutletCode);
                         break;
                     case Constants.POS_SCHEME:
                         axnname = "get/posscheme";

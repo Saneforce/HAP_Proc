@@ -1271,10 +1271,11 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-
             common_class.getProductDetails(this);
+
             common_class.getDb_310Data(Constants.Primary_Product_List, this);
             getACBalance(0);  // common_class.getDb_310Data(Rout_List, this);
+
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
         } else if (type == 3) {

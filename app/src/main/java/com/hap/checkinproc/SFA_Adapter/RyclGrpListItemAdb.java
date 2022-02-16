@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity.selPOS;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -19,42 +21,42 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHolder> {
+public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.ViewHolder> {
     private static final String TAG = "RecycleItem";
     private JSONArray mlist = new JSONArray();
     private Context mContext;
     static onListItemClick itemClick;
-    RyclListItemAdb.ViewHolder pholder;
     Common_Class common_class;
 
     String id = "";
 
-    public RyclListItemAdb(JSONArray mlist, Context mContext, onListItemClick mItemClick) {
+    public RyclGrpListItemAdb(JSONArray mlist, Context mContext, onListItemClick mItemClick) {
         this.mlist = mlist;
         this.mContext = mContext;
         this.itemClick = mItemClick;
         common_class = new Common_Class(mContext);
     }
 
-//    public void notify(JSONArray mlist, Context mContext, onListItemClick mItemClick, String id) {
-//        this.mlist = mlist;
-//        this.mContext = mContext;
-//        this.itemClick = mItemClick;
-//        common_class = new Common_Class(mContext);
-//        this.id = id;
-//    }
+    public void notify(JSONArray mlist, Context mContext, String id, onListItemClick mItemClick) {
+        this.mlist = mlist;
+        this.mContext = mContext;
+        this.itemClick = mItemClick;
+        common_class = new Common_Class(mContext);
+        this.id = id;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
-    public RyclListItemAdb.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RyclGrpListItemAdb.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_order_types_ryclv, parent, false);
-        RyclListItemAdb.ViewHolder holder = new RyclListItemAdb.ViewHolder(view);
+        RyclGrpListItemAdb.ViewHolder holder = new RyclGrpListItemAdb.ViewHolder(view);
         return holder;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RyclListItemAdb.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RyclGrpListItemAdb.ViewHolder holder, int position) {
 
         JSONObject itm = null;
         try {
@@ -62,43 +64,48 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
             holder.icon.setText(itm.getString("name"));
 
 
-
-
             holder.gridcolor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    JSONObject itm = null;
                     try {
-                        itm = mlist.getJSONObject(holder.getAdapterPosition());
-                        if (itemClick != null) itemClick.onItemClick(itm);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+                        JSONObject itm = null;
+                        try {
+                            itm = mlist.getJSONObject(holder.getAdapterPosition());
+                            if (itemClick != null) itemClick.onItemClick(itm);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (id.equalsIgnoreCase("") || (id.equalsIgnoreCase(itm.getString("id")))) {
+                            selPOS = position;
+                        }
+                        notifyDataSetChanged();
+                    } catch (Exception e) {
+
                     }
-                    if (pholder != null) {
-                        pholder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbutton));
-                        pholder.icon.setTextColor(mContext.getResources().getColor(R.color.black));
-                        pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-                    }
-                    pholder = holder;
-                    common_class.grpPos = holder.getAdapterPosition();
-                    holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
-                    holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+
                 }
             });
 
-            if (position == common_class.grpPos) {
+            if (position == selPOS) {
+                //  if (id.equalsIgnoreCase("") || (id.equalsIgnoreCase(itm.getString("id")))) {
 
                 holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbtnprimary));
                 holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                 holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
-                pholder = holder;
-            } else {
-                holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbutton));
-                holder.icon.setTextColor(mContext.getResources().getColor(R.color.black));
-                holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                // }
 
+            } else {
+                // if (id.equalsIgnoreCase("") || (!id.equalsIgnoreCase(itm.getString("id")))) {
+
+                holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbutton));
+                if (!id.equalsIgnoreCase("") && !id.equalsIgnoreCase(itm.getString("id")))
+                    holder.icon.setTextColor(mContext.getResources().getColor(R.color.grey_500));
+                else
+                    holder.icon.setTextColor(mContext.getResources().getColor(R.color.black));
+
+                holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                // }
             }
 
         } catch (JSONException e) {

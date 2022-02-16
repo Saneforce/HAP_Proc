@@ -53,7 +53,7 @@ import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
-import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
+import com.hap.checkinproc.SFA_Adapter.RyclGrpListItemAdb;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -107,7 +107,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
     private int selectedPos = 0;
-    private TextView tvTotalAmount, tvACBal,tvNetAmtTax;
+    private TextView tvTotalAmount, tvACBal, tvNetAmtTax;
     private double totalvalues, taxVal, editTotValues;
     private Integer totalQty;
     private TextView tvBillTotItem, tvTotUOM;
@@ -123,6 +123,12 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     private boolean isEditOrder = false;
     private int inValidQty = -1;
     private double totTax;
+    private JSONArray ProdGroups;
+    private RyclGrpListItemAdb grplistItems;
+    public static PrimaryOrderActivity primaryOrderActivity;
+    public static int selPOS = 0;
+    Boolean boolMinu18 = false;
+    String grpName = "";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -130,6 +136,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_primary_order_layout);
+            primaryOrderActivity = this;
+            selPOS = 0;
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(PrimaryOrderActivity.this);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
@@ -917,29 +925,28 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         }
 
-                    totTax = 0;
-            try {
-                String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
-                JSONObject obj = new JSONObject(totAmtTax);
+        totTax = 0;
+        try {
+            String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
+            JSONObject obj = new JSONObject(totAmtTax);
 
-                if (obj.getBoolean("success")) {
-                    JSONArray arr = obj.getJSONArray("Data");
-                    for (int i = 0; i < arr.length(); i++) {
-                        JSONObject taxObj = arr.getJSONObject(i);
-                        double taxCal = (totalvalues) *
-                                ((taxObj.getDouble("Value") / 100));
-                        totTax = +totTax + taxCal;
+            if (obj.getBoolean("success")) {
+                JSONArray arr = obj.getJSONArray("Data");
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject taxObj = arr.getJSONObject(i);
+                    double taxCal = (totalvalues) *
+                            ((taxObj.getDouble("Value") / 100));
+                    totTax = +totTax + taxCal;
 
-                    }
                 }
-            } catch (Exception e) {
-
             }
+        } catch (Exception e) {
 
-         totalvalues = totalvalues + totTax;
+        }
 
-          tvNetAmtTax.setText("₹ " + formatter.format(totTax));
+        totalvalues = totalvalues + totTax;
 
+        tvNetAmtTax.setText("₹ " + formatter.format(totTax));
 
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
@@ -1083,8 +1090,59 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         }
 
+
+        if (boolMinu18) {
+            if (Getorder_Array_List.size() == 0)
+                grplistItems.notify(ProdGroups, this, "", new onListItemClick() {
+                    @Override
+                    public void onItemClick(JSONObject item) {
+                        try {
+                            grpName = "";
+                            FilterTypes(item.getString("id"));
+                            common_class.brandPos = 0;
+
+                            tvGrpName.setText("" + item.getString("name"));
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+            else {
+                grpName = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
+                grplistItems.notify(ProdGroups, this, "" + grpName, new onListItemClick() {
+                    @Override
+                    public void onItemClick(JSONObject item) {
+//                        try {
+//                            if (grpName.equalsIgnoreCase("")) {
+//                                grpName = item.getString("name");
+//
+//                                FilterTypes(item.getString("id"));
+//                                common_class.brandPos = 0;
+//
+//                                tvGrpName.setText("" + item.getString("name"));
+//                            }
+//                        } catch (Exception e) {
+//
+//                        }
+                    }
+                });
+            }
+
+        }
         String data = gson.toJson(Product_Modal);
         sharedCommonPref.save(Constants.LOC_PRIMARY_DATA, data);
+    }
+
+    public void showGrpProduct(JSONObject item) {
+        try {
+            FilterTypes(item.getString("id"));
+            common_class.brandPos = 0;
+
+            tvGrpName.setText("" + item.getString("name"));
+        } catch (Exception e) {
+
+        }
     }
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
@@ -1168,12 +1226,20 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         try {
             //  Product_Modal = gson.fromJson(data, userType);
 
-            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            ProdGroups = db.getMasterData(Constants.ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
 
-            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+            for (int i = 0; i < ProdGroups.length(); i++) {
+                JSONObject grpName = ProdGroups.getJSONObject(i);
+                if (grpName.getString("name").equalsIgnoreCase("-18")) {
+                    boolMinu18 = true;
+                    break;
+                }
+            }
+
+            grplistItems = new RyclGrpListItemAdb(ProdGroups, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
 
@@ -1642,7 +1708,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             int cVal = (int) (val);
 
                             if (val - cVal > 0) {
-                                holder.Qty.setText("" + (Math.round(val+1) * ProductItem.getMultiple_Qty()));
+                                holder.Qty.setText("" + (Math.round(val + 1) * ProductItem.getMultiple_Qty()));
 
                             }
                             Log.v("remaiVal:", "" + val + " :round:" + cVal);

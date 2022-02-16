@@ -231,6 +231,12 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
             common_class.getDataFromApi(Constants.GRN_ORDER_DATA, this, false);
 
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.TAXList)))
+                common_class.getDb_310Data(Constants.TAXList, this);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.TAXList)))
+                common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
+
+
         } catch (Exception e) {
 
             Log.e(TAG, " invoice oncreate: " + e.getMessage());
@@ -677,6 +683,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     totalvalues += grn_product.get(pm).getAmount();
                     totalQty += grn_product.get(pm).getQty();
 
+
                     Getorder_Array_List.add(grn_product.get(pm));
 
 
@@ -786,6 +793,53 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
 
             switch (key) {
+                case Constants.FreeSchemeDiscList:
+                    JSONObject jsonObject = new JSONObject(apiDataResponse);
+
+                    if (jsonObject.getBoolean("success")) {
+
+
+                        Gson gson = new Gson();
+                        List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                        if (jsonArray != null && jsonArray.length() > 1) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                        jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                        Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
+                                        jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
+                                        jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+
+
+                            }
+                        }
+
+                        sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
+
+
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
+
+                    }
+                    break;
+                case Constants.TAXList:
+                    JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+                    Log.v("TAX_PRIMARY:", apiDataResponse);
+
+                    if (jsonObjectTax.getBoolean("success")) {
+                        sharedCommonPref.save(Constants.TAXList, apiDataResponse);
+
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.TAXList);
+
+                    }
+                    break;
                 case Constants.GRN_ORDER_DATA:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equalsIgnoreCase("[]")) {
                         common_class.showMsg(this, "No Records Found");
@@ -1580,12 +1634,12 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 }
 
 
-                holder.Rate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDialog(Product_Details_Modal);
-                    }
-                });
+//                holder.Rate.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showDialog(Product_Details_Modal);
+//                    }
+//                });
 
                 updateToTALITEMUI();
             } catch (Exception e) {
