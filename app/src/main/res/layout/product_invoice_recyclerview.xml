@@ -56,50 +56,73 @@
                         android:textStyle="bold" />
 
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="25dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <TextView
-
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:inputType="number"
-                            android:text="Price"
-                            android:textColor="@color/grey_800"
-                            android:visibility="visible" />
+                            android:orientation="horizontal">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:inputType="number"
+                                android:text="MRP"
+                                android:textColor="@color/grey_800"
+                                android:textSize="12sp"
+                                android:visibility="visible" />
 
-                        <TextView
-                            android:id="@+id/Rate"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/MrpRate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center_vertical"
+                                android:text=""
+                                android:textColor="@color/txt_color_black"
+                                android:textSize="@dimen/C15dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:gravity="end"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
-                            android:drawableRight="@drawable/edit_small"
-                            android:drawablePadding="@dimen/C3dp"
-                            android:fontFamily="sans-serif"
-                            android:gravity="center_vertical"
-                            android:text="₹0"
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C15dp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:text="Price"
+                                android:textColor="@color/grey_800"
+                                android:textSize="12sp"
+                                android:visibility="visible" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/txt_color_black"
-                            android:visibility="gone" />
-
-
-                    </RelativeLayout>
-
+                            <TextView
+                                android:id="@+id/Rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginStart="@dimen/C10dp"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center_vertical"
+                                android:text="₹0"
+                                android:textColor="@color/txt_color_black"
+                                android:textSize="@dimen/C15dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"

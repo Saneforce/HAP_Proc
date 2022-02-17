@@ -134,7 +134,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             sharedCommonPref = new Shared_Common_Pref(FPPrimaryOrderActivity.this);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
             common_class = new Common_Class(this);
-            common_class.getProductDetails(this);
+            getProductDetails();
 
             categorygrid = findViewById(R.id.category);
             Grpgrid = findViewById(R.id.PGroup);
@@ -194,8 +194,6 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
-
-            common_class.getDb_310Data(Constants.Primary_Product_List, this);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -662,7 +660,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt",formatter.format( orderTotTax.get(i).getTax_Amt()));
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -834,7 +832,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1032,26 +1030,26 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                 case Constants.Primary_Product_List:
                     String OrdersTable = sharedCommonPref.getvalue(Constants.Primary_Product_List);
                     Product_Modal = gson.fromJson(OrdersTable, userType);
-                    JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
-                    LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
-                    GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    Grpgrid.setLayoutManager(GrpgridlayManager);
-
-                    RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
-                        @Override
-                        public void onItemClick(JSONObject item) {
-
-                            try {
-                                FilterTypes(item.getString("id"));
-                                common_class.brandPos = 0;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    Grpgrid.setAdapter(grplistItems);
-
-                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+//                    JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+//                    LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
+//                    GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//                    Grpgrid.setLayoutManager(GrpgridlayManager);
+//
+//                    RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+//                        @Override
+//                        public void onItemClick(JSONObject item) {
+//
+//                            try {
+//                                FilterTypes(item.getString("id"));
+//                                common_class.brandPos = 0;
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//                    Grpgrid.setAdapter(grplistItems);
+//
+//                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
                     break;
 
@@ -1271,9 +1269,9 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-            common_class.getProductDetails(this);
+            getProductDetails();
 
-            common_class.getDb_310Data(Constants.Primary_Product_List, this);
+          //  common_class.getDb_310Data(Constants.Primary_Product_List, this);
             getACBalance(0);  // common_class.getDb_310Data(Rout_List, this);
 
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
@@ -1285,6 +1283,93 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
             common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
         }
+    }
+
+    public void getProductDetails() {
+
+        if (common_class.isNetworkAvailable(this)) {
+            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(this);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                jParam.put("outletId", Shared_Common_Pref.OutletCode);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        // Log.v(TAG, response.toString());
+                        db.deleteMasterData(Constants.ProdGroups_List);
+                        db.addMasterData(Constants.ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.ProdTypes_List);
+                        db.addMasterData(Constants.ProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodCate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        try {
+                            db.deleteMasterData(Constants.Category_List);
+                            db.addMasterData(Constants.Category_List, response.body());
+
+                            common_class.getDb_310Data(Constants.Primary_Product_List, FPPrimaryOrderActivity.this);
+
+
+                            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+                            LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(FPPrimaryOrderActivity.this);
+                            GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            Grpgrid.setLayoutManager(GrpgridlayManager);
+
+                            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, FPPrimaryOrderActivity.this, new onListItemClick() {
+                                @Override
+                                public void onItemClick(JSONObject item) {
+
+                                    try {
+                                        FilterTypes(item.getString("id"));
+                                        common_class.brandPos = 0;
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            Grpgrid.setAdapter(grplistItems);
+
+                            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
@@ -1448,7 +1533,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                 if (CategoryType >= 0) {
 
                     holder.tvMRP.setText("₹" + ProductItem.getMRP());
-                    holder.totalQty.setText("Total Qty : " + (int)oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
+                    holder.totalQty.setText("Total Qty : " + (int) oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
 
                     if (!ProductItem.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1469,7 +1554,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                     String uomQty = "";
                     for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
                         name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
-                        uomQty = uomQty + "" +(int) ((Integer.parseInt(ProductItem.getConversionFactor()) * ProductItem.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+                        uomQty = uomQty + "" + (int) ((Integer.parseInt(ProductItem.getConversionFactor()) * ProductItem.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
 
                     }
 
@@ -1540,7 +1625,7 @@ public class FPPrimaryOrderActivity extends AppCompatActivity implements View.On
                                 String uomQty = "";
                                 for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
                                     name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
-                                    uomQty = uomQty + "" + (int)((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
+                                    uomQty = uomQty + "" + (int) ((Integer.parseInt(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
                                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
 
                                 }

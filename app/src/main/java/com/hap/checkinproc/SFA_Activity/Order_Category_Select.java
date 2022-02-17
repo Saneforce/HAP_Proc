@@ -1225,6 +1225,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 if (CategoryType >= 0) {
+                    holder.tvMRP.setText("₹" + Product_Details_Modal.getMRP());
 
                     holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /*+
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
@@ -1595,7 +1596,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM/*, tvUomName, tvUomQty*/;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM,tvMRP/*, tvUomName, tvUomQty*/;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1620,6 +1621,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 if (CategoryType >= 0) {
                     rlUOM = view.findViewById(R.id.rlUOM);
+                    tvMRP = view.findViewById(R.id.MrpRate);
 
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);

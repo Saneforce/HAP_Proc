@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;

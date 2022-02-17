@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.5";
+    public static String Version_Name = "ver 3.3.7";
     public static String Work_Type = "0";
     public static int count;
 
@@ -785,6 +785,30 @@ public class Common_Class {
                                 shared_common_pref.save(key, is.toString());
                                 updateUi = ((UpdateResponseUI) activity);
                                 updateUi.onLoadDataUpdateUI(is.toString(), key);
+
+                                if (key.equals(Constants.Distributor_List)) {
+                                    if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
+                                        JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+                                        Log.v("distList:", jsonArray.toString());
+
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                            shared_common_pref.save(Constants.Distributor_name, jsonObject1.optString("name"));
+                                            shared_common_pref.save(Constants.Distributor_Id, String.valueOf(jsonObject1.optInt("id")));
+                                            shared_common_pref.save(Constants.DistributorERP, jsonObject1.optString("ERP_Code"));
+                                            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, String.valueOf(jsonObject1.optInt("id")));
+                                            shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
+                                            shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
+                                            getDataFromApi(Retailer_OutletList, activity, false);
+
+                                            break;
+                                        }
+
+
+                                    }
+
+                                }
                             }
 
                         } catch (Exception e) {
