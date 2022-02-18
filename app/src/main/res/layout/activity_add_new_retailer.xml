@@ -1346,6 +1346,131 @@
                             android:visibility="gone">
 
                             <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freezer status"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/C2dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:src="@drawable/mandatory"
+                                    android:visibility="visible" />
+
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlFreezerStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:orientation="vertical"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:id="@+id/txFreezerStatus"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Freezer status"
+                                    android:padding="5dp"
+                                    android:textSize="13sp" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/C10dp"
+                                    android:layout_height="@dimen/C10dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/C10dp"
+                                    android:src="@drawable/spin_down_arrow"></ImageView>
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llExpecSalVal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Expected Sales Value"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/C2dp"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:src="@drawable/mandatory"
+                                        android:visibility="visible" />
+                                </LinearLayout>
+
+                                <EditText
+                                    android:id="@+id/edt_expectSaleVal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/text_bg_grey"
+                                    android:gravity="start"
+                                    android:hint="Enter Expected Sales Value"
+                                    android:inputType="numberDecimal"
+                                    android:padding="10dp"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_marginTop="@dimen/C10dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Deposit Amount"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/C2dp"
+                                        android:layout_marginTop="@dimen/C3dp"
+                                        android:src="@drawable/mandatory"
+                                        android:visibility="visible" />
+                                </LinearLayout>
+
+                                <EditText
+                                    android:id="@+id/edt_depositAmt"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/text_bg_grey"
+                                    android:gravity="start"
+                                    android:hint="Enter Deposit Amount"
+                                    android:inputType="numberDecimal"
+                                    android:padding="10dp"
+                                    android:textSize="13sp" />
+
+                            </LinearLayout>
+
+
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
 
                                 android:layout_height="wrap_content"
@@ -1425,82 +1550,6 @@
                                     android:hint="Enter the Freezer Tag Number"
                                     android:padding="10dp"
                                     android:textSize="13sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Freezer status"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="13sp" />
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/C2dp"
-                                    android:layout_marginTop="@dimen/C3dp"
-                                    android:src="@drawable/mandatory"
-                                    android:visibility="visible" />
-
-                            </LinearLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/rlFreezerStatus"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/text_bg_grey"
-                                android:orientation="vertical"
-                                android:padding="5dp">
-
-                                <TextView
-                                    android:id="@+id/txFreezerStatus"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Freezer status"
-                                    android:padding="5dp"
-                                    android:textSize="13sp" />
-
-                                <ImageView
-                                    android:layout_width="@dimen/C10dp"
-                                    android:layout_height="@dimen/C10dp"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:src="@drawable/spin_down_arrow"></ImageView>
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:id="@+id/llExpecSalVal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Expected Sales Value"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="13sp" />
-
-                                <EditText
-                                    android:id="@+id/edt_expectSaleVal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/text_bg_grey"
-                                    android:gravity="start"
-                                    android:hint="Enter Expected Sales Value"
-                                    android:inputType="numberDecimal"
-                                    android:padding="10dp"
-                                    android:textSize="13sp" />
-
                             </LinearLayout>
 
 

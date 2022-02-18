@@ -634,6 +634,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "invoice");
+                        OutletItem.put("category_type", Shared_Common_Pref.SecOrdOutletType);
+
                         // OutletItem.put("outstandAmt", outstandAmt);
 
                         OutletItem.put("PAYAmount", etRecAmt.getText().toString());

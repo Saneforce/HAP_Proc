@@ -109,7 +109,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> categoryList = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     Gson gson;
-    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_sub_category, edtExpcSalVal,
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_sub_category,edtDepositAmt, edtExpcSalVal,
             edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag, edtDistCode;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
@@ -204,6 +204,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edtDistCode = findViewById(R.id.edt_dist_code);
+            edtDepositAmt=findViewById(R.id.edt_depositAmt);
 
             linClsRmks = findViewById(R.id.linClsRmks);
             edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
@@ -288,6 +289,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
+
+
+
 
             categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
             rvCategoryTypes.setAdapter(categoryAdapter);
@@ -597,9 +601,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
-                    else if (!divERP.equalsIgnoreCase("47") && txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
+                    else if (!divERP.equalsIgnoreCase("21") && txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
-                    } else if (!divERP.equalsIgnoreCase("47") && tvSubCategory.getText().toString().equalsIgnoreCase("")) {
+                    } else if (!divERP.equalsIgnoreCase("21") && tvSubCategory.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Sub Category", Toast.LENGTH_SHORT).show();
                     } else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
@@ -611,9 +615,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (divERP.equalsIgnoreCase("47") && categoryType.equals("")) {
+                    } else if (divERP.equalsIgnoreCase("21") && categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    } else if (divERP.equalsIgnoreCase("47") && cbFreezerYes.isChecked()) {
+                    } else if (divERP.equalsIgnoreCase("21") && cbFreezerYes.isChecked()) {
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
                         else if (edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
@@ -697,7 +701,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             }
             divERP = shared_common_pref.getvalue(Constants.DivERP);
-            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("47") || divERP.equalsIgnoreCase("62")) {
+            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("21") || divERP.equalsIgnoreCase("62")) {
                 linReatilerRoute.setEnabled(true);
             } else {
                 linReatilerRoute.setEnabled(false);
@@ -705,8 +709,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
             if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
-                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
-                    mSubmit.setVisibility(View.GONE);
+//                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
+//                    mSubmit.setVisibility(View.GONE);
 
                 rlDistributor.setEnabled(false);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
@@ -1020,6 +1024,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     public void addNewRetailers() {
         try {
+
+            String cat = "";
+            String subCat = "";
+            String catSubCat = "";
+            for (int i = 0; i < serviceTypeList.size(); i++) {
+                if (serviceTypeList.get(i).isSelected()) {
+                    cat = cat + serviceTypeList.get(i).getCatName() + ",";
+                    subCat = subCat + serviceTypeList.get(i).getSubCatName() + ",";
+                    catSubCat = catSubCat + serviceTypeList.get(i).getCatName() + "~~" + serviceTypeList.get(i).getSubCatName() + ",";
+                }
+            }
             if (!imageServer.equalsIgnoreCase("")) {
                 Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
                 mIntent.putExtra("mFilePath", imageConvert);
@@ -1108,7 +1123,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_contactperson3", "''");
             reportObject.put("unlisted_doctor_designation2", "''");
             reportObject.put("unlisted_cat_code", "null");
-            reportObject.put("unlisted_specialty_name", tvSubCategory.getText().toString());
+            reportObject.put("unlisted_specialty_name", Common_Class.isNullOrEmpty(tvSubCategory.getText().toString()) ? subCat : tvSubCategory.getText().toString());
             reportObject.put("unlisted_specialty_code", categoryId);
             reportObject.put("unlisted_qulifi", "'samp'");
             reportObject.put("unlisted_class", classId);
@@ -1123,9 +1138,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
             reportObject.put("img_name", "'" + imageServer + "'");
-            reportObject.put("sub_category", "'" + txtRetailerChannel.getText().toString() + "'");
+            reportObject.put("sub_category", Common_Class.isNullOrEmpty(txtRetailerChannel.getText().toString()) ? "'" + cat + "'" :
+                    "'" + txtRetailerChannel.getText().toString() + "'");
+            reportObject.put("category_type", catSubCat);
             reportObject.put("sub_categoryId", "'" + channelID + "'");
             reportObject.put("expected_sales_value", "'" + edtExpcSalVal.getText().toString() + "'");
+            reportObject.put("deposit_amount", "'" + edtDepositAmt.getText().toString() + "'");
             reportObject.put("fssai_number", "'" + edtFSSAI.getText().toString() + "'");
             reportObject.put("pan_number", "'" + edtPAN.getText().toString() + "'");
 
@@ -1172,7 +1190,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             JSONArray outletTypeArr = new JSONArray();
 
-            if (divERP.equalsIgnoreCase("47")) {
+            if (divERP.equalsIgnoreCase("21")) {
                 for (int i = 0; i < serviceTypeList.size(); i++) {
                     if (serviceTypeList.get(i).isSelected()) {
                         JSONObject typeData = new JSONObject();
@@ -1186,11 +1204,23 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
                 }
             }
+            else {
+                JSONObject typeData = new JSONObject();
+                typeData.put("type_name", "");
+                typeData.put("cat_name", txtRetailerChannel.getText().toString());
+                typeData.put("cat_id", channelID);
+                typeData.put("subcat_id", tvSubCategory.getText().toString());
+                typeData.put("subcat_name",categoryId);
+                outletTypeArr.put(typeData);
+
+            }
 
             reportObject.put("outlet_type_Details", outletTypeArr);
 
 
-            docMasterObject.put("unlisted_doctor_master", reportObject);
+            // docMasterObject.put("unlisted_doctor_master", reportObject);
+            docMasterObject.put("newunlisted_doctor_master", reportObject);
+
 
             mainArray = new JSONArray();
             mainArray.put(docMasterObject);
@@ -1370,7 +1400,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
         if (divERP.equalsIgnoreCase("62"))
             linReatilerRoute.setEnabled(true);
-        if (divERP.equals("47")) {
+        if (divERP.equals("21")) {
             linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
@@ -1535,6 +1565,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     void assignData() {
         name = ApiClient.BASE_URL + Retailer_Modal_List.get(getOutletPosition()).getImagename();
+        name=name.replaceAll("server/","");
         name = name.replaceAll(",", "");
         Picasso.with(AddNewRetailer.this)
                 .load(name)

@@ -20,6 +20,8 @@ public class ApiClient {
         if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             BASE_URL = "http://primary.hap.in/server/";
         }
+
+     //   BASE_URL = "https://checkin.hap.in/";
         Log.d("BaseURL", BASE_URL);
         if (retrofit == null) {
 

@@ -671,6 +671,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "order");
                         OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
+                        OutletItem.put("category_type", Shared_Common_Pref.SecOrdOutletType);
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);

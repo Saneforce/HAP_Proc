@@ -400,7 +400,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
-                if (shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("47")) {
+                if (shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
                     categoryType = "-18";
                     findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
                 } else
@@ -602,6 +602,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     void setOutletCategoryAdapter() {
         try {
             ArrayList<String> list = new ArrayList<>();
+            list.add("ALL");
             for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
                 if (!Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getOutletClass()) && !Retailer_Modal_ListFilter.get(i).getOutletClass().equalsIgnoreCase("B")) {
                     list.add(Retailer_Modal_ListFilter.get(i).getOutletClass());
@@ -610,12 +611,12 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             HashSet hs = new HashSet();
             hs.addAll(list);
             list.clear();
-            list.add("ALL");
             list.addAll(hs);
 
             rvMasterCategory.setAdapter(new OutletMasterCategoryFilterAdapter(list, this, new AdapterOnClick() {
                 @Override
                 public void CallMobile(String categoryName) {
+                    common_class.brandPos = 0;
                     mCategoryName = categoryName;
                     setSubCatAdapter();
 
@@ -634,18 +635,25 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
     void setSubCatAdapter() {
         ArrayList<String> subList = new ArrayList<>();
+        subList.add("ALL");
+
         for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
-            if (mCategoryName.equalsIgnoreCase("ALL"))
+            if ((mCategoryName.equalsIgnoreCase("ALL") ||
+                    mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass())
+                            && !Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getSpeciality())))
                 subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
-            else if (mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass()))
-                subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
+
 
         }
         HashSet sub = new HashSet();
         sub.addAll(subList);
         subList.clear();
-        subList.add("ALL");
         subList.addAll(sub);
+
+        for (int i=0;i<subList.size();i++ ){
+            if(Common_Class.isNullOrEmpty(subList.get(i)))
+                subList.remove(i);
+        }
 
         rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(subList, this, new AdapterOnClick() {
             @Override
@@ -957,7 +965,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
 
-            if (myDataset.get(position).getDivERP().equalsIgnoreCase("47")) {
+            if (myDataset.get(position).getDivERP().equalsIgnoreCase("21")) {
                 findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
                 categoryType = "-18";
             } else {
@@ -1158,7 +1166,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-                        } else if (Common_Class.isNullOrEmpty(dashboard_route.categoryType) && shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("47")) {
+                        } else if (Common_Class.isNullOrEmpty(dashboard_route.categoryType) && shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
                             common_class.showMsg(getActivity(), "Select the Category Type");
                         } else {
 
