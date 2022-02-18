@@ -22,13 +22,13 @@ import java.util.ArrayList;
 
 public class OutletCategoryFilterAdapter extends RecyclerView.Adapter<OutletCategoryFilterAdapter.ViewHolder> {
     private static final String TAG = "RecycleItem";
-    private ArrayList<Common_Model> mlist = new ArrayList<>();
+    private ArrayList<String> mlist = new ArrayList<>();
     private Context mContext;
     static AdapterOnClick itemClick;
     OutletCategoryFilterAdapter.ViewHolder pholder;
     Common_Class common_class;
 
-    public OutletCategoryFilterAdapter(ArrayList<Common_Model> mlist, Context mContext, AdapterOnClick mItemClick) {
+    public OutletCategoryFilterAdapter(ArrayList<String> mlist, Context mContext, AdapterOnClick mItemClick) {
         this.mlist = mlist;
         this.mContext = mContext;
         this.itemClick = mItemClick;
@@ -47,19 +47,19 @@ public class OutletCategoryFilterAdapter extends RecyclerView.Adapter<OutletCate
     @Override
     public void onBindViewHolder(@NonNull OutletCategoryFilterAdapter.ViewHolder holder, int position) {
 
-        Common_Model itm = null;
+        String itm = null;
         try {
             itm = mlist.get(position);
-            holder.icon.setText(itm.getName());
+            holder.icon.setText(itm);
 
             holder.gridcolor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    Common_Model itm = null;
+                    String itm = null;
                     try {
                         itm = mlist.get(holder.getAdapterPosition());
-                        if (itemClick != null) itemClick.CallMobile(itm.getName());
+                        if (itemClick != null) itemClick.CallMobile(itm);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -69,14 +69,14 @@ public class OutletCategoryFilterAdapter extends RecyclerView.Adapter<OutletCate
                         pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     }
                     pholder = holder;
-                    common_class.grpPos = holder.getAdapterPosition();
+                    common_class.brandPos = holder.getAdapterPosition();
                     holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                 }
             });
 
-            if (position == common_class.grpPos) {
+            if (position == common_class.brandPos) {
 
                 holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbtnprimary));
                 holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));

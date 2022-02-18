@@ -32,6 +32,14 @@ public class Product_Details_Modal {
     @SerializedName("Product_Cat_Code")
     @Expose
     private Integer productCatCode;
+
+    @SerializedName("Product_Grp_Code")
+    @Expose
+    private Integer Product_Grp_Code;
+
+    @SerializedName("RateEdit")
+    @Expose
+    private Integer RateEdit;
     @SerializedName("row_num")
     @Expose
     private String rowNum;
@@ -62,7 +70,7 @@ public class Product_Details_Modal {
     private double defaultUOMQty;
     @SerializedName("Default_UOM")
     @Expose
-    private Double defaultUOM;
+    private String defaultUOM;
 
     @SerializedName("Default_UOM_Name")
     @Expose
@@ -107,6 +115,15 @@ public class Product_Details_Modal {
     @Expose
     private Integer CheckStock;
 
+
+    @SerializedName("Multiple_UOM")
+    @Expose
+    private String Multiple_UOM;
+
+    @SerializedName("Multiple_Qty")
+    @Expose
+    private Integer Multiple_Qty;
+
     @SerializedName("UOMList")
     @Expose
     private List<UOM> UOMList = new ArrayList<>();
@@ -114,6 +131,12 @@ public class Product_Details_Modal {
 
     private String UOM_Id;
     private String UOM_Nm;
+
+    public Product_Details_Modal(double cnvQty, String UOM_Nm) {
+        this.CnvQty = cnvQty;
+        this.UOM_Nm = UOM_Nm;
+    }
+
     private String mfg = "";
     private String exp = "";
     private String remarks = "";
@@ -343,7 +366,7 @@ public class Product_Details_Modal {
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
-                                 String unitCode, double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
+                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
                                  Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax) {
         this.id = id;
         this.name = name;
@@ -553,11 +576,11 @@ public class Product_Details_Modal {
         this.defaultUOMQty = defaultUOMQty;
     }
 
-    public Double getDefaultUOM() {
+    public String getDefaultUOM() {
         return defaultUOM;
     }
 
-    public void setDefaultUOM(Double defaultUOM) {
+    public void setDefaultUOM(String defaultUOM) {
         this.defaultUOM = defaultUOM;
     }
 
@@ -719,6 +742,38 @@ public class Product_Details_Modal {
 
     public void setCheckStock(Integer checkStock) {
         CheckStock = checkStock;
+    }
+
+    public String getMultiple_UOM() {
+        return Multiple_UOM;
+    }
+
+    public void setMultiple_UOM(String multiple_UOM) {
+        Multiple_UOM = multiple_UOM;
+    }
+
+    public Integer getMultiple_Qty() {
+        return Multiple_Qty;
+    }
+
+    public void setMultiple_Qty(Integer multiple_Qty) {
+        Multiple_Qty = multiple_Qty;
+    }
+
+    public Integer getProduct_Grp_Code() {
+        return Product_Grp_Code;
+    }
+
+    public void setProduct_Grp_Code(Integer product_Grp_Code) {
+        Product_Grp_Code = product_Grp_Code;
+    }
+
+    public Integer getRateEdit() {
+        return RateEdit;
+    }
+
+    public void setRateEdit(Integer rateEdit) {
+        RateEdit = rateEdit;
     }
 
 

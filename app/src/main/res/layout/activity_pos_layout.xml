@@ -136,7 +136,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="POP"
+                android:text="POS"
                 android:textAlignment="center"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -714,6 +714,16 @@
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
 
+                                <ImageView
+                                    android:visibility="invisible"
+                                    android:id="@+id/ivDel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/C5dp"
+                                    android:padding="@dimen/C5dp"
+                                    android:src="@drawable/delete_cart"></ImageView>
+
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -974,6 +984,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -1226,6 +1237,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:textStyle="bold"
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1237,6 +1249,7 @@
                 </TextView>
 
                 <TextView
+                    android:textStyle="bold"
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

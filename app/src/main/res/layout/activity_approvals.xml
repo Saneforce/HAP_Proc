@@ -445,9 +445,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Deviation Entry" />
+                                    android:text="Deviation Entry"
+                                    android:textSize="16sp" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -480,6 +480,7 @@
 
                         </LinearLayout>
 
+
                         <include layout="@layout/part_view" />
 
                         <LinearLayout
@@ -494,9 +495,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Holiday Entry" />
+                                    android:text="Holiday Entry"
+                                    android:textSize="16sp" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -891,6 +892,40 @@
                             </RelativeLayout>
 
                         </LinearLayout>
+
+                        <include layout="@layout/part_view" />
+
+                        <LinearLayout
+                            android:id="@+id/lin_productProjectionApproval"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C10dp"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    style="@style/TextStyle"
+                                    android:text="Product Projection"
+                                    android:textSize="16sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+
+                                    <include layout="@layout/image_arrow" />
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
 
                         <include layout="@layout/part_view" />
 

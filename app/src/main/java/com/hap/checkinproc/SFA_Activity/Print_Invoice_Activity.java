@@ -433,7 +433,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     taxData.put("Tax_Id", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Order_Outlet_Filter.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -452,7 +452,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", taxList.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", taxList.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(taxList.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -988,6 +988,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Order_Outlet_Filter.clear();
 
             int total_qtytext = 0;
+            double tcsVal=0;
             subTotalVal = 0.00;
             JSONArray arr = new JSONArray(response);
             taxList = new ArrayList<>();
@@ -999,11 +1000,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     JSONObject obj = arr.getJSONObject(a);
                     total_qtytext += obj.getInt("Qty");
                     double amt = 0;
-                    String paidAmt = "0";
-                    try {
-                        paidAmt = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? "0" : obj.getString("PaidAmount");
-                    } catch (Exception e) {
-                    }
 
                     double taxAmt = 0.00;
 
@@ -1065,8 +1061,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), 1, "1",
-                            "1", "5", "", 0, 1.8, obj.getDouble("Price"),
-                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, paidAmt, (taxAmt)));
+                            "1", "5", "", 0, "0", obj.getDouble("Price"),
+                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt)));
 
 
                 }
@@ -1079,6 +1075,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     JSONObject obj = arr.getJSONObject(i);
                     total_qtytext += obj.getInt("Quantity");
                     subTotalVal += (obj.getDouble("value"));
+
+                     tcsVal = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? obj.getDouble("TCS") : 0;
+
                     String paidAmt = "0";
                     try {
                         paidAmt = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? "0" : obj.getString("PaidAmount");
@@ -1095,6 +1094,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                             taxAmt += taxObj.getDouble("Tax_Amt");
                             if (taxList.size() == 0) {
+                                if (tcsVal > 0)
+                                    taxList.add(new Product_Details_Modal("TCS", tcsVal));
                                 taxList.add(new Product_Details_Modal(label, amt));
                             } else {
 
@@ -1118,7 +1119,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
-                            "1", "5", obj.getString("UOM"), 0, 1.8, obj.getDouble("Rate"),
+                            "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"),
                             obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt)));
 
 
@@ -1129,7 +1130,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             }
 
 
-            // subTotalVal = Double.parseDouble(formatter.format(subTotalVal));
+
+             subTotalVal = Double.parseDouble(formatter.format(subTotalVal+tcsVal));
 
             totalqty.setText("" + String.valueOf(total_qtytext));
             totalitem.setText("" + Order_Outlet_Filter.size());

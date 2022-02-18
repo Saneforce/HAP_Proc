@@ -95,7 +95,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.2.20";
+    public static String Version_Name = "ver 3.3.7";
     public static String Work_Type = "0";
     public static int count;
 
@@ -300,6 +300,7 @@ public class Common_Class {
         return ResArray;
     }
 
+
     public void getDataFromApi(String key, Activity activity, Boolean boolRefresh) {
 
         updateUi = ((UpdateResponseUI) activity);
@@ -392,6 +393,12 @@ public class Common_Class {
                 case Constants.PrePrimaryOrderQty:
                     QuerySTring1 = "{\"tableName\":\"getpreviousorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
+                case Constants.PreInvOrderQty:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousinvoice\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    //  axnname = "getpreviousinvoice";
+
+                    break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
@@ -464,8 +471,8 @@ public class Common_Class {
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
 
-String res=response.body().toString();
-                        Log.v("Res>>",""+res );
+                        String res = response.body().toString();
+                        Log.v("Res>>", "" + res);
 
                     } catch (Exception e) {
 
@@ -547,8 +554,10 @@ String res=response.body().toString();
                         axnname = "get/myteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
                         data.put("date", jparam.get("date").getAsString());
-                        //data.put("date", "2021-11-10");
+                        // data.put("date", "2021-09-09");
                         data.put("type", jparam.get("type").getAsString());
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+
                         break;
 
                     case Constants.DELIVERY_SEQUENCE:
@@ -674,6 +683,7 @@ String res=response.body().toString();
                         axnname = "get/secondaryscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("outletId", Shared_Common_Pref.OutletCode);
                         break;
                     case Constants.POS_SCHEME:
                         axnname = "get/posscheme";
@@ -768,13 +778,37 @@ String res=response.body().toString();
                                 BufferedReader bf = new BufferedReader(ip);
                                 while ((line = bf.readLine()) != null) {
                                     is.append(line);
-                                    Log.v("Res>>", is.toString());
+                                    Log.v("Res>>" + key + ": ", is.toString());
                                 }
 
 
                                 shared_common_pref.save(key, is.toString());
                                 updateUi = ((UpdateResponseUI) activity);
                                 updateUi.onLoadDataUpdateUI(is.toString(), key);
+
+                                if (key.equals(Constants.Distributor_List)) {
+                                    if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
+                                        JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+                                        Log.v("distList:", jsonArray.toString());
+
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                            shared_common_pref.save(Constants.Distributor_name, jsonObject1.optString("name"));
+                                            shared_common_pref.save(Constants.Distributor_Id, String.valueOf(jsonObject1.optInt("id")));
+                                            shared_common_pref.save(Constants.DistributorERP, jsonObject1.optString("ERP_Code"));
+                                            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, String.valueOf(jsonObject1.optInt("id")));
+                                            shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
+                                            shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
+                                            getDataFromApi(Retailer_OutletList, activity, false);
+
+                                            break;
+                                        }
+
+
+                                    }
+
+                                }
                             }
 
                         } catch (Exception e) {

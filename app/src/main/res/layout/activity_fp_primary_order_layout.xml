@@ -125,18 +125,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-<TextView
-    android:id="@+id/usrName"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fontFamily="@font/basic"
-    android:hint="Select Franchise"
-    android:textAllCaps="true"
-    android:textColor="@color/black"
-    android:textColorHint="@color/black"
-    android:textSize="13sp"
-    android:paddingRight="@dimen/C5dp"
-    />
+
+                <TextView
+                    android:id="@+id/usrName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/basic"
+                    android:hint="Select Franchise"
+                    android:paddingRight="@dimen/C5dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="13sp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,24 +158,24 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_weight="1"
                                 android:id="@+id/distributor_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:fontFamily="@font/basic"
                                 android:hint="Select Franchise"
+                                android:paddingRight="@dimen/C5dp"
                                 android:textAllCaps="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="13sp"
-                                android:paddingRight="@dimen/C5dp"/>
+                                android:textSize="13sp" />
 
                             <ImageView
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginRight="@dimen/C5dp"
                                 android:id="@+id/ivDistSpinner"
                                 android:layout_width="7dp"
                                 android:layout_height="7dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="@dimen/C5dp"
                                 android:src="@drawable/spin_down_arrow"
                                 app:tint="@color/black">
 
@@ -182,11 +183,11 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:id="@+id/btnCmbRoute"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/route_text"
@@ -220,7 +221,6 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:visibility="gone"
                                     android:id="@+id/tvDistId"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -230,7 +230,8 @@
                                     android:text=""
                                     android:textColor="@color/txt_color_black"
                                     android:textSize="10sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:visibility="gone" />
 
                                 <TextView
                                     android:id="@+id/tvDate"
@@ -1036,7 +1037,8 @@
                     android:fontFamily="sans-serif"
                     android:text="Items : 0"
                     android:textColor="@color/white"
-                    android:textSize="11sp">
+                    android:textSize="11sp"
+                    android:textStyle="bold">
 
                 </TextView>
 
@@ -1047,7 +1049,8 @@
                     android:fontFamily="sans-serif"
                     android:text=" ₹ 0"
                     android:textColor="@color/white"
-                    android:textSize="13sp">
+                    android:textSize="13sp"
+                    android:textStyle="bold">
 
                 </TextView>
             </LinearLayout>

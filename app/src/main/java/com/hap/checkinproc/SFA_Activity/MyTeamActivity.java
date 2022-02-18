@@ -8,8 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -38,6 +41,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -55,7 +59,6 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.MyTeamCategoryAdapter;
 import com.hap.checkinproc.SFA_Adapter.MyTeamMapAdapter;
-import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
@@ -69,7 +72,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public Common_Class common_class;
-    TextView Createoutlet, latitude, longitude, availableoutlets, cAddress;
 
     public static Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -229,18 +231,50 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject arrObj = arr.getJSONObject(i);
-                    boolean addItmflg=false;
-                    if(txSearchRet.getText().toString().equalsIgnoreCase("") ||
-                            (";"+arrObj.getString("Sf_Name").toLowerCase()).indexOf(";"+txSearchRet.getText().toString().toLowerCase())>-1)
-                    {
-                        addItmflg=true;
+                    boolean addItmflg = false;
+                    if (txSearchRet.getText().toString().equalsIgnoreCase("") ||
+                            (";" + arrObj.getString("Sf_Name").toLowerCase()).indexOf(";" + txSearchRet.getText().toString().toLowerCase()) > -1) {
+                        addItmflg = true;
                     }
 
                     if (addItmflg && (mType.equalsIgnoreCase(arrObj.getString("shortname")) || mType.equalsIgnoreCase("ALL"))) {
                         LatLng latLng = new LatLng(Double.parseDouble(arrObj.getString("Lat")),
                                 Double.parseDouble(arrObj.getString("Lon")));
-                        marker = map.addMarker(new MarkerOptions().position(latLng)
-                                .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        BitmapDescriptor markerIcon;
+
+                        switch (arrObj.getString("shortname")) {
+                            case "FRANCHISE":
+                                markerIcon = getMarkerIconFromDrawable(getResources().getDrawable
+                                        (R.drawable.ic_franchise));
+
+                                marker = map.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title((arrObj.getString("Sf_Name")))
+                                        .icon(markerIcon)
+                                );
+
+
+                                break;
+                            case "OUTLET":
+                                markerIcon = getMarkerIconFromDrawable(getResources().getDrawable
+                                        (R.drawable.ic_baseline_storefront_24));
+
+                                marker = map.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title((arrObj.getString("Sf_Name")))
+                                        .icon(markerIcon)
+                                );
+
+
+                                break;
+                            default:
+                                marker = map.addMarker(new MarkerOptions().position(latLng)
+                                        .title((arrObj.getString("Sf_Name"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+                                break;
+                        }
+
+
                         mark.add(marker);
 
 
@@ -280,13 +314,22 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
-                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
 
             }
         } catch (Exception e) {
 
         }
+    }
+
+    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, 50, 50);
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     void init() {
@@ -364,8 +407,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     case Constants.MYTEAM_LOCATION:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
-                            String Desgs="[\"ALL\","+jsonObject.getJSONArray("Designation").join(",")+"]";
-                           // Log.v(TAG,"loc list:")
+                            String Desgs = "[\"ALL\"," + jsonObject.getJSONArray("Designation").join(",") + "]";
+                            // Log.v(TAG,"loc list:")
                             JSONArray arr = new JSONArray(Desgs);//jsonObject.getJSONArray("Designation");
                             adapter = new MyTeamCategoryAdapter(arr, R.layout.myteam_category_adapter_layout, this);
                             rvCategory.setAdapter(adapter);

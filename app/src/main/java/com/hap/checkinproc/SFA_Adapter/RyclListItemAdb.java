@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,12 +27,22 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
     RyclListItemAdb.ViewHolder pholder;
     Common_Class common_class;
 
+    String id = "";
+
     public RyclListItemAdb(JSONArray mlist, Context mContext, onListItemClick mItemClick) {
         this.mlist = mlist;
         this.mContext = mContext;
         this.itemClick = mItemClick;
         common_class = new Common_Class(mContext);
     }
+
+//    public void notify(JSONArray mlist, Context mContext, onListItemClick mItemClick, String id) {
+//        this.mlist = mlist;
+//        this.mContext = mContext;
+//        this.itemClick = mItemClick;
+//        common_class = new Common_Class(mContext);
+//        this.id = id;
+//    }
 
     @NonNull
     @Override
@@ -51,6 +60,9 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
         try {
             itm = mlist.getJSONObject(position);
             holder.icon.setText(itm.getString("name"));
+
+
+
 
             holder.gridcolor.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,6 +116,7 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView icon;
         LinearLayout gridcolor;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.textView);

@@ -582,12 +582,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                             @Override
                                             public void OnLocationRecived(Location location) {
                                                 strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                                // SaveOrder();
+                                                SaveOrder();
                                             }
                                         });
                                     } else {
                                         strLoc = sLoc.split(":");
-                                        //SaveOrder();
+                                        SaveOrder();
                                     }
                                 }
                             }, 500);
@@ -692,7 +692,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -711,7 +711,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -724,7 +724,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -858,7 +858,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1183,6 +1183,13 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
 
+                if (Product_Details_Modal.getRateEdit() == 1) {
+                    holder.Rate.setEnabled(true);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
+                } else {
+                    holder.Rate.setEnabled(false);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
 
                 if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                     holder.ImgVwProd.clearColorFilter();
@@ -1197,8 +1204,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                 if (CategoryType >= 0) {
 
-                    holder.totalQty.setText("Total Qty : " + (((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())) * Product_Details_Modal.getCnvQty()));
+                    holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()/* +
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())) * Product_Details_Modal.getCnvQty()*/)));
 
 
                     holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
@@ -1228,7 +1235,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
+                if (Product_Details_Modal.getQty() > 0)
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
@@ -1278,7 +1286,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.totalQty.setText("Total Qty : " + (int)/* totQty*/enterQty);
                             }
 
 
@@ -1421,17 +1429,17 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                             updateToTALITEMUI();
 
-                            if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                Log.v(TAG + position, ":OUT:amt:" + amt);
-                                if (amt.equals("₹0.00")) {
-                                    Log.v(TAG + position, ":IN:amt:" + amt);
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-
-                                showFreeQtyList();
-                            }
+//                            if (CategoryType == -1) {
+//                                String amt = holder.Amount.getText().toString();
+//                                Log.v(TAG + position, ":OUT:amt:" + amt);
+//                                if (amt.equals("₹0.00")) {
+//                                    Log.v(TAG + position, ":IN:amt:" + amt);
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1452,6 +1460,33 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                     }
                 });
+
+                if (CategoryType == -1) {
+                    holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialogBox.showDialog(VanSalesOrderActivity.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
+                        }
+                    });
+                }
 
 
                 holder.Rate.setOnClickListener(new View.OnClickListener() {
@@ -1524,7 +1559,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
                     QtyAmt, totalQty, tvTaxLabel;
-            ImageView ImgVwProd, QtyPls, QtyMns;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
             LinearLayout llRegular;
@@ -1555,6 +1590,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     totalQty = view.findViewById(R.id.totalqty);
                     rlUOM = view.findViewById(R.id.rlUOM);
 
+                } else {
+                    ivDel = view.findViewById(R.id.ivDel);
                 }
 
 

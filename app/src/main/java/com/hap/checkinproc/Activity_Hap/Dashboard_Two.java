@@ -37,6 +37,7 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -551,7 +552,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             TextView txDyDet = findViewById(R.id.lTDyTx);
             txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
 
-            mShared_common_pref.save(Constants.LOGIN_DATE, fItm.get("AttDate").getAsString());
+            mShared_common_pref.save(Constants.LOGIN_DATE, com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
             JsonArray dyRpt = new JsonArray();
             JsonObject newItem = new JsonObject();
             newItem.addProperty("name", "Shift");

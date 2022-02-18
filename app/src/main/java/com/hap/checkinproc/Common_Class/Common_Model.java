@@ -5,7 +5,8 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
-    private  int icon;
+    private String catName, catId, subCatName, subCatId;
+    private int icon;
     private String DivERP;
     private String ERP_Code;
     private String QPS_Code;
@@ -123,6 +124,16 @@ public class Common_Model {
         this.name = name;
         this.id = id;
         this.isSelected = isSelected;
+    }
+
+    public Common_Model(String name, String id, boolean isSelected, String catName, String catId, String subCatName, String subCatId) {
+        this.name = name;
+        this.id = id;
+        this.isSelected = isSelected;
+        this.catName = catName;
+        this.catId = catId;
+        this.subCatName = subCatName;
+        this.subCatId = subCatId;
     }
 
     public Common_Model(String name, String id, int CnvQty) {
@@ -295,5 +306,37 @@ public class Common_Model {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public String getCatName() {
+        return catName;
+    }
+
+    public void setCatName(String catName) {
+        this.catName = catName;
+    }
+
+    public String getCatId() {
+        return catId;
+    }
+
+    public void setCatId(String catId) {
+        this.catId = catId;
+    }
+
+    public String getSubCatName() {
+        return subCatName;
+    }
+
+    public void setSubCatName(String subCatName) {
+        this.subCatName = subCatName;
+    }
+
+    public String getSubCatId() {
+        return subCatId;
+    }
+
+    public void setSubCatId(String subCatId) {
+        this.subCatId = subCatId;
     }
 }

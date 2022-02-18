@@ -34,6 +34,8 @@ public class Shared_Common_Pref {
     public static String FromActivity = "";
     public static String OutletName = "OutletName";
     public static String OutletCode = "OutletCode";
+    public static String SecOrdOutletType = "";
+
 
     public static String Dept_Type = "Dept_Type";
     public static String Sync_Flag;

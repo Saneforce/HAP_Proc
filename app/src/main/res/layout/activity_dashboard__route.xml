@@ -894,6 +894,8 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:visibility="gone"
+                android:id="@+id/cvCatTypeParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
@@ -903,27 +905,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/C3dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/C10dp"
-                        android:layout_marginEnd="@dimen/C2dp"
-                        android:layout_marginBottom="@dimen/C5dp"
+                        android:layout_marginLeft="@dimen/C10dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/C5dp"
-                            android:layout_weight="1"
                             android:letterSpacing="0.01"
                             android:text="-18"
                             tools:ignore="NestedWeights" />
 
                         <Switch
+                            android:checked="true"
                             android:id="@+id/swMinus18"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -931,19 +932,15 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/C10dp"
-                        android:layout_marginEnd="@dimen/C2dp"
-                        android:layout_marginBottom="@dimen/C5dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/C5dp"
-                            android:layout_weight="1"
                             android:letterSpacing="0.01"
                             android:text="+4"
                             android:textAlignment="center"
@@ -957,19 +954,15 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/C10dp"
-                        android:layout_marginEnd="@dimen/C2dp"
-                        android:layout_marginBottom="@dimen/C5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/C5dp"
-                            android:layout_weight="1"
                             android:letterSpacing="0.01"
                             android:text="Ambient"
                             android:textAlignment="textEnd"
@@ -982,10 +975,53 @@
                             tools:ignore="UseSwitchCompatOrMaterialXml" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/C5dp"
+                            android:letterSpacing="0.01"
+                            android:text="B&amp;C"
+                            android:textAlignment="textEnd"
+                            tools:ignore="NestedWeights" />
+
+                        <Switch
+                            android:id="@+id/swBandC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C5dp"
+                android:visibility="visible"
+                app:cardCornerRadius="@dimen/C5dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvOutletMasterCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C5dp"
+                    android:orientation="horizontal"
+
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+
+            </androidx.cardview.widget.CardView>
+
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -1040,9 +1076,9 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/C10dp"
                 android:layout_marginRight="@dimen/C10dp"
-                android:layout_height="wrap_content"
                 app:cardCornerRadius="@dimen/C5dp">
 
                 <com.google.android.material.appbar.AppBarLayout
@@ -1057,16 +1093,16 @@
 
                         <com.google.android.material.tabs.TabLayout
                             android:id="@+id/tabs"
-                            android:background="@color/white"
                             style="@style/TabTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+                            android:background="@color/white"
                             app:tabGravity="fill"
                             app:tabIndicatorColor="@color/colorPrimaryDark"
                             app:tabIndicatorHeight="2dp"
                             app:tabRippleColor="@color/Hap_location"
-                            app:tabTextColor="@color/colorPrimaryDark" />
-
+                            app:tabSelectedTextColor="@color/colorPrimaryDark"
+                            app:tabTextColor="@color/grey_600" />
                     </RelativeLayout>
                 </com.google.android.material.appbar.AppBarLayout>
 

@@ -40,12 +40,14 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -72,7 +74,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Order_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class Order_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     //GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -97,7 +99,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
     EditText etCategoryItemSearch;
-    int cashDiscount;
+    int cashDiscount, uomPos;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     public int selectedPos = 0;
@@ -109,6 +111,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     private DatePickerDialog fromDatePickerDialog;
     public static Order_Category_Select order_category_select;
     private List<Product_Details_Modal> orderTotTax;
+    private ArrayList<Common_Model> uomList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +186,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            Log.v(TAG, " order oncreate:h ");
+            Log.v(TAG, " category Type:" + Shared_Common_Pref.SecOrdOutletType);
 
             // showOrderItemList(0, "");
 
@@ -215,145 +219,155 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
             });
 
-            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+//            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+//
+//            if (!Common_Class.isNullOrEmpty(preOrderList) && Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA))) {
+//                for (int pm = 0; pm < Product_Modal.size(); pm++) {
+//                    JSONObject jsonObjectPreOrder = new JSONObject(preOrderList);
+//                    JSONArray arr = jsonObjectPreOrder.getJSONArray("Data");
+//
+//                    for (int k = 0; k < arr.length(); k++) {
+//                        JSONObject obj = arr.getJSONObject(k);
+//
+//                        if (Product_Modal.get(pm).getId().equals(obj.getString("Product_Detail_Code"))) {
+//
+//                            Product_Modal.get(pm).setRegularQty(obj.getInt("Qty"));
+//
+//                            Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getRegularQty() * Product_Modal.get(pm).getRate())));
+//
+//
+//                            double enterQty = Product_Modal.get(pm).getRegularQty();
+//                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+//
+//                            Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
+//                            }.getType();
+//                            List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
+//
+//                            double highestScheme = 0;
+//                            boolean haveVal = false;
+//                            if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
+//
+//                                for (int i = 0; i < product_details_modalArrayList.size(); i++) {
+//
+//                                    if (Product_Modal.get(pm).getId().equals(product_details_modalArrayList.get(i).getId())) {
+//
+//                                        haveVal = true;
+//                                        double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
+//
+//                                        if (enterQty >= schemeVal) {
+//
+//                                            if (schemeVal > highestScheme) {
+//                                                highestScheme = schemeVal;
+//
+//
+//                                                if (!product_details_modalArrayList.get(i).getFree().equals("0")) {
+//                                                    if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
+//                                                        double freePer = (enterQty / highestScheme);
+//
+//                                                        double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
+//                                                                get(i).getFree());
+//
+//                                                        Product_Modal.get(pm).setFree(String.valueOf(Math.round(freeVal)));
+//                                                    } else {
+//                                                        int val = (int) (enterQty / highestScheme);
+//                                                        int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
+//                                                        Product_Modal.get(pm).setFree(String.valueOf(freeVal));
+//                                                    }
+//                                                } else {
+//
+//                                                    Product_Modal.get(pm).setFree("0");
+//
+//                                                }
+//
+//
+//                                                if (product_details_modalArrayList.get(i).getDiscount() != 0) {
+//
+//                                                    if (product_details_modalArrayList.get(i).getDiscount_type().equals("%")) {
+//                                                        double discountVal = enterQty * (((product_details_modalArrayList.get(i).getDiscount()
+//                                                        )) / 100);
+//
+//
+//                                                        Product_Modal.get(pm).setDiscount((Math.round(discountVal)));
+//
+//                                                    } else {
+//                                                        //Rs
+//                                                        if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
+//                                                            double freePer = (enterQty / highestScheme);
+//
+//                                                            double freeVal = freePer * (product_details_modalArrayList.
+//                                                                    get(i).getDiscount());
+//
+//                                                            Product_Modal.get(pm).setDiscount((Math.round(freeVal)));
+//                                                        } else {
+//                                                            int val = (int) (enterQty / highestScheme);
+//                                                            double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
+//                                                            Product_Modal.get(pm).setDiscount((freeVal));
+//                                                        }
+//                                                    }
+//
+//                                                } else {
+//                                                    Product_Modal.get(pm).setDiscount(0.00);
+//
+//                                                }
+//
+//
+//                                            }
+//
+//                                        } else {
+//                                            Product_Modal.get(pm).setFree("0");
+//
+//                                            Product_Modal.get(pm).setDiscount(0.00);
+//
+//
+//                                        }
+//
+//
+//                                    }
+//
+//                                }
+//
+//
+//                            }
+//
+//                            if (!haveVal) {
+//                                Product_Modal.get(pm).setFree("0");
+//
+//                                Product_Modal.get(pm).setDiscount(0.00);
+//
+//                            } else {
+//                                Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getAmount()) -
+//                                        Double.valueOf(Product_Modal.get(pm).getDiscount()));
+//                            }
+//
+//
+//                            sumofTax(Product_Modal, pm);
+//                        }
+//                    }
+//
+//                }
+//            }
 
-            if (!Common_Class.isNullOrEmpty(preOrderList) && Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA))) {
-                for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                    JSONObject jsonObjectPreOrder = new JSONObject(preOrderList);
-                    JSONArray arr = jsonObjectPreOrder.getJSONArray("Data");
-
-                    for (int k = 0; k < arr.length(); k++) {
-                        JSONObject obj = arr.getJSONObject(k);
-
-                        if (Product_Modal.get(pm).getId().equals(obj.getString("Product_Detail_Code"))) {
-
-                            Product_Modal.get(pm).setRegularQty(obj.getInt("Qty"));
-
-                            Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getRegularQty() * Product_Modal.get(pm).getRate())));
-
-
-                            double enterQty = Product_Modal.get(pm).getRegularQty();
-                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
-
-                            Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                            }.getType();
-                            List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
-
-                            double highestScheme = 0;
-                            boolean haveVal = false;
-                            if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
-
-                                for (int i = 0; i < product_details_modalArrayList.size(); i++) {
-
-                                    if (Product_Modal.get(pm).getId().equals(product_details_modalArrayList.get(i).getId())) {
-
-                                        haveVal = true;
-                                        double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
-
-                                        if (enterQty >= schemeVal) {
-
-                                            if (schemeVal > highestScheme) {
-                                                highestScheme = schemeVal;
-
-
-                                                if (!product_details_modalArrayList.get(i).getFree().equals("0")) {
-                                                    if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-                                                        double freePer = (enterQty / highestScheme);
-
-                                                        double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
-                                                                get(i).getFree());
-
-                                                        Product_Modal.get(pm).setFree(String.valueOf(Math.round(freeVal)));
-                                                    } else {
-                                                        int val = (int) (enterQty / highestScheme);
-                                                        int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
-                                                        Product_Modal.get(pm).setFree(String.valueOf(freeVal));
-                                                    }
-                                                } else {
-
-                                                    Product_Modal.get(pm).setFree("0");
-
-                                                }
-
-
-                                                if (product_details_modalArrayList.get(i).getDiscount() != 0) {
-
-                                                    if (product_details_modalArrayList.get(i).getDiscount_type().equals("%")) {
-                                                        double discountVal = enterQty * (((product_details_modalArrayList.get(i).getDiscount()
-                                                        )) / 100);
-
-
-                                                        Product_Modal.get(pm).setDiscount((Math.round(discountVal)));
-
-                                                    } else {
-                                                        //Rs
-                                                        if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-                                                            double freePer = (enterQty / highestScheme);
-
-                                                            double freeVal = freePer * (product_details_modalArrayList.
-                                                                    get(i).getDiscount());
-
-                                                            Product_Modal.get(pm).setDiscount((Math.round(freeVal)));
-                                                        } else {
-                                                            int val = (int) (enterQty / highestScheme);
-                                                            double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
-                                                            Product_Modal.get(pm).setDiscount((freeVal));
-                                                        }
-                                                    }
-
-                                                } else {
-                                                    Product_Modal.get(pm).setDiscount(0.00);
-
-                                                }
-
-
-                                            }
-
-                                        } else {
-                                            Product_Modal.get(pm).setFree("0");
-
-                                            Product_Modal.get(pm).setDiscount(0.00);
-
-
-                                        }
-
-
-                                    }
-
-                                }
-
-
-                            }
-
-                            if (!haveVal) {
-                                Product_Modal.get(pm).setFree("0");
-
-                                Product_Modal.get(pm).setDiscount(0.00);
-
-                            } else {
-                                Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getAmount()) -
-                                        Double.valueOf(Product_Modal.get(pm).getDiscount()));
-                            }
-
-
-                            sumofTax(Product_Modal, pm);
-                        }
-                    }
-
-                }
-            }
-
-            Log.v(TAG, " order oncreate:j " + preOrderList);
+            // Log.v(TAG, " order oncreate:j " + preOrderList);
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
             JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+
+            JSONArray filterArr = new JSONArray();
+
+            for (int i = 0; i < ProdGroups.length(); i++) {
+                JSONObject obj = ProdGroups.getJSONObject(i);
+                if (Common_Class.isNullOrEmpty(Shared_Common_Pref.SecOrdOutletType) || (Shared_Common_Pref.SecOrdOutletType.contains(obj.getString("name"))))
+                    filterArr.put(obj);
+            }
+
+
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
 
-            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, this, new onListItemClick() {
+            RyclListItemAdb grplistItems = new RyclListItemAdb(filterArr, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
 
@@ -367,7 +381,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             });
             Grpgrid.setAdapter(grplistItems);
 
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+            FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
 
         } catch (Exception e) {
@@ -657,6 +671,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "order");
                         OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
+                        OutletItem.put("category_type", Shared_Common_Pref.SecOrdOutletType);
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -674,8 +689,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
-                                    Getorder_Array_List.get(z).getRegularQty());
+                            double cf = (Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("Product_Total_Qty", cf > 0 ? (Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty()) *
+                                    cf : Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
@@ -687,6 +703,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                             ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                             ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
+                            ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
+
 
                             JSONArray tax_Details = new JSONArray();
 
@@ -702,7 +723,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
                                     taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
                                     taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", amt);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
 
 
@@ -721,7 +742,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             JSONObject totTaxObj = new JSONObject();
 
                             totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", orderTotTax.get(i).getTax_Amt());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                             totTaxArr.put(totTaxObj);
 
                         }
@@ -866,7 +887,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size()+"   Qty : "+totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -1006,6 +1027,22 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         return super.dispatchTouchEvent(event);
     }
 
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        common_class.dismissCommonDialog(type);
+        switch (type) {
+            case 1:
+
+                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pay_recyclerview, getApplicationContext(), 1);
+
+                break;
+
+        }
+    }
+
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
         Context context;
         CategoryAdapter.MyViewHolder pholder;
@@ -1128,6 +1165,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         }
 
+        public void notify(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
+            this.Product_Details_Modalitem = Product_Details_Modalitem;
+            this.rowLayout = rowLayout;
+            this.context = context;
+            this.CategoryType = categoryType;
+            notifyDataSetChanged();
+
+        }
+
         @Override
         public Prodct_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
@@ -1148,17 +1194,42 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
+                holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
-                holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
+
+                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
+                    holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+                else {
+                    holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+
+
+                }
+
+
+                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
+
+
+                if (Product_Details_Modal.getRateEdit() == 1) {
+                    holder.Rate.setEnabled(true);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
+                } else {
+                    holder.Rate.setEnabled(false);
+                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
+
+
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
 
                 if (CategoryType >= 0) {
+                    holder.tvMRP.setText("₹" + Product_Details_Modal.getMRP());
 
-                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /*+
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1172,15 +1243,36 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     }
 
 
-                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getCnvQty() * Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
+                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
+
+
+                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            uomPos = position;
+                            uomList = new ArrayList<>();
+
+                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+
+                                }
+                                common_class.showCommonDialog(uomList, 1, Order_Category_Select.this);
+                            } else {
+                                common_class.showMsg(Order_Category_Select.this, "No Records Found.");
+                            }
+                        }
+                    });
 
 
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
+                if (Product_Details_Modal.getQty() > 0)
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
@@ -1221,7 +1313,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty());
+                            double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1229,8 +1321,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
-                                holder.totalQty.setText("Total Qty : " + (int) totQty);
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
+                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
+
                             }
 
 
@@ -1373,17 +1466,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                             updateToTALITEMUI();
 
-                            if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                Log.v(TAG + position, ":OUT:amt:" + amt);
-                                if (amt.equals("₹0.00")) {
-                                    Log.v(TAG + position, ":IN:amt:" + amt);
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-
-                                showFreeQtyList();
-                            }
+                            //hide code for edit scenario not working properly (remove also unwanted situation)
+//                            if (CategoryType == -1) {
+//                                String amt = holder.Amount.getText().toString();
+//                                Log.v(TAG + position, ":OUT:amt:" + amt);
+//                                if (amt.equals("₹0.00")) {
+//                                    Log.v(TAG + position, ":IN:amt:" + amt);
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
@@ -1404,6 +1498,34 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     }
                 });
+
+
+                if (CategoryType == -1) {
+                    holder.ivDel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA",
+                                    "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
+                                    , "OK", "Cancel", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            Product_Details_Modalitem.get(position).setQty(0);
+                                            Product_Details_Modalitem.remove(position);
+                                            notifyDataSetChanged();
+                                            updateToTALITEMUI();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+
+                        }
+                    });
+                }
 
 
                 holder.Rate.setOnClickListener(new View.OnClickListener() {
@@ -1475,11 +1597,12 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel;
-            ImageView ImgVwProd, QtyPls, QtyMns;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM,tvMRP/*, tvUomName, tvUomQty*/;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
-            LinearLayout llRegular;
+            LinearLayout llRegular, rlUOM;
+
 
             public MyViewHolder(View view) {
                 super(view);
@@ -1494,14 +1617,23 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
+                tvUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
+                    rlUOM = view.findViewById(R.id.rlUOM);
+                    tvMRP = view.findViewById(R.id.MrpRate);
+
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+//                    tvUomName = view.findViewById(R.id.tvUomName);
+//                    tvUomQty = view.findViewById(R.id.tvUomQty);
+
+                } else {
+                    ivDel = view.findViewById(R.id.ivDel);
                 }
 
 

@@ -214,6 +214,11 @@ public interface ApiInterface {
                                 @Field("data") String data);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<Object> GetRouteObject(@QueryMap Map<String, String> params);
+
+
+    @FormUrlEncoded
     @POST("Db_v300.php?axn=dcr/save")
     Call<Object> Tb_Mydayplan(@QueryMap Map<String, String> params, @Field("data") String body);
 
@@ -440,6 +445,11 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("db_v310.php?axn=save/vansales")
+    Call<JsonObject> saveVanSales(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+
+    @FormUrlEncoded
     @POST("db_v310.php?")
     Call<JsonObject> saveIndent(@Query("axn") String axn,@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
@@ -534,6 +544,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=save/qpsentry")
     Call<ResponseBody> submitQPSData(@Field("data") String body);
+
+
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/savepaymententry")

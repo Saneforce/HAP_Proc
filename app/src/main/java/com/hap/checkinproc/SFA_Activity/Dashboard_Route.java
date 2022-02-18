@@ -51,11 +51,10 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
-import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.PushNotification.MyFirebaseMessagingService;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.OutletCategoryFilterAdapter;
+import com.hap.checkinproc.SFA_Adapter.OutletMasterCategoryFilterAdapter;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -71,6 +70,7 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -78,13 +78,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface, UpdateResponseUI {
+public class Dashboard_Route extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     public static Dashboard_Route dashboard_route;
     public static Common_Class common_class;
-    public TextView distributor_text;
     public static Shared_Common_Pref shared_common_pref;
+    public TextView distributor_text;
     List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
     List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
     List<OutletReport_View_Modal> Retailer_Order_List;
@@ -96,29 +97,27 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     LinearLayout btnCmbRoute, btTotUniOtlt, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni;
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    String DCRMode;
     String sDeptType, RetType = "";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     DatabaseHandler db;
-
     ImageView ivToolbarHome, ivBtnRpt;
     LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder;
     TabAdapter adapter;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    Switch swACOutlet, swOTHOutlet;
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
+    Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient, swBandC;
     int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
     boolean updSale = true;
     String ViewDist;
-    ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
-    RecyclerView rvOutletCategory;
-
+    RecyclerView rvOutletCategory, rvMasterCategory;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
-    private String mCategoryName = "ALL";
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private String mCategoryName = "ALL", mSubCategoryName = "ALL";
+    private final ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
+
+    String categoryType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,11 +215,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             swACOutlet = findViewById(R.id.swACOutlet);
             swOTHOutlet = findViewById(R.id.swOTHOutlet);
+            swPlus4 = findViewById(R.id.swPlus4);
+            swAmbient = findViewById(R.id.swAmbient);
+            swMinus18 = findViewById(R.id.swMinus18);
+            swBandC = findViewById(R.id.swBandC);
 
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
             tabLayout = findViewById(R.id.tabs);
             rvOutletCategory = findViewById(R.id.rvOutletCategory);
+            rvMasterCategory = findViewById(R.id.rvOutletMasterCategory);
 
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
@@ -232,7 +236,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             llNewOrder.setOnClickListener(this);
             llNoOrder.setOnClickListener(this);
             llInvoice.setOnClickListener(this);
-
+            ivBtnRpt.setOnClickListener(this);
+            btSrvOtlt.setOnClickListener(this);
+            btTotUniOtlt.setOnClickListener(this);
+            btUniOtlt.setOnClickListener(this);
+            btClsOtlt.setOnClickListener(this);
 
             txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             txTotUniOtlt.setTypeface(null, Typeface.BOLD);
@@ -247,13 +255,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
             txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-
-            ivBtnRpt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
-                }
-            });
             txtOrdDate.setText(DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
 
             swACOutlet.setOnClickListener(new View.OnClickListener() {
@@ -280,92 +281,61 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     setPagerAdapter(false);
                 }
             });
-            btSrvOtlt.setOnClickListener(new View.OnClickListener() {
+
+
+            swMinus18.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    RetType = "1";
-                    txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                    txSrvOtlt.setTypeface(null, Typeface.BOLD);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swAmbient.setChecked(false);
+                        swBandC.setChecked(false);
 
-                    undrServ.setVisibility(View.VISIBLE);
-                    undrUni.setVisibility(View.INVISIBLE);
-                    undrCls.setVisibility(View.INVISIBLE);
-                    underTotUni.setVisibility(View.INVISIBLE);
 
-                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
-                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
-                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
-                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    }
 
-                    setPagerAdapter(false);
-                    // SearchRetailers();
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
+
+                    //  setPagerAdapter(false);
+                }
+            });
+            swPlus4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swMinus18.setChecked(false);
+                        swAmbient.setChecked(false);
+                        swBandC.setChecked(false);
+
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
+
                 }
             });
 
-            btTotUniOtlt.setOnClickListener(new View.OnClickListener() {
+            swAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    RetType = "";
-                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                    txTotUniOtlt.setTypeface(null, Typeface.BOLD);
-
-                    underTotUni.setVisibility(View.VISIBLE);
-                    undrServ.setVisibility(View.INVISIBLE);
-                    undrUni.setVisibility(View.INVISIBLE);
-                    undrCls.setVisibility(View.INVISIBLE);
-
-                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
-                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
-                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
-                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-
-                    setPagerAdapter(false);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swMinus18.setChecked(false);
+                        swBandC.setChecked(false);
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
 
                 }
             });
-            btUniOtlt.setOnClickListener(new View.OnClickListener() {
+
+            swBandC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    RetType = "0";
-                    txUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                    txUniOtlt.setTypeface(null, Typeface.BOLD);
-                    undrUni.setVisibility(View.VISIBLE);
-                    undrServ.setVisibility(View.INVISIBLE);
-                    undrCls.setVisibility(View.INVISIBLE);
-                    underTotUni.setVisibility(View.INVISIBLE);
-                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
-                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txClsOtlt.setTypeface(null, Typeface.NORMAL);
-                    txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
-                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swMinus18.setChecked(false);
+                        swAmbient.setChecked(false);
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked(), swBandC.isChecked());
 
-                    setPagerAdapter(false);
-                }
-            });
-            btClsOtlt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RetType = "2";
-                    txClsOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                    txClsOtlt.setTypeface(null, Typeface.BOLD);
-                    undrCls.setVisibility(View.VISIBLE);
-                    undrUni.setVisibility(View.INVISIBLE);
-                    undrServ.setVisibility(View.INVISIBLE);
-                    underTotUni.setVisibility(View.INVISIBLE);
-
-                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
-                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
-                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-                    txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
-                    txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-
-                    setPagerAdapter(false);
                 }
             });
 
@@ -389,15 +359,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 }
             });
             gson = new Gson();
-            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
-            }.getType();
-
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))
-                getRetailerChannel();
-            else {
-                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
-                setOutletCategoryAdapter();
-            }
 
 
             tvDistributor.setOnClickListener(new View.OnClickListener() {
@@ -431,23 +392,20 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             }
             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            // GetJsonData(shared_common_pref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
-            DCRMode = shared_common_pref.getvalue(Shared_Common_Pref.DCRMode);
-//            if (DCRMode.equalsIgnoreCase("SC")) {
-//                headtext.setText("SALES CALLS");
-//            }
-            DCRMode = shared_common_pref.getvalue(Shared_Common_Pref.DCRMode);
-//            if (DCRMode.equalsIgnoreCase("VC")) {
-//                headtext.setText("VAN ROUTE SUPPLY");
-//            }
 
-            if (DCRMode.equalsIgnoreCase("SR")) {
+            if (shared_common_pref.getvalue(Shared_Common_Pref.DCRMode).equalsIgnoreCase("SR")) {
                 headtext.setText("SALES RETURN");
             }
 
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+                if (shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
+                    categoryType = "-18";
+                    findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
+                } else
+                    findViewById(R.id.cvCatTypeParent).setVisibility(View.GONE);
+                common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
                 common_class.getDb_310Data(Rout_List, this);
                 getLastInvoiceData();
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
@@ -505,6 +463,27 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
 
+            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
+            }.getType();
+
+            //  if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
+            //  getRetailerChannel();
+
+//            else {
+//                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+//                rvMasterCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, this, new AdapterOnClick() {
+//                    @Override
+//                    public void CallMobile(String categoryName) {
+//                        setOutletCategoryAdapter();
+//                    }
+//                }));
+
+            // }
+
+
+            setOutletCategoryAdapter();
+            getGroupOutletCategory();
+
 
         } catch (Exception e) {
             Log.e("Retailor List:ex ", e.getMessage());
@@ -514,10 +493,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     }
 
-    public void getRetailerChannel() {
-        modelRetailChannel.clear();
-        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
-                "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+    private void getCategoryType(boolean isMinus18, boolean isPlus4, boolean isAmbient, boolean isBandC) {
+        categoryType = isMinus18 ? "-18" : isPlus4 ? "+4" : isAmbient ? "Ambient" : isBandC ? "B&C" : "";
+        Log.v("categoryTypes:DR", categoryType);
+        setPagerAdapter(true);
+    }
+
+    public void getGroupOutletCategory() {
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_SName as group\\\"]\"," +
+                "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"group asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
                 shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24",
@@ -526,27 +510,30 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 try {
-
+                    modelRetailChannel.clear();
                     JsonArray jsonArray = response.body();
-                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    Log.e("RESPONSE_VALUE_GROUP", String.valueOf(jsonArray));
                     for (int a = 0; a < jsonArray.size(); a++) {
                         JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                         String className = String.valueOf(jsonObject.get("name"));
                         String id = String.valueOf(jsonObject.get("id"));
-                        String approval = String.valueOf(jsonObject.get("NeedApproval"));
-
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
-                        Log.e("RETAILER_Channel_NAME", retailerClass);
+                        String approval = String.valueOf(jsonObject.get("NeedApproval"));
                         Common_Model mCommon_model_spinner = new Common_Model(id, retailerClass, approval);
                         Log.e("LeaveType_Request", retailerClass);
                         modelRetailChannel.add(mCommon_model_spinner);
                     }
 
-                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
-                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
-                    }
-
-                    setOutletCategoryAdapter();
+//                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+//                        rvMasterCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, Dashboard_Route.this, new AdapterOnClick() {
+//                            @Override
+//                            public void CallMobile(String categoryName) {
+//                                setOutletCategoryAdapter();
+//                            }
+//                        }));
+//
+//                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
+//                    }
 
                 } catch (Exception e) {
                     Log.v(" getRetailerChannel: ", e.getMessage());
@@ -561,18 +548,123 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         });
     }
 
-    void setOutletCategoryAdapter() {
 
-        modelRetailChannel.add(0, new Common_Model("ALL"));
-        rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, this, new AdapterOnClick() {
+    public void getRetailerChannel() {
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
+                "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
+                shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24",
+                routeMap);
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                try {
+                    modelRetailChannel.clear();
+                    JsonArray jsonArray = response.body();
+                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    for (int a = 0; a < jsonArray.size(); a++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                        String className = String.valueOf(jsonObject.get("name"));
+                        String id = String.valueOf(jsonObject.get("id"));
+                        String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
+                        String approval = String.valueOf(jsonObject.get("NeedApproval"));
+                        Common_Model mCommon_model_spinner = new Common_Model(id, retailerClass, approval);
+                        Log.e("LeaveType_Request", retailerClass);
+                        modelRetailChannel.add(mCommon_model_spinner);
+                    }
+
+//                    if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
+//                        rvMasterCategory.setAdapter(new OutletCategoryFilterAdapter(modelRetailChannel, Dashboard_Route.this, new AdapterOnClick() {
+//                            @Override
+//                            public void CallMobile(String categoryName) {
+//                                setOutletCategoryAdapter();
+//                            }
+//                        }));
+//
+//                        shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
+//                    }
+
+                } catch (Exception e) {
+                    Log.v(" getRetailerChannel: ", e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    void setOutletCategoryAdapter() {
+        try {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("ALL");
+            for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
+                if (!Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getOutletClass()) && !Retailer_Modal_ListFilter.get(i).getOutletClass().equalsIgnoreCase("B")) {
+                    list.add(Retailer_Modal_ListFilter.get(i).getOutletClass());
+                }
+            }
+            HashSet hs = new HashSet();
+            hs.addAll(list);
+            list.clear();
+            list.addAll(hs);
+
+            rvMasterCategory.setAdapter(new OutletMasterCategoryFilterAdapter(list, this, new AdapterOnClick() {
+                @Override
+                public void CallMobile(String categoryName) {
+                    common_class.brandPos = 0;
+                    mCategoryName = categoryName;
+                    setSubCatAdapter();
+
+                    setPagerAdapter(true);
+                }
+            }));
+
+
+            setSubCatAdapter();
+
+        } catch (Exception e) {
+            Log.v("Retailor List:cat ex", e.getMessage());
+        }
+
+    }
+
+    void setSubCatAdapter() {
+        ArrayList<String> subList = new ArrayList<>();
+        subList.add("ALL");
+
+        for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
+            if ((mCategoryName.equalsIgnoreCase("ALL") ||
+                    mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass())
+                            && !Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getSpeciality())))
+                subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
+
+
+        }
+        HashSet sub = new HashSet();
+        sub.addAll(subList);
+        subList.clear();
+        subList.addAll(sub);
+
+        for (int i=0;i<subList.size();i++ ){
+            if(Common_Class.isNullOrEmpty(subList.get(i)))
+                subList.remove(i);
+        }
+
+        rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(subList, this, new AdapterOnClick() {
             @Override
             public void CallMobile(String categoryName) {
-                mCategoryName = categoryName;
+                mSubCategoryName = categoryName;
                 setPagerAdapter(true);
             }
         }));
-    }
 
+
+    }
 
     public void getSalesCounts() {
         updSale = true;
@@ -633,29 +725,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     protected void onResume() {
         super.onResume();
 
-        if (!distributor_text.getText().toString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_name))) {
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id)) && !distributor_text.getText().toString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_name))) {
             route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
             distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
             tvDistributor.setText(shared_common_pref.getvalue(Constants.Distributor_name));
             common_class.getDb_310Data(Rout_List, this);
-        }
-
-        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
+
         }
+
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_PERMISSIONS_REQUEST_CODE:
-                if (grantResults.length > 0) {
-
-                }
-        }
-    }
-
 
     private void getLastInvoiceData() {
         try {
@@ -716,7 +795,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -724,6 +803,86 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btClsOtlt:
+                RetType = "2";
+                txClsOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                txClsOtlt.setTypeface(null, Typeface.BOLD);
+                undrCls.setVisibility(View.VISIBLE);
+                undrUni.setVisibility(View.INVISIBLE);
+                undrServ.setVisibility(View.INVISIBLE);
+                underTotUni.setVisibility(View.INVISIBLE);
+
+                txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                setPagerAdapter(false);
+                setOutletCategoryAdapter();
+                break;
+            case R.id.btSrvOtlt:
+                RetType = "1";
+                txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                txSrvOtlt.setTypeface(null, Typeface.BOLD);
+
+                undrServ.setVisibility(View.VISIBLE);
+                undrUni.setVisibility(View.INVISIBLE);
+                undrCls.setVisibility(View.INVISIBLE);
+                underTotUni.setVisibility(View.INVISIBLE);
+
+                txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                setPagerAdapter(false);
+                setOutletCategoryAdapter();
+                break;
+            case R.id.btUniOtlt:
+                RetType = "0";
+                txUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                txUniOtlt.setTypeface(null, Typeface.BOLD);
+                undrUni.setVisibility(View.VISIBLE);
+                undrServ.setVisibility(View.INVISIBLE);
+                undrCls.setVisibility(View.INVISIBLE);
+                underTotUni.setVisibility(View.INVISIBLE);
+                txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txTotUniOtlt.setTypeface(null, Typeface.NORMAL);
+                txTotUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                setPagerAdapter(false);
+                setOutletCategoryAdapter();
+                break;
+            case R.id.btTotUnivOtlt:
+                RetType = "";
+                txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                txTotUniOtlt.setTypeface(null, Typeface.BOLD);
+
+                underTotUni.setVisibility(View.VISIBLE);
+                undrServ.setVisibility(View.INVISIBLE);
+                undrUni.setVisibility(View.INVISIBLE);
+                undrCls.setVisibility(View.INVISIBLE);
+
+                txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                txClsOtlt.setTypeface(null, Typeface.NORMAL);
+                txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+
+                setPagerAdapter(false);
+                setOutletCategoryAdapter();
+                break;
+            case R.id.ivBtnRpt:
+                common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
+                break;
 
             case R.id.llOrder:
                 if (smryOrd.getText().toString().equals("0"))
@@ -786,25 +945,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void hideProgress() {
-    }
-
-    @Override
-    public void setDataToRoute(ArrayList<Route_Master> noticeArrayList) {
-        Log.e("ROUTE_MASTER", String.valueOf(noticeArrayList.size()));
-    }
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
 
         common_class.dismissCommonDialog(type);
         if (type == 2) {
+            mCategoryName = "ALL";
+            mSubCategoryName = "ALL";
             route_text.setText("");
             shared_common_pref.save(Constants.Route_name, "");
             shared_common_pref.save(Constants.Route_Id, "");
@@ -816,6 +964,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             shared_common_pref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+
+            if (myDataset.get(position).getDivERP().equalsIgnoreCase("21")) {
+                findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
+                categoryType = "-18";
+            } else {
+                categoryType = "";
+                findViewById(R.id.cvCatTypeParent).setVisibility(View.GONE);
+            }
+
+
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
             getLastInvoiceData();
             common_class.getDataFromApi(Retailer_OutletList, this, false);
@@ -829,15 +987,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    @Override
-    public void setDataToRouteObject(Object noticeArrayList, int position) {
-    }
-
-    @Override
-    public void onResponseFailure(Throwable throwable) {
-
-
-    }
 
     public void loadroute() {
 
@@ -857,6 +1006,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+                    case Constants.POS_NETAMT_TAX:
+                        Log.v("POS_NETAMT_TAX:", apiDataResponse);
+                        break;
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
@@ -874,6 +1026,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         break;
                     case Retailer_OutletList:
                         setPagerAdapter(false);
+                        setOutletCategoryAdapter();
                         break;
                     case Constants.RETAILER_STATUS:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
@@ -900,6 +1053,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Log.v("statusList:", outletCode);
 
                             setPagerAdapter(false);
+                            setOutletCategoryAdapter();
                         }
                         break;
                 }
@@ -943,7 +1097,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     ACTrue = true;
                 }
 
-                if (DCRMode.equalsIgnoreCase("SR") && Common_Class.isNullOrEmpty(Retailer_Modal_List.get(i).getCustomerCode()))
+                if (shared_common_pref.getvalue(Shared_Common_Pref.DCRMode).equalsIgnoreCase("SR") && Common_Class.isNullOrEmpty(Retailer_Modal_List.get(i).getCustomerCode()))
                     ACTrue = false;
 
                 if (Retailer_Modal_List.get(i).getType() == null)
@@ -964,16 +1118,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             txSrvOtltCnt.setText(String.valueOf(CountSR));
             txClsOtltCnt.setText(String.valueOf(CountCls));
             txTotUniOtltCnt.setText(String.valueOf(CountTotUni));
-            // Retailer_Modal_ListFilter = Retailer_Modal_List;
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, "");
+                Log.v("categoryTypes:", categoryType);
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, categoryType, mSubCategoryName);
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route");
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName);
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
             }
+
+
         } catch (Exception e) {
             Log.v("DAshboard_Route:", e.getMessage());
         }
@@ -1010,6 +1166,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                        } else if (Common_Class.isNullOrEmpty(dashboard_route.categoryType) && shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
+                            common_class.showMsg(getActivity(), "Select the Category Type");
                         } else {
 
                             if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId())) {
@@ -1049,6 +1207,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                            } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
+                            if (dashboard_route.categoryType.equalsIgnoreCase("Ambient"))
+                                Shared_Common_Pref.SecOrdOutletType = "+4," + dashboard_route.categoryType;
+                            else if (dashboard_route.categoryType.equalsIgnoreCase("+4"))
+                                Shared_Common_Pref.SecOrdOutletType = dashboard_route.categoryType + ",Ambient";
+                            else
+                                Shared_Common_Pref.SecOrdOutletType = dashboard_route.categoryType;
                             Shared_Common_Pref.CUSTOMER_CODE = mRetailer_Modal_ListFilter.get(position).getCustomerCode();
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
                             common_class.CommonIntentwithoutFinish(Invoice_History.class);
