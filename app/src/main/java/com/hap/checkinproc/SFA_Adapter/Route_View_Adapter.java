@@ -17,13 +17,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -33,6 +36,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +56,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         public TextView textviewname, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC,llDataParent;
+        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC, llDataParent;
         ImageView icMob, btnEditRet;
         RecyclerView lstTdyView, lstPreView;
         Button btnView;
@@ -64,7 +68,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 btnView = view.findViewById(R.id.btn_View);
                 textviewname = view.findViewById(R.id.retailername);
                 parent_layout = view.findViewById(R.id.parent_layout);
-                llDataParent=view.findViewById(R.id.llDataParent);
+                llDataParent = view.findViewById(R.id.llDataParent);
 
                 invoicedate = view.findViewById(R.id.invoicedate);
                 tvRetailorCode = view.findViewById(R.id.retailorCode);
@@ -210,6 +214,21 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     intent.putExtra("OutletAddress", mRetailer_Modal_List.getListedDrAddress1());
                     intent.putExtra("OutletMobile", mRetailer_Modal_List.getPrimary_No());
                     intent.putExtra("OutletRoute", mRetailer_Modal_List.getTownName());
+                    ArrayList<Common_Model> serviceTypeList = new ArrayList<>();
+//                    Gson gson=new Gson();
+//
+//                    for (int i = 0; i < Retailer_Modal_Listitem.size(); i++) {
+//                        if (mRetailer_Modal_List.getId().equals(Retailer_Modal_Listitem.get(i).getId())) {
+//                            serviceTypeList.add(new Common_Model(Retailer_Modal_Listitem.get(i).getCategory_Universe_Id(), "i+1",
+//                                    true, Retailer_Modal_Listitem.get(i).getOutletClass(), "" + Retailer_Modal_Listitem.get(i).getDocCatCode(),
+//                                    Retailer_Modal_Listitem.get(i).getSpeciality(), "" + Retailer_Modal_Listitem.get(i).getDocSpecialCode()));
+//
+//
+//                        }
+//                    }
+
+                   // shared_common_pref.save(Dashboard_Route.this,gson.toJson(serviceTypeList.toString()));
+
 
                     context.startActivity(intent);
                 }
@@ -232,10 +251,10 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             holder.btnView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(holder.btnView.getText().toString().equalsIgnoreCase("VIEW")){
+                    if (holder.btnView.getText().toString().equalsIgnoreCase("VIEW")) {
                         holder.btnView.setText("HIDE");
-                        holder.llDataParent.setVisibility(View.VISIBLE);}
-                    else {
+                        holder.llDataParent.setVisibility(View.VISIBLE);
+                    } else {
                         holder.btnView.setText("VIEW");
                         holder.llDataParent.setVisibility(View.GONE);
                     }

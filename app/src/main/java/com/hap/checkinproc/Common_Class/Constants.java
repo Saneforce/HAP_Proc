@@ -103,6 +103,7 @@ public class Constants {
     public static final String POS_NETAMT_TAX = "posNetAmtTax";
     public static final String SALES_RETURN_FILECOUNT ="salesReturnFileCnt" ;
     public static final String CURRENT_STOCK = "currentStk";
+    public static final String OUTLET_TYPE_LIST = "outletTypeList";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
