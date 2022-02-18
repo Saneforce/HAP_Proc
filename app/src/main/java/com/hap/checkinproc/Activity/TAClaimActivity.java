@@ -18,6 +18,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -132,6 +133,7 @@ import retrofit2.Response;
 
 public class TAClaimActivity extends AppCompatActivity implements Master_Interface,
         OnMapReadyCallback {
+    String TAG="CLIAM";
     static TransferUtility transferUtility;
     // Reference to the utility class
     static Util util;
@@ -3355,12 +3357,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         //usersByCountry.put(modeName, users);
 
     }
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    //@RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String sMode="";
         long nano_startTime = System.nanoTime();
+        String uKey="",uMode="",uTyp="";
         ImageUKey = keyEk + UserDetails.getString("Sfcode","") + nano_startTime;
         if(requestCode==144) {
             if (txtLodgUKey.getText().toString().equals("")) {
@@ -3370,6 +3373,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtLodgUKey.setText(lodUKey);
             }
             lodUKey = txtLodgUKey.getText().toString();
+            uKey=lodUKey;
+            uMode="LOD";uTyp="Room";
             sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey;
         }
         if(requestCode==124){
@@ -3380,6 +3385,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 tvTxtUKeys.setText(tvEditcnt);
             }
             TlUKey = tvTxtUKeys.getText().toString();
+            uKey=TlUKey;
+            uMode="TL";uTyp=editMode;
             sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey;
         }
         if(requestCode==100){
@@ -3391,6 +3398,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
 
             OeUKey = oeTxtUKeys.getText().toString();
+            uKey=OeUKey;
+            uMode="OE";uTyp=editMode;
             sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey;
         }
         if(requestCode==787){
@@ -3401,9 +3410,62 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 lcTxtUKeys.setText(lcEditcnt);
             }
             LcUKey = lcTxtUKeys.getText().toString();
+            uKey=LcUKey;
+            uMode="LC";
+            uTyp=editMode;
             sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;
         }
+        if (data.getClipData() != null) {
+            ClipData mClipData = data.getClipData();
+            for (int i = 0; i < mClipData.getItemCount(); i++) {
+                ClipData.Item iteml = mClipData.getItemAt(i);
+                Uri item = iteml.getUri();
+                String fileName=ImageUKey+""+util.getFileExtension(this,item);
+                final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "/" + fileName);
 
+                util.createFile(getApplicationContext(), item, file);
+                fullPath = file.getPath();
+                if(uMode.equalsIgnoreCase("LOD")) lodgArrLst.add(fullPath);
+
+                try {
+                    JSONObject jItem=new JSONObject();
+                    jItem.put("Mode",uMode);
+                    jItem.put("DtTm",DateTime);
+                    jItem.put("UKey",uKey);
+                    jItem.put("Type",uTyp);
+                    jItem.put("IKey",ImageUKey);
+                    jItem.put("FName",fileName);
+                    jArrAttach.put(jItem);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), fileName, "TAPhotos");
+            }
+        }
+        else {
+            Uri item = data.getData();
+            String fileName=ImageUKey+"."+util.getFileExtension(this,item);
+            final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "/" + fileName);
+            util.createFile(getApplicationContext(), item, file);
+            fullPath = file.getPath();
+            if(uMode.equalsIgnoreCase("LOD")) lodgArrLst.add(fullPath);
+            try {
+                JSONObject jItem=new JSONObject();
+                jItem.put("Mode",uMode);
+                jItem.put("DtTm",DateTime);
+                jItem.put("UKey",uKey);
+                jItem.put("Type",uTyp);
+                jItem.put("IKey",ImageUKey);
+                jItem.put("FName",fileName);
+                jArrAttach.put(jItem);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), fileName, "TAPhotos");
+        }
+/*
         if (requestCode == 144) {
             if (resultCode == RESULT_OK) {
                 if (requestCode == 144) {
@@ -3412,10 +3474,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
+
                             // display your images
                             ImageFilePath filepath = new ImageFilePath();
+
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
                             lodgArrLst.add(fullPath);
+
                             getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
 
                         }
@@ -3481,7 +3546,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                 }
             }
-        } else if (requestCode == 787) {
+        }
+        else if (requestCode == 787) {
             if (resultCode == RESULT_OK) {
                 if (requestCode == 787) {
                     if (data.getClipData() != null) {
@@ -3507,7 +3573,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                 }
             }
-        } else if (requestCode == 344) {
+        }
+        else if (requestCode == 344) {
             if (resultCode == RESULT_OK) {
                 if (requestCode == 344) {
                     if (data.getClipData() != null) {
@@ -3533,7 +3600,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                 }
             }
-        } else if (requestCode == 406) {
+        }
+        else if (requestCode == 406) {
             if (resultCode == RESULT_OK) {
                 if (requestCode == 406) {
                     if (data.getClipData() != null) {
@@ -3568,7 +3636,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             getMulipart(lodUKey, filePath, "LOD", "", "Room", "", "");
 
-        } else if (requestCode == 343 && resultCode == Activity.RESULT_OK) {
+        }
+        else if (requestCode == 343 && resultCode == Activity.RESULT_OK) {
 
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
@@ -3577,7 +3646,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             getMulipart(lodgLate, filePath, "LOD", "", "LateMode", "", "");
 
-        } else if (requestCode == 405 && resultCode == Activity.RESULT_OK) {
+        }
+        else if (requestCode == 405 && resultCode == Activity.RESULT_OK) {
 
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
@@ -3586,7 +3656,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             getMulipart(lodgEarly, filePath, "LOD", "", "EarlyMode", "", "");
 
-        } else if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
+        }
+        else if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
@@ -3594,7 +3665,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             getMulipart(TlUKey, filePath, "TL", "", editMode, "", "");
 
-        } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
+        }
+        else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
 
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
@@ -3603,7 +3675,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             getMulipart(OeUKey, filePath, "OE", "", editMode, "", "");
 
-        } else if (requestCode == 786 && resultCode == Activity.RESULT_OK) {
+        }
+        else if (requestCode == 786 && resultCode == Activity.RESULT_OK) {
 
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
@@ -3611,7 +3684,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
 
             getMulipart(LcUKey, filePath, "LC", "", editMode, "", "");
-        }
+        }*/
     }
     public void pdfViewList() {
         dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
@@ -3665,12 +3738,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
     public void selectMultiImage(Integer attachName) {
         dialog.dismiss();
-        Intent intent = new Intent();
-        intent.setType("*/*");
+       /* Intent intent = new Intent();
+        intent.setType("**");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);
-
+        */
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), attachName + 1);
     }
     public void captureFile(Integer reqCode) {
         dialog.dismiss();
@@ -5264,7 +5341,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 @Override
                 public void onStateChanged(int id, TransferState state) {
                     if (TransferState.COMPLETED == state) {
-
                         Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
                     } else if (TransferState.FAILED == state) {
 
@@ -5287,16 +5363,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             });
         }
         catch (Exception e){
-           // Log.e(TAG,e.getMessage());
+            Log.e(TAG,e.getMessage());
         }
     }
-    private void DownloadPhoto(ImageView ImgViewer, String FileName,String FileExt){
+    private void DownloadPhoto(ImageView ImgViewer, String FileName,String FileExt,String Mode){
         try{
 
-            final File file = File.createTempFile(FileName,"jpg");
+            final File file = File.createTempFile(FileName,"."+FileExt);
 
             TransferObserver downloadObserver =
-                    transferUtility.download("happic","TAPhotos/" + FileName+"."+FileExt , file);
+                    transferUtility.download("happic",Mode+"/" + FileName+"."+FileExt , file);
 
             downloadObserver.setTransferListener(new TransferListener() {
 
@@ -5305,7 +5381,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if (TransferState.COMPLETED == state) {
                         Bitmap bmp=BitmapFactory.decodeFile(file.getAbsolutePath());
                         ImgViewer.setImageBitmap(bmp);
-                        Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Downloaded Completed!", Toast.LENGTH_SHORT).show();
                     } else if (TransferState.FAILED == state) {
 
                     }
