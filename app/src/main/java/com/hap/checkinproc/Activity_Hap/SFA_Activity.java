@@ -168,7 +168,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
             menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
-            //  menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
+            menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
         }
 
 
@@ -227,7 +227,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
         });
         rvMenu.setAdapter(menuAdapter);
-
 
 
     }

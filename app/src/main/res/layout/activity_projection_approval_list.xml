@@ -54,7 +54,7 @@
         android:layout_height="@dimen/C40dp"
         android:layout_gravity="center_vertical"
         android:background="@color/grey_300"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <TextView
@@ -63,37 +63,29 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/sno"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="@dimen/C14dp"></TextView>
 
 
-        <TextView
-            android:id="@+id/Itemcount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:text="Des"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C14dp"></TextView>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:text="Ho"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C14dp"></TextView>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Applied Date"
+            android:text="Date"
+            android:textColor="@color/black"
+            android:textSize="@dimen/C14dp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:text="Qty"
             android:textColor="@color/black"
             android:textSize="@dimen/C14dp"></TextView>
 

@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -79,7 +80,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress;
+    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress,tvHistory;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -113,6 +114,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(ProjectionCategorySelectActivity.this);
             common_class = new Common_Class(this);
+            common_class.getProductDetails(this);
+
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
@@ -129,9 +132,11 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
+            tvHistory=findViewById(R.id.tvHistory);
 
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
+            tvHistory.setOnClickListener(this);
 
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -142,30 +147,30 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             recyclerView = findViewById(R.id.orderrecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Retailor_PHNo)))
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
                 llCalMob.setVisibility(View.GONE);
             else
-                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
-            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
+                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
+            retaileAddress.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA)))
-                Product_Modal = gson.fromJson(OrdersTable, userType);
-            else {
-                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_SECONDARY_DATA), userType);
+//            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA)))
+            Product_Modal = gson.fromJson(OrdersTable, userType);
+            // else {
+            // Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
 
-            }
+            //  }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -216,6 +221,20 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             Grpgrid.setAdapter(grplistItems);
 
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+
+
+            if (Shared_Common_Pref.Projection_Approval == 1 /*&& !Common_Class.isNullOrEmpty(
+                    sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA))*/) {
+                // Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
+
+                if (Product_Modal != null && Product_Modal.size() > 1) {
+                    findViewById(R.id.llApprovParent).setVisibility(View.VISIBLE);
+                    findViewById(R.id.rlTakeOrder).setVisibility(View.GONE);
+                    Product_Modal.get(0).setQty(5);
+                    Product_Modal.get(1).setQty(3);
+                    showOrderList();
+                }
+            }
 
 
         } catch (Exception e) {
@@ -380,6 +399,9 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvHistory:
+                startActivity(new Intent(this,ProjectionHistoryActivity.class));
+                break;
             case R.id.btnCallMob:
                 common_class.showCalDialog(ProjectionCategorySelectActivity.this, "Do you want to Call this Outlet?",
                         tvRetailorPhone.getText().toString().replaceAll(",", ""));
@@ -458,26 +480,26 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                         HeadItem.put("Worktype_code", Worktype_code);
                         HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
                         HeadItem.put("dcr_activity_date", Common_Class.GetDate());
-                        HeadItem.put("Daywise_Remarks", "");
+                        // HeadItem.put("Daywise_Remarks", "");
                         HeadItem.put("UKey", Ukey);
-                        HeadItem.put("orderValue", formatter.format(totalvalues));
+                        // HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();
-                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
-                        OutletItem.put("modified_time", Common_Class.GetDate());
+//                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
+//                        OutletItem.put("modified_time", Common_Class.GetDate());
                         OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
                         OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                        OutletItem.put("orderValue", formatter.format(totalvalues));
-                        OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("NetAmount", formatter.format(totalvalues));
+//                        OutletItem.put("orderValue", formatter.format(totalvalues));
+//                        OutletItem.put("CashDiscount", cashDiscount);
+//                        OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
-                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
-                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
+//                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+//                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
+//                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
+//                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "projection");
 
                         if (strLoc.length > 0) {
@@ -488,67 +510,67 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                             OutletItem.put("Long", "");
                         }
                         JSONArray Order_Details = new JSONArray();
-                        JSONArray totTaxArr = new JSONArray();
+                        // JSONArray totTaxArr = new JSONArray();
 
                         for (int z = 0; z < Getorder_Array_List.size(); z++) {
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
-                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
-                                    Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
+//                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+//                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
+//                                    Getorder_Array_List.get(z).getRegularQty());
+//                            ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+//                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
-                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
-                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
-                            ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
-                            ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
-                            ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
-                            ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
-                            ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
-                            ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+//                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
+//                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
+//                            ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
+//                            ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
+//                            ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
+//                            ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
+//                            ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
+//                            ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
 
-                            JSONArray tax_Details = new JSONArray();
-
-
-                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
-                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-
-                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
-                                    JSONObject taxData = new JSONObject();
-
-                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
-                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
-                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
-                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
-                                    taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", formatter.format(amt));
-                                    tax_Details.put(taxData);
-
-
-                                }
-
-
-                            }
-
-                            ProdItem.put("TAX_details", tax_Details);
+//                            JSONArray tax_Details = new JSONArray();
+//
+//
+//                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+//                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
+//
+//                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+//                                    JSONObject taxData = new JSONObject();
+//
+//                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+//                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+//                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+//                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+//                                    taxData.put("Tax_Type", label);
+//                                    taxData.put("Tax_Amt", formatter.format(amt));
+//                                    tax_Details.put(taxData);
+//
+//
+//                                }
+//
+//
+//                            }
+//
+//                            ProdItem.put("TAX_details", tax_Details);
 
                             Order_Details.put(ProdItem);
 
                         }
 
-                        for (int i = 0; i < orderTotTax.size(); i++) {
-                            JSONObject totTaxObj = new JSONObject();
+//                        for (int i = 0; i < orderTotTax.size(); i++) {
+//                            JSONObject totTaxObj = new JSONObject();
+//
+//                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
+//                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
+//                            totTaxArr.put(totTaxObj);
+//
+//                        }
 
-                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
-                            totTaxArr.put(totTaxObj);
-
-                        }
-
-                        OutletItem.put("TOT_TAX_details", totTaxArr);
+                        //  OutletItem.put("TOT_TAX_details", totTaxArr);
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
@@ -556,7 +578,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                         e.printStackTrace();
                     }
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    Call<JsonObject> responseBodyCall = apiInterface.saveProjection(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -569,8 +591,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                                     Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_SECONDARY_DATA);
-                                        common_class.CommonIntentwithFinish(SFA_Activity.class);
+                                        sharedCommonPref.clear_pref(Constants.LOC_PROJECTION_DATA);
+                                        common_class.CommonIntentwithFinish(ProjectionHistoryActivity.class);
                                     }
                                     common_class.showMsg(ProjectionCategorySelectActivity.this, jsonObjects.getString("Msg"));
 
@@ -640,7 +662,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
         TextView tvTax = findViewById(R.id.tvTaxVal);
         TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
         TextView tvBillSubTotal = findViewById(R.id.subtotal);
-        TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
+      //  TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
         tvBillTotItem = findViewById(R.id.totalitem);
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
@@ -692,11 +714,11 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
         // tvTax.setText("₹ " + formatter.format(taxVal));
 
 
-        if (cashDiscount > 0) {
-            tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
-        } else
-            tvSaveAmt.setVisibility(View.GONE);
+//        if (cashDiscount > 0) {
+//            tvSaveAmt.setVisibility(View.VISIBLE);
+//            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
+//        } else
+//            tvSaveAmt.setVisibility(View.GONE);
         orderTotTax = new ArrayList<>();
         orderTotTax.clear();
 
@@ -745,7 +767,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
         }
 
         String data = gson.toJson(Product_Modal);
-        sharedCommonPref.save(Constants.LOC_SECONDARY_DATA, data);
+        sharedCommonPref.save(Constants.LOC_PROJECTION_DATA, data);
 
     }
 
@@ -772,12 +794,26 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        switch (key) {
+            case Constants.PreOrderQtyList:
+                // loadData(apiDataResponse);
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
+                showOrderList();
 
+                break;
+        }
+    }
+
+    private void loadData(String apiDataResponse) {
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (Shared_Common_Pref.Projection_Approval == 1) {
+                finish();
+                Shared_Common_Pref.Projection_Approval = 0;
+            }
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
             } else {
@@ -989,7 +1025,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
-               if (Product_Details_Modal.getQty() > 0)
+                if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))

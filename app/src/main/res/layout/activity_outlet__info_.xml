@@ -200,7 +200,7 @@
                         android:textSize="13dp"
                         android:textStyle="bold"
 
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"

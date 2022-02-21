@@ -34,9 +34,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class PosHistoryActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
+public class ProjectionHistoryActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
-    TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot;
+    TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot, tvHistory;
     Common_Class common_class;
 
     PosOrder_History_Adapter mReportViewAdapter;
@@ -44,7 +44,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
     Shared_Common_Pref sharedCommonPref;
     public static String stDate = "", endDate = "";
     DatePickerDialog fromDatePickerDialog;
-    String date = "";
+    String date = "",TAG="ProjectionHistory";
     LinearLayout llDistributor, btnCmbRoute;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     Common_Model Model_Pojo;
@@ -53,8 +53,8 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_pos_history);
-            sharedCommonPref = new Shared_Common_Pref(PosHistoryActivity.this);
+            setContentView(R.layout.activity_projection_history);
+            sharedCommonPref = new Shared_Common_Pref(this);
             common_class = new Common_Class(this);
 
             tvStartDate = findViewById(R.id.tvStartDate);
@@ -78,7 +78,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
-            common_class.getDataFromApi(Constants.GetPosOrderHistory, this, false);
+            common_class.getDataFromApi(Constants.GetProjectionOrderHistory, this, false);
 
 
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
@@ -96,7 +96,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
             }
 
         } catch (Exception e) {
-
+Log.v(TAG,e.getMessage());
         }
 
     }
@@ -116,7 +116,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-                common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
+                common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
@@ -134,6 +134,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.tvStartDate:
                 selectDate(1);
                 break;
@@ -155,29 +156,29 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
 
     void selectDate(int val) {
         Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(PosHistoryActivity.this, new DatePickerDialog.OnDateSetListener() {
+        fromDatePickerDialog = new DatePickerDialog(ProjectionHistoryActivity.this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 int month = monthOfYear + 1;
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (common_class.checkDates(date, tvEndDate.getText().toString(), PosHistoryActivity.this) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(), ProjectionHistoryActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
-                        common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
+                        common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
                     } else
-                        common_class.showMsg(PosHistoryActivity.this, "Please select valid date");
+                        common_class.showMsg(ProjectionHistoryActivity.this, "Please select valid date");
                 } else {
-                    if (common_class.checkDates(tvStartDate.getText().toString(), date, PosHistoryActivity.this) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date, ProjectionHistoryActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();
-                        common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
+                        common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
 
                     } else
-                        common_class.showMsg(PosHistoryActivity.this, "Please select valid date");
+                        common_class.showMsg(ProjectionHistoryActivity.this, "Please select valid date");
 
                 }
 
@@ -223,11 +224,11 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                         loadroute();
                         break;
 
-                    case Constants.GetPosOrderHistory:
+                    case Constants.GetProjectionOrderHistory:
 
                         JSONArray arr = new JSONArray(apiDataResponse);
 
-                        mReportViewAdapter = new PosOrder_History_Adapter(PosHistoryActivity.this, arr, apiDataResponse, new AdapterOnClick() {
+                        mReportViewAdapter = new PosOrder_History_Adapter(ProjectionHistoryActivity.this, arr, apiDataResponse, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
                                 try {
@@ -277,7 +278,8 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common_class.CommonIntentwithFinish(POSActivity.class);
+            finish();
+            // common_class.CommonIntentwithFinish(POSActivity.class);
             overridePendingTransition(R.anim.in, R.anim.out);
             return true;
         }

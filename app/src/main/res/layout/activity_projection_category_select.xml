@@ -38,7 +38,8 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvApprovSta"
+
+                android:id="@+id/tvHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/C5dp"
@@ -813,6 +814,41 @@
 
 
         </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llApprovParent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/approv_button"
+                style="@style/BottomButton"
+                android:layout_weight="1"
+                android:background="@drawable/button_dgreen"
+                android:text="Approval"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="0dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp" />
+
+            <Button
+                android:id="@+id/reject_button"
+                style="@style/BottomButton"
+                android:layout_weight="1"
+                android:background="@drawable/button_amber"
+                android:text="Reject"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="0dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 

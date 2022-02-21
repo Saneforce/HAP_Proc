@@ -53,6 +53,7 @@ import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
+import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -371,6 +372,16 @@ public class Common_Class {
                     QueryString.put("todate", PosHistoryActivity.endDate);
 
                     break;
+
+                case Constants.GetProjectionOrderHistory:
+                    QuerySTring1 = "{\"tableName\":\"gettotalposorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+//                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+//                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("fromdate", ProjectionHistoryActivity.stDate);
+                    QueryString.put("todate", ProjectionHistoryActivity.endDate);
+
+                    break;
+
 
                 case Constants.Outlet_Total_Orders:
                     QuerySTring1 = "{\"tableName\":\"gettotaloutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";

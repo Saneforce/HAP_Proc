@@ -10,6 +10,7 @@ public class Shared_Common_Pref {
     public static String CUSTOMER_CODE = "";
     public static String SALES_MODE = "";
     public static String LOGINTYPE = "";
+    public static int Projection_Approval=0;
     SharedPreferences Common_pref;
     SharedPreferences.Editor editor;
     Activity activity;

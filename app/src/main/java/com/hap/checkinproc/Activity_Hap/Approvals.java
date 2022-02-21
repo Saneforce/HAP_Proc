@@ -25,6 +25,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.ProjectionApprovListActivity;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
 import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
@@ -46,7 +47,7 @@ import retrofit2.Response;
 public class Approvals extends AppCompatActivity implements View.OnClickListener {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout linProjectionApprove,LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -161,6 +162,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
+        linProjectionApprove=findViewById(R.id.lin_productProjectionApproval);
         /*Status text*/
         /*SetOnClickListner*/
         LeaveRequest.setOnClickListener(this);
@@ -183,6 +185,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_DeviationApproval.setOnClickListener(this);
         linDaExceptionEntry.setOnClickListener(this);
         DaExcptStaus.setOnClickListener(this);
+        linProjectionApprove.setOnClickListener(this);
 
 
         getcountdetails();
@@ -240,6 +243,11 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_leave_req:
                 startActivity(new Intent(Approvals.this, Leave_Approval.class));
+                finish();
+                break;
+
+            case R.id.lin_productProjectionApproval:
+                startActivity(new Intent(Approvals.this, ProjectionApprovListActivity.class));
                 finish();
                 break;
 

@@ -1231,7 +1231,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 QueryString.put("axn", "dcr/save");
                 totalValueString = mainArray.toString();
             } else {
-                QueryString.put("axn", "upd/retailer");
+                QueryString.put("axn", "upd/newretailer");
                 totalValueString = reportObject.toString();
             }
             QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
