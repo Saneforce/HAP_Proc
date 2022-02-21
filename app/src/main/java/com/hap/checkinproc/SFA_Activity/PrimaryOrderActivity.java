@@ -1091,7 +1091,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         }
 
-
+        boolMinu18=false;
         if (boolMinu18) {
             if (Getorder_Array_List.size() == 0)
                 grplistItems.notify(ProdGroups, this, "", new onListItemClick() {

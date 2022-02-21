@@ -75,7 +75,7 @@
     <string name="route">Route  </string>
     <string name="retailer">Outlet Name </string>
     <string name="retailer_class">Outlet Class  </string>
-    <string name="retailer_channel">Outlet Category </string>
+    <string name="retailer_channel">Outlet Channel </string>
     <string name="event_capture">Event Capture</string>
     <string name="order">Orders</string>
     <string name="remark">Enter the Remarks </string>
@@ -86,8 +86,8 @@
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Photo</string>
-    <string name="app_ver">v3.3.7</string>
-    <string name="tool_app_ver">Ver 3.3.7</string>
+    <string name="app_ver">v3.3.8</string>
+    <string name="tool_app_ver">Ver 3.3.8</string>
     <string name="trv_exc_entry">Travel Mode Exception Entry</string>
     <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
     <string name="trv_exc_status">Travel Mode Exception Status</string>

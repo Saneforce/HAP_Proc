@@ -10,8 +10,8 @@ android {
         applicationId "com.hap.checkinproc"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 3208
-        versionName "3.3.7"
+        versionCode 3308
+        versionName "3.3.8"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -148,4 +148,11 @@ dependencies {
     implementation 'com.google.apis:google-api-services-people:v1-rev99-1.22.0'
 
     implementation 'com.jakewharton:butterknife:6.1.0'
+
+    // BEGIN AWS DEPENDENCIES
+    def aws_version = "2.16.+"
+    implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
+    implementation ("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
+    // END AWS DEPENDENCIES
+
 }

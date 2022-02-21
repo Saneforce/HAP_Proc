@@ -3,6 +3,7 @@ package com.hap.checkinproc.common;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,9 +11,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Util;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -41,6 +47,10 @@ public class FileUploadService extends JobIntentService {
     private static final String TAG = "FileUploadService: ";
     Disposable mDisposable;
 
+    static TransferUtility transferUtility;
+    // Reference to the utility class
+    static Util util;
+
     String mFilePath,mSF,FileName,Mode;
     /**
      * Unique job ID for this service.
@@ -60,31 +70,63 @@ public class FileUploadService extends JobIntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+        util = new Util();
+        transferUtility = util.getTransferUtility(this);
     }
     private void UploadPhoto(){
         try{
-        if (mFilePath == null) {
-            Log.e(TAG, "onHandleWork: Invalid file URI");
-            return;
-        }
+            if (mFilePath == null) {
+                Log.e(TAG, "onHandleWork: Invalid file URI");
+                return;
+            }
 
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Flowable<Double> fileObservable = Flowable.create(emitter -> {
-            apiInterface.onFileUpload(mSF,FileName,Mode,
-                    createMultipartBody(mFilePath, emitter)).blockingGet();
-            emitter.onComplete();
-        }, BackpressureStrategy.LATEST);
-        mDisposable = fileObservable.subscribeOn(Schedulers.computation())
+            final File file = new File(mFilePath);
+           /* TransferObserver uploadObserver =
+                    transferUtility.upload("happic","TAPhotos/" + FileName , file);
+
+            uploadObserver.setTransferListener(new TransferListener() {
+
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if (TransferState.COMPLETED == state) {
+                        Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
+                        sendOtherPhotos();
+                    } else if (TransferState.FAILED == state) {
+
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                    int percentDone = (int) percentDonef;
+
+                    //tvFileName.setText("ID:" + id + "|bytesCurrent: " + bytesCurrent + "|bytesTotal: " + bytesTotal + "|" + percentDone + "%");
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            });*/
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Flowable<Double> fileObservable = Flowable.create(emitter -> {
+                apiInterface.onFileUpload(mSF,FileName,Mode,
+                        createMultipartBody(mFilePath, emitter)).blockingGet();
+                emitter.onComplete();
+            }, BackpressureStrategy.LATEST);
+            mDisposable = fileObservable.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(progress -> onProgress(progress), throwable -> onErrors(throwable),
-                        () -> onSuccess());}
+                        () -> onSuccess());
+        }
         catch (Exception e){
             Log.e(TAG,e.getMessage());
         }
     }
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-
         mFilePath = intent.getStringExtra("mFilePath");
         mSF = intent.getStringExtra("SF");
         FileName=intent.getStringExtra("FileName");
