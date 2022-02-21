@@ -81,7 +81,7 @@ public class FileUploadService extends JobIntentService {
             }
 
             final File file = new File(mFilePath);
-            TransferObserver uploadObserver =
+           /* TransferObserver uploadObserver =
                     transferUtility.upload("happic","TAPhotos/" + FileName , file);
 
             uploadObserver.setTransferListener(new TransferListener() {
@@ -109,8 +109,8 @@ public class FileUploadService extends JobIntentService {
                     ex.printStackTrace();
                 }
 
-            });
-            /*ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            });*/
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Flowable<Double> fileObservable = Flowable.create(emitter -> {
                 apiInterface.onFileUpload(mSF,FileName,Mode,
                         createMultipartBody(mFilePath, emitter)).blockingGet();
@@ -119,7 +119,7 @@ public class FileUploadService extends JobIntentService {
             mDisposable = fileObservable.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(progress -> onProgress(progress), throwable -> onErrors(throwable),
-                        () -> onSuccess());*/
+                        () -> onSuccess());
         }
         catch (Exception e){
             Log.e(TAG,e.getMessage());

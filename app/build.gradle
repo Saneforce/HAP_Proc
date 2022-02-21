@@ -10,8 +10,8 @@ android {
         applicationId "com.hap.checkinproc"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 3213
-        versionName "3.2.13"
+        versionCode 3308
+        versionName "3.3.8"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

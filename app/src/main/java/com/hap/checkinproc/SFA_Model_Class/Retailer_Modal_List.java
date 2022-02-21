@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Retailer_Modal_List {
@@ -86,7 +87,48 @@ public class Retailer_Modal_List {
     @Expose
     private String Cust_Code;
 
+    public ArrayList<CateSpecList> getCategoryList() {
+        return CategoryList;
+    }
 
+    public void setCategoryList(ArrayList<CateSpecList> categoryList) {
+        CategoryList = categoryList;
+    }
+
+    @SerializedName("outlet_type_Details")
+    @Expose
+    private ArrayList<CateSpecList> CategoryList;
+
+    @SerializedName("deposit_amount")
+    @Expose
+    private String deposit_amount;
+    @SerializedName("expected_sales_value")
+    @Expose
+    private String expected_sales_value;
+    @SerializedName("Freezer_status")
+    @Expose
+    private String Freezer_status;
+    @SerializedName("Freezer_Tag_no")
+    @Expose
+    private String Freezer_Tag_no;
+    @SerializedName("Pan_No")
+    @Expose
+    private String Pan_No;
+    @SerializedName("FssiNo")
+    @Expose
+    private String FssiNo;
+    @SerializedName("freezer_capacity")
+    @Expose
+    private String freezer_capacity;
+    @SerializedName("freezer_required")
+    @Expose
+    private String freezer_required;
+    @SerializedName("freezer_attachments")
+    @Expose
+    private String freezer_attachments;
+    @SerializedName("Freezer_make")
+    @Expose
+    private String Freezer_make;
     @SerializedName("Mnth")
     @Expose
     private String Mnth;
@@ -285,6 +327,86 @@ public class Retailer_Modal_List {
         DelivType = delivType;
     }
 
+    public String getFreezer_status() {
+        return Freezer_status;
+    }
+
+    public void setFreezer_status(String freezer_status) {
+        Freezer_status = freezer_status;
+    }
+
+    public String getFreezer_Tag_no() {
+        return Freezer_Tag_no;
+    }
+
+    public void setFreezer_Tag_no(String freezer_Tag_no) {
+        Freezer_Tag_no = freezer_Tag_no;
+    }
+
+    public String getPan_No() {
+        return Pan_No;
+    }
+
+    public void setPan_No(String pan_No) {
+        Pan_No = pan_No;
+    }
+
+    public String getFssiNo() {
+        return FssiNo;
+    }
+
+    public void setFssiNo(String fssiNo) {
+        FssiNo = fssiNo;
+    }
+
+    public String getFreezer_capacity() {
+        return freezer_capacity;
+    }
+
+    public void setFreezer_capacity(String freezer_capacity) {
+        this.freezer_capacity = freezer_capacity;
+    }
+
+    public String getFreezer_attachments() {
+        return freezer_attachments;
+    }
+
+    public void setFreezer_attachments(String freezer_attachments) {
+        this.freezer_attachments = freezer_attachments;
+    }
+
+    public String getFreezer_make() {
+        return Freezer_make;
+    }
+
+    public void setFreezer_make(String freezer_make) {
+        Freezer_make = freezer_make;
+    }
+
+    public String getDeposit_amount() {
+        return deposit_amount;
+    }
+
+    public void setDeposit_amount(String deposit_amount) {
+        this.deposit_amount = deposit_amount;
+    }
+
+    public String getFreezer_required() {
+        return freezer_required;
+    }
+
+    public void setFreezer_required(String freezer_required) {
+        this.freezer_required = freezer_required;
+    }
+
+    public String getExpected_sales_value() {
+        return expected_sales_value;
+    }
+
+    public void setExpected_sales_value(String expected_sales_value) {
+        this.expected_sales_value = expected_sales_value;
+    }
+
     public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
         Cust_Code = cust_Code;
         Others = others;
@@ -329,6 +451,7 @@ public class Retailer_Modal_List {
     public String getOwner_Name() {
         return Owner_Name;
     }
+
 
     public void setOwner_Name(String owner_Name) {
         Owner_Name = owner_Name;
@@ -667,7 +790,6 @@ public class Retailer_Modal_List {
         this.docCatCode = docCatCode;
         this.contactPersion = contactPersion;
         this.docSpecialCode = docSpecialCode;
-
     }
 
     @SerializedName("Category_Universe_Id")
@@ -879,5 +1001,26 @@ public class Retailer_Modal_List {
 
     public void setCustomerCode(String customerCode) {
         CustomerCode = customerCode;
+    }
+
+    public class CateSpecList{
+        @SerializedName("OutletCode")
+        @Expose
+        public String OutletCode;
+        @SerializedName("OutletCat_Type")
+        @Expose
+        public String OutletCat_Type;
+        @SerializedName("Category_Code")
+        @Expose
+        public String Category_Code;
+        @SerializedName("Category_Name")
+        @Expose
+        public String Category_Name;
+        @SerializedName("Sub_Category_Code")
+        @Expose
+        public String Sub_Category_Code;
+        @SerializedName("Sub_Category_Name")
+        @Expose
+        public String Sub_Category_Name;
     }
 }
