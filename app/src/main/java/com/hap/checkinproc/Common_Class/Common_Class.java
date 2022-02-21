@@ -364,6 +364,8 @@ public class Common_Class {
                     QueryString.put("todate", TodayPrimOrdActivity.endDate);
 
                     break;
+
+
                 case Constants.GetPosOrderHistory:
                     QuerySTring1 = "{\"tableName\":\"gettotalposorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 //                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
@@ -374,9 +376,8 @@ public class Common_Class {
                     break;
 
                 case Constants.GetProjectionOrderHistory:
-                    QuerySTring1 = "{\"tableName\":\"gettotalposorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-//                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-//                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QuerySTring1 = "{\"tableName\":\"getprojectionhistory\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
                     QueryString.put("fromdate", ProjectionHistoryActivity.stDate);
                     QueryString.put("todate", ProjectionHistoryActivity.endDate);
 
@@ -412,6 +413,13 @@ public class Common_Class {
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
+                case Constants.ProjectionOrderDetails_List:
+                    QuerySTring1 = "{\"tableName\":\"getprojectiondetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);

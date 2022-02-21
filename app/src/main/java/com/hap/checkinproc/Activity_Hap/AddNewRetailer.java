@@ -109,7 +109,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> categoryList = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     Gson gson;
-    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_sub_category,edtDepositAmt, edtExpcSalVal,
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_sub_category, edtDepositAmt, edtExpcSalVal,
             edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag, edtDistCode;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
@@ -204,7 +204,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edtDistCode = findViewById(R.id.edt_dist_code);
-            edtDepositAmt=findViewById(R.id.edt_depositAmt);
+            edtDepositAmt = findViewById(R.id.edt_depositAmt);
 
             linClsRmks = findViewById(R.id.linClsRmks);
             edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
@@ -289,8 +289,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
-
-
 
 
             categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
@@ -517,11 +515,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
-                ArrayList<Retailer_Modal_List.CateSpecList> CatSubList=Retailer_Modal_List.get(getOutletPosition()).getCategoryList();
-                for(int ik=0;ik<serviceTypeList.size();ik++){
-                    for(int ij=0;ij<CatSubList.size();ij++){
-                        if(CatSubList.get(ij).OutletCat_Type.equalsIgnoreCase(serviceTypeList.get(ik).getName()))
-                        {
+                ArrayList<Retailer_Modal_List.CateSpecList> CatSubList = Retailer_Modal_List.get(getOutletPosition()).getCategoryList();
+                for (int ik = 0; ik < serviceTypeList.size(); ik++) {
+                    for (int ij = 0; ij < CatSubList.size(); ij++) {
+                        if (CatSubList.get(ij).OutletCat_Type.equalsIgnoreCase(serviceTypeList.get(ik).getName())) {
                             serviceTypeList.get(ik).setSelected(true);
                             serviceTypeList.get(ik).setCatId(CatSubList.get(ij).Category_Code);
                             serviceTypeList.get(ik).setSubCatId(CatSubList.get(ij).Sub_Category_Code);
@@ -543,13 +540,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 tvFreezerSta.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
                 tvFreezerCapacity.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
                 //freezerStaId
-                String FreReq=Retailer_Modal_List.get(getOutletPosition()).getFreezer_required();
+                String FreReq = Retailer_Modal_List.get(getOutletPosition()).getFreezer_required();
                 cbFreezerYes.setChecked(false);
-                if(FreReq.equalsIgnoreCase("yes")) {
-                    cbFreezerNo.setChecked(false);cbFreezerYes.setChecked(true);
+                if (FreReq.equalsIgnoreCase("yes")) {
+                    cbFreezerNo.setChecked(false);
+                    cbFreezerYes.setChecked(true);
                     findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
                 }
-                updateView("",false);
+                updateView("", false);
                 if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLat()))
                     RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
                 if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLong()))
@@ -557,14 +555,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 Shared_Common_Pref.Outletlat = RetLat;
                 Shared_Common_Pref.Outletlong = RetLng;
-                String[] filelst=Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",");
+                String[] filelst = Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",");
 
                 mFreezerData.clear();
                 mFreezerData = new ArrayList<>();
                 mFreezerData.add(new QPS_Modal("", "", ""));
-                List<String> jAryDta=new ArrayList<>();
-                for(int il=0;il<filelst.length;il++) {
-                    if(!filelst[il].equalsIgnoreCase("")){
+                List<String> jAryDta = new ArrayList<>();
+                for (int il = 0; il < filelst.length; il++) {
+                    if (!filelst[il].equalsIgnoreCase("")) {
                         String sname = ApiClient.BASE_URL + "FreezerImages/" + filelst[il];
                         sname = sname.replaceAll("server/", "");
                         jAryDta.add(sname);
@@ -1255,21 +1253,20 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         JSONObject typeData = new JSONObject();
                         typeData.put("type_name", serviceTypeList.get(i).getName());
                         typeData.put("cat_name", serviceTypeList.get(i).getCatName());
-                        typeData.put("cat_id", serviceTypeList.get(i).getCatId());
-                        typeData.put("subcat_id", serviceTypeList.get(i).getSubCatId());
+                        typeData.put("cat_id", Integer.parseInt(serviceTypeList.get(i).getCatId()));
+                        typeData.put("subcat_id", Integer.parseInt(serviceTypeList.get(i).getSubCatId()));
                         typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
 
                         outletTypeArr.put(typeData);
                     }
                 }
-            }
-            else {
+            } else {
                 JSONObject typeData = new JSONObject();
                 typeData.put("type_name", "");
                 typeData.put("cat_name", txtRetailerChannel.getText().toString());
                 typeData.put("cat_id", channelID);
                 typeData.put("subcat_id", tvSubCategory.getText().toString());
-                typeData.put("subcat_name",categoryId);
+                typeData.put("subcat_name", categoryId);
                 outletTypeArr.put(typeData);
 
             }
@@ -1624,7 +1621,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     void assignData() {
         name = ApiClient.BASE_URL + Retailer_Modal_List.get(getOutletPosition()).getImagename();
-        name=name.replaceAll("server/","");
+        name = name.replaceAll("server/", "");
         name = name.replaceAll(",", "");
         Picasso.with(AddNewRetailer.this)
                 .load(name)
@@ -1910,8 +1907,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 holder.type.setText(list.get(position).getName());
                 holder.category.setText(list.get(position).getCatName());
                 holder.subCategory.setText(list.get(position).getSubCatName());
-                if (list.get(position).isSelected()==false) holder.cbType.setChecked(false);
-                if (list.get(position).isSelected()==true) holder.cbType.setChecked(true);
+                if (list.get(position).isSelected() == false) holder.cbType.setChecked(false);
+                if (list.get(position).isSelected() == true) holder.cbType.setChecked(true);
                 holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

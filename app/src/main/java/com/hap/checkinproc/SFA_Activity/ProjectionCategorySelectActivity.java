@@ -114,7 +114,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(ProjectionCategorySelectActivity.this);
             common_class = new Common_Class(this);
-            common_class.getProductDetails(this);
+            //common_class.getProductDetails(this);
 
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
@@ -161,7 +161,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Projection_Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
@@ -201,7 +201,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
-            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            JSONArray ProdGroups = db.getMasterData(Constants.ProjectionProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -222,19 +222,19 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
-
-            if (Shared_Common_Pref.Projection_Approval == 1 /*&& !Common_Class.isNullOrEmpty(
-                    sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA))*/) {
-                // Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
-
-                if (Product_Modal != null && Product_Modal.size() > 1) {
-                    findViewById(R.id.llApprovParent).setVisibility(View.VISIBLE);
-                    findViewById(R.id.rlTakeOrder).setVisibility(View.GONE);
-                    Product_Modal.get(0).setQty(5);
-                    Product_Modal.get(1).setQty(3);
-                    showOrderList();
-                }
-            }
+//
+//            if (Shared_Common_Pref.Projection_Approval == 1 /*&& !Common_Class.isNullOrEmpty(
+//                    sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA))*/) {
+//                // Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
+//
+//                if (Product_Modal != null && Product_Modal.size() > 1) {
+//                    findViewById(R.id.llApprovParent).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.rlTakeOrder).setVisibility(View.GONE);
+//                    Product_Modal.get(0).setQty(5);
+//                    Product_Modal.get(1).setQty(3);
+//                    showOrderList();
+//                }
+//            }
 
 
         } catch (Exception e) {
@@ -283,7 +283,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     private void FilterTypes(String GrpID) {
         try {
             JSONArray TypGroups = new JSONArray();
-            JSONArray tTypGroups = db.getMasterData(Constants.ProdTypes_List);
+            JSONArray tTypGroups = db.getMasterData(Constants.ProjectionProdTypes_List);
             LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
             TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Brndgrid.setLayoutManager(TypgridlayManager);
@@ -297,13 +297,13 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             String filterId = "";
             if (TypGroups.length() > 0)
                 filterId = TypGroups.getJSONObject(0).getString("id");
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", filterId);
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Projection_Category_List)), "1", filterId);
 
             RyclBrandListItemAdb TyplistItems = new RyclBrandListItemAdb(TypGroups, this, new onListItemClick() {
                 @Override
                 public void onItemClick(JSONObject item) {
                     try {
-                        GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", item.getString("id"));
+                        GetJsonData(String.valueOf(db.getMasterData(Constants.Projection_Category_List)), "1", item.getString("id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

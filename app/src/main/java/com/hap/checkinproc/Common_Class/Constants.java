@@ -113,6 +113,8 @@ public class Constants {
     public static final String CUTOFF_TIME = "cutOffTime";
     public static final String GetTodayPrimaryOrder_List = "getTodayPrimaryOrderList";
     public static final String TodayPrimaryOrderDetails_List = "todayPrimaryOrderDetail";
+    public static final String ProjectionOrderDetails_List = "projectionOrderDetail";
+
     public static final String MYTEAM_LOCATION = "myTeamLocation";
     public static final String NEW_OUTLET = "newOutlet";
     public static final String PrePrimaryOrderQty = "prePrimaryOrderQty";
@@ -138,4 +140,8 @@ public class Constants {
     public static final String SR_GetTodayOrder_List="srGetOrderDetailList";
     public static final String PreInvOrderQty="preInvoiceOrderQty";
     public static final String GetProjectionOrderHistory="getProjectionHistory";
+    public static final String ProjectionProdGroups_List="projectionProdGrpList";
+    public static final String ProjectionProdTypes_List="projectionProdTypeList";
+    public static final String Projection_Category_List="projectionCategoryList";
+    public static final String Projection_Product_List="projectionProdList";
 }

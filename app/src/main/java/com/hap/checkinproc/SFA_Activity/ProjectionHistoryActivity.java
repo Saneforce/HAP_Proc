@@ -25,6 +25,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PosOrder_History_Adapter;
+import com.hap.checkinproc.SFA_Adapter.Projection_History_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,12 +40,12 @@ public class ProjectionHistoryActivity extends AppCompatActivity implements Mast
     TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot, tvHistory;
     Common_Class common_class;
 
-    PosOrder_History_Adapter mReportViewAdapter;
+    Projection_History_Adapter mReportViewAdapter;
     RecyclerView invoicerecyclerview;
     Shared_Common_Pref sharedCommonPref;
     public static String stDate = "", endDate = "";
     DatePickerDialog fromDatePickerDialog;
-    String date = "",TAG="ProjectionHistory";
+    String date = "", TAG = "ProjectionHistory";
     LinearLayout llDistributor, btnCmbRoute;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     Common_Model Model_Pojo;
@@ -96,7 +97,7 @@ public class ProjectionHistoryActivity extends AppCompatActivity implements Mast
             }
 
         } catch (Exception e) {
-Log.v(TAG,e.getMessage());
+            Log.v(TAG, e.getMessage());
         }
 
     }
@@ -228,14 +229,14 @@ Log.v(TAG,e.getMessage());
 
                         JSONArray arr = new JSONArray(apiDataResponse);
 
-                        mReportViewAdapter = new PosOrder_History_Adapter(ProjectionHistoryActivity.this, arr, apiDataResponse, new AdapterOnClick() {
+                        mReportViewAdapter = new Projection_History_Adapter(ProjectionHistoryActivity.this, arr, apiDataResponse, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
                                 try {
                                     JSONObject obj = arr.getJSONObject(position);
                                     Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
                                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    sharedCommonPref.save(Constants.FLAG, "POS INVOICE");
+                                    sharedCommonPref.save(Constants.FLAG, "PROJECTION");
                                     intent.putExtra("Order_Values", obj.getString("Order_Value"));
                                     intent.putExtra("Invoice_Values", obj.getString("invoicevalues"));
                                     //intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
@@ -278,8 +279,8 @@ Log.v(TAG,e.getMessage());
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-            // common_class.CommonIntentwithFinish(POSActivity.class);
+            // finish();
+            common_class.CommonIntentwithFinish(ProjectionCategorySelectActivity.class);
             overridePendingTransition(R.anim.in, R.anim.out);
             return true;
         }

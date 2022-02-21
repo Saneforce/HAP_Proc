@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -59,6 +60,7 @@ import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -218,7 +220,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
                         break;
                     case "Projection":
-                        common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
+//                        JSONArray prodList = db.getMasterData(Constants.Projection_Product_List);
+//
+//                        if (prodList==null) {
+                        getProjectionProductDetails(SFA_Activity.this);
+//                        } else {
+//                            common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
+//
+//                        }
                         break;
 
 
@@ -228,6 +237,84 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         });
         rvMenu.setAdapter(menuAdapter);
 
+
+    }
+
+    public void getProjectionProductDetails(Activity activity) {
+
+        if (common_class.isNetworkAvailable(activity)) {
+            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(activity);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+               // jParam.put("outletId", Shared_Common_Pref.OutletCode);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/projectionprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_grp_List", response.body().toString());
+                        db.deleteMasterData(Constants.ProjectionProdGroups_List);
+                        db.addMasterData(Constants.ProjectionProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/projectionprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_type_List", response.body().toString());
+                        db.deleteMasterData(Constants.ProjectionProdTypes_List);
+                        db.addMasterData(Constants.ProjectionProdTypes_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/projectionprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_cat_List", response.body().toString());
+                        db.deleteMasterData(Constants.Projection_Category_List);
+                        db.addMasterData(Constants.Projection_Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/projectionproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_Product_List", response.body().toString());
+                        db.deleteMasterData(Constants.Projection_Product_List);
+                        db.addMasterData(Constants.Projection_Product_List, response.body());
+
+                        common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+                        Log.v("Projec_Product_fail", t.getMessage());
+
+                    }
+                });
+            } catch (Exception e) {
+                Log.v("Projec_Product_List_ex",e.getMessage());
+
+                e.printStackTrace();
+            }
+        }
 
     }
 

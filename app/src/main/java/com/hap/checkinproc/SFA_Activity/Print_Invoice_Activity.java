@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.location.Location;
 import android.net.Uri;
@@ -180,14 +181,26 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 phone = "Mobile:" + tvRetailorPhone.getText().toString();
 
             } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ||
-                    sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
+                    sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE") || (sharedCommonPref.getvalue(Constants.FLAG).equals("PROJECTION"))) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
                 findViewById(R.id.llOutletParent).setVisibility(View.GONE);
                 tvDistAdd.setVisibility(View.VISIBLE);
                 //  tvDistId.setVisibility(View.VISIBLE);
                 if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order"))
                     common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
-                else {
+                else if (sharedCommonPref.getvalue(Constants.FLAG).equals("PROJECTION")) {
+
+                    common_class.getDataFromApi(Constants.ProjectionOrderDetails_List, this, false);
+                    findViewById(R.id.llUOM).setVisibility(View.GONE);
+                    findViewById(R.id.llPrice).setVisibility(View.GONE);
+                    findViewById(R.id.llTot).setVisibility(View.GONE);
+                    findViewById(R.id.rlSubTot).setVisibility(View.GONE);
+                    findViewById(R.id.rlNetAmt).setVisibility(View.GONE);
+                    totalitem.setTypeface(Typeface.DEFAULT_BOLD);
+                    totalqty.setTypeface(Typeface.DEFAULT_BOLD);
+
+
+                } else {
                     findViewById(R.id.tvWelcomeLabel).setVisibility(View.VISIBLE);
                     common_class.getDataFromApi(Constants.PosOrderDetails_List, this, false);
                 }
@@ -951,6 +964,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     case Constants.TodayOrderDetails_List:
                         orderInvoiceDetailData(apiDataResponse);
                         break;
+                    case Constants.ProjectionOrderDetails_List:
+                        orderInvoiceDetailData(apiDataResponse);
+                        break;
                     case Constants.TodayPrimaryOrderDetails_List:
                         orderInvoiceDetailData(apiDataResponse);
                         break;
@@ -988,7 +1004,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Order_Outlet_Filter.clear();
 
             int total_qtytext = 0;
-            double tcsVal=0;
+            double tcsVal = 0;
             subTotalVal = 0.00;
             JSONArray arr = new JSONArray(response);
             taxList = new ArrayList<>();
@@ -1066,7 +1082,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
                 }
-                mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter);
+                mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, sharedCommonPref.getvalue(Constants.FLAG));
                 rvReturnInv.setAdapter(mReportViewAdapter);
 
             } else {
@@ -1076,7 +1092,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     total_qtytext += obj.getInt("Quantity");
                     subTotalVal += (obj.getDouble("value"));
 
-                     tcsVal = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? obj.getDouble("TCS") : 0;
+                    tcsVal = sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order") ? obj.getDouble("TCS") : 0;
 
                     String paidAmt = "0";
                     try {
@@ -1125,13 +1141,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 }
 
-                mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter);
+                mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, sharedCommonPref.getvalue(Constants.FLAG));
                 printrecyclerview.setAdapter(mReportViewAdapter);
             }
 
 
-
-             subTotalVal = Double.parseDouble(formatter.format(subTotalVal+tcsVal));
+            subTotalVal = Double.parseDouble(formatter.format(subTotalVal + tcsVal));
 
             totalqty.setText("" + String.valueOf(total_qtytext));
             totalitem.setText("" + Order_Outlet_Filter.size());

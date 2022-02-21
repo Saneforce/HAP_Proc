@@ -384,6 +384,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/llUOM"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -418,6 +419,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/llPrice"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -434,6 +436,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/llTot"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -484,6 +487,7 @@
                                 android:visibility="visible" />
 
                             <RelativeLayout
+                                android:id="@+id/rlSubTot"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C5dp">
@@ -530,6 +534,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -576,6 +581,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
+                                android:id="@+id/rlTax"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -631,6 +637,7 @@
                                 android:background="@color/background"></View>
 
                             <RelativeLayout
+                                android:id="@+id/rlNetAmt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C5dp">
