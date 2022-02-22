@@ -53,6 +53,10 @@ public class Product_Details_Modal {
     @Expose
     private String unitCode;
 
+    private String plant="";
+    private String plantId="";
+
+
     public String getERP_Code() {
         return ERP_Code;
     }
@@ -774,6 +778,22 @@ public class Product_Details_Modal {
 
     public void setRateEdit(Integer rateEdit) {
         RateEdit = rateEdit;
+    }
+
+    public String getPlant() {
+        return plant;
+    }
+
+    public void setPlant(String plant) {
+        this.plant = plant;
+    }
+
+    public String getPlantId() {
+        return plantId;
+    }
+
+    public void setPlantId(String plantId) {
+        this.plantId = plantId;
     }
 
 

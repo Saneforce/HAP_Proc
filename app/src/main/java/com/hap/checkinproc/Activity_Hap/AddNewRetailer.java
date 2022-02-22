@@ -1251,10 +1251,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 for (int i = 0; i < serviceTypeList.size(); i++) {
                     if (serviceTypeList.get(i).isSelected()) {
                         JSONObject typeData = new JSONObject();
+
+                        double catId = Double.parseDouble((serviceTypeList.get(i).getCatId()));
+
+                        double subCatId = Double.parseDouble((serviceTypeList.get(i).getSubCatId()));
                         typeData.put("type_name", serviceTypeList.get(i).getName());
                         typeData.put("cat_name", serviceTypeList.get(i).getCatName());
-                        typeData.put("cat_id", Integer.parseInt(serviceTypeList.get(i).getCatId()));
-                        typeData.put("subcat_id", Integer.parseInt(serviceTypeList.get(i).getSubCatId()));
+                        typeData.put("cat_id", (int)catId);
+                        typeData.put("subcat_id", (int) subCatId);
                         typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
 
                         outletTypeArr.put(typeData);
@@ -1320,16 +1324,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         common_class.CommonIntentwithFinish(OutletApprovListActivity.class);
                         overridePendingTransition(R.anim.in, R.anim.out);
                     } else*/
-                    if (Shared_Common_Pref.FromActivity == "Outlets") {
-                        Shared_Common_Pref.FromActivity = "";
-                        common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
-                    } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
-                        Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.Sync_Flag = "1";
-                        //startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
-                        common_class.CommonIntentwithFinish(Dashboard_Route.class);
-                        // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-                    }
+//                    if (Shared_Common_Pref.FromActivity == "Outlets") {
+//                        Shared_Common_Pref.FromActivity = "";
+//                        common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
+//                    } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
+//                        Shared_Common_Pref.Outler_AddFlag = "0";
+//                        Shared_Common_Pref.Sync_Flag = "1";
+//                        //startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
+//                        common_class.CommonIntentwithFinish(Dashboard_Route.class);
+//                        // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+//                    }
+
+                    finish();
                 }
 
                 @Override

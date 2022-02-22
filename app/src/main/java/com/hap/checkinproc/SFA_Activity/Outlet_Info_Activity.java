@@ -402,7 +402,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                         intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
 
                         startActivity(intent);
-                        finish();
+                       // finish();
                     } catch (Exception e) {
 
                     }

@@ -1,7 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -111,7 +110,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     private TextView tvTotalAmount, tvACBal, tvNetAmtTax;
     private double totalvalues, taxVal, editTotValues;
     private Integer totalQty;
-    private TextView tvBillTotItem, tvTotUOM;
+    private TextView tvBillTotItem, tvTotUOM, tvBillTotQty, tvTotQtyLabel;
     double ACBalance = 0.0;
     final Handler handler = new Handler();
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
@@ -876,244 +875,257 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void updateToTALITEMUI() {
-        TextView tvTotalItems = findViewById(R.id.tvTotalItems);
-        TextView tvTotLabel = findViewById(R.id.tvTotLabel);
-
-        tvTotalAmount = findViewById(R.id.tvTotalAmount);
-
-        TextView tvTax = findViewById(R.id.tvTaxVal);
-
-        TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
-
-        TextView tvBillSubTotal = findViewById(R.id.subtotal);
-        TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
-
-        tvBillTotItem = findViewById(R.id.totalitem);
-        TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
-        TextView tvBillToPay = findViewById(R.id.tvnetamount);
-        TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
-
-
-        Getorder_Array_List = new ArrayList<>();
-        Getorder_Array_List.clear();
-        totalvalues = 0;
-        totalQty = 0;
-        cashDiscount = 0;
-        taxVal = 0;
-
-        orderTotTax = new ArrayList<>();
-        orderTotUOM = new ArrayList<>();
-
-        String uomName = "";
-        for (int pm = 0; pm < Product_Modal.size(); pm++) {
-
-            if (Product_Modal.get(pm).getQty() > 0) {
-
-                cashDiscount += (double) Product_Modal.get(pm).getDiscount();
-
-                totalvalues += Product_Modal.get(pm).getAmount();
-
-                totalQty += Product_Modal.get(pm).getQty();
-
-                if (Product_Modal.get(pm).getTax() > 0)
-                    taxVal += Product_Modal.get(pm).getTax();
-
-
-                Getorder_Array_List.add(Product_Modal.get(pm));
-
-
-            }
-
-        }
-
-        totTax = 0;
         try {
-            String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
-            JSONObject obj = new JSONObject(totAmtTax);
+            TextView tvTotalItems = findViewById(R.id.tvTotalItems);
+            TextView tvTotLabel = findViewById(R.id.tvTotLabel);
 
-            if (obj.getBoolean("success")) {
-                JSONArray arr = obj.getJSONArray("Data");
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject taxObj = arr.getJSONObject(i);
-                    double taxCal = (totalvalues) *
-                            ((taxObj.getDouble("Value") / 100));
-                    totTax = +totTax + taxCal;
+            tvTotalAmount = findViewById(R.id.tvTotalAmount);
+
+            TextView tvTax = findViewById(R.id.tvTaxVal);
+
+            TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
+
+            TextView tvBillSubTotal = findViewById(R.id.subtotal);
+            TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
+
+            tvBillTotItem = findViewById(R.id.totalitem);
+            tvBillTotQty = findViewById(R.id.tvtotalqty);
+            tvTotQtyLabel = findViewById(R.id.tvTotQtyLabel);
+            TextView tvBillToPay = findViewById(R.id.tvnetamount);
+            TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
+
+
+            Getorder_Array_List = new ArrayList<>();
+            Getorder_Array_List.clear();
+            totalvalues = 0;
+            totalQty = 0;
+            cashDiscount = 0;
+            taxVal = 0;
+
+            orderTotTax = new ArrayList<>();
+            orderTotUOM = new ArrayList<>();
+
+
+            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+
+                if (Product_Modal.get(pm).getQty() > 0) {
+
+                    cashDiscount += (double) Product_Modal.get(pm).getDiscount();
+
+                    totalvalues += Product_Modal.get(pm).getAmount();
+
+                    totalQty += Product_Modal.get(pm).getQty();
+
+                    if (Product_Modal.get(pm).getTax() > 0)
+                        taxVal += Product_Modal.get(pm).getTax();
+
+
+                    Getorder_Array_List.add(Product_Modal.get(pm));
+
 
                 }
+
             }
-        } catch (Exception e) {
 
-        }
+            totTax = 0;
+            try {
+                String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
+                JSONObject obj = new JSONObject(totAmtTax);
 
-        totalvalues = totalvalues + totTax;
+                if (obj.getBoolean("success")) {
+                    JSONArray arr = obj.getJSONArray("Data");
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject taxObj = arr.getJSONObject(i);
+                        double taxCal = (totalvalues) *
+                                ((taxObj.getDouble("Value") / 100));
+                        totTax = +totTax + taxCal;
 
-        tvNetAmtTax.setText("₹ " + formatter.format(totTax));
+                    }
+                }
+            } catch (Exception e) {
 
+            }
 
-        tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
+            totalvalues = totalvalues + totTax;
 
-
-        if (isEditOrder) {
-            isEditOrder = false;
-            editTotValues = totalvalues;
-        }
-
-
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
-
-        if (Getorder_Array_List.size() == 1)
-            tvTotLabel.setText("Price (1 item)");
-        else
-            tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
-
-        tvBillSubTotal.setText("₹ " + formatter.format(totalvalues));
-        tvBillTotItem.setText("" + Getorder_Array_List.size());
-        tvBillTotQty.setText("" + totalQty);
-        tvBillToPay.setText("₹ " + formatter.format(totalvalues));
-        tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
-        tvTax.setText("₹ " + formatter.format(taxVal));
+            tvNetAmtTax.setText("₹ " + formatter.format(totTax));
 
 
-        if (cashDiscount > 0) {
-            tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order.");
-        } else
-            tvSaveAmt.setVisibility(View.GONE);
+            tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
 
-        for (int l = 0; l < Getorder_Array_List.size(); l++) {
-            if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
-                for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
-                    String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
-                    Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
-                    if (orderTotTax.size() == 0) {
-                        orderTotTax.add(new Product_Details_Modal(label, amt));
-                    } else {
 
-                        boolean isDuplicate = false;
-                        for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
-                            if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
-                                double oldAmt = orderTotTax.get(totTax).getTax_Amt();
-                                isDuplicate = true;
-                                orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+            if (isEditOrder) {
+                isEditOrder = false;
+                editTotValues = totalvalues;
+            }
 
-                            }
-                        }
 
-                        if (!isDuplicate) {
+            tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
+
+            if (Getorder_Array_List.size() == 1)
+                tvTotLabel.setText("Price (1 item)");
+            else
+                tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
+            tvBillTotQty.setText("" + totalQty);
+
+            tvBillSubTotal.setText("₹ " + formatter.format(totalvalues));
+            tvBillTotItem.setText("" + Getorder_Array_List.size());
+            tvBillToPay.setText("₹ " + formatter.format(totalvalues));
+            tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
+            tvTax.setText("₹ " + formatter.format(taxVal));
+
+
+            if (cashDiscount > 0) {
+                tvSaveAmt.setVisibility(View.VISIBLE);
+                tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order.");
+            } else
+                tvSaveAmt.setVisibility(View.GONE);
+
+            for (int l = 0; l < Getorder_Array_List.size(); l++) {
+                if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
+                    for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
+                        String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
+                        Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
+                        if (orderTotTax.size() == 0) {
                             orderTotTax.add(new Product_Details_Modal(label, amt));
-
-                        }
-                    }
-
-
-                }
-
-
-                String label = Getorder_Array_List.get(l).getProductUnit();
-                if (label.equalsIgnoreCase("CRT") || (label.equalsIgnoreCase("UNT"))) {
-                    int qty = Getorder_Array_List.get(l).getQty();
-                    if (orderTotUOM.size() == 0) {
-                        orderTotUOM.add(new Product_Details_Modal(qty, label));
-                    } else {
-
-                        boolean isDuplicate = false;
-                        for (int totUom = 0; totUom < orderTotUOM.size(); totUom++) {
-                            if (orderTotUOM.get(totUom).getUOM_Nm().equals(label)) {
-                                double oldQty = orderTotUOM.get(totUom).getCnvQty();
-                                isDuplicate = true;
-                                orderTotUOM.set(totUom, new Product_Details_Modal(oldQty + qty, label));
-
-                            }
-                        }
-
-                        if (!isDuplicate) {
-                            orderTotUOM.add(new Product_Details_Modal(qty, label));
-
-                        }
-                    }
-                }
-
-                for (int uom = 0; uom < Getorder_Array_List.get(l).getUOMList().size(); uom++) {
-                    String label1 = Getorder_Array_List.get(l).getUOMList().get(uom).getUOM_Nm();
-                    if (label1.equalsIgnoreCase("CRT") || (label1.equalsIgnoreCase("UNT"))) {
-                        int qty1 = (int) ((Integer.parseInt(Getorder_Array_List.get(l).getConversionFactor()) * Getorder_Array_List.get(l).getQty())
-                                / Getorder_Array_List.get(l).getUOMList().get(uom).getCnvQty());
-                        if (orderTotUOM.size() == 0) {
-                            orderTotUOM.add(new Product_Details_Modal(qty1, label1));
                         } else {
 
                             boolean isDuplicate = false;
-                            for (int totUom = 0; totUom < orderTotUOM.size(); totUom++) {
-                                if (orderTotUOM.get(totUom).getUOM_Nm().equals(label1)) {
-                                    double oldQty = orderTotUOM.get(totUom).getCnvQty();
+                            for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
+                                if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
+                                    double oldAmt = orderTotTax.get(totTax).getTax_Amt();
                                     isDuplicate = true;
-                                    orderTotUOM.set(totUom, new Product_Details_Modal(oldQty + qty1, label1));
+                                    orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
 
                                 }
                             }
 
                             if (!isDuplicate) {
-                                orderTotUOM.add(new Product_Details_Modal(qty1, label1));
+                                orderTotTax.add(new Product_Details_Modal(label, amt));
+
+                            }
+                        }
+
+
+                    }
+
+
+                    String label = Getorder_Array_List.get(l).getProductUnit();
+                    if (label.equalsIgnoreCase("CRT") || (label.equalsIgnoreCase("UNT"))) {
+                        int qty = Getorder_Array_List.get(l).getQty();
+                        if (orderTotUOM.size() == 0) {
+                            orderTotUOM.add(new Product_Details_Modal(qty, label));
+                        } else {
+
+                            boolean isDuplicate = false;
+                            for (int totUom = 0; totUom < orderTotUOM.size(); totUom++) {
+                                if (orderTotUOM.get(totUom).getUOM_Nm().equals(label)) {
+                                    double oldQty = orderTotUOM.get(totUom).getCnvQty();
+                                    isDuplicate = true;
+                                    orderTotUOM.set(totUom, new Product_Details_Modal(oldQty + qty, label));
+
+                                }
+                            }
+
+                            if (!isDuplicate) {
+                                orderTotUOM.add(new Product_Details_Modal(qty, label));
 
                             }
                         }
                     }
 
+                    for (int uom = 0; uom < Getorder_Array_List.get(l).getUOMList().size(); uom++) {
+                        String label1 = Getorder_Array_List.get(l).getUOMList().get(uom).getUOM_Nm();
+                        if (label1.equalsIgnoreCase("CRT") || (label1.equalsIgnoreCase("UNT"))) {
+                            int qty1 = (int) ((Integer.parseInt(Getorder_Array_List.get(l).getConversionFactor()) * Getorder_Array_List.get(l).getQty())
+                                    / Getorder_Array_List.get(l).getUOMList().get(uom).getCnvQty());
+                            if (orderTotUOM.size() == 0) {
+                                orderTotUOM.add(new Product_Details_Modal(qty1, label1));
+                            } else {
 
-                }
+                                boolean isDuplicate = false;
+                                for (int totUom = 0; totUom < orderTotUOM.size(); totUom++) {
+                                    if (orderTotUOM.get(totUom).getUOM_Nm().equals(label1)) {
+                                        double oldQty = orderTotUOM.get(totUom).getCnvQty();
+                                        isDuplicate = true;
+                                        orderTotUOM.set(totUom, new Product_Details_Modal(oldQty + qty1, label1));
 
-            }
-        }
+                                    }
+                                }
 
-        String label = "";
-        String amt = "";
-        for (int i = 0; i < orderTotTax.size(); i++) {
-            label = label + orderTotTax.get(i).getTax_Type() + "\n";
-            amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
-        }
+                                if (!isDuplicate) {
+                                    orderTotUOM.add(new Product_Details_Modal(qty1, label1));
 
-        for (int i = 0; i < orderTotUOM.size(); i++) {
-            uomName = uomName + orderTotUOM.get(i).getUOM_Nm() + " : " + ((int) orderTotUOM.get(i).getCnvQty()) + "  ";
-
-        }
-        tvTotUOM.setText(uomName);
-        tvTotUOM.setMovementMethod(new ScrollingMovementMethod());
-
-
-        tvTaxLabel.setText(label);
-        tvTax.setText(amt);
-        if (orderTotTax.size() == 0) {
-            tvTaxLabel.setVisibility(View.INVISIBLE);
-            tvTax.setVisibility(View.INVISIBLE);
-        } else {
-            tvTaxLabel.setVisibility(View.VISIBLE);
-            tvTax.setVisibility(View.VISIBLE);
-
-        }
-
-        boolMinu18=false;
-        if (boolMinu18) {
-            if (Getorder_Array_List.size() == 0)
-                grplistItems.notify(ProdGroups, this, "", new onListItemClick() {
-                    @Override
-                    public void onItemClick(JSONObject item) {
-                        try {
-                            grpName = "";
-                            FilterTypes(item.getString("id"));
-                            common_class.brandPos = 0;
-
-                            tvGrpName.setText("" + item.getString("name"));
-                        } catch (Exception e) {
-
+                                }
+                            }
                         }
 
+
                     }
-                });
-            else {
-                grpName = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
-                grplistItems.notify(ProdGroups, this, "" + grpName, new onListItemClick() {
-                    @Override
-                    public void onItemClick(JSONObject item) {
+
+                }
+            }
+
+            String label = "";
+            String amt = "";
+            for (int i = 0; i < orderTotTax.size(); i++) {
+                label = label + orderTotTax.get(i).getTax_Type() + "\n";
+                amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
+            }
+            String uomName = "";
+
+            String qtyLabel = "Total Qty" + "\n";
+            String qtyVal = "" + totalQty + "\n";
+
+            for (int i = 0; i < orderTotUOM.size(); i++) {
+                qtyLabel = qtyLabel + orderTotUOM.get(i).getUOM_Nm() + "\n";
+                qtyVal = qtyVal + ((int) orderTotUOM.get(i).getCnvQty()) + "\n";
+
+                uomName = uomName + orderTotUOM.get(i).getUOM_Nm() + " : " + ((int) orderTotUOM.get(i).getCnvQty()) + "  ";
+
+            }
+
+            tvTotQtyLabel.setText("" + qtyLabel);
+            tvBillTotQty.setText("" + qtyVal);
+
+            tvTotUOM.setText(uomName);
+            tvTotUOM.setMovementMethod(new ScrollingMovementMethod());
+
+
+            tvTaxLabel.setText(label);
+            tvTax.setText(amt);
+            if (orderTotTax.size() == 0) {
+                tvTaxLabel.setVisibility(View.INVISIBLE);
+                tvTax.setVisibility(View.INVISIBLE);
+            } else {
+                tvTaxLabel.setVisibility(View.VISIBLE);
+                tvTax.setVisibility(View.VISIBLE);
+
+            }
+
+            boolMinu18 = false;
+            if (boolMinu18) {
+                if (Getorder_Array_List.size() == 0)
+                    grplistItems.notify(ProdGroups, this, "", new onListItemClick() {
+                        @Override
+                        public void onItemClick(JSONObject item) {
+                            try {
+                                grpName = "";
+                                FilterTypes(item.getString("id"));
+                                common_class.brandPos = 0;
+
+                                tvGrpName.setText("" + item.getString("name"));
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+                    });
+                else {
+                    grpName = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
+                    grplistItems.notify(ProdGroups, this, "" + grpName, new onListItemClick() {
+                        @Override
+                        public void onItemClick(JSONObject item) {
 //                        try {
 //                            if (grpName.equalsIgnoreCase("")) {
 //                                grpName = item.getString("name");
@@ -1126,13 +1138,16 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 //                        } catch (Exception e) {
 //
 //                        }
-                    }
-                });
-            }
+                        }
+                    });
+                }
 
+            }
+            String data = gson.toJson(Product_Modal);
+            sharedCommonPref.save(Constants.LOC_PRIMARY_DATA, data);
+        } catch (Exception e) {
+            Log.v(TAG + " updateUI:", e.getMessage());
         }
-        String data = gson.toJson(Product_Modal);
-        sharedCommonPref.save(Constants.LOC_PRIMARY_DATA, data);
     }
 
     public void showGrpProduct(JSONObject item) {

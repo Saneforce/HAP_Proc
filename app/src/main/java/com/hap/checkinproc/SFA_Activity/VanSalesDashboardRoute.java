@@ -635,7 +635,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute","","","");
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "", "");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -657,7 +657,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             case R.id.tvStockLoad:
                 Intent load = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
-                load.putExtra(Constants.VAN_SALES_MODE, "LOAD");
+                Shared_Common_Pref.VAN_SALES_MODE = "Stock Loading";
                 startActivity(load);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
@@ -665,7 +665,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
 
                 Intent unload = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
-                unload.putExtra(Constants.VAN_SALES_MODE, "UnLOAD");
+                Shared_Common_Pref.VAN_SALES_MODE = "Stock UnLoading";
                 startActivity(unload);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
@@ -895,9 +895,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
 
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", "","");
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", "", "");
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute","","","");
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "", "");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);

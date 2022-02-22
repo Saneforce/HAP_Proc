@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <include layout="@layout/sfatoolbar"></include>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +23,7 @@
             android:padding="@dimen/C3dp">
 
             <TextView
-
+                android:id="@+id/tvHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -133,11 +134,11 @@
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="@dimen/C2dp"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/C5dp"
-                    android:background="@color/grey_500" />
+                    android:background="@color/grey_500"
+                    android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/PBrnd"
@@ -315,8 +316,7 @@
                                 android:layout_weight="1"
                                 android:visibility="visible">
 
-                               >
-                            </LinearLayout>
+                                ></LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -327,14 +327,15 @@
                                 <TextView
                                     android:id="@+id/itemstextview"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1.5"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="left"
+                                    android:layout_weight="1.5"
                                     android:gravity="left"
                                     android:text="SKU"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold" />
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -354,10 +355,10 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:id="@+id/Rate"
@@ -407,20 +408,20 @@
                                 </LinearLayout>
 
                                 <ImageView
-                                    android:visibility="invisible"
                                     android:id="@+id/ivDel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/C5dp"
                                     android:padding="@dimen/C5dp"
-                                    android:src="@drawable/delete_cart"></ImageView>
+                                    android:src="@drawable/delete_cart"
+                                    android:visibility="invisible"></ImageView>
 
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:layout_width="match_parent"
@@ -450,10 +451,10 @@
 
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:id="@+id/total"
@@ -569,6 +570,7 @@
                             android:visibility="gone">
 
                             <TextView
+                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="PRICE DETAILS"
@@ -584,6 +586,7 @@
 
 
                             <RelativeLayout
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp">
@@ -632,6 +635,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
+android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -645,7 +649,7 @@
                                     android:textSize="@dimen/C13dp"></TextView>
 
                                 <TextView
-                                    android:id="@+id/tvtotalqty"
+                                    android:id="@+id/tvnetamount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="10"
@@ -678,6 +682,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -726,27 +731,28 @@
 
 
                             <View
+                                android:visibility="visible"
                                 android:layout_width="match_parent"
                                 android:layout_height="3dp"
-                                android:layout_marginTop="-10dp"
                                 android:background="@color/black"
                                 android:outlineAmbientShadowColor="@color/black"></View>
 
                             <RelativeLayout
+                                android:visibility="visible"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TO PAY"
+                                    android:text="TOTAL QTY"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"
                                     android:textStyle="bold"></TextView>
 
                                 <TextView
-                                    android:id="@+id/tvnetamount"
+                                    android:id="@+id/tvtotalqty"
                                     android:layout_width="match_parent"
 
                                     android:layout_height="wrap_content"
@@ -759,12 +765,12 @@
                             </RelativeLayout>
 
                             <View
+
                                 android:layout_width="match_parent"
                                 android:layout_height="3dp"
                                 android:background="@color/black"
                                 android:outlineAmbientShadowColor="@color/black"
                                 android:visibility="visible"></View>
-
 
 
                             <TextView
@@ -826,32 +832,34 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="@dimen/C3dp"
                 android:layout_toRightOf="@+id/tvCart"
                 android:orientation="vertical">
 
                 <TextView
-                    android:textStyle="bold"
+                    android:gravity="center_vertical"
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="sans-serif"
                     android:text="Items : 0"
                     android:textColor="@color/white"
-                    android:textSize="11sp">
+                    android:textSize="11sp"
+                    android:textStyle="bold">
 
                 </TextView>
 
                 <TextView
-                    android:textStyle="bold"
+                    android:visibility="gone"
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text=" ₹ 0"
                     android:textColor="@color/white"
-                    android:textSize="13sp">
+                    android:textSize="13sp"
+                    android:textStyle="bold">
 
                 </TextView>
 

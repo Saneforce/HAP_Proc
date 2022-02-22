@@ -529,6 +529,10 @@ public class Common_Class {
 
 
                 switch (key) {
+                    case Constants.PLANT_MASTER:
+                        axnname = "get/plantmaster";
+                        QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",",""));
+                        break;
                     case Constants.SALES_RETURN:
                         // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
                         axnname = "get/stockreturn";

@@ -1,7 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
@@ -84,7 +83,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -106,7 +105,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     private Integer totalQty;
     private TextView tvBillTotItem;
     final Handler handler = new Handler();
-    private DatePickerDialog fromDatePickerDialog;
     private List<Product_Details_Modal> orderTotTax;
     private int uomPos;
     private ArrayList<Common_Model> uomList;
@@ -120,6 +118,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(VanSalesOrderActivity.this);
             common_class = new Common_Class(this);
+            tvHeader = findViewById(R.id.tvHeader);
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
@@ -168,12 +167,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-            //  if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)))
-            Product_Modal = gson.fromJson(OrdersTable, userType);
-//            else {
-//                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA), userType);
-//
-//            }
+            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)) && Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading"))
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA), userType);
+            else {
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+
+            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -367,6 +366,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
+            tvHeader.setText(Shared_Common_Pref.VAN_SALES_MODE);
+
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -482,7 +483,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
-                showOrderItemList(selectedPos, "");
+                if (Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading"))
+                    showOrderList();
+                else
+                    showOrderItemList(selectedPos, "");
             }
 
         } catch (JSONException e) {
@@ -641,7 +645,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                        OutletItem.put("ordertype", "Van Sales");
+                        OutletItem.put("ordertype", Shared_Common_Pref.VAN_SALES_MODE);
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -737,7 +741,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                     Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_VANSALES_DATA);
+                                        // sharedCommonPref.clear_pref(Constants.LOC_VANSALES_DATA);
                                         //  common_class.CommonIntentwithFinish(Invoice_History.class);
                                         finish();
                                     }
@@ -926,7 +930,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
 
         String data = gson.toJson(Product_Modal);
-        sharedCommonPref.save(Constants.LOC_VANSALES_DATA, data);
+        if (Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Loading"))
+            sharedCommonPref.save(Constants.LOC_VANSALES_DATA, data);
 
     }
 
@@ -959,7 +964,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT") && !Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading")) {
                 moveProductScreen();
             } else {
                 finish();
@@ -1007,7 +1012,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                 Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                 Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
+                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
                 break;
         }
     }
@@ -1200,6 +1205,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 } else {
                     holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
                     holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
+
+                if(Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading")){
+                    holder.QtyPls.setVisibility(View.INVISIBLE);
+                    holder.QtyMns.setVisibility(View.INVISIBLE);
+                    holder.Qty.setEnabled(false);
                 }
 
                 if (CategoryType >= 0) {
@@ -1462,6 +1473,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 });
 
                 if (CategoryType == -1) {
+
+                    if(Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading"))
+                        holder.ivDel.setVisibility(View.INVISIBLE);
+
                     holder.ivDel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

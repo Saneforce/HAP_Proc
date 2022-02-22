@@ -373,6 +373,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
 
             case R.id.lin_vanSales:
+                Shared_Common_Pref.VAN_SALES_MODE = "Van Sales Order";
                 startActivity(new Intent(getApplicationContext(), VanSalesOrderActivity.class));
                 overridePendingTransition(R.anim.in, R.anim.out);
 

@@ -38,12 +38,14 @@ import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -69,7 +71,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProjectionCategorySelectActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class ProjectionCategorySelectActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     //GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -80,7 +82,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress,tvHistory;
+    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress, tvHistory;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -97,13 +99,18 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid;
     public int selectedPos = 0;
-    private TextView tvTotalAmount;
+    private TextView tvTotalAmount,tvPlant;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
     final Handler handler = new Handler();
     public static ProjectionCategorySelectActivity order_category_select;
     private List<Product_Details_Modal> orderTotTax;
+
+    ArrayList<Common_Model> plantList = new ArrayList<>();
+    private int plantPos;
+    LinearLayout llPlant;
+    private String plantId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,11 +139,14 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
-            tvHistory=findViewById(R.id.tvHistory);
+            tvHistory = findViewById(R.id.tvHistory);
 
             llCalMob = findViewById(R.id.btnCallMob);
+            llPlant=findViewById(R.id.llPlant);
+            tvPlant=findViewById(R.id.tvPlant);
             llCalMob.setOnClickListener(this);
             tvHistory.setOnClickListener(this);
+            llPlant.setOnClickListener(this);
 
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -237,6 +247,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 //            }
 
 
+            common_class.getDb_310Data(Constants.PLANT_MASTER, this);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -399,8 +410,11 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llPlant:
+                common_class.showCommonDialog(plantList,1,this);
+                break;
             case R.id.tvHistory:
-                startActivity(new Intent(this,ProjectionHistoryActivity.class));
+                startActivity(new Intent(this, ProjectionHistoryActivity.class));
                 break;
             case R.id.btnCallMob:
                 common_class.showCalDialog(ProjectionCategorySelectActivity.this, "Do you want to Call this Outlet?",
@@ -501,6 +515,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 //                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
 //                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "projection");
+                        OutletItem.put("plantName", tvPlant.getText().toString());
+                        OutletItem.put("plantId", plantId);
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -662,7 +678,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
         TextView tvTax = findViewById(R.id.tvTaxVal);
         TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
         TextView tvBillSubTotal = findViewById(R.id.subtotal);
-      //  TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
+        //  TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
         tvBillTotItem = findViewById(R.id.totalitem);
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
@@ -794,18 +810,35 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
-        switch (key) {
-            case Constants.PreOrderQtyList:
-                // loadData(apiDataResponse);
-                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
-                showOrderList();
+        try {
+            switch (key) {
+                case Constants.PreOrderQtyList:
+                    // loadData(apiDataResponse);
+                    Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PROJECTION_DATA), userType);
+                    showOrderList();
 
-                break;
+                    break;
+
+                case Constants.PLANT_MASTER:
+                    Log.v(key, apiDataResponse);
+
+                    JSONObject obj = new JSONObject(apiDataResponse);
+
+                    if (obj.getBoolean("success")) {
+                        JSONArray arr = obj.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject data = arr.getJSONObject(i);
+                            plantList.add(new Common_Model(data.getString("PlantName"), data.getString("PlantID")));
+                        }
+                    }
+
+                    break;
+            }
+        } catch (Exception e) {
+
         }
     }
 
-    private void loadData(String apiDataResponse) {
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -849,6 +882,25 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             }
         }
         return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        try {
+            common_class.dismissCommonDialog(type);
+            switch (type) {
+                case 1:
+                    tvPlant.setText(""+myDataset.get(position).getName());
+                    plantId=myDataset.get(position).getId();
+//                    Product_ModalSetAdapter.get(plantPos).setPlantId(myDataset.get(position).getId());
+//                    Product_ModalSetAdapter.get(plantPos).setPlant(myDataset.get(position).getName());
+//                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_projection_pay_recyclerview, getApplicationContext(), 1);
+                    break;
+
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
@@ -973,6 +1025,16 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
         }
 
+        public void notify(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
+            this.Product_Details_Modalitem = Product_Details_Modalitem;
+            this.rowLayout = rowLayout;
+            this.context = context;
+            this.CategoryType = categoryType;
+            notifyDataSetChanged();
+
+        }
+
+
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
@@ -1001,6 +1063,11 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
 
                 if (CategoryType >= 0) {
+                    if (Product_Details_Modal.getPlant() == null) {
+                        Product_Details_Modal.setPlant("");
+                        Product_Details_Modal.setPlantId("");
+                    }
+                    holder.tvPlant.setText(Product_Details_Modal.getPlant());
 
                     holder.totalQty.setText("" + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
@@ -1022,6 +1089,13 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                     holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
 
 
+                    holder.tvPlant.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            plantPos = position;
+                            common_class.showCommonDialog(plantList, 1, ProjectionCategorySelectActivity.this);
+                        }
+                    });
                 }
 
                 holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
@@ -1265,9 +1339,10 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             return Product_Details_Modalitem.size();
         }
 
+
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel;
+                    QtyAmt, totalQty, tvTaxLabel, tvPlant;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
@@ -1289,6 +1364,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
 
                 if (CategoryType >= 0) {
+                    tvPlant = view.findViewById(R.id.tvPlant);
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
                     regularAmt = view.findViewById(R.id.RegularAmt);

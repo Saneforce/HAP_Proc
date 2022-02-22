@@ -578,13 +578,13 @@
                                 </LinearLayout>
 
                                 <ImageView
-                                    android:visibility="invisible"
                                     android:id="@+id/ivDel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/C5dp"
                                     android:padding="@dimen/C5dp"
-                                    android:src="@drawable/delete_cart"></ImageView>
+                                    android:src="@drawable/delete_cart"
+                                    android:visibility="invisible"></ImageView>
 
 
                                 <LinearLayout
@@ -797,11 +797,13 @@
                             </RelativeLayout>
 
                             <RelativeLayout
+                                android:layout_marginBottom="-15dp"
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
                                 <TextView
-
+                                    android:id="@+id/tvTotQtyLabel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Total Qty"
@@ -1017,9 +1019,9 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_marginRight="@dimen/C100dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/C100dp"
                     android:layout_toRightOf="@+id/tvCart"
                     android:orientation="horizontal">
 
@@ -1036,10 +1038,10 @@
                     </TextView>
 
                     <TextView
-                        android:layout_marginLeft="@dimen/C5dp"
                         android:id="@+id/tvTotalItems"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:fontFamily="sans-serif"
                         android:text="Items : 0   Qty : 0"
                         android:textColor="@color/white"
@@ -1051,13 +1053,13 @@
                 </LinearLayout>
 
                 <TextView
-                    android:scrollbars="horizontal"
-
                     android:id="@+id/tvTotUom"
-                    android:layout_marginRight="@dimen/C100dp"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/C100dp"
                     android:fontFamily="sans-serif"
+                    android:scrollbars="horizontal"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:textStyle="bold">

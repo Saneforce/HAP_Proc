@@ -214,22 +214,6 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     intent.putExtra("OutletAddress", mRetailer_Modal_List.getListedDrAddress1());
                     intent.putExtra("OutletMobile", mRetailer_Modal_List.getPrimary_No());
                     intent.putExtra("OutletRoute", mRetailer_Modal_List.getTownName());
-                    ArrayList<Common_Model> serviceTypeList = new ArrayList<>();
-//                    Gson gson=new Gson();
-//
-//                    for (int i = 0; i < Retailer_Modal_Listitem.size(); i++) {
-//                        if (mRetailer_Modal_List.getId().equals(Retailer_Modal_Listitem.get(i).getId())) {
-//                            serviceTypeList.add(new Common_Model(Retailer_Modal_Listitem.get(i).getCategory_Universe_Id(), "i+1",
-//                                    true, Retailer_Modal_Listitem.get(i).getOutletClass(), "" + Retailer_Modal_Listitem.get(i).getDocCatCode(),
-//                                    Retailer_Modal_Listitem.get(i).getSpeciality(), "" + Retailer_Modal_Listitem.get(i).getDocSpecialCode()));
-//
-//
-//                        }
-//                    }
-
-                   // shared_common_pref.save(Dashboard_Route.this,gson.toJson(serviceTypeList.toString()));
-
-
                     context.startActivity(intent);
                 }
             });
