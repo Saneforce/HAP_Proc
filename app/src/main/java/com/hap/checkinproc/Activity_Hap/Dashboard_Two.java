@@ -37,7 +37,6 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
-import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -346,7 +345,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             getMnthReports(0);
             GetMissedPunch();
 
-
+            Shared_Common_Pref.TravelAllowance = 0;
         } catch (Exception e) {
 
         }
@@ -807,12 +806,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, Leave_Dashboard.class);
                 break;
             case R.id.btn_da_exp_entry:
+                Shared_Common_Pref.TravelAllowance = 0;
                 intent = new Intent(this, TAClaimActivity.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);
                 break;
             case R.id.approvals:
+                Shared_Common_Pref.TravelAllowance = 1;
                 intent = new Intent(this, Approvals.class);
                 break;
             case R.id.btn_gate_in:

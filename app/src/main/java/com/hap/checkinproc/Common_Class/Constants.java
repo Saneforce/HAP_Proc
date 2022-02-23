@@ -106,6 +106,7 @@ public class Constants {
     public static final String OUTLET_TYPE_LIST = "outletTypeList";
     public static final String LOC_PROJECTION_DATA = "locProjectionData";
     public static final String PLANT_MASTER = "plantMaster";
+    public static final String SERVICETYPE_LIST = "serviceTypeList";
     public static String View_SUMMARY_MODE = "";
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";

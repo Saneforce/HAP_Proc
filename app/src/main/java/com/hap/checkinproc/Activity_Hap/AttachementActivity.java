@@ -52,6 +52,7 @@ public class AttachementActivity extends AppCompatActivity {
     List<QPS_Modal> qpsModalList = new ArrayList<>();
     static OnAttachmentDelete deleteListener;
     private Gson gson;
+    private String sfcode = "";
 
     @SuppressLint("ResourceType")
     @Override
@@ -68,7 +69,7 @@ public class AttachementActivity extends AppCompatActivity {
         allRelative.setBackgroundColor(Color.TRANSPARENT);
 
         intentValue = new ArrayList<String>();
-        String sfcode=String.valueOf(getIntent().getSerializableExtra("sfcode"));
+        sfcode = String.valueOf(getIntent().getStringExtra("sfCode"));
 
         allImage(String.valueOf(getIntent().getSerializableExtra("position")),
                 String.valueOf(getIntent().getSerializableExtra("headTravel")),
@@ -165,7 +166,8 @@ public class AttachementActivity extends AppCompatActivity {
     public void allImage(String pos, String HeadTravel, String Mode, String Date) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<JsonArray> mCall = apiInterface.allPreview(pos, HeadTravel, Mode, Date, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        //    Call<JsonArray> mCall = apiInterface.allPreview(pos, HeadTravel, Mode, Date, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        Call<JsonArray> mCall = apiInterface.allPreview(pos, HeadTravel, Mode, Date, Shared_Common_Pref.TravelAllowance == 0 ? shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) : sfcode);
         Log.e("IMAGE_View_TRAN", mCall.request().toString());
         mCall.enqueue(new Callback<JsonArray>() {
             @Override
