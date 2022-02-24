@@ -36,6 +36,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.hap.checkinproc.Activity.TAClaimAwsActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -808,6 +809,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.btn_da_exp_entry:
                 Shared_Common_Pref.TravelAllowance = 0;
                 intent = new Intent(this, TAClaimActivity.class);
+              //  intent = new Intent(this, TAClaimAwsActivity.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);

@@ -762,27 +762,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             shared_common_pref.save(Constants.Retailor_FilePath, "");
 
             linReatilerRoute.setOnClickListener(this);
+            rlDistributor.setOnClickListener(this);
 
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-                rlDistributor.setOnClickListener(this);
                 btnDistCode.setVisibility(View.VISIBLE);
                 common_class.getDb_310Data(Rout_List, this);
 
             }
-            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("21") || divERP.equalsIgnoreCase("62")) {
-                linReatilerRoute.setEnabled(true);
-            } else {
-                linReatilerRoute.setEnabled(false);
-            }
+//            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("21") || divERP.equalsIgnoreCase("62")) {
+//                linReatilerRoute.setEnabled(true);
+//            } else {
+//                linReatilerRoute.setEnabled(false);
+//            }
 
 
-            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+           // if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
 //                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
 //                    mSubmit.setVisibility(View.GONE);
 
-                rlDistributor.setEnabled(false);
-                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
-            }
+//                rlDistributor.setEnabled(false);
+//                findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+//            }
 
 
             mData.add(new QPS_Modal("", "", ""));
@@ -924,6 +924,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 headtext.setText("Outlet Approval");
 
             }
+            common_class.getDb_310Data(Constants.Rout_List, this);
+            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID,shared_common_pref.getvalue(Constants.Distributor_Id));
 
 
         } catch (Exception e) {
@@ -1337,6 +1339,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             QueryString.put("State_Code", Shared_Common_Pref.StateCode);
             QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
             QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put(Constants.Distributor_Id, shared_common_pref.getvalue(Constants.Distributor_Id));
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             // addNewRetailer
             Log.e("QueryString", totalValueString);
@@ -1373,6 +1376,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                        common_class.CommonIntentwithFinish(Dashboard_Route.class);
 //                        // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
 //                    }
+
+
+                    shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID,shared_common_pref.getvalue(Constants.Distributor_Id));
 
                     finish();
                 }
@@ -1500,10 +1506,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     private void getFreezerData(String divERP) {
 
-        if (divERP.equalsIgnoreCase("62"))
-            linReatilerRoute.setEnabled(true);
+//        if (divERP.equalsIgnoreCase("62"))
+//            linReatilerRoute.setEnabled(true);
         if (divERP.equals("21")) {
-            linReatilerRoute.setEnabled(true);
+          //  linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
             findViewById(R.id.llSubCategory).setVisibility(View.GONE);
@@ -1511,8 +1517,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             // findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
         } else {
-            if (!Shared_Common_Pref.Outler_AddFlag.equals("1"))
-                linReatilerRoute.setEnabled(false);
+//            if (!Shared_Common_Pref.Outler_AddFlag.equals("1"))
+//                linReatilerRoute.setEnabled(false);
             if (!Common_Class.isNullOrEmpty(divERP)) {
                 findViewById(R.id.llCategoryType).setVisibility(View.GONE);
                 findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
@@ -1554,6 +1560,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     @Override
     public void onBackPressed() {
+        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID,shared_common_pref.getvalue(Constants.Distributor_Id));
+
         finish();
     }
 

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.PdfViewerActivity;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -214,9 +216,27 @@ public class AttachementActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
 
-                            Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                            intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
-                            startActivity(intent);
+                            if (jsonObject.get("Imageurl").getAsString().endsWith(".pdf")) {
+
+//                                DownloadManager
+//                                manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+//                                Uri uri = Uri.parse("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+//                                DownloadManager.Request request = new DownloadManager.Request(uri);
+//                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+//                                long reference = manager.enqueue(request);
+                                  //new DownloadPdf(AttachementActivity.this, jsonObject.get("Imageurl").getAsString());
+                                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+
+                              //  String file=;
+                                stat.putExtra("PDF_ONE", jsonObject.get("Imageurl").getAsString());
+                                stat.putExtra("PDF_FILE", "Web");
+                                startActivity(stat);
+
+                            } else {
+                                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                                intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
+                                startActivity(intent);
+                            }
                         }
                     });
                 }

@@ -400,11 +400,13 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+
                 if (shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
                     categoryType = "-18";
                     findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
                 } else
                     findViewById(R.id.cvCatTypeParent).setVisibility(View.GONE);
+
                 common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
                 common_class.getDb_310Data(Rout_List, this);
                 getLastInvoiceData();

@@ -88,6 +88,7 @@ public class PdfViewerActivity extends AppCompatActivity {
             if (pdfFile.equalsIgnoreCase("local")) {
                 pdfView.fromFile(new File(pdfurl)).load();
             } else {
+                pdfurl=pdfurl.replaceAll("http:","https:");
                 new RetrivePDFfromUrl().execute(pdfurl);
             }
         } catch (Exception e) {

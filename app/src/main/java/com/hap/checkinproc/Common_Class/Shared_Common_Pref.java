@@ -12,6 +12,7 @@ public class Shared_Common_Pref {
     public static String SALES_MODE = "";
     public static String LOGINTYPE = "";
     public static int Projection_Approval=0;
+    public static String ImageUKey="";
     SharedPreferences Common_pref;
     SharedPreferences.Editor editor;
     Activity activity;
