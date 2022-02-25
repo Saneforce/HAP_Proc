@@ -525,10 +525,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 switch (key) {
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
-                        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
+                     //   if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
                             common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
-                        else
-                            common_class.CommonIntentwithoutFinish(FPPrimaryOrderActivity.class);
+//                        else
+//                            common_class.CommonIntentwithoutFinish(FPPrimaryOrderActivity.class);
 
                         overridePendingTransition(R.anim.in, R.anim.out);
                         break;

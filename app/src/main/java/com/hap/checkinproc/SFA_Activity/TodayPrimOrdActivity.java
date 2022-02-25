@@ -285,12 +285,14 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
-                finish();
-            else
-                common_class.CommonIntentwithFinish(FPPrimaryOrderActivity.class);
-            overridePendingTransition(R.anim.in, R.anim.out);
+//            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
+//                finish();
+//            else
+//                common_class.CommonIntentwithFinish(FPPrimaryOrderActivity.class);
+//
 
+            finish();
+            overridePendingTransition(R.anim.in, R.anim.out);
             return true;
         }
         return false;

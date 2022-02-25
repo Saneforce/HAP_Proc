@@ -141,6 +141,12 @@ public class Product_Details_Modal {
         this.UOM_Nm = UOM_Nm;
     }
 
+    public Product_Details_Modal( String UOM_Nm,int Qty,int Multiple_Qty) {
+        this.UOM_Nm=UOM_Nm;
+        this.Qty = Qty;
+        this.Multiple_Qty = Multiple_Qty;
+    }
+
     private String mfg = "";
     private String exp = "";
     private String remarks = "";
@@ -810,6 +816,11 @@ public class Product_Details_Modal {
         @Expose
         private String UOM_Nm;
 
+        private int enterQty;
+
+        private float value;
+
+
         public String getUOM_Id() {
             return UOM_Id;
         }
@@ -832,6 +843,22 @@ public class Product_Details_Modal {
 
         public void setCnvQty(double cnvQty) {
             CnvQty = cnvQty;
+        }
+
+        public int getEnterQty() {
+            return enterQty;
+        }
+
+        public void setEnterQty(int enterQty) {
+            this.enterQty = enterQty;
+        }
+
+        public float getValue() {
+            return value;
+        }
+
+        public void setValue(float value) {
+            this.value = value;
         }
     }
 }
