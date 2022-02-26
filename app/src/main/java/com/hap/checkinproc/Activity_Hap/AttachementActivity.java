@@ -1,7 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,6 +54,7 @@ public class AttachementActivity extends AppCompatActivity {
     static OnAttachmentDelete deleteListener;
     private Gson gson;
     private String sfcode = "";
+    private String url = "";
 
     @SuppressLint("ResourceType")
     @Override
@@ -189,9 +189,18 @@ public class AttachementActivity extends AppCompatActivity {
                     View childView = parentLinearLayout.getChildAt(m);
                     ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
 
-                    Picasso.with(AttachementActivity.this)
-                            .load(jsonObject.get("Imageurl").getAsString())
-                            .into(taAttach);
+
+                    if (jsonObject.get("Imageurl").getAsString().endsWith(".pdf")) {
+                        Picasso.with(AttachementActivity.this)
+                                .load(R.drawable.pdf)
+                                .into(taAttach);
+                    } else {
+                        //   url = url.replaceAll("https:", "http:");
+
+                        Picasso.with(AttachementActivity.this)
+                                .load(jsonObject.get("Imageurl").getAsString())
+                                .into(taAttach);
+                    }
 
                     position = parentLinearLayout.indexOfChild(rowView);
                     View cv = parentLinearLayout.getChildAt(position);
@@ -217,17 +226,7 @@ public class AttachementActivity extends AppCompatActivity {
                         public void onClick(View v) {
 
                             if (jsonObject.get("Imageurl").getAsString().endsWith(".pdf")) {
-
-//                                DownloadManager
-//                                manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-//                                Uri uri = Uri.parse("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
-//                                DownloadManager.Request request = new DownloadManager.Request(uri);
-//                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-//                                long reference = manager.enqueue(request);
-                                  //new DownloadPdf(AttachementActivity.this, jsonObject.get("Imageurl").getAsString());
                                 Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
-
-                              //  String file=;
                                 stat.putExtra("PDF_ONE", jsonObject.get("Imageurl").getAsString());
                                 stat.putExtra("PDF_FILE", "Web");
                                 startActivity(stat);

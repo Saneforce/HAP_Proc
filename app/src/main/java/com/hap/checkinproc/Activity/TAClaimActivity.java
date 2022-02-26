@@ -3472,6 +3472,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             String sMode = "";
             long nano_startTime = System.nanoTime();
             ImageUKey = keyEk + UserDetails.getString("Sfcode", "") + nano_startTime;
+
+            Shared_Common_Pref.ImageUKey=ImageUKey;
             if (requestCode == 144) {
                 if (txtLodgUKey.getText().toString().equals("")) {
                     DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -3515,6 +3517,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
 
 
+
             if (requestCode == 144) {
                 if (resultCode == RESULT_OK) {
                     if (requestCode == 144) {
@@ -3532,7 +3535,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             }
                         } else if (data.getData() != null) {
                             Uri item = data.getData();
-                            Shared_Common_Pref.ImageUKey = ImageUKey;
 
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, item);

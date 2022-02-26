@@ -93,8 +93,7 @@
                     android:id="@+id/btnCmbRoute"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/C5dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/route_text"
@@ -118,7 +117,10 @@
 
                     </ImageView>
                 </LinearLayout>
+
+
             </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/toolbar_home"
