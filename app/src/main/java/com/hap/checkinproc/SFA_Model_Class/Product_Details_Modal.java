@@ -56,6 +56,7 @@ public class Product_Details_Modal {
     private String plant="";
     private String plantId="";
 
+    private String saveMode="";
 
     public String getERP_Code() {
         return ERP_Code;
@@ -800,6 +801,14 @@ public class Product_Details_Modal {
 
     public void setPlantId(String plantId) {
         this.plantId = plantId;
+    }
+
+    public String getSaveMode() {
+        return saveMode;
+    }
+
+    public void setSaveMode(String saveMode) {
+        this.saveMode = saveMode;
     }
 
 

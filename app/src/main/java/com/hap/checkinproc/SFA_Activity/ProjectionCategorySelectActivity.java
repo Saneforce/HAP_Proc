@@ -99,7 +99,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid;
     public int selectedPos = 0;
-    private TextView tvTotalAmount,tvPlant;
+    private TextView tvTotalAmount, tvPlant;
     private double totalvalues, taxVal;
     private Integer totalQty;
     private TextView tvBillTotItem;
@@ -110,7 +110,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     ArrayList<Common_Model> plantList = new ArrayList<>();
     private int plantPos;
     LinearLayout llPlant;
-    private String plantId="";
+    private String plantId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +142,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             tvHistory = findViewById(R.id.tvHistory);
 
             llCalMob = findViewById(R.id.btnCallMob);
-            llPlant=findViewById(R.id.llPlant);
-            tvPlant=findViewById(R.id.tvPlant);
+            llPlant = findViewById(R.id.llPlant);
+            tvPlant = findViewById(R.id.tvPlant);
             llCalMob.setOnClickListener(this);
             tvHistory.setOnClickListener(this);
             llPlant.setOnClickListener(this);
@@ -411,7 +411,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.llPlant:
-                common_class.showCommonDialog(plantList,1,this);
+                common_class.showCommonDialog(plantList, 1, this);
                 break;
             case R.id.tvHistory:
                 startActivity(new Intent(this, ProjectionHistoryActivity.class));
@@ -441,6 +441,9 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                 try {
 
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+
+                        if (Common_Class.isNullOrEmpty(tvPlant.getText().toString()))
+                            common_class.showMsg(this, "Please Select Plant");
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
                             Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
@@ -890,8 +893,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             common_class.dismissCommonDialog(type);
             switch (type) {
                 case 1:
-                    tvPlant.setText(""+myDataset.get(position).getName());
-                    plantId=myDataset.get(position).getId();
+                    tvPlant.setText("" + myDataset.get(position).getName());
+                    plantId = myDataset.get(position).getId();
 //                    Product_ModalSetAdapter.get(plantPos).setPlantId(myDataset.get(position).getId());
 //                    Product_ModalSetAdapter.get(plantPos).setPlant(myDataset.get(position).getName());
 //                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_projection_pay_recyclerview, getApplicationContext(), 1);

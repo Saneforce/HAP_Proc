@@ -55,10 +55,19 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
             holder.txtValue.setText("" + new DecimalFormat("##0.00").format(Double.parseDouble(obj.getString("Order_Value"))));
             holder.Itemcountinvoice.setText(obj.getString("Status"));
 
-            if (isToday(obj.getString("Order_Date")) == 0)
-                holder.llEdit.setVisibility(View.VISIBLE);
-            else
-                holder.llEdit.setVisibility(View.GONE);
+//            if (isToday(obj.getString("Order_Date")) == 0)
+//                holder.llEdit.setVisibility(View.VISIBLE);
+//            else
+//                holder.llEdit.setVisibility(View.GONE);
+
+            try {
+                if (obj.getInt("editmode") == 0)
+                    holder.llEdit.setVisibility(View.VISIBLE);
+                else
+                    holder.llEdit.setVisibility(View.GONE);
+            } catch (Exception e) {
+
+            }
 
 
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {

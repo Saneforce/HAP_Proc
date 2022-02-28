@@ -81,7 +81,8 @@
                     android:id="@+id/llEdit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.3">
+                    android:layout_weight="0.3"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/btnEditRet"

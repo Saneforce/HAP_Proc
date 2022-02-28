@@ -233,6 +233,8 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
                     case Constants.GetTodayPrimaryOrder_List:
 
+                        Log.v("TodayPrim",apiDataResponse);
+
                         JSONArray arr = new JSONArray(apiDataResponse);
 
                         mReportViewAdapter = new PrimaryOrder_History_Adapter(TodayPrimOrdActivity.this, arr, apiDataResponse, new AdapterOnClick() {

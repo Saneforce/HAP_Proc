@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,6 +40,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -102,7 +105,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     String TAG = "PRIMARY_ORDER";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch, balDetwin;
-    ImageView ivClose, btnClose;
+    ImageView ivClose, btnClose, ivToolbarHome;
     EditText etCategoryItemSearch;
     double cashDiscount;
     boolean bRmRow = false;
@@ -176,20 +179,23 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             tvTotalAmount = findViewById(R.id.tvTotalAmount);
             llDistributor = findViewById(R.id.llDistributor);
+            etCategoryItemSearch = findViewById(R.id.searchView);
+            tvTimer = findViewById(R.id.tvTimer);
 
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
                 distributor_text.setText("HI! " + sharedCommonPref.getvalue(Constants.Distributor_name, ""));
                 distributor_text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+                tvTimer.setVisibility(View.VISIBLE);
+
             } else {
                 llDistributor.setOnClickListener(this);
                 distributor_text.setText(sharedCommonPref.getvalue(Constants.Distributor_name, ""));
                 distributor_text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_round_arrow_drop_down_24, 0);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
+                tvTimer.setVisibility(View.GONE);
             }
 
-            etCategoryItemSearch = findViewById(R.id.searchView);
-            tvTimer = findViewById(R.id.tvTimer);
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
@@ -224,8 +230,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 loadCategoryData();
             }
 
-            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
-            common_class.gotoHomeScreen(this, ivToolbarHome);
+            ivToolbarHome = findViewById(R.id.toolbar_home);
+            ivToolbarHome.setOnClickListener(this);
             common_class.getDb_310Data(Constants.PRIMARY_SCHEME, this);
             tvACBal.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -588,11 +594,28 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.toolbar_home:
+                if (!Common_Class.isNullOrEmpty(getIntent().getStringExtra(Constants.ORDER_ID))) {
+                    SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                    if (CheckIn == true) {
+                        common_class.commonDialog(this, SFA_Activity.class, "Primary Order?");
+
+                    } else
+                        common_class.commonDialog(this, Dashboard.class, "Primary Order?");
+
+                } else {
+                    common_class.gotoHomeScreen(this, ivToolbarHome);
+                }
+                break;
             case R.id.llDistributor:
                 common_class.showCommonDialog(common_class.getDistList(), 2, this);
                 break;
             case R.id.llTodayPriOrd:
-                startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
+                if (!Common_Class.isNullOrEmpty(getIntent().getStringExtra(Constants.ORDER_ID)))
+                    common_class.commonDialog(this, TodayPrimOrdActivity.class, "Primary Order?");
+                else
+                    startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
                 break;
             case R.id.rlAddProduct:
                 moveProductScreen();
@@ -718,6 +741,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                         JSONArray multipleArr = new JSONArray();
 
+                        JSONArray uomArr = new JSONArray();
+
                         for (int z = 0; z < Getorder_Array_List.size(); z++) {
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
@@ -792,6 +817,21 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         }
 
                         OutletItem.put("multiple_details", multipleArr);
+
+
+
+                        for (int i = 0; i < orderTotUOM.size(); i++) {
+                            JSONObject mulObj = new JSONObject();
+
+                            mulObj.put("uom_name", orderTotUOM.get(i).getUOM_Nm());
+                            mulObj.put("uom_qty", orderTotUOM.get(i).getCnvQty());
+                            uomArr.put(mulObj);
+
+                        }
+
+
+
+                        OutletItem.put("uom_details", uomArr);
 
 
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
@@ -1183,6 +1223,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 qtyVal = qtyVal + (crtVal) + "\n";
                 uomName = uomName + "CRT : " + (crtVal) + "  ";
 
+                orderTotUOM.add(new Product_Details_Modal(crtVal,"CRT"));
+
+
             }
             tvTotQtyLabel.setText("" + qtyLabel);
             tvBillTotQty.setText("" + qtyVal);
@@ -1243,8 +1286,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 }
 
             }
-            String data = gson.toJson(Product_Modal);
-            sharedCommonPref.save(Constants.LOC_PRIMARY_DATA, data);
+            if (Common_Class.isNullOrEmpty(getIntent().getStringExtra(Constants.ORDER_ID))) {
+                String data = gson.toJson(Product_Modal);
+                sharedCommonPref.save(Constants.LOC_PRIMARY_DATA, data);
+            }
         } catch (Exception e) {
             Log.v(TAG + " updateUI:", e.getMessage());
         }
@@ -1518,6 +1563,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         loadData(apiDataResponse);
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
+                    sharedCommonPref.clear_pref(Constants.PRIMARY_ORDER);
                     loadData(apiDataResponse);
                     isEditOrder = true;                    // sharedCommonPref.save(Constants.TodayPrimaryOrderDetails_List, apiDataResponse);
                     break;
