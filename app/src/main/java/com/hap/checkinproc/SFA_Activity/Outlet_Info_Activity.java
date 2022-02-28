@@ -110,6 +110,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             swUpdOutlet = findViewById(R.id.swUpdOutlet);
             swUpdNoOutlet = findViewById(R.id.swUpdNoOutlet);
             tvApprovalSta = findViewById(R.id.tvApprovSta);
+            tvApprovalSta.setVisibility(View.GONE);
             tvApprovalSta.setOnClickListener(this);
 
             route_text.setOnClickListener(this);
