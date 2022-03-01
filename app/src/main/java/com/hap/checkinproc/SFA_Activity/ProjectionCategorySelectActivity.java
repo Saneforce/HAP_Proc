@@ -1296,17 +1296,17 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
                             updateToTALITEMUI();
 
-                            if (CategoryType == -1) {
-                                String amt = holder.Amount.getText().toString();
-                                Log.v(TAG + position, ":OUT:amt:" + amt);
-                                if (amt.equals("₹0.00")) {
-                                    Log.v(TAG + position, ":IN:amt:" + amt);
-                                    Product_Details_Modalitem.remove(position);
-                                    notifyDataSetChanged();
-                                }
-
-                                showFreeQtyList();
-                            }
+//                            if (CategoryType == -1) {
+//                                String amt = holder.Amount.getText().toString();
+//                                Log.v(TAG + position, ":OUT:amt:" + amt);
+//                                if (amt.equals("₹0.00")) {
+//                                    Log.v(TAG + position, ":IN:amt:" + amt);
+//                                    Product_Details_Modalitem.remove(position);
+//                                    notifyDataSetChanged();
+//                                }
+//
+//                                showFreeQtyList();
+//                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
