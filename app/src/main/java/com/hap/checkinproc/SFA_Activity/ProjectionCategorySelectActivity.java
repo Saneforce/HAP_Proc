@@ -444,7 +444,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
                         if (Common_Class.isNullOrEmpty(tvPlant.getText().toString()))
                             common_class.showMsg(this, "Please Select Plant");
-                        if (Getorder_Array_List != null
+                        else if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
                             Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
                             if (takeorder.isAnimating()) return;

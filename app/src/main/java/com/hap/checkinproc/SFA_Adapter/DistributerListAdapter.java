@@ -110,7 +110,18 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                                             AryDta.getJSONObject(position).put("balUpdatedTime", Common_Class.GetDatemonthyearTimeformat());
 
 
-                                            shared_common_pref.save(Constants.Distributor_List, AryDta.toString());
+                                           // shared_common_pref.save(Constants.Distributor_List,AryDta.toString());
+                                            JSONArray distArr = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+
+                                            for (int i = 0; i < distArr.length(); i++) {
+
+                                                if (AryDta.getJSONObject(position).getInt("id") ==
+                                                        distArr.getJSONObject(i).getInt("id")) {
+                                                    distArr.put(i, AryDta.getJSONObject(position));
+                                                    shared_common_pref.save(Constants.Distributor_List, distArr.toString());
+
+                                                }
+                                            }
                                         } catch (Exception e) {
                                             Log.v("newArr:catch", e.getMessage());
                                         }

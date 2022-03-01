@@ -59,7 +59,6 @@ import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -136,7 +135,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            common_class.getDb_310Data(Constants.Distributor_List, this);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
+                common_class.getDb_310Data(Constants.Distributor_List, this);
         }
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
             common_class.getPOSProduct(this);
@@ -164,7 +164,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
             menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
             menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
-           // menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
+            // menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
 
         } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
             menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
@@ -249,7 +249,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             try {
                 jParam.put("SF", UserDetails.getString("Sfcode", ""));
                 jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
-               // jParam.put("outletId", Shared_Common_Pref.OutletCode);
+                // jParam.put("outletId", Shared_Common_Pref.OutletCode);
                 jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 service.getDataArrayList("get/projectionprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -309,7 +309,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             } catch (Exception e) {
-                Log.v("Projec_Product_List_ex",e.getMessage());
+                Log.v("Projec_Product_List_ex", e.getMessage());
 
                 e.printStackTrace();
             }
@@ -524,8 +524,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 switch (key) {
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
-                     //   if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
-                            common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        //   if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE))
+                        common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
 //                        else
 //                            common_class.CommonIntentwithoutFinish(FPPrimaryOrderActivity.class);
 

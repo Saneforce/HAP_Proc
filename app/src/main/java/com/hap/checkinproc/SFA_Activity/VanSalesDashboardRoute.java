@@ -662,12 +662,15 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvStockUnload:
-
-                Intent unload = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
-                Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
-                Shared_Common_Pref.VAN_SALES_MODE = "Stock UnLoading";
-                startActivity(unload);
-                overridePendingTransition(R.anim.in, R.anim.out);
+                if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.LOC_VANSALES_DATA))) {
+                    common_class.showMsg(this, "No Stock");
+                } else {
+                    Intent unload = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
+                    Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
+                    Shared_Common_Pref.VAN_SALES_MODE = "Stock UnLoading";
+                    startActivity(unload);
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                }
                 break;
             case R.id.llNewOrder:
                 if (smryNOrd.getText().toString().equals("0"))
@@ -936,6 +939,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                        } else if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.LOC_VANSALES_DATA))) {
+                            common_class.showMsg(getActivity(), "No Stock");
                         } else {
 
                             if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId())) {

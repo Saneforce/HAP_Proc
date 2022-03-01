@@ -283,9 +283,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             tvDistId.setText("" + sharedCommonPref.getvalue(Constants.DistributorERP));
             tvDate.setText(DT.GetDateTime(getApplicationContext(), "dd-MMM-yyyy"));
             orderId = getIntent().getStringExtra(Constants.ORDER_ID);
-//            if (orderId != null) {
-//                common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
-//            }
 
             Log.v(TAG, " LOC DATA: " + sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA));
 
@@ -478,8 +475,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     showOrderItemList(selectedPos, "");
                 } else {
                     orderId = "";
-                    // loadData(sharedCommonPref.getvalue(Constants.TodayPrimaryOrderDetails_List));
-                    common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
+
+                    common_class.getDataFromApi(Constants.PRIMARY_ORDER_EDIT, this, false);
 
                 }
 
@@ -588,7 +585,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sharedCommonPref.clear_pref(Constants.TodayPrimaryOrderDetails_List);
+        sharedCommonPref.clear_pref(Constants.PRIMARY_ORDER_EDIT);
     }
 
     @Override
@@ -1562,10 +1559,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     } else
                         loadData(apiDataResponse);
                     break;
-                case Constants.TodayPrimaryOrderDetails_List:
+                case Constants.PRIMARY_ORDER_EDIT:
                     sharedCommonPref.clear_pref(Constants.PRIMARY_ORDER);
                     loadData(apiDataResponse);
-                    isEditOrder = true;                    // sharedCommonPref.save(Constants.TodayPrimaryOrderDetails_List, apiDataResponse);
+                    isEditOrder = true;
                     break;
                 case Constants.Primary_Product_List:
                     Product_Modal = gson.fromJson(apiDataResponse, userType);
