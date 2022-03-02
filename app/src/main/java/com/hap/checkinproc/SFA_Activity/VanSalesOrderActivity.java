@@ -109,6 +109,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     private int uomPos;
     private ArrayList<Common_Model> uomList;
 
+    String axn = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +169,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)) && Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading"))
+            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)) && Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
                 Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA), userType);
             else {
                 Product_Modal = gson.fromJson(OrdersTable, userType);
@@ -366,9 +368,20 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
-            tvHeader.setText(Shared_Common_Pref.VAN_SALES_MODE);
+            tvHeader.setText(Constants.VAN_SALES_MODE);
 
 
+            switch (Constants.VAN_SALES_MODE) {
+                case Constants.VAN_STOCK_LOADING:
+                    axn = "save/stockloading";
+                    break;
+                case Constants.VAN_STOCK_UNLOADING:
+                    axn = "save/stockunloading";
+                    break;
+                case Constants.VAN_SALES_ORDER:
+                    axn = "save/vansales";
+                    break;
+            }
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -483,7 +496,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
-                if (Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading"))
+                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
                     showOrderList();
                 else
                     showOrderItemList(selectedPos, "");
@@ -586,12 +599,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                             @Override
                                             public void OnLocationRecived(Location location) {
                                                 strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                                SaveOrder();
+                                                SaveOrder(axn);
                                             }
                                         });
                                     } else {
                                         strLoc = sLoc.split(":");
-                                        SaveOrder();
+                                        SaveOrder(axn);
                                     }
                                 }
                             }, 500);
@@ -610,7 +623,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void SaveOrder() {
+    private void SaveOrder(String axn) {
         // if (common_class.isNetworkAvailable(this)) {
 
         AlertDialogBox.showDialog(VanSalesOrderActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
@@ -645,7 +658,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                     OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                     OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                    OutletItem.put("ordertype", Shared_Common_Pref.VAN_SALES_MODE);
+                    OutletItem.put("ordertype", Constants.VAN_SALES_MODE);
 
                     if (strLoc.length > 0) {
                         OutletItem.put("Lat", strLoc[0]);
@@ -730,7 +743,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     e.printStackTrace();
                 }
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(axn, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                 responseBodyCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -932,7 +945,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
 
         String data = gson.toJson(Product_Modal);
-        if (Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Loading"))
+        if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_LOADING))
             sharedCommonPref.save(Constants.LOC_VANSALES_DATA, data);
 
     }
@@ -966,7 +979,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT") && !Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading")) {
+            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT") &&
+                    !Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING)) {
                 moveProductScreen();
             } else {
                 finish();
@@ -1209,7 +1223,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
                 }
 
-                if (Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading")) {
+                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING)) {
                     holder.QtyPls.setVisibility(View.INVISIBLE);
                     holder.QtyMns.setVisibility(View.INVISIBLE);
                     holder.Qty.setEnabled(false);
@@ -1476,7 +1490,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                 if (CategoryType == -1) {
 
-                    if (Shared_Common_Pref.VAN_SALES_MODE.equalsIgnoreCase("Stock Unloading"))
+                    if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
                         holder.ivDel.setVisibility(View.INVISIBLE);
 
                     holder.ivDel.setOnClickListener(new View.OnClickListener() {

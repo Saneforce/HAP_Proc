@@ -87,7 +87,9 @@ public class Constants {
 
     public static final String POS_SCHEME = "posScheme";
     public static final String UOM = "uom";
-    public static final String VAN_SALES_MODE = "vanSalesMode";
+    public static final String VAN_STOCK_LOADING = "Stock Loading";
+    public static final String VAN_STOCK_UNLOADING = "Stock UnLoading";
+    public static final String VAN_SALES_ORDER = "Van Sales Order";
     public static final String LOGIN_DATA = "loginData";
     public static final String DB_TWO_GET_NOTIFY = "dashboardTwoNotify";
     public static final String DB_TWO_GET_DYREPORTS = "dashboardTwoDyReports";
@@ -109,6 +111,8 @@ public class Constants {
     public static final String SERVICETYPE_LIST = "serviceTypeList";
     public static final String PRIMARY_ORDER_EDIT = "primaryOrderEdit";
     public static String View_SUMMARY_MODE = "";
+    public static String VAN_SALES_MODE = "Van Sales Order";
+
     public static final String LOGIN_TYPE = "loginType";
     public static final String CHECKIN_TYPE = "CheckIn";
     public static final String DISTRIBUTER_TYPE = "Distributor";

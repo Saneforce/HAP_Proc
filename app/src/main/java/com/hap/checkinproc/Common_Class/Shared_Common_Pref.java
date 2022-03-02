@@ -6,13 +6,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Shared_Common_Pref {
-    public static  String VAN_SALES_MODE ="Van Sales Order" ;
+    public static String VAN_SALES_MODE = "Van Sales Order";
+    public static String VAN_STOCK_LOADING = "Stock Loading";
+    public static String VAN_STOCK_UNLOADING = "Stock UnLoading";
+    public static String VAN_SALES_ORDER = "Van Sales Order";
+
     public static String SFA_MENU = "";
     public static String CUSTOMER_CODE = "";
     public static String SALES_MODE = "";
     public static String LOGINTYPE = "";
-    public static int Projection_Approval=0;
-    public static String ImageUKey="";
+    public static int Projection_Approval = 0;
+    public static String ImageUKey = "";
     SharedPreferences Common_pref;
     SharedPreferences.Editor editor;
     Activity activity;
@@ -43,20 +47,7 @@ public class Shared_Common_Pref {
 
     public static String Dept_Type = "Dept_Type";
     public static String Sync_Flag;
-    public static String spNamemas = "SP_MAS_DETAILS";
-    public static String loggedIn = "loggedIn";
-    public static String Password = "Password";
     public static String name = "name";
-    public static String nameuser = "nameuser";
-    public static String cards_pref = "cards_pref";
-    public static String login_user = "login_user";
-    public static String Remember_me = "rememberMe";
-    public static String mastersynclog = "masterlog";//,boolean mastersynclog
-    //My day plan
-    public static String spMydayplan = "SP_MY_DAY_PLAN";
-    public static String Worktype = "worktype";
-    public static String Cluster = "cluster";
-    public static String Work_date = "workdate";
     public static String Status = "status";
     public static int TotalCountApproval = 0;
     public static String TransSlNo;
@@ -66,20 +57,8 @@ public class Shared_Common_Pref {
     public static String OutletUniv = "OutletUniv";
 
     public static String Rout_List = "Rout_List";
-    public static String Outlet_List = "Outlet_List";
-    public static String Distributor_List = "Distributor_List";
     public static String Category_List = "Category_List";
-    public static String Product_List = "Product_List";
-    public static String GetTodayOrder_List = "GetTodayOrder_List";
-    public static String TodayOrderDetails_List = "TodayOrderDetails_List";
-    public static String Compititor_List = "Compititor_List";
     public static String Todaydayplanresult = "Todaydayplanresult";
-    public static String Outlet_Total_Orders = "Outlet_Total_Orders";
-    public static String Outlet_Total_AlldaysOrders = "Outlet_Total_AlldaysOrders";
-
-    public static String TodaySfOrdervalues = "TodaySfOrdervalues";
-    public static String DistributorCode = "DistributorCode";
-    public static String DistributorName = "DistributorName";
     public static String Route_Code = "Route_Code";
     public static String Route_name = "Route_name";
 

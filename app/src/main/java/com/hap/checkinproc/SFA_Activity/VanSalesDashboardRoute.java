@@ -657,7 +657,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             case R.id.tvStockLoad:
                 Intent load = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
-                Shared_Common_Pref.VAN_SALES_MODE = "Stock Loading";
+                Constants.VAN_SALES_MODE = Constants.VAN_STOCK_LOADING;
                 startActivity(load);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
@@ -667,7 +667,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 } else {
                     Intent unload = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
                     Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
-                    Shared_Common_Pref.VAN_SALES_MODE = "Stock UnLoading";
+                    Constants.VAN_SALES_MODE = Constants.VAN_STOCK_UNLOADING;
                     startActivity(unload);
                     overridePendingTransition(R.anim.in, R.anim.out);
                 }
@@ -945,7 +945,6 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
 
                             if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId())) {
                                 shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);
-                                shared_common_pref.clear_pref(Constants.LOC_VANSALES_DATA);
                                 shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
 
                             }
