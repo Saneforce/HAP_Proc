@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -29,7 +31,6 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,10 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class Onduty_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    Button Oapprovebutton,ODreject,OD_rejectsave;
+    Button Oapprovebutton, ODreject, OD_rejectsave;
     TextView name, applieddate, empcode, hq, mobilenumber, designation, odtype, purposeofvisit, odlocation, geocheckin, geocheckout, checkin, checkout;
     String Sf_Code, Tour_plan_Date, duty_id;
     Shared_Common_Pref shared_common_pref;
@@ -104,11 +103,10 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
 
-
             }
         });
         name = findViewById(R.id.name);
-        applieddate = findViewById(R.id.name);
+        applieddate = findViewById(R.id.applieddate);
         Oapprovebutton = findViewById(R.id.Oapprovebutton);
         empcode = findViewById(R.id.empcode);
         reason = findViewById(R.id.reason);
@@ -137,33 +135,34 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
         OD_rejectsave.setOnClickListener(this);
 
 
-
         mobilenumber.setOnClickListener(this);
         geocheckin.setOnClickListener(this);
         geocheckout.setOnClickListener(this);
         i = getIntent();
         Log.e("MOBILE_NUMBER", i.getExtras().getString("MobileNumber"));
+
         applieddate.setText("" + i.getExtras().getString("Applieddate"));
         name.setText("" + i.getExtras().getString("Username"));
         empcode.setText("" + i.getExtras().getString("Emp_Code"));
-        hq.setText(" " + i.getExtras().getString("HQ"));
-        designation.setText(" " + i.getExtras().getString("Designation"));
+        hq.setText("" + i.getExtras().getString("HQ"));
+        designation.setText("" + i.getExtras().getString("Designation"));
         mobilenumber.setText("" + i.getExtras().getString("MobileNumber"));
-        odtype.setText(" " + i.getExtras().getString("Odtype"));
-        purposeofvisit.setText(" " + i.getExtras().getString("POV"));
+        odtype.setText("" + i.getExtras().getString("Odtype"));
+        purposeofvisit.setText("" + i.getExtras().getString("POV"));
         odlocation.setText("" + i.getExtras().getString("OdLocation"));
         geocheckin.setText("" + i.getExtras().getString("Geocheckin"));
-        geocheckout.setText(" " + i.getExtras().getString("geocheckout"));
+        geocheckout.setText("" + i.getExtras().getString("geocheckout"));
         checkin.setText("" + i.getExtras().getString("checkintime"));
         checkout.setText("" + i.getExtras().getString("checkouttime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         duty_id = i.getExtras().getString("duty_id");
-mobilenumber.setOnClickListener(this);
+        mobilenumber.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Onduty_approval.class);            }
+                common_class.CommonIntentwithFinish(Onduty_approval.class);
+            }
         });
 
     }

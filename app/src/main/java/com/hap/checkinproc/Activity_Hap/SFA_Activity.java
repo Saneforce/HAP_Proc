@@ -133,16 +133,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         init();
         setOnClickListener();
 
-
-        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
-                common_class.getDb_310Data(Constants.Distributor_List, this);
-        }
-        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
-            common_class.getPOSProduct(this);
-            common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
-        }
-
         tvDate.setText("" + Common_Class.GetDatewothouttime());
 
         sfa_date = tvDate.getText().toString();
@@ -155,21 +145,40 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         showDashboardData();
 
 
-        menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
-        menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
-        menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
-        menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
-        menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+        switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)){
+            case Constants.CHECKIN_TYPE:
+                menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
+                menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
+                menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+                menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
+                menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
+                menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
 
-        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
-            menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
-            menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
-            // menuList.add(new Common_Model("Sales Return", R.drawable.ic_sales_return));
+                if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
+                    common_class.getDb_310Data(Constants.Distributor_List, this);
+                break;
+            case Constants.DISTRIBUTER_TYPE:
+                menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
+                menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
+                menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+                menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+                menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
 
-        } else if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
-            menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
-            menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
-            menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
+                common_class.getPOSProduct(this);
+                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+                break;
+            default:
+                menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
+                menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
+                menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
+                menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
+                break;
         }
 
 

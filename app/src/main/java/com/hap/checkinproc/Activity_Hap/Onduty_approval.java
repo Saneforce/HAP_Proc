@@ -157,6 +157,9 @@ public class Onduty_approval extends AppCompatActivity {
                         intent.putExtra("checkouttime", approvalList.get(Name).getEndTime());
                         intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
                         intent.putExtra("duty_id", String.valueOf(approvalList.get(Name).getDutyId()));
+
+
+                     //   intent.putExtra("onduty_approval",new Gson().toJson(approvalList.get(Name)));
                         startActivity(intent);
                         finish();
                     }
