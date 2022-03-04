@@ -12,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,17 +30,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class TodayPrimOrdActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
-    TextView tvStartDate, tvEndDate, distributor_text, route_text,tvGrandTot;;
+    TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot;
+    ;
     Common_Class common_class;
 
     PrimaryOrder_History_Adapter mReportViewAdapter;
@@ -170,7 +168,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
-                    if (common_class.checkDates(date, tvEndDate.getText().toString(),TodayPrimOrdActivity.this) ||
+                    if (common_class.checkDates(date, tvEndDate.getText().toString(), TodayPrimOrdActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
@@ -178,7 +176,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                     } else
                         common_class.showMsg(TodayPrimOrdActivity.this, "Please select valid date");
                 } else {
-                    if (common_class.checkDates(tvStartDate.getText().toString(), date,TodayPrimOrdActivity.this) ||
+                    if (common_class.checkDates(tvStartDate.getText().toString(), date, TodayPrimOrdActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();
@@ -233,7 +231,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
                     case Constants.GetTodayPrimaryOrder_List:
 
-                        Log.v("TodayPrim",apiDataResponse);
+                        Log.v("TodayPrim", apiDataResponse);
 
                         JSONArray arr = new JSONArray(apiDataResponse);
 
@@ -300,7 +298,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
         return false;
     }
 
-    public void updateData(String orderNo, String cutoff_time) {
+    public void updateData(String orderNo, String cutoff_time, String categoryType) {
         try {
             if (Common_Class.isNullOrEmpty(cutoff_time)) {
                 common_class.showMsg(this, "Time UP...");
@@ -313,6 +311,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                     sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
                     Intent intent = new Intent(this, PrimaryOrderActivity.class);
                     intent.putExtra(Constants.ORDER_ID, orderNo);
+                    intent.putExtra(Constants.CATEGORY_TYPE, categoryType);
                     Shared_Common_Pref.TransSlNo = orderNo;
                     startActivity(intent);
                     overridePendingTransition(R.anim.in, R.anim.out);

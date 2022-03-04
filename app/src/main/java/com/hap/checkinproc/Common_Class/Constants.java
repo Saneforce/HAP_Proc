@@ -110,6 +110,8 @@ public class Constants {
     public static final String PLANT_MASTER = "plantMaster";
     public static final String SERVICETYPE_LIST = "serviceTypeList";
     public static final String PRIMARY_ORDER_EDIT = "primaryOrderEdit";
+    public static final String CATEGORY_TYPE ="categoryType" ;
+    public static final String REPEAT_PRIMARY_ORDER = "repeatPrimaryOrder";
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";
 

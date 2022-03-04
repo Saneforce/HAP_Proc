@@ -4304,10 +4304,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
-        Log.v("PATH_IMAGE", path);
+        Log.v("PATH_IMAGE", ""+path);
         MultipartBody.Part imgg = convertimg("file", path);
         Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
-        sendImageToServer(count, x, mode, from, to, imgg);
+        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")||path.endsWith(".pdf"))
+            sendImageToServer(count, x, mode, from, to, imgg);
+        else
+            mCommon_class.showMsg(this,"Image and Pdf file only supported");
     }
 
     public MultipartBody.Part convertimg(String tag, String path) {
@@ -5203,9 +5206,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 try {
                     if (response.isSuccessful()) {
+
+
                         String jsonData = null;
                         jsonData = response.body().string();
                         JSONObject js = new JSONObject(jsonData);
+
+                        if(js.getBoolean("success")){
+                            mCommon_class.showMsg(TAClaimActivity.this,"File uploading successful ");
+                        }
                     }
 
                 } catch (Exception e) {

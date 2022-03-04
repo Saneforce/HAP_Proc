@@ -405,6 +405,11 @@ public class Common_Class {
                 case Constants.PrePrimaryOrderQty:
                     QuerySTring1 = "{\"tableName\":\"getpreviousorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
+                case Constants.REPEAT_PRIMARY_ORDER:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousordernew\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("GrpCode", "" + Shared_Common_Pref.ORDER_TYPE);
+
+                    break;
                 case Constants.PreInvOrderQty:
                     QuerySTring1 = "{\"tableName\":\"getpreviousinvoice\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
@@ -412,7 +417,7 @@ public class Common_Class {
 
                     break;
                 case Constants.TodayPrimaryOrderDetails_List:
-                  //  QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    //  QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetailsnew\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
@@ -420,7 +425,7 @@ public class Common_Class {
                     break;
 
                 case Constants.PRIMARY_ORDER_EDIT:
-                      QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -539,7 +544,7 @@ public class Common_Class {
                 switch (key) {
                     case Constants.PLANT_MASTER:
                         axnname = "get/plantmaster";
-                        QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",",""));
+                        QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
                         break;
                     case Constants.SALES_RETURN:
                         // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}

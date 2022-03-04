@@ -93,7 +93,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     Type userType;
     Gson gson;
     CircularProgressButton takeorder, btnRepeat;
-    TextView Out_Let_Name, Category_Nametext,
+    TextView Category_Nametext,
             tvTimer, txBalAmt, txAmtWalt, txAvBal, tvDistId, tvDate, tvGrpName;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llTdPriOrd, btnRefACBal;
     Common_Class common_class;
@@ -125,7 +125,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<Product_Details_Modal> orderTotTax;
     private ArrayList<Product_Details_Modal> orderTotUOM;
     List<Product_Details_Modal> multiList;
-    String orderId = "";
+    String orderId = "", orderType = "";
     private boolean isEditOrder = false;
     private int inValidQty = -1;
     private double totTax;
@@ -134,7 +134,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     public static PrimaryOrderActivity primaryOrderActivity;
     public static int selPOS = 0;
     Boolean boolMinu18 = false;
-    String grpName = "";
+    String grpName = "", grpCode = "";
     LinearLayout llDistributor;
 
     @SuppressLint("SetTextI18n")
@@ -227,7 +227,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 common_class.getDb_310Data(Constants.Primary_Product_List, this);
             else {
                 Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA), userType);
-                loadCategoryData();
+                loadCategoryData("NEW");
             }
 
             ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -660,7 +660,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        common_class.getDataFromApi(Constants.PrePrimaryOrderQty, PrimaryOrderActivity.this, false);
+                        common_class.getDataFromApi(Constants.REPEAT_PRIMARY_ORDER, PrimaryOrderActivity.this, false);
                     }
                 }, 500);
                 break;
@@ -724,6 +724,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         OutletItem.put("mode", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit");
                         OutletItem.put("cutoff_time", sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
                         OutletItem.put("totAmtTax", formatter.format(totTax));
+                        OutletItem.put("groupCode", grpCode);
                         OutletItem.put("groupName", grpName);
 
                         if (strLoc.length > 0) {
@@ -816,7 +817,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         OutletItem.put("multiple_details", multipleArr);
 
 
-
                         for (int i = 0; i < orderTotUOM.size(); i++) {
                             JSONObject mulObj = new JSONObject();
 
@@ -825,7 +825,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             uomArr.put(mulObj);
 
                         }
-
 
 
                         OutletItem.put("uom_details", uomArr);
@@ -1061,7 +1060,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             int crtVal = 0;
             for (int l = 0; l < Getorder_Array_List.size(); l++) {
-                grpName = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
+                grpCode = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
 
                 if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
                     for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
@@ -1220,7 +1219,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 qtyVal = qtyVal + (crtVal) + "\n";
                 uomName = uomName + "CRT : " + (crtVal) + "  ";
 
-                orderTotUOM.add(new Product_Details_Modal(crtVal,"CRT"));
+                orderTotUOM.add(new Product_Details_Modal(crtVal, "CRT"));
 
 
             }
@@ -1243,14 +1242,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             }
 
-            boolMinu18 = false;
-            if (boolMinu18) {
+            //boolMinu18 = false;
+            if (boolMinu18 && !isEditOrder) {
                 if (Getorder_Array_List.size() == 0)
                     grplistItems.notify(ProdGroups, this, "", new onListItemClick() {
                         @Override
                         public void onItemClick(JSONObject item) {
                             try {
                                 grpName = "";
+                                grpCode = "";
                                 FilterTypes(item.getString("id"));
                                 common_class.brandPos = 0;
 
@@ -1262,8 +1262,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         }
                     });
                 else {
-                    grpName = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
-                    grplistItems.notify(ProdGroups, this, "" + grpName, new onListItemClick() {
+                    grpCode = "" + Getorder_Array_List.get(0).getProduct_Grp_Code();
+
+                    for (int i = 0; i < ProdGroups.length(); i++) {
+                        if (grpCode.equalsIgnoreCase(ProdGroups.getJSONObject(i).getString("id"))) {
+                            grpName = ProdGroups.getJSONObject(i).getString("name");
+                        }
+                    }
+
+                    grplistItems.notify(ProdGroups, this, "" + grpCode, new onListItemClick() {
                         @Override
                         public void onItemClick(JSONObject item) {
 //                        try {
@@ -1380,10 +1387,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         ResetSubmitBtn(2);
     }
 
-    void loadCategoryData() {
+    void loadCategoryData(String mode) {
         try {
-            //  Product_Modal = gson.fromJson(data, userType);
-
             ProdGroups = db.getMasterData(Constants.ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -1391,10 +1396,32 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             for (int i = 0; i < ProdGroups.length(); i++) {
                 JSONObject grpName = ProdGroups.getJSONObject(i);
-                if (grpName.getString("name").equalsIgnoreCase("-18")) {
+                if (mode.equalsIgnoreCase("new") && grpName.getString("name").equalsIgnoreCase("-18")) {
                     boolMinu18 = true;
+                    Shared_Common_Pref.ORDER_TYPE = grpName.getString("id");
                     break;
+                } else if (mode.equalsIgnoreCase("edit")) {
+                    if (orderType.equalsIgnoreCase(grpName.getString("name"))) {
+                        Shared_Common_Pref.ORDER_TYPE = grpName.getString("id");
+                        boolMinu18 = true;
+                        break;
+
+                    }
                 }
+            }
+
+
+            if (mode.equalsIgnoreCase("edit") && boolMinu18) {
+                for (int i = 0; i < ProdGroups.length(); i++) {
+                    JSONObject obj = ProdGroups.getJSONObject(i);
+                    JSONArray arr = new JSONArray();
+                    if (obj.getString("name").equalsIgnoreCase(orderType)) {
+                        arr.put(obj);
+                        ProdGroups = arr;
+                        break;
+                    }
+                }
+
             }
 
             grplistItems = new RyclGrpListItemAdb(ProdGroups, this, new onListItemClick() {
@@ -1552,7 +1579,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             switch (key) {
-                case Constants.PrePrimaryOrderQty:
+                case Constants.REPEAT_PRIMARY_ORDER:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
                         ResetSubmitBtn(0);
                         common_class.showMsg(PrimaryOrderActivity.this, "No Records Found.");
@@ -1561,12 +1588,16 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     break;
                 case Constants.PRIMARY_ORDER_EDIT:
                     sharedCommonPref.clear_pref(Constants.PRIMARY_ORDER);
+                    orderType = getIntent().getStringExtra(Constants.CATEGORY_TYPE);
+                    loadCategoryData("EDIT");
                     loadData(apiDataResponse);
+
+
                     isEditOrder = true;
                     break;
                 case Constants.Primary_Product_List:
                     Product_Modal = gson.fromJson(apiDataResponse, userType);
-                    loadCategoryData();
+                    loadCategoryData("NEW");
                     break;
 
                 case Constants.PRIMARY_SCHEME:

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 
@@ -89,10 +90,12 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
 
             if (position == selPOS) {
                 //  if (id.equalsIgnoreCase("") || (id.equalsIgnoreCase(itm.getString("id")))) {
-
+                Shared_Common_Pref.ORDER_TYPE = itm.getString("id");
                 holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbtnprimary));
                 holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                 holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+
+
                 // }
 
             } else {

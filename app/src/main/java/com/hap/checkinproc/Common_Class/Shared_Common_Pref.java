@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Shared_Common_Pref {
+    public static  String ORDER_TYPE ="orderType" ;
     public static String VAN_SALES_MODE = "Van Sales Order";
     public static String VAN_STOCK_LOADING = "Stock Loading";
     public static String VAN_STOCK_UNLOADING = "Stock UnLoading";

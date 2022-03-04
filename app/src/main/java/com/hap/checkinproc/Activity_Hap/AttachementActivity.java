@@ -190,15 +190,16 @@ public class AttachementActivity extends AppCompatActivity {
                     ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
 
 
-                    if (jsonObject.get("Imageurl").getAsString().endsWith(".pdf")) {
-                        Picasso.with(AttachementActivity.this)
-                                .load(R.drawable.pdf)
-                                .into(taAttach);
-                    } else {
-                        //   url = url.replaceAll("https:", "http:");
+                    if (jsonObject.get("Imageurl").getAsString().endsWith(".png") || jsonObject.get("Imageurl").getAsString().endsWith(".jpeg") ||
+                            jsonObject.get("Imageurl").getAsString().endsWith(".jpg")) {
 
                         Picasso.with(AttachementActivity.this)
                                 .load(jsonObject.get("Imageurl").getAsString())
+                                .into(taAttach);
+
+                    } else {
+                        Picasso.with(AttachementActivity.this)
+                                .load(R.drawable.pdf)
                                 .into(taAttach);
                     }
 
@@ -225,16 +226,20 @@ public class AttachementActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
 
-                            if (jsonObject.get("Imageurl").getAsString().endsWith(".pdf")) {
+                            if (jsonObject.get("Imageurl").getAsString().endsWith(".png") || jsonObject.get("Imageurl").getAsString().endsWith(".jpeg") ||
+                                    jsonObject.get("Imageurl").getAsString().endsWith(".jpg")) {
+
+                                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                                intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
+                                startActivity(intent);
+
+                            } else {
                                 Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
                                 stat.putExtra("PDF_ONE", jsonObject.get("Imageurl").getAsString());
                                 stat.putExtra("PDF_FILE", "Web");
                                 startActivity(stat);
 
-                            } else {
-                                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                                intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
-                                startActivity(intent);
+
                             }
                         }
                     });

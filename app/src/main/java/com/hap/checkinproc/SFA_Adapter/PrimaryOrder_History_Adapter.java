@@ -55,10 +55,6 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
             holder.txtValue.setText("" + new DecimalFormat("##0.00").format(Double.parseDouble(obj.getString("Order_Value"))));
             holder.Itemcountinvoice.setText(obj.getString("Status"));
 
-//            if (isToday(obj.getString("Order_Date")) == 0)
-//                holder.llEdit.setVisibility(View.VISIBLE);
-//            else
-//                holder.llEdit.setVisibility(View.GONE);
 
             try {
                 if (obj.getInt("editmode") == 0)
@@ -82,7 +78,7 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
                 public void onClick(View v) {
                     try {
                         TodayPrimOrdActivity.mTdPriAct.updateData(mDate.getJSONObject(position).getString("Trans_Sl_No"),
-                                mDate.getJSONObject(position).getString("cutoff_time"));
+                                mDate.getJSONObject(position).getString("cutoff_time"), mDate.getJSONObject(position).getString("category_type"));
                     } catch (Exception e) {
 
                     }

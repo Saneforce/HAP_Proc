@@ -1,6 +1,5 @@
 package com.hap.checkinproc.Activity.Util;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -35,72 +34,80 @@ public class ImageFilePath {
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
 
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+//            // ExternalStorageProvider
+//            if (isExternalStorageDocument(uri)) {
+//                final String docId = DocumentsContract.getDocumentId(uri);
+//                final String[] split = docId.split(":");
+//                final String type = split[0];
+//
+//                if ("primary".equalsIgnoreCase(type)) {
+//                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+//                }
+//            }
+//            // DownloadsProvider
+//            else if (isDownloadsDocument(uri)) {
+//
+//                final String id = DocumentsContract.getDocumentId(uri);
+//                final Uri contentUri = ContentUris.withAppendedId(
+//                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+//
+//                return getDataColumn(context, contentUri, null, null);
+//            }
+//            // MediaProvider
+//            else if (isMediaDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
+            Uri contentUri = null;
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if ("video".equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if ("audio".equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            } else/* if ("document".equals(type))*/ {
+                Util util = new Util();
+                String fileName = Shared_Common_Pref.ImageUKey + "." + util.getFileExtension(context, uri);
+                final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        "/" + fileName);
+                util.createFile(context, uri, file);
+                return file.getPath();
+
             }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+            final String selection = "_id=?";
+            final String[] selectionArgs = new String[]{
+                    split[1]
+            };
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                } else if ("document".equals(type)) {
-                    Util util = new Util();
-                    String fileName = Shared_Common_Pref.ImageUKey + "." + util.getFileExtension(context, uri);
-                    final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            "/" + fileName);
-                    util.createFile(context, uri, file);
-                    return file.getPath();
-
-                }
-
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            return getDataColumn(context, contentUri, selection, selectionArgs);
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
             // Return the remote address
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
 
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else {
             return uri.getPath();
         }
 
-        return null;
+//        }
+//        // MediaStore (and general)
+//        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+//
+//            // Return the remote address
+//            if (isGooglePhotosUri(uri))
+//                return uri.getLastPathSegment();
+//
+//            return getDataColumn(context, uri, null, null);
+//        }
+//        // File
+//        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+//            return uri.getPath();
+//        }
+
+        // return null;
     }
 
     /**
