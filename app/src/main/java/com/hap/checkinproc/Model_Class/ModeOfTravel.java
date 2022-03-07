@@ -20,6 +20,9 @@ public class ModeOfTravel {
     private String Attachemnt;
 
 
+    @SerializedName("Alw_Eligibilty")
+    @Expose
+    private String Alw_Eligibilty;
 
     @SerializedName("Max_Allowance")
     @Expose
@@ -87,4 +90,11 @@ public class ModeOfTravel {
         this.driverNeed = driverNeed;
     }
 
+    public String getAlw_Eligibilty() {
+        return Alw_Eligibilty;
+    }
+
+    public void setAlw_Eligibilty(String alw_Eligibilty) {
+        Alw_Eligibilty = alw_Eligibilty;
+    }
 }

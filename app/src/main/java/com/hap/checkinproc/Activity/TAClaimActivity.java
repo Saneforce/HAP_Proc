@@ -169,7 +169,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
             DATE = "", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "",
-            sLocId = "", sLocName = "", sDALocId = "", sDALocName = "", sDALType, CInDate = "", COutDate = "";
+            sLocId = "", sLocName = "", sDALocId = "", sDALocName = "", sDALType, CInDate = "", COutDate = "",Alw_Eligibilty="";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
@@ -2279,6 +2279,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             StrBus = jsonObject.get("From_Place").getAsString();
                             StrTo = jsonObject.get("To_Place").getAsString();
                             StrDaName = jsonObject.get("MOT_Name").getAsString();
+                            Alw_Eligibilty=jsonObject.get("Alw_Eligibilty").getAsString();
                             StrDailyAllowance = jsonObject.get("dailyAllowance").getAsString();
                             strFuelAmount = jsonObject.get("FuelAmt").getAsString();
                             allowanceAmt = jsonObject.get("Allowance_Value").getAsString();
@@ -2461,6 +2462,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 enterFrom.setText(StrBus);
                                 enterTo.setText(StrTo);
 
+
+                                if (Alw_Eligibilty.equalsIgnoreCase("0")) {
+                                    enterFare.setText("0");
+                                    enterFare.setEnabled(false);
+                                } else {
+                                 //   enterFare.setText(tldraftJson.get("Fare").getAsString());
+                                    enterFare.setEnabled(true);
+                                }
+
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
                                 previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
@@ -2581,7 +2591,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             editText.setText("" + tldraftJson.get("Mode").getAsString());
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
                             enterTo.setText(tldraftJson.get("To_P").getAsString());
-                            enterFare.setText(tldraftJson.get("Fare").getAsString());
+
+                            if (tldraftJson.get("Alw_Eligibilty").getAsString().equalsIgnoreCase("0")) {
+                                enterFare.setText("0");
+                                enterFare.setEnabled(false);
+                            } else {
+                                enterFare.setText(tldraftJson.get("Fare").getAsString());
+                                enterFare.setEnabled(true);
+                            }
 
                             String sRWID = tldraftJson.get("Mode").getAsString() + "_" + System.nanoTime();
                             txRwID.setText(sRWID);
@@ -3473,7 +3490,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             long nano_startTime = System.nanoTime();
             ImageUKey = keyEk + UserDetails.getString("Sfcode", "") + nano_startTime;
 
-            Shared_Common_Pref.ImageUKey=ImageUKey;
+            Shared_Common_Pref.ImageUKey = ImageUKey;
             if (requestCode == 144) {
                 if (txtLodgUKey.getText().toString().equals("")) {
                     DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -3515,7 +3532,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 LcUKey = lcTxtUKeys.getText().toString();
                 sMode = "LC;" + DateTime + ";" + LcUKey + ";" + editMode + ";" + ImageUKey;
             }
-
 
 
             if (requestCode == 144) {
@@ -4304,13 +4320,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
-        Log.v("PATH_IMAGE", ""+path);
+        Log.v("PATH_IMAGE", "" + path);
         MultipartBody.Part imgg = convertimg("file", path);
         Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
-        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")||path.endsWith(".pdf"))
+        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".pdf"))
             sendImageToServer(count, x, mode, from, to, imgg);
         else
-            mCommon_class.showMsg(this,"Image and Pdf file only supported");
+            mCommon_class.showMsg(this, "Image and Pdf file only supported");
     }
 
     public MultipartBody.Part convertimg(String tag, String path) {
@@ -4580,10 +4596,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             JSONObject Selitem = myDataset.get(position).getJSONObject();
             int maxVal = 50000;
             String AttFlg = "0";
+
+            String Alw_Eligibilty = "";
             try {
                 AttFlg = Selitem.getString("Attachemnt");
                 maxVal = Selitem.getInt("Max_Allowance");
                 if (maxVal == 0) maxVal = 50000;
+
+                Alw_Eligibilty = Selitem.getString("Alw_Eligibilty");
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -4603,6 +4623,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             } else {
                 imgAtt.setVisibility(View.GONE);
                 imgPrv.setVisibility(View.GONE);
+            }
+
+            if (Alw_Eligibilty.equalsIgnoreCase("0")) {
+                txtTAFare.setText("0");
+                txtTAFare.setEnabled(false);
+            } else {
+                txtTAFare.setEnabled(true);
             }
         } else if (type == 80) {
             editTextPositionss = myDataset.get(position).getPho();
@@ -4818,6 +4845,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         item.put("modeId", modeId);
                         item.put("Attachemnt", modelOfTravel.get(i).getAttachemnt());
                         item.put("Max_Allowance", modelOfTravel.get(i).getMax_Allowance());
+                        item.put("Alw_Eligibilty", modelOfTravel.get(i).getAlw_Eligibilty());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -5212,8 +5240,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         jsonData = response.body().string();
                         JSONObject js = new JSONObject(jsonData);
 
-                        if(js.getBoolean("success")){
-                            mCommon_class.showMsg(TAClaimActivity.this,"File uploading successful ");
+                        if (js.getBoolean("success")) {
+                            mCommon_class.showMsg(TAClaimActivity.this, "File uploading successful ");
                         }
                     }
 
