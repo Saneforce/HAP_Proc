@@ -51,12 +51,14 @@ import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -113,6 +115,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     DatabaseHandler db;
     private String key;
     Gson gson;
+    private String checkInUrl="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -551,6 +554,24 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             JsonObject fItm = res.get(0).getAsJsonObject();
             TextView txDyDet = findViewById(R.id.lTDyTx);
             txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
+
+            CircleImageView ivCheckIn = findViewById(R.id.ivCheckIn);
+            checkInUrl = ApiClient.BASE_URL.replaceAll("server/", "");
+            checkInUrl = checkInUrl + fItm.get("ImgName").getAsString();
+            Picasso.with(Dashboard_Two.this)
+                    .load(checkInUrl)
+                    .into(ivCheckIn);
+
+            ivCheckIn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                    intent.putExtra("ImageUrl", checkInUrl);
+                    startActivity(intent);
+
+                }
+            });
+
 
             mShared_common_pref.save(Constants.LOGIN_DATE, com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
             JsonArray dyRpt = new JsonArray();
