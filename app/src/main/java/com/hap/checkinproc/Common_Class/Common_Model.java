@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
+    private  String Latlong;
     private String catName, catId, subCatName, subCatId;
     private int icon;
     private String DivERP;
@@ -76,7 +77,25 @@ public class Common_Model {
         this.Pho = phone;
     }
 
-    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP) {
+    public Common_Model(String name, String id, String flag, String address, String phone, String cont) {
+        this.name = name;
+        this.id = id;
+        this.flag = flag;
+        this.address = address;
+        this.phone = phone;
+        this.cont = cont;
+
+    }
+
+    public String getLatlong() {
+        return Latlong;
+    }
+
+    public void setLatlong(String latlong) {
+        Latlong = latlong;
+    }
+
+    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP, String Latlong) {
         this.name = name;
         this.id = id;
         this.flag = flag;
@@ -84,6 +103,7 @@ public class Common_Model {
         this.phone = phone;
         this.cont = cont;
         this.DivERP = DivERP;
+        this.Latlong=Latlong;
     }
 
     public Common_Model(String id, String name, String flag, String checkouttime, Boolean ExpNeed) {

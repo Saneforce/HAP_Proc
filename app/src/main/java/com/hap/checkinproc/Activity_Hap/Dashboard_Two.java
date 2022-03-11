@@ -558,9 +558,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             CircleImageView ivCheckIn = findViewById(R.id.ivCheckIn);
             checkInUrl = ApiClient.BASE_URL.replaceAll("server/", "");
             checkInUrl = checkInUrl + fItm.get("ImgName").getAsString();
+
+            if(Common_Class.isNullOrEmpty(fItm.get("ImgName").getAsString()))
+                ivCheckIn.setVisibility(View.GONE);
+            else {
+                ivCheckIn.setVisibility(View.VISIBLE);
             Picasso.with(Dashboard_Two.this)
                     .load(checkInUrl)
-                    .into(ivCheckIn);
+                    .into(ivCheckIn);}
+
+
 
             ivCheckIn.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -63,7 +63,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     String TAG = "OUTLET_INFO_Activity:", viewType = "-1";
     ;
     private TextView distributor_text;
-    Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet;
+    Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet, swFreezerOutlet, swNoFreezerOutlet;
     int CountUR = 0, CountSR = 0, CountCls = 0;
     TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta;
     LinearLayout btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
@@ -110,6 +110,9 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             swUpdOutlet = findViewById(R.id.swUpdOutlet);
             swUpdNoOutlet = findViewById(R.id.swUpdNoOutlet);
             tvApprovalSta = findViewById(R.id.tvApprovSta);
+            swFreezerOutlet = findViewById(R.id.swFreezerOutlet);
+            swNoFreezerOutlet = findViewById(R.id.swNofreezerOutlet);
+
             tvApprovalSta.setVisibility(View.GONE);
             tvApprovalSta.setOnClickListener(this);
 
@@ -215,6 +218,34 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                     reloadData();
                 }
             });
+
+
+            swFreezerOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swNoFreezerOutlet.setChecked(false);
+                }
+            });
+            swFreezerOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reloadData();
+                }
+            });
+            swNoFreezerOutlet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swFreezerOutlet.setChecked(false);
+                }
+            });
+            swNoFreezerOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reloadData();
+                }
+            });
+
+
             btSrvOtlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -331,7 +362,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
         String routeId = sharedCommonPref.getvalue(Route_Id);
 
-        retailerSize=Retailer_Modal_List.size();
+        retailerSize = Retailer_Modal_List.size();
 
         CountUR = 0;
         CountSR = 0;
@@ -360,6 +391,21 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 } else {
                     ACTrue = true;
                 }
+
+                boolean FreezerTrue = false;
+
+                Log.v("freezer:",""+swFreezerOutlet.isChecked()+" :nofree:"+swNoFreezerOutlet.isChecked());
+                if (swFreezerOutlet.isChecked()) {
+                    if (Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("Yes"))
+                        FreezerTrue = true;
+                } else if (swNoFreezerOutlet.isChecked()) {
+                    if ((Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("No")))
+                        FreezerTrue = true;
+                } else {
+                    FreezerTrue = true;
+                }
+
+
                 boolean FiltrType = false;
                 String outletType = Retailer_Modal_List.get(sr).getType() == null ? "0" : Retailer_Modal_List.get(sr).getType();
                 if (viewType.equalsIgnoreCase("-1"))
@@ -367,10 +413,10 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 else if (outletType.equalsIgnoreCase(viewType))
                     FiltrType = true;
 
-                if (UpdTrue && ACTrue && FiltrType && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                if (UpdTrue && ACTrue && FiltrType && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
                     Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
                 }
-                if (UpdTrue && ACTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                if (UpdTrue && ACTrue && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
                     if (Retailer_Modal_List.get(sr).getType() == null)
                         Retailer_Modal_List.get(sr).setType("0");
                     if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("0")) CountUR++;
@@ -386,7 +432,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
         if (Retailer_Modal_ListFilter != null) {
 
-            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(),"Outlets", new AdapterOnClick() {
+            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(), "Outlets", new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {
                     try {
@@ -403,7 +449,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                         intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
 
                         startActivity(intent);
-                       // finish();
+                        // finish();
                     } catch (Exception e) {
 
                     }

@@ -668,7 +668,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
 */
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
-                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde, "");
+                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde);
                 missed_punch.add(Model_Pojo);
                 if (missedDates != null) {
                     if (missedDates.equalsIgnoreCase(Model_Pojo.getId())) {

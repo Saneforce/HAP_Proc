@@ -1,8 +1,10 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,16 +25,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.common.FileUploadService;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,9 +53,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CoolerInfoActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView tvOrder, tvOtherBrand, tvQPS, tvPOP, tvRetailorName, tvReceivedDate;
-    EditText etTagNo, etMake, etCoolerType, etRemarks;
+public class CoolerInfoActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+    TextView tvOrder, tvOtherBrand, tvQPS, tvPOP, tvRetailorName, etTagNo, etMake, etCoolerType, tvReceivedDate;
+    EditText etRemarks;
     Common_Class common_class;
     CheckBox cbPurity, cbFrontage, cbNoWrk, cbAvail;
     Button btnSubmit;
@@ -59,6 +67,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
     RecyclerView rvPurity, rvFrontage, rvNotWorking;
     private FilesAdapter filesAdapter;
+    private String[] strLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +197,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         tvOtherBrand.setOnClickListener(this);
         tvQPS.setOnClickListener(this);
         tvPOP.setOnClickListener(this);
-        tvReceivedDate.setOnClickListener(this);
+        //  tvReceivedDate.setOnClickListener(this);
 
         ivPurityCapture.setOnClickListener(this);
         ivPurityPreview.setOnClickListener(this);
@@ -196,6 +205,8 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         ivFTPreview.setOnClickListener(this);
         ivNowrkCapture.setOnClickListener(this);
         ivNoWrkPreview.setOnClickListener(this);
+        btnSubmit.setOnClickListener(this);
+        common_class.getDb_310Data(Constants.COOLER_INFO, this);
     }
 
     @Override
@@ -211,20 +222,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         if (coolerFileList.get(pos).getFileUrls() != null) {
             coolerFileList.get(pos).getFileUrls().clear();
         }
-//        if (qpsModalList != null && qpsModalList.size() > 0) {
-//            List<QPS_Modal> filterList = new ArrayList<>();
-//            for (int i = 0; i < qpsModalList.size(); i++) {
-//                if (qpsModalList.get(i).getFileKey().contains(key)) {
-//                    File file = new File(qpsModalList.get(i).getFileName());
-//                    file.delete();
-//                } else {
-//                    filterList.add(qpsModalList.get(i));
-//                }
-//            }
-//            qpsModalList.clear();
-//            qpsModalList = filterList;
-//            shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
-//        }
+
     }
 
     @Override
@@ -274,9 +272,30 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                     common_class.showMsg(this, "Enter Cooler Type");
                 } else if (tvReceivedDate.getText().toString().equals("")) {
                     common_class.showMsg(this, "Enter Received Date");
+                } else if (cbPurity.isChecked() && (coolerFileList.get(0).getFileUrls() == null || coolerFileList.get(0).getFileUrls().size() == 0)) {
+                    common_class.showMsg(this, "Kindly Attach Purity Files");
+                } else if (cbFrontage.isChecked() && (coolerFileList.get(1).getFileUrls() == null || coolerFileList.get(1).getFileUrls().size() == 0)) {
+                    common_class.showMsg(this, "Kindly Attach Frontage Files");
+                } else if (cbNoWrk.isChecked() && (coolerFileList.get(2).getFileUrls() == null || coolerFileList.get(2).getFileUrls().size() == 0)) {
+                    common_class.showMsg(this, "Kindly Attach Not Working Files");
                 } else {
-                    submitData();
-                    uploadFile();
+
+                    String sLoc = shared_common_pref.getvalue("CurrLoc");
+                    if (sLoc.equalsIgnoreCase("")) {
+                        new LocationFinder(getApplication(), new LocationEvents() {
+                            @Override
+                            public void OnLocationRecived(Location location) {
+                                strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                submitData();
+                                uploadFile();
+                            }
+                        });
+                    } else {
+                        strLoc = sLoc.split(":");
+                        submitData();
+                        uploadFile();
+                    }
+
                 }
                 break;
         }
@@ -301,75 +320,155 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     }
 
     void submitData() {
+        if (common_class.isNetworkAvailable(this)) {
 
-        JSONArray data = new JSONArray();
-        JSONObject ActivityData = new JSONObject();
-        try {
-            JSONObject HeadItem = new JSONObject();
-            HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
-            HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-            HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
+            AlertDialogBox.showDialog(CoolerInfoActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                @Override
+                public void PositiveMethod(DialogInterface dialog, int id) {
+                    common_class.ProgressdialogShow(1, "");
 
-            HeadItem.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
-
-            HeadItem.put("date", Common_Class.GetDatewothouttime());
-
-            HeadItem.put("tagNo", etTagNo.getText().toString());
-            HeadItem.put("make", etMake.getText().toString());
-            HeadItem.put("coolerType", etCoolerType.getText().toString());
-
-            HeadItem.put("recDate", tvReceivedDate.getText().toString());
-            HeadItem.put("cbPurity", cbPurity.isChecked());
-
-            HeadItem.put("cbFrontage", cbFrontage.isChecked());
-            HeadItem.put("cbNotAvailable", cbAvail.isChecked());
-            HeadItem.put("cbNotWorking", cbNoWrk.isChecked());
-            HeadItem.put("remarks", etRemarks.getText().toString());
-
-            ActivityData.put("Cooler_Header", HeadItem);
-            JSONArray Order_Details = new JSONArray();
-            for (int z = 0; z < coolerFileList.size(); z++) {
-
-                if (coolerFileList.get(z).getFileUrls() != null) {
-                    for (int f = 0; f < coolerFileList.get(z).getFileUrls().size(); f++) {
-                        JSONObject ProdItem = new JSONObject();
-                        ProdItem.put("cooler_filename", coolerFileList.get(z).getFileUrls().get(f));
-                        Order_Details.put(ProdItem);
-                    }
-                }
-
-            }
-            ActivityData.put("file_Details", Order_Details);
-            data.put(ActivityData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> responseBodyCall = apiInterface.approveCIEntry(data.toString());
-        responseBodyCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()) {
+                    JSONArray data = new JSONArray();
+                    JSONObject ActivityData = new JSONObject();
                     try {
+                        JSONObject HeadItem = new JSONObject();
+                        HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
 
-                        JSONObject jsonObjects = new JSONObject(response.body().toString());
-                        String san = jsonObjects.getString("success");
-                        Log.e("Success_Message", san);
+                        HeadItem.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
 
-                        if (jsonObjects.getBoolean("success")) {
-                            common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
+                        HeadItem.put("date", Common_Class.GetDatewothouttime());
+
+                        HeadItem.put("tagNo", etTagNo.getText().toString());
+                        HeadItem.put("make", etMake.getText().toString());
+                        HeadItem.put("coolerType", etCoolerType.getText().toString());
+
+                        HeadItem.put("recDate", tvReceivedDate.getText().toString());
+                        HeadItem.put("cbPurity", "" + cbPurity.isChecked());
+
+                        HeadItem.put("cbFrontage", "" + cbFrontage.isChecked());
+                        HeadItem.put("cbNotAvailable", "" + cbAvail.isChecked());
+                        HeadItem.put("cbNotWorking", "" + cbNoWrk.isChecked());
+                        HeadItem.put("remarks", etRemarks.getText().toString());
+                        HeadItem.put("lat", strLoc[0]);
+                        HeadItem.put("lng", strLoc[1]);
+
+
+                        ActivityData.put("Cooler_Header", HeadItem);
+
+                        for (int z = 0; z < coolerFileList.size(); z++) {
+
+                            String type = "";
+                            switch (z) {
+                                case 0:
+                                    type = "purity";
+                                    break;
+                                case 1:
+                                    type = "frontage";
+                                    break;
+                                case 2:
+                                    type = "notworking";
+                                    break;
+                            }
+                            JSONArray Order_Details = new JSONArray();
+                            if (coolerFileList.get(z).getFileUrls() != null) {
+                                for (int f = 0; f < coolerFileList.get(z).getFileUrls().size(); f++) {
+                                    JSONObject ProdItem = new JSONObject();
+                                    String filePath = coolerFileList.get(z).getFileUrls().get(f).replaceAll("file:/", "");
+                                    File file = new File(filePath);
+
+                                    ProdItem.put("cooler_filetype", type);
+                                    ProdItem.put("cooler_filename", file.getName());
+                                    Order_Details.put(ProdItem);
+                                }
+
+
+                            }
+                            ActivityData.put(type + "_file_Details", Order_Details);
+
                         }
+
+
+                        data.put(ActivityData);
                     } catch (Exception e) {
-
+                        common_class.ProgressdialogShow(0, "");
+                        e.printStackTrace();
                     }
-                }
-            }
+                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                    Call<JsonObject> responseBodyCall = apiInterface.approveCIEntry(data.toString());
+                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            if (response.isSuccessful()) {
+                                try {
+                                    common_class.ProgressdialogShow(0, "");
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e("SUBMIT_VALUE", "ERROR");
-            }
-        });
+                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                    String san = jsonObjects.getString("success");
+                                    Log.e("Success_Message", san);
+
+                                    common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
+
+                                    if (jsonObjects.getBoolean("success")) {
+                                        finish();
+                                    }
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            common_class.ProgressdialogShow(0, "");
+                            Log.e("SUBMIT_VALUE", "ERROR");
+                        }
+                    });
+
+                }
+                @Override
+                public void NegativeMethod(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+
+                }
+            });
+        } else {
+            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            Log.v("cooler:", apiDataResponse);
+
+            // {"success":true,"Data":[{"TagNo":"10120120185","Make":"INDICOOL","CoolerType":"HARD TOP","ReceivedDate":"2020-12-17"}]}
+            switch (key) {
+                case Constants.COOLER_INFO:
+
+                    JSONObject obj = new JSONObject(apiDataResponse);
+
+                    if (obj.getBoolean("success")) {
+
+                        JSONArray arr = obj.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject arrObj = arr.getJSONObject(i);
+                            etTagNo.setText("" + arrObj.getString("TagNo"));
+                            etMake.setText("" + arrObj.getString("Make"));
+                            etCoolerType.setText("" + arrObj.getString("CoolerType"));
+                            tvReceivedDate.setText("" + arrObj.getString("ReceivedDate"));
+                        }
+                    } else {
+                        common_class.showMsg(this, obj.getString("Msg"));
+                        common_class.CommonIntentwithFinish(Invoice_History.class);
+
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+        }
+    }
+
 }

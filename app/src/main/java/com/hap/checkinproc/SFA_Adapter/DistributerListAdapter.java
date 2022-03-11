@@ -66,6 +66,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
             holder.tvDistName.setText(itm.getString("name"));
             holder.tvDistAdd.setText(itm.getString("Addr1"));
 
+
             NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
 
             holder.rlRefresh.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +111,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                                             AryDta.getJSONObject(position).put("balUpdatedTime", Common_Class.GetDatemonthyearTimeformat());
 
 
-                                           // shared_common_pref.save(Constants.Distributor_List,AryDta.toString());
+                                            // shared_common_pref.save(Constants.Distributor_List,AryDta.toString());
                                             JSONArray distArr = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
 
                                             for (int i = 0; i < distArr.length(); i++) {
@@ -158,12 +159,15 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                     try {
                         Common_Class common_class = new Common_Class(context);
                         JSONObject itm = AryDta.getJSONObject(position);
-                        if (Common_Class.isNullOrEmpty(itm.getString("lat")) || Common_Class.isNullOrEmpty(itm.getString("lon"))) {
+                        if (Common_Class.isNullOrEmpty(itm.getString("Latlong"))) {
                             common_class.showMsg(Reports_Distributor_Name.reports_distributor_name, "No route is found");
                         } else {
+
+                            String[] latlongs = itm.getString("Latlong").split("\\.");
+
                             Intent intent = new Intent(context, MapDirectionActivity.class);
-                            intent.putExtra(Constants.DEST_LAT, itm.getString("lat"));
-                            intent.putExtra(Constants.DEST_LNG, itm.getString("long"));
+                            intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+                            intent.putExtra(Constants.DEST_LNG, latlongs[1]);
                             intent.putExtra(Constants.DEST_NAME, itm.getString("name"));
                             context.startActivity(intent);
                         }

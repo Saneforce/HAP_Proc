@@ -189,7 +189,6 @@ public class Retailer_Modal_List {
     @Expose
     private String CustomerCode;
 
-
     public Retailer_Modal_List getRetailer_modal_list() {
         return retailer_modal_list;
     }

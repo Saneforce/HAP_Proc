@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.16";
+    public static String Version_Name = "ver 3.3.17";
     public static String Work_Type = "0";
     public static int count;
 
@@ -542,6 +542,11 @@ public class Common_Class {
 
 
                 switch (key) {
+                    case Constants.COOLER_INFO:
+                        axnname = "get/coolerinfo";
+                        data.put("retailerCode", Shared_Common_Pref.OutletCode);
+                        data.put("dt",Common_Class.GetDatewothouttime());
+                        break;
                     case Constants.PLANT_MASTER:
                         axnname = "get/plantmaster";
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
@@ -1257,7 +1262,7 @@ public class Common_Class {
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
                 String DivERP = jsonObject1.optString("DivERP");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP);
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP,jsonObject1.optString("Latlong"));
                 distributor_master.add(Model_Pojo);
 
             }

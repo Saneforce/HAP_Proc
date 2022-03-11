@@ -17,16 +17,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
-import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -36,7 +34,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +53,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         public TextView textviewname, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC, llDataParent;
+        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC, llDataParent, icFreezer;
         ImageView icMob, btnEditRet;
         RecyclerView lstTdyView, lstPreView;
         Button btnView;
@@ -69,6 +66,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 textviewname = view.findViewById(R.id.retailername);
                 parent_layout = view.findViewById(R.id.parent_layout);
                 llDataParent = view.findViewById(R.id.llDataParent);
+                icFreezer = view.findViewById(R.id.icFreezer);
 
                 invoicedate = view.findViewById(R.id.invoicedate);
                 tvRetailorCode = view.findViewById(R.id.retailorCode);
@@ -168,6 +166,13 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             holder.icAC.setVisibility(View.INVISIBLE);
             if (mRetailer_Modal_List.getDelivType() != null && mRetailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
                 holder.icAC.setVisibility(View.VISIBLE);
+            }
+
+
+            if (!Common_Class.isNullOrEmpty(mRetailer_Modal_List.getFreezer_required()) && mRetailer_Modal_List.getFreezer_required().equalsIgnoreCase("yes")) {
+                holder.icFreezer.setVisibility(View.VISIBLE);
+            } else {
+                holder.icFreezer.setVisibility(View.GONE);
             }
 
             SimpleDateFormat fdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

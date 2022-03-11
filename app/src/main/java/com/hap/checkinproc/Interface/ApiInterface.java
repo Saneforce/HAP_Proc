@@ -576,8 +576,9 @@ public interface ApiInterface {
     Call<ResponseBody> GetRouteObject310(@QueryMap Map<String, String> params,
                                          @Field("data") String data);
 
+
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=approve/cisentry")
+    @POST("Db_v310.php?axn=save/coolerinfo")
     Call<JsonObject> approveCIEntry(@Field("data") String toString);
 
     @FormUrlEncoded

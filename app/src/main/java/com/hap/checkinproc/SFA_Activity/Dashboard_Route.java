@@ -104,7 +104,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     ImageView ivToolbarHome, ivBtnRpt;
     LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder;
     TabAdapter adapter;
-    Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient, swBandC;
+    Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient, swBandC, swFreezerOutlet, swNoFreezerOutlet;
     int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
@@ -117,7 +117,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     private String mCategoryName = "ALL", mSubCategoryName = "ALL";
     private final ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
 
-    String categoryType = "";
+    String categoryType = "",freezerFilter="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,6 +219,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             swAmbient = findViewById(R.id.swAmbient);
             swMinus18 = findViewById(R.id.swMinus18);
             swBandC = findViewById(R.id.swBandC);
+            swFreezerOutlet = findViewById(R.id.swFreezerOutlet);
+            swNoFreezerOutlet = findViewById(R.id.swNofreezerOutlet);
 
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(4);
@@ -279,6 +281,31 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     setPagerAdapter(false);
+                }
+            });
+
+
+            swFreezerOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swNoFreezerOutlet.setChecked(false);
+
+
+
+                    }
+                    getFilterType(swFreezerOutlet.isChecked(),swNoFreezerOutlet.isChecked());
+                }
+            });
+
+            swNoFreezerOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swFreezerOutlet.setChecked(false);
+                    }
+
+                    getFilterType(swFreezerOutlet.isChecked(),swNoFreezerOutlet.isChecked());
                 }
             });
 
@@ -495,6 +522,11 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    private void getFilterType(boolean isFreezerOutlet, boolean isNoFreezerOutlet) {
+        freezerFilter=isFreezerOutlet?"Yes":isNoFreezerOutlet?"No":"";
+        setPagerAdapter(true);
+    }
+
     private void getCategoryType(boolean isMinus18, boolean isPlus4, boolean isAmbient, boolean isBandC) {
         categoryType = isMinus18 ? "-18" : isPlus4 ? "+4" : isAmbient ? "Ambient" : isBandC ? "B&C" : "";
         Log.v("categoryTypes:DR", categoryType);
@@ -652,8 +684,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
         subList.clear();
         subList.addAll(sub);
 
-        for (int i=0;i<subList.size();i++ ){
-            if(Common_Class.isNullOrEmpty(subList.get(i)))
+        for (int i = 0; i < subList.size(); i++) {
+            if (Common_Class.isNullOrEmpty(subList.get(i)))
                 subList.remove(i);
         }
 
@@ -797,7 +829,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName);
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName,freezerFilter);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -1122,10 +1154,10 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             txTotUniOtltCnt.setText(String.valueOf(CountTotUni));
 
             if (isFilter) {
-                Log.v("categoryTypes:", categoryType);
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, categoryType, mSubCategoryName);
+                Log.v("categoryTypes:", categoryType+" :freezer:"+freezerFilter);
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, categoryType, mSubCategoryName,freezerFilter);
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName);
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName,freezerFilter);
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);

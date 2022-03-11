@@ -19,13 +19,13 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     List<Retailer_Modal_List> Retailer_Modal_ListFilter;
     List<Retailer_Modal_List> mRetailer_Modal_List;
     private int mTabPos = -1;
-    private String mSearchText = "", mCategory = "", mCatType = "", mSubCategory = "";
+    private String mSearchText = "", mCategory = "", mCatType = "", mSubCategory = "", mFreezer = "";
     private String mRetType = "1";
     String mActivityName;
 
     Context mContext;
 
-    public TabAdapter(FragmentManager fm, int tabPos, List<Retailer_Modal_List> retailer_Modal_List, String RetType, Context context, String name, String category, String catType, String subCategory) {
+    public TabAdapter(FragmentManager fm, int tabPos, List<Retailer_Modal_List> retailer_Modal_List, String RetType, Context context, String name, String category, String catType, String subCategory, String mFreezer) {
         super(fm);
         this.mRetailer_Modal_List = retailer_Modal_List;
         this.mRetType = RetType;
@@ -34,6 +34,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         this.mCategory = category;
         this.mCatType = catType;
         this.mSubCategory = subCategory;
+        this.mFreezer = mFreezer;
 
         Log.v("tabAdapter: ", "pos:" + tabPos);
     }
@@ -56,7 +57,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     }
 
 
-    public void notifyData(List<Retailer_Modal_List> retailer_Modal_List, int tabPos, String filterText, String RetType, String category, String catType, String subCategory) {
+    public void notifyData(List<Retailer_Modal_List> retailer_Modal_List, int tabPos, String filterText, String RetType, String category, String catType, String subCategory, String mFreezer) {
         this.mTabPos = tabPos;
         this.mRetType = RetType;
         this.mRetailer_Modal_List = retailer_Modal_List;
@@ -64,6 +65,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         this.mCategory = category;
         this.mCatType = catType;
         this.mSubCategory = subCategory;
+        this.mFreezer = mFreezer;
         notifyDataSetChanged();
 
     }
@@ -96,7 +98,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
 
             for (int i = 0; i < mRetailer_Modal_List.size(); i++) {
-                Log.v("categoryTypes:res:", mRetailer_Modal_List.get(i).getCategory_Universe_Id() + " :filter:" + mCatType
+                Log.v("categoryTypes:res:", "freezer:" + mFreezer + ":" + mRetailer_Modal_List.get(i).getFreezer_required() + mRetailer_Modal_List.get(i).getCategory_Universe_Id() + " :filter:" + mCatType
                         + " cat:" + mRetailer_Modal_List.get(i).getOutletClass() + " :sub:" + mRetailer_Modal_List.get(i).getSpeciality());
 
                 String outletType = mRetailer_Modal_List.get(i).getType() == null ? "0" : mRetailer_Modal_List.get(i).getType();
@@ -108,7 +110,8 @@ public class TabAdapter extends FragmentStatePagerAdapter {
                         (flag != mTabPos)) && (Common_Class.isNullOrEmpty(mCategory) || mCategory.equalsIgnoreCase("ALL") ||
                         mCategory.equalsIgnoreCase(mRetailer_Modal_List.get(i).getOutletClass())) &&
                         (mCatType.equalsIgnoreCase("") || (mRetailer_Modal_List.get(i).getCategory_Universe_Id() != null && ((mCatType.contains(mRetailer_Modal_List.get(i).getCategory_Universe_Id())) || (mRetailer_Modal_List.get(i).getCategory_Universe_Id().contains(mCatType)))))
-                        && (mSubCategory.equalsIgnoreCase("") || mSubCategory.equalsIgnoreCase("ALL") || (mRetailer_Modal_List.get(i).getSpeciality() != null && mRetailer_Modal_List.get(i).getSpeciality().equalsIgnoreCase(mSubCategory)))) {
+                        && (mSubCategory.equalsIgnoreCase("") || mSubCategory.equalsIgnoreCase("ALL") || (mRetailer_Modal_List.get(i).getSpeciality() != null && mRetailer_Modal_List.get(i).getSpeciality().equalsIgnoreCase(mSubCategory)))
+                        && (Common_Class.isNullOrEmpty(mFreezer) || (!Common_Class.isNullOrEmpty(mRetailer_Modal_List.get(i).getFreezer_required()) && mFreezer.equalsIgnoreCase(mRetailer_Modal_List.get(i).getFreezer_required())))) {
                     Retailer_Modal_ListFilter.add(mRetailer_Modal_List.get(i));
                 }
             }

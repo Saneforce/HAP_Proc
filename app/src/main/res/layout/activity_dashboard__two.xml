@@ -630,7 +630,7 @@
                                 android:layout_marginLeft="@dimen/C5dp"
 
                                 android:layout_marginTop="5dp"
-                                android:src="@color/green" />
+                              />
 
 
                             <TextView

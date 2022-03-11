@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -144,6 +145,21 @@
                             android:layout_marginRight="@dimen/C5dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_shipment_cooler" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/icFreezer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:scaleType="centerCrop"
+                            android:tint="@color/colorPrimaryDark"
+                            android:src="@drawable/ic_freezer"
+                            tools:ignore="UseAppTint" />
                     </LinearLayout>
 
 

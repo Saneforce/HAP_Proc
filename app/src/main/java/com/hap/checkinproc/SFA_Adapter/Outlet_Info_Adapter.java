@@ -1,6 +1,8 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,11 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -31,13 +36,15 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, txRetNo, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt;
-        public LinearLayout retStaBdg, icAC, layparent;
+        public LinearLayout retStaBdg, icAC, icFreezer, layparent, linDirection;
         Button btnSend;
         EditText etSNo;
         RelativeLayout rlSeqParent;
 
         public MyViewHolder(View view) {
             super(view);
+            linDirection = view.findViewById(R.id.linDirection);
+            icFreezer = view.findViewById(R.id.icFreezer);
 
             layparent = view.findViewById(R.id.layparent);
             textviewname = view.findViewById(R.id.retailername);
@@ -135,6 +142,38 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         });
 
         holder.txRetNo.setText("" + Retailer_Modal_List.getListedDrSlNo().toString());
+
+
+        holder.linDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sOutletName = Retailer_Modal_List.getName();
+
+                drawRoute(sOutletName, Retailer_Modal_List.getLat(), Retailer_Modal_List.getLong());
+            }
+        });
+
+        if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.getFreezer_required()) && Retailer_Modal_List.getFreezer_required().equalsIgnoreCase("yes")) {
+            holder.icFreezer.setVisibility(View.VISIBLE);
+        } else {
+            holder.icFreezer.setVisibility(View.GONE);
+        }
+
+
+    }
+
+    private void drawRoute(String OutletName, String sLat, String sLng) {
+        try {
+            Intent intent = new Intent(context, MapDirectionActivity.class);
+            intent.putExtra(Constants.DEST_LAT, sLat);
+            intent.putExtra(Constants.DEST_LNG, sLng);
+            intent.putExtra(Constants.DEST_NAME, OutletName);
+            intent.putExtra(Constants.NEW_OUTLET, "");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Log.v("OutletInfoDrawRoute:", e.getMessage());
+        }
 
     }
 
