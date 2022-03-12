@@ -145,7 +145,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         showDashboardData();
 
 
-        switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)){
+        switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
             case Constants.CHECKIN_TYPE:
                // menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
                 menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));

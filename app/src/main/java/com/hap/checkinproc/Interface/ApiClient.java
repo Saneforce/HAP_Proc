@@ -23,7 +23,9 @@ public class ApiClient {
             BASE_URL = "http://primary.hap.in/server/";
         }
 
-     //   BASE_URL = "https://checkin.hap.in/";
+      //  BASE_URL = "http://hapins.sanfmcg.com/server/";
+
+        //   BASE_URL = "https://checkin.hap.in/";
         Log.d("BaseURL", BASE_URL);
         if (retrofit == null) {
 

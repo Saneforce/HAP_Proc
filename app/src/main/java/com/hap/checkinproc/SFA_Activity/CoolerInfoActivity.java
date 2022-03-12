@@ -337,7 +337,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
                         HeadItem.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
 
-                        HeadItem.put("date", Common_Class.GetDatewothouttime());
+                        HeadItem.put("date", Common_Class.GetDate());
 
                         HeadItem.put("tagNo", etTagNo.getText().toString());
                         HeadItem.put("make", etMake.getText().toString());

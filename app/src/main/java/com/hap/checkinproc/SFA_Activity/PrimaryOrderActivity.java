@@ -137,6 +137,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     String grpName = "", grpCode = "";
     LinearLayout llDistributor;
 
+    boolean isSubmit = false;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +195,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 distributor_text.setText(sharedCommonPref.getvalue(Constants.Distributor_name, ""));
                 distributor_text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_round_arrow_drop_down_24, 0);
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
-                tvTimer.setVisibility(View.GONE);
+                tvTimer.setVisibility(View.VISIBLE);
             }
 
             Product_ModalSetAdapter = new ArrayList<>();
@@ -512,7 +514,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         try {
             Type type = new TypeToken<ArrayList<Datum>>() {
             }.getType();
-            List<Datum> slotList = gson.fromJson(sharedCommonPref.getvalue(Constants.SlotTime), type);
+            List<Datum> slotList = new ArrayList<>();
+            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SlotTime))) {
+                slotList = gson.fromJson(sharedCommonPref.getvalue(Constants.SlotTime), type);
+            }
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
             long val = 0;
@@ -534,8 +539,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             if (!Common_Class.isNullOrEmpty(time))
                 sharedCommonPref.save(Constants.CUTOFF_TIME, time);
-            else if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME))) {
-                sharedCommonPref.save(Constants.CUTOFF_TIME, "--:--:--");
+            else {
+                sharedCommonPref.save(Constants.CUTOFF_TIME, "23:59:00");
             }
 
         } catch (Exception e) {
@@ -555,11 +560,14 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 ResetSubmitBtn(0);
                 common_class.showMsg(this, "Low A/C Balance...");
 
-            } else if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME)) ||
+            }
+            else if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME)) ||
                     sharedCommonPref.getvalue(Constants.CUTOFF_TIME).equals("--:--:--")) {
                 ResetSubmitBtn(0);
                 common_class.showMsg(this, "Time UP...");
-            } else {
+            }
+
+            else {
                 String sLoc = sharedCommonPref.getvalue("CurrLoc");
                 if (sLoc.equalsIgnoreCase("")) {
                     new LocationFinder(getApplication(), new LocationEvents() {
@@ -694,178 +702,190 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
 
-                    JSONArray data = new JSONArray();
-                    JSONObject ActivityData = new JSONObject();
-                    try {
-                        JSONObject HeadItem = new JSONObject();
-                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
-                        HeadItem.put("Worktype_code", Worktype_code);
-                        HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
-                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
-                        HeadItem.put("Daywise_Remarks", "");
-                        HeadItem.put("UKey", Ukey);
-                        HeadItem.put("orderValue", formatter.format(totalvalues));
-                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
-                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
-                        ActivityData.put("Activity_Report_Head", HeadItem);
+                    if (!isSubmit) {
+                        isSubmit = true;
 
-                        JSONObject OutletItem = new JSONObject();
-                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
-                        OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                        OutletItem.put("orderValue", formatter.format(totalvalues));
-                        OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("NetAmount", formatter.format(totalvalues));
-                        OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
-                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-                        OutletItem.put("ordertype", "order");
-                        OutletItem.put("orderId", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "" : getIntent().getStringExtra(Constants.ORDER_ID));
-                        OutletItem.put("mode", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit");
-                        OutletItem.put("cutoff_time", sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
-                        OutletItem.put("totAmtTax", formatter.format(totTax));
-                        OutletItem.put("groupCode", grpCode);
-                        OutletItem.put("groupName", grpName);
+                        JSONArray data = new JSONArray();
+                        JSONObject ActivityData = new JSONObject();
+                        try {
+                            JSONObject HeadItem = new JSONObject();
+                            HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                            HeadItem.put("Worktype_code", Worktype_code);
+                            HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
+                            HeadItem.put("dcr_activity_date", Common_Class.GetDate());
+                            HeadItem.put("Daywise_Remarks", "");
+                            HeadItem.put("UKey", Ukey);
+                            HeadItem.put("orderValue", formatter.format(totalvalues));
+                            HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                            HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+                            ActivityData.put("Activity_Report_Head", HeadItem);
 
-                        if (strLoc.length > 0) {
-                            OutletItem.put("Lat", strLoc[0]);
-                            OutletItem.put("Long", strLoc[1]);
-                        } else {
-                            OutletItem.put("Lat", "");
-                            OutletItem.put("Long", "");
-                        }
-                        JSONArray Order_Details = new JSONArray();
-                        JSONArray totTaxArr = new JSONArray();
+                            JSONObject OutletItem = new JSONObject();
+                            OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
+                            OutletItem.put("modified_time", Common_Class.GetDate());
+                            OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                            OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
+                            OutletItem.put("orderValue", formatter.format(totalvalues));
+                            OutletItem.put("CashDiscount", cashDiscount);
+                            OutletItem.put("NetAmount", formatter.format(totalvalues));
+                            OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
+                            OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+                            OutletItem.put("ordertype", "order");
+                            OutletItem.put("orderId", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "" : getIntent().getStringExtra(Constants.ORDER_ID));
+                            OutletItem.put("mode", getIntent().getStringExtra(Constants.ORDER_ID) == null ? "new" : "edit");
+                            OutletItem.put("cutoff_time", sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
+                            OutletItem.put("totAmtTax", formatter.format(totTax));
+                            OutletItem.put("groupCode", grpCode);
+                            OutletItem.put("groupName", grpName);
 
-                        JSONArray multipleArr = new JSONArray();
-
-                        JSONArray uomArr = new JSONArray();
-
-                        for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                            JSONObject ProdItem = new JSONObject();
-                            ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
-                            ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
-                            ProdItem.put("Product_ERP", Getorder_Array_List.get(z).getERP_Code());
-                            ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
-                            ProdItem.put("Product_RegularQty", 0);
-                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty()
-                            );
-                            ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                            ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
-                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getSBRate()));
-
-                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
-                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
-                            ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
-                            ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
-                            ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
-                            ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
-                            ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
-                            ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
-                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getConversionFactor());
-
-                            JSONArray tax_Details = new JSONArray();
-
-                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
-                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-
-                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
-                                    JSONObject taxData = new JSONObject();
-
-                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
-                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
-                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
-                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
-                                    taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", formatter.format(amt));
-                                    tax_Details.put(taxData);
-
-                                }
-
-
+                            if (strLoc.length > 0) {
+                                OutletItem.put("Lat", strLoc[0]);
+                                OutletItem.put("Long", strLoc[1]);
+                            } else {
+                                OutletItem.put("Lat", "");
+                                OutletItem.put("Long", "");
                             }
+                            JSONArray Order_Details = new JSONArray();
+                            JSONArray totTaxArr = new JSONArray();
 
-                            ProdItem.put("TAX_details", tax_Details);
+                            JSONArray multipleArr = new JSONArray();
 
+                            JSONArray uomArr = new JSONArray();
 
-                            Order_Details.put(ProdItem);
+                            for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                                JSONObject ProdItem = new JSONObject();
+                                ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
+                                ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
+                                ProdItem.put("Product_ERP", Getorder_Array_List.get(z).getERP_Code());
+                                ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
+                                ProdItem.put("Product_RegularQty", 0);
+                                ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty()
+                                );
+                                ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+                                ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
+                                ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getSBRate()));
 
-                        }
+                                ProdItem.put("free", Getorder_Array_List.get(z).getFree());
+                                ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
+                                ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
+                                ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
+                                ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
+                                ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
+                                ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
+                                ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
+                                ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getConversionFactor());
 
-                        for (int i = 0; i < orderTotTax.size(); i++) {
-                            JSONObject totTaxObj = new JSONObject();
+                                JSONArray tax_Details = new JSONArray();
 
-                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
-                            totTaxArr.put(totTaxObj);
+                                if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+                                        Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
 
-                        }
+                                    for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+                                        JSONObject taxData = new JSONObject();
 
-                        OutletItem.put("TOT_TAX_details", totTaxArr);
-
-
-                        for (int i = 0; i < multiList.size(); i++) {
-                            JSONObject mulObj = new JSONObject();
-
-                            mulObj.put("multiple_name", multiList.get(i).getUOM_Nm());
-                            mulObj.put("multiple_tot_qty", multiList.get(i).getQty());
-                            mulObj.put("multiple_val", multiList.get(i).getMultiple_Qty());
-                            multipleArr.put(mulObj);
-
-                        }
-
-                        OutletItem.put("multiple_details", multipleArr);
-
-
-                        for (int i = 0; i < orderTotUOM.size(); i++) {
-                            JSONObject mulObj = new JSONObject();
-
-                            mulObj.put("uom_name", orderTotUOM.get(i).getUOM_Nm());
-                            mulObj.put("uom_qty", orderTotUOM.get(i).getCnvQty());
-                            uomArr.put(mulObj);
-
-                        }
-
-
-                        OutletItem.put("uom_details", uomArr);
-
-
-                        ActivityData.put("Activity_Doctor_Report", OutletItem);
-                        ActivityData.put("Order_Details", Order_Details);
-                        data.put(ActivityData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.savePrimaryOrder(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.isSuccessful()) {
-                                try {
-                                    Log.e("JSON_VALUES", response.body().toString());
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    ResetSubmitBtn(1);
-                                    common_class.showMsg(PrimaryOrderActivity.this, jsonObjects.getString("Msg"));
-                                    if (jsonObjects.getString("success").equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
-                                        // common_class.CommonIntentwithFinish(SFA_Activity.class);
-                                        startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
+                                        String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+                                        Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+                                        taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+                                        taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+                                        taxData.put("Tax_Type", label);
+                                        taxData.put("Tax_Amt", formatter.format(amt));
+                                        tax_Details.put(taxData);
 
                                     }
 
-                                } catch (Exception e) {
-                                    ResetSubmitBtn(2);
+
+                                }
+
+                                ProdItem.put("TAX_details", tax_Details);
+
+
+                                Order_Details.put(ProdItem);
+
+                            }
+
+                            for (int i = 0; i < orderTotTax.size(); i++) {
+                                JSONObject totTaxObj = new JSONObject();
+
+                                totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
+                                totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
+                                totTaxArr.put(totTaxObj);
+
+                            }
+
+                            OutletItem.put("TOT_TAX_details", totTaxArr);
+
+
+                            for (int i = 0; i < multiList.size(); i++) {
+                                JSONObject mulObj = new JSONObject();
+
+                                mulObj.put("multiple_name", multiList.get(i).getUOM_Nm());
+                                mulObj.put("multiple_tot_qty", multiList.get(i).getQty());
+                                mulObj.put("multiple_val", multiList.get(i).getMultiple_Qty());
+                                multipleArr.put(mulObj);
+
+                            }
+
+                            OutletItem.put("multiple_details", multipleArr);
+
+
+                            for (int i = 0; i < orderTotUOM.size(); i++) {
+                                JSONObject mulObj = new JSONObject();
+
+                                mulObj.put("uom_name", orderTotUOM.get(i).getUOM_Nm());
+                                mulObj.put("uom_qty", orderTotUOM.get(i).getCnvQty());
+                                uomArr.put(mulObj);
+
+                            }
+
+
+                            OutletItem.put("uom_details", uomArr);
+
+
+                            ActivityData.put("Activity_Doctor_Report", OutletItem);
+                            ActivityData.put("Order_Details", Order_Details);
+                            data.put(ActivityData);
+                        } catch (JSONException e) {
+                            isSubmit=false;
+                            e.printStackTrace();
+                        }
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonObject> responseBodyCall = apiInterface.savePrimaryOrder(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        responseBodyCall.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        Log.e("JSON_VALUES", response.body().toString());
+                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                        ResetSubmitBtn(1);
+                                        common_class.showMsg(PrimaryOrderActivity.this, jsonObjects.getString("Msg"));
+                                        if (jsonObjects.getString("success").equals("true")) {
+                                            sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                                            // common_class.CommonIntentwithFinish(SFA_Activity.class);
+                                            startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
+
+                                        }
+
+                                        isSubmit=false;
+
+                                    } catch (Exception e) {
+                                        ResetSubmitBtn(2);
+                                        isSubmit=false;
+                                    }
+                                }
+                                else {
+                                    isSubmit=false;
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e("SUBMIT_VALUE", "ERROR");
-                            ResetSubmitBtn(2);
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Log.e("SUBMIT_VALUE", "ERROR");
+                                ResetSubmitBtn(2);
+                                isSubmit=false;
+                            }
+                        });
+                    }
 
                 }
 
@@ -1255,6 +1275,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                 common_class.brandPos = 0;
 
                                 tvGrpName.setText("" + item.getString("name"));
+                                getSlotTimes(item.getString("id"));
                             } catch (Exception e) {
 
                             }
@@ -1273,18 +1294,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     grplistItems.notify(ProdGroups, this, "" + grpCode, new onListItemClick() {
                         @Override
                         public void onItemClick(JSONObject item) {
-//                        try {
-//                            if (grpName.equalsIgnoreCase("")) {
-//                                grpName = item.getString("name");
-//
-//                                FilterTypes(item.getString("id"));
-//                                common_class.brandPos = 0;
-//
-//                                tvGrpName.setText("" + item.getString("name"));
-//                            }
-//                        } catch (Exception e) {
-//
-//                        }
+
                         }
                     });
                 }
@@ -1299,16 +1309,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public void showGrpProduct(JSONObject item) {
-        try {
-            FilterTypes(item.getString("id"));
-            common_class.brandPos = 0;
-
-            tvGrpName.setText("" + item.getString("name"));
-        } catch (Exception e) {
-
-        }
-    }
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
@@ -1434,6 +1434,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                         tvGrpName.setText("" + item.getString("name"));
 
+                        getSlotTimes(item.getString("id"));
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -1444,9 +1446,20 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
             tvGrpName.setText("" + ProdGroups.getJSONObject(0).getString("name"));
 
+            getSlotTimes(ProdGroups.getJSONObject(0).getString("id"));
 
         } catch (Exception e) {
             Log.v(TAG + "loadData:", e.getMessage());
+        }
+    }
+
+    void getSlotTimes(String grpCode) {
+        try {
+            JsonObject data = new JsonObject();
+            data.addProperty("GrpCode", grpCode);
+            common_class.getDb_310Data(Constants.SlotTime, this, data);
+        } catch (Exception e) {
+
         }
     }
 
@@ -1535,27 +1548,6 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                             common_class.getDb_310Data(Constants.Primary_Product_List, PrimaryOrderActivity.this);
 
-
-//                            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
-//                            LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(PrimaryOrderActivity.this);
-//                            GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//                            Grpgrid.setLayoutManager(GrpgridlayManager);
-//
-//                            RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, PrimaryOrderActivity.this, new onListItemClick() {
-//                                @Override
-//                                public void onItemClick(JSONObject item) {
-//
-//                                    try {
-//                                        FilterTypes(item.getString("id"));
-//                                        common_class.brandPos = 0;
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                            });
-//                            Grpgrid.setAdapter(grplistItems);
-//
-//                            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
                         } catch (Exception e) {
 
                         }
@@ -1579,6 +1571,29 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             switch (key) {
+                case Constants.SlotTime:
+                    Log.v(key + ":", apiDataResponse);
+                    JSONObject obj = new JSONObject(apiDataResponse);
+
+                    if (obj.getBoolean("success")) {
+                        JSONArray arr = obj.getJSONArray("Data");
+                        List<Datum> slotList = new ArrayList<>();
+
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject dataObj = arr.getJSONObject(i);
+
+                            slotList.add(new Datum(dataObj.getString("Tm")));
+                        }
+
+
+                        sharedCommonPref.save(Constants.SlotTime, gson.toJson(slotList));
+                    } else {
+                        sharedCommonPref.clear_pref(Constants.SlotTime);
+
+                    }
+
+
+                    break;
                 case Constants.REPEAT_PRIMARY_ORDER:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
                         ResetSubmitBtn(0);

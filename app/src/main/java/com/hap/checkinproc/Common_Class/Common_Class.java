@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.17";
+    public static String Version_Name = "ver 3.3.19";
     public static String Work_Type = "0";
     public static int count;
 
@@ -542,6 +542,11 @@ public class Common_Class {
 
 
                 switch (key) {
+                    case Constants.SlotTime:
+                        axnname = "get/slottimes";
+                        data.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("GrpCode", jparam.get("GrpCode").getAsString());
+                        break;
                     case Constants.COOLER_INFO:
                         axnname = "get/coolerinfo";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);

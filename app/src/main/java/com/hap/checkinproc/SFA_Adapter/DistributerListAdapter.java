@@ -163,7 +163,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                             common_class.showMsg(Reports_Distributor_Name.reports_distributor_name, "No route is found");
                         } else {
 
-                            String[] latlongs = itm.getString("Latlong").split("\\.");
+                            String[] latlongs = itm.getString("Latlong").split(":");
 
                             Intent intent = new Intent(context, MapDirectionActivity.class);
                             intent.putExtra(Constants.DEST_LAT, latlongs[0]);
