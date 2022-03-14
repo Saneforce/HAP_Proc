@@ -16,10 +16,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -131,6 +133,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private Marker marker;
     JsonArray jOutlets;
     private JsonObject editRetailJsonObj;
+    Switch swFreezerOutlet, swNoFreezerOutlet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,6 +234,33 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
+
+            swFreezerOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swNoFreezerOutlet.setChecked(false);
+
+
+                    }
+
+                    SearchRetailers();
+
+                }
+            });
+
+            swNoFreezerOutlet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swFreezerOutlet.setChecked(false);
+                    }
+                    SearchRetailers();
+
+                }
+            });
+
+
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
 
@@ -305,7 +335,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                             jOutlets = srhOutlets;
                         }
                         availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
-                      setOutletsAdapter(jOutlets);
+                        setOutletsAdapter(jOutlets);
                     } catch (Exception e) {
 
                     }
@@ -444,40 +474,26 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     private void SearchRetailers() {
         JsonArray srhOutlets = new JsonArray();
+
+        String freezerType = swFreezerOutlet.isChecked() ? "yes" : swNoFreezerOutlet.isChecked() ? "No" : "";
+
         for (int sr = 0; sr < jOutlets.size(); sr++) {
             JsonObject jItm = jOutlets.get(sr).getAsJsonObject();
             String itmname = jItm.get("Name").getAsString().toUpperCase();
             String sSchText = txSearchRet.getText().toString().toUpperCase();
             if (((";" + itmname).indexOf(";" + sSchText) > -1) && (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)
-                    || (jItm.get("DistCode").getAsString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_Id))))) {
+                    || (jItm.get("DistCode").getAsString().equalsIgnoreCase(shared_common_pref.getvalue(Constants.Distributor_Id)))) &&
+                    (Common_Class.isNullOrEmpty(freezerType) ||
+                            jItm.get("freezer_required").getAsString().equalsIgnoreCase(freezerType))) {
                 srhOutlets.add(jItm);
             }
         }
         availableoutlets.setText("Available Outlets :" + "\t" + srhOutlets.size());
         setOutletsAdapter(srhOutlets);
-//        recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
-//                getApplicationContext(), new AdapterOnClick() {
-//            @Override
-//            public void onIntentClick(JsonObject item, int position) {
-//                JsonObject jItm = item;
-//
-//                Shared_Common_Pref.Outler_AddFlag = "0";
-//                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
-//                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-//                shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
-//                shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
-//                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
-//                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
-//
-//                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
-//                common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.this, false);
-//                common_class.CommonIntentwithoutFinish(Invoice_History.class);
-//            }
-//        }));
     }
 
 
-    void setOutletsAdapter(JsonArray jOutlets){
+    void setOutletsAdapter(JsonArray jOutlets) {
         recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
                 Nearby_Outlets.this, new AdapterOnClick() {
             @Override
@@ -542,6 +558,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         llExplore = (LinearLayout) findViewById(R.id.llExplore);
         ivExplore = (ImageView) findViewById(R.id.ivExplore);
         ivNearMe = (ImageView) findViewById(R.id.ivNearMe);
+        swFreezerOutlet = findViewById(R.id.swFreezerOutlet);
+        swNoFreezerOutlet = findViewById(R.id.swNofreezerOutlet);
+
 
     }
 

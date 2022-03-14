@@ -487,6 +487,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        <activity-alias-->
+<!--            android:exported="false"-->
+<!--            android:name=".MainActivityAlias"-->
+<!--            android:roundIcon="@mipmap/ic_launcher_round"-->
+<!--            android:label="@string/app_name"-->
+<!--            android:icon="@mipmap/ic_launcher"-->
+<!--            android:enabled="false"-->
+<!--            android:targetActivity=".Activity_Hap.MainActivity">-->
+
+<!--            <intent-filter>-->
+
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+
+<!--            </intent-filter>-->
+
+<!--        </activity-alias>-->
+
+<!--        <activity-alias-->
+<!--            android:exported="false"-->
+<!--            android:name=".MainActivityAlias"-->
+<!--            android:roundIcon="@mipmap/ic_launcher_round"-->
+<!--            android:label="@string/app_name"-->
+<!--            android:icon="@mipmap/ic_launcher"-->
+<!--            android:enabled="false"-->
+<!--            android:targetActivity=".Activity_Hap.MainActivity">-->
+
+<!--            <intent-filter>-->
+
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+
+<!--            </intent-filter>-->
+
+<!--        </activity-alias>-->
+
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait" />

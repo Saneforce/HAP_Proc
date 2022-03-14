@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -90,6 +89,12 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             if (jItem.get("DelivType").getAsString().equalsIgnoreCase("AC")) {
                 holder.icAC.setVisibility(View.VISIBLE);
             }
+            holder.icFreezer.setVisibility(View.GONE);
+            if (jItem.get("freezer_required").getAsString().equalsIgnoreCase("yes")) {
+                holder.icFreezer.setVisibility(View.VISIBLE);
+            }
+
+
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,10 +113,9 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 
 
                         if (!shared_common_pref.getvalue(Constants.Distributor_Id).equalsIgnoreCase(jItem.get("DistCode").getAsString())) {
-                           Nearby_Outlets.nearby_outlets.navigateEditRetailerScreen(jItem,false);
-                        }
-                        else {
-                           Nearby_Outlets.nearby_outlets.navigateEditRetailerScreen(jItem,true);
+                            Nearby_Outlets.nearby_outlets.navigateEditRetailerScreen(jItem, false);
+                        } else {
+                            Nearby_Outlets.nearby_outlets.navigateEditRetailerScreen(jItem, true);
                         }
 
 
@@ -193,6 +197,28 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 }
             });
 
+            holder.linDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        JsonObject jItem = jLists.get(position).getAsJsonObject();
+                        if (Common_Class.isNullOrEmpty(jItem.get("lat").getAsString()) || Common_Class.isNullOrEmpty(jItem.get("long").getAsString())) {
+                            common_class.showMsg(Nearby_Outlets.nearby_outlets, "No route is found");
+                        } else {
+
+                            Intent intent = new Intent(context, MapDirectionActivity.class);
+                            intent.putExtra(Constants.DEST_LAT, jItem.get("lat").getAsString());
+                            intent.putExtra(Constants.DEST_LNG, jItem.get("long").getAsString());
+                            intent.putExtra(Constants.DEST_NAME, jItem.get("Name").getAsString());
+                            context.startActivity(intent);
+                        }
+                    } catch (Exception e) {
+
+                        Log.v("NearbyOutlet:Dir: ", e.getMessage());
+                    }
+                }
+            });
+
 
         } catch (Exception e) {
             Log.v("RouteAdapter: ", e.getMessage());
@@ -240,14 +266,14 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             holder.txPreTotQty.setText(String.valueOf(iQty));
             holder.txPreTotVal.setText("₹" + new DecimalFormat("##0.00").format(iVal));
 
-            holder.linDirection.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    String sOutletName = mRetailer_Modal_List.getName();
-//
-//                    drawRoute(sOutletName, mRetailer_Modal_List.getLat(), mRetailer_Modal_List.getLong());
-                }
-            });
+//            holder.linDirection.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+////                    String sOutletName = mRetailer_Modal_List.getName();
+////
+////                    drawRoute(sOutletName, mRetailer_Modal_List.getLat(), mRetailer_Modal_List.getLong());
+//                }
+//            });
 
 
         } catch (JSONException e) {
@@ -268,7 +294,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName, txRetailCode, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txDistance, txTdyDt, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo;
-        LinearLayout parent_layout, icAC, linDirection;
+        LinearLayout parent_layout, icAC, linDirection, icFreezer;
         RecyclerView lstTdyView, lstPreView;
         ImageView icMob;
         ImageView ivEdit;
@@ -285,6 +311,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 txOwnerNm = view.findViewById(R.id.txOwnerNm);
                 txMobile = view.findViewById(R.id.txMobile);
                 icMob = view.findViewById(R.id.icMob);
+                icFreezer = view.findViewById(R.id.icFreezer);
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
                 txDistance = view.findViewById(R.id.txDistance);
