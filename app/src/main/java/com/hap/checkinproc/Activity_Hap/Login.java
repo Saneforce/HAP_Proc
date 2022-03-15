@@ -598,9 +598,9 @@ public class Login extends AppCompatActivity {
                 }
                 //eMail = "srinivas.p@hap.in";
                 //eMail = "sajan@hap.in";
-                  //eMail = "1005985@hap.in";
+                //eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-                 // eMail = "ciadmin@hap.in";
+                // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -625,7 +625,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-               // eMail = "1013362@hap.in";//(-18)
+                // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -634,10 +634,12 @@ public class Login extends AppCompatActivity {
 
                 // eMail="sivakumar.s@hap.in";
 
-               // eMail = "1026710@hap.in";
+                // eMail = "1026710@hap.in";
 
-               // eMail="1017169@hap.in";
+                // eMail="1017169@hap.in";
 
+
+               // eMail = "1013678@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -652,6 +654,44 @@ public class Login extends AppCompatActivity {
                                         Gson gson = new Gson();
                                         assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
+
+                                        try {
+                                            PackageManager manager = getPackageManager();
+
+                                            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals("Distributor")) {
+
+                                                // enable old icon
+                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
+                                                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+                                                // disable new icon
+                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
+                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
+                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+                                                Toast.makeText(Login.this, "Enable Distributor Icon", Toast.LENGTH_LONG).show();
+                                            } else {
+
+                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
+                                                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+                                                // disable new icon
+                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
+                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
+                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+                                                Toast.makeText(Login.this, "Enable FFA Icon", Toast.LENGTH_LONG).show();
+                                            }
+
+                                        } catch (Exception e) {
+                                            Log.v("launcherIcon:",e.getMessage());
+                                        }
+
+
                                     } catch (Exception e) {
                                         Log.v("Login:assign", e.getMessage());
                                     }

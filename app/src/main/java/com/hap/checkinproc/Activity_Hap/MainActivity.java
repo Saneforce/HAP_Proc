@@ -7,14 +7,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN = 3000;
     public static final String mypreference = "mypref";
+    Shared_Common_Pref shared_common_pref;
+    ImageView ivLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +27,23 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setContentView(R.layout.activity_main);
+            shared_common_pref = new Shared_Common_Pref(this);
+            ivLogo = findViewById(R.id.ivLogo);
+
+
+            switch (shared_common_pref.getvalue(Constants.LOGIN_TYPE)) {
+                case Constants.DISTRIBUTER_TYPE:
+                    ivLogo.setImageResource(R.mipmap.ic_so_launcher_foreground);
+
+                    break;
+                case Constants.CHECKIN_TYPE:
+                    ivLogo.setImageResource(R.mipmap.ic_ffa_launcher_foreground);
+                    break;
+                default:
+                    ivLogo.setImageResource(R.drawable.clogo);
+
+                    break;
+            }
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -34,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(MainActivity.this, PrivacyPolicy.class);
                         startActivity(intent);
                     } else {
+
+
                         Intent intent = new Intent(MainActivity.this, Login.class);
                         startActivity(intent);
                     }
