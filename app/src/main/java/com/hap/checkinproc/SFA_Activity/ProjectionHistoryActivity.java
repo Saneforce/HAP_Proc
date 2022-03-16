@@ -117,6 +117,8 @@ public class ProjectionHistoryActivity extends AppCompatActivity implements Mast
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+                sharedCommonPref.save(Constants.DivERP,myDataset.get(position).getDivERP());
+
                 common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);

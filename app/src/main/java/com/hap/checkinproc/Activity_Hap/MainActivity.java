@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             shared_common_pref = new Shared_Common_Pref(this);
             ivLogo = findViewById(R.id.ivLogo);
 
+            String value = getIntent().getStringExtra("loading");
+
 
             switch (shared_common_pref.getvalue(Constants.LOGIN_TYPE)) {
                 case Constants.DISTRIBUTER_TYPE:
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences sharedpreferences;
                     sharedpreferences = getSharedPreferences(mypreference,
                             Context.MODE_PRIVATE);
+
                     if (sharedpreferences.getString("nameKey", "") == "") {
                         Intent intent = new Intent(MainActivity.this, PrivacyPolicy.class);
                         startActivity(intent);

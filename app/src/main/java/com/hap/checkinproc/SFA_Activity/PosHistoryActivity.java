@@ -113,6 +113,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                 distributor_text.setText(myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+                sharedCommonPref.save(Constants.DivERP,myDataset.get(position).getDivERP());
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());

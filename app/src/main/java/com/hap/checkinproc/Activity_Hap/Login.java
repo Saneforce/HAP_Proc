@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -98,6 +99,7 @@ public class Login extends AppCompatActivity {
     private ProgressDialog mProgress;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    final Handler handler = new Handler();
 
     private LocationReceiver rcvMReceiver;
     private SANGPSTracker mLUService;
@@ -119,6 +121,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
         db = new DatabaseHandler(this);
         shared_common_pref = new Shared_Common_Pref(this);
 
@@ -555,6 +559,10 @@ public class Login extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
         }
         firebaseAuth.addAuthStateListener(authStateListener);
+
+
+//        if(getIntent().getStringExtra("loading")!=null)
+//            assignLoginData();
     }
 
     @Override
@@ -600,7 +608,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-                // eMail = "ciadmin@hap.in";
+               // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -625,7 +633,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-                // eMail = "1013362@hap.in";//(-18)
+               // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -639,7 +647,7 @@ public class Login extends AppCompatActivity {
                 // eMail="1017169@hap.in";
 
 
-               // eMail = "1013678@hap.in";
+                //eMail = "1006208@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -652,13 +660,33 @@ public class Login extends AppCompatActivity {
 
                                     try {
                                         Gson gson = new Gson();
-                                        assignLoginData(response.body(), requestCode);
+//                                        assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
+//                                        String[] iconColour = {"com.hap.checkinproc.Activity_Hap.DefaultLauncherAlias", "com.hap.checkinproc.Activity_Hap.FFALauncherAlias", "com.hap.checkinproc.Activity_Hap.DistributorLauncherAlias"};
+//
+//                                        String type = response.body().getData().get(0).getLoginType().equalsIgnoreCase(Constants.DISTRIBUTER_TYPE) ? "com.hap.checkinproc.Activity_Hap.DistributorLauncherAlias" : "com.hap.checkinproc.Activity_Hap.FFALauncherAlias";
+//
+//                                        PackageManager manager = getPackageManager();
+//                                        int action;
+//                                        for (String value : iconColour) {
+//                                            if (value.equalsIgnoreCase(type)) {
+//                                                action = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+//                                                Toast.makeText(Login.this, "Enable " + response.body().getData().get(0).getLoginType() + " Icon", Toast.LENGTH_LONG).show();
+//                                            } else {
+//                                                action = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+//                                                // Toast.makeText(Login.this, "Disable " + value + " Icon", Toast.LENGTH_LONG).show();
+//                                            }
+//
+//                                            manager.setComponentEnabledSetting(
+//                                                    new ComponentName(Login.this, value),
+//                                                    action, PackageManager.DONT_KILL_APP);
+//                                        }
+
 
                                         try {
                                             PackageManager manager = getPackageManager();
 
-                                            if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals("Distributor")) {
+                                            if (response.body().getData().get(0).getLoginType().equalsIgnoreCase("Distributor")) {
 
                                                 // enable old icon
                                                 manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
@@ -671,7 +699,9 @@ public class Login extends AppCompatActivity {
                                                 manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
                                                         , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 
-                                                Toast.makeText(Login.this, "Enable Distributor Icon", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(Login.this, "Enable " + Constants.DISTRIBUTER_TYPE + " Icon", Toast.LENGTH_LONG).show();
+
+
                                             } else {
 
                                                 manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
@@ -684,12 +714,28 @@ public class Login extends AppCompatActivity {
                                                 manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
                                                         , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 
-                                                Toast.makeText(Login.this, "Enable FFA Icon", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(Login.this, "Enable " + Constants.CHECKIN_TYPE + " Icon", Toast.LENGTH_LONG).show();
+
+
                                             }
 
                                         } catch (Exception e) {
-                                            Log.v("launcherIcon:",e.getMessage());
+                                            Log.v("launcherIcon:", e.getMessage());
                                         }
+
+                                        mProgress.setTitle("Please wait while we configure...");
+                                        mProgress.show();
+
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                assignLoginData(response.body(), requestCode);
+
+//                                                Intent intent = new Intent(Login.this, MainActivity.class);
+//                                                intent.putExtra("loading", "loading");
+//                                                startActivity(intent);
+
+                                            }
+                                        }, 1000);
 
 
                                     } catch (Exception e) {
@@ -899,6 +945,8 @@ public class Login extends AppCompatActivity {
                     userEditor.putBoolean("Login", false);
                 userEditor.apply();
                 startActivity(intent);
+                overridePendingTransition(R.anim.in, R.anim.out);
+
                 try {
                     mProgress.dismiss();
                 } catch (Exception e) {

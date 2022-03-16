@@ -120,6 +120,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
+                sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
                 common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
@@ -307,14 +308,14 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 Date d1 = sdf.parse(Common_Class.GetTime());
                 Date d2 = sdf.parse(cutoff_time);
                 long elapsed = d2.getTime() - d1.getTime();
-                if (elapsed >= 0) {
-                    sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
-                    Intent intent = new Intent(this, PrimaryOrderActivity.class);
-                    intent.putExtra(Constants.ORDER_ID, orderNo);
-                    intent.putExtra(Constants.CATEGORY_TYPE, categoryType);
-                    Shared_Common_Pref.TransSlNo = orderNo;
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.in, R.anim.out);
+                  if (elapsed >= 0) {
+                sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                Intent intent = new Intent(this, PrimaryOrderActivity.class);
+                intent.putExtra(Constants.ORDER_ID, orderNo);
+                intent.putExtra(Constants.CATEGORY_TYPE, categoryType);
+                Shared_Common_Pref.TransSlNo = orderNo;
+                startActivity(intent);
+                overridePendingTransition(R.anim.in, R.anim.out);
 
                 } else {
                     common_class.showMsg(this, "Time UP...");

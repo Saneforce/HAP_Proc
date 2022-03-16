@@ -229,7 +229,21 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 common_class.getDb_310Data(Constants.Primary_Product_List, this);
             else {
                 Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_PRIMARY_DATA), userType);
-                loadCategoryData("NEW");
+
+                boolean isHave = false;
+                for (int i = 0; i < Product_Modal.size(); i++) {
+                    if (Product_Modal.get(i).getQty() > 0) {
+                        isHave = true;
+                        loadCategoryData("SAVE", "" + Product_Modal.get(i).getProduct_Grp_Code());
+                        break;
+                    }
+                }
+
+                if (!isHave) {
+                    loadCategoryData("NEW", "");
+
+                }
+
             }
 
             ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -560,14 +574,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 ResetSubmitBtn(0);
                 common_class.showMsg(this, "Low A/C Balance...");
 
-            }
-            else if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME)) ||
+            } else if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.CUTOFF_TIME)) ||
                     sharedCommonPref.getvalue(Constants.CUTOFF_TIME).equals("--:--:--")) {
                 ResetSubmitBtn(0);
                 common_class.showMsg(this, "Time UP...");
-            }
-
-            else {
+            } else {
                 String sLoc = sharedCommonPref.getvalue("CurrLoc");
                 if (sLoc.equalsIgnoreCase("")) {
                     new LocationFinder(getApplication(), new LocationEvents() {
@@ -845,7 +856,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             ActivityData.put("Order_Details", Order_Details);
                             data.put(ActivityData);
                         } catch (JSONException e) {
-                            isSubmit=false;
+                            isSubmit = false;
                             e.printStackTrace();
                         }
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -866,15 +877,14 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                                         }
 
-                                        isSubmit=false;
+                                        isSubmit = false;
 
                                     } catch (Exception e) {
                                         ResetSubmitBtn(2);
-                                        isSubmit=false;
+                                        isSubmit = false;
                                     }
-                                }
-                                else {
-                                    isSubmit=false;
+                                } else {
+                                    isSubmit = false;
                                 }
                             }
 
@@ -882,7 +892,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             public void onFailure(Call<JsonObject> call, Throwable t) {
                                 Log.e("SUBMIT_VALUE", "ERROR");
                                 ResetSubmitBtn(2);
-                                isSubmit=false;
+                                isSubmit = false;
                             }
                         });
                     }
@@ -1263,7 +1273,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             }
 
             //boolMinu18 = false;
-            if (boolMinu18 && !isEditOrder) {
+            Log.v(TAG + "DivERP:", sharedCommonPref.getvalue(Constants.DivERP));
+            if (sharedCommonPref.getvalue(Constants.DivERP).equalsIgnoreCase("21") && !isEditOrder) {
                 if (Getorder_Array_List.size() == 0)
                     grplistItems.notify(ProdGroups, this, "", new onListItemClick() {
                         @Override
@@ -1387,41 +1398,34 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         ResetSubmitBtn(2);
     }
 
-    void loadCategoryData(String mode) {
+    void loadCategoryData(String mode, String id) {
         try {
             ProdGroups = db.getMasterData(Constants.ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
 
-            for (int i = 0; i < ProdGroups.length(); i++) {
-                JSONObject grpName = ProdGroups.getJSONObject(i);
-                if (mode.equalsIgnoreCase("new") && grpName.getString("name").equalsIgnoreCase("-18")) {
-                    boolMinu18 = true;
-                    Shared_Common_Pref.ORDER_TYPE = grpName.getString("id");
-                    break;
-                } else if (mode.equalsIgnoreCase("edit")) {
-                    if (orderType.equalsIgnoreCase(grpName.getString("name"))) {
-                        Shared_Common_Pref.ORDER_TYPE = grpName.getString("id");
-                        boolMinu18 = true;
-                        break;
-
-                    }
-                }
-            }
+            String saveProductname = "";
 
 
-            if (mode.equalsIgnoreCase("edit") && boolMinu18) {
+            if (sharedCommonPref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
                 for (int i = 0; i < ProdGroups.length(); i++) {
                     JSONObject obj = ProdGroups.getJSONObject(i);
-                    JSONArray arr = new JSONArray();
-                    if (obj.getString("name").equalsIgnoreCase(orderType)) {
-                        arr.put(obj);
-                        ProdGroups = arr;
-                        break;
+                    if (mode.equalsIgnoreCase("save")) {
+                        if (obj.getString("id").equalsIgnoreCase(id)) {
+                            selPOS = i;
+                            saveProductname = obj.getString("name");
+                            break;
+                        }
+                    } else if (mode.equalsIgnoreCase("edit")) {
+                        JSONArray arr = new JSONArray();
+                        if (obj.getString("name").equalsIgnoreCase(orderType)) {
+                            arr.put(obj);
+                            ProdGroups = arr;
+                            break;
+                        }
                     }
                 }
-
             }
 
             grplistItems = new RyclGrpListItemAdb(ProdGroups, this, new onListItemClick() {
@@ -1431,9 +1435,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     try {
                         FilterTypes(item.getString("id"));
                         common_class.brandPos = 0;
-
                         tvGrpName.setText("" + item.getString("name"));
-
                         getSlotTimes(item.getString("id"));
 
                     } catch (JSONException e) {
@@ -1443,10 +1445,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             });
             Grpgrid.setAdapter(grplistItems);
 
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
-            tvGrpName.setText("" + ProdGroups.getJSONObject(0).getString("name"));
-
-            getSlotTimes(ProdGroups.getJSONObject(0).getString("id"));
+            FilterTypes(saveProductname.equalsIgnoreCase("") ? ProdGroups.getJSONObject(0).getString("id") : "" + id);
+            tvGrpName.setText(saveProductname.equalsIgnoreCase("") ? "" + ProdGroups.getJSONObject(0).getString("name") : saveProductname);
+            getSlotTimes(saveProductname.equalsIgnoreCase("") ? ProdGroups.getJSONObject(0).getString("id") : "" + id);
 
         } catch (Exception e) {
             Log.v(TAG + "loadData:", e.getMessage());
@@ -1482,6 +1483,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
             getProductDetails();
             // common_class.getProductDetails(this);
 
@@ -1604,15 +1606,13 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 case Constants.PRIMARY_ORDER_EDIT:
                     sharedCommonPref.clear_pref(Constants.PRIMARY_ORDER);
                     orderType = getIntent().getStringExtra(Constants.CATEGORY_TYPE);
-                    loadCategoryData("EDIT");
+                    loadCategoryData("EDIT", "");
                     loadData(apiDataResponse);
-
-
                     isEditOrder = true;
                     break;
                 case Constants.Primary_Product_List:
                     Product_Modal = gson.fromJson(apiDataResponse, userType);
-                    loadCategoryData("NEW");
+                    loadCategoryData("NEW", "");
                     break;
 
                 case Constants.PRIMARY_SCHEME:

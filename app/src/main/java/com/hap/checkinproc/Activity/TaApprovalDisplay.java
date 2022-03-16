@@ -52,7 +52,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
             txtTL, txtLA, txtLC, txtOE, txtReject, txtEmpId, txtMobile;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "",
+    String date = " ", SlStart = "",TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "",
             endImg = "", lodgTotal = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
