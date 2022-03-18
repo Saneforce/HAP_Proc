@@ -85,84 +85,6 @@ public class AttachementActivity extends AppCompatActivity {
         parentLinearLayout.setRowCount(4);
         ImageUKey = String.valueOf(getIntent().getSerializableExtra("Delete"));
 
-
-//        if (getIntent().getStringExtra("qps_localData") != null && !getIntent().getStringExtra("qps_localData").equals("")) {
-//            showLocalImgList();
-//        }
-
-
-    }
-
-    private void showLocalImgList() {
-        try {
-            gson = new Gson();
-            String strQPS = shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST);
-
-            Type userType = new TypeToken<ArrayList<QPS_Modal>>() {
-            }.getType();
-            qpsModalList = gson.fromJson(strQPS, userType);
-
-            List<QPS_Modal> filterList = new ArrayList<>();
-            filterList.clear();
-
-            for (int i = 0; i < qpsModalList.size(); i++) {
-                if (qpsModalList.get(i).getFileKey().contains((getIntent().getStringExtra("qps_localData")))) {
-                    filterList.add(qpsModalList.get(i));
-                }
-            }
-
-
-            ImgCount = filterList.size();
-            for (int m = 0; m < filterList.size(); m++) {
-
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                final View rowView = inflater.inflate(R.layout.activity_layout_img_preview, null);
-                parentLinearLayout.addView(rowView, parentLinearLayout.getChildCount());
-
-                View childView = parentLinearLayout.getChildAt(m);
-                ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
-
-                File file = new File(filterList.get(m).getFilePath());
-                Uri contentUri = Uri.fromFile(file);
-
-                Picasso.with(AttachementActivity.this)
-                        .load(contentUri)
-                        .into(taAttach);
-
-                position = parentLinearLayout.indexOfChild(rowView);
-                View cv = parentLinearLayout.getChildAt(position);
-                ImageView taAttachs = (ImageView) (cv.findViewById(R.id.img_preview));
-                deleteImage = (ImageView) cv.findViewById(R.id.img_delete);
-                if (ImageUKey.equals("1")) {
-                    deleteImage.setVisibility(View.GONE);
-                } else {
-                    deleteImage.setVisibility(View.VISIBLE);
-                }
-
-
-                deleteImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteImage(file, (View) v.getParent());
-
-                    }
-                });
-                taAttachs.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-//                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-//                        intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
-//                        startActivity(intent);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Log.e("AttachQPS: ", e.getMessage());
-        }
-
-
     }
 
     public void allImage(String pos, String HeadTravel, String Mode, String Date) {
@@ -176,7 +98,7 @@ public class AttachementActivity extends AppCompatActivity {
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
                 JsonArray jsonArray = response.body();
-                Log.e("JSON_ARRAY", jsonArray.toString());
+                Log.e("JSON_ARRAY_VIEW", jsonArray.toString());
                 ImgCount = jsonArray.size();
                 for (int m = 0; m < jsonArray.size(); m++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
@@ -261,12 +183,12 @@ public class AttachementActivity extends AppCompatActivity {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         Call<JsonObject> mCall = apiInterface.dltePrvws(ImageUrl, ImageUKey, DateTime, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-        Log.e("IMAGE_DELETE_REPONSE", mCall.request().toString());
+        Log.e("JSON_ARRAY_DEL", mCall.request().toString());
         mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObject = response.body();
-                Log.e("RESPONSE", jsonObject.get("success").getAsString());
+                Log.e("RESPONSE", response.body().toString());
                 //parentLinearLayout.removeViewAt(Position);
                 parentLinearLayout.removeView(view);
                 ImgCount--;

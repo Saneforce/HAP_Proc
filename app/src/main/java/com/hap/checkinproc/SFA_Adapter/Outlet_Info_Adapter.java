@@ -31,7 +31,6 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     private int rowLayout;
     private Context context;
     AdapterOnClick mAdapterOnClick;
-    int dummy;
     String activityName;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -147,9 +146,11 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         holder.linDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sOutletName = Retailer_Modal_List.getName();
-
-                drawRoute(sOutletName, Retailer_Modal_List.getLat(), Retailer_Modal_List.getLong());
+                if (Common_Class.isNullOrEmpty(Retailer_Modal_List.getLat()) || Common_Class.isNullOrEmpty(Retailer_Modal_List.getLong())) {
+                    Toast.makeText(context, "No route is found", Toast.LENGTH_SHORT).show();
+                } else {
+                    drawRoute(Retailer_Modal_List.getName(), Retailer_Modal_List.getLat(), Retailer_Modal_List.getLong());
+                }
             }
         });
 

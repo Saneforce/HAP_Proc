@@ -4,13 +4,14 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -49,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,7 +60,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     EditText etRemarks;
     Common_Class common_class;
     CheckBox cbPurity, cbFrontage, cbNoWrk, cbAvail;
-    Button btnSubmit;
+    CircularProgressButton btnSubmit;
     private DatePickerDialog fromDatePickerDialog;
     ImageView ivPurityCapture, ivPurityPreview, ivFTCapture, ivFTPreview, ivNowrkCapture, ivNoWrkPreview, ivToolbarHome;
     Gson gson;
@@ -68,6 +70,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     RecyclerView rvPurity, rvFrontage, rvNotWorking;
     private FilesAdapter filesAdapter;
     private String[] strLoc;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +228,25 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    public void ResetSubmitBtn(int resetMode) {
+        common_class.ProgressdialogShow(0, "");
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
+            btnSubmit.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        } else {
+            btnSubmit.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnSubmit.stopAnimation();
+                btnSubmit.revertAnimation();
+            }
+        }, dely);
+
+    }
+
     @Override
     public void onClick(View v) {
         Common_Class common_class = new Common_Class(this);
@@ -279,22 +301,28 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 } else if (cbNoWrk.isChecked() && (coolerFileList.get(2).getFileUrls() == null || coolerFileList.get(2).getFileUrls().size() == 0)) {
                     common_class.showMsg(this, "Kindly Attach Not Working Files");
                 } else {
-
-                    String sLoc = shared_common_pref.getvalue("CurrLoc");
-                    if (sLoc.equalsIgnoreCase("")) {
-                        new LocationFinder(getApplication(), new LocationEvents() {
-                            @Override
-                            public void OnLocationRecived(Location location) {
-                                strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                    if (btnSubmit.isAnimating()) return;
+                    btnSubmit.startAnimation();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String sLoc = shared_common_pref.getvalue("CurrLoc");
+                            if (sLoc.equalsIgnoreCase("")) {
+                                new LocationFinder(getApplication(), new LocationEvents() {
+                                    @Override
+                                    public void OnLocationRecived(Location location) {
+                                        strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                        submitData();
+                                        uploadFile();
+                                    }
+                                });
+                            } else {
+                                strLoc = sLoc.split(":");
                                 submitData();
                                 uploadFile();
                             }
-                        });
-                    } else {
-                        strLoc = sLoc.split(":");
-                        submitData();
-                        uploadFile();
-                    }
+                        }
+                    }, 500);
 
                 }
                 break;
@@ -408,11 +436,14 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                                     Log.e("Success_Message", san);
 
                                     common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
+                                    ResetSubmitBtn(1);
 
                                     if (jsonObjects.getBoolean("success")) {
                                         finish();
                                     }
                                 } catch (Exception e) {
+                                    common_class.ProgressdialogShow(0, "");
+                                    ResetSubmitBtn(2);
 
                                 }
                             }
@@ -422,18 +453,24 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             common_class.ProgressdialogShow(0, "");
                             Log.e("SUBMIT_VALUE", "ERROR");
+                            ResetSubmitBtn(2);
+
                         }
                     });
 
                 }
+
                 @Override
                 public void NegativeMethod(DialogInterface dialog, int id) {
                     dialog.dismiss();
+                    ResetSubmitBtn(0);
+
 
                 }
             });
         } else {
             Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            ResetSubmitBtn(0);
 
         }
 
@@ -443,15 +480,10 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             Log.v("cooler:", apiDataResponse);
-
-            // {"success":true,"Data":[{"TagNo":"10120120185","Make":"INDICOOL","CoolerType":"HARD TOP","ReceivedDate":"2020-12-17"}]}
             switch (key) {
                 case Constants.COOLER_INFO:
-
                     JSONObject obj = new JSONObject(apiDataResponse);
-
                     if (obj.getBoolean("success")) {
-
                         JSONArray arr = obj.getJSONArray("Data");
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject arrObj = arr.getJSONObject(i);
@@ -463,7 +495,6 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                     } else {
                         common_class.showMsg(this, obj.getString("Msg"));
                         common_class.CommonIntentwithFinish(Invoice_History.class);
-
                     }
                     break;
             }

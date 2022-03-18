@@ -176,10 +176,6 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                         JSONArray data = new JSONArray();
                         JSONObject ActivityData = new JSONObject();
 
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-                        Calendar calobj = Calendar.getInstance();
-                        String dateTime = df.format(calobj.getTime());
-
                         try {
                             JSONObject HeadItem = new JSONObject();
                             HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
@@ -187,9 +183,8 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                             HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
                             HeadItem.put("CustName", Shared_Common_Pref.OutletName);
                             HeadItem.put("StkCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                            HeadItem.put("Datetime", dateTime);
+                            HeadItem.put("Datetime",Common_Class.GetDate());
                             ActivityData.put("Json_Head", HeadItem);
-
 
                             JSONArray Order_Details = new JSONArray();
                             for (int z = 0; z < submitBrandList.size(); z++) {
@@ -233,9 +228,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                                     try {
                                         Log.e("JSON_VALUES", response.body().toString());
                                         JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                        String san = jsonObjects.getString("success");
-                                        Log.e("Success_Message", san);
-                                        if (san.equals("true")) {
+                                        if (jsonObjects.getString("success").equals("true")) {
                                             startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                             finish();
                                         }

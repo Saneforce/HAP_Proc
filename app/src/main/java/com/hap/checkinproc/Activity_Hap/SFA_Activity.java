@@ -228,14 +228,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
                         break;
                     case "Projection":
-//                        JSONArray prodList = db.getMasterData(Constants.Projection_Product_List);
-//
-//                        if (prodList==null) {
                         getProjectionProductDetails(SFA_Activity.this);
-//                        } else {
-//                            common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
-//
-//                        }
                         break;
 
 
@@ -319,7 +312,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 });
             } catch (Exception e) {
                 Log.v("Projec_Product_List_ex", e.getMessage());
-
                 e.printStackTrace();
             }
         }

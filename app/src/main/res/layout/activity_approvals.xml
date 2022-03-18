@@ -896,6 +896,7 @@
                         <include layout="@layout/part_view" />
 
                         <LinearLayout
+                            android:visibility="gone"
                             android:id="@+id/lin_productProjectionApproval"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -927,7 +928,8 @@
                         </LinearLayout>
 
 
-                        <include layout="@layout/part_view" />
+                        <include layout="@layout/part_view"
+                            android:visibility="gone"/>
 
                         <LinearLayout
                             android:id="@+id/lin_leaveholidaystatus"

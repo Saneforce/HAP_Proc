@@ -633,7 +633,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-               // eMail = "1013362@hap.in";//(-18)
+                // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -662,26 +662,6 @@ public class Login extends AppCompatActivity {
                                         Gson gson = new Gson();
 //                                        assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
-//                                        String[] iconColour = {"com.hap.checkinproc.Activity_Hap.DefaultLauncherAlias", "com.hap.checkinproc.Activity_Hap.FFALauncherAlias", "com.hap.checkinproc.Activity_Hap.DistributorLauncherAlias"};
-//
-//                                        String type = response.body().getData().get(0).getLoginType().equalsIgnoreCase(Constants.DISTRIBUTER_TYPE) ? "com.hap.checkinproc.Activity_Hap.DistributorLauncherAlias" : "com.hap.checkinproc.Activity_Hap.FFALauncherAlias";
-//
-//                                        PackageManager manager = getPackageManager();
-//                                        int action;
-//                                        for (String value : iconColour) {
-//                                            if (value.equalsIgnoreCase(type)) {
-//                                                action = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-//                                                Toast.makeText(Login.this, "Enable " + response.body().getData().get(0).getLoginType() + " Icon", Toast.LENGTH_LONG).show();
-//                                            } else {
-//                                                action = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-//                                                // Toast.makeText(Login.this, "Disable " + value + " Icon", Toast.LENGTH_LONG).show();
-//                                            }
-//
-//                                            manager.setComponentEnabledSetting(
-//                                                    new ComponentName(Login.this, value),
-//                                                    action, PackageManager.DONT_KILL_APP);
-//                                        }
-
 
                                         try {
                                             PackageManager manager = getPackageManager();
@@ -730,9 +710,6 @@ public class Login extends AppCompatActivity {
                                             public void run() {
                                                 assignLoginData(response.body(), requestCode);
 
-//                                                Intent intent = new Intent(Login.this, MainActivity.class);
-//                                                intent.putExtra("loading", "loading");
-//                                                startActivity(intent);
 
                                             }
                                         }, 1000);

@@ -240,6 +240,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     final Handler handler = new Handler();
 
     private ShimmerFrameLayout mShimmerViewContainer;
+    private String Ukey="";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -1204,13 +1205,17 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
                             editMode = editText.getText().toString();
 
-                            if (tvTxtUKeys.getText().toString().equals("")) {
-                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                Calendar calobjw = Calendar.getInstance();
-                                tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                                tvTxtUKeys.setText(tvEditcnt);
-                            }
-                            TlUKey = tvTxtUKeys.getText().toString();
+                            //hide for file attach mandatory validation
+//                            if (tvTxtUKeys.getText().toString().equals("")) {
+//                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//                                Calendar calobjw = Calendar.getInstance();
+//                                tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+//                                tvTxtUKeys.setText(tvEditcnt);
+//                            }
+//                            TlUKey = tvTxtUKeys.getText().toString();
+                            if(editText.getText().toString().equalsIgnoreCase(""))
+                                mCommon_class.showMsg(TAClaimActivity.this,"Select the Mode");
+                            else
                             popupCapture(123);
 
                         }
@@ -2528,7 +2533,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                                 tvTxtUKeys.setText(tvEditcnt);
                                             }
                                             TlUKey = tvTxtUKeys.getText().toString();*/
-                                            popupCapture(123);
+                                            if(editText.getText().toString().equalsIgnoreCase(""))
+                                                mCommon_class.showMsg(TAClaimActivity.this,"Select the Mode");
+                                            else popupCapture(123);
 
 
                                         }
@@ -2685,7 +2692,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                                         Log.v("Travel_Location_imagw", editMode);
 
-                                        popupCapture(123);
+                                        if(editText.getText().toString().equalsIgnoreCase(""))
+                                            mCommon_class.showMsg(TAClaimActivity.this,"Select the Mode");
+                                        else popupCapture(123);
 
 
                                     }
@@ -2952,6 +2961,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if(finalChoosedDate.equalsIgnoreCase(currentDateandTime)){
                         btn_sub.setVisibility(View.GONE);
                     }*/
+
+
                 }
 
                 @Override
@@ -3526,272 +3537,272 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         super.onActivityResult(requestCode, resultCode, data);
         try {
-            if(data!=null){
-            String sMode = "";
-            long nano_startTime = System.nanoTime();
-            ImageUKey = keyEk + UserDetails.getString("Sfcode", "") + nano_startTime;
+            if (data != null) {
+                String sMode = "";
+                long nano_startTime = System.nanoTime();
+                ImageUKey = keyEk + UserDetails.getString("Sfcode", "") + nano_startTime;
 
-            Shared_Common_Pref.ImageUKey = ImageUKey;
-            if (requestCode == 144) {
-                if (txtLodgUKey.getText().toString().equals("")) {
-                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobjw = Calendar.getInstance();
-                    lodUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                    txtLodgUKey.setText(lodUKey);
+                Shared_Common_Pref.ImageUKey = ImageUKey;
+                if (requestCode == 144) {
+                    if (txtLodgUKey.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        lodUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        txtLodgUKey.setText(lodUKey);
+                    }
+
+
+                    lodUKey = txtLodgUKey.getText().toString();
+
+                    sMode = "LOD;" + DateTime + ";" + lodUKey + ";Room;" + ImageUKey;
+                }
+                if (requestCode == 124) {
+                    if (tvTxtUKeys.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        tvTxtUKeys.setText(tvEditcnt);
+                    }
+                    TlUKey = tvTxtUKeys.getText().toString();
+                    sMode = "TL;" + DateTime + ";" + TlUKey + ";" + editMode + ";" + ImageUKey;
+                }
+                if (requestCode == 100) {
+                    if (oeTxtUKeys.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        oeTxtUKeys.setText(oeEditCnt);
+                    }
+
+                    OeUKey = oeTxtUKeys.getText().toString();
+                    sMode = "OE;" + DateTime + ";" + OeUKey + ";" + editMode + ";" + ImageUKey;
+                }
+                if (requestCode == 787) {
+                    if (lcTxtUKeys.getText().toString().equals("")) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                        lcTxtUKeys.setText(lcEditcnt);
+                    }
+                    LcUKey = lcTxtUKeys.getText().toString();
+                    sMode = "LC;" + DateTime + ";" + LcUKey + ";" + editMode + ";" + ImageUKey;
                 }
 
 
-                lodUKey = txtLodgUKey.getText().toString();
-
-                sMode = "LOD;" + DateTime + ";" + lodUKey + ";Room;" + ImageUKey;
-            }
-            if (requestCode == 124) {
-                if (tvTxtUKeys.getText().toString().equals("")) {
-                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobjw = Calendar.getInstance();
-                    tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                    tvTxtUKeys.setText(tvEditcnt);
-                }
-                TlUKey = tvTxtUKeys.getText().toString();
-                sMode = "TL;" + DateTime + ";" + TlUKey + ";" + editMode + ";" + ImageUKey;
-            }
-            if (requestCode == 100) {
-                if (oeTxtUKeys.getText().toString().equals("")) {
-                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobjw = Calendar.getInstance();
-                    oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                    oeTxtUKeys.setText(oeEditCnt);
-                }
-
-                OeUKey = oeTxtUKeys.getText().toString();
-                sMode = "OE;" + DateTime + ";" + OeUKey + ";" + editMode + ";" + ImageUKey;
-            }
-            if (requestCode == 787) {
-                if (lcTxtUKeys.getText().toString().equals("")) {
-                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobjw = Calendar.getInstance();
-                    lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                    lcTxtUKeys.setText(lcEditcnt);
-                }
-                LcUKey = lcTxtUKeys.getText().toString();
-                sMode = "LC;" + DateTime + ";" + LcUKey + ";" + editMode + ";" + ImageUKey;
-            }
+                if (requestCode == 144) {
+                    if (resultCode == RESULT_OK) {
+                        if (requestCode == 144) {
+                            if (data.getClipData() != null) {
+                                ClipData mClipData = data.getClipData();
+                                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                                    ClipData.Item item = mClipData.getItemAt(i);
+                                    Uri uri = item.getUri();
+                                    //display your images
+                                    ImageFilePath filepath = new ImageFilePath();
+                                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                                    lodgArrLst.add(fullPath);
+                                    getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
 
 
-            if (requestCode == 144) {
-                if (resultCode == RESULT_OK) {
-                    if (requestCode == 144) {
-                        if (data.getClipData() != null) {
-                            ClipData mClipData = data.getClipData();
-                            for (int i = 0; i < mClipData.getItemCount(); i++) {
-                                ClipData.Item item = mClipData.getItemAt(i);
-                                Uri uri = item.getUri();
-                                //display your images
+                                }
+                            } else if (data.getData() != null) {
+                                Uri item = data.getData();
+
                                 ImageFilePath filepath = new ImageFilePath();
-                                fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                                fullPath = filepath.getPath(TAClaimActivity.this, item);
                                 lodgArrLst.add(fullPath);
-                                getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
-
-
-
-                            }
-                        } else if (data.getData() != null) {
-                            Uri item = data.getData();
-
-                            ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, item);
-                            lodgArrLst.add(fullPath);
 //                            Util util = new Util();
 //                            String fileName = ImageUKey + "." + util.getFileExtension(this, item);
 //                            final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
 //                                    "/" + fileName);
 //                            util.createFile(getApplicationContext(), item, file);
 //                            fullPath = file.getPath();
-                            getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
+                                getMulipart(lodUKey, fullPath, "LOD", ImageUKey, "Room", "", "");
 
+                            }
                         }
                     }
-                }
-            } else if (requestCode == 124) {
-                if (resultCode == RESULT_OK) {
-                    if (data.getClipData() != null) {
-                        ClipData mClipData = data.getClipData();
-                        for (int i = 0; i < mClipData.getItemCount(); i++) {
-                            ClipData.Item item = mClipData.getItemAt(i);
-                            Uri uri = item.getUri();
-                            // display your images
+                } else if (requestCode == 124) {
+                    if (resultCode == RESULT_OK) {
+                        if (data.getClipData() != null) {
+                            ClipData mClipData = data.getClipData();
+                            for (int i = 0; i < mClipData.getItemCount(); i++) {
+                                ClipData.Item item = mClipData.getItemAt(i);
+                                Uri uri = item.getUri();
+                                // display your images
+                                ImageFilePath filepath = new ImageFilePath();
+                                fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                                getMulipart(TlUKey, fullPath, "TL", ImageUKey, editMode, "", "");
+
+                            }
+                        } else if (data.getData() != null) {
+                            Uri item = data.getData();
                             ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            fullPath = filepath.getPath(TAClaimActivity.this, item);
+
 
                             getMulipart(TlUKey, fullPath, "TL", ImageUKey, editMode, "", "");
 
                         }
-                    } else if (data.getData() != null) {
-                        Uri item = data.getData();
-                        ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
-
-
-                        getMulipart(TlUKey, fullPath, "TL", ImageUKey, editMode, "", "");
-
                     }
-                }
 
-            } else if (requestCode == 100) {
-                if (resultCode == RESULT_OK) {
-                    if (requestCode == 100) {
-                        if (data.getClipData() != null) {
-                            ClipData mClipData = data.getClipData();
-                            for (int i = 0; i < mClipData.getItemCount(); i++) {
-                                ClipData.Item item = mClipData.getItemAt(i);
-                                Uri uri = item.getUri();
+                } else if (requestCode == 100) {
+                    if (resultCode == RESULT_OK) {
+                        if (requestCode == 100) {
+                            if (data.getClipData() != null) {
+                                ClipData mClipData = data.getClipData();
+                                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                                    ClipData.Item item = mClipData.getItemAt(i);
+                                    Uri uri = item.getUri();
+                                    ImageFilePath filepath = new ImageFilePath();
+                                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                                    getMulipart(OeUKey, fullPath, "OE", ImageUKey, editMode, "", "");
+
+
+                                }
+                            } else if (data.getData() != null) {
+
+                                Uri item = data.getData();
                                 ImageFilePath filepath = new ImageFilePath();
-                                fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
-
+                                fullPath = filepath.getPath(TAClaimActivity.this, item);
                                 getMulipart(OeUKey, fullPath, "OE", ImageUKey, editMode, "", "");
 
-
                             }
-                        } else if (data.getData() != null) {
-
-                            Uri item = data.getData();
-                            ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, item);
-                            getMulipart(OeUKey, fullPath, "OE", ImageUKey, editMode, "", "");
-
                         }
                     }
-                }
-            } else if (requestCode == 787) {
-                if (resultCode == RESULT_OK) {
-                    if (requestCode == 787) {
-                        if (data.getClipData() != null) {
-                            ClipData mClipData = data.getClipData();
-                            for (int i = 0; i < mClipData.getItemCount(); i++) {
-                                ClipData.Item item = mClipData.getItemAt(i);
-                                Uri uri = item.getUri();
-                                // display your images
+                } else if (requestCode == 787) {
+                    if (resultCode == RESULT_OK) {
+                        if (requestCode == 787) {
+                            if (data.getClipData() != null) {
+                                ClipData mClipData = data.getClipData();
+                                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                                    ClipData.Item item = mClipData.getItemAt(i);
+                                    Uri uri = item.getUri();
+                                    // display your images
+                                    ImageFilePath filepath = new ImageFilePath();
+                                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                                    getMulipart(LcUKey, fullPath, "LC", ImageUKey, editMode, "", "");
+
+                                }
+                            } else if (data.getData() != null) {
+
+                                Uri item = data.getData();
                                 ImageFilePath filepath = new ImageFilePath();
-                                fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                                fullPath = filepath.getPath(TAClaimActivity.this, item);
 
                                 getMulipart(LcUKey, fullPath, "LC", ImageUKey, editMode, "", "");
 
                             }
-                        } else if (data.getData() != null) {
-
-                            Uri item = data.getData();
-                            ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, item);
-
-                            getMulipart(LcUKey, fullPath, "LC", ImageUKey, editMode, "", "");
-
                         }
                     }
-                }
-            } else if (requestCode == 344) {
-                if (resultCode == RESULT_OK) {
-                    if (requestCode == 344) {
-                        if (data.getClipData() != null) {
-                            ClipData mClipData = data.getClipData();
-                            for (int i = 0; i < mClipData.getItemCount(); i++) {
-                                ClipData.Item item = mClipData.getItemAt(i);
-                                Uri uri = item.getUri();
-                                // display your images
+                } else if (requestCode == 344) {
+                    if (resultCode == RESULT_OK) {
+                        if (requestCode == 344) {
+                            if (data.getClipData() != null) {
+                                ClipData mClipData = data.getClipData();
+                                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                                    ClipData.Item item = mClipData.getItemAt(i);
+                                    Uri uri = item.getUri();
+                                    // display your images
+                                    ImageFilePath filepath = new ImageFilePath();
+                                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                                    getMulipart(lodgLate, fullPath, "LOD", ImageUKey, "LateMode", "", "");
+
+                                }
+                            } else if (data.getData() != null) {
+
+                                Uri item = data.getData();
                                 ImageFilePath filepath = new ImageFilePath();
-                                fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                                fullPath = filepath.getPath(TAClaimActivity.this, item);
 
                                 getMulipart(lodgLate, fullPath, "LOD", ImageUKey, "LateMode", "", "");
 
                             }
-                        } else if (data.getData() != null) {
-
-                            Uri item = data.getData();
-                            ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, item);
-
-                            getMulipart(lodgLate, fullPath, "LOD", ImageUKey, "LateMode", "", "");
-
                         }
                     }
-                }
-            } else if (requestCode == 406) {
-                if (resultCode == RESULT_OK) {
-                    if (requestCode == 406) {
-                        if (data.getClipData() != null) {
-                            ClipData mClipData = data.getClipData();
-                            for (int i = 0; i < mClipData.getItemCount(); i++) {
-                                ClipData.Item item = mClipData.getItemAt(i);
-                                Uri uri = item.getUri();
-                                // display your images
+                } else if (requestCode == 406) {
+                    if (resultCode == RESULT_OK) {
+                        if (requestCode == 406) {
+                            if (data.getClipData() != null) {
+                                ClipData mClipData = data.getClipData();
+                                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                                    ClipData.Item item = mClipData.getItemAt(i);
+                                    Uri uri = item.getUri();
+                                    // display your images
+                                    ImageFilePath filepath = new ImageFilePath();
+                                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                                    getMulipart(lodgEarly, fullPath, "LOD", ImageUKey, "EarlyMode", "", "");
+
+                                }
+                            } else if (data.getData() != null) {
+
+                                Uri item = data.getData();
                                 ImageFilePath filepath = new ImageFilePath();
-                                fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                                fullPath = filepath.getPath(TAClaimActivity.this, item);
 
                                 getMulipart(lodgEarly, fullPath, "LOD", ImageUKey, "EarlyMode", "", "");
 
                             }
-                        } else if (data.getData() != null) {
-
-                            Uri item = data.getData();
-                            ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, item);
-
-                            getMulipart(lodgEarly, fullPath, "LOD", ImageUKey, "EarlyMode", "", "");
-
                         }
                     }
+                } else if (requestCode == 143 && resultCode == Activity.RESULT_OK) {
+                    finalPath = "/storage/emulated/0";
+                    filePath = outputFileUri.getPath();
+                    filePath = filePath.substring(1);
+                    filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+                    getMulipart(lodUKey, filePath, "LOD", "", "Room", "", "");
+
+                } else if (requestCode == 343 && resultCode == Activity.RESULT_OK) {
+
+                    finalPath = "/storage/emulated/0";
+                    filePath = outputFileUri.getPath();
+                    filePath = filePath.substring(1);
+                    filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+                    getMulipart(lodgLate, filePath, "LOD", "", "LateMode", "", "");
+
+                } else if (requestCode == 405 && resultCode == Activity.RESULT_OK) {
+
+                    finalPath = "/storage/emulated/0";
+                    filePath = outputFileUri.getPath();
+                    filePath = filePath.substring(1);
+                    filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+                    getMulipart(lodgEarly, filePath, "LOD", "", "EarlyMode", "", "");
+
+                } else if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
+                    finalPath = "/storage/emulated/0";
+                    filePath = outputFileUri.getPath();
+                    filePath = filePath.substring(1);
+                    filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+                    getMulipart(TlUKey, filePath, "TL", "", editMode, "", "");
+
+                } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
+
+                    finalPath = "/storage/emulated/0";
+                    filePath = outputFileUri.getPath();
+                    filePath = filePath.substring(1);
+                    filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+                    getMulipart(OeUKey, filePath, "OE", "", editMode, "", "");
+
+                } else if (requestCode == 786 && resultCode == Activity.RESULT_OK) {
+
+                    finalPath = "/storage/emulated/0";
+                    filePath = outputFileUri.getPath();
+                    filePath = filePath.substring(1);
+                    filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+                    getMulipart(LcUKey, filePath, "LC", "", editMode, "", "");
                 }
-            } else if (requestCode == 143 && resultCode == Activity.RESULT_OK) {
-                finalPath = "/storage/emulated/0";
-                filePath = outputFileUri.getPath();
-                filePath = filePath.substring(1);
-                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-
-                getMulipart(lodUKey, filePath, "LOD", "", "Room", "", "");
-
-            } else if (requestCode == 343 && resultCode == Activity.RESULT_OK) {
-
-                finalPath = "/storage/emulated/0";
-                filePath = outputFileUri.getPath();
-                filePath = filePath.substring(1);
-                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-
-                getMulipart(lodgLate, filePath, "LOD", "", "LateMode", "", "");
-
-            } else if (requestCode == 405 && resultCode == Activity.RESULT_OK) {
-
-                finalPath = "/storage/emulated/0";
-                filePath = outputFileUri.getPath();
-                filePath = filePath.substring(1);
-                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-
-                getMulipart(lodgEarly, filePath, "LOD", "", "EarlyMode", "", "");
-
-            } else if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
-                finalPath = "/storage/emulated/0";
-                filePath = outputFileUri.getPath();
-                filePath = filePath.substring(1);
-                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-
-                getMulipart(TlUKey, filePath, "TL", "", editMode, "", "");
-
-            } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
-
-                finalPath = "/storage/emulated/0";
-                filePath = outputFileUri.getPath();
-                filePath = filePath.substring(1);
-                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-
-                getMulipart(OeUKey, filePath, "OE", "", editMode, "", "");
-
-            } else if (requestCode == 786 && resultCode == Activity.RESULT_OK) {
-
-                finalPath = "/storage/emulated/0";
-                filePath = outputFileUri.getPath();
-                filePath = filePath.substring(1);
-                filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-
-                getMulipart(LcUKey, filePath, "LC", "", editMode, "", "");
-            }}
+            }
         } catch (Exception e) {
             Log.v("TAClaimActivity:mulImg:", e.getMessage());
         }
@@ -3970,6 +3981,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     public void submitData(String responseVal, CircularProgressButton btnAnim) {
 
+
         if (edtEarBill.getText().toString().equalsIgnoreCase("")) edtEarBill.setText("0");
         if (edtLateBill.getText().toString().equalsIgnoreCase("")) edtLateBill.setText("0");
         if (earCheckIn.getText().toString().equalsIgnoreCase("00:00:00")) earCheckIn.setText("");
@@ -3993,6 +4005,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         try {
             /*Head Json*/
+            jsonData.put("UKey", Ukey);
+
             jsonData.put("SF_Code", SF_code);
             jsonData.put("exp_date", DateTime);
             jsonData.put("da_mode", StrDailyAllowance);
@@ -4120,6 +4134,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 edtRwID = views.findViewById(R.id.TARwID);
                 editModeId = edtRwID.getText().toString();
 
+
                 CtrlsListModel UTAItem = uTAItems.get(editModeId);
                 if (editMode.equalsIgnoreCase("")) {
                     Toast.makeText(TAClaimActivity.this, "Select the Travel Mode", Toast.LENGTH_LONG).show();
@@ -4145,7 +4160,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     return;
                 }
                 if (UTAItem != null) {
-                    if (UTAItem.getAttachNeed().equalsIgnoreCase("1") && tvTxtUKeys.getText().toString().equalsIgnoreCase("")) {
+
+                    String val = tvTxtUKeys.getText().toString();
+                    Log.v("TravelExpensesubmit:", val);
+                    if (UTAItem.getAttachNeed().equalsIgnoreCase("1") &&
+                            tvTxtUKeys.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
                         ResetSubmitBtn(0, btnAnim);
                         return;
@@ -4805,6 +4824,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void changeDate(String chooseDate) {
+        Ukey = Common_Class.GetEkey();
         displayTravelMode(chooseDate);
         travelDynamicLoaction.removeAllViews();
         linAddAllowance.setVisibility(View.VISIBLE);
@@ -5276,7 +5296,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     private void sendImageToServer(String count, String HeadTravel, String Mode, String from, String To, MultipartBody.Part imgg) {
 
         long nano_startTime = System.nanoTime();
-        Log.e("nano_startTime", String.valueOf(nano_startTime));
+        Log.e("headTravel:multi:", HeadTravel);
         ImageUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + nano_startTime;
 
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
