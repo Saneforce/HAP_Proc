@@ -524,6 +524,11 @@ public interface ApiInterface {
     Call<JsonObject> taApprove(@Field("data") String body);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/tacumulativeapprove")
+    Call<JsonObject> taCumulativeApprove(@Field("data") String body);
+
+
+    @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<ResponseBody> updateAllowance(@Query("axn") String axn, @Field("data") String userData);
 

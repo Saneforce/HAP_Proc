@@ -402,6 +402,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
+            Log.v(key + ":", "" + apiDataResponse);
             if (apiDataResponse != null) {
                 switch (key) {
                     case Constants.MYTEAM_LOCATION:

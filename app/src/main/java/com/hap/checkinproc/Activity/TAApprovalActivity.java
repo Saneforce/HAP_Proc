@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -33,19 +35,17 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.Travel_Approval_Adapter;
-import com.hap.checkinproc.common.TimerService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class TAApprovalActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
+    TextView tvName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class TAApprovalActivity extends AppCompatActivity {
         getTAList();
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
+        tvName=findViewById(R.id.tvName);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,10 +107,13 @@ public class TAApprovalActivity extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Approvals.class);
+                finish();
+               // common_class.CommonIntentwithFinish(Approvals.class);
 
             }
         });
+
+        tvName.setText(getIntent().getStringExtra("name"));
     }
 
     public void getTAList() {
@@ -122,11 +126,21 @@ public class TAApprovalActivity extends AppCompatActivity {
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     JsonArray jsonArray = response.body();
 
+                    JsonArray filterArr = new JsonArray();
+
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(i);
+
+                        if (getIntent().getStringExtra("view_id").equalsIgnoreCase(jsonObject.get("Sf_code").getAsString())) {
+                            filterArr.add(jsonObject);
+                        }
+                    }
+
                     Log.v("APPROVAL_LIST", jsonArray.toString());
-                    recyclerView.setAdapter(new Travel_Approval_Adapter(jsonArray, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
+                    recyclerView.setAdapter(new Travel_Approval_Adapter(filterArr, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int Name) {
-                            JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
+                            JsonObject jsonObject = (JsonObject) filterArr.get(Name);
                             Intent intent = new Intent(getApplicationContext(), TAViewStatus.class);
                             intent.putExtra("TA_Date", jsonObject.get("id").getAsString());
                             intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
@@ -151,9 +165,8 @@ public class TAApprovalActivity extends AppCompatActivity {
 
                 }
             });
-        }
-        catch (Exception e){
-            Log.e("TAApproval: ",e.getMessage());
+        } catch (Exception e) {
+            Log.e("TAApproval: ", e.getMessage());
         }
     }
 

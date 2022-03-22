@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,24 +16,17 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
-import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,13 +40,10 @@ public class AttachementActivity extends AppCompatActivity {
     Integer position, ImgCount = 0;
     RelativeLayout allRelative;
     Shared_Common_Pref shared_common_pref;
-    String ImageUKey = "", ImageUrl = "", DateTime = "", sMode = "";
+    String ImageUKey = "",  sMode = "";
 
-    List<QPS_Modal> qpsModalList = new ArrayList<>();
     static OnAttachmentDelete deleteListener;
-    private Gson gson;
     private String sfcode = "";
-    private String url = "";
 
     @SuppressLint("ResourceType")
     @Override
@@ -135,8 +124,6 @@ public class AttachementActivity extends AppCompatActivity {
                         deleteImage.setVisibility(View.VISIBLE);
                     }
 
-
-                    int finalIndex = m;
                     deleteImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -205,22 +192,6 @@ public class AttachementActivity extends AppCompatActivity {
 
     }
 
-
-    public void deleteImage(File file, View view) {
-
-        for (int i = 0; i < qpsModalList.size(); i++) {
-            if (qpsModalList.get(i).getFilePath().equals(file.getAbsolutePath())) {
-                qpsModalList.remove(i);
-                shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
-            }
-        }
-
-        parentLinearLayout.removeView(view);
-        ImgCount--;
-        if (file.exists())
-            file.delete();
-
-    }
 
     public void DeleteLayout(View v) {
         finish();

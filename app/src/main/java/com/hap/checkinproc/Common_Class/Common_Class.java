@@ -542,6 +542,12 @@ public class Common_Class {
 
 
                 switch (key) {
+
+                    case Constants.WEEKLY_EXPENSE:
+                        axnname = "get/weeklyexpense";
+                        QueryString.put("sfCode", UserDetails.getString("Sfcode", ""));
+                        break;
+
                     case Constants.SlotTime:
                         axnname = "get/slottimes";
                         data.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -550,7 +556,7 @@ public class Common_Class {
                     case Constants.COOLER_INFO:
                         axnname = "get/coolerinfo";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);
-                        data.put("dt",Common_Class.GetDatewothouttime());
+                        data.put("dt", Common_Class.GetDatewothouttime());
                         break;
                     case Constants.PLANT_MASTER:
                         axnname = "get/plantmaster";
@@ -1267,7 +1273,7 @@ public class Common_Class {
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
                 String DivERP = jsonObject1.optString("DivERP");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP,jsonObject1.optString("Latlong"));
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP, jsonObject1.optString("Latlong"));
                 distributor_master.add(Model_Pojo);
 
             }

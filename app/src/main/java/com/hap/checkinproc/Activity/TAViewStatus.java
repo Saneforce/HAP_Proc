@@ -4799,9 +4799,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
     private void SendtpApproval(int flag) {
         JSONObject taReq = new JSONObject();
-
         try {
-
             taReq.put("sfCode", sfCode);
             taReq.put("Flag", flag);
             taReq.put("Sl_No", SlStart);

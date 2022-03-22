@@ -1,7 +1,6 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,20 +49,20 @@ public class Travel_Approval_Adapter extends RecyclerView.Adapter<Travel_Approva
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
 
-            JsonObject jsonObject = (JsonObject) leave_Approval_ModelsList.get(position);
-            {
+        JsonObject jsonObject = (JsonObject) leave_Approval_ModelsList.get(position);
+        {
+         //   holder.textviewname.setVisibility(View.GONE);
+            //Log.v("Leave_APPROEV", jsonObject.toString());
+            holder.textviewname.setText(jsonObject.get("Sf_Name").getAsString());
+            holder.textviewdate.setText(jsonObject.get("id").getAsString());
+            holder.leavedays.setText(jsonObject.get("Total_Amount").getAsString());
+            holder.open.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                //Log.v("Leave_APPROEV", jsonObject.toString());
-                holder.textviewname.setText(jsonObject.get("Sf_Name").getAsString());
-                holder.textviewdate.setText(jsonObject.get("id").getAsString());
-                holder.leavedays.setText(jsonObject.get("Total_Amount").getAsString());
-                holder.open.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        mAdapterOnClick.onIntentClick(position);
-                    }
-                });
+                    mAdapterOnClick.onIntentClick(position);
+                }
+            });
         }
 
     }

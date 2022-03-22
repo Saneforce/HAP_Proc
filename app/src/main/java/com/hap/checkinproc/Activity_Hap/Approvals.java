@@ -21,9 +21,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAApprovalActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.ProjectionApprovListActivity;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
@@ -32,7 +34,6 @@ import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Onduty_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Permission_Status_Activity;
 import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,10 +45,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Approvals extends AppCompatActivity implements View.OnClickListener {
+public class Approvals extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout linProjectionApprove,LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout linProjectionApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -162,7 +163,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
-        linProjectionApprove=findViewById(R.id.lin_productProjectionApproval);
+        linProjectionApprove = findViewById(R.id.lin_productProjectionApproval);
         /*Status text*/
         /*SetOnClickListner*/
         LeaveRequest.setOnClickListener(this);
@@ -277,9 +278,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_travel_allow:
-                startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
-                //startActivity(new Intent(Approvals.this, TACumulativeApproval.class));
-                finish();
+                // startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
+
+                common_class.getDb_310Data(Constants.WEEKLY_EXPENSE, this);
+
                 break;
 
             case R.id.lin_tour_plan:
@@ -377,4 +379,26 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     }
 
 
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            switch (key) {
+                case Constants.WEEKLY_EXPENSE:
+                    Log.v(key + ":", apiDataResponse);
+                    JSONObject obj = new JSONObject(apiDataResponse);
+                    if (obj.getBoolean("success")) {
+                        startActivity(new Intent(Approvals.this, TACumulativeApproval.class));
+                      //  startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
+                        finish();
+                    } else {
+                        common_class.showMsg(this, obj.getString("Msg"));
+                    }
+
+                    break;
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
 }

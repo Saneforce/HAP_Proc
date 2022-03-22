@@ -1,15 +1,26 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.TAApprovalActivity;
+import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.onPayslipItemClick;
 import com.hap.checkinproc.R;
 
@@ -17,14 +28,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHolder> {
     private static final String TAG = "ShiftList";
     private JSONArray mlist = new JSONArray();
     private Context mContext;
     static onPayslipItemClick payClick;
+    NumberFormat formatter = new DecimalFormat("##0.00");
+    Shared_Common_Pref sharedCommonPref;
+    Common_Class common_class;
+
+
     public TAApprListItem(JSONArray mlist, Context mContext) {
         this.mlist = mlist;
         this.mContext = mContext;
+        sharedCommonPref = new Shared_Common_Pref(mContext);
+        common_class = new Common_Class(mContext);
     }
 
     @NonNull
@@ -35,23 +60,124 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
         return holder;
 
     }
-    public static void SetPayOnClickListener(onPayslipItemClick mPayClick){
-        payClick=mPayClick;
+
+    public static void SetPayOnClickListener(onPayslipItemClick mPayClick) {
+        payClick = mPayClick;
     }
+
     @Override
     public void onBindViewHolder(@NonNull TAApprListItem.ViewHolder holder, int position) {
-
         JSONObject itm = null;
         try {
             itm = mlist.getJSONObject(position);
-            holder.txEMPNm.setText(itm.getString("name"));
-            holder.txEMPDesig.setText(itm.getString("value"));
+            holder.txEMPNm.setText(itm.getString("EmployeeName"));
+            holder.txEMPDesig.setText(itm.getString("Designation"));
+            holder.tvTotAmt.setText("₹ " + formatter.format(itm.getDouble("Total")));
+            holder.tvPeriod.setText(itm.getString("FromDate") + " - " + itm.getString("ToDate"));
+            holder.tvDailyAlow.setText("₹ " + formatter.format(itm.getDouble("DailyAllowance")));
+            holder.tvfuelAlow.setText("₹ " + formatter.format(itm.getDouble("FuelAllowance")));
+            holder.tvTrvlExp.setText("₹ " + formatter.format(itm.getDouble("TravelExpense")));
+            holder.tvOtherExp.setText("₹ " + formatter.format(itm.getDouble("OtherExpense")));
+            holder.tvLocConv.setText("₹ " + formatter.format(itm.getDouble("LocalConveyance")));
+            holder.tvLodgingAlow.setText("₹ " + formatter.format(itm.getDouble("LodgingAllowance")));
+
+
+            holder.btnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(mContext, TAApprovalActivity.class);
+                        intent.putExtra("view_id", mlist.getJSONObject(position).getString("Sf_Code"));
+                        intent.putExtra("name", mlist.getJSONObject(position).getString("EmployeeName"));
+                        mContext.startActivity(intent);
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+            holder.btnApprov.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        SendtpApproval(1, mlist.getJSONObject(position));
+//                        Intent intent = new Intent(mContext, TAApprovalActivity.class);
+//                        intent.putExtra("view_id", mlist.getJSONObject(position).getString("Sf_Code"));
+//                        intent.putExtra("name",mlist.getJSONObject(position).getString("EmployeeName"));
+//                        mContext.startActivity(intent);
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+            holder.btnRjct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        SendtpApproval(2, mlist.getJSONObject(position));
+//                        Intent intent = new Intent(mContext, TAApprovalActivity.class);
+//                        intent.putExtra("view_id", mlist.getJSONObject(position).getString("Sf_Code"));
+//                        intent.putExtra("name",mlist.getJSONObject(position).getString("EmployeeName"));
+//                        mContext.startActivity(intent);
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
+
+    void SendtpApproval(int flag, JSONObject obj) {
+        JSONObject taReq = new JSONObject();
+
+        try {
+            taReq.put("login_sfCode", sharedCommonPref.getvalue(Shared_Common_Pref.Sf_Code));
+            taReq.put("emp_sfCode", obj.getString("Sf_Code"));
+
+            taReq.put("Flag", flag);
+            taReq.put("TDate", obj.getString("TDate"));
+            taReq.put("FDate", obj.getString("FDate"));
+
+
+        Log.v("TA_REQ", taReq.toString());
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.taCumulativeApprove(taReq.toString());
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                try {
+                    common_class.CommonIntentwithFinish(TAApprovalActivity.class);
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if (flag == 1) {
+                        Toast.makeText(mContext, "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -60,8 +186,9 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txEMPNm,txEMPDesig;
+        TextView txEMPNm, txEMPDesig, tvTotAmt, tvPeriod, tvDailyAlow, tvfuelAlow, tvLodgingAlow, tvTrvlExp, tvOtherExp, tvLocConv;
         LinearLayout parentLayout;
+        Button btnView, btnApprov, btnRjct;
         //CardView secondarylayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,6 +196,18 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
             txEMPNm = itemView.findViewById(R.id.txEmpName);
             txEMPDesig = itemView.findViewById(R.id.txDesgName);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            tvTotAmt = itemView.findViewById(R.id.tvTotalAmount);
+            tvDailyAlow = itemView.findViewById(R.id.tvDailyAlowAmt);
+            tvPeriod = itemView.findViewById(R.id.tvPeriod);
+            tvfuelAlow = itemView.findViewById(R.id.tvFuelAlowAmt);
+            tvLodgingAlow = itemView.findViewById(R.id.tvLodgingAlowAmt);
+            tvTrvlExp = itemView.findViewById(R.id.tvTrvlExpAmt);
+            tvOtherExp = itemView.findViewById(R.id.tvOtherExpAmt);
+            tvLocConv = itemView.findViewById(R.id.tvLocConveyanceAmt);
+            btnView = itemView.findViewById(R.id.btn_View);
+            btnApprov = itemView.findViewById(R.id.btn_approve);
+            btnRjct = itemView.findViewById(R.id.btn_reject);
+
 
             //secondarylayout=itemView.findViewById(R.id.secondary_layout);
         }
