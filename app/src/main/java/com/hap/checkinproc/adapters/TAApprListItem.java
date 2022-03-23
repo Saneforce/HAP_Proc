@@ -1,12 +1,15 @@
 package com.hap.checkinproc.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAApprovalActivity;
+import com.hap.checkinproc.Activity_Hap.TACumulativeApproval;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -99,11 +103,7 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
                 @Override
                 public void onClick(View v) {
                     try {
-                        SendtpApproval(1, mlist.getJSONObject(position));
-//                        Intent intent = new Intent(mContext, TAApprovalActivity.class);
-//                        intent.putExtra("view_id", mlist.getJSONObject(position).getString("Sf_Code"));
-//                        intent.putExtra("name",mlist.getJSONObject(position).getString("EmployeeName"));
-//                        mContext.startActivity(intent);
+                        SendtpApproval(1, mlist.getJSONObject(position), "");
                     } catch (Exception e) {
 
                     }
@@ -113,11 +113,8 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
                 @Override
                 public void onClick(View v) {
                     try {
-                        SendtpApproval(2, mlist.getJSONObject(position));
-//                        Intent intent = new Intent(mContext, TAApprovalActivity.class);
-//                        intent.putExtra("view_id", mlist.getJSONObject(position).getString("Sf_Code"));
-//                        intent.putExtra("name",mlist.getJSONObject(position).getString("EmployeeName"));
-//                        mContext.startActivity(intent);
+
+                        showAlertDialogButtonClicked(2, mlist.getJSONObject(position));
                     } catch (Exception e) {
 
                     }
@@ -131,7 +128,8 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
 
     }
 
-    void SendtpApproval(int flag, JSONObject obj) {
+
+    void SendtpApproval(int flag, JSONObject obj, String reason) {
         JSONObject taReq = new JSONObject();
 
         try {
@@ -141,41 +139,102 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
             taReq.put("Flag", flag);
             taReq.put("TDate", obj.getString("TDate"));
             taReq.put("FDate", obj.getString("FDate"));
+            taReq.put("Date", Common_Class.GetDate());
+            taReq.put("Reason", reason);
 
 
-        Log.v("TA_REQ", taReq.toString());
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.taCumulativeApprove(taReq.toString());
+            Log.v("TA_REQ", taReq.toString());
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.taCumulativeApprove(taReq.toString());
 
-        mCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                // locationList=response.body();
-                try {
-                    common_class.CommonIntentwithFinish(TAApprovalActivity.class);
-                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    if (flag == 1) {
-                        Toast.makeText(mContext, "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(mContext, "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
+            mCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    // locationList=response.body();
+                    try {
+                       // mContext.startActivity(new Intent(mContext, TACumulativeApproval.class));
+                        TACumulativeApproval.taCumulativeApproval.finish();
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        Log.v("Res>>", response.body().toString());
+                        if (flag == 1) {
+                            Toast.makeText(mContext, "TA Approved Successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
 
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
 
-            }
-        });
+                }
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showAlertDialogButtonClicked(int flag, JSONObject obj) {
+
+        // Create an alert builder
+        AlertDialog.Builder builder
+                = new AlertDialog.Builder(mContext);
+        builder.setTitle("HAP Check-In");
+        builder.setMessage("Do you confirm to Reject Travel Allowance Approval?");
+
+        // set the custom layout
+        final View customLayout
+                = TACumulativeApproval.taCumulativeApproval.getLayoutInflater()
+                .inflate(
+                        R.layout.ta_reject_popup,
+                        null);
+        builder.setView(customLayout);
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+
+        // add a button
+        builder
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(
+                                    DialogInterface dialog,
+                                    int which) {
+                                EditText editText
+                                        = customLayout
+                                        .findViewById(
+                                                R.id.editText);
+
+
+                                if (editText.getText().toString().equalsIgnoreCase("")) {
+                                    common_class.showMsg(TACumulativeApproval.taCumulativeApproval, "Please Enter the Reason");
+                                } else {
+                                    dialog.dismiss();
+                                    SendtpApproval(flag, obj, editText.getText().toString());
+                                }
+
+
+                            }
+                        });
+
+
+        AlertDialog dialog
+                = builder.create();
+        dialog.show();
     }
 
 

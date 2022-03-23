@@ -32,7 +32,6 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
@@ -225,6 +224,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_ta_claim:
+                Shared_Common_Pref.TravelAllowance = 0;
                 startActivity(new Intent(this, TAClaimActivity.class)); //Travel_Allowance
                 break;
 
@@ -235,6 +235,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_approvals:
+                Shared_Common_Pref.TravelAllowance = 1;
                 startActivity(new Intent(this, Approvals.class));
                 break;
             case R.id.lin_myday_plan:
@@ -393,29 +394,31 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             }
         });
     }
-public void getHAPWorkTypes(){
 
-    JSONObject jParam=new JSONObject();
-    try {
-        jParam.put("SF",UserDetails.getString("Sfcode",""));
-        jParam.put("div", UserDetails.getString("Divcode",""));
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        service.getDataArrayList("get/worktypes",jParam.toString()).enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                db.deleteMasterData("HAPWorkTypes");
-                db.addMasterData("HAPWorkTypes",response.body());
-            }
+    public void getHAPWorkTypes() {
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
+        JSONObject jParam = new JSONObject();
+        try {
+            jParam.put("SF", UserDetails.getString("Sfcode", ""));
+            jParam.put("div", UserDetails.getString("Divcode", ""));
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            service.getDataArrayList("get/worktypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    db.deleteMasterData("HAPWorkTypes");
+                    db.addMasterData("HAPWorkTypes", response.body());
+                }
 
-            }
-        });
-    } catch (JSONException e) {
-        e.printStackTrace();
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-}
+
     public void getHapLocations() {
         String commonLeaveType = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -542,7 +545,7 @@ public void getHAPWorkTypes(){
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d("MDPError",t.getMessage());
+                Log.d("MDPError", t.getMessage());
             }
         });
     }
@@ -607,12 +610,12 @@ public void getHAPWorkTypes(){
             if (ActStarted.equalsIgnoreCase("true")) {
                 Intent aIntent;
                 String sDeptType = UserDetails.getString("DeptType", "");
-                 if (sDeptType.equalsIgnoreCase("1")) {
+                if (sDeptType.equalsIgnoreCase("1")) {
                     aIntent = new Intent(Dashboard.this, ProcurementDashboardActivity.class);
-                 } else {
-                     Shared_Common_Pref.Sync_Flag = "0";
-                     aIntent = new Intent(Dashboard.this, SFA_Activity.class);
-                 }
+                } else {
+                    Shared_Common_Pref.Sync_Flag = "0";
+                    aIntent = new Intent(Dashboard.this, SFA_Activity.class);
+                }
                 startActivity(aIntent);
                 finish();
             } else {

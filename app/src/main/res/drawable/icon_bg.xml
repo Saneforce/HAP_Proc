@@ -12,24 +12,7 @@
         android:centerColor="@android:color/transparent"
         android:endColor="@color/colorPrimaryDark"
         android:startColor="#07696A" />
-    <!--    <gradient-->
-    <!--        android:startColor="#789F3D"-->
-    <!--        android:endColor="#FF9EC563"-->
-    <!--        android:angle="90" />-->
 
-    <!--    <gradient-->
-    <!--        android:startColor="@color/colorPrimaryDark"-->
-    <!--        android:endColor="@color/colorPrimaryDark"-->
-    <!--        android:angle="90" />-->
-    <!--
-    <gradient
-        android:startColor="#06AF75"
-        android:endColor="#04B074"
-        android:angle="90" />-->
-    <!--    <gradient-->
-    <!--        android:startColor="#1974e6"-->
-    <!--        android:endColor="@color/Reports"-->
-    <!--        android:angle="-90" />-->
 </shape>
 
 

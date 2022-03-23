@@ -349,7 +349,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             getMnthReports(0);
             GetMissedPunch();
 
-            Shared_Common_Pref.TravelAllowance = 0;
+
         } catch (Exception e) {
 
         }

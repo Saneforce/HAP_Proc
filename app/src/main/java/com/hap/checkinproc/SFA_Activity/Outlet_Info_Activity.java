@@ -362,12 +362,13 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
         String routeId = sharedCommonPref.getvalue(Route_Id);
 
-        retailerSize = Retailer_Modal_List.size();
 
         CountUR = 0;
         CountSR = 0;
         CountCls = 0;
         if (Retailer_Modal_List != null) {
+            retailerSize = Retailer_Modal_List.size();
+
             for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
                 String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
                 String sSchText = txSearchRet.getText().toString().toUpperCase();

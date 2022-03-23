@@ -638,7 +638,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
                     }
 
-                    if (iOutletTyp == 2) {
+                    if (Common_Class.isNullOrEmpty(txOutletType.getText().toString())) {
+                        common_class.showMsg(AddNewRetailer.this, "Select Outlet Type");
+                    } else if (iOutletTyp == 2) {
                         if (mSubmit.isAnimating()) return;
                         mSubmit.startAnimation();
                         handler.postDelayed(new Runnable() {
@@ -669,34 +671,38 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
 //                    }
-                    else if (!divERP.equalsIgnoreCase("21") && txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
-                        Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
-                    } else if (!divERP.equalsIgnoreCase("21") && tvSubCategory.getText().toString().equalsIgnoreCase("")) {
-                        Toast.makeText(getApplicationContext(), "Select the Sub Category", Toast.LENGTH_SHORT).show();
-                    } else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
+//                    else if (!divERP.equalsIgnoreCase("21") && txtRetailerChannel.getText().toString().equalsIgnoreCase("")) {
+//                        Toast.makeText(getApplicationContext(), "Select the Outlet Category", Toast.LENGTH_SHORT).show();
+//                    } else if (!divERP.equalsIgnoreCase("21") && tvSubCategory.getText().toString().equalsIgnoreCase("")) {
+//                        Toast.makeText(getApplicationContext(), "Select the Sub Category", Toast.LENGTH_SHORT).show();
+//                    }
+
+
+                    else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
-                    } else if (txOutletType.getText().toString().equalsIgnoreCase("")) {
-                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
                     } else if (iOutletTyp == 2 && edtClsRetRmk.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Enter the reason for close outlet", Toast.LENGTH_SHORT).show();
                         linClsRmks.requestFocus();
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (divERP.equalsIgnoreCase("21") && categoryType.equals("")) {
+                    } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    } else if (divERP.equalsIgnoreCase("21") && cbFreezerYes.isChecked()) {
+                    } else if (!cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
+                        common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
+
+                    } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
                         if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
-                            common_class.showMsg(AddNewRetailer.this, "Selet the Freezer Status");
+                            common_class.showMsg(AddNewRetailer.this, "Selet the Freezer/Cooler Status");
                         } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
-                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer make");
+                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler make");
 
                         else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
-                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer Tag Number");
+                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler Tag Number");
                         } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
-                            common_class.showMsg(AddNewRetailer.this, "Select the Freezer Capacity");
+                            common_class.showMsg(AddNewRetailer.this, "Select the Freezer/Cooler Capacity");
                         } else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
-                            common_class.showMsg(AddNewRetailer.this, "Please take Freezer Photo");
+                            common_class.showMsg(AddNewRetailer.this, "Please take Freezer/Cooler Photo");
                         else {
                             if (mSubmit.isAnimating()) return;
                             mSubmit.startAnimation();
@@ -776,7 +782,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //            }
 
 
-           // if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+            // if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
 //                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
 //                    mSubmit.setVisibility(View.GONE);
 
@@ -925,7 +931,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             }
             common_class.getDb_310Data(Constants.Rout_List, this);
-            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID,shared_common_pref.getvalue(Constants.Distributor_Id));
+            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
 
 
         } catch (Exception e) {
@@ -1288,33 +1294,41 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             JSONArray outletTypeArr = new JSONArray();
 
-            if (divERP.equalsIgnoreCase("21")) {
-                for (int i = 0; i < serviceTypeList.size(); i++) {
-                    if (serviceTypeList.get(i).isSelected()) {
-                        JSONObject typeData = new JSONObject();
+            //if (divERP.equalsIgnoreCase("21")) {
+            for (int i = 0; i < serviceTypeList.size(); i++) {
+                if (serviceTypeList.get(i).isSelected()) {
+                    JSONObject typeData = new JSONObject();
 
-                        double catId = Double.parseDouble((serviceTypeList.get(i).getCatId()));
+                    double catId = Double.parseDouble((serviceTypeList.get(i).getCatId()));
 
-                        double subCatId = Double.parseDouble((serviceTypeList.get(i).getSubCatId()));
-                        typeData.put("type_name", serviceTypeList.get(i).getName());
-                        typeData.put("cat_name", serviceTypeList.get(i).getCatName());
-                        typeData.put("cat_id", (int) catId);
-                        typeData.put("subcat_id", (int) subCatId);
-                        typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
+                    double subCatId = Double.parseDouble((serviceTypeList.get(i).getSubCatId()));
+                    typeData.put("type_name", serviceTypeList.get(i).getName());
+                    typeData.put("cat_name", serviceTypeList.get(i).getCatName());
+                    typeData.put("cat_id", (int) catId);
+                    typeData.put("subcat_id", (int) subCatId);
+                    typeData.put("subcat_name", serviceTypeList.get(i).getSubCatName());
 
-                        outletTypeArr.put(typeData);
+                    outletTypeArr.put(typeData);
+
+                    if (Common_Class.isNullOrEmpty(serviceTypeList.get(i).getSubCatName())) {
+                        common_class.showMsg(AddNewRetailer.this, "Select the " + serviceTypeList.get(i).getName() + " Sub Category");
+                        return;
+                    } else if (Common_Class.isNullOrEmpty(serviceTypeList.get(i).getCatName())) {
+                        common_class.showMsg(AddNewRetailer.this, "Select the " + serviceTypeList.get(i).getName() + " Category");
+                        return;
                     }
                 }
-            } else {
-                JSONObject typeData = new JSONObject();
-                typeData.put("type_name", "");
-                typeData.put("cat_name", txtRetailerChannel.getText().toString());
-                typeData.put("cat_id", channelID);
-                typeData.put("subcat_id", tvSubCategory.getText().toString());
-                typeData.put("subcat_name", categoryId);
-                outletTypeArr.put(typeData);
-
             }
+//            } else {
+//                JSONObject typeData = new JSONObject();
+//                typeData.put("type_name", "");
+//                typeData.put("cat_name", txtRetailerChannel.getText().toString());
+//                typeData.put("cat_id", channelID);
+//                typeData.put("subcat_id", tvSubCategory.getText().toString());
+//                typeData.put("subcat_name", categoryId);
+//                outletTypeArr.put(typeData);
+//
+//            }
 
             reportObject.put("outlet_type_Details", outletTypeArr);
 
@@ -1378,7 +1392,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    }
 
 
-                    shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID,shared_common_pref.getvalue(Constants.Distributor_Id));
+                    shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
 
                     finish();
                 }
@@ -1509,21 +1523,37 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //        if (divERP.equalsIgnoreCase("62"))
 //            linReatilerRoute.setEnabled(true);
         if (divERP.equals("21")) {
-          //  linReatilerRoute.setEnabled(true);
+            //  linReatilerRoute.setEnabled(true);
             findViewById(R.id.llCategoryType).setVisibility(View.VISIBLE);
             findViewById(R.id.rvCategoryTypes).setVisibility(View.VISIBLE);
             findViewById(R.id.llSubCategory).setVisibility(View.GONE);
             findViewById(R.id.llCategory).setVisibility(View.GONE);
+
+            serviceTypeList = new ArrayList<>();
+            serviceTypeList.add(new Common_Model("-18", "1", false, "", "", "", ""));
+            serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
+            serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
+            serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
+
+
+            categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
+            rvCategoryTypes.setAdapter(categoryAdapter);
+
 
             // findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
         } else {
 //            if (!Shared_Common_Pref.Outler_AddFlag.equals("1"))
 //                linReatilerRoute.setEnabled(false);
             if (!Common_Class.isNullOrEmpty(divERP)) {
-                findViewById(R.id.llCategoryType).setVisibility(View.GONE);
-                findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
-                findViewById(R.id.llSubCategory).setVisibility(View.VISIBLE);
-                findViewById(R.id.llCategory).setVisibility(View.VISIBLE);
+
+//                findViewById(R.id.llCategoryType).setVisibility(View.GONE);
+//                findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
+//                findViewById(R.id.llSubCategory).setVisibility(View.VISIBLE);
+//                findViewById(R.id.llCategory).setVisibility(View.VISIBLE);
+                serviceTypeList.clear();
+                serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
+                categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
+                rvCategoryTypes.setAdapter(categoryAdapter);
 
             }
             //findViewById(R.id.llFreezer).setVisibility(View.GONE);
@@ -1560,7 +1590,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     @Override
     public void onBackPressed() {
-        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID,shared_common_pref.getvalue(Constants.Distributor_Id));
+        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
 
         finish();
     }

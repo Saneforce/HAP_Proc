@@ -207,6 +207,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                         } else {
 
                             Intent intent = new Intent(context, MapDirectionActivity.class);
+                            intent.putExtra(Constants.NEW_OUTLET,"new");
                             intent.putExtra(Constants.DEST_LAT, jItem.get("lat").getAsString());
                             intent.putExtra(Constants.DEST_LNG, jItem.get("long").getAsString());
                             intent.putExtra(Constants.DEST_NAME, jItem.get("Name").getAsString());

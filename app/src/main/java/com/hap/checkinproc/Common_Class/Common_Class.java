@@ -839,27 +839,7 @@ public class Common_Class {
                                 updateUi.onLoadDataUpdateUI(is.toString(), key);
 
                                 if (key.equals(Constants.Distributor_List)) {
-                                    if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
-                                        JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
-                                        Log.v("distList:", jsonArray.toString());
-
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                                            shared_common_pref.save(Constants.Distributor_name, jsonObject1.optString("name"));
-                                            shared_common_pref.save(Constants.Distributor_Id, String.valueOf(jsonObject1.optInt("id")));
-                                            shared_common_pref.save(Constants.DistributorERP, jsonObject1.optString("ERP_Code"));
-                                            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, String.valueOf(jsonObject1.optInt("id")));
-                                            shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
-                                            shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
-                                            getDataFromApi(Retailer_OutletList, activity, false);
-
-                                            break;
-                                        }
-
-
-                                    }
-
+                                    setDefDist();
                                 }
                             }
 
@@ -879,6 +859,34 @@ public class Common_Class {
                 });
             } else {
                 showMsg(activity, "Please check your internet connection.");
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public void setDefDist() {
+        try {
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
+                JSONArray jsonArray = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+                Log.v("distList:", jsonArray.toString());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                    shared_common_pref.save(Constants.Distributor_name, jsonObject1.optString("name"));
+                    shared_common_pref.save(Constants.Distributor_Id, String.valueOf(jsonObject1.optInt("id")));
+                    shared_common_pref.save(Constants.DistributorERP, jsonObject1.optString("ERP_Code"));
+                    shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, String.valueOf(jsonObject1.optInt("id")));
+                    shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
+                    shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
+                    getDataFromApi(Retailer_OutletList, activity, false);
+
+                    break;
+                }
+
+
             }
         } catch (Exception e) {
 

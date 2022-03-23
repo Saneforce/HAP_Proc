@@ -3,13 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/cardbutton.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/des_bg.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_distributor.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_editpen.xml" value="0.2824074074074074" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_heatmeter.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/icon_bg.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/mandatory.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/tabs_selector.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/text_bg.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/text_bg_grey.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/textbox_bg.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/tool_bar_bg.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/tp_custom_check.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/tp_custom_uncheck.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/txt_rect_red.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/white_mud_round_rect.xml" value="0.2824074074074074" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_add_new_retailer.xml" value="0.13044579533941236" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_approvals.xml" value="0.24094202898550723" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_attachement.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard__route.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard__two.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dist_name.xml" value="0.27291666666666664" />
@@ -29,12 +44,14 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_t_a_view_status.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/adapter_report_list.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/dist_info_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/explorelist.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/item_ta_appr.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/leave_approval_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/oe_claim_approval.xml" value="0.2682291666666667" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/primaryorder_history_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/ta_reject_popup.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/team_loc_detail_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/tl_claim_appro_one.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/travel_allowance_dynamic.xml" value="0.14010416666666667" />

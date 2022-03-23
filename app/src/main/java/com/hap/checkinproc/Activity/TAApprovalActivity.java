@@ -131,7 +131,7 @@ public class TAApprovalActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JsonObject jsonObject = (JsonObject) jsonArray.get(i);
 
-                        if (getIntent().getStringExtra("view_id").equalsIgnoreCase(jsonObject.get("Sf_code").getAsString())) {
+                        if (getIntent().getStringExtra("view_id")!=null&&getIntent().getStringExtra("view_id").equalsIgnoreCase(jsonObject.get("Sf_code").getAsString())) {
                             filterArr.add(jsonObject);
                         }
                     }

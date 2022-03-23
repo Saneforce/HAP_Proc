@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -35,7 +37,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationFinder;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,21 +45,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class TaApprovalDisplay extends AppCompatActivity {
 
     TextView txtTaAmt, txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA,
             txtTL, txtLA, txtLC, txtOE, txtReject, txtEmpId, txtMobile;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "",TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "",
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "",
             endImg = "", lodgTotal = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null, jsonTravDetai = null, lcDraftArray = null, oeDraftArray = null, trvldArray = null, ldArray = null,
             daArray = null;
     Double ldgTtl, brd, ta, ldg, oe, lc, trv_lc;
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,9 @@ public class TaApprovalDisplay extends AppCompatActivity {
         setContentView(R.layout.activity_ta_approval_display);
         mShared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
+
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
 
         date = String.valueOf(getIntent().getSerializableExtra("date"));
         Log.v("datedate", date);
@@ -219,13 +223,13 @@ public class TaApprovalDisplay extends AppCompatActivity {
     public void FuelApproval(View v) {
 /*
         if (!txtTL.getText().equals("Rs. 0.0")) {*/
-            Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
-            intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
-            intent.putExtra("start_Photo", stImg);
-            intent.putExtra("End_photo", endImg);
-            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
-            startActivity(intent);
-    /*    }*/
+        Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
+        intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
+        intent.putExtra("start_Photo", stImg);
+        intent.putExtra("End_photo", endImg);
+        intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+        startActivity(intent);
+        /*    }*/
     }
 
     public void LCApproval(View v) {
@@ -331,6 +335,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
         JSONObject taReq = new JSONObject();
 
         try {
+            taReq.put("login_sfCode", UserDetails.getString("Sfcode", ""));
             taReq.put("sfCode", sfCode);
             taReq.put("Flag", flag);
             taReq.put("Sl_No", SlStart);

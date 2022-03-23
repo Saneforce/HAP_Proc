@@ -3802,6 +3802,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     getMulipart(LcUKey, filePath, "LC", "", editMode, "", "");
                 }
+
+
+                Log.v("FileName:Load1",filePath);
+                Log.v("FileName:Load2",fullPath);
+
             }
         } catch (Exception e) {
             Log.v("TAClaimActivity:mulImg:", e.getMessage());
@@ -3929,6 +3934,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 mIntent.putExtra("FileName", FileName);
                 mIntent.putExtra("Mode", "ExpClaim;" + sMode);
                 FileUploadService.enqueueWork(TAClaimActivity.this, mIntent);
+
+
+                Log.v("FileName:capture",FileName);
 
             }
         });
@@ -4398,10 +4406,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
         Log.v("PATH_IMAGE", "" + path);
-        MultipartBody.Part imgg = convertimg("file", path);
-        Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
-        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".pdf"))
-            sendImageToServer(count, x, mode, from, to, imgg);
+
+        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".pdf")){
+            MultipartBody.Part imgg = convertimg("file", path);
+            Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
+            sendImageToServer(count, x, mode, from, to, imgg);}
         else
             mCommon_class.showMsg(this, "Image and Pdf file only supported");
     }

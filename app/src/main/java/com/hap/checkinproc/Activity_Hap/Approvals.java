@@ -389,7 +389,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     if (obj.getBoolean("success")) {
                         startActivity(new Intent(Approvals.this, TACumulativeApproval.class));
                       //  startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
-                        finish();
+                       // finish();
                     } else {
                         common_class.showMsg(this, obj.getString("Msg"));
                     }

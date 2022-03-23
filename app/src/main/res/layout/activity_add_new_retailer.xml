@@ -388,12 +388,12 @@
                                     android:textSize="13sp" />
 
                                 <ImageView
-                                    android:visibility="invisible"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/C2dp"
                                     android:layout_marginTop="@dimen/C3dp"
-                                    android:src="@drawable/mandatory" />
+                                    android:src="@drawable/mandatory"
+                                    android:visibility="invisible" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -1074,7 +1074,8 @@
                             android:id="@+id/llCategory"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -1129,7 +1130,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
 
                             <LinearLayout
@@ -1236,7 +1238,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -1278,7 +1280,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Freezer Required"
+                                    android:text="Freezer/Cooler Required"
                                     android:textColor="@android:color/black"
                                     android:textSize="13sp" />
 
@@ -1399,7 +1401,7 @@
                                     android:id="@+id/txFreezerStatus"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Freezer status"
+                                    android:hint="Freezer/Cooler status"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 
@@ -1524,7 +1526,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/text_bg_grey"
                                     android:gravity="start"
-                                    android:hint="Enter the Freezer Make"
+                                    android:hint="Enter the Freezer/Cooler Make"
                                     android:padding="10dp"
                                     android:textSize="13sp" />
                             </LinearLayout>
@@ -1546,7 +1548,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Freezer Tag Number"
+                                        android:text="Freezer/Cooler Tag Number"
                                         android:textColor="@android:color/black"
                                         android:textSize="13sp" />
 
@@ -1565,7 +1567,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/text_bg_grey"
                                     android:gravity="start"
-                                    android:hint="Enter the Freezer Tag Number"
+                                    android:hint="Enter the Freezer/Cooler Tag Number"
                                     android:padding="10dp"
                                     android:textSize="13sp" />
                             </LinearLayout>
@@ -1580,7 +1582,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Freezer Capacity (Ltr)"
+                                    android:text="Freezer/Cooler Capacity (Ltr)"
                                     android:textColor="@android:color/black"
                                     android:textSize="13sp" />
 
@@ -1606,7 +1608,7 @@
                                     android:id="@+id/txFreezerCapacity"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Freezer Capacity"
+                                    android:hint="Freezer/Cooler Capacity"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 
@@ -1634,7 +1636,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Freezer Photo Upload"
+                                        android:text="Freezer/Cooler Photo Upload"
                                         android:textColor="@android:color/black"
                                         android:textSize="13sp" />
 
