@@ -69,13 +69,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         String getAddress = contact.getAddress();
         String getPhone = contact.getPhone();
 
-        if (!isNullOrEmpty(getAddress) && typeName != 1000) {
+        if (!isNullOrEmpty(getAddress) && typeName != 1000 && typeName != 6) {
             fruitViewHolder.mTextAddress.setText(contact.getAddress());
             fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
         } else {
             fruitViewHolder.mTextAddress.setVisibility(View.GONE);
         }
-        if (!isNullOrEmpty(getPhone)) {
+        if (!isNullOrEmpty(getPhone) && typeName != 6) {
             fruitViewHolder.mTextPhone.setText(contact.getPhone());
             fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
         } else {
@@ -144,7 +144,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public int getItemCount() {
-        if(contactListFiltered == null) return 0;
+        if (contactListFiltered == null) return 0;
         return contactListFiltered.size();
     }
 
@@ -157,12 +157,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 List<Common_Model> filteredList = new ArrayList<>();
                 List<Common_Model> filteredany = new ArrayList<>();
                 for (Common_Model row : contactList) {
-                    String sName=row.getName().toLowerCase().trim().replaceAll("\\s", "");
-                    String getAddress = (row.getAddress()!=null)?row.getAddress().toLowerCase().trim().replaceAll("\\s", ""):"";
-                    String getPhone = (row.getPhone()!=null)?row.getPhone().toLowerCase().trim().replaceAll("\\s", ""):"";
-                    if ((";"+sName).contains(";"+charString)||(";"+getAddress).contains(";"+charString)||(";"+getPhone).contains(";"+charString)) {
+                    String sName = row.getName().toLowerCase().trim().replaceAll("\\s", "");
+                    String getAddress = (row.getAddress() != null) ? row.getAddress().toLowerCase().trim().replaceAll("\\s", "") : "";
+                    String getPhone = (row.getPhone() != null) ? row.getPhone().toLowerCase().trim().replaceAll("\\s", "") : "";
+                    if ((";" + sName).contains(";" + charString) || (";" + getAddress).contains(";" + charString) || (";" + getPhone).contains(";" + charString)) {
                         filteredList.add(row);
-                    } else if (sName.contains(charString)|| getAddress.contains(charString)||getPhone.contains(charString)) {
+                    } else if (sName.contains(charString) || getAddress.contains(charString) || getPhone.contains(charString)) {
                         filteredany.add(row);
                     }
                 }

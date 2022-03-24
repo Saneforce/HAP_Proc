@@ -56,6 +56,17 @@
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/tvProERPCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Prod"
+                        android:textColor="@color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -156,4 +156,5 @@ public class Constants {
     public static final String ProjectionProdTypes_List="projectionProdTypeList";
     public static final String Projection_Category_List="projectionCategoryList";
     public static final String Projection_Product_List="projectionProdList";
+    public static final String CusSubGrpErp="CusSubGrpErp";
 }

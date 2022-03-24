@@ -117,7 +117,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     private String mCategoryName = "ALL", mSubCategoryName = "ALL";
     private final ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
 
-    String categoryType = "",freezerFilter="";
+    String categoryType = "", freezerFilter = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,9 +292,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                         swNoFreezerOutlet.setChecked(false);
 
 
-
                     }
-                    getFilterType(swFreezerOutlet.isChecked(),swNoFreezerOutlet.isChecked());
+                    getFilterType(swFreezerOutlet.isChecked(), swNoFreezerOutlet.isChecked());
                 }
             });
 
@@ -305,7 +304,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                         swFreezerOutlet.setChecked(false);
                     }
 
-                    getFilterType(swFreezerOutlet.isChecked(),swNoFreezerOutlet.isChecked());
+                    getFilterType(swFreezerOutlet.isChecked(), swNoFreezerOutlet.isChecked());
                 }
             });
 
@@ -523,7 +522,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getFilterType(boolean isFreezerOutlet, boolean isNoFreezerOutlet) {
-        freezerFilter=isFreezerOutlet?"Yes":isNoFreezerOutlet?"No":"";
+        freezerFilter = isFreezerOutlet ? "Yes" : isNoFreezerOutlet ? "No" : "";
         setPagerAdapter(true);
     }
 
@@ -829,7 +828,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName,freezerFilter);
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName, freezerFilter);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -998,6 +997,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             shared_common_pref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            shared_common_pref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
             if (myDataset.get(position).getDivERP().equalsIgnoreCase("21")) {
                 findViewById(R.id.cvCatTypeParent).setVisibility(View.VISIBLE);
@@ -1154,10 +1154,10 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             txTotUniOtltCnt.setText(String.valueOf(CountTotUni));
 
             if (isFilter) {
-                Log.v("categoryTypes:", categoryType+" :freezer:"+freezerFilter);
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, categoryType, mSubCategoryName,freezerFilter);
+                Log.v("categoryTypes:", categoryType + " :freezer:" + freezerFilter);
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, mCategoryName, categoryType, mSubCategoryName, freezerFilter);
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName,freezerFilter);
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "Dashboard_Route", mCategoryName, categoryType, mSubCategoryName, freezerFilter);
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);

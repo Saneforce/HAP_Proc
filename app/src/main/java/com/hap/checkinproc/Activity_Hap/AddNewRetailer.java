@@ -105,6 +105,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> categoryList = new ArrayList<>();
+    List<Common_Model> filterCatList = new ArrayList<>();
+    List<Common_Model> filterSubCatList = new ArrayList<>();
+
     Common_Model mCommon_model_spinner;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_sub_category, edtDepositAmt, edtExpcSalVal,
@@ -156,11 +159,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Boolean isValidCode = false;
     public static AddNewRetailer mAddNewRetailer;
     CheckBox cbFranchise, cbFreezerYes, cbFreezerNo;
-    private String categoryId = "", approval = "";
+    private String categoryId = "", approval = "", distGrpERP = "";
 
     boolean isFlag = false;
     private int typeUpdatePos = -1, freezerStaApproval;
     private Category_Adapter categoryAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +186,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             distributor_text = findViewById(R.id.distributor_text);
             retailercode = findViewById(R.id.retailercode);
             common_class = new Common_Class(this);
+            shared_common_pref = new Shared_Common_Pref(this);
             CurrentLocLin = findViewById(R.id.CurrentLocLin);
             retailercodevisible = findViewById(R.id.retailercodevisible);
             CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
@@ -253,6 +258,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             linReatilerChannel.setOnClickListener(this);
             rlSubCategory.setOnClickListener(this);
             ivProfilePreview.setOnClickListener(this);
+
+            distGrpERP = shared_common_pref.getvalue(Constants.CusSubGrpErp);
 
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -340,7 +347,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
             gson = new Gson();
-            shared_common_pref = new Shared_Common_Pref(this);
             outletCode = Shared_Common_Pref.OutletCode;
 
 
@@ -838,6 +844,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 getRetailerChannel();
             else {
                 modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+
+                filterSubCategory(modelRetailChannel);
+
             }
 
 
@@ -846,6 +855,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             else {
                 getCategoryList(shared_common_pref.getvalue(OUTLET_CATEGORY));
             }
+
 
             Log.e(TAG + "9:", Shared_Common_Pref.Outler_AddFlag);
 
@@ -1051,7 +1061,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Retailer Channel */
     public void getRetailerChannel() {
-        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"NeedApproval\\\",\\\"CategoryCode\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
+        String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"DivErp\\\",\\\"NeedApproval\\\",\\\"CategoryCode\\\",\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\"," +
                 "\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),
@@ -1063,7 +1073,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 try {
 
                     JsonArray jsonArray = response.body();
-                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    Log.e("RESPONSE_VALUE:SubCAT:", String.valueOf(jsonArray));
                     for (int a = 0; a < jsonArray.size(); a++) {
                         JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                         String className = String.valueOf(jsonObject.get("name"));
@@ -1078,13 +1088,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                         Log.e("RETAILER_Channel_NAME", retailerClass);
                         String approval = String.valueOf(jsonObject.get("NeedApproval"));
-                        mCommon_model_spinner = new Common_Model(id, retailerClass, approval, String.valueOf(jsonObject.get("CategoryCode")));
+                        // mCommon_model_spinner = new Common_Model(id, retailerClass, approval, String.valueOf(jsonObject.get("CategoryCode")));
+
+                        mCommon_model_spinner = new Common_Model(retailerClass, id, approval, String.valueOf(jsonObject.get("CategoryCode")), String.valueOf(jsonObject.get("DivErp")));
+
                         Log.e("LeaveType_Request", retailerClass);
                         modelRetailChannel.add(mCommon_model_spinner);
                     }
 
                     if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
                         shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
+
+                        filterSubCategory(modelRetailChannel);
                     }
                 } catch (Exception e) {
                     Log.v(TAG + " getRetailerChannel: ", e.getMessage());
@@ -1457,15 +1472,22 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             case 2:
                 txtRetailerRoute.setText("");
                 routeId = "";
+                distGrpERP = myDataset.get(position).getCusSubGrpErp();
                 distributor_text.setText(myDataset.get(position).getName());
                 findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
-                common_class.getDb_310Data(Constants.Rout_List, this);
+
 
                 divERP = myDataset.get(position).getDivERP();
                 distributorERP = myDataset.get(position).getCont();
 
                 getFreezerData(divERP);
+
+
+                filterCategory(categoryList);
+                filterSubCategory(modelRetailChannel);
+
+                common_class.getDb_310Data(Constants.Rout_List, this);
 
 
                 // getServiceTypes(myDataset.get(position).getId());
@@ -1824,11 +1846,41 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
                     categoryList.add(new Common_Model(obj.getString("CategoryCode"), obj.getString("CategoryName"),
-                            obj.getString("OutletCategory")));
+                            obj.getString("OutletCategory"), obj.getString("DivErp")));
                 }
+
+                if (categoryList != null && categoryList.size() > 0)
+                    filterCategory(categoryList);
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    void filterCategory(List<Common_Model> catList) {
+        filterCatList.clear();
+        filterCatList = new ArrayList<>();
+        if (catList != null && catList.size() > 0) {
+            for (int i = 0; i < catList.size(); i++) {
+                if (catList.get(i).getCheckouttime().equalsIgnoreCase(distGrpERP)) {
+                    filterCatList.add(catList.get(i));
+                }
+
+            }
+        }
+    }
+
+    void filterSubCategory(List<Common_Model> subCatList) {
+        filterSubCatList.clear();
+        filterSubCatList = new ArrayList<>();
+
+        if (subCatList != null && subCatList.size() > 0) {
+            for (int i = 0; i < subCatList.size(); i++) {
+                if (subCatList.get(i).getPhone().equalsIgnoreCase(distGrpERP)) {
+                    filterSubCatList.add(subCatList.get(i));
+                }
+
+            }
         }
     }
 
@@ -2033,8 +2085,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         if (list.get(position).isSelected()) {
                             ArrayList<Common_Model> typeCatList = new ArrayList<>();
 
+//                            for (int i = 0; i < filterCatList.size(); i++) {
+//                                if (filterCatList.get(i).getFlag().contains(list.get(position).getName()))
+//                                    typeCatList.add(filterCatList.get(i));
+//                            }
+
                             for (int i = 0; i < categoryList.size(); i++) {
-                                if (categoryList.get(i).getFlag().contains(list.get(position).getName()))
+                                String ERP = filterCatList.get(position).getCheckouttime() + ",";
+                                if (categoryList.get(i).getFlag().contains(list.get(position).getName()) && ERP.contains(distGrpERP + ","))
                                     typeCatList.add(categoryList.get(i));
                             }
                             common_class.showCommonDialog(typeCatList, 5, AddNewRetailer.this);
@@ -2050,12 +2108,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             if (list.get(position).isSelected() && !Common_Class.isNullOrEmpty(list.get(position).getCatId())) {
                                 ArrayList<Common_Model> typeSubCatList = new ArrayList<>();
 
+//                                for (int i = 0; i < filterSubCatList.size(); i++) {
+//
+//                                    // String code = modelRetailChannel.get(i).getCheckouttime();
+//                                    String code = filterSubCatList.get(i).getAddress();
+//
+//                                    if (code.contains(list.get(position).getCatId() + ","))
+//                                        typeSubCatList.add(filterSubCatList.get(i));
+//                                }
+
+
                                 for (int i = 0; i < modelRetailChannel.size(); i++) {
 
-                                    String code = modelRetailChannel.get(i).getCheckouttime();
-                                    if (code.contains(list.get(position).getCatId() + ","))
+                                    // String code = modelRetailChannel.get(i).getCheckouttime();
+                                    String code = modelRetailChannel.get(i).getAddress();
+                                    String ERP = modelRetailChannel.get(i).getPhone() + ",";
+
+                                    if (code.contains(list.get(position).getCatId() + ",") && (ERP.contains(distGrpERP + ",")))
                                         typeSubCatList.add(modelRetailChannel.get(i));
                                 }
+
+
                                 common_class.showCommonDialog(typeSubCatList, 6, AddNewRetailer.this);
                             }
                         } catch (Exception e) {

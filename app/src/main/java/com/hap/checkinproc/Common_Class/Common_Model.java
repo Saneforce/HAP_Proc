@@ -5,7 +5,8 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
-    private  String Latlong;
+    private String CusSubGrpErp;
+    private String Latlong;
     private String catName, catId, subCatName, subCatId;
     private int icon;
     private String DivERP;
@@ -95,7 +96,7 @@ public class Common_Model {
         Latlong = latlong;
     }
 
-    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP, String Latlong) {
+    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP, String Latlong, String CusSubGrpErp) {
         this.name = name;
         this.id = id;
         this.flag = flag;
@@ -103,7 +104,8 @@ public class Common_Model {
         this.phone = phone;
         this.cont = cont;
         this.DivERP = DivERP;
-        this.Latlong=Latlong;
+        this.Latlong = Latlong;
+        this.CusSubGrpErp = CusSubGrpErp;
     }
 
     public Common_Model(String id, String name, String flag, String checkouttime, Boolean ExpNeed) {
@@ -139,6 +141,8 @@ public class Common_Model {
         this.flag = flag;
         this.checkouttime = checkouttime;
     }
+
+
 
     public Common_Model(String name, String id, boolean isSelected) {
         this.name = name;
@@ -188,6 +192,7 @@ public class Common_Model {
         this.name = name;
         this.flag = flag;
     }
+
 
     public Common_Model(String name, int Total_Ltrs, String QPS_Name, String QPS_Code) {
         this.name = name;
@@ -358,5 +363,13 @@ public class Common_Model {
 
     public void setSubCatId(String subCatId) {
         this.subCatId = subCatId;
+    }
+
+    public String getCusSubGrpErp() {
+        return CusSubGrpErp;
+    }
+
+    public void setCusSubGrpErp(String cusSubGrpErp) {
+        CusSubGrpErp = cusSubGrpErp;
     }
 }

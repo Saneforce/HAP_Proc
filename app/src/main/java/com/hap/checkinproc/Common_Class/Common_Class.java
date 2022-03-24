@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.23";
+    public static String Version_Name = "ver 3.3.24";
     public static String Work_Type = "0";
     public static int count;
 
@@ -590,7 +590,6 @@ public class Common_Class {
                     case Constants.OUTLET_CATEGORY:
                         axnname = "get/outletcategory";
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
-
                         //  data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.CUSTOMER_DATA:
@@ -874,15 +873,14 @@ public class Common_Class {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
                     shared_common_pref.save(Constants.Distributor_name, jsonObject1.optString("name"));
                     shared_common_pref.save(Constants.Distributor_Id, String.valueOf(jsonObject1.optInt("id")));
                     shared_common_pref.save(Constants.DistributorERP, jsonObject1.optString("ERP_Code"));
                     shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, String.valueOf(jsonObject1.optInt("id")));
                     shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
                     shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
+                    shared_common_pref.save(Constants.CusSubGrpErp,jsonObject1.getString("CusSubGrpErp"));
                     getDataFromApi(Retailer_OutletList, activity, false);
-
                     break;
                 }
 
@@ -1281,7 +1279,7 @@ public class Common_Class {
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
                 String DivERP = jsonObject1.optString("DivERP");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP, jsonObject1.optString("Latlong"));
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP, jsonObject1.optString("Latlong"), jsonObject1.getString("CusSubGrpErp"));
                 distributor_master.add(Model_Pojo);
 
             }

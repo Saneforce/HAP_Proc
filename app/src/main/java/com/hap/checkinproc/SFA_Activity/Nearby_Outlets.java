@@ -261,6 +261,12 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             });
 
 
+            if(getIntent().getStringExtra("menu")!=null){
+                findViewById(R.id.llMenuParent).setVisibility(View.GONE);
+                Createoutlet.setVisibility(View.GONE);
+            }
+
+
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
 
@@ -308,6 +314,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         getCompleteAddressString(location.getLatitude(), location.getLongitude());
         JSONObject jsonObject = new JSONObject();
         try {
+            common_class.ProgressdialogShow(1, "");
+
             jsonObject.put("SF", UserDetails.getString("Sfcode", ""));
             jsonObject.put("Div", UserDetails.getString("Divcode", ""));
             jsonObject.put("Lat", location.getLatitude());
@@ -319,6 +327,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     try {
+                        common_class.ProgressdialogShow(0, "");
+
                         jOutlets = response.body();
 
                         if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
@@ -337,12 +347,15 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                         availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
                         setOutletsAdapter(jOutlets);
                     } catch (Exception e) {
+                        common_class.ProgressdialogShow(0, "");
 
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    common_class.ProgressdialogShow(0, "");
+
                     Log.d("Fence", t.getMessage());
                 }
             });

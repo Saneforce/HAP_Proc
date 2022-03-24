@@ -55,7 +55,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String mypreference = "mypref";
     TextView username;
     TextView lblUserName, lblEmail;
-    Button linMyday, linCheckin, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
+    Button linMyday, linCheckin, linApprovals, linRequstStaus, linReport, linOnDuty, linSFA, linTaClaim, linExtShift,
             linTourPlan, linExit, lin_check_in, linHolidayWorking, linReCheck;
     Integer type, OTFlg = 0;
     Common_Class common_class;
@@ -130,9 +130,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
         linOnDuty = (findViewById(R.id.lin_onduty));
+        linSFA = findViewById(R.id.lin_sfa);
+
+        linSFA.setVisibility(View.GONE);
 
         linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
+        else
+            linSFA.setVisibility(View.VISIBLE);
 
         if (linOnDuty.getVisibility() == View.VISIBLE) {
             linCheckin.setVisibility(View.VISIBLE);
@@ -180,6 +185,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
         linReCheck.setOnClickListener(this);
+        linSFA.setOnClickListener(this);
         getcountdetails();
         updateFlxlayout();
     }
@@ -282,6 +288,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 oDutyInt.putExtra("Onduty", onDuty);
                 startActivity(oDutyInt);
 
+                break;
+
+            case R.id.lin_sfa:
+                startActivity(new Intent(this, SFA_Activity.class));
                 break;
             case R.id.lin_exit:
                 SharedPreferences.Editor editor = UserDetails.edit();

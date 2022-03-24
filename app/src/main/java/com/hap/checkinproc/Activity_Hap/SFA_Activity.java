@@ -45,6 +45,7 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
+import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
@@ -151,6 +152,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+                menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
                 menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
                 menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
                 menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
@@ -164,6 +166,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+                menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
                 menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
                 menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
@@ -175,6 +178,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Secondary Order", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
+                menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
                 menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
                 menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
@@ -189,6 +193,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void CallMobile(String menuName) {
                 switch (menuName) {
+                    case "Nearby Outlets":
+                        Intent intent = new Intent(SFA_Activity.this, Nearby_Outlets.class);
+
+                        intent.putExtra("menu", "menu");
+                        startActivity(intent);
+                        break;
                     case "GRN":
                         common_class.CommonIntentwithNEwTask(GrnListActivity.class);
                         break;
@@ -200,8 +210,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case "Secondary Order":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
-                        Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
-                        startActivity(intent);
+                        startActivity(new Intent(SFA_Activity.this, Dashboard_Route.class));
                         break;
 
                     case "Sales Return":

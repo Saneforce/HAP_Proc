@@ -1484,6 +1484,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
             sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
+            sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
+
             getProductDetails();
             // common_class.getProductDetails(this);
 
@@ -1974,6 +1976,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
 
                 if (CategoryType >= 0) {
+                    holder.tvProERPCode.setText(""+ProductItem.getERP_Code());
 
                     holder.tvMRP.setText("₹" + ProductItem.getMRP());
                     holder.totalQty.setText("Total Qty : " + (int) oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
@@ -2348,7 +2351,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, lblRQty, productQty,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvDefUOM, tvUomName, tvUomQty, tvMultiple;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvDefUOM, tvUomName, tvUomQty, tvMultiple,tvProERPCode;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -2376,6 +2379,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     tvMRP = view.findViewById(R.id.MrpRate);
                     tvUomName = view.findViewById(R.id.tvUomName);
                     tvUomQty = view.findViewById(R.id.tvUomQty);
+                    tvProERPCode=view.findViewById(R.id.tvProERPCode);
 
                 } else {
                     ivDel = view.findViewById(R.id.ivDel);

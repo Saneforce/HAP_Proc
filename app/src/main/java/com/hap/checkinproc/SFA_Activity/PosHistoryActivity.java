@@ -117,6 +117,8 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+                sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
+
                 common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);

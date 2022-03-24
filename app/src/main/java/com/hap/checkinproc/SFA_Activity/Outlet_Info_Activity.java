@@ -395,7 +395,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
                 boolean FreezerTrue = false;
 
-                Log.v("freezer:",""+swFreezerOutlet.isChecked()+" :nofree:"+swNoFreezerOutlet.isChecked());
+                Log.v("freezer:", "" + swFreezerOutlet.isChecked() + " :nofree:" + swNoFreezerOutlet.isChecked());
                 if (swFreezerOutlet.isChecked()) {
                     if (Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("Yes"))
                         FreezerTrue = true;
@@ -473,6 +473,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
+
             findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);

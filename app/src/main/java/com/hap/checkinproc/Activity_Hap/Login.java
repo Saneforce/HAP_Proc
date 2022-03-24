@@ -620,7 +620,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-                //eMail = "anbu@saneforce.com";
+              //  eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -650,6 +650,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "1006208@hap.in";
                // eMail="rajasekaranm@hap.in";
              //   eMail="1018368@hap.in";
+               // eMail="sajan@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -776,6 +777,8 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Constants.DistributorERP, response.getData().get(0).getERP_Code());
                 shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
                 shared_common_pref.save(Constants.DistributorAdd, response.getData().get(0).getStockist_Address());
+                shared_common_pref.save(Constants.CusSubGrpErp,response.getData().get(0).getCusSubGrpErp());
+
                 Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                 userEditor.putString("Sfcode", response.getData().get(0).getDistCode());
                 userEditor.putString("Divcode", response.getData().get(0).getDivisionCode());

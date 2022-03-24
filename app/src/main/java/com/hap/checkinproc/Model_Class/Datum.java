@@ -18,6 +18,10 @@ public class Datum {
     @Expose
     private String ERP_Code;
 
+    @SerializedName("CusSubGrpErp")
+    @Expose
+    private String CusSubGrpErp;
+
     public Datum(String tm) {
         Tm = tm;
     }
@@ -412,5 +416,13 @@ public class Datum {
 
     public void setSalesReturnImg(Integer salesReturnImg) {
         SalesReturnImg = salesReturnImg;
+    }
+
+    public String getCusSubGrpErp() {
+        return CusSubGrpErp;
+    }
+
+    public void setCusSubGrpErp(String cusSubGrpErp) {
+        CusSubGrpErp = cusSubGrpErp;
     }
 }
