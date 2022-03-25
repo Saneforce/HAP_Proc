@@ -105,8 +105,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> categoryList = new ArrayList<>();
-    List<Common_Model> filterCatList = new ArrayList<>();
-    List<Common_Model> filterSubCatList = new ArrayList<>();
 
     Common_Model mCommon_model_spinner;
     Gson gson;
@@ -845,8 +843,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             else {
                 modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
 
-                filterSubCategory(modelRetailChannel);
-
             }
 
 
@@ -1098,8 +1094,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     if (modelRetailChannel != null && modelRetailChannel.size() > 0) {
                         shared_common_pref.save(Constants.RETAIL_CHANNEL, gson.toJson(modelRetailChannel));
-
-                        filterSubCategory(modelRetailChannel);
                     }
                 } catch (Exception e) {
                     Log.v(TAG + " getRetailerChannel: ", e.getMessage());
@@ -1483,10 +1477,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 getFreezerData(divERP);
 
-
-                filterCategory(categoryList);
-                filterSubCategory(modelRetailChannel);
-
                 common_class.getDb_310Data(Constants.Rout_List, this);
 
 
@@ -1849,38 +1839,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             obj.getString("OutletCategory"), obj.getString("DivErp")));
                 }
 
-                if (categoryList != null && categoryList.size() > 0)
-                    filterCategory(categoryList);
             }
         } catch (Exception e) {
 
-        }
-    }
-
-    void filterCategory(List<Common_Model> catList) {
-        filterCatList.clear();
-        filterCatList = new ArrayList<>();
-        if (catList != null && catList.size() > 0) {
-            for (int i = 0; i < catList.size(); i++) {
-                if (catList.get(i).getCheckouttime().equalsIgnoreCase(distGrpERP)) {
-                    filterCatList.add(catList.get(i));
-                }
-
-            }
-        }
-    }
-
-    void filterSubCategory(List<Common_Model> subCatList) {
-        filterSubCatList.clear();
-        filterSubCatList = new ArrayList<>();
-
-        if (subCatList != null && subCatList.size() > 0) {
-            for (int i = 0; i < subCatList.size(); i++) {
-                if (subCatList.get(i).getPhone().equalsIgnoreCase(distGrpERP)) {
-                    filterSubCatList.add(subCatList.get(i));
-                }
-
-            }
         }
     }
 
@@ -2085,13 +2046,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         if (list.get(position).isSelected()) {
                             ArrayList<Common_Model> typeCatList = new ArrayList<>();
 
-//                            for (int i = 0; i < filterCatList.size(); i++) {
-//                                if (filterCatList.get(i).getFlag().contains(list.get(position).getName()))
-//                                    typeCatList.add(filterCatList.get(i));
+//                            for (int i = 0; i < categoryList.size(); i++) {
+//                                if (categoryList.get(i).getFlag().contains(list.get(position).getName()))
+//                                    typeCatList.add(categoryList.get(i));
 //                            }
 
                             for (int i = 0; i < categoryList.size(); i++) {
-                                String ERP = filterCatList.get(position).getCheckouttime() + ",";
+                                String ERP = categoryList.get(position).getCheckouttime() + ",";
                                 if (categoryList.get(i).getFlag().contains(list.get(position).getName()) && ERP.contains(distGrpERP + ","))
                                     typeCatList.add(categoryList.get(i));
                             }
@@ -2108,13 +2069,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             if (list.get(position).isSelected() && !Common_Class.isNullOrEmpty(list.get(position).getCatId())) {
                                 ArrayList<Common_Model> typeSubCatList = new ArrayList<>();
 
-//                                for (int i = 0; i < filterSubCatList.size(); i++) {
+//                                for (int i = 0; i < modelRetailChannel.size(); i++) {
 //
 //                                    // String code = modelRetailChannel.get(i).getCheckouttime();
-//                                    String code = filterSubCatList.get(i).getAddress();
+//                                    String code = modelRetailChannel.get(i).getAddress();
 //
 //                                    if (code.contains(list.get(position).getCatId() + ","))
-//                                        typeSubCatList.add(filterSubCatList.get(i));
+//                                        typeSubCatList.add(modelRetailChannel.get(i));
 //                                }
 
 

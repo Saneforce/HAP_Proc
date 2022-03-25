@@ -74,7 +74,7 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         if (View_Status_ModelsList.get(position).getDayStatus().equalsIgnoreCase("On-Duty")) {
             holder.llOnDuty.setVisibility(View.VISIBLE);
         }
-        
+
         holder.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
