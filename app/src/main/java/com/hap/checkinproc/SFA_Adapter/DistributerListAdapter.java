@@ -103,7 +103,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                                             holder.tvbal.setText("" + format1.format(ACBalance));
                                             holder.tvAvailBal.setText("Available Balance:" + format1.format(ActBAL));
                                             holder.tvAmtBlk.setText("Amount Blocked:" + format1.format(jItem.get("Pending").getAsDouble()));
-                                            holder.tvBalUpdTime.setText("Last Updated On " + Common_Class.GetDatemonthyearTimeformat());
+                                            holder.tvBalUpdTime.setText("Amount Updated On " + Common_Class.GetDatemonthyearTimeformat());
 
                                             AryDta.getJSONObject(position).put("bal", format1.format(ACBalance));
                                             AryDta.getJSONObject(position).put("avail", format1.format(ActBAL));
@@ -141,13 +141,19 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                 }
 
             });
+            holder.tvLocUpdTime.setText("");
+            try {
+                holder.tvLocUpdTime.setText("Location Updated On " + itm.getString("locUpdatedTime"));
 
+            } catch (Exception e) {
+
+            }
 
             try {
                 holder.tvbal.setText("" + (itm.getString("bal")));
                 holder.tvAmtBlk.setText("Amount Blocked:" + (itm.getString("blk")));
                 holder.tvAvailBal.setText("Previous Order value:" + itm.getString("avail"));
-                holder.tvBalUpdTime.setText("Last Updated On " + itm.getString("balUpdatedTime"));
+                holder.tvBalUpdTime.setText("Amount Updated On " + itm.getString("balUpdatedTime"));
             } catch (Exception e) {
                 // holder.tvBalUpdTime.setText("Last Updated On " + Common_Class.GetDatemonthyearTimeformat());
 
@@ -169,6 +175,8 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                             intent.putExtra(Constants.DEST_LAT, latlongs[0]);
                             intent.putExtra(Constants.DEST_LNG, latlongs[1]);
                             intent.putExtra(Constants.DEST_NAME, itm.getString("name"));
+                            intent.putExtra(Constants.NEW_OUTLET, "new");
+
                             context.startActivity(intent);
                         }
                     } catch (Exception e) {
@@ -208,7 +216,9 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                 @Override
                 public void onClick(View v) {
                     try {
-                        Reports_Distributor_Name.reports_distributor_name.updateDistlatLng(AryDta.getJSONObject(position).getInt("id"), position);
+
+                        Reports_Distributor_Name.reports_distributor_name.updateDistlatLng(AryDta.getJSONObject(position).getInt("id"), position, AryDta);
+
                     } catch (Exception e) {
                     }
                 }
@@ -235,7 +245,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvDistName, tvbal, tvAvailBal, tvAmtBlk, tvBalUpdTime, tvDistAdd;
+        public TextView tvDistName, tvbal, tvAvailBal, tvAmtBlk, tvBalUpdTime, tvDistAdd, tvLocUpdTime;
         RelativeLayout rlRefresh;
         LinearLayout llDirection, llParent, llRefreshLoc;
         ProgressBar pb;
@@ -252,6 +262,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
             tvBalUpdTime = view.findViewById(R.id.tvBalUpdTime);
             tvDistAdd = view.findViewById(R.id.tvDistAdd);
             llRefreshLoc = view.findViewById(R.id.llRefreshLoc);
+            tvLocUpdTime = view.findViewById(R.id.tvLocUpdTime);
             pb = view.findViewById(R.id.progressbar);
 
         }

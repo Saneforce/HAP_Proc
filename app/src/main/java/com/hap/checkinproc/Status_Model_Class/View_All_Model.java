@@ -40,6 +40,16 @@ public class View_All_Model {
     @Expose
     private String Loc;
 
+    @SerializedName("flag")
+    @Expose
+    private String flag;
+
+
+
+    @SerializedName("Attndt")
+    @Expose
+    private String Attndt;
+
     public String getLoc() {
         return Loc;
     }
@@ -126,5 +136,21 @@ public class View_All_Model {
 
     public void setStusClr(String stusClr) {
         this.stusClr = stusClr;
+    }
+
+    public String getAttndt() {
+        return Attndt;
+    }
+
+    public void setAttndt(String attndt) {
+        Attndt = attndt;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }

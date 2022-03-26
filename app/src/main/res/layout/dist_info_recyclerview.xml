@@ -49,11 +49,11 @@
 
 
             <LinearLayout
-                android:visibility="visible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
 
                 <RelativeLayout
@@ -100,11 +100,11 @@
 
 
         <LinearLayout
-            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/C10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/tvAvailBal"
@@ -130,7 +130,7 @@
 
         <LinearLayout
             android:id="@+id/llRefreshLoc"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="@dimen/C5dp"
@@ -139,24 +139,35 @@
             android:paddingTop="@dimen/C5dp"
             android:paddingRight="@dimen/C5dp"
             android:paddingBottom="@dimen/C5dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="@dimen/C15dp"
                 android:layout_height="@dimen/C15dp"
                 android:src="@drawable/loca_icon" />
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/C2dp"
                 android:paddingTop="2dp"
                 android:paddingRight="@dimen/C10dp"
                 android:text="Refresh Location"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLocUpdTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif"
+                android:gravity="end"
                 android:textSize="9sp" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

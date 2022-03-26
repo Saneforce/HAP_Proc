@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.24";
+    public static String Version_Name = "ver 3.3.25";
     public static String Work_Type = "0";
     public static int count;
 
@@ -542,6 +542,10 @@ public class Common_Class {
 
 
                 switch (key) {
+                    case Constants.GroupFilter:
+                        axnname = "get/groupfilter";
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
 
                     case Constants.WEEKLY_EXPENSE:
                         axnname = "get/weeklyexpense";
@@ -879,7 +883,7 @@ public class Common_Class {
                     shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, String.valueOf(jsonObject1.optInt("id")));
                     shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
                     shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
-                    shared_common_pref.save(Constants.CusSubGrpErp,jsonObject1.getString("CusSubGrpErp"));
+                    shared_common_pref.save(Constants.CusSubGrpErp, jsonObject1.getString("CusSubGrpErp"));
                     getDataFromApi(Retailer_OutletList, activity, false);
                     break;
                 }

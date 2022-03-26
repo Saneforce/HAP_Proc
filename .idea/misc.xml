@@ -28,11 +28,15 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_add_new_retailer.xml" value="0.13044579533941236" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_approvals.xml" value="0.24094202898550723" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_attachement.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_checkin.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard__route.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard__two.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dist_name.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_holiday__approval__reject.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_holiday__entry__approval.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_image_capture.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_login.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_nearby__outlets.xml" value="0.27291666666666664" />
@@ -59,6 +63,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/primaryorder_history_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/row_holiday_entry_status.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/ta_reject_popup.xml" value="0.25" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/team_loc_detail_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/tl_claim_appro_one.xml" value="0.25" />

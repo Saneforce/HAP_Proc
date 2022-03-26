@@ -71,14 +71,20 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         String color = View_Status_Model.getStusClr().replace("!important", "");
         drawable.setColor(Color.parseColor(color.trim()));
         holder.llOnDuty.setVisibility(View.GONE);
-        if (View_Status_ModelsList.get(position).getDayStatus().equalsIgnoreCase("On-Duty")) {
+        if (View_Status_Model.getDayStatus().equalsIgnoreCase("On-Duty") && View_Status_Model.getFlag() != null && !View_Status_Model.getFlag().equalsIgnoreCase("2")) {
             holder.llOnDuty.setVisibility(View.VISIBLE);
+
+            if (View_Status_Model.getFlag().equalsIgnoreCase("1"))
+                holder.cbOnDuty.setChecked(true);
+            else
+                holder.cbOnDuty.setChecked(false);
         }
+
 
         holder.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendStatusUpdate(holder.cbOnDuty.isChecked() ? 1 : 0,View_Status_ModelsList.get(position));
+                sendStatusUpdate(holder.cbOnDuty.isChecked() ? 1 : 0, View_Status_ModelsList.get(position));
             }
         });
 
@@ -92,20 +98,19 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
             taReq.put("login_sfCode", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
             taReq.put("Flag", flag);
             taReq.put("current_date", Common_Class.GetDate());
-            taReq.put("shift_date",data.getWrkDate());
+            taReq.put("shift_date", data.getAttndt());
 
 
+            Log.v("TA_REQ", taReq.toString());
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.viewStatusUpdate(taReq.toString());
 
-        Log.v("TA_REQ", taReq.toString());
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.viewStatusUpdate(taReq.toString());
-
-        mCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                // locationList=response.body();
-                try {
-                    Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+            mCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    // locationList=response.body();
+                    try {
+                        Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
 
 //                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
 //                    if (flag == 1) {
@@ -116,16 +121,16 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
 //                    }
 ////
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
 
-            }
-        });
+                }
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();

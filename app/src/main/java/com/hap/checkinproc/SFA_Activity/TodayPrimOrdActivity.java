@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 import android.app.DatePickerDialog;
@@ -61,6 +62,8 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             mTdPriAct = this;
             sharedCommonPref = new Shared_Common_Pref(TodayPrimOrdActivity.this);
             common_class = new Common_Class(this);
+
+            //common_class.getDb_310Data(Constants.GroupFilter,this);
 
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
@@ -230,6 +233,9 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
                         }
                         loadroute();
+                        break;
+                    case GroupFilter:
+                        Log.v(key, apiDataResponse);
                         break;
 
                     case Constants.GetTodayPrimaryOrder_List:

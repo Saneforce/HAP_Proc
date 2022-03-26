@@ -224,6 +224,11 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
+    @POST("Db_v300.php?axn=distlocation/update")
+    Call<Object> updateDistLatLng(@QueryMap Map<String, String> params, @Field("data") String body);
+
+
+    @FormUrlEncoded
     @POST("Db_v300.php")
     Call<Object> Getwe_Status(@Query("Priod") String Amod, @Query("sfCode") String sFCode,
                               @Query("axn") String axn, @Query("Status") String status,
@@ -520,11 +525,16 @@ public interface ApiInterface {
     Call<ResponseBody> RecallSave(@Field("data") String userData);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=update/distlatlng")
+    Call<JsonObject> distLatLngUpdate(@Field("data") String body);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?axn=save/taapprove")
     Call<JsonObject> taApprove(@Field("data") String body);
 
+
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=save/ondutyupdate")
+    @POST("Db_v300.php?axn=save/ondutyupdate")
     Call<JsonObject> viewStatusUpdate(@Field("data") String body);
 
     @FormUrlEncoded
