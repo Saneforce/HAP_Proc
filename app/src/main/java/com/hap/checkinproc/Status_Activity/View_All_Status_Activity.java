@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
@@ -31,7 +32,9 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.ViewAll_Status_Adapter;
 import com.hap.checkinproc.Status_Model_Class.View_All_Model;
-import com.hap.checkinproc.common.TimerService;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -57,13 +60,15 @@ public class View_All_Status_Activity extends AppCompatActivity {
     SharedPreferences UserDetails;
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
+    Shared_Common_Pref shared_common_pref;
 
+    JSONArray arr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__all__status_);
-
+        shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
@@ -131,7 +136,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         gson = new Gson();
-        getWeekOffStatus();
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +144,50 @@ public class View_All_Status_Activity extends AppCompatActivity {
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+
+        getOnDutyStatus();
+        getWeekOffStatus();
+
+    }
+
+    private void getOnDutyStatus() {
+        JSONObject taReq = new JSONObject();
+
+        try {
+            taReq.put("login_sfCode", UserDetails.getString("Sfcode", ""));
+
+
+            Log.v("TA_REQ", taReq.toString());
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.getOnDutyStatus(taReq.toString());
+
+            mCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    // locationList=response.body();
+                    try {
+                        Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                        JSONObject obj = new JSONObject(new Gson().toJson(response.body()));
+                        if (obj.getBoolean("success")) {
+                            arr = obj.getJSONArray("Data");
+                        }
+
+                    } catch (Exception e) {
+                        Log.v("TA_REQ1", e.getMessage());
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.v("TA_REQ2", t.getMessage());
+
+                }
+            });
+
+        } catch (Exception e) {
+            Log.v("TA_REQ3", e.getMessage());
+        }
     }
 
     private void getWeekOffStatus() {
@@ -159,14 +208,28 @@ public class View_All_Status_Activity extends AppCompatActivity {
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 try {
                     common_class.ProgressdialogShow(2, "Onduty Status");
                     userType = new TypeToken<ArrayList<View_All_Model>>() {
                     }.getType();
                     approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
+
+                    try {
+                        for (int i = 0; i < arr.length(); i++) {
+                            for (int v = 0; v < approvalList.size(); v++) {
+
+                                if (arr.getJSONObject(i).getString("dt").equalsIgnoreCase(approvalList.get(v).getAttndt())) {
+                                    approvalList.get(v).setFlag(arr.getJSONObject(i).getInt("flag"));
+                                    break;
+
+                                }
+                            }
+
+                        }
+                    } catch (Exception e) {
+
+                    }
+
                     recyclerView.setAdapter(new ViewAll_Status_Adapter(approvalList, R.layout.view_all_status_listitem, getApplicationContext(), AMOD));
                 } catch (Exception e) {
                 }
@@ -174,7 +237,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                Log.e("ONfailureSTATUS", QueryString.toString());
+
                 common_class.ProgressdialogShow(2, "Permission Status");
             }
         });
@@ -189,6 +252,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
                     View_All_Status_Activity.super.onBackPressed();
                 }
             });
+
     @Override
     public void onBackPressed() {
 

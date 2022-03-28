@@ -532,6 +532,11 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=save/taapprove")
     Call<JsonObject> taApprove(@Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("Db_v300.php?axn=get/ondutystat")
+    Call<JsonObject> getOnDutyStatus(@Field("data") String body);
+
+
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=save/ondutyupdate")

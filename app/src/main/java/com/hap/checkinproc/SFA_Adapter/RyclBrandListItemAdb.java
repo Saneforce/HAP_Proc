@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Order_Category_Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +49,9 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
         JSONObject itm = null;
         try {
             itm = mlist.getJSONObject(position);
+
             holder.icon.setText(itm.getString("name"));
+
 
             holder.gridcolor.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,7 +90,7 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
                 holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -28,13 +28,13 @@ public class PrimaryOrder_History_Adapter extends RecyclerView.Adapter<PrimaryOr
     Context context;
     JSONArray mDate;
     AdapterOnClick mAdapterOnClick;
-    String mResponse;
 
-    public PrimaryOrder_History_Adapter(Context context, JSONArray mDate, String mResponse, AdapterOnClick mAdapterOnClick) {
+
+    public PrimaryOrder_History_Adapter(Context context, JSONArray mDate, AdapterOnClick mAdapterOnClick) {
         this.context = context;
         this.mDate = mDate;
         this.mAdapterOnClick = mAdapterOnClick;
-        this.mResponse = mResponse;
+
     }
 
     @NonNull

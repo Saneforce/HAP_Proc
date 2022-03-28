@@ -71,15 +71,18 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         String color = View_Status_Model.getStusClr().replace("!important", "");
         drawable.setColor(Color.parseColor(color.trim()));
         holder.llOnDuty.setVisibility(View.GONE);
-        if (View_Status_Model.getDayStatus().equalsIgnoreCase("On-Duty") && View_Status_Model.getFlag() != null && !View_Status_Model.getFlag().equalsIgnoreCase("2")) {
-            holder.llOnDuty.setVisibility(View.VISIBLE);
+        try {
+            if (View_Status_Model.getDayStatus().equalsIgnoreCase("On-Duty") && View_Status_Model.getFlag() != 2) {
+                holder.llOnDuty.setVisibility(View.VISIBLE);
 
-            if (View_Status_Model.getFlag().equalsIgnoreCase("1"))
-                holder.cbOnDuty.setChecked(true);
-            else
-                holder.cbOnDuty.setChecked(false);
+                if (View_Status_Model.getFlag() == 1)
+                    holder.cbOnDuty.setChecked(true);
+                else
+                    holder.cbOnDuty.setChecked(false);
+            }
+        } catch (Exception e) {
+
         }
-
 
         holder.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

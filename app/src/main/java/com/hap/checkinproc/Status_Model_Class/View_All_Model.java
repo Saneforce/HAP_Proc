@@ -42,7 +42,7 @@ public class View_All_Model {
 
     @SerializedName("flag")
     @Expose
-    private String flag;
+    private int flag;
 
 
 
@@ -146,11 +146,11 @@ public class View_All_Model {
         Attndt = attndt;
     }
 
-    public String getFlag() {
+    public int getFlag() {
         return flag;
     }
 
-    public void setFlag(String flag) {
+    public void setFlag(int flag) {
         this.flag = flag;
     }
 }

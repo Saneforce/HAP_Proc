@@ -24,8 +24,10 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PrimaryOrder_History_Adapter;
+import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,7 +46,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     Common_Class common_class;
 
     PrimaryOrder_History_Adapter mReportViewAdapter;
-    RecyclerView invoicerecyclerview;
+    RecyclerView invoicerecyclerview, rvFilter;
     Shared_Common_Pref sharedCommonPref;
     public static TodayPrimOrdActivity mTdPriAct;
     public static String stDate = "", endDate = "";
@@ -53,6 +55,9 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     LinearLayout llDistributor, btnCmbRoute;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     Common_Model Model_Pojo;
+
+    String groupType = "All";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +68,12 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             sharedCommonPref = new Shared_Common_Pref(TodayPrimOrdActivity.this);
             common_class = new Common_Class(this);
 
-            //common_class.getDb_310Data(Constants.GroupFilter,this);
+            common_class.getDb_310Data(Constants.GroupFilter, this);
 
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
+            rvFilter = findViewById(R.id.rvPrimOrdFilter);
             distributor_text = findViewById(R.id.distributor_text);
             llDistributor = findViewById(R.id.llDistributor);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
@@ -104,6 +110,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 }
             }
 
+
         } catch (Exception e) {
 
         }
@@ -115,6 +122,8 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 2:
+                groupType = "All";
+                common_class.brandPos = 0;
                 route_text.setText("");
                 sharedCommonPref.save(Constants.Route_name, "");
                 sharedCommonPref.save(Constants.Route_Id, "");
@@ -127,6 +136,8 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
                 sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
+
+                common_class.getDb_310Data(Constants.GroupFilter, this);
 
                 common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
@@ -236,50 +247,49 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                         break;
                     case GroupFilter:
                         Log.v(key, apiDataResponse);
+
+                        JSONObject filterObj = new JSONObject(apiDataResponse);
+
+                        JSONObject obj = new JSONObject();
+                        obj.put("name", "All");
+                        obj.put("GroupCode", "0");
+
+                        JSONArray arr = new JSONArray();
+
+                        arr.put(obj);
+
+                        if (filterObj.getBoolean("success")) {
+                            findViewById(R.id.cvPrimOrdFilter).setVisibility(View.VISIBLE);
+
+
+                            for (int i = 0; i < filterObj.getJSONArray("Data").length(); i++)
+                                arr.put(filterObj.getJSONArray("Data").getJSONObject(i));
+
+
+                        }
+
+                        rvFilter.setAdapter(new RyclBrandListItemAdb(arr, this, new onListItemClick() {
+
+                            @Override
+
+                            public void onItemClick(JSONObject item) {
+                                try {
+                                    groupType = item.getString("name");
+                                    setHistoryAdapter(new JSONArray(sharedCommonPref.getvalue(Constants.GetTodayPrimaryOrder_List)));
+
+                                } catch (Exception e) {
+                                    Log.v("primHist:", e.getMessage());
+                                }
+                            }
+
+                        }));
+
                         break;
 
                     case Constants.GetTodayPrimaryOrder_List:
-
                         Log.v("TodayPrim", apiDataResponse);
-
-                        JSONArray arr = new JSONArray(apiDataResponse);
-
-                        mReportViewAdapter = new PrimaryOrder_History_Adapter(TodayPrimOrdActivity.this, arr, apiDataResponse, new AdapterOnClick() {
-                            @Override
-                            public void onIntentClick(int position) {
-                                try {
-                                    JSONObject obj = arr.getJSONObject(position);
-                                    Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
-                                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    sharedCommonPref.save(Constants.FLAG, "Primary Order");
-                                    intent.putExtra("Order_Values", obj.getString("Order_Value"));
-                                    intent.putExtra("Invoice_Values", obj.getString("invoicevalues"));
-                                    //intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                    intent.putExtra("Invoice_Date", obj.getString("Order_Date"));
-                                    intent.putExtra("NetAmount", obj.getString("NetAmount"));
-                                    intent.putExtra("Discount_Amount", obj.getString("Discount_Amount"));
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.in, R.anim.out);
-                                } catch (Exception e) {
-                                    Log.v("primary:", e.getMessage());
-                                }
-
-                            }
-                        });
-                        invoicerecyclerview.setAdapter(mReportViewAdapter);
-
-                        double totAmt = 0;
-                        for (int i = 0; i < arr.length(); i++) {
-                            JSONObject obj = arr.getJSONObject(i);
-                            totAmt += Double.parseDouble(obj.getString("Order_Value"));
-                        }
-
-                        if (totAmt > 0) {
-                            findViewById(R.id.cvTotParent).setVisibility(View.VISIBLE);
-                            tvGrandTot.setText("₹" + new DecimalFormat("##0.00").format(totAmt));
-                        } else
-                            findViewById(R.id.cvTotParent).setVisibility(View.GONE);
-                        break;
+                        sharedCommonPref.save(Constants.GetTodayPrimaryOrder_List, apiDataResponse);
+                        setHistoryAdapter(new JSONArray(apiDataResponse));
 
 
                 }
@@ -289,6 +299,59 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
             Log.v("Invoice History: ", e.getMessage());
 
         }
+    }
+
+
+    void setHistoryAdapter(JSONArray arr) {
+        try {
+            JSONArray filterArr = new JSONArray();
+            for (int i = 0; i < arr.length(); i++) {
+                if (Common_Class.isNullOrEmpty(groupType) || groupType.equalsIgnoreCase("All") || groupType.equalsIgnoreCase(arr.getJSONObject(i).getString("category_type"))) {
+                    filterArr.put(arr.getJSONObject(i));
+                }
+            }
+
+
+            mReportViewAdapter = new PrimaryOrder_History_Adapter(TodayPrimOrdActivity.this, filterArr, new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    try {
+                        JSONObject obj = filterArr.getJSONObject(position);
+                        Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
+                        Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                        sharedCommonPref.save(Constants.FLAG, "Primary Order");
+                        intent.putExtra("Order_Values", obj.getString("Order_Value"));
+                        intent.putExtra("Invoice_Values", obj.getString("invoicevalues"));
+                        //intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                        intent.putExtra("Invoice_Date", obj.getString("Order_Date"));
+                        intent.putExtra("NetAmount", obj.getString("NetAmount"));
+                        intent.putExtra("Discount_Amount", obj.getString("Discount_Amount"));
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.in, R.anim.out);
+                    } catch (Exception e) {
+                        Log.v("primary:", e.getMessage());
+                    }
+
+                }
+            });
+            invoicerecyclerview.setAdapter(mReportViewAdapter);
+
+            double totAmt = 0;
+            for (int i = 0; i < filterArr.length(); i++) {
+                JSONObject obj = filterArr.getJSONObject(i);
+                totAmt += Double.parseDouble(obj.getString("Order_Value"));
+            }
+
+            if (totAmt > 0) {
+                findViewById(R.id.cvTotParent).setVisibility(View.VISIBLE);
+                tvGrandTot.setText("₹" + new DecimalFormat("##0.00").format(totAmt));
+            } else
+                findViewById(R.id.cvTotParent).setVisibility(View.GONE);
+        } catch (Exception e) {
+            Log.v("primHistAda:", e.getMessage());
+        }
+
+
     }
 
     @Override
@@ -316,14 +379,14 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 Date d1 = sdf.parse(Common_Class.GetTime());
                 Date d2 = sdf.parse(cutoff_time);
                 long elapsed = d2.getTime() - d1.getTime();
-                  if (elapsed >= 0) {
-                sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
-                Intent intent = new Intent(this, PrimaryOrderActivity.class);
-                intent.putExtra(Constants.ORDER_ID, orderNo);
-                intent.putExtra(Constants.CATEGORY_TYPE, categoryType);
-                Shared_Common_Pref.TransSlNo = orderNo;
-                startActivity(intent);
-                overridePendingTransition(R.anim.in, R.anim.out);
+                if (elapsed >= 0) {
+                    sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
+                    Intent intent = new Intent(this, PrimaryOrderActivity.class);
+                    intent.putExtra(Constants.ORDER_ID, orderNo);
+                    intent.putExtra(Constants.CATEGORY_TYPE, categoryType);
+                    Shared_Common_Pref.TransSlNo = orderNo;
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in, R.anim.out);
 
                 } else {
                     common_class.showMsg(this, "Time UP...");

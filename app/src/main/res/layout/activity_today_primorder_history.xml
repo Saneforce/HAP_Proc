@@ -76,11 +76,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/btnCmbRoute"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/route_text"
@@ -109,8 +109,6 @@
                 android:id="@+id/llCustomDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginRight="@dimen/C10dp"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -140,6 +138,26 @@
                     android:padding="@dimen/C8dp" />
 
             </LinearLayout>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvPrimOrdFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C5dp"
+                android:visibility="visible"
+                app:cardCornerRadius="@dimen/C5dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPrimOrdFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C5dp"
+                    android:orientation="horizontal"
+
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+
+            </androidx.cardview.widget.CardView>
 
 
             <LinearLayout
