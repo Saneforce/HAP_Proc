@@ -117,6 +117,11 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
 
+        tvCoolerInfo.setVisibility(View.GONE);
+
+        if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+            tvCoolerInfo.setVisibility(View.VISIBLE);
+
     }
 
     @Override

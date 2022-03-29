@@ -44,7 +44,7 @@ public class Reports_Distributor_Name extends AppCompatActivity {
     EditText etSearch;
     public static Reports_Distributor_Name reports_distributor_name;
     ProgressBar pb;
-    private int dist_id, dist_pos;
+    private int dist_id, dist_pos, refreshFlag;
     private JSONArray loc_Arr;
 
     @Override
@@ -107,18 +107,19 @@ public class Reports_Distributor_Name extends AppCompatActivity {
 
     }
 
-    public void updateDistlatLng(int id, int pos, JSONArray arr) {
+    public void updateDistlatLng(int id, int pos, JSONArray arr, int flag) {
         try {
             dist_id = id;
             loc_Arr = arr;
             dist_pos = pos;
+            refreshFlag = flag;
 
             new LocationFinder(this, new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
                     try {
                         if (location != null) {
-                            locUpdate(id, location, loc_Arr);
+                            locUpdate(id, location, loc_Arr, refreshFlag);
                         }
                     } catch (Exception e) {
 
@@ -139,7 +140,7 @@ public class Reports_Distributor_Name extends AppCompatActivity {
                 @Override
                 public void OnLocationRecived(Location location) {
                     try {
-                        locUpdate(dist_id, location, loc_Arr);
+                        locUpdate(dist_id, location, loc_Arr, refreshFlag);
                     } catch (Exception e) {
                     }
                 }
@@ -149,7 +150,7 @@ public class Reports_Distributor_Name extends AppCompatActivity {
         }
     }
 
-    void locUpdate(int id, Location location, JSONArray distArr) {
+    void locUpdate(int id, Location location, JSONArray distArr, int flag) {
         JSONObject jsonobj = new JSONObject();
 
         try {
@@ -158,6 +159,7 @@ public class Reports_Distributor_Name extends AppCompatActivity {
             jsonobj.put("lat", (String.valueOf(location.getLatitude())));
             jsonobj.put("lng", (String.valueOf(location.getLongitude())));
             jsonobj.put("current_date", (Common_Class.GetDate()));
+            jsonobj.put("flag", flag);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -182,7 +184,8 @@ public class Reports_Distributor_Name extends AppCompatActivity {
                         for (int i = 0; i < loc_Arr.length(); i++) {
                             JSONObject loc_obj = loc_Arr.getJSONObject(i);
                             if (dist_id == loc_obj.getInt("id")) {
-                                loc_obj.put("Latlong", location.getLatitude() + ":" + location.getLongitude());
+
+                                loc_obj.put("Latlong", refreshFlag == 1 ? location.getLatitude() + ":" + location.getLongitude() : "");
                                 loc_obj.put("locUpdatedTime", Common_Class.GetDatemonthyearTimeformat());
 
                                 break;

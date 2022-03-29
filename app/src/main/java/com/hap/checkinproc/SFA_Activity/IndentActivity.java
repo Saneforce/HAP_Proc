@@ -261,6 +261,13 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                 axnName = "save/stockrotate";
             else
                 axnName = "save/indentorder";
+
+
+
+            tvCoolerInfo.setVisibility(View.GONE);
+
+            if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+                tvCoolerInfo.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 

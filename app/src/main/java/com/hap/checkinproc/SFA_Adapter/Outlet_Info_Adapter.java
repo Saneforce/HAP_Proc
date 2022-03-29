@@ -34,11 +34,12 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     String activityName;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, txRetNo, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt;
-        public LinearLayout retStaBdg, icAC, icFreezer, layparent, linDirection;
+        public TextView textviewname, textviewdate, txRetNo, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt,tvPhone;
+        public LinearLayout retStaBdg, icAC, icFreezer, layparent, linDirection,llCallMob;
         Button btnSend;
         EditText etSNo;
         RelativeLayout rlSeqParent;
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -60,6 +61,8 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
             etSNo = view.findViewById(R.id.etSNo);
             txRetNo = view.findViewById(R.id.txRetNo);
             rlSeqParent = view.findViewById(R.id.rlSequence);
+            llCallMob=view.findViewById(R.id.btnCallMob);
+            tvPhone=view.findViewById(R.id.retailePhoneNum);
         }
     }
 
@@ -160,7 +163,12 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
             holder.icFreezer.setVisibility(View.GONE);
         }
 
+        holder.llCallMob.setVisibility(View.GONE);
 
+        if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.getPrimary_No())) {
+            holder.llCallMob.setVisibility(View.VISIBLE);
+            holder.tvPhone.setText(""+Retailer_Modal_List.getPrimary_No());
+        }
     }
 
     private void drawRoute(String OutletName, String sLat, String sLng) {

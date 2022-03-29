@@ -123,6 +123,11 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         });
 
         common_class.getDb_310Data(Constants.QPS_HAPBRAND, this);
+
+        tvCoolerInfo.setVisibility(View.GONE);
+
+        if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+            tvCoolerInfo.setVisibility(View.VISIBLE);
     }
 
 

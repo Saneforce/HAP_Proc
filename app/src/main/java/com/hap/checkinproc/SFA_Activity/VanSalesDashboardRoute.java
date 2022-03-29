@@ -961,6 +961,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                                     + mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
 
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
+                            Shared_Common_Pref.Freezer_Required = mRetailer_Modal_ListFilter.get(position).getFreezer_required();
+
                             Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                             common_class.CommonIntentwithoutFinish(Invoice_History.class);
                             getActivity().overridePendingTransition(R.anim.in, R.anim.out);

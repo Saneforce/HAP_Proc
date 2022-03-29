@@ -229,6 +229,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
 
             }
+
+            tvCoolerInfo.setVisibility(View.GONE);
+
+            if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+                tvCoolerInfo.setVisibility(View.VISIBLE);
+
         } catch (Exception e) {
             Log.v(TAG, e.getMessage());
         }

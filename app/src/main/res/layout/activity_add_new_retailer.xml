@@ -808,10 +808,11 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="City"
+                                android:text="Location"
                                 android:textColor="@android:color/black"></TextView>
 
                             <ImageView
+                                android:visibility="invisible"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -827,13 +828,50 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
-                            android:hint="Enter the City"
+                            android:hint="Enter the Location"
                             android:padding="10dp"
                             android:textSize="13sp" />
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="District"
+                                android:textColor="@android:color/black"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
+
+                        <EditText
+                            android:id="@+id/edt_district"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg_grey"
+                            android:gravity="start"
+                            android:hint="Enter the District"
+                            android:padding="10dp"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -65,6 +68,7 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
             JSONObject itm = AryDta.getJSONObject(position);
             holder.tvDistName.setText(itm.getString("name"));
             holder.tvDistAdd.setText(itm.getString("Addr1"));
+            holder.tvLatLng.setText("");
 
 
             NumberFormat format1 = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
@@ -217,12 +221,43 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                 public void onClick(View v) {
                     try {
 
-                        Reports_Distributor_Name.reports_distributor_name.updateDistlatLng(AryDta.getJSONObject(position).getInt("id"), position, AryDta);
+                        AlertDialogBox.showDialog(context, "HAP Check-In", "Do you confirm to Refresh Location?",
+                                "Update", "Remove", true, new AlertBox() {
+                                    @Override
+                                    public void PositiveMethod(DialogInterface dialog, int id) {
+                                        try {
+                                            Reports_Distributor_Name.reports_distributor_name.updateDistlatLng(AryDta.getJSONObject(position).getInt("id"), position, AryDta, 1);
+                                        } catch (Exception e) {
+                                        }
+                                    }
+
+                                    @Override
+                                    public void NegativeMethod(DialogInterface dialog, int id) {
+                                        try {
+                                            Reports_Distributor_Name.reports_distributor_name.updateDistlatLng(AryDta.getJSONObject(position).getInt("id"), position, AryDta, 0);
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                });
 
                     } catch (Exception e) {
                     }
                 }
             });
+
+            holder.llMobile.setVisibility(View.GONE);
+            if (!Common_Class.isNullOrEmpty(itm.getString("Mobile"))) {
+                holder.llMobile.setVisibility(View.VISIBLE)
+                ;
+                holder.tvMobile.setText("" + itm.getString("Mobile"));
+            }
+
+            if (!Common_Class.isNullOrEmpty(itm.getString("Latlong"))) {
+                String[] latlongs = itm.getString("Latlong").split(":");
+
+                holder.tvLatLng.setText("Lat:" + latlongs[0] + "   " + "Lng:" + latlongs[1]);
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -245,9 +280,9 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvDistName, tvbal, tvAvailBal, tvAmtBlk, tvBalUpdTime, tvDistAdd, tvLocUpdTime;
+        public TextView tvDistName, tvbal, tvAvailBal, tvAmtBlk, tvBalUpdTime, tvDistAdd, tvLocUpdTime, tvLatLng, tvMobile;
         RelativeLayout rlRefresh;
-        LinearLayout llDirection, llParent, llRefreshLoc;
+        LinearLayout llDirection, llParent, llRefreshLoc, llMobile;
         ProgressBar pb;
 
         public MyViewHolder(View view) {
@@ -264,6 +299,10 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
             llRefreshLoc = view.findViewById(R.id.llRefreshLoc);
             tvLocUpdTime = view.findViewById(R.id.tvLocUpdTime);
             pb = view.findViewById(R.id.progressbar);
+            tvLatLng = view.findViewById(R.id.tvLatLng);
+            llMobile = view.findViewById(R.id.btnCallMob);
+            tvMobile = view.findViewById(R.id.tvDistPhone);
+
 
         }
     }

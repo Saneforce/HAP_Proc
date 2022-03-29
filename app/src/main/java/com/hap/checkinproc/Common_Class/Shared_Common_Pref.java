@@ -39,6 +39,8 @@ public class Shared_Common_Pref {
     public static String OutletName = "OutletName";
     public static String OutletCode = "OutletCode";
     public static String SecOrdOutletType = "";
+    public static String Freezer_Required = "";
+
     public static int TravelAllowance = 0;
 
 

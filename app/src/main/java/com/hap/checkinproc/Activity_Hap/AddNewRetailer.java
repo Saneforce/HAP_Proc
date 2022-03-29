@@ -108,7 +108,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     Common_Model mCommon_model_spinner;
     Gson gson;
-    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_sub_category, edtDepositAmt, edtExpcSalVal,
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, etDistrict, addRetailerPhone, addRetailerEmail, edt_sub_category, edtDepositAmt, edtExpcSalVal,
             edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag, edtDistCode;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
@@ -202,6 +202,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerCity = findViewById(R.id.edt_new_city);
             addRetailerPhone = findViewById(R.id.edt_new_phone);
             addRetailerEmail = findViewById(R.id.edt_new_email);
+            etDistrict = findViewById(R.id.edt_district);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edtDistCode = findViewById(R.id.edt_dist_code);
@@ -293,7 +294,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             serviceTypeList.add(new Common_Model("-18", "1", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
-            serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
+            //serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
 
 
             categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
@@ -669,6 +670,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Select the State", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerCity.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
+                    } else if (etDistrict.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Enter District", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerPhone.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
                     }
@@ -692,10 +695,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    } else if (!cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
-                        common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
+                    }
+//                    else if (!cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
+//                        common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
+//
+//                    }
 
-                    } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
+                    else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
                         if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(AddNewRetailer.this, "Selet the Freezer/Cooler Status");
                         } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
@@ -1191,6 +1197,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             else
                 reportObject.put("outstanding_amount", "'" + edt_outstanding.getText().toString());
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
+            reportObject.put("districtname", "'" + etDistrict.getText().toString() + "'");
+
             reportObject.put("State_Code", "'" + stateCode + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
             reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
@@ -1545,7 +1553,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             serviceTypeList.add(new Common_Model("-18", "1", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
             serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
-            serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
+            //  serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
 
 
             categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);

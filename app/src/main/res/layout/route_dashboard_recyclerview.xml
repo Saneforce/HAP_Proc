@@ -148,18 +148,18 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/icFreezer"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginRight="@dimen/C5dp"
                             android:scaleType="centerCrop"
-                            android:tint="@color/colorPrimaryDark"
                             android:src="@drawable/ic_freezer"
+                            android:tint="@color/colorPrimaryDark"
                             tools:ignore="UseAppTint" />
                     </LinearLayout>
 
@@ -177,7 +177,6 @@
                         android:id="@+id/txOwnerNm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -598,17 +597,51 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llDistParent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp">
+                    android:layout_marginTop="-5dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/txDistName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/C10dp"
+                        android:text="sg"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="10sp" />
+
+                    <LinearLayout
+                        android:layout_marginLeft="@dimen/C10dp"
+                        android:id="@+id/llCallMob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <ImageView
+                            android:layout_width="13dp"
+                            android:layout_height="13dp"
+                            android:src="@drawable/call_icon"
+                            app:tint="@color/colorPrimaryDark" />
+
+                        <TextView
+                            android:id="@+id/tvDistPhone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="tuououououououououououo"
+                            android:textSize="9sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvDistAdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="sigps"
+                        android:textSize="9sp" />
+
                 </LinearLayout>
 
                 <LinearLayout

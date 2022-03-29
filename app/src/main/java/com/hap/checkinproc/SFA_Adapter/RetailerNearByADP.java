@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -207,7 +208,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                         } else {
 
                             Intent intent = new Intent(context, MapDirectionActivity.class);
-                            intent.putExtra(Constants.NEW_OUTLET,"new");
+                            intent.putExtra(Constants.NEW_OUTLET, "new");
                             intent.putExtra(Constants.DEST_LAT, jItem.get("lat").getAsString());
                             intent.putExtra(Constants.DEST_LNG, jItem.get("long").getAsString());
                             intent.putExtra(Constants.DEST_NAME, jItem.get("Name").getAsString());
@@ -219,6 +220,17 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                     }
                 }
             });
+
+            holder.llDistparent.setVisibility(View.VISIBLE);
+
+            holder.llDistcal.setVisibility(View.GONE);
+            if (!Common_Class.isNullOrEmpty(jItem.get("DistMobile").getAsString())) {
+                holder.llDistcal.setVisibility(View.VISIBLE)
+                ;
+                holder.tvDistMobile.setText(jItem.get("DistMobile").getAsString());
+            }
+
+            holder.tvDistAdd.setText(jItem.get("DistAddress").getAsString());
 
 
         } catch (Exception e) {
@@ -276,6 +288,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 //                }
 //            });
 
+            holder.btnView.setVisibility(View.GONE);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -294,11 +307,12 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName, txRetailCode, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txDistance, txTdyDt, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
-                tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo;
-        LinearLayout parent_layout, icAC, linDirection, icFreezer;
+                tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo, tvDistAdd, tvDistMobile;
+        LinearLayout parent_layout, icAC, linDirection, icFreezer, llDistparent, llDistcal;
         RecyclerView lstTdyView, lstPreView;
         ImageView icMob;
         ImageView ivEdit;
+        Button btnView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -333,7 +347,11 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
                 ivEdit = view.findViewById(R.id.btnEditRet);
                 icAC = view.findViewById(R.id.icAC);
-
+                llDistparent = view.findViewById(R.id.llDistParent);
+                llDistcal = view.findViewById(R.id.llCallMob);
+                tvDistAdd = view.findViewById(R.id.tvDistAdd);
+                tvDistMobile = view.findViewById(R.id.tvDistPhone);
+                btnView=view.findViewById(R.id.btn_View);
 
                 // ivEdit.setVisibility(View.GONE);
                 //txRetNo.setVisibility(View.GONE);

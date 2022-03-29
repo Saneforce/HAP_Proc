@@ -261,7 +261,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             });
 
 
-            if(getIntent().getStringExtra("menu")!=null){
+            if (getIntent().getStringExtra("menu") != null) {
                 findViewById(R.id.llMenuParent).setVisibility(View.GONE);
                 Createoutlet.setVisibility(View.GONE);
             }
@@ -521,6 +521,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                     shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
                     shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
 
+                    Shared_Common_Pref.Freezer_Required = jItm.get("freezer_required").getAsString();
                     if (!shared_common_pref.getvalue(Constants.Distributor_Id).equalsIgnoreCase(jItm.get("DistCode").getAsString())) {
                         shared_common_pref.save(Constants.Distributor_Id, jItm.get("DistCode").getAsString());
                         shared_common_pref.save(Constants.Distributor_name, jItm.get("Distributor").getAsString());
@@ -530,8 +531,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                         shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, jItm.get("DistCode").getAsString());
                         common_class.getDataFromApi(Constants.Retailer_OutletList, Nearby_Outlets.nearby_outlets, false);
                     } else {
+
                         common_class.CommonIntentwithoutFinish(Invoice_History.class);
                     }
+
                 } catch (Exception e) {
                     Log.v(TAG + "nearbyOut:", e.getMessage());
                 }

@@ -383,6 +383,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
+            tvCoolerInfo.setVisibility(View.GONE);
+
+            if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+                tvCoolerInfo.setVisibility(View.VISIBLE);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());

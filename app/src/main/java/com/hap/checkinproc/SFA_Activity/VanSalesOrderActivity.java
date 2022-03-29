@@ -382,6 +382,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     axn = "save/vansales";
                     break;
             }
+
+
+            tvCoolerInfo.setVisibility(View.GONE);
+
+            if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+                tvCoolerInfo.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 

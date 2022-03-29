@@ -1214,6 +1214,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
                             Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
+                            Shared_Common_Pref.Freezer_Required = mRetailer_Modal_ListFilter.get(position).getFreezer_required();
+
                             //  Shared_Common_Pref.DistributorCode = shared_common_pref.getvalue(Constants.Distributor_Id);
                             //  Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
                             // Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
