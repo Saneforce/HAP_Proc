@@ -195,7 +195,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 switch (menuName) {
                     case "Nearby Outlets":
                         Intent intent = new Intent(SFA_Activity.this, Nearby_Outlets.class);
-
                         intent.putExtra("menu", "menu");
                         startActivity(intent);
                         break;

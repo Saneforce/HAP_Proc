@@ -113,7 +113,21 @@ public class Datum {
     @SerializedName("OTFlg")
     @Expose
     private Integer oTFlg;
+
+    public Integer getFreezer_Mandatory() {
+        return Freezer_Mandatory;
+    }
+
+    public void setFreezer_Mandatory(Integer freezer_Mandatory) {
+        Freezer_Mandatory = freezer_Mandatory;
+    }
+
     @SerializedName("SalesReturnImg")
+
+    @Expose
+    private Integer Freezer_Mandatory;
+    @SerializedName("Freezer_Mandatory")
+
     @Expose
     private Integer SalesReturnImg;
     @SerializedName("HOLocation")

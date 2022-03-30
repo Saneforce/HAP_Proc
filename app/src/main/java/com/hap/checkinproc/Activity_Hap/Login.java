@@ -608,7 +608,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-                //  eMail = "ciadmin@hap.in";
+               // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 // eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -633,7 +633,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-                // eMail = "1013362@hap.in";//(-18)
+               // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -650,7 +650,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "1006208@hap.in";
                 // eMail="rajasekaranm@hap.in";
                 //   eMail="1018368@hap.in";
-                //eMail="sajan@hap.in";
+           //     eMail="sajan@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -763,6 +763,7 @@ public class Login extends AppCompatActivity {
             SharedPreferences.Editor userEditor = UserDetails.edit();
             SharedPreferences.Editor cInEditor = CheckInDetails.edit();
 
+
             if (response.getData().get(0).getLoginType() != null &&
                     response.getData().get(0).getLoginType().equals("Distributor")) {
                 shared_common_pref.save(Constants.SALES_RETURN_FILECOUNT, response.getData().get(0).getSalesReturnImg());
@@ -807,6 +808,7 @@ public class Login extends AppCompatActivity {
 
                 cInEditor.putBoolean("CheckIn", true);
                 cInEditor.apply();
+                shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory());
                 startActivity(new Intent(Login.this, SFA_Activity.class));
 
             } else {
@@ -872,6 +874,9 @@ public class Login extends AppCompatActivity {
                 String mProfile = response.getData().get(0).getProfile();
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
+
+                shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory()==null?0:response.getData().get(0).getFreezer_Mandatory());
+
 
                 /* Unwanted Lines */
                 Shared_Common_Pref.Sf_Code = code;

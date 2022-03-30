@@ -258,6 +258,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             rlSubCategory.setOnClickListener(this);
             ivProfilePreview.setOnClickListener(this);
 
+
+            findViewById(R.id.ivFreezReqMandatory).setVisibility(View.INVISIBLE);
+
+            if(shared_common_pref.getIntValue(Constants.Freezer_Mandatory)==1)
+                findViewById(R.id.ivFreezReqMandatory).setVisibility(View.VISIBLE);
+
+
             distGrpERP = shared_common_pref.getvalue(Constants.CusSubGrpErp);
 
 
@@ -669,7 +676,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (tvStateName.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Select the State", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerCity.getText().toString().matches("")) {
-                        Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Enter Location", Toast.LENGTH_SHORT).show();
                     } else if (etDistrict.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter District", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerPhone.getText().toString().matches("")) {
@@ -695,13 +702,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    }
-//                    else if (!cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
-//                        common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
-//
-//                    }
+                    } else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
+                        common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
 
-                    else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
+                    } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
                         if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(AddNewRetailer.this, "Selet the Freezer/Cooler Status");
                         } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
