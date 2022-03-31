@@ -240,7 +240,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     final Handler handler = new Handler();
 
     private ShimmerFrameLayout mShimmerViewContainer;
-    private String Ukey="";
+    private String Ukey = "";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -1213,10 +1213,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 //                                tvTxtUKeys.setText(tvEditcnt);
 //                            }
 //                            TlUKey = tvTxtUKeys.getText().toString();
-                            if(editText.getText().toString().equalsIgnoreCase(""))
-                                mCommon_class.showMsg(TAClaimActivity.this,"Select the Mode");
+                            if (editText.getText().toString().equalsIgnoreCase(""))
+                                mCommon_class.showMsg(TAClaimActivity.this, "Select the Mode");
                             else
-                            popupCapture(123);
+                                popupCapture(123);
 
                         }
 
@@ -2533,8 +2533,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                                 tvTxtUKeys.setText(tvEditcnt);
                                             }
                                             TlUKey = tvTxtUKeys.getText().toString();*/
-                                            if(editText.getText().toString().equalsIgnoreCase(""))
-                                                mCommon_class.showMsg(TAClaimActivity.this,"Select the Mode");
+                                            if (editText.getText().toString().equalsIgnoreCase(""))
+                                                mCommon_class.showMsg(TAClaimActivity.this, "Select the Mode");
                                             else popupCapture(123);
 
 
@@ -2692,8 +2692,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                                         Log.v("Travel_Location_imagw", editMode);
 
-                                        if(editText.getText().toString().equalsIgnoreCase(""))
-                                            mCommon_class.showMsg(TAClaimActivity.this,"Select the Mode");
+                                        if (editText.getText().toString().equalsIgnoreCase(""))
+                                            mCommon_class.showMsg(TAClaimActivity.this, "Select the Mode");
                                         else popupCapture(123);
 
 
@@ -3804,8 +3804,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 }
 
 
-                Log.v("FileName:Load1",filePath);
-                Log.v("FileName:Load2",fullPath);
+                Log.v("FileName:Load1", filePath);
+                Log.v("FileName:Load2", fullPath);
 
             }
         } catch (Exception e) {
@@ -3936,7 +3936,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 FileUploadService.enqueueWork(TAClaimActivity.this, mIntent);
 
 
-                Log.v("FileName:capture",FileName);
+                Log.v("FileName:capture", FileName);
 
             }
         });
@@ -4167,17 +4167,17 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     enterFare.requestFocus();
                     return;
                 }
-                if (UTAItem != null) {
 
-                    String val = tvTxtUKeys.getText().toString();
-                    Log.v("TravelExpensesubmit:", val);
-                    if (UTAItem.getAttachNeed().equalsIgnoreCase("1") &&
-                            tvTxtUKeys.getText().toString().equalsIgnoreCase("")) {
-                        Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
-                        ResetSubmitBtn(0, btnAnim);
-                        return;
-                    }
+
+                String val = tvTxtUKeys.getText().toString();
+                Log.v("TravelExpensesubmit:", val);
+                if ((UTAItem == null || UTAItem.getAttachNeed().equalsIgnoreCase("1")) &&
+                        tvTxtUKeys.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
+                    ResetSubmitBtn(0, btnAnim);
+                    return;
                 }
+
                 jsonTrLoc.put("mode", editText.getText().toString());
                 jsonTrLoc.put("from", enterFrom.getText().toString());
                 jsonTrLoc.put("to", enterTo.getText().toString());
@@ -4253,7 +4253,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         editLaFare.requestFocus();
                         return;
                     }
-                    if (ULCItem.getAttachNeed().equalsIgnoreCase("1") && lcTxtUKeys.getText().toString().equalsIgnoreCase("")) {
+                    if ((ULCItem == null || ULCItem.getAttachNeed().equalsIgnoreCase("1")) && lcTxtUKeys.getText().toString().equalsIgnoreCase("")) {
                         ResetSubmitBtn(0, btnAnim);
                         Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
                         return;
@@ -4315,7 +4315,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         ResetSubmitBtn(0, btnAnim);
                         return;
                     }
-                    if (UOEItem.getAttachNeed().equalsIgnoreCase("1") && oeTxtUKey.getText().toString().equalsIgnoreCase("")) {
+                    if ((UOEItem == null || UOEItem.getAttachNeed().equalsIgnoreCase("1")) && oeTxtUKey.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
                         ResetSubmitBtn(0, btnAnim);
                         return;
@@ -4407,11 +4407,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
         Log.v("PATH_IMAGE", "" + path);
 
-        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".pdf")){
+        if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".pdf")) {
             MultipartBody.Part imgg = convertimg("file", path);
             Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
-            sendImageToServer(count, x, mode, from, to, imgg);}
-        else
+            sendImageToServer(count, x, mode, from, to, imgg);
+        } else
             mCommon_class.showMsg(this, "Image and Pdf file only supported");
     }
 

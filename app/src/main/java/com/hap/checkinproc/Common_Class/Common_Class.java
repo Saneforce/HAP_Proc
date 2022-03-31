@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.26";
+    public static String Version_Name = "ver 3.3.27";
     public static String Work_Type = "0";
     public static int count;
 
@@ -542,9 +542,18 @@ public class Common_Class {
 
 
                 switch (key) {
+                    case Constants.PRIMARY_DASHBOARD:
+                        axnname = "get/primarydashboardvalues";
+                        data.put("login_sfCode", UserDetails.getString("Sfcode", ""));
+                        data.put("Dt", Common_Class.GetDatewothouttime());
+                        data.put("Grpcode", SFA_Activity.sfaActivity.groupType);
+                        data.put(Constants.LOGIN_TYPE,shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        break;
+
                     case Constants.GroupFilter:
                         axnname = "get/groupfilter";
-                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE) ?
+                                shared_common_pref.getvalue(Constants.Distributor_Id) : "");
                         break;
 
                     case Constants.WEEKLY_EXPENSE:
@@ -564,6 +573,7 @@ public class Common_Class {
                         break;
                     case Constants.PLANT_MASTER:
                         axnname = "get/plantmaster";
+                        QueryString.put("login_sfCode", UserDetails.getString("Sfcode", ""));
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
                         break;
                     case Constants.SALES_RETURN:

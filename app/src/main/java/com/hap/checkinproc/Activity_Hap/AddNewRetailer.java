@@ -599,6 +599,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
                 if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
                     owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                if (Retailer_Modal_List.get(getOutletPosition()).getDistrictname() != null)
+                    etDistrict.setText("" + Retailer_Modal_List.get(getOutletPosition()).getDistrictname());
                 edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
                 edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
                 //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
@@ -700,9 +702,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
+                    }
+
+                    else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    } else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
+                    }
+
+
+                    else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
                         common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
 
                     } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
@@ -1765,6 +1772,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
         if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
             owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+        if (Retailer_Modal_List.get(getOutletPosition()).getDistrictname() != null)
+            etDistrict.setText("" + Retailer_Modal_List.get(getOutletPosition()).getDistrictname());
+
+
         edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
         edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
         // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());

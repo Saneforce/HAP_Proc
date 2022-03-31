@@ -189,6 +189,11 @@ public class Retailer_Modal_List {
     @Expose
     private String CustomerCode;
 
+    @SerializedName("districtname")
+    @Expose
+    private String districtname;
+
+
     public Retailer_Modal_List getRetailer_modal_list() {
         return retailer_modal_list;
     }
@@ -1000,6 +1005,14 @@ public class Retailer_Modal_List {
 
     public void setCustomerCode(String customerCode) {
         CustomerCode = customerCode;
+    }
+
+    public String getDistrictname() {
+        return districtname;
+    }
+
+    public void setDistrictname(String districtname) {
+        this.districtname = districtname;
     }
 
     public class CateSpecList{

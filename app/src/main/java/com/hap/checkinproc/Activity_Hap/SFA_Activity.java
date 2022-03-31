@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
+import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -39,6 +40,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
@@ -55,6 +57,7 @@ import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
+import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -62,6 +65,8 @@ import com.hap.checkinproc.common.SANGPSTracker;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -92,14 +97,20 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
     RecyclerView recyclerView;
     TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls,
-            tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls, tvUserName;
+            tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls, tvUserName,
+            tvPrimOrder, tvNoOrder, tvTotalValOrder, tvUpdTime;
     private DatePickerDialog fromDatePickerDialog;
 
     public static String sfa_date = "";
 
     MenuAdapter menuAdapter;
-    RecyclerView rvMenu;
+    RecyclerView rvMenu, rvPrimOrd;
     private List<Common_Model> menuList = new ArrayList<>();
+    NumberFormat formatter = new DecimalFormat("##0.00");
+
+    public static String updateTime = "";
+    public String groupType = "All";
+    public static SFA_Activity sfaActivity;
 
 
     @Override
@@ -107,6 +118,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sfactivity);
         db = new DatabaseHandler(this);
+        sfaActivity = this;
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         ivLogout = findViewById(R.id.toolbar_home);
@@ -117,6 +129,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders = findViewById(R.id.linorders);
         Logout = findViewById(R.id.Logout);
         rvMenu = findViewById(R.id.rvMenu);
+        tvTotalValOrder = findViewById(R.id.tvTotValOrd);
+        tvNoOrder = findViewById(R.id.tvNoOrd);
+        tvPrimOrder = findViewById(R.id.tvPrimOrd);
+        tvUpdTime = findViewById(R.id.tvUpdTime);
+        rvPrimOrd = findViewById(R.id.rvPrimOrder);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -140,10 +157,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         String sUName = UserDetails.getString("SfName", "");
         tvUserName.setText("HI! " + sUName);
+        tvUpdTime.setText("Last Updated On : " + updateTime);
 
         common_class.getProductDetails(this);
         getNoOrderRemarks();
         showDashboardData();
+        common_class.getDb_310Data(Constants.GroupFilter, this);
 
 
         switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
@@ -523,6 +542,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         //common_class.getDb_310Data(Constants.SERVICEOUTLET, this);
         common_class.getDb_310Data(Constants.OUTLET_SUMMARY, this);
         common_class.getDb_310Data(Constants.SFA_DASHBOARD, this);
+        common_class.getDb_310Data(Constants.PRIMARY_DASHBOARD, this);
 
     }
 
@@ -531,6 +551,61 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+
+                    case GroupFilter:
+                        Log.v(key, apiDataResponse);
+
+                        JSONObject filterObj = new JSONObject(apiDataResponse);
+
+                        JSONObject obj1 = new JSONObject();
+                        obj1.put("name", "All");
+                        obj1.put("GroupCode", "0");
+
+                        JSONArray arr1 = new JSONArray();
+
+                        arr1.put(obj1);
+
+                        if (filterObj.getBoolean("success")) {
+
+
+                            for (int i = 0; i < filterObj.getJSONArray("Data").length(); i++)
+                                arr1.put(filterObj.getJSONArray("Data").getJSONObject(i));
+
+
+                        }
+
+                        rvPrimOrd.setAdapter(new RyclBrandListItemAdb(arr1, this, new onListItemClick() {
+
+                            @Override
+
+                            public void onItemClick(JSONObject item) {
+                                try {
+                                    groupType = item.getString("name");
+                                    common_class.getDb_310Data(Constants.PRIMARY_DASHBOARD, SFA_Activity.this);
+                                } catch (Exception e) {
+                                    Log.v("primHist:", e.getMessage());
+                                }
+                            }
+
+                        }));
+
+
+                        break;
+                    case Constants.PRIMARY_DASHBOARD:
+
+                        Log.v(key + ":", apiDataResponse);
+                        JSONObject obj = new JSONObject(apiDataResponse);
+                        if (obj.getBoolean("success")) {
+                            updateTime = Common_Class.GetDate();
+                            tvUpdTime.setText("Last Updated On : " + updateTime);
+                            JSONArray arr = obj.getJSONArray("Data");
+
+                            tvPrimOrder.setText("" + arr.getJSONObject(0).getInt("Ordr"));
+                            tvNoOrder.setText("" + arr.getJSONObject(0).getInt("NoOrdr"));
+                            tvTotalValOrder.setText("" + formatter.format(arr.getJSONObject(0).getDouble("Val")));
+
+                        }
+                        break;
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
                         common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);

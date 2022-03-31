@@ -116,6 +116,7 @@ public class Constants {
     public static final String SLOT_TIMES = "slotTimes";
     public static final String WEEKLY_EXPENSE ="weeklyExpense" ;
     public static final String ONDUTY_STATUS = "ondutyStatus";
+    public static final String PRIMARY_DASHBOARD = "primaryDashboard";
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";
 

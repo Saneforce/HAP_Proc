@@ -31,7 +31,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.multidex.BuildConfig;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
@@ -54,6 +53,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -608,7 +608,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "sajan@hap.in";
                 //eMail = "1005985@hap.in";
 //                eMail = "haptest5@hap.in";
-               // eMail = "ciadmin@hap.in";
+              //  eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 // eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -633,7 +633,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-               // eMail = "1013362@hap.in";//(-18)
+                //eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
