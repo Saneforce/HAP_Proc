@@ -297,15 +297,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             mCommon_model_spinner = new Common_Model("3", "Duplicate", "flag");
             outletTypeList.add(mCommon_model_spinner);
 
-            serviceTypeList = new ArrayList<>();
-            serviceTypeList.add(new Common_Model("-18", "1", false, "", "", "", ""));
-            serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
-            serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
-            //serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
-
-
-            categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
-            rvCategoryTypes.setAdapter(categoryAdapter);
+//            serviceTypeList = new ArrayList<>();
+//            serviceTypeList.add(new Common_Model("-18", "1", false, "", "", "", ""));
+//            serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
+//            serviceTypeList.add(new Common_Model("Ambient", "3", false, "", "", "", ""));
+//            //serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
+//
+//
+//            categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
+//            rvCategoryTypes.setAdapter(categoryAdapter);
 
 
             rlOutletType.setOnClickListener(new View.OnClickListener() {
@@ -519,6 +519,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             Log.e(TAG + "1:1", Shared_Common_Pref.Outler_AddFlag);
 
+            getFreezerData(divERP);
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
                 addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
@@ -814,7 +815,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             mData.add(new QPS_Modal("", "", ""));
             mFreezerData.add(new QPS_Modal("", "", ""));
-            getFreezerData(divERP);
+
             Log.e(TAG + "5:", Shared_Common_Pref.Outler_AddFlag);
 
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_capacity)))

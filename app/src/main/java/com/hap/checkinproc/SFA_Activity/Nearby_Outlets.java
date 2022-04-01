@@ -200,6 +200,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
+
             Createoutlet.setOnClickListener(this);
             ImageView backView = findViewById(R.id.imag_back);
 
