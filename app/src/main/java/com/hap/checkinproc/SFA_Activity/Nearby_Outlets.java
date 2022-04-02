@@ -972,7 +972,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 builder.include(latLng);
 
             }
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+          //  map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
             //  drDetail();
             removeMarkedPlaces();
