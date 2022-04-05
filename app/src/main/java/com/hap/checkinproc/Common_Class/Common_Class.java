@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.27";
+    public static String Version_Name = "ver 3.3.28";
     public static String Work_Type = "0";
     public static int count;
 
@@ -616,12 +616,15 @@ public class Common_Class {
                         data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.MYTEAM_LOCATION:
-                        axnname = "get/myteamlocation";
+                        axnname = "get/newmyteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
                         data.put("date", jparam.get("date").getAsString());
+                        data.put("lat",jparam.get("lat").getAsString());
+                        data.put("lng",jparam.get("lng").getAsString());
                         // data.put("date", "2021-09-09");
                         data.put("type", jparam.get("type").getAsString());
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
 
                         break;
 

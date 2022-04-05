@@ -72,6 +72,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public Common_Class common_class;
+    TextView Createoutlet, latitude, longitude, availableoutlets, cAddress;
 
     public static Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -205,6 +206,8 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             data.addProperty("sfcode", Shared_Common_Pref.Sf_Code);
             data.addProperty("date", Common_Class.GetDatewothouttime());
             data.addProperty("type", type);
+            data.addProperty("lat", "" + laty);
+            data.addProperty("lng", "" + lngy);
 
             common_class.getDb_310Data(Constants.MYTEAM_LOCATION, this, data);
         } else {
@@ -402,7 +405,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
-            Log.v(key + ":", "" + apiDataResponse);
             if (apiDataResponse != null) {
                 switch (key) {
                     case Constants.MYTEAM_LOCATION:
@@ -439,6 +441,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             TextView tvDesig = (TextView) view.findViewById(R.id.tvDesig);
             TextView tvMobile = (TextView) view.findViewById(R.id.txMobile);
             TextView txDtTm = (TextView) view.findViewById(R.id.txDtTm);
+            TextView txHQ = view.findViewById(R.id.tvHQ);
 
 
             for (int i = 0; i < array.length(); i++) {
@@ -453,10 +456,15 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             JSONObject obj = array.getJSONObject(locPos);
-            tvSfName.setText(obj.getString("Sf_Name"));
-            tvDesig.setText(obj.getString("Designation_Name"));
-            tvMobile.setText(obj.getString("SF_Mobile"));
-            txDtTm.setText(obj.getString("dttm"));
+            tvSfName.setText("" + obj.getString("Sf_Name"));
+            tvDesig.setText("" + obj.getString("Designation_Name"));
+            tvMobile.setText("" + obj.getString("SF_Mobile"));
+            txDtTm.setText("" + obj.getString("dttm"));
+            txHQ.setText("" + obj.getString("HQ_Name"));
+
+            if(Common_Class.isNullOrEmpty(obj.getString("SF_Mobile")))
+                view.findViewById(R.id.btnCallMob).setVisibility(View.GONE);
+
             tvMobile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

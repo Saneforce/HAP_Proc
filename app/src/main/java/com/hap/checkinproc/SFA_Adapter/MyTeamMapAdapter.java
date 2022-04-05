@@ -58,19 +58,23 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
         try {
             json = array.getJSONObject(position);
             holder.tvSfName.setText((MyTeamActivity.myTeamActivity.mType.equalsIgnoreCase("ALL") ?
-                    json.getString("Sf_Name") + " (" + json.getString("shortname") + ")" : json.getString("Sf_Name"))+" - "+json.getString("sf_emp_id"));
+                    json.getString("Sf_Name") + " (" + json.getString("shortname") + ")" : json.getString("Sf_Name")) + " - " + json.getString("sf_emp_id"));
             //holder.txEMPId.setText(json.getString("sf_emp_id"));
             holder.txEMPId.setVisibility(View.GONE);
             holder.tvDesig.setText(json.getString("Designation_Name"));
             holder.tvMobile.setText(json.getString("SF_Mobile"));
             holder.txDtTm.setText(json.getString("dttm"));
-            holder.txHQ.setText(json.getString("HQ_Name"));
+            holder.txHQ.setText(""+json.getString("HQ_Name"));
             holder.tvMobile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mAdapterOnClick.CallMobile(holder.tvMobile.getText().toString().replaceAll(",", ""));
                 }
             });
+
+            holder.llMobile.setVisibility(View.VISIBLE);
+            if(Common_Class.isNullOrEmpty(json.getString("SF_Mobile")))
+                holder.llMobile.setVisibility(View.GONE);
 
 
         } catch (Exception e) {
@@ -116,7 +120,7 @@ public class MyTeamMapAdapter extends RecyclerView.Adapter<MyTeamMapAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView tvSfName,txEMPId, tvDesig, tvMobile,txDtTm,txHQ;
+        TextView tvSfName, txEMPId, tvDesig, tvMobile, txDtTm, txHQ;
         LinearLayout llDir, llMobile;
 
 

@@ -52,10 +52,10 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
                         <TextView
+                            android:visibility="gone"
                             android:id="@+id/tvEMPId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Rajasekar"
                             android:textSize="10sp"
                             android:layout_marginTop="-5dp"
                             android:textStyle="bold" />
@@ -70,7 +70,6 @@
                             android:id="@+id/tvHQ"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Field Supervisor"
                             />
 
 

@@ -53,6 +53,7 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
+import com.hap.checkinproc.SFA_Activity.ReportsListActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
@@ -121,40 +122,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         sfaActivity = this;
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-        ivLogout = findViewById(R.id.toolbar_home);
-        Lin_Route = findViewById(R.id.Lin_Route);
-        SyncButon = findViewById(R.id.SyncButon);
-        Lin_Lead = findViewById(R.id.Lin_Lead);
-        Lin_Dashboard = findViewById(R.id.Lin_Dashboard);
-        linorders = findViewById(R.id.linorders);
-        Logout = findViewById(R.id.Logout);
-        rvMenu = findViewById(R.id.rvMenu);
-        tvTotalValOrder = findViewById(R.id.tvTotValOrd);
-        tvNoOrder = findViewById(R.id.tvNoOrd);
-        tvPrimOrder = findViewById(R.id.tvPrimOrd);
-        tvUpdTime = findViewById(R.id.tvUpdTime);
-        rvPrimOrd = findViewById(R.id.rvPrimOrder);
-
         common_class = new Common_Class(this);
-        SyncButon.setOnClickListener(this);
-        Lin_Route.setOnClickListener(this);
-        Lin_Lead.setOnClickListener(this);
-        Lin_Dashboard.setOnClickListener(this);
-        linorders.setOnClickListener(this);
-        Logout.setOnClickListener(this);
-        ivLogout.setOnClickListener(this);
-
         gson = new Gson();
-        ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
 
         init();
         setOnClickListener();
 
+        ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
+
+
         tvDate.setText("" + Common_Class.GetDatewothouttime());
 
         sfa_date = tvDate.getText().toString();
-
         String sUName = UserDetails.getString("SfName", "");
         tvUserName.setText("HI! " + sUName);
         tvUpdTime.setText("Last Updated On : " + updateTime);
@@ -247,8 +227,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
                         break;
                     case "Reports":
-                        //  common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
-                        common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
+                          common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
+                       // common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
 
                         break;
                     case "My Team":
@@ -348,6 +328,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
+        SyncButon.setOnClickListener(this);
+        Lin_Route.setOnClickListener(this);
+        Lin_Lead.setOnClickListener(this);
+        Lin_Dashboard.setOnClickListener(this);
+        linorders.setOnClickListener(this);
+        Logout.setOnClickListener(this);
+        ivLogout.setOnClickListener(this);
+
     }
 
     private void getCumulativeDataFromAPI(String response) {
@@ -454,6 +442,21 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
         tvUserName = findViewById(R.id.tvUserName);
+
+        ivLogout = findViewById(R.id.toolbar_home);
+        Lin_Route = findViewById(R.id.Lin_Route);
+        SyncButon = findViewById(R.id.SyncButon);
+        Lin_Lead = findViewById(R.id.Lin_Lead);
+        Lin_Dashboard = findViewById(R.id.Lin_Dashboard);
+        linorders = findViewById(R.id.linorders);
+        Logout = findViewById(R.id.Logout);
+        rvMenu = findViewById(R.id.rvMenu);
+        tvTotalValOrder = findViewById(R.id.tvTotValOrd);
+        tvNoOrder = findViewById(R.id.tvNoOrd);
+        tvPrimOrder = findViewById(R.id.tvPrimOrd);
+        tvUpdTime = findViewById(R.id.tvUpdTime);
+        rvPrimOrd = findViewById(R.id.rvPrimOrder);
+
 
 
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
