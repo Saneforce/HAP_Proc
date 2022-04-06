@@ -66,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="#80000000"></TextView>
 
-
             <TextView
                 android:id="@+id/txt_per_day"
                 android:layout_width="wrap_content"

@@ -39,7 +39,6 @@ public class Reports_Outler_Name extends AppCompatActivity {
     Common_Class common_class;
     TextView  textViewname;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
-
     Shared_Common_Pref shared_common_pref;
 
     @Override
@@ -77,8 +76,5 @@ public class Reports_Outler_Name extends AppCompatActivity {
 
             }
         }));
-
-
     }
-
 }
