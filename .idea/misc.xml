@@ -20,6 +20,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/icon_bg.xml" value="0.2824074074074074" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/mandatory.xml" value="0.2824074074074074" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/report.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/tabs_selector.xml" value="0.2824074074074074" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/text_bg.xml" value="0.2824074074074074" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/text_bg_grey.xml" value="0.2890625" />
@@ -75,6 +76,7 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/primaryorder_history_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/procuct_category_types.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.33" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/row_date_view_report.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/row_holiday_entry_status.xml" value="0.23550724637681159" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/sfa_menu_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/ta_reject_popup.xml" value="0.25" />

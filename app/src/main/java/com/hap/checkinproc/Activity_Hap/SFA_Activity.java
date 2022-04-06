@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -55,7 +56,6 @@ import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.ReportsListActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
-import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
@@ -110,8 +110,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     NumberFormat formatter = new DecimalFormat("##0.00");
 
     public static String updateTime = "";
-    public String groupType = "All";
-    public static SFA_Activity sfaActivity;
 
 
     @Override
@@ -119,7 +117,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sfactivity);
         db = new DatabaseHandler(this);
-        sfaActivity = this;
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         common_class = new Common_Class(this);
@@ -142,6 +139,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         common_class.getProductDetails(this);
         getNoOrderRemarks();
         showDashboardData();
+        getPrimaryData("All");
         common_class.getDb_310Data(Constants.GroupFilter, this);
 
 
@@ -152,7 +150,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
                 menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
-                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_reports));
                 menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
                 menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
                 menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
@@ -166,7 +164,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
                 menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
-                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_reports));
                 menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
 
@@ -178,7 +176,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
                 menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
-                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_reports));
                 menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
                 break;
@@ -227,8 +225,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
                         break;
                     case "Reports":
-                          common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
-                       // common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
+                        common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
+                        // common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
 
                         break;
                     case "My Team":
@@ -458,7 +456,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         rvPrimOrd = findViewById(R.id.rvPrimOrder);
 
 
-
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
         Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
 
@@ -545,7 +542,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         //common_class.getDb_310Data(Constants.SERVICEOUTLET, this);
         common_class.getDb_310Data(Constants.OUTLET_SUMMARY, this);
         common_class.getDb_310Data(Constants.SFA_DASHBOARD, this);
-        common_class.getDb_310Data(Constants.PRIMARY_DASHBOARD, this);
 
     }
 
@@ -562,7 +558,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                         JSONObject obj1 = new JSONObject();
                         obj1.put("name", "All");
-                        obj1.put("GroupCode", "0");
+                        obj1.put("GroupCode", "All");
 
                         JSONArray arr1 = new JSONArray();
 
@@ -583,8 +579,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                             public void onItemClick(JSONObject item) {
                                 try {
-                                    groupType = item.getString("name");
-                                    common_class.getDb_310Data(Constants.PRIMARY_DASHBOARD, SFA_Activity.this);
+                                    getPrimaryData(item.getString("GroupCode"));
                                 } catch (Exception e) {
                                     Log.v("primHist:", e.getMessage());
                                 }
@@ -680,6 +675,12 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
 
         }
+    }
+
+    void getPrimaryData(String groupType) {
+        JsonObject data = new JsonObject();
+        data.addProperty("Grpcode", groupType);
+        common_class.getDb_310Data(Constants.PRIMARY_DASHBOARD, SFA_Activity.this, data);
     }
 
     public class OutletDashboardInfoAdapter extends RecyclerView.Adapter<OutletDashboardInfoAdapter.MyViewHolder> {

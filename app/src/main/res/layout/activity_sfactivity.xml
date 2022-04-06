@@ -711,7 +711,7 @@
                                 style="@style/headerTextStyle"
                                 android:layout_width="wrap_content"
                                 android:paddingLeft="@dimen/C15dp"
-                                android:text="Day Activity"
+                                android:text="Today Orders"
                                 android:textAlignment="textStart" />
 
                             <androidx.recyclerview.widget.RecyclerView

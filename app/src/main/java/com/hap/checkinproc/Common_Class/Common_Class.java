@@ -96,7 +96,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.28";
+    public static String Version_Name = "ver 3.3.29";
     public static String Work_Type = "0";
     public static int count;
 
@@ -546,7 +546,7 @@ public class Common_Class {
                         axnname = "get/primarydashboardvalues";
                         data.put("login_sfCode", UserDetails.getString("Sfcode", ""));
                         data.put("Dt", Common_Class.GetDatewothouttime());
-                        data.put("Grpcode", SFA_Activity.sfaActivity.groupType);
+                        data.put("Grpcode",jparam.get("Grpcode").getAsString());
                         data.put(Constants.LOGIN_TYPE,shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
 
@@ -675,7 +675,7 @@ public class Common_Class {
                         break;
                     case Constants.QPS_COMBO:
                         axnname = "get/qpsallocation";
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -710,12 +710,12 @@ public class Common_Class {
                         break;
                     case Constants.PAYMODES:
                         axnname = "get/paymenttype";
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
 
                     case Constants.POP_MATERIAL:
                         axnname = "get/popmaster";
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -735,14 +735,14 @@ public class Common_Class {
                     case Constants.TAXList:
                         axnname = "get/producttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("retailorId", Shared_Common_Pref.OutletCode);
                         break;
 
                     case Constants.POS_TAXList:
                         axnname = "get/posproducttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("retailorId", Shared_Common_Pref.OutletCode);
                         break;
 
@@ -750,18 +750,18 @@ public class Common_Class {
                     case Constants.FreeSchemeDiscList:
                         axnname = "get/secondaryscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("outletId", Shared_Common_Pref.OutletCode);
                         break;
                     case Constants.POS_SCHEME:
                         axnname = "get/posscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.PRIMARY_SCHEME:
                         axnname = "get/primaryscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.PreOrderQtyList:
                         axnname = "get/prevorderqty";
@@ -776,28 +776,28 @@ public class Common_Class {
                     case Constants.CUMULATIVEDATA:
                         axnname = "get/cumulativevalues";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SERVICEOUTLET:
                         axnname = "get/serviceoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.OUTLET_SUMMARY:
                         axnname = "get/outletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode",UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SFA_DASHBOARD:
                         axnname = "get/channelwiseoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode",UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
