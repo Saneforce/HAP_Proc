@@ -67,7 +67,7 @@ public class Reports_Outler_Name extends AppCompatActivity {
 
         if (!OrdersTable.equals(""))
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), "Reports",new AdapterOnClick() {
+            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_List, R.layout.outlet_info_recyclerview,this, "Reports",new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
                 Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();

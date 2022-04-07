@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
@@ -26,12 +28,13 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
     int rowlayout;
 
     String DistName = "";
-
+    Common_Class common_class;
 
     public DashboardInfoAdapter(Context context, JSONArray mDate, int rowlayout) {
         this.context = context;
         this.mDate = mDate;
         this.rowlayout = rowlayout;
+        common_class = new Common_Class(context);
 
     }
 
@@ -98,6 +101,20 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
             holder.tvDistPh.setText("" + mObj.getString("Mobile"));
             holder.tvDateTime.setText("" + mObj.getString("Date_Time"));
             holder.tvProductName.setText(pro_name);
+            holder.llDistCall.setVisibility(View.VISIBLE);
+            if (Common_Class.isNullOrEmpty(holder.tvDistPh.getText().toString()))
+                holder.llDistCall.setVisibility(View.GONE);
+
+            holder.llDistCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        common_class.showCalDialog(context, "Do you want to Call this Franchise?", holder.tvDistPh.getText().toString().replaceAll(",", ""));
+                    } catch (Exception e) {
+                        Log.v("Call:Outlet:", e.getMessage());
+                    }
+                }
+            });
 
 
         } catch (Exception e) {
@@ -113,6 +130,7 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvId, tvStatus, tvAmount, tvOutletName, tvDistName, tvDistAdd, tvDistPh, tvDateTime, tvProductName;
         ImageView ivStatus;
+        LinearLayout llDistCall;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -126,6 +144,7 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
             tvDistPh = itemView.findViewById(R.id.txMobile);
             tvDateTime = itemView.findViewById(R.id.tvDateTime);
             tvProductName = itemView.findViewById(R.id.tvProductName);
+            llDistCall = itemView.findViewById(R.id.btnCallMob);
 
 
         }

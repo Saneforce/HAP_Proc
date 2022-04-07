@@ -72,7 +72,6 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public Common_Class common_class;
-    TextView Createoutlet, latitude, longitude, availableoutlets, cAddress;
 
     public static Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
@@ -287,7 +286,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
 
-                mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy), new AdapterOnClick() {
+                mapAdapter = new MyTeamMapAdapter(this, arr1, String.valueOf(laty), String.valueOf(lngy),mType, new AdapterOnClick() {
                     @Override
                     public void onIntentClick(JsonObject item, int Name) {
 
@@ -437,6 +436,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             //alertDialog.setCancelable(false);
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             LinearLayout llDir = (LinearLayout) view.findViewById(R.id.llDirection);
+            LinearLayout llCall=view.findViewById(R.id.btnCallMob);
             TextView tvSfName = (TextView) view.findViewById(R.id.tvSfName);
             TextView tvDesig = (TextView) view.findViewById(R.id.tvDesig);
             TextView tvMobile = (TextView) view.findViewById(R.id.txMobile);
@@ -465,19 +465,10 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
             if(Common_Class.isNullOrEmpty(obj.getString("SF_Mobile")))
                 view.findViewById(R.id.btnCallMob).setVisibility(View.GONE);
 
-            tvMobile.setOnClickListener(new View.OnClickListener() {
+            llCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Log.d("Event", "CAll Mobile");
-                    int readReq = ContextCompat.checkSelfPermission(MyTeamActivity.this, CALL_PHONE);
-                    if (readReq != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                    } else {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:" + tvMobile.getText()));//change the number
-                        startActivity(callIntent);
-                    }
+                    common_class.showCalDialog(MyTeamActivity.this, "Do you want to Call this number?", tvMobile.getText().toString().replaceAll(",", ""));
                 }
             });
 

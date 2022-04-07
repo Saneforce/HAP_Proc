@@ -433,7 +433,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
 
         if (Retailer_Modal_ListFilter != null) {
 
-            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, getApplicationContext(), "Outlets", new AdapterOnClick() {
+            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, this, "Outlets", new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {
                     try {

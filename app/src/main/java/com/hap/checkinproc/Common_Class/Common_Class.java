@@ -546,8 +546,8 @@ public class Common_Class {
                         axnname = "get/primarydashboardvalues";
                         data.put("login_sfCode", UserDetails.getString("Sfcode", ""));
                         data.put("Dt", Common_Class.GetDatewothouttime());
-                        data.put("Grpcode",jparam.get("Grpcode").getAsString());
-                        data.put(Constants.LOGIN_TYPE,shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        data.put("Grpcode", jparam.get("Grpcode").getAsString());
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
 
                     case Constants.GroupFilter:
@@ -619,8 +619,8 @@ public class Common_Class {
                         axnname = "get/newmyteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
                         data.put("date", jparam.get("date").getAsString());
-                        data.put("lat",jparam.get("lat").getAsString());
-                        data.put("lng",jparam.get("lng").getAsString());
+                        data.put("lat", jparam.get("lat").getAsString());
+                        data.put("lng", jparam.get("lng").getAsString());
                         // data.put("date", "2021-09-09");
                         data.put("type", jparam.get("type").getAsString());
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
@@ -790,14 +790,14 @@ public class Common_Class {
                     case Constants.OUTLET_SUMMARY:
                         axnname = "get/outletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode",UserDetails.getString("Divcode", ""));
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SFA_DASHBOARD:
                         axnname = "get/channelwiseoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode",UserDetails.getString("Divcode", ""));
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
@@ -1093,7 +1093,14 @@ public class Common_Class {
         AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
-                callMob(activity, num);
+                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+                } else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    activity.startActivity(callIntent);
+                }
             }
 
             @Override
@@ -1103,17 +1110,28 @@ public class Common_Class {
         });
     }
 
+    public void showCalDialog(Context activity, String msg, String num) {
+        AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                //callMob(activity, num);
+                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+                } else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    activity.startActivity(callIntent);
+                }
+            }
 
-    public void callMob(Activity activity, String num) {
-        int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
-        if (readReq != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
-        } else {
-            Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" + num));//change the number
-            activity.startActivity(callIntent);
-        }
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+
+            }
+        });
     }
+
 
     public String datePicker(Activity activity, TextView view) {
         Calendar newCalendar = Calendar.getInstance();

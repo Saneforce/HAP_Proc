@@ -33,8 +33,9 @@
                     android:layout_gravity="center"
                     android:id="@+id/ivMenuIcon"
                     android:layout_width="@dimen/C40dp"
+                    android:tint="@color/colorPrimaryDark"
                     android:layout_height="@dimen/C40dp"
-                    android:src="@drawable/ic_outline_add_chart_48"
+                    android:src="@drawable/ic_report2"
                     tools:ignore="UseAppTint" />
 
                 <TextView

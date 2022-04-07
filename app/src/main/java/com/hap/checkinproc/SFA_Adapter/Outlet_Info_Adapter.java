@@ -32,6 +32,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
     private Context context;
     AdapterOnClick mAdapterOnClick;
     String activityName;
+    Common_Class common_class;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, txRetNo, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt,tvPhone;
@@ -74,6 +75,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         this.context = context;
         this.activityName = activityName;
         this.mAdapterOnClick = mAdapterOnClick;
+        common_class=new Common_Class(context);
     }
 
     @Override
@@ -169,6 +171,17 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
             holder.llCallMob.setVisibility(View.VISIBLE);
             holder.tvPhone.setText(""+Retailer_Modal_List.getPrimary_No());
         }
+        holder.llCallMob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    common_class.showCalDialog(context, "Do you want to Call this Outlet?", holder.tvPhone.getText().toString().replaceAll(",", ""));
+                }
+                catch (Exception e){
+                    Log.v("Call:Outlet:",e.getMessage());
+                }
+            }
+        });
     }
 
     private void drawRoute(String OutletName, String sLat, String sLng) {
