@@ -564,6 +564,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     ldgAdd.setText("+ Add");
                     lodgContvw.setVisibility(View.GONE);
                     txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
+                    totLodgAmt = String.valueOf(0);
 
                 }
                 SumOFLodging(0);

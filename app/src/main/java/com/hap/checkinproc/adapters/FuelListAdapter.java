@@ -105,11 +105,11 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
 
 
-                        String qz = String.valueOf(q * z);
+//                        String qz = String.valueOf(q * z);
+//
+//                        Log.v("Testing_Total", qz);
 
-                        Log.v("Testing_Total", qz);
-
-                        holder.TextTotalAmount.setText("Rs. " + qz);
+                        holder.TextTotalAmount.setText("Rs. " +  new DecimalFormat("##0.00").format(q*z));
                     }else{
                         Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
@@ -120,11 +120,11 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
 
 
-                        String qz = String.valueOf(q * z);
+//                        String qz = String.valueOf(q * z);
+//
+//                        Log.v("Testing_Total", qz);
 
-                        Log.v("Testing_Total", qz);
-
-                        holder.TextTotalAmount.setText("Rs. " + qz);
+                        holder.TextTotalAmount.setText("Rs. " +  new DecimalFormat("##0.00").format(q*z));
                     }
                 } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
                     if (Total >= FWMax_Km) {
