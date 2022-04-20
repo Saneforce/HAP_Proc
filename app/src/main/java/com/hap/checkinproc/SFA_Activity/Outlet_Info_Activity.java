@@ -61,7 +61,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     List<Common_Model> FRoute_Master = new ArrayList<>();
     DatabaseHandler db;
     String TAG = "OUTLET_INFO_Activity:", viewType = "-1";
-    ;
     private TextView distributor_text;
     Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet, swFreezerOutlet, swNoFreezerOutlet;
     int CountUR = 0, CountSR = 0, CountCls = 0;
@@ -352,139 +351,145 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     }
 
     public void reloadData() {
-
-        Retailer_Modal_ListFilter.clear();
-        if (sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
-            Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
-        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        String routeId = sharedCommonPref.getvalue(Route_Id);
-
-
-        CountUR = 0;
-        CountSR = 0;
-        CountCls = 0;
-        if (Retailer_Modal_List != null) {
-            retailerSize = Retailer_Modal_List.size();
-
-            for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
-                String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
-                String sSchText = txSearchRet.getText().toString().toUpperCase();
-                boolean UpdTrue = false;
-                if (swUpdOutlet.isChecked()) {
-                    if (Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase(""))
-                        UpdTrue = true;
-                } else if (swUpdNoOutlet.isChecked()) {
-                    if (!(Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase("")))
-                        UpdTrue = true;
-                } else {
-                    UpdTrue = true;
-                }
-                boolean ACTrue = false;
-                if (swACOutlet.isChecked()) {
-                    if (Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
-                        ACTrue = true;
-                } else if (swOTHOutlet.isChecked()) {
-                    if (!(Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC")))
-                        ACTrue = true;
-                } else {
-                    ACTrue = true;
-                }
-
-                boolean FreezerTrue = false;
-
-                Log.v("freezer:", "" + swFreezerOutlet.isChecked() + " :nofree:" + swNoFreezerOutlet.isChecked());
-                if (swFreezerOutlet.isChecked()) {
-                    if (Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("Yes"))
-                        FreezerTrue = true;
-                } else if (swNoFreezerOutlet.isChecked()) {
-                    if ((Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("No")))
-                        FreezerTrue = true;
-                } else {
-                    FreezerTrue = true;
-                }
-
-
-                boolean FiltrType = false;
-                String outletType = Retailer_Modal_List.get(sr).getType() == null ? "0" : Retailer_Modal_List.get(sr).getType();
-                if (viewType.equalsIgnoreCase("-1"))
-                    FiltrType = true;
-                else if (outletType.equalsIgnoreCase(viewType))
-                    FiltrType = true;
-
-                if (UpdTrue && ACTrue && FiltrType && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
-                }
-                if (UpdTrue && ACTrue && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
-                    if (Retailer_Modal_List.get(sr).getType() == null)
-                        Retailer_Modal_List.get(sr).setType("0");
-                    if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("0")) CountUR++;
-                    if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("1")) CountSR++;
-                    if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("2")) CountCls++;
-                }
+        try {
+            Retailer_Modal_ListFilter.clear();
+            if (sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
+                Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
+                return;
             }
-        }
-        TotalOutlets.setText(String.valueOf(Retailer_Modal_ListFilter.size()));
-        txUniOtltCnt.setText(String.valueOf(CountUR));
-        txSrvOtltCnt.setText(String.valueOf(CountSR));
-        txClsOtltCnt.setText(String.valueOf(CountCls));
+            String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            String routeId = sharedCommonPref.getvalue(Route_Id);
 
-        if (Retailer_Modal_ListFilter != null) {
 
-            recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, this, "Outlets", new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    try {
-                        Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                        Shared_Common_Pref.Outlet_Info_Flag = "1";
-                        Shared_Common_Pref.Editoutletflag = "1";
-                        Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.FromActivity = "Outlets";
-                        Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
-                        intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
-                        intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
-                        intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                        intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getPrimary_No());
-                        intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
+            CountUR = 0;
+            CountSR = 0;
+            CountCls = 0;
+            if (Retailer_Modal_List != null) {
+                retailerSize = Retailer_Modal_List.size();
 
-                        startActivity(intent);
-                        // finish();
-                    } catch (Exception e) {
-
+                for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
+                    String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
+                    String sSchText = txSearchRet.getText().toString().toUpperCase();
+                    boolean UpdTrue = false;
+                    if (swUpdOutlet.isChecked()) {
+                        if (Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase(""))
+                            UpdTrue = true;
+                    } else if (swUpdNoOutlet.isChecked()) {
+                        if (!(Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase("")))
+                            UpdTrue = true;
+                    } else {
+                        UpdTrue = true;
+                    }
+                    boolean ACTrue = false;
+                    if (swACOutlet.isChecked()) {
+                        if (Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
+                            ACTrue = true;
+                    } else if (swOTHOutlet.isChecked()) {
+                        if (!(Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC")))
+                            ACTrue = true;
+                    } else {
+                        ACTrue = true;
                     }
 
-                }
-            }));
+                    boolean FreezerTrue = false;
 
+                    Log.v("freezer:", "" + swFreezerOutlet.isChecked() + " :nofree:" + swNoFreezerOutlet.isChecked());
+                    if (swFreezerOutlet.isChecked()) {
+                        if (Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("Yes"))
+                            FreezerTrue = true;
+                    } else if (swNoFreezerOutlet.isChecked()) {
+                        if ((Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("No")))
+                            FreezerTrue = true;
+                    } else {
+                        FreezerTrue = true;
+                    }
+
+
+                    boolean FiltrType = false;
+                    String outletType = Retailer_Modal_List.get(sr).getType() == null ? "0" : Retailer_Modal_List.get(sr).getType();
+                    if (viewType.equalsIgnoreCase("-1"))
+                        FiltrType = true;
+                    else if (outletType.equalsIgnoreCase(viewType))
+                        FiltrType = true;
+
+                    if (UpdTrue && ACTrue && FiltrType && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
+                    }
+                    if (UpdTrue && ACTrue && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                        if (Retailer_Modal_List.get(sr).getType() == null)
+                            Retailer_Modal_List.get(sr).setType("0");
+                        if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("0")) CountUR++;
+                        if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("1")) CountSR++;
+                        if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("2")) CountCls++;
+                    }
+                }
+            }
+            TotalOutlets.setText(String.valueOf(Retailer_Modal_ListFilter.size()));
+            txUniOtltCnt.setText(String.valueOf(CountUR));
+            txSrvOtltCnt.setText(String.valueOf(CountSR));
+            txClsOtltCnt.setText(String.valueOf(CountCls));
+
+            if (Retailer_Modal_ListFilter != null) {
+
+                recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, this, "Outlets", new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(int position) {
+                        try {
+                            Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
+                            Shared_Common_Pref.Outlet_Info_Flag = "1";
+                            Shared_Common_Pref.Editoutletflag = "1";
+                            Shared_Common_Pref.Outler_AddFlag = "0";
+                            Shared_Common_Pref.FromActivity = "Outlets";
+                            Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
+                            intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
+                            intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
+                            intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                            intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getPrimary_No());
+                            intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
+
+                            startActivity(intent);
+                            // finish();
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                }));
+
+            }
+        } catch (Exception e) {
         }
     }
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
-        common_class.dismissCommonDialog(type);
-        if (type == 2) {
-            route_text.setText("");
-            sharedCommonPref.save(Constants.Route_Id, "");
-            distributor_text.setText(myDataset.get(position).getName());
-            sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
-            sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
-            sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
-            sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
-            sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-            sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
+        try {
+            common_class.dismissCommonDialog(type);
+            if (type == 2) {
+                route_text.setText("");
+                sharedCommonPref.save(Constants.Route_Id, "");
+                distributor_text.setText(myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+                sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
+                sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
+                sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+                sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
-            findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
-            common_class.getDataFromApi(Retailer_OutletList, this, false);
-            common_class.getDb_310Data(Rout_List, this);
-            sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
+                findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
+                common_class.getDataFromApi(Retailer_OutletList, this, false);
+                common_class.getDb_310Data(Rout_List, this);
+                sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
 
-        } else if (type == 3) {
-            route_text.setText(myDataset.get(position).getName());
-            sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());
-            sharedCommonPref.save(Constants.Route_Id, myDataset.get(position).getId());
-            reloadData();
+            } else if (type == 3) {
+                route_text.setText(myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());
+                sharedCommonPref.save(Constants.Route_Id, myDataset.get(position).getId());
+                reloadData();
+            }
+        } catch (Exception e) {
+
         }
     }
 

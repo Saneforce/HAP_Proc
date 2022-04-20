@@ -452,7 +452,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 service.getDataArrayList("get/indentprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        // Log.v(TAG, response.toString());
+                         Log.v(TAG, response.toString());
                         db.deleteMasterData(Constants.INDENT_ProdGroups_List);
                         db.addMasterData(Constants.INDENT_ProdGroups_List, response.body());
                     }

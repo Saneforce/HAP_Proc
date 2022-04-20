@@ -55,8 +55,6 @@ import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -91,21 +89,15 @@ public class Common_Class {
     public Context context;
     Shared_Common_Pref shared_common_pref;
     ProgressDialog nDialog;
-    Type userType;
+
     Gson gson;
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.4.1";
+    public static String Version_Name = "ver 3.4.3";
     public static String Work_Type = "0";
     public static int count;
-
-    private List<Retailer_Modal_List> retailer_modal_list = new ArrayList<>();
     private UpdateResponseUI updateUi;
-    Type userTypeRetailor;
-
-    List<OutletReport_View_Modal> outletReport_view_modalList = new ArrayList<>();
-    private Type userTypeGetTodayOrder;
     private DatePickerDialog fromDatePickerDialog;
 
     String pickDate = "";

@@ -261,7 +261,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             findViewById(R.id.ivFreezReqMandatory).setVisibility(View.INVISIBLE);
 
-            if(shared_common_pref.getIntValue(Constants.Freezer_Mandatory)==1)
+            if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1)
                 findViewById(R.id.ivFreezReqMandatory).setVisibility(View.VISIBLE);
 
 
@@ -703,14 +703,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    }
-
-                    else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
+                    } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    }
-
-
-                    else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
+                    } else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
                         common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
 
                     } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
@@ -857,10 +852,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             Log.e(TAG + "8:", Shared_Common_Pref.Outler_AddFlag);
 
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
+            {
                 getRetailerChannel();
-            else {
-                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
 
+            } else {
+                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+                String val = shared_common_pref.getvalue(Constants.RETAIL_CHANNEL);
+                Log.v("subcat:", val);
             }
 
 
@@ -1102,11 +1100,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                         Log.e("RETAILER_Channel_NAME", retailerClass);
                         String approval = String.valueOf(jsonObject.get("NeedApproval"));
+                        String code = jsonObject.get("CategoryCode").getAsString();
+                        String divERP = jsonObject.get("DivErp").getAsString();
+
                         // mCommon_model_spinner = new Common_Model(id, retailerClass, approval, String.valueOf(jsonObject.get("CategoryCode")));
 
-                        mCommon_model_spinner = new Common_Model(retailerClass, id, approval, String.valueOf(jsonObject.get("CategoryCode")), String.valueOf(jsonObject.get("DivErp")));
+                        mCommon_model_spinner = new Common_Model(retailerClass, id, approval, code, divERP);
 
-                        Log.e("LeaveType_Request", retailerClass);
+                        Log.e("LeaveType_Request", retailerClass + ":code:" + code + ":erp:" + divERP);
                         modelRetailChannel.add(mCommon_model_spinner);
                     }
 
@@ -1467,6 +1468,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 serviceTypeList.get(typeUpdatePos).setCatId(myDataset.get(position).getId());
                 serviceTypeList.get(typeUpdatePos).setCatName(myDataset.get(position).getName());
+
+                serviceTypeList.get(typeUpdatePos).setSubCatId("");
+                serviceTypeList.get(typeUpdatePos).setSubCatName("");
+
                 categoryAdapter.notifyData(serviceTypeList, this);
 
                 break;
@@ -1582,7 +1587,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                findViewById(R.id.rvCategoryTypes).setVisibility(View.GONE);
 //                findViewById(R.id.llSubCategory).setVisibility(View.VISIBLE);
 //                findViewById(R.id.llCategory).setVisibility(View.VISIBLE);
-                serviceTypeList.clear();
+                //  serviceTypeList.clear();
+
+                serviceTypeList = new ArrayList<>();
+
                 serviceTypeList.add(new Common_Model("+4", "2", false, "", "", "", ""));
                 categoryAdapter = new Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, AddNewRetailer.this);
                 rvCategoryTypes.setAdapter(categoryAdapter);
@@ -2076,7 +2084,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                            }
 
                             for (int i = 0; i < categoryList.size(); i++) {
-                                String ERP = categoryList.get(position).getCheckouttime() + ",";
+                                String ERP = categoryList.get(i).getCheckouttime() + ",";
+                                Log.v(TAG + "cat:", "pos" + i + ":" + categoryList.get(i).getFlag() + ":ERP:" + ERP + ":grpERP:" + distGrpERP);
                                 if (categoryList.get(i).getFlag().contains(list.get(position).getName()) && ERP.contains(distGrpERP + ","))
                                     typeCatList.add(categoryList.get(i));
                             }

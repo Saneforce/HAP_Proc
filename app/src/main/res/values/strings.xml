@@ -89,8 +89,8 @@
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Photo</string>
-    <string name="app_ver">v3.4.1</string>
-    <string name="tool_app_ver">Ver 3.4.1</string>
+    <string name="app_ver">v3.4.3</string>
+    <string name="tool_app_ver">Ver 3.4.3</string>
     <string name="trv_exc_entry">Travel Mode Exception Entry</string>
     <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
     <string name="trv_exc_status">Travel Mode Exception Status</string>
