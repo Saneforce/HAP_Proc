@@ -734,7 +734,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         break;
                     case Constants.SR_GetTodayOrder_List:
                         setHistoryAdapter(apiDataResponse);
-
                         break;
 
                     case Constants.PreOrderQtyList:

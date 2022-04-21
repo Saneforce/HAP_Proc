@@ -12,6 +12,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -53,10 +54,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
@@ -162,6 +165,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     boolean isFlag = false;
     private int typeUpdatePos = -1, freezerStaApproval;
     private Category_Adapter categoryAdapter;
+
+    String customer_code = "";
 
 
     @Override
@@ -528,6 +533,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
+
+                if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getCustomerCode())) {
+                    cbFranchise.setChecked(true);
+                    edtDistCode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCustomerCode());
+                    btnDistCode.setText("Valid Code");
+                    isValidCode = true;
+                    customer_code = Retailer_Modal_List.get(getOutletPosition()).getCustomerCode();
+                    findViewById(R.id.llFranchiseCode).setVisibility(View.VISIBLE);
+                }
                 ArrayList<Retailer_Modal_List.CateSpecList> CatSubList = Retailer_Modal_List.get(getOutletPosition()).getCategoryList();
                 for (int ik = 0; ik < serviceTypeList.size(); ik++) {
                     for (int ij = 0; ij < CatSubList.size(); ij++) {
@@ -652,8 +666,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         if (serviceTypeList.get(i).isSelected())
                             categoryType = categoryType + serviceTypeList.get(i).getName() + ",";
                     }
-
-                    if (Common_Class.isNullOrEmpty(txOutletType.getText().toString())) {
+                    if (cbFranchise.isChecked() && !isValidCode) {
+                        if (btnDistCode.getText().toString().equalsIgnoreCase("Check Validity"))
+                            common_class.showMsg(AddNewRetailer.this, "Please Check validity for the Franchise Code");
+                        else
+                            common_class.showMsg(AddNewRetailer.this, "Please given valid Franchise Code or Uncheck the HAP Franchise");
+                    } else if (Common_Class.isNullOrEmpty(txOutletType.getText().toString())) {
                         common_class.showMsg(AddNewRetailer.this, "Select Outlet Type");
                     } else if (iOutletTyp == 2) {
                         if (mSubmit.isAnimating()) return;
@@ -792,6 +810,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 common_class.getDb_310Data(Rout_List, this);
 
             }
+
 //            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("21") || divERP.equalsIgnoreCase("62")) {
 //                linReatilerRoute.setEnabled(true);
 //            } else {
@@ -885,10 +904,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    if (btnDistCode.getText().toString().equalsIgnoreCase("Valid Code")) {
-                        btnDistCode.setText("Invalid Code");
-                        isValidCode = false;
-                    }
+                    // if (btnDistCode.getText().toString().equalsIgnoreCase("Valid Code")) {
+                    btnDistCode.setText("Check Validity");
+                    isValidCode = false;
+                    // }
                 }
 
                 @Override
@@ -1245,7 +1264,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_class", classId);
             reportObject.put("id", common_class.addquote(outletCode));
 
-            reportObject.put("customer_code", isValidCode ? edtDistCode.getText().toString() : "");
+            reportObject.put("customer_code", cbFranchise.isChecked() ? customer_code : "");
 
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
@@ -1693,13 +1712,22 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     common_class.showCommonDialog(modelRetailChannel, 10, AddNewRetailer.this);
                     break;
                 case R.id.btn_dist_enter:
-                    if (Common_Class.isNullOrEmpty(edtDistCode.getText().toString()))
-                        common_class.showMsg(this, "Enter Customer Code");
-                    else {
-                        JsonObject data = new JsonObject();
-                        data.addProperty("customer_code", edtDistCode.getText().toString().trim());
-                        data.addProperty("ERP_Code", distributorERP);
-                        common_class.getDb_310Data(Constants.CUSTOMER_DATA, this, data);
+                    if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+
+                        AlertDialogBox.showDialog(AddNewRetailer.this, "HAP SFA", "Are You Sure Want to Update the Franchise Code?", "OK", "Cancel", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                checkValidity();
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                    } else {
+                        checkValidity();
                     }
                     break;
                 case R.id.ivRetailCapture:
@@ -1755,6 +1783,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
         } catch (Exception e) {
             Log.v(TAG + "profileView:", e.getMessage());
+        }
+    }
+
+    void checkValidity() {
+        if (Common_Class.isNullOrEmpty(edtDistCode.getText().toString()))
+            common_class.showMsg(this, "Enter Customer Code");
+        else {
+            JsonObject data = new JsonObject();
+            data.addProperty("customer_code", edtDistCode.getText().toString().trim());
+            data.addProperty("ERP_Code", distributorERP);
+            common_class.getDb_310Data(Constants.CUSTOMER_DATA, this, data);
         }
     }
 
@@ -1929,7 +1968,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                             btnDistCode.setText("Valid Code");
                             isValidCode = true;
+                            customer_code = edtDistCode.getText().toString();
                         } else {
+                            btnDistCode.setText("Invalid Code");
                             common_class.showMsg(this, cusObj.getString("Msg"));
                         }
                         break;

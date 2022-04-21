@@ -154,7 +154,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
                 menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
                 menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
-
+               // menuList.add(new Common_Model("Stock Audit", R.drawable.ic_stock_audit));
                 if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
                     common_class.getDb_310Data(Constants.Distributor_List, this);
                 break;
@@ -233,7 +233,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
                         break;
                     case "Projection":
-                        getProjectionProductDetails(SFA_Activity.this);
+                        getProjectionProductDetails(SFA_Activity.this,ProjectionCategorySelectActivity.class);
+                        break;
+                    case "Stock Audit":
+                      //  getProjectionProductDetails(SFA_Activity.this,ProjectionCategorySelectActivity.class);
                         break;
 
 
@@ -246,7 +249,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void getProjectionProductDetails(Activity activity) {
+    public void getProjectionProductDetails(Activity activity,Class className) {
 
         if (common_class.isNetworkAvailable(activity)) {
             UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
@@ -305,7 +308,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         db.deleteMasterData(Constants.Projection_Product_List);
                         db.addMasterData(Constants.Projection_Product_List, response.body());
 
-                        common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
+                        common_class.CommonIntentwithNEwTask(className);
 
                     }
 
