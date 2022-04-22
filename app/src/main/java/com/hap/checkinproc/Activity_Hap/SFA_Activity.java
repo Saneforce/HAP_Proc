@@ -57,6 +57,7 @@ import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.ReportsListActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
+import com.hap.checkinproc.SFA_Activity.StockAuditCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -233,11 +234,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(MyTeamActivity.class);
                         break;
                     case "Projection":
-                        getProjectionProductDetails(SFA_Activity.this,ProjectionCategorySelectActivity.class);
+                        getProjectionProductDetails(SFA_Activity.this);
                         break;
                     case "Stock Audit":
-                      //  getProjectionProductDetails(SFA_Activity.this,ProjectionCategorySelectActivity.class);
-                        break;
+                      getStockAuditDetails(SFA_Activity.this);  break;
 
 
                 }
@@ -249,7 +249,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void getProjectionProductDetails(Activity activity,Class className) {
+    public void getProjectionProductDetails(Activity activity) {
 
         if (common_class.isNetworkAvailable(activity)) {
             UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
@@ -308,7 +308,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         db.deleteMasterData(Constants.Projection_Product_List);
                         db.addMasterData(Constants.Projection_Product_List, response.body());
 
-                        common_class.CommonIntentwithNEwTask(className);
+                        common_class.CommonIntentwithNEwTask(ProjectionCategorySelectActivity.class);
 
                     }
 
@@ -326,6 +326,82 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void getStockAuditDetails(Activity activity) {
+
+        if (common_class.isNetworkAvailable(activity)) {
+            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(activity);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                // jParam.put("outletId", Shared_Common_Pref.OutletCode);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/auditprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_grp_List", response.body().toString());
+                        db.deleteMasterData(Constants.StockAudit_GroupsList);
+                        db.addMasterData(Constants.StockAudit_GroupsList, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/auditprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_type_List", response.body().toString());
+                        db.deleteMasterData(Constants.StockAudit_Types_List);
+                        db.addMasterData(Constants.StockAudit_Types_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/auditprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_cat_List", response.body().toString());
+                        db.deleteMasterData(Constants.StockAudit_Category_List);
+                        db.addMasterData(Constants.StockAudit_Category_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/auditproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        Log.v("Projec_Product_List", response.body().toString());
+                        db.deleteMasterData(Constants.StockAudit_Product_List);
+                        db.addMasterData(Constants.StockAudit_Product_List, response.body());
+
+                        common_class.CommonIntentwithNEwTask(StockAuditCategorySelectActivity.class);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+                        Log.v("Projec_Product_fail", t.getMessage());
+
+                    }
+                });
+            } catch (Exception e) {
+                Log.v("Projec_Product_List_ex", e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
