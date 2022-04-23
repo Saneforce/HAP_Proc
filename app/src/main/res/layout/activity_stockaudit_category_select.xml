@@ -89,14 +89,20 @@
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
 
 
             <LinearLayout
                 android:id="@+id/llPlant"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/C30dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/C5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -125,6 +131,40 @@
 
                 </ImageView>
             </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnCmbRoute"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/route_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bangalore CFA"
+                        android:hint="Select the Route"
+                        android:paddingRight="@dimen/C5dp"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="9sp" />
+
+                    <ImageView
+                        android:id="@+id/ivRouteSpinner"
+                        android:layout_width="@dimen/C7dp"
+                        android:layout_height="@dimen/C7dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/spin_down_arrow"
+                        app:tint="@color/white">
+
+                    </ImageView>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/toolbar_home"

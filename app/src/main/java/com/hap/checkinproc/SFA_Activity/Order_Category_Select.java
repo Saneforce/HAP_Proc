@@ -639,7 +639,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     private void SaveOrder() {
-        if (common_class.isNetworkAvailable(this)) {
+       // if (common_class.isNetworkAvailable(this)) {
 
             AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
@@ -755,6 +755,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
+
+                        Log.v(TAG+"submit:",data.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -800,10 +802,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     ResetSubmitBtn(0);
                 }
             });
-        } else {
-            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
-            ResetSubmitBtn(0);
-        }
+//        } else {
+//            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+//            ResetSubmitBtn(0);
+//        }
     }
 
     private void FilterProduct(List<Product_Details_Modal> orderList) {

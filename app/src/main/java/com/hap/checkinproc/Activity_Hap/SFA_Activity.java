@@ -71,7 +71,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,7 +157,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
                 menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
                 menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
-               // menuList.add(new Common_Model("Stock Audit", R.drawable.ic_stock_audit));
+                menuList.add(new Common_Model("Stock Audit", R.drawable.ic_stock_audit));
                 if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
                     common_class.getDb_310Data(Constants.Distributor_List, this);
                 break;
@@ -237,7 +239,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         getProjectionProductDetails(SFA_Activity.this);
                         break;
                     case "Stock Audit":
-                      getStockAuditDetails(SFA_Activity.this);  break;
+                        getStockAuditDetails(SFA_Activity.this);
+                        break;
 
 
                 }
@@ -332,30 +335,37 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
             DatabaseHandler db = new DatabaseHandler(activity);
-            JSONObject jParam = new JSONObject();
+          //  Map<String, String> jParam = new HashMap<>();
+
+            //  JSONObject jParam = new JSONObject();
             try {
-                jParam.put("SF", UserDetails.getString("Sfcode", ""));
-                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                // jParam.put("outletId", Shared_Common_Pref.OutletCode);
-                jParam.put("div", UserDetails.getString("Divcode", ""));
+//                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+//                jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
+//                // jParam.put("outletId", Shared_Common_Pref.OutletCode);
+//                jParam.put("div", UserDetails.getString("Divcode", ""));
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                service.getDataArrayList("get/auditprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getStockAudit("get/auditprodgroup", UserDetails.getString("Divcode", "")).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("Projec_grp_List", response.body().toString());
-                        db.deleteMasterData(Constants.StockAudit_GroupsList);
-                        db.addMasterData(Constants.StockAudit_GroupsList, response.body());
+                        try {
+                            Log.v("stockAudit_grp_List", response.body().toString());
+                            db.deleteMasterData(Constants.StockAudit_GroupsList);
+                            db.addMasterData(Constants.StockAudit_GroupsList, response.body().toString());
+                        } catch (Exception e) {
+                            Log.v("StockAudit:Ex:catch", e.getMessage());
+
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
-
+                        Log.v("StockAudit:Ex", t.getMessage());
                     }
                 });
-                service.getDataArrayList("get/auditprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getStockAudit("get/auditprodtypes", UserDetails.getString("Divcode", "")).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("Projec_type_List", response.body().toString());
+                        Log.v("stockAudit_type_List", response.body().toString());
                         db.deleteMasterData(Constants.StockAudit_Types_List);
                         db.addMasterData(Constants.StockAudit_Types_List, response.body());
                     }
@@ -365,10 +375,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-                service.getDataArrayList("get/auditprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getStockAudit("get/auditprodcate", UserDetails.getString("Divcode", "")).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("Projec_cat_List", response.body().toString());
+                        Log.v("stockAudit_cat_List", response.body().toString());
                         db.deleteMasterData(Constants.StockAudit_Category_List);
                         db.addMasterData(Constants.StockAudit_Category_List, response.body());
                     }
@@ -378,10 +388,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-                service.getDataArrayList("get/auditproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getStockAudit("get/auditproddets", UserDetails.getString("Divcode", "")).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("Projec_Product_List", response.body().toString());
+                        Log.v("stockAudit_Product_List", response.body().toString());
                         db.deleteMasterData(Constants.StockAudit_Product_List);
                         db.addMasterData(Constants.StockAudit_Product_List, response.body());
 

@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +33,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -245,7 +243,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 //            }
 
 
-            common_class.getDb_310Data(Constants.PLANT_MASTER, this);
+            common_class.getDb_310Data(Constants.STOCK_AUDIT_PLANT, this);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -820,16 +818,16 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
                     break;
 
-                case Constants.PLANT_MASTER:
+                case Constants.STOCK_AUDIT_PLANT:
                     Log.v(key, apiDataResponse);
 
                     JSONObject obj = new JSONObject(apiDataResponse);
 
                     if (obj.getBoolean("success")) {
-                        JSONArray arr = obj.getJSONArray("Data");
+                        JSONArray arr = obj.getJSONArray("data");
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject data = arr.getJSONObject(i);
-                            plantList.add(new Common_Model(data.getString("PlantName"), data.getString("PlantID")));
+                            plantList.add(new Common_Model(data.getString("Type"), ""));
                         }
                     }
 

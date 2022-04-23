@@ -59,6 +59,12 @@ public interface ApiInterface {
     @POST("Db_v310.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
 
+
+   // @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<JsonArray> getStockAudit(@Query("axn") String axn, @Query("div") String div);
+
+
     @GET("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("dte") String date);
 
@@ -459,12 +465,12 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_v310.php?")
-    Call<JsonObject> saveVanSales(@Query("axn") String axn,@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+    Call<JsonObject> saveVanSales(@Query("axn") String axn, @Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
 
     @FormUrlEncoded
     @POST("db_v310.php?")
-    Call<JsonObject> saveIndent(@Query("axn") String axn,@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+    Call<JsonObject> saveIndent(@Query("axn") String axn, @Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/salesreturn")
@@ -541,7 +547,6 @@ public interface ApiInterface {
     Call<JsonObject> getOnDutyStatus(@Field("data") String body);
 
 
-
     @FormUrlEncoded
     @POST("Db_v300.php?axn=save/ondutyupdate")
     Call<JsonObject> viewStatusUpdate(@Field("data") String body);
@@ -576,7 +581,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=save/qpsentry")
     Call<ResponseBody> submitQPSData(@Field("data") String body);
-
 
 
     @FormUrlEncoded

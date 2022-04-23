@@ -109,6 +109,8 @@ public class Constants {
     public static final String LOC_PROJECTION_DATA = "locProjectionData";
     public static final String LOC_STOCKAUDIT_DATA = "locStockAuditData";
     public static final String PLANT_MASTER = "plantMaster";
+    public static final String STOCK_AUDIT_PLANT = "stockAuditplantMaster";
+
     public static final String SERVICETYPE_LIST = "serviceTypeList";
     public static final String PRIMARY_ORDER_EDIT = "primaryOrderEdit";
     public static final String CATEGORY_TYPE ="categoryType" ;

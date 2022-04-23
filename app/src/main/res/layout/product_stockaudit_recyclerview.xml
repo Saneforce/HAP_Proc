@@ -147,6 +147,61 @@
 
                     </LinearLayout>
 
+
+                    <LinearLayout
+                        android:layout_marginBottom="@dimen/C5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:inputType="number"
+                            android:text="On Hand : "
+                            android:textColor="@color/grey_800"
+                            android:textSize="12sp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/MrpRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginLeft="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:text="50"
+                            android:textColor="@color/txt_color_black"
+                            android:textSize="@dimen/C15dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/C15dp"
+                            android:gravity="center_vertical"
+                            android:inputType="number"
+                            android:text="Difference : "
+                            android:textColor="@color/grey_800"
+                            android:textSize="12sp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginLeft="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:text="50"
+                            android:textColor="@color/txt_color_black"
+                            android:textSize="@dimen/C15dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/C30dp"
@@ -159,7 +214,7 @@
                             android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
-                            android:text="Crates : "
+                            android:text="Confirmed : "
                             android:textColor="@color/grey_800" />
 
                         <LinearLayout
@@ -204,27 +259,27 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:visibility="gone"
-                            android:layout_marginRight="@dimen/C5dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/C5dp"
-                            android:background="@drawable/order_qty_backround">
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:background="@drawable/order_qty_backround"
+                            android:visibility="gone">
 
 
                             <TextView
-                                android:ellipsize="end"
-                                android:maxLines="1"
                                 android:id="@+id/tvPlant"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentRight="true"
                                 android:background="@color/white"
-                                android:textAlignment="center"
+                                android:ellipsize="end"
                                 android:hint="Select Plant"
+                                android:maxLines="1"
                                 android:padding="5dp"
                                 android:text=""
+                                android:textAlignment="center"
                                 android:textColor="@color/black" />
 
 

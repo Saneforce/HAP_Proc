@@ -63,7 +63,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -568,6 +567,11 @@ public class Common_Class {
                         QueryString.put("login_sfCode", UserDetails.getString("Sfcode", ""));
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
                         break;
+                    case Constants.STOCK_AUDIT_PLANT:
+                        axnname = "get/planttype";
+//                        QueryString.put("login_sfCode", UserDetails.getString("Sfcode", ""));
+//                        QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
+                        break;
                     case Constants.SALES_RETURN:
                         // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
                         axnname = "get/stockreturn";
@@ -869,7 +873,7 @@ public class Common_Class {
                 showMsg(activity, "Please check your internet connection.");
             }
         } catch (Exception e) {
-
+            Log.v("common_api:310:EX:", e.getMessage());
         }
 
     }
