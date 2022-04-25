@@ -120,6 +120,7 @@ public class Constants {
     public static final String WEEKLY_EXPENSE ="weeklyExpense" ;
     public static final String ONDUTY_STATUS = "ondutyStatus";
     public static final String PRIMARY_DASHBOARD = "primaryDashboard";
+    public static final String STOCK_AUDIT_MFSCFA ="stockAuditMFSCFA" ;
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";
 

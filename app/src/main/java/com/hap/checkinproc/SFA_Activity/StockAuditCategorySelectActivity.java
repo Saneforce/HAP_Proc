@@ -80,8 +80,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress, tvHistory;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
+    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress, tvHistory, tvMCSCFA;
+    LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob, llMCSCFA;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
@@ -105,9 +105,12 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
     private List<Product_Details_Modal> orderTotTax;
 
     ArrayList<Common_Model> plantList = new ArrayList<>();
+    ArrayList<Common_Model> scfaList = new ArrayList<>();
+
     private int plantPos;
     LinearLayout llPlant;
     private String plantId = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,9 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
             llCalMob = findViewById(R.id.btnCallMob);
             llPlant = findViewById(R.id.llPlant);
             tvPlant = findViewById(R.id.tvPlant);
+            tvMCSCFA = findViewById(R.id.tvMCSCFA);
+            llMCSCFA = findViewById(R.id.llmcScfa);
+            llMCSCFA.setOnClickListener(this);
             llCalMob.setOnClickListener(this);
             tvHistory.setOnClickListener(this);
             llPlant.setOnClickListener(this);
@@ -242,8 +248,10 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 //                }
 //            }
 
-
-            common_class.getDb_310Data(Constants.STOCK_AUDIT_PLANT, this);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.STOCK_AUDIT_PLANT)))
+                common_class.getDb_310Data(Constants.STOCK_AUDIT_PLANT, this);
+            else
+                addPlantList(sharedCommonPref.getvalue(Constants.STOCK_AUDIT_PLANT));
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -406,6 +414,9 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llmcScfa:
+                common_class.showCommonDialog(scfaList, 100, this);
+                break;
             case R.id.llPlant:
                 common_class.showCommonDialog(plantList, 1, this);
                 break;
@@ -503,8 +514,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                         JSONObject OutletItem = new JSONObject();
 //                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
 //                        OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
+//                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+//                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
 //                        OutletItem.put("orderValue", formatter.format(totalvalues));
 //                        OutletItem.put("CashDiscount", cashDiscount);
 //                        OutletItem.put("NetAmount", formatter.format(totalvalues));
@@ -514,8 +525,9 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 //                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
 //                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "StockAudit");
-                        OutletItem.put("plantName", tvPlant.getText().toString());
-                        OutletItem.put("plantId", plantId);
+                        OutletItem.put("plantType", tvPlant.getText().toString());
+                        OutletItem.put("mcscfaName", tvMCSCFA.getText().toString());
+                        OutletItem.put("mcscfaCode", plantId);
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -532,6 +544,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_Diff", Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_OnHand", Getorder_Array_List.get(z).getQty());
 //                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
 //                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
 //                                    Getorder_Array_List.get(z).getRegularQty());
@@ -820,15 +834,23 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
                 case Constants.STOCK_AUDIT_PLANT:
                     Log.v(key, apiDataResponse);
+                    addPlantList(apiDataResponse);
 
+                    break;
+                case Constants.STOCK_AUDIT_MFSCFA:
+                    Log.v(key, apiDataResponse);
+                    if (scfaList != null) scfaList.clear();
                     JSONObject obj = new JSONObject(apiDataResponse);
 
                     if (obj.getBoolean("success")) {
                         JSONArray arr = obj.getJSONArray("data");
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject data = arr.getJSONObject(i);
-                            plantList.add(new Common_Model(data.getString("Type"), ""));
+                            scfaList.add(new Common_Model(data.getString("Name"), data.getString("Code")));
                         }
+                    } else {
+                        scfaList.clear();
+                        sharedCommonPref.clear_pref(Constants.STOCK_AUDIT_PLANT);
                     }
 
                     break;
@@ -838,7 +860,24 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
         }
     }
 
+    void addPlantList(String apiDataResponse) {
+        try {
+            JSONObject obj = new JSONObject(apiDataResponse);
 
+            if (obj.getBoolean("success")) {
+                JSONArray arr = obj.getJSONArray("data");
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject data = arr.getJSONObject(i);
+                    plantList.add(new Common_Model(data.getString("Type"), ""));
+                }
+            } else {
+                sharedCommonPref.clear_pref(Constants.STOCK_AUDIT_PLANT);
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
 //        if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -890,6 +929,14 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
             switch (type) {
                 case 1:
                     tvPlant.setText("" + myDataset.get(position).getName());
+                    // plantId = myDataset.get(position).getId();
+                    JsonObject data = new JsonObject();
+                    data.addProperty("Type", myDataset.get(position).getName());
+                    tvMCSCFA.setText("");
+                    common_class.getDb_310Data(Constants.STOCK_AUDIT_MFSCFA, this, data);
+                    break;
+                case 100:
+                    tvMCSCFA.setText(myDataset.get(position).getName());
                     plantId = myDataset.get(position).getId();
                     break;
 

@@ -103,7 +103,7 @@ public class Common_Class {
     private CustomListViewDialog customDialog;
     SharedPreferences UserDetails;
     public static final String UserDetail = "MyPrefs";
-    public int brandPos = 0, grpPos = 0;
+    public int brandPos = 0, grpPos = 0,categoryPos=0;
 
 
     public void CommonIntentwithFinish(Class classname) {
@@ -572,6 +572,12 @@ public class Common_Class {
 //                        QueryString.put("login_sfCode", UserDetails.getString("Sfcode", ""));
 //                        QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
                         break;
+                    case Constants.STOCK_AUDIT_MFSCFA:
+                        axnname = "get/mfscfa";
+                        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        QueryString.put("Type",jparam.get("Type").getAsString());
+                        break;
+
                     case Constants.SALES_RETURN:
                         // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
                         axnname = "get/stockreturn";

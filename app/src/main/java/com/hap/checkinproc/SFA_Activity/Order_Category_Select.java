@@ -966,7 +966,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     public void showOrderItemList(int categoryPos, String filterString) {
-        categoryPos = selectedPos;
+      //  categoryPos = selectedPos;
         Product_ModalSetAdapter.clear();
         for (Product_Details_Modal personNpi : Product_Modal) {
             if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
