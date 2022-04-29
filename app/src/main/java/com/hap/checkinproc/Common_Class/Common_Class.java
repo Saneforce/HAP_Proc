@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.4.4";
+    public static String Version_Name = "ver 3.4.5";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -533,6 +533,7 @@ public class Common_Class {
 
 
                 switch (key) {
+
                     case Constants.PRIMARY_DASHBOARD:
                         axnname = "get/primarydashboardvalues";
                         data.put("login_sfCode", UserDetails.getString("Sfcode", ""));

@@ -52,7 +52,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -375,7 +374,10 @@ public class Login extends AppCompatActivity {
                         Intent aIntent;
                         String sDeptType = UserDetails.getString("DeptType", "");
                         if (sDeptType.equalsIgnoreCase("1")) {
-                            aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                            //bommu
+                            // aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+
                         } else {
                             Shared_Common_Pref.Sync_Flag = "0";
                             if (checkValueStore())
@@ -607,12 +609,12 @@ public class Login extends AppCompatActivity {
                 //eMail = "srinivas.p@hap.in";
                 //eMail = "sajan@hap.in";
                 //   eMail = "1005985@hap.in";
-               // eMail = "haptest5@hap.in";
+                // eMail = "haptest5@hap.in";
 
 
-               // eMail = "ciadmin@hap.in";
+                // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
-                 //eMail = "haptest5@hap.in";
+              //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
                 // eMail = "pachamuthu.m@hap.in";
                 // eMail="akshay.r@hap.in";
@@ -622,7 +624,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-                 // eMail = "anbu@saneforce.com";
+                // eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -657,11 +659,13 @@ public class Login extends AppCompatActivity {
                 // eMail="johnkennedy.i@hap.in";
                 //eMail = "1018937@hap.in";
 
-               // eMail="1006812@hap.in";//ramalakshmi
-               // eMail="1018821@hap.in";//md food services
-               // eMail="1006815@hap.in";
-              //  eMail="1977ananthkumar@gmail.com";
-
+                // eMail="1006812@hap.in";//ramalakshmi
+                // eMail="1018821@hap.in";//md food services
+                // eMail="1006815@hap.in";
+                //  eMail="1977ananthkumar@gmail.com";
+              //  eMail = "gpmuthu11@gmail.com";
+//                eMail = "1015742@hap.in";
+//                eMail = "1021230@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {

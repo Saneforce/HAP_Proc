@@ -60,7 +60,7 @@ public interface ApiInterface {
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
 
 
-   // @FormUrlEncoded
+    // @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonArray> getStockAudit(@Query("axn") String axn, @Query("div") String div);
 
@@ -620,5 +620,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=save/popapprove")
     Call<JsonObject> approvePOPEntry(@Field("data") String toString);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<JsonObject> submit(@Query("axn") String axn, @Field("data") String toString);
 
 }

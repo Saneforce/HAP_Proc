@@ -765,7 +765,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                             for (int z = 0; z < Getorder_Array_List.size(); z++) {
                                 JSONObject ProdItem = new JSONObject();
-                                ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
+                               // ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                                 ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                                 ProdItem.put("Product_ERP", Getorder_Array_List.get(z).getERP_Code());
                                 ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
@@ -780,7 +780,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                 ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
                                 ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
                                 ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
-                                ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
+                              //  ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
                                 ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
                                 ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                                 ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
@@ -826,17 +826,17 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                             OutletItem.put("TOT_TAX_details", totTaxArr);
 
 
-                            for (int i = 0; i < multiList.size(); i++) {
-                                JSONObject mulObj = new JSONObject();
-
-                                mulObj.put("multiple_name", multiList.get(i).getUOM_Nm());
-                                mulObj.put("multiple_tot_qty", multiList.get(i).getQty());
-                                mulObj.put("multiple_val", multiList.get(i).getMultiple_Qty());
-                                multipleArr.put(mulObj);
-
-                            }
-
-                            OutletItem.put("multiple_details", multipleArr);
+//                            for (int i = 0; i < multiList.size(); i++) {
+//                                JSONObject mulObj = new JSONObject();
+//
+//                                mulObj.put("multiple_name", multiList.get(i).getUOM_Nm());
+//                                mulObj.put("multiple_tot_qty", multiList.get(i).getQty());
+//                                mulObj.put("multiple_val", multiList.get(i).getMultiple_Qty());
+//                                multipleArr.put(mulObj);
+//
+//                            }
+//
+//                            OutletItem.put("multiple_details", multipleArr);
 
 
                             for (int i = 0; i < orderTotUOM.size(); i++) {

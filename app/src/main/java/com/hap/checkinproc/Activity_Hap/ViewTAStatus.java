@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -12,23 +14,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.ViewTAStatusAdapter;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class ViewTAStatus extends AppCompatActivity {
 
@@ -117,7 +123,13 @@ public class ViewTAStatus extends AppCompatActivity {
                 JsonArray jsonTa = response.body();
                 Log.v("JSON_VIEW_Array", jsonTa.toString());
 
-                viewTAStatusAdapter = new ViewTAStatusAdapter(ViewTAStatus.this, jsonTa);
+                viewTAStatusAdapter = new ViewTAStatusAdapter(ViewTAStatus.this, jsonTa, new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(JsonObject item, int Name) {
+
+                        cancelPendingApproval(item);
+                    }
+                });
                 mTaStatusList.setAdapter(viewTAStatusAdapter);
             }
 
@@ -127,5 +139,48 @@ public class ViewTAStatus extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void cancelPendingApproval(JsonObject obj) {
+        try {
+            JSONObject jParam = new JSONObject();
+
+            jParam.put("Sf_code", obj.get("Sf_code").getAsString());
+            jParam.put("EDT", obj.get("EDT").getAsString());
+            jParam.put("Approval_Flag", obj.get("Approval_Flag").getAsString());
+            jParam.put("Expdt", obj.get("Expdt").getAsString());
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> responseBodyCall = apiInterface.submit("cancel/tapending", jParam.toString());
+            responseBodyCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    if (response.isSuccessful()) {
+                        try {
+
+                            Log.v("ViewTAStatus:cancel:", response.body().toString());
+                            JSONObject jsonObjects = new JSONObject(response.body().toString());
+
+                            if (jsonObjects.getBoolean("success")) {
+                                startActivity(new Intent(ViewTAStatus.this, TAClaimActivity.class));
+                                // finish();
+                                //common_class.getDb_310Data(Constants.POP_ENTRY_STATUS, POPActivity.popActivity);
+                            }
+                            Toast.makeText(ViewTAStatus.this, jsonObjects.getString("Msg"), Toast.LENGTH_SHORT).show();
+
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e("SUBMIT_VALUE", "ERROR:" + t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 }

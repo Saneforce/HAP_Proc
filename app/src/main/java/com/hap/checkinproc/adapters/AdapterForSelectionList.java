@@ -12,8 +12,8 @@ import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.hap.checkinproc.Activity.Util.SelectionModel;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 
 import java.util.ArrayList;
@@ -22,15 +22,17 @@ import java.util.List;
 
 public class AdapterForSelectionList extends BaseAdapter {
     Context context;
-    ArrayList<SelectionModel> array=new ArrayList<>();
-    ArrayList<SelectionModel> dummyList=new ArrayList<>();
-    int type=0;
+    ArrayList<SelectionModel> array = new ArrayList<>();
+    ArrayList<SelectionModel> dummyList = new ArrayList<>();
+    int type = 0;
+    AdapterOnClick adapterOnClick;
 
-    public AdapterForSelectionList(Context context, ArrayList<SelectionModel> array, int type) {
+    public AdapterForSelectionList(Context context, ArrayList<SelectionModel> array, int type, AdapterOnClick adapterOnClick) {
         this.context = context;
         this.array = array;
-        this.type=type;
+        this.type = type;
         this.dummyList.addAll(array);
+        this.adapterOnClick = adapterOnClick;
     }
 
     @Override
@@ -50,22 +52,21 @@ public class AdapterForSelectionList extends BaseAdapter {
 
     @Override
     public View getView(final int i, View convertView, ViewGroup parent) {
-        View view= LayoutInflater.from(context).inflate(R.layout.row_item_selection,parent,false);
-        RelativeLayout lay_row=(RelativeLayout)view.findViewById(R.id.lay_row);
-        TextView txt_name=(TextView)view.findViewById(R.id.txt_name);
-        final CheckBox check=(CheckBox)view.findViewById(R.id.check);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_item_selection, parent, false);
+        RelativeLayout lay_row = (RelativeLayout) view.findViewById(R.id.lay_row);
+        TextView txt_name = (TextView) view.findViewById(R.id.txt_name);
+        final CheckBox check = (CheckBox) view.findViewById(R.id.check);
         check.setChecked(array.get(i).isClick());
         txt_name.setText(array.get(i).getTxt());
 
         check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(type==0){
-                    for(int k=0;k<array.size();k++){
-                        if(i!=k){
+                if (type == 0) {
+                    for (int k = 0; k < array.size(); k++) {
+                        if (i != k) {
                             array.get(k).setClick(false);
-                        }
-                        else {
+                        } else {
 
                            /* AlphaAnimation animation1 = new AlphaAnimation(0.2f, 1.0f);
                             animation1.setDuration(500);
@@ -77,9 +78,8 @@ public class AdapterForSelectionList extends BaseAdapter {
                         }
                     }
                     notifyDataSetChanged();
-                }
-                else {
-                    if(array.size()!=0) {
+                } else {
+                    if (array.size() != 0) {
                         if (array.get(i).isClick()) {
                             check.setChecked(false);
                             array.get(i).setClick(false);
@@ -102,12 +102,14 @@ public class AdapterForSelectionList extends BaseAdapter {
         lay_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(type==0){
-                    for(int k=0;k<array.size();k++){
-                        if(i!=k){
+                adapterOnClick.onIntentClick(i);
+
+
+                if (type == 0) {
+                    for (int k = 0; k < array.size(); k++) {
+                        if (i != k) {
                             array.get(k).setClick(false);
-                        }
-                        else {
+                        } else {
 
                            /* AlphaAnimation animation1 = new AlphaAnimation(0.2f, 1.0f);
                             animation1.setDuration(500);
@@ -119,9 +121,8 @@ public class AdapterForSelectionList extends BaseAdapter {
                         }
                     }
                     notifyDataSetChanged();
-                }
-                else {
-                    if(array.size()!=0) {
+                } else {
+                    if (array.size() != 0) {
                         if (array.get(i).isClick()) {
                             check.setChecked(false);
                             array.get(i).setClick(false);
@@ -152,7 +153,7 @@ public class AdapterForSelectionList extends BaseAdapter {
 
 
                 FilterResults filterResults = new FilterResults();
-                if(charSequence != null && charSequence.length()>0) {
+                if (charSequence != null && charSequence.length() > 0) {
                     List<SelectionModel> filteredList = new ArrayList<>();
                     String charString = charSequence.toString();
                     if (charString.isEmpty()) {
@@ -177,10 +178,9 @@ public class AdapterForSelectionList extends BaseAdapter {
 
 
                     filterResults.values = filteredList;
-                }else
-                {
+                } else {
                     // results.count=filterList.size();
-                    filterResults.values=dummyList;
+                    filterResults.values = dummyList;
 
                 }
                 return filterResults;

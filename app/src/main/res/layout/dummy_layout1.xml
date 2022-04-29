@@ -3,82 +3,142 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:background="#fff"
-    >
+    android:layout_marginLeft="@dimen/C5dp"
+    android:layout_marginBottom="@dimen/C10dp"
+    android:background="#fff">
+
     <RelativeLayout
+        android:id="@+id/r_lay_fist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:id="@+id/r_lay_fist">
+        android:layout_marginTop="10dp">
 
         <RelativeLayout
             android:id="@+id/r_lay_sec"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/round_rect_grey"
             android:padding="13dp">
 
+            <!--            <EditText-->
+            <!--                android:id="@+id/edt_field"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@null"-->
+            <!--                android:hint="Enter Text"-->
+            <!--                android:singleLine="true"-->
+            <!--                android:textColor="#000"-->
+            <!--                android:textColorHint="#787878"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:fontFamily="@font/lato_bold" />-->
+
+            <!--            <EditText-->
+            <!--                android:id="@+id/edt_field_numeric"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@null"-->
+            <!--                android:digits="1234567890"-->
+            <!--                android:hint="Enter Numeric Value"-->
+            <!--                android:inputType="number"-->
+            <!--                android:singleLine="true"-->
+            <!--                android:textColor="#000"-->
+            <!--                android:textColorHint="#787878"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:fontFamily="@font/lato_bold" />-->
+
+            <!--            <EditText-->
+            <!--                android:id="@+id/edt_feed"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="80dp"-->
+            <!--                android:background="@null"-->
+            <!--                android:hint="Enter Text"-->
+            <!--                android:textColor="#000"-->
+            <!--                android:textColorHint="#787878"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:fontFamily="@font/lato_bold" />-->
+
+            <!--            <RelativeLayout-->
+            <!--                android:id="@+id/rlay_spin"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:visibility="gone">-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/spin_txt"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text=" Select "-->
+            <!--                    android:textColor="#000"-->
+            <!--                    android:textSize="15sp"-->
+            <!--                    app:fontFamily="@font/lato_bold" />-->
+
+            <!--                <ImageView-->
+            <!--                    android:layout_width="12dp"-->
+            <!--                    android:layout_height="12dp"-->
+            <!--                    android:layout_alignParentEnd="true"-->
+            <!--                    android:layout_centerVertical="true"-->
+            <!--                    android:src="@drawable/spin_down_arrow" />-->
+            <!--            </RelativeLayout>-->
+
             <EditText
+                android:visibility="gone"
                 android:id="@+id/edt_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="Enter Text"
-                android:singleLine="true"
-                android:textColor="#000"
-                android:textColorHint="#787878"
-                android:visibility="gone"
-                app:fontFamily="@font/lato_bold" />
+                android:background="@drawable/text_bg_grey"
+                android:gravity="start"
+                android:hint="Enter text"
+                android:padding="10dp"
+                android:textSize="13dp" />
 
             <EditText
+                android:visibility="gone"
                 android:id="@+id/edt_field_numeric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:digits="1234567890"
-                android:hint="Enter Numeric Value"
-                android:inputType="number"
-                android:singleLine="true"
-                android:textColor="#000"
-                android:textColorHint="#787878"
-                android:visibility="gone"
-                app:fontFamily="@font/lato_bold" />
+                android:background="@drawable/text_bg_grey"
+                android:gravity="start"
+                android:hint="Enter text"
+                android:padding="10dp"
+                android:textSize="13dp" />
 
             <EditText
+                android:visibility="gone"
                 android:id="@+id/edt_feed"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@null"
-                android:hint="Enter Text"
-                android:textColor="#000"
-                android:textColorHint="#787878"
-                android:visibility="gone"
-                app:fontFamily="@font/lato_bold" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_bg_grey"
+                android:gravity="start"
+                android:hint="Enter text"
+                android:padding="10dp"
+                android:textSize="13dp" />
 
             <RelativeLayout
                 android:id="@+id/rlay_spin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/text_bg_grey"
+                android:orientation="vertical"
+                android:padding="5dp"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/spin_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Select "
-                    android:textColor="#000"
-                    android:textSize="15sp"
-                    app:fontFamily="@font/lato_bold" />
+                    android:hint=" Select "
+                    android:padding="5dp"
+                    android:textSize="13sp" />
 
                 <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="@dimen/C10dp"
+                    android:layout_height="@dimen/C10dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/C10dp"
                     android:src="@drawable/spin_down_arrow" />
             </RelativeLayout>
+
 
             <RelativeLayout
                 android:id="@+id/rlay_currency"
@@ -256,19 +316,28 @@
 
         </RelativeLayout>
 
-        <TextView
+        <!--        <TextView-->
 
+        <!--            android:id="@+id/txt_label"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="13dp"-->
+        <!--            android:background="#fff"-->
+        <!--            android:text="Field Name"-->
+        <!--            android:textColor="#AAADB8"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:layout_marginTop="2dp"-->
+        <!--            app:fontFamily="@font/lato_light" />-->
+
+
+        <TextView
             android:id="@+id/txt_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:background="#fff"
-            android:text="Field Name"
-            android:textColor="#AAADB8"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="2dp"
-            app:fontFamily="@font/lato_light" />
+            android:text="Outlet Type"
+            android:textColor="@android:color/black"
+            android:textSize="13sp" />
 
     </RelativeLayout>
 

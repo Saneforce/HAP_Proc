@@ -284,7 +284,7 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                             JSONArray js = new JSONArray(is.toString());
                             for (int i = 0; i < js.length(); i++) {
                                 JSONObject jj = js.getJSONObject(i);
-                                array_nav.add(new ListModel(jj.getString("Frm_ID"), jj.getString("Frm_Name"), jj.getString("Frm_Table"), jj.getString("Targt_Frm"), jj.getString("Frm_Type")));
+                                array_nav.add(new ListModel(jj.getString("Frm_ID"), jj.getString("Frm_Name"), jj.getString("Frm_Table"), jj.getString("Targt_Frm"), jj.getString("Frm_Type"),0));
                             }
                             nav_adapt = new AdapterForNavigation(ProcurementDashboardActivity.this, array_nav);
                             list_nav.setAdapter(nav_adapt);

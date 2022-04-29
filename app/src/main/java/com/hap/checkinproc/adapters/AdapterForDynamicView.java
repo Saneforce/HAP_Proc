@@ -74,7 +74,7 @@ public class AdapterForDynamicView extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        view = LayoutInflater.from(context).inflate(R.layout.dummy_layout, viewGroup, false);
+        view = LayoutInflater.from(context).inflate(R.layout.dummy_layout1, viewGroup, false);
         TextView txt_label = (TextView) view.findViewById(R.id.txt_label);
         RelativeLayout rlay_spin = (RelativeLayout) view.findViewById(R.id.rlay_spin);
         RelativeLayout rlay_date = (RelativeLayout) view.findViewById(R.id.rlay_date);
