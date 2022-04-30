@@ -53,10 +53,10 @@ public class Product_Details_Modal {
     @Expose
     private String unitCode;
 
-    private String plant="";
-    private String plantId="";
+    private String plant = "";
+    private String plantId = "";
 
-    private String saveMode="";
+    private String saveMode = "";
 
     public String getERP_Code() {
         return ERP_Code;
@@ -105,6 +105,40 @@ public class Product_Details_Modal {
     private String ConversionFactor;
 
 
+    public int getOnHand() {
+        return onHand;
+    }
+
+    public void setOnHand(int onHold) {
+        this.onHand = onHold;
+    }
+
+    public String getMATNR() {
+        return MATNR;
+    }
+
+    public void setMATNR(String MATNR) {
+        this.MATNR = MATNR;
+    }
+
+    //    @SerializedName("ConversionFactor")
+//    @Expose
+    private int onHand;
+    //    @SerializedName("ConversionFactor")
+//    @Expose
+    private String MATNR;
+
+    public String getSA_UOM() {
+        return SA_UOM;
+    }
+
+    public void setSA_UOM(String SA_UOM) {
+        this.SA_UOM = SA_UOM;
+    }
+
+    private String SA_UOM;
+
+
     @SerializedName("CGST")
     @Expose
     private Double CGST;
@@ -142,8 +176,8 @@ public class Product_Details_Modal {
         this.UOM_Nm = UOM_Nm;
     }
 
-    public Product_Details_Modal( String UOM_Nm,int Qty,int Multiple_Qty) {
-        this.UOM_Nm=UOM_Nm;
+    public Product_Details_Modal(String UOM_Nm, int Qty, int Multiple_Qty) {
+        this.UOM_Nm = UOM_Nm;
         this.Qty = Qty;
         this.Multiple_Qty = Multiple_Qty;
     }

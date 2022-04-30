@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.4.5";
+    public static String Version_Name = "ver 3.4.6";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -103,7 +103,7 @@ public class Common_Class {
     private CustomListViewDialog customDialog;
     SharedPreferences UserDetails;
     public static final String UserDetail = "MyPrefs";
-    public int brandPos = 0, grpPos = 0,categoryPos=0;
+    public int brandPos = 0, grpPos = 0, categoryPos = 0;
 
 
     public void CommonIntentwithFinish(Class classname) {
@@ -542,6 +542,12 @@ public class Common_Class {
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
 
+                    case Constants.AUDIT_STOCK_ONHAND:
+                        axnname = "get/getauditstock";
+                        data.put("plant", jparam.get("plant").getAsString());
+                        data.put("loc", jparam.get("loc").getAsString());
+                        break;
+
                     case Constants.GroupFilter:
                         axnname = "get/groupfilter";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.DISTRIBUTER_TYPE) ?
@@ -576,7 +582,7 @@ public class Common_Class {
                     case Constants.STOCK_AUDIT_MFSCFA:
                         axnname = "get/mfscfa";
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
-                        QueryString.put("Type",jparam.get("Type").getAsString());
+                        QueryString.put("Type", jparam.get("Type").getAsString());
                         break;
 
                     case Constants.SALES_RETURN:

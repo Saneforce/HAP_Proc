@@ -28,7 +28,6 @@
             >
 
 
-
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -67,11 +66,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/Rate"
@@ -89,11 +88,11 @@
 
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/llRegular"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/RegularQty"
@@ -105,7 +104,54 @@
                         android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
+                    <TextView
+                        android:id="@+id/tvUOM"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvOnHand"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvDiff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -113,6 +159,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/C15dp"
                     android:background="@drawable/order_qty_backround">
+
                     <ImageView
                         android:id="@+id/ivQtyMns"
                         android:layout_width="25dp"
@@ -120,6 +167,7 @@
                         android:padding="6dp"
                         android:src="@drawable/disable_minus"
                         app:tint="@color/color_red" />
+
                     <EditText
 
                         android:id="@+id/Qty"
@@ -151,10 +199,10 @@
 
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tvTaxTotAmt"
@@ -186,10 +234,10 @@
 
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/Amount"

@@ -460,7 +460,7 @@ public interface ApiInterface {
     Call<JsonObject> saveProjection(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
-    @POST("db_v310.php?axn=save/stockAudit")
+    @POST("db_v310.php?axn=save/stockaudit")
     Call<JsonObject> saveStockAudit(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded

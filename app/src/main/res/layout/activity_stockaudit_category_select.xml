@@ -342,6 +342,46 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
             </androidx.recyclerview.widget.RecyclerView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/edt_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/text_bg_grey"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                    android:gravity="start"
+                    android:hint="Enter the Location"
+                    android:inputType="textCapCharacters"
+                    android:padding="10dp"
+
+                    android:textSize="13dp" />
+
+                <Button
+                    android:id="@+id/btn_onHand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/C5dp"
+
+                    android:background="@drawable/bottom_button"
+                    android:padding="10dp"
+                    android:text="Get On Hand"
+
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
 
 

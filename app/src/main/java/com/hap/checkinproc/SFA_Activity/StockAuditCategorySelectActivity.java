@@ -12,11 +12,13 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -110,6 +112,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
     private int plantPos;
     LinearLayout llPlant;
     private String plantId = "";
+    Button btnOnHand;
+    EditText etLoc;
 
 
     @Override
@@ -145,10 +149,14 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
             tvPlant = findViewById(R.id.tvPlant);
             tvMCSCFA = findViewById(R.id.tvMCSCFA);
             llMCSCFA = findViewById(R.id.llmcScfa);
+            btnOnHand = findViewById(R.id.btn_onHand);
+            etLoc = findViewById(R.id.edt_location);
+
             llMCSCFA.setOnClickListener(this);
             llCalMob.setOnClickListener(this);
             tvHistory.setOnClickListener(this);
             llPlant.setOnClickListener(this);
+            btnOnHand.setOnClickListener(this);
 
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -414,6 +422,18 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_onHand:
+                if (Common_Class.isNullOrEmpty(plantId)) {
+                    common_class.showMsg(this, "Select the Plant");
+                } else {
+                    JsonObject data = new JsonObject();
+                    data.addProperty("plant", plantId);
+                    data.addProperty("loc", etLoc.getText().toString());
+
+                    common_class.getDb_310Data(Constants.AUDIT_STOCK_ONHAND, this, data);
+                    common_class.ProgressdialogShow(1, "");
+                }
+                break;
             case R.id.llmcScfa:
                 common_class.showCommonDialog(scfaList, 100, this);
                 break;
@@ -528,6 +548,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                         OutletItem.put("plantType", tvPlant.getText().toString());
                         OutletItem.put("mcscfaName", tvMCSCFA.getText().toString());
                         OutletItem.put("mcscfaCode", plantId);
+                        OutletItem.put("location", etLoc.getText().toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
@@ -541,11 +562,14 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
                         for (int z = 0; z < Getorder_Array_List.size(); z++) {
                             JSONObject ProdItem = new JSONObject();
-                            ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
+                            // ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
-                            ProdItem.put("Product_Diff", Getorder_Array_List.get(z).getQty());
-                            ProdItem.put("Product_OnHand", Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_Diff", Getorder_Array_List.get(z).getOnHand() - Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_OnHand", Getorder_Array_List.get(z).getOnHand());
+                            ProdItem.put("product_matnr", Getorder_Array_List.get(z).getMATNR());
+                            ProdItem.put("product_uom", Getorder_Array_List.get(z).getSA_UOM());
+
 //                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
 //                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
 //                                    Getorder_Array_List.get(z).getRegularQty());
@@ -621,7 +645,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
                                         sharedCommonPref.clear_pref(Constants.LOC_STOCKAUDIT_DATA);
-                                        common_class.CommonIntentwithFinish(ProjectionHistoryActivity.class);
+                                        finish();
                                     }
                                     common_class.showMsg(StockAuditCategorySelectActivity.this, jsonObjects.getString("Msg"));
 
@@ -823,8 +847,45 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+
         try {
+            Log.v(TAG + key + ":", apiDataResponse);
             switch (key) {
+
+                case Constants.AUDIT_STOCK_ONHAND:
+                    common_class.ProgressdialogShow(0, "");
+
+                    String OrdersTable = String.valueOf(db.getMasterData(Constants.StockAudit_Product_List));
+                    userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                    }.getType();
+                    Product_Modal = gson.fromJson(OrdersTable, userType);
+
+
+                    JSONObject obj1 = new JSONObject(apiDataResponse);
+                    if (obj1.getBoolean("success")) {
+                        JSONArray arr = obj1.getJSONArray("data");
+
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject data = arr.getJSONObject(i);
+                            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                                if (data.getString("ProductCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
+                                    Product_Modal.get(pm).setOnHand(data.getInt("Qty"));
+                                    Product_Modal.get(pm).setSA_UOM(data.getString("UOM"));
+                                    Product_Modal.get(pm).setMATNR(data.getString("MATNR"));
+                                }
+                            }
+                        }
+//                        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_stockaudit_recyclerview, getApplicationContext(), categoryPos);
+//                        recyclerView.setAdapter(mProdct_Adapter);
+//
+
+
+                    }
+
+
+                    showOrderItemList(selectedPos, "");
+
+                    break;
                 case Constants.PreOrderQtyList:
                     // loadData(apiDataResponse);
                     Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_STOCKAUDIT_DATA), userType);
@@ -878,22 +939,20 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
         }
     }
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            if (Shared_Common_Pref.Projection_Approval == 1) {
-//                finish();
-//                Shared_Common_Pref.Projection_Approval = 0;
-//            }
-//            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-//                moveProductScreen();
-//            } else {
-//                common_class.commonDialog(this, SFA_Activity.class, "Projection?");
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+                moveProductScreen();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return false;
+    }
 
     void moveProductScreen() {
         lin_gridcategory.setVisibility(View.VISIBLE);
@@ -934,6 +993,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                     data.addProperty("Type", myDataset.get(position).getName());
                     tvMCSCFA.setText("");
                     common_class.getDb_310Data(Constants.STOCK_AUDIT_MFSCFA, this, data);
+
                     break;
                 case 100:
                     tvMCSCFA.setText(myDataset.get(position).getName());
@@ -1103,8 +1163,14 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+                if (Product_Details_Modal.getSA_UOM() == null)
+                    Product_Details_Modal.setSA_UOM(Product_Details_Modal.getProductSaleUnit());
+
+                holder.tvUom.setText("" + Product_Details_Modal.getSA_UOM());
+                holder.tvOnHand.setText("" + Product_Details_Modal.getOnHand());
 
 
+                holder.tvDiff.setText("" + (Product_Details_Modal.getOnHand() - Product_Details_Modal.getQty()));
                 if (CategoryType >= 0) {
                     if (Product_Details_Modal.getPlant() == null) {
                         Product_Details_Modal.setPlant("");
@@ -1186,6 +1252,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
                             double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty());
 
+
+                            holder.tvDiff.setText("" + (Product_Details_Modal.getOnHand() - (int) totQty));
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
@@ -1385,7 +1453,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvPlant;
+                    QtyAmt, totalQty, tvTaxLabel, tvPlant, tvOnHand, tvUom, tvDiff;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
@@ -1404,6 +1472,9 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
+                tvOnHand = view.findViewById(R.id.tvOnHand);
+                tvUom = view.findViewById(R.id.tvUOM);
+                tvDiff = view.findViewById(R.id.tvDiff);
 
 
                 if (CategoryType >= 0) {
