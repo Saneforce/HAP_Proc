@@ -565,7 +565,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                             // ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
-                            ProdItem.put("Product_Diff", Getorder_Array_List.get(z).getOnHand() - Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_Diff", Getorder_Array_List.get(z).getQty() - Getorder_Array_List.get(z).getOnHand());
                             ProdItem.put("Product_OnHand", Getorder_Array_List.get(z).getOnHand());
                             ProdItem.put("product_matnr", Getorder_Array_List.get(z).getMATNR());
                             ProdItem.put("product_uom", Getorder_Array_List.get(z).getSA_UOM());
@@ -710,6 +710,7 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
 
     public void updateToTALITEMUI() {
         TextView tvTotalItems = findViewById(R.id.tvTotalItems);
+        //    TextView tvOnHandDiff = findViewById(R.id.tvonHandDiff);
         TextView tvTotLabel = findViewById(R.id.tvTotLabel);
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
         TextView tvTax = findViewById(R.id.tvTaxVal);
@@ -727,6 +728,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
+        int onHand = 0;
+        int diff = 0;
 
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -744,6 +747,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                         taxVal += Product_Modal.get(pm).getTax();
 
 
+//                    onHand += Product_Modal.get(pm).getOnHand();
+//                    diff += Product_Modal.get(pm).getQty() - Product_Modal.get(pm).getOnHand();
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
 
@@ -752,7 +757,9 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
         }
 
         tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
+        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Confirmed : " + totalQty);
+        // tvOnHandDiff.setText("OnHand : " + onHand + "   Difference : " + diff);
+
 
         if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
@@ -875,9 +882,6 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                                 }
                             }
                         }
-//                        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_stockaudit_recyclerview, getApplicationContext(), categoryPos);
-//                        recyclerView.setAdapter(mProdct_Adapter);
-//
 
 
                     }
@@ -917,6 +921,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                     break;
             }
         } catch (Exception e) {
+            Log.v(TAG + key + ":", e.getMessage());
+            common_class.ProgressdialogShow(0, "");
 
         }
     }
@@ -1170,7 +1176,13 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                 holder.tvOnHand.setText("" + Product_Details_Modal.getOnHand());
 
 
-                holder.tvDiff.setText("" + (Product_Details_Modal.getOnHand() - Product_Details_Modal.getQty()));
+                holder.tvDiff.setText("" + (Product_Details_Modal.getQty() - Product_Details_Modal.getOnHand()));
+
+                if (Product_Details_Modal.getQty() - Product_Details_Modal.getOnHand() > 0)
+                    holder.tvDiff.setTextColor(getResources().getColor(R.color.green));
+                else
+                    holder.tvDiff.setTextColor(getResources().getColor(R.color.color_red));
+
                 if (CategoryType >= 0) {
                     if (Product_Details_Modal.getPlant() == null) {
                         Product_Details_Modal.setPlant("");
@@ -1253,7 +1265,13 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
                             double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty());
 
 
-                            holder.tvDiff.setText("" + (Product_Details_Modal.getOnHand() - (int) totQty));
+                            holder.tvDiff.setText("" + ((int) totQty - Product_Details_Modal.getOnHand()));
+
+                            if ((int) totQty - Product_Details_Modal.getOnHand() > 0)
+                                holder.tvDiff.setTextColor(getResources().getColor(R.color.green));
+                            else
+                                holder.tvDiff.setTextColor(getResources().getColor(R.color.color_red));
+
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
