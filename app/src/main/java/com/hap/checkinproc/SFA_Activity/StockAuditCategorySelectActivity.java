@@ -728,8 +728,8 @@ public class StockAuditCategorySelectActivity extends AppCompatActivity implemen
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
-        int onHand = 0;
-        int diff = 0;
+//        int onHand = 0;
+//        int diff = 0;
 
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
