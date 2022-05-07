@@ -35,11 +35,11 @@
                 android:text="@string/tool_app_ver"
                 android:textColor="@color/white"
                 android:textSize="8sp" />
-        </LinearLayout>
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <ImageView
@@ -63,10 +63,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -94,23 +92,18 @@
                                 android:gravity="center"
                                 android:text="Graph Mode"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/C14dp"></TextView>
-
+                                android:textSize="@dimen/C14dp"/>
                             <Switch
                                 android:id="@+id/switchCumulativeMode"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"></Switch>
-
-
+                                android:layout_alignParentRight="true"/>
                         </RelativeLayout>
-
 
                         <com.google.android.material.appbar.AppBarLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
 
                             <com.google.android.material.tabs.TabLayout
                                 android:id="@+id/tabs"
@@ -121,13 +114,11 @@
                                 app:tabIndicatorColor="@android:color/white"
                                 app:tabIndicatorHeight="2dp"
                                 app:tabMode="fixed" />
-
                             <androidx.viewpager.widget.ViewPager
                                 android:id="@+id/viewpager"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@color/white" />
-
                         </com.google.android.material.appbar.AppBarLayout>
 
                         <LinearLayout
@@ -146,8 +137,6 @@
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/C30dp">
-
-
                             </TextView>
 
                             <TextView
@@ -159,8 +148,6 @@
                                 android:text="."
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/C30dp">
-
-
                             </TextView>
 
                             <TextView
@@ -172,17 +159,9 @@
                                 android:text="."
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/C30dp">
-
-
                             </TextView>
-
-
                         </LinearLayout>
-
-
                     </RelativeLayout>
-
-
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -208,9 +187,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:visibility="visible">
-
                         </androidx.recyclerview.widget.RecyclerView>
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -222,12 +199,10 @@
                         android:visibility="gone">
 
                         <LinearLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C10dp"
                             android:orientation="horizontal">
-
 
                             <LinearLayout
                                 android:id="@+id/Lin_primary"
@@ -237,14 +212,13 @@
                                 android:orientation="vertical"
                                 android:visibility="visible">
 
-
                                 <ImageView
                                     android:id="@+id/imgPrimary"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:src="@drawable/ic_outline_add_chart_48" />
+                                    android:src="@drawable/ic_outline_add_chart_48"/>
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -255,10 +229,7 @@
                                     android:gravity="center"
                                     android:text="Primary Orders"
                                     android:textAlignment="center" />
-
-
                             </LinearLayout>
-
 
                             <LinearLayout
                                 android:id="@+id/Lin_DCR"
@@ -266,7 +237,6 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-
 
                                 <ImageView
                                     android:id="@+id/imgDCR"
@@ -286,8 +256,6 @@
                                     android:text="Secondary Orders"
                                     android:textAlignment="center" />
                             </LinearLayout>
-
-
                             <LinearLayout
                                 android:id="@+id/Lin_Route"
                                 android:layout_width="match_parent"
@@ -307,7 +275,6 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/C8dp"
@@ -427,7 +394,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-
                                 android:orientation="vertical">
 
                                 <ImageView
@@ -447,9 +413,7 @@
                                     android:text="Reports"
                                     android:textAlignment="center" />
                             </LinearLayout>
-
                         </LinearLayout>
-
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -460,14 +424,12 @@
                             android:weightSum="5">
 
                             <LinearLayout
-
                                 android:id="@+id/Lin_POS"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="gone">
-
 
                                 <ImageView
                                     android:id="@+id/imgPOS"
@@ -476,7 +438,6 @@
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:src="@drawable/ic_outline_assignment_48" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -488,7 +449,6 @@
                                     android:textAlignment="center" />
                             </LinearLayout>
 
-
                             <LinearLayout
                                 android:id="@+id/lin_myteam"
                                 android:layout_width="0dp"
@@ -496,14 +456,12 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="visible">
-
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:src="@drawable/ic_baseline_groups_24" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -528,7 +486,6 @@
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:src="@drawable/ic_outline_local_shipping_24" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -539,21 +496,18 @@
                                     android:textAlignment="center" />
                             </LinearLayout>
 
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="gone">
-
                                 <ImageView
                                     android:id="@+id/Seededdetailss"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:src="@drawable/loca_icon" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -570,26 +524,21 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="gone">
-
                                 <ImageView
-
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:src="@drawable/ic_outline_assignment_48" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginTop="@dimen/C8dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-
                                     android:text="Orders"
                                     android:textAlignment="center" />
                             </LinearLayout>
-
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -597,13 +546,11 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="gone">
-
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_outline_my_location_24" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -612,8 +559,6 @@
                                     android:text="Dist.Location"
                                     android:textAlignment="center" />
                             </LinearLayout>
-
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -623,7 +568,6 @@
                             android:orientation="horizontal"
                             android:visibility="gone">
 
-
                             <LinearLayout
                                 android:id="@+id/SyncButon"
                                 android:layout_width="match_parent"
@@ -631,14 +575,12 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="invisible">
-
                                 <ImageView
                                     android:id="@+id/Sync"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:src="@drawable/syn_icon" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -647,7 +589,6 @@
                                     android:textAlignment="center" />
                             </LinearLayout>
 
-
                             <LinearLayout
                                 android:id="@+id/Logout"
                                 android:layout_width="match_parent"
@@ -655,14 +596,12 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:visibility="invisible">
-
                                 <ImageView
                                     android:id="@+id/RefreFriend"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:src="@drawable/logout_icon" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -670,22 +609,16 @@
                                     android:text="Logout"
                                     android:textAlignment="center" />
                             </LinearLayout>
-
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
-
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp"
                     app:cardCornerRadius="@dimen/C10dp">
-
-                    <include layout="@layout/fragment_outletdata_info"></include>
-
+                    <include layout="@layout/fragment_outletdata_info"/>
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -722,18 +655,14 @@
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 
                         </RelativeLayout>
-
-                        <!--                        <androidx.cardview.widget.CardView-->
-                        <!--                            android:id="@+id/cvPrimOrdFilter"-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:layout_margin="@dimen/C5dp"-->
-                        <!--                            android:visibility="visible"-->
-                        <!--                            app:cardCornerRadius="@dimen/C5dp">-->
-
-
-                        <!--                        </androidx.cardview.widget.CardView>-->
-
+                        <!--   <androidx.cardview.widget.CardView-->
+                        <!--        android:id="@+id/cvPrimOrdFilter"-->
+                        <!--        android:layout_width="match_parent"-->
+                        <!--        android:layout_height="wrap_content"-->
+                        <!--        android:layout_margin="@dimen/C5dp"-->
+                        <!--        android:visibility="visible"-->
+                        <!--        app:cardCornerRadius="@dimen/C5dp">-->
+                        <!--    </androidx.cardview.widget.CardView>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -758,7 +687,6 @@
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -777,7 +705,6 @@
                                 android:visibility="gone" />
 
                             <LinearLayout
-
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -794,7 +721,6 @@
                                     android:textColor="@color/Extended"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -834,7 +760,6 @@
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -868,7 +793,6 @@
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
-
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -877,8 +801,6 @@
                                     android:textAlignment="center"
                                     android:textSize="9sp" />
                             </LinearLayout>
-
-
                         </LinearLayout>
 
                         <TextView
@@ -902,9 +824,7 @@
                     android:layout_margin="@dimen/C5dp"
                     android:visibility="gone"
                     app:cardCornerRadius="@dimen/C10dp">
-
-                    <include layout="@layout/fragment_salesdata_info"></include>
-
+                    <include layout="@layout/fragment_salesdata_info"/>
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -913,9 +833,7 @@
                     android:layout_margin="@dimen/C5dp"
                     android:visibility="visible"
                     app:cardCornerRadius="@dimen/C10dp">
-
                     <include layout="@layout/fragment_tabledata_info"></include>
-
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -923,17 +841,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp"
                     app:cardCornerRadius="@dimen/C10dp">
-
                     <include layout="@layout/fragment_visitdata_info"></include>
-
                 </androidx.cardview.widget.CardView>
-
-
             </LinearLayout>
-
         </ScrollView>
-
-
     </RelativeLayout>
-
 </LinearLayout>

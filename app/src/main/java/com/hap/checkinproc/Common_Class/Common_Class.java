@@ -876,9 +876,7 @@ public class Common_Class {
         } catch (Exception e) {
 
         }
-
     }
-
     public void setDefDist() {
         try {
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
@@ -897,16 +895,11 @@ public class Common_Class {
                     getDataFromApi(Retailer_OutletList, activity, false);
                     break;
                 }
-
-
             }
         } catch (Exception e) {
 
         }
-
     }
-
-
     public void getProductDetails(Activity activity) {
 
         if (isNetworkAvailable(activity)) {
@@ -974,10 +967,7 @@ public class Common_Class {
                 e.printStackTrace();
             }
         }
-
     }
-
-
     public void getPOSProduct(Activity activity) {
 
         if (isNetworkAvailable(activity)) {
@@ -998,6 +988,7 @@ public class Common_Class {
                         // Log.v(TAG, response.toString());
                         db.deleteMasterData(Constants.POS_ProdGroups_List);
                         db.addMasterData(Constants.POS_ProdGroups_List, response.body());
+                        Log.d("Response",response.body().toString());
                     }
 
                     @Override
@@ -1029,8 +1020,6 @@ public class Common_Class {
 
                     }
                 });
-
-
                 service.getDataArrayList("get/posproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -1048,20 +1037,16 @@ public class Common_Class {
                 e.printStackTrace();
             }
         }
-
     }
-
     public void showMsg(Activity activity, String msg) {
         Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
-
     public boolean checkDates(String stDate, String endDate, Activity activity) {
         boolean b = false;
         try {
             SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
-
             Date date1 = dfDate.parse(stDate);
             Date date2 = dfDate.parse(endDate);
             long diff = date2.getTime() - date1.getTime();
@@ -1074,7 +1059,6 @@ public class Common_Class {
                 } else {
                     b = false; //If start date is after the end date
                 }
-
             } else {
                 Toast.makeText(activity, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
                 return false;
@@ -1092,15 +1076,12 @@ public class Common_Class {
             public void PositiveMethod(DialogInterface dialog, int id) {
                 callMob(activity, num);
             }
-
             @Override
             public void NegativeMethod(DialogInterface dialog, int id) {
 
             }
         });
     }
-
-
     public void callMob(Activity activity, String num) {
         int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
         if (readReq != PackageManager.PERMISSION_GRANTED) {
@@ -1111,7 +1092,6 @@ public class Common_Class {
             activity.startActivity(callIntent);
         }
     }
-
     public String datePicker(Activity activity, TextView view) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
@@ -1120,8 +1100,6 @@ public class Common_Class {
                 int month = monthOfYear + 1;
 
                 pickDate = ("" + dayOfMonth + "/" + month + "/" + year);
-
-
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
@@ -1247,7 +1225,6 @@ public class Common_Class {
 //
 //
 //    }
-
 
     /* public void showToastMSG(Activity Ac, String MSg, int s) {
          TastyToast.makeText(Ac, MSg,
@@ -1425,7 +1402,6 @@ public class Common_Class {
             }
         });
     }
-
     public void clearLocData(Activity activity) {
         Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(activity);
         sharedCommonPref.clear_pref(Constants.STATE_LIST);
@@ -1435,18 +1411,12 @@ public class Common_Class {
         sharedCommonPref.clear_pref(Constants.Freezer_capacity);
 
     }
-
-
     public static class InputFilterMinMax implements InputFilter {
-
         private int min, max;
-
         public InputFilterMinMax(int min, int max) {
             this.min = min;
             this.max = max;
         }
-
-
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
             try {
@@ -1457,14 +1427,10 @@ public class Common_Class {
             }
             return "";
         }
-
         private boolean isInRange(int a, int b, int c) {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
-
     }
-
-
     public void gotoHomeScreen(Context context, View ivToolbarHome) {
         ivToolbarHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1478,13 +1444,7 @@ public class Common_Class {
                     CommonIntentwithoutFinish(SFA_Activity.class);
                 } else
                     context.startActivity(new Intent(context, Dashboard.class));
-
             }
         });
-
-
     }
-
-
 }
-

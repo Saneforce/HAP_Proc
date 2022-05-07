@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ComponentName;
@@ -53,6 +54,7 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
+import com.hap.checkinproc.SFA_Activity.ReportsListActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Distributor_Name;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
@@ -88,9 +90,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     Shared_Common_Pref sharedCommonPref;
     SharedPreferences UserDetails;
     DatabaseHandler db;
-
     ImageView ivLogout, ivCalendar;
-
     LinearLayout llGridParent;
 
     OutletDashboardInfoAdapter cumulativeInfoAdapter;
@@ -121,40 +121,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         sfaActivity = this;
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-        ivLogout = findViewById(R.id.toolbar_home);
-        Lin_Route = findViewById(R.id.Lin_Route);
-        SyncButon = findViewById(R.id.SyncButon);
-        Lin_Lead = findViewById(R.id.Lin_Lead);
-        Lin_Dashboard = findViewById(R.id.Lin_Dashboard);
-        linorders = findViewById(R.id.linorders);
-        Logout = findViewById(R.id.Logout);
-        rvMenu = findViewById(R.id.rvMenu);
-        tvTotalValOrder = findViewById(R.id.tvTotValOrd);
-        tvNoOrder = findViewById(R.id.tvNoOrd);
-        tvPrimOrder = findViewById(R.id.tvPrimOrd);
-        tvUpdTime = findViewById(R.id.tvUpdTime);
-        rvPrimOrd = findViewById(R.id.rvPrimOrder);
-
         common_class = new Common_Class(this);
-        SyncButon.setOnClickListener(this);
-        Lin_Route.setOnClickListener(this);
-        Lin_Lead.setOnClickListener(this);
-        Lin_Dashboard.setOnClickListener(this);
-        linorders.setOnClickListener(this);
-        Logout.setOnClickListener(this);
-        ivLogout.setOnClickListener(this);
-
         gson = new Gson();
-        ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
-
 
         init();
         setOnClickListener();
-
+        ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
         tvDate.setText("" + Common_Class.GetDatewothouttime());
-
         sfa_date = tvDate.getText().toString();
-
         String sUName = UserDetails.getString("SfName", "");
         tvUserName.setText("HI! " + sUName);
         tvUpdTime.setText("Last Updated On : " + updateTime);
@@ -164,7 +138,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         showDashboardData();
         common_class.getDb_310Data(Constants.GroupFilter, this);
 
-
         switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
             case Constants.CHECKIN_TYPE:
                 menuList.add(new Common_Model("Primary Order", R.drawable.ic_outline_add_chart_48));
@@ -172,7 +145,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
                 menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
-                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_reports));
                 menuList.add(new Common_Model("Franchise", R.drawable.ic_franchise));
                 menuList.add(new Common_Model("My Team", R.drawable.ic_baseline_groups_24));
                 menuList.add(new Common_Model("Projection", R.drawable.ic_projection));
@@ -186,10 +159,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
                 menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
-                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_reports));
                 menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
-
                 common_class.getPOSProduct(this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
                 break;
@@ -198,13 +170,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 menuList.add(new Common_Model("Van Sales", R.drawable.ic_outline_local_shipping_24));
                 menuList.add(new Common_Model("Outlets", R.drawable.ic_baseline_storefront_24));
                 menuList.add(new Common_Model("Nearby Outlets", R.drawable.ic_outline_near_me_24));
-                menuList.add(new Common_Model("Reports", R.drawable.ic_sfa_reports));
+                menuList.add(new Common_Model("Reports", R.drawable.ic_reports));
                 menuList.add(new Common_Model("POS", R.drawable.ic_outline_assignment_48));
                 menuList.add(new Common_Model("GRN", R.drawable.ic_outline_assignment_turned_in_24));
                 break;
         }
-
-
         RecyclerView.LayoutManager manager = new GridLayoutManager(this, 4);
         rvMenu.setLayoutManager(manager);
         //  rvMenu.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -247,8 +217,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);
                         break;
                     case "Reports":
-                        //  common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
-                        common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
+                        common_class.CommonIntentwithNEwTask(ReportsListActivity.class);
+                        // common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
 
                         break;
                     case "My Team":
@@ -348,6 +318,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
+        SyncButon.setOnClickListener(this);
+        Lin_Route.setOnClickListener(this);
+        Lin_Lead.setOnClickListener(this);
+        Lin_Dashboard.setOnClickListener(this);
+        linorders.setOnClickListener(this);
+        Logout.setOnClickListener(this);
+        ivLogout.setOnClickListener(this);
+
     }
 
     private void getCumulativeDataFromAPI(String response) {
@@ -454,6 +432,21 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
         tvUserName = findViewById(R.id.tvUserName);
+
+        ivLogout = findViewById(R.id.toolbar_home);
+        Lin_Route = findViewById(R.id.Lin_Route);
+        SyncButon = findViewById(R.id.SyncButon);
+        Lin_Lead = findViewById(R.id.Lin_Lead);
+        Lin_Dashboard = findViewById(R.id.Lin_Dashboard);
+        linorders = findViewById(R.id.linorders);
+        Logout = findViewById(R.id.Logout);
+        rvMenu = findViewById(R.id.rvMenu);
+        tvTotalValOrder = findViewById(R.id.tvTotValOrd);
+        tvNoOrder = findViewById(R.id.tvNoOrd);
+        tvPrimOrder = findViewById(R.id.tvPrimOrd);
+        tvUpdTime = findViewById(R.id.tvUpdTime);
+        rvPrimOrd = findViewById(R.id.rvPrimOrder);
+
 
 
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
@@ -720,8 +713,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
             } catch (Exception e) {
             }
-
-
         }
 
         @Override
@@ -730,21 +721,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
             TextView tvDesc, tvValue;
             ProgressBar pbVisitCount;
-
             public MyViewHolder(View view) {
                 super(view);
                 tvDesc = view.findViewById(R.id.tvDesc);
                 tvValue = view.findViewById(R.id.tvValue);
                 pbVisitCount = view.findViewById(R.id.pbVisitCount);
-
-
             }
         }
-
-
     }
 
     public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
@@ -776,7 +761,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
 
         @Override
-        public void onBindViewHolder(MenuAdapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(MenuAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             try {
                 try {
                     holder.tvName.setText("" + listt.get(position).getName());
@@ -792,19 +777,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 } catch (Exception e) {
                     Log.e("adaptergetView: ", e.getMessage());
                 }
-
-
             } catch (Exception e) {
             }
-
-
         }
 
         @Override
         public int getItemCount() {
             return listt.size();
         }
-
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
             TextView tvName;
@@ -816,13 +796,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 tvName = view.findViewById(R.id.tvMenuName);
                 ivIcon = view.findViewById(R.id.ivMenuIcon);
                 llParent = view.findViewById(R.id.llMenu);
-
             }
         }
-
-
     }
-
 
     private final ServiceConnection mServiceConection = new ServiceConnection() {
         @Override
@@ -844,17 +820,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             if (common_class.isNetworkAvailable(this)) {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
-
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 Calendar calobj = Calendar.getInstance();
                 String dateTime = df.format(calobj.getTime());
-
 
                 JSONObject HeadItem = new JSONObject();
                 HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
                 HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
                 HeadItem.put("dt", dateTime);
-
 
                 Call<ResponseBody> call = service.getDashboardValues(HeadItem.toString());
                 call.enqueue(new Callback<ResponseBody>() {
@@ -871,27 +844,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                     is.append(line);
                                     Log.v("Res>>", is.toString());
                                 }
-
-
                                 JSONObject jsonObject = new JSONObject(is.toString());
-
-
                                 //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
-
                                 if (jsonObject.getBoolean("success")) {
-
                                     JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
                                     }
-
-
                                 }
-
-
 //                            popMaterialList.clear();
 //
 //                            for (int i = 0; i < jsonArray.length(); i++) {
@@ -910,11 +870,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                         }
                     }
-
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.v("fail>>2", t.toString());
-
 
                     }
                 });
@@ -923,7 +881,5 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
         } catch (Exception e) {
             Log.v("fail>>", e.getMessage());
-
-
         }
     }*/

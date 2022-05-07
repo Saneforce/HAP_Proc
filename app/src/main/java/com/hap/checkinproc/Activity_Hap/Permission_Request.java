@@ -683,9 +683,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
 
@@ -693,7 +691,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         });
 
     }
-
     /*Permission Select Hours*/
     private void selectedHours() {
 
@@ -702,23 +699,16 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         Model_Pojo2 = new Common_Model("2", "2", "FWFlg");
         permissionSelectHours.add(Model_Pojo1);
         permissionSelectHours.add(Model_Pojo2);
-
-
         customDialog = new CustomListViewDialog(Permission_Request.this, permissionSelectHours, 10);
         Window window = customDialog.getWindow();
         window.setGravity(Gravity.CENTER);
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
-
-
     }
-
-
     @Override
     public void onClick(View v) {
 
     }
-
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();

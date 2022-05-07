@@ -56,8 +56,7 @@ public interface ApiInterface {
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
 
     @FormUrlEncoded
-    @POST("Db_v310.php?")
-    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
+    @POST("Db_v310.php?")    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
 
     @GET("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("dte") String date);
@@ -78,7 +77,7 @@ public interface ApiInterface {
 
     /*sending data*/
     @FormUrlEncoded
-    @POST("Db_v300.php?")
+
     Call<JsonObject> getDataList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
     @FormUrlEncoded
@@ -401,7 +400,6 @@ public interface ApiInterface {
                                @Query("From") String from,
                                @Query("To") String To,
                                @Part MultipartBody.Part file);
-
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/checkinimage")

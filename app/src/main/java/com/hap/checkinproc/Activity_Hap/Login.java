@@ -394,8 +394,6 @@ public class Login extends AppCompatActivity {
                 }
             }
         }
-
-
     }
 
     boolean checkValueStore() {
@@ -438,7 +436,6 @@ public class Login extends AppCompatActivity {
             handleSignInResult(result, requestCode);
         }
     }
-
     private void handleSignInResult(GoogleSignInResult result, int requestCode) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
@@ -607,8 +604,8 @@ public class Login extends AppCompatActivity {
                 //eMail = "srinivas.p@hap.in";
                 //eMail = "sajan@hap.in";
                 //eMail = "1005985@hap.in";
-//                eMail = "haptest5@hap.in";
-                eMail = "ciadmin@hap.in";
+                  eMail = "haptest5@hap.in";
+               // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 // eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -666,56 +663,56 @@ public class Login extends AppCompatActivity {
 //                                        assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
 
-                                        try {
-                                            PackageManager manager = getPackageManager();
-
-                                            if (response.body().getData().get(0).getLoginType().equalsIgnoreCase("Distributor")) {
-
-                                                // enable old icon
-                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
-                                                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
-                                                // disable new icon
-                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
-                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-
-                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
-                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-
-                                                Toast.makeText(Login.this, "Enable " + Constants.DISTRIBUTER_TYPE + " Icon", Toast.LENGTH_LONG).show();
-
-
-                                            } else {
-
-                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
-                                                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
-                                                // disable new icon
-                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
-                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-
-                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
-                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-
-                                                Toast.makeText(Login.this, "Enable " + Constants.CHECKIN_TYPE + " Icon", Toast.LENGTH_LONG).show();
-
-
-                                            }
-
-                                        } catch (Exception e) {
-                                            Log.v("launcherIcon:", e.getMessage());
-                                        }
-
-                                        mProgress.setTitle("Please wait while we configure...");
-                                        mProgress.show();
-
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
+//                                        try {
+//                                            PackageManager manager = getPackageManager();
+//
+//                                            if (response.body().getData().get(0).getLoginType().equalsIgnoreCase("Distributor")) {
+//
+//                                                // enable old icon
+//                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
+//                                                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//
+//                                                // disable new icon
+//                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
+//                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
+//                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                                                Toast.makeText(Login.this, "Enable " + Constants.DISTRIBUTER_TYPE + " Icon", Toast.LENGTH_LONG).show();
+//
+//
+//                                            } else {
+//
+//                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, FFALauncherAlias.class)
+//                                                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//
+//                                                // disable new icon
+//                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DistributorLauncherAlias.class)
+//                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                                                manager.setComponentEnabledSetting(new ComponentName(Login.this, DefaultLauncherAlias.class)
+//                                                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                                                Toast.makeText(Login.this, "Enable " + Constants.CHECKIN_TYPE + " Icon", Toast.LENGTH_LONG).show();
+//
+//
+//                                            }
+//
+//                                        } catch (Exception e) {
+//                                            Log.v("launcherIcon:", e.getMessage());
+//                                        }
+//
+//                                        mProgress.setTitle("Please wait while we configure...");
+//                                        mProgress.show();
+//
+//                                        handler.postDelayed(new Runnable() {
+//                                            public void run() {
                                                 assignLoginData(response.body(), requestCode);
 
 
-                                            }
-                                        }, 1000);
+//                                            }
+//                                        }, 1000);
 
 
                                     } catch (Exception e) {
