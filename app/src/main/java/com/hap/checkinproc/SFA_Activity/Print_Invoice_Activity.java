@@ -191,7 +191,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 if (sharedCommonPref.getvalue(Constants.FLAG).equals("Primary Order"))
                     common_class.getDataFromApi(Constants.TodayPrimaryOrderDetails_List, this, false);
                 else if (sharedCommonPref.getvalue(Constants.FLAG).equals("PROJECTION")) {
-
                     common_class.getDataFromApi(Constants.ProjectionOrderDetails_List, this, false);
                     findViewById(R.id.llUOM).setVisibility(View.GONE);
                     findViewById(R.id.llPrice).setVisibility(View.GONE);
@@ -201,6 +200,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     totalitem.setTypeface(Typeface.DEFAULT_BOLD);
                     totalqty.setTypeface(Typeface.DEFAULT_BOLD);
 
+                    tvDistAdd.setVisibility(View.GONE);
+                    tvDistributorPh.setVisibility(View.GONE);
+                    findViewById(R.id.llDistCall).setVisibility(View.GONE);
 
                 } else {
                     findViewById(R.id.tvWelcomeLabel).setVisibility(View.VISIBLE);
@@ -577,13 +579,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.printTextln(Printama.CENTER, storeName);
                 printama.addNewLine();
                 printama.setBold();
-                printama.printTextln(Printama.LEFT, "Address :");
+                if (tvDistAdd.getVisibility() == View.VISIBLE) {
+                    printama.printTextln(Printama.LEFT, "Address :");
+                    printama.setNormalText();
+                    printama.addNewLine();
 
-
-                printama.setNormalText();
-                printama.addNewLine();
-                printama.printTextln(Printama.LEFT, address);
-                printama.printTextln(Printama.LEFT, phone);
+                    printama.printTextln(Printama.LEFT, address);
+                }
+                if (tvDistributorPh.getVisibility() == View.VISIBLE)
+                    printama.printTextln(Printama.LEFT, phone);
                 printama.addNewLine(2);
                 printama.setBold();
                 printama.printText(billnumber.getText().toString() + "          " + invoicedate.getText().toString());
@@ -752,20 +756,25 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setTextAlign(Paint.Align.LEFT);
 
             y = y + 30;
-            canvas.drawText("Address :", x, y, paint);
-            paint.setColor(Color.DKGRAY);
-            paint.setTextSize(14);
-            y = y + 20;
 
-            String[] lines = Split(address, 60, address.length());
-            for (int i = 0; i < lines.length; i++) {
-                System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
-                canvas.drawText(lines[i], x, y, paint);
+            if (tvDistAdd.getVisibility() == View.VISIBLE) {
+                canvas.drawText("Address :", x, y, paint);
+                paint.setColor(Color.DKGRAY);
+                paint.setTextSize(14);
                 y = y + 20;
 
+                String[] lines = Split(address, 60, address.length());
+                for (int i = 0; i < lines.length; i++) {
+                    System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
+                    canvas.drawText(lines[i], x, y, paint);
+                    y = y + 20;
+
+                }
             }
-            canvas.drawText(phone, x, y, paint);
-            y = y + 30;
+            if (tvDistributorPh.getVisibility() == View.VISIBLE) {
+                canvas.drawText(phone, x, y, paint);
+                y = y + 30;
+            }
 
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
@@ -1178,12 +1187,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         String uomQty = "";
                         for (int i = 0; i < uomList.size(); i++) {
                             uomName = uomName + uomList.get(i).getUOM_Nm() + "\n";
-                            uomQty=uomQty+(int)uomList.get(i).getCnvQty()+"\n";
+                            uomQty = uomQty + (int) uomList.get(i).getCnvQty() + "\n";
                         }
 
 
-                        tvUOMName.setText(""+uomName);
-                        tvUomQty.setText(""+uomQty);
+                        tvUOMName.setText("" + uomName);
+                        tvUomQty.setText("" + uomQty);
                     }
                 } else {
                     JSONArray arr = new JSONArray(response);
@@ -1234,10 +1243,20 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
                     }
+
+                    if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection")) {
+                        try {
+                            storeName = arr.getJSONObject(0).getString("plantName") + "(" + arr.getJSONObject(0).getInt("plantID") + ")";
+                            tvDistributorName.setText("" + storeName);
+
+                        } catch (Exception e) {
+
+                        }
+
+                    }
                 }
                 mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, sharedCommonPref.getvalue(Constants.FLAG));
                 printrecyclerview.setAdapter(mReportViewAdapter);
-
 
 
             }

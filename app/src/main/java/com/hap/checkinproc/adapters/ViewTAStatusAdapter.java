@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,17 +17,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAViewStatus;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 
 
 public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapter.MyViewHolder> {
     Context context;
     JsonArray taJsonArray;
+    AdapterOnClick adapterOnClick;
 
 
-    public ViewTAStatusAdapter(Context context, JsonArray taJsonArray) {
+    public ViewTAStatusAdapter(Context context, JsonArray taJsonArray, AdapterOnClick adapterOnClick) {
         this.context = context;
         this.taJsonArray = taJsonArray;
+        this.adapterOnClick = adapterOnClick;
     }
 
     @NonNull
@@ -65,6 +69,16 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
                 context.startActivity(TAViewAct);
             }
         });
+        holder.btnCancel.setVisibility(View.GONE);
+        if (jsonObject.get("ApSTatus").getAsString().equalsIgnoreCase("Approval Pending"))
+            holder.btnCancel.setVisibility(View.VISIBLE);
+
+        holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterOnClick.onIntentClick(jsonObject, position);
+            }
+        });
     }
 
 
@@ -77,6 +91,7 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
 
         TextView taDate, taStatus, taTotalAmt, taDaAmt, taTLAmt, taFaAmt, taLaAmt, taLcAmt, taOeAmt;
         CardView mCardView;
+        Button btnCancel;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +105,11 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
             taLcAmt = (TextView) itemView.findViewById(R.id.txt_lc);
             taOeAmt = (TextView) itemView.findViewById(R.id.txt_oe);
             mCardView = itemView.findViewById(R.id.ta_row_item);
+            btnCancel = itemView.findViewById(R.id.btn_cancel);
         }
+    }
+
+    public interface OnTAStatusClick {
+        void onCancelClick(JsonObject obj);
     }
 }

@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -40,15 +39,16 @@ import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.AdapterForDynamicView;
 import com.hap.checkinproc.adapters.AdapterForSelectionList;
 import com.hap.checkinproc.adapters.FilterDemoAdapter;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -96,6 +96,7 @@ public class ViewActivity extends AppCompatActivity {
     ImageView iv_dwnldmaster_back;
     TextView tool_header;
     Button btn_save;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,6 +299,8 @@ public class ViewActivity extends AppCompatActivity {
                         datePick(i, 8);
                     } else if (array_view.get(i).getViewid().equalsIgnoreCase("6") || array_view.get(i).getViewid().equalsIgnoreCase("7")) {
                         popupSpinner(1, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
+
+
                     }
                 }
 
@@ -435,14 +438,14 @@ public class ViewActivity extends AppCompatActivity {
     public void popupSpinner(int type, final ArrayList<SelectionModel> array_selection, final int pos, String creationId) {
         final Dialog dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.popup_dynamic_view);
+        dialog.setContentView(R.layout.popup_dynamic_view1);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
         ListView popup_list = (ListView) dialog.findViewById(R.id.popup_list);
         TextView tv_todayplan_popup_head = (TextView) dialog.findViewById(R.id.tv_todayplan_popup_head);
         tv_todayplan_popup_head.setText(array_view.get(pos).getFieldname());
-        ImageView iv_close_popup = (ImageView) dialog.findViewById(R.id.iv_close_popup);
+        Button iv_close_popup = (Button) dialog.findViewById(R.id.btnClose);
         Button ok = (Button) dialog.findViewById(R.id.ok);
 
         if (array_selection.contains(new SelectionModel(true))) {
@@ -450,7 +453,40 @@ public class ViewActivity extends AppCompatActivity {
         } else
             isEmpty = true;
 
-        final AdapterForSelectionList adapt = new AdapterForSelectionList(ViewActivity.this, array_selection, type);
+        AdapterForSelectionList adapt = new AdapterForSelectionList(ViewActivity.this, array_selection, type, new AdapterOnClick() {
+            @Override
+            public void onIntentClick(int itemPos) {
+
+
+//                if (array_selection.contains(new SelectionModel(true))) {
+//                    for (int i = 0; i < array_selection.size(); i++) {
+//                        SelectionModel m = array_selection.get(i);
+//                        if (m.isClick()) {
+                array_view.get(pos).setValue(array_selection.get(itemPos).getTxt());
+                if (filterList.size() != 0) {
+                    for (int j = 0; j < filterList.size(); j++) {
+                        if (filterList.get(j).getTxt().equals(creationId)) {
+                            selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), array_selection.get(itemPos).getTxt()));
+                        }
+                    }
+                    Log.e("ListValues_fil", filterList.toString());
+                    Log.e("ListValues_select", selectedFilter.toString());
+                }
+                adp_view.notifyDataSetChanged();
+                //  break;
+//                        }
+//                    }
+//
+//                } else {
+//                    array_view.get(pos).setValue("");
+//                    adp_view.notifyDataSetChanged();
+//                }
+                dialog.dismiss();
+                commonFun();
+            }
+
+
+        });
         popup_list.setAdapter(adapt);
         final SearchView search_view = (SearchView) dialog.findViewById(R.id.search_view);
         search_view.setOnClickListener(new View.OnClickListener() {
@@ -499,7 +535,7 @@ public class ViewActivity extends AppCompatActivity {
                         if (m.isClick()) {
                             array_view.get(pos).setValue(m.getTxt());
                             i = array_selection.size();
-                            if(filterList.size()!=0){
+                            if (filterList.size() != 0) {
                                 for (int j = 0; j < filterList.size(); j++) {
                                     if (filterList.get(j).getTxt().equals(creationId)) {
                                         selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), m.getTxt()));
@@ -523,7 +559,7 @@ public class ViewActivity extends AppCompatActivity {
         });
     }
 
-    public void filterLogic(){
+    public void filterLogic() {
 
 
     }
@@ -815,7 +851,9 @@ public class ViewActivity extends AppCompatActivity {
                             Log.v("printing_save_tp", is.toString());
                             JSONObject jj = new JSONObject(is.toString());
                             if (jj.getString("success").equalsIgnoreCase("true")) {
-                                Intent i = new Intent(ViewActivity.this, ProcurementDashboardActivity.class);
+                                //bommu
+                                //Intent i = new Intent(ViewActivity.this, ProcurementDashboardActivity.class);
+                                Intent i = new Intent(ViewActivity.this, SFA_Activity.class);
                                 startActivity(i);
                             }
 

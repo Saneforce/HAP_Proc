@@ -275,7 +275,7 @@
 
                                     android:textColor="@color/white"
                                     android:textSize="13dp"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
                             </LinearLayout>
                         </LinearLayout>
 

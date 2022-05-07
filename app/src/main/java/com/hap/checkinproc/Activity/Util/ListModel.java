@@ -1,14 +1,24 @@
 package com.hap.checkinproc.Activity.Util;
 
 public class ListModel {
-    String formid,formName,formTable,targetForm,formType;
+    String formid, formName, formTable, targetForm, formType;
+    int icon;
 
-    public ListModel(String formid, String formName, String formTable, String targetForm, String formType) {
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
+
+    public ListModel(String formid, String formName, String formTable, String targetForm, String formType, int icon) {
         this.formid = formid;
         this.formName = formName;
         this.formTable = formTable;
         this.targetForm = targetForm;
         this.formType = formType;
+        this.icon = icon;
     }
 
     public String getFormid() {

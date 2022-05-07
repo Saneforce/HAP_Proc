@@ -55,8 +55,6 @@ import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -65,7 +63,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,28 +88,22 @@ public class Common_Class {
     public Context context;
     Shared_Common_Pref shared_common_pref;
     ProgressDialog nDialog;
-    Type userType;
+
     Gson gson;
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.3.27";
+    public static String Version_Name = "ver 3.4.7";
     public static String Work_Type = "0";
     public static int count;
-
-    private List<Retailer_Modal_List> retailer_modal_list = new ArrayList<>();
     private UpdateResponseUI updateUi;
-    Type userTypeRetailor;
-
-    List<OutletReport_View_Modal> outletReport_view_modalList = new ArrayList<>();
-    private Type userTypeGetTodayOrder;
     private DatePickerDialog fromDatePickerDialog;
 
     String pickDate = "";
     private CustomListViewDialog customDialog;
     SharedPreferences UserDetails;
     public static final String UserDetail = "MyPrefs";
-    public int brandPos = 0, grpPos = 0;
+    public int brandPos = 0, grpPos = 0, categoryPos = 0;
 
 
     public void CommonIntentwithFinish(Class classname) {
@@ -542,12 +533,19 @@ public class Common_Class {
 
 
                 switch (key) {
+
                     case Constants.PRIMARY_DASHBOARD:
                         axnname = "get/primarydashboardvalues";
                         data.put("login_sfCode", UserDetails.getString("Sfcode", ""));
                         data.put("Dt", Common_Class.GetDatewothouttime());
-                        data.put("Grpcode", SFA_Activity.sfaActivity.groupType);
-                        data.put(Constants.LOGIN_TYPE,shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        data.put("Grpcode", jparam.get("Grpcode").getAsString());
+                        data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        break;
+
+                    case Constants.AUDIT_STOCK_ONHAND:
+                        axnname = "get/getauditstock";
+                        data.put("plant", jparam.get("plant").getAsString());
+                        data.put("loc", jparam.get("loc").getAsString());
                         break;
 
                     case Constants.GroupFilter:
@@ -576,6 +574,17 @@ public class Common_Class {
                         QueryString.put("login_sfCode", UserDetails.getString("Sfcode", ""));
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
                         break;
+                    case Constants.STOCK_AUDIT_PLANT:
+                        axnname = "get/planttype";
+//                        QueryString.put("login_sfCode", UserDetails.getString("Sfcode", ""));
+//                        QueryString.put("divisionCode", UserDetails.getString("Divcode", "").replaceAll(",", ""));
+                        break;
+                    case Constants.STOCK_AUDIT_MFSCFA:
+                        axnname = "get/mfscfa";
+                        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+                        QueryString.put("Type", jparam.get("Type").getAsString());
+                        break;
+
                     case Constants.SALES_RETURN:
                         // {"Stk":"","Dt":"","RetID":"","CustomerCode":""}
                         axnname = "get/stockreturn";
@@ -616,12 +625,15 @@ public class Common_Class {
                         data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.MYTEAM_LOCATION:
-                        axnname = "get/myteamlocation";
+                        axnname = "get/newmyteamlocation";
                         data.put("sfcode", jparam.get("sfcode").getAsString());
                         data.put("date", jparam.get("date").getAsString());
+                        data.put("lat", jparam.get("lat").getAsString());
+                        data.put("lng", jparam.get("lng").getAsString());
                         // data.put("date", "2021-09-09");
                         data.put("type", jparam.get("type").getAsString());
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
 
                         break;
 
@@ -672,7 +684,7 @@ public class Common_Class {
                         break;
                     case Constants.QPS_COMBO:
                         axnname = "get/qpsallocation";
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -707,12 +719,12 @@ public class Common_Class {
                         break;
                     case Constants.PAYMODES:
                         axnname = "get/paymenttype";
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
 
                     case Constants.POP_MATERIAL:
                         axnname = "get/popmaster";
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         data.put("retailorCode", Shared_Common_Pref.OutletCode);
                         data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -732,14 +744,14 @@ public class Common_Class {
                     case Constants.TAXList:
                         axnname = "get/producttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("retailorId", Shared_Common_Pref.OutletCode);
                         break;
 
                     case Constants.POS_TAXList:
                         axnname = "get/posproducttaxdetails";
                         data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("retailorId", Shared_Common_Pref.OutletCode);
                         break;
 
@@ -747,18 +759,18 @@ public class Common_Class {
                     case Constants.FreeSchemeDiscList:
                         axnname = "get/secondaryscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         data.put("outletId", Shared_Common_Pref.OutletCode);
                         break;
                     case Constants.POS_SCHEME:
                         axnname = "get/posscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.PRIMARY_SCHEME:
                         axnname = "get/primaryscheme";
                         data.put("sfCode", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.PreOrderQtyList:
                         axnname = "get/prevorderqty";
@@ -773,28 +785,28 @@ public class Common_Class {
                     case Constants.CUMULATIVEDATA:
                         axnname = "get/cumulativevalues";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SERVICEOUTLET:
                         axnname = "get/serviceoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.OUTLET_SUMMARY:
                         axnname = "get/outletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.SFA_DASHBOARD:
                         axnname = "get/channelwiseoutletsummary";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        data.put("divCode", Shared_Common_Pref.Div_Code);
+                        data.put("divCode", UserDetails.getString("Divcode", ""));
                         data.put("dt", sfa_date);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
@@ -874,9 +886,11 @@ public class Common_Class {
                 showMsg(activity, "Please check your internet connection.");
             }
         } catch (Exception e) {
-
+            Log.v("common_api:310:EX:", e.getMessage());
         }
+
     }
+
     public void setDefDist() {
         try {
             if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
@@ -895,11 +909,16 @@ public class Common_Class {
                     getDataFromApi(Retailer_OutletList, activity, false);
                     break;
                 }
+
+
             }
         } catch (Exception e) {
 
         }
+
     }
+
+
     public void getProductDetails(Activity activity) {
 
         if (isNetworkAvailable(activity)) {
@@ -967,7 +986,10 @@ public class Common_Class {
                 e.printStackTrace();
             }
         }
+
     }
+
+
     public void getPOSProduct(Activity activity) {
 
         if (isNetworkAvailable(activity)) {
@@ -988,7 +1010,6 @@ public class Common_Class {
                         // Log.v(TAG, response.toString());
                         db.deleteMasterData(Constants.POS_ProdGroups_List);
                         db.addMasterData(Constants.POS_ProdGroups_List, response.body());
-                        Log.d("Response",response.body().toString());
                     }
 
                     @Override
@@ -1020,6 +1041,8 @@ public class Common_Class {
 
                     }
                 });
+
+
                 service.getDataArrayList("get/posproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -1037,16 +1060,20 @@ public class Common_Class {
                 e.printStackTrace();
             }
         }
+
     }
+
     public void showMsg(Activity activity, String msg) {
         Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
     public boolean checkDates(String stDate, String endDate, Activity activity) {
         boolean b = false;
         try {
             SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+
             Date date1 = dfDate.parse(stDate);
             Date date2 = dfDate.parse(endDate);
             long diff = date2.getTime() - date1.getTime();
@@ -1059,6 +1086,7 @@ public class Common_Class {
                 } else {
                     b = false; //If start date is after the end date
                 }
+
             } else {
                 Toast.makeText(activity, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
                 return false;
@@ -1074,24 +1102,46 @@ public class Common_Class {
         AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
-                callMob(activity, num);
+                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+                } else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    activity.startActivity(callIntent);
+                }
             }
+
             @Override
             public void NegativeMethod(DialogInterface dialog, int id) {
 
             }
         });
     }
-    public void callMob(Activity activity, String num) {
-        int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
-        if (readReq != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
-        } else {
-            Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" + num));//change the number
-            activity.startActivity(callIntent);
-        }
+
+    public void showCalDialog(Context activity, String msg, String num) {
+        AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                //callMob(activity, num);
+                int readReq = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, 1001);
+                } else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    activity.startActivity(callIntent);
+                }
+            }
+
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+
+            }
+        });
     }
+
+
     public String datePicker(Activity activity, TextView view) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
@@ -1100,6 +1150,8 @@ public class Common_Class {
                 int month = monthOfYear + 1;
 
                 pickDate = ("" + dayOfMonth + "/" + month + "/" + year);
+
+
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
@@ -1225,6 +1277,7 @@ public class Common_Class {
 //
 //
 //    }
+
 
     /* public void showToastMSG(Activity Ac, String MSg, int s) {
          TastyToast.makeText(Ac, MSg,
@@ -1402,6 +1455,7 @@ public class Common_Class {
             }
         });
     }
+
     public void clearLocData(Activity activity) {
         Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(activity);
         sharedCommonPref.clear_pref(Constants.STATE_LIST);
@@ -1411,12 +1465,18 @@ public class Common_Class {
         sharedCommonPref.clear_pref(Constants.Freezer_capacity);
 
     }
+
+
     public static class InputFilterMinMax implements InputFilter {
+
         private int min, max;
+
         public InputFilterMinMax(int min, int max) {
             this.min = min;
             this.max = max;
         }
+
+
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
             try {
@@ -1427,10 +1487,14 @@ public class Common_Class {
             }
             return "";
         }
+
         private boolean isInRange(int a, int b, int c) {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
+
     }
+
+
     public void gotoHomeScreen(Context context, View ivToolbarHome) {
         ivToolbarHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1444,7 +1508,13 @@ public class Common_Class {
                     CommonIntentwithoutFinish(SFA_Activity.class);
                 } else
                     context.startActivity(new Intent(context, Dashboard.class));
+
             }
         });
+
+
     }
+
+
 }
+

@@ -53,7 +53,7 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
             JSONArray arr = itm.getJSONArray("Details");
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                statusList.add(new QPS_Modal(obj.getString("POP_ID"), obj.getString("POP_Status"), obj.getString("Received_Date"), obj.getString("Images")
+                statusList.add(new QPS_Modal(obj.getString("POP_ID"), obj.getString("POP_Status"), obj.getString("Received_Date"), obj.getString("POP_Image")
                         , obj.getString("POP_Req_ID"), obj.getString("Trans_Sl_No")));
             }
 

@@ -33,19 +33,19 @@ public class MainActivity extends AppCompatActivity {
             String value = getIntent().getStringExtra("loading");
 
 
-            switch (shared_common_pref.getvalue(Constants.LOGIN_TYPE)) {
-                case Constants.DISTRIBUTER_TYPE:
-                    ivLogo.setImageResource(R.mipmap.ic_so_launcher_foreground);
-
-                    break;
-                case Constants.CHECKIN_TYPE:
-                    ivLogo.setImageResource(R.mipmap.ic_ffa_launcher_foreground);
-                    break;
-                default:
-                    ivLogo.setImageResource(R.drawable.clogo);
-
-                    break;
-            }
+//            switch (shared_common_pref.getvalue(Constants.LOGIN_TYPE)) {
+//                case Constants.DISTRIBUTER_TYPE:
+//                    ivLogo.setImageResource(R.mipmap.ic_so_launcher_foreground);
+//
+//                    break;
+//                case Constants.CHECKIN_TYPE:
+//                    ivLogo.setImageResource(R.mipmap.ic_ffa_launcher_foreground);
+//                    break;
+//                default:
+//                    ivLogo.setImageResource(R.drawable.clogo);
+//
+//                    break;
+//            }
 
             new Handler().postDelayed(new Runnable() {
                 @Override

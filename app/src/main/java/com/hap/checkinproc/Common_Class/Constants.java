@@ -107,7 +107,10 @@ public class Constants {
     public static final String CURRENT_STOCK = "currentStk";
     public static final String OUTLET_TYPE_LIST = "outletTypeList";
     public static final String LOC_PROJECTION_DATA = "locProjectionData";
+    public static final String LOC_STOCKAUDIT_DATA = "locStockAuditData";
     public static final String PLANT_MASTER = "plantMaster";
+    public static final String STOCK_AUDIT_PLANT = "stockAuditplantMaster";
+
     public static final String SERVICETYPE_LIST = "serviceTypeList";
     public static final String PRIMARY_ORDER_EDIT = "primaryOrderEdit";
     public static final String CATEGORY_TYPE ="categoryType" ;
@@ -117,6 +120,8 @@ public class Constants {
     public static final String WEEKLY_EXPENSE ="weeklyExpense" ;
     public static final String ONDUTY_STATUS = "ondutyStatus";
     public static final String PRIMARY_DASHBOARD = "primaryDashboard";
+    public static final String STOCK_AUDIT_MFSCFA ="stockAuditMFSCFA" ;
+    public static final String AUDIT_STOCK_ONHAND ="auditStockOnHand" ;
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";
 
@@ -158,6 +163,15 @@ public class Constants {
     public static final String ProjectionProdTypes_List="projectionProdTypeList";
     public static final String Projection_Category_List="projectionCategoryList";
     public static final String Projection_Product_List="projectionProdList";
+
+
+    public static final String StockAudit_GroupsList="StockAuditProdGrpList";
+    public static final String StockAudit_Types_List="StockAuditProdTypeList";
+    public static final String StockAudit_Category_List="StockAuditCategoryList";
+    public static final String StockAudit_Product_List="StockAuditProdList";
+
+
+
     public static final String CusSubGrpErp="CusSubGrpErp";
     public static final String GroupFilter="groupFilter";
     public static final String Freezer_Mandatory="freezerMandatory";

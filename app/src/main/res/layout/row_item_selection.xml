@@ -3,25 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    android:padding="10dp">
+    android:padding="4dp">
 
     <RelativeLayout
+        android:id="@+id/lay_row"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lay_row">
+        android:layout_height="wrap_content">
+
         <CheckBox
+            android:id="@+id/check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/custom_checkbox_tp"
-            android:id="@+id/check"
-            android:focusable="false"/>
+            android:focusable="false"
+            android:visibility="gone" />
 
+        <!--        <TextView-->
+        <!--            style="@style/TextStyle"-->
+        <!--            android:text="Select the doctor"-->
+        <!--            android:layout_toRightOf="@+id/check"-->
+        <!--            android:id="@+id/txt_name"-->
+        <!--            />-->
         <TextView
-            style="@style/TextStyle"
-            android:text="Select the doctor"
-            android:layout_toRightOf="@+id/check"
             android:id="@+id/txt_name"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select the doctor"
+
+            android:textColor="@android:color/black" />
     </RelativeLayout>
 
 

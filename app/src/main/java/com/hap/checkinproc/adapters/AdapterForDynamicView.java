@@ -26,13 +26,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Activity.ViewActivity;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -50,6 +49,7 @@ public class AdapterForDynamicView extends BaseAdapter {
     ListView dyn_list;
     LinearLayout dyn_l_lay;
     SharedPreferences share;
+    private String strFarmerType = "";
 
     public AdapterForDynamicView(Context context, ArrayList<ModelDynamicView> array) {
         this.context = context;
@@ -74,7 +74,7 @@ public class AdapterForDynamicView extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        view = LayoutInflater.from(context).inflate(R.layout.dummy_layout, viewGroup, false);
+        view = LayoutInflater.from(context).inflate(R.layout.dummy_layout1, viewGroup, false);
         TextView txt_label = (TextView) view.findViewById(R.id.txt_label);
         RelativeLayout rlay_spin = (RelativeLayout) view.findViewById(R.id.rlay_spin);
         RelativeLayout rlay_date = (RelativeLayout) view.findViewById(R.id.rlay_date);
@@ -176,6 +176,9 @@ public class AdapterForDynamicView extends BaseAdapter {
             if (!TextUtils.isEmpty(mm.getValue()))
                 spin_txt.setText(mm.getValue());
 
+            if (mm.getViewid().equalsIgnoreCase("4"))
+                strFarmerType = mm.getValue();
+
         } else if (mm.getViewid().equalsIgnoreCase("15") || mm.getViewid().equalsIgnoreCase("16") || mm.getViewid().equalsIgnoreCase("17")) {
             rlay_upload.setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(mm.getValue())) {
@@ -230,13 +233,25 @@ public class AdapterForDynamicView extends BaseAdapter {
 
             try {
                 JSONArray jj = new JSONArray(mm.getValue().toString());
+                JSONArray filterArr = new JSONArray();
                 if (jj.length() > 1) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.MATCH_PARENT, 1800);
                     dyn_list.setLayoutParams(params);
 
+                    if (!Common_Class.isNullOrEmpty(strFarmerType)) {
+                        for (int f = 0; f < jj.length(); f++) {
+                            JSONObject obj = jj.getJSONObject(f);
+                            if (strFarmerType.startsWith(obj.getString("Farmer_type"))) {
+                                filterArr.put(obj);
+                            }
+                        }
+
+
+                    }
+
                 }
                 Log.v("printing_json", jj.toString());
-                FilterDemoAdapter adpt = new FilterDemoAdapter(context, jj, mm.getTvalue(), 0, mm.getSlno());
+                FilterDemoAdapter adpt = new FilterDemoAdapter(context, strFarmerType.equalsIgnoreCase("") ? jj : filterArr, mm.getTvalue(), 0, mm.getSlno());
                 // FilterAdapter ff = new FilterAdapter(context, jj, mm.getTvalue(), 0,"0");
                 dyn_list.setAdapter(adpt);
 

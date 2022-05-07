@@ -38,7 +38,6 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
     JsonArray jLists;
     int RowLayout;
     Context context;
-    JSONObject PreSales;
     AdapterOnClick mAdapterOnClick;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
@@ -233,6 +232,26 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             holder.tvDistAdd.setText(jItem.get("DistAddress").getAsString());
 
 
+            holder.llOutletCal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    common_class.showCalDialog(context, "Do you want to Call this Outlet?",
+                            holder.txMobile.getText().toString().replaceAll(",", ""));
+
+                }
+            });
+
+
+            holder.llDistcal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    common_class.showCalDialog(context, "Do you want to Call this Franchise?",
+                            holder.tvDistMobile.getText().toString().replaceAll(",", ""));
+
+                }
+            });
+
+
         } catch (Exception e) {
             Log.v("RouteAdapter: ", e.getMessage());
         }
@@ -308,7 +327,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName, txRetailCode, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txDistance, txTdyDt, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 tvFirstMonth, tvSecondMnth, tvThirdMnth, txRetNo, tvDistAdd, tvDistMobile;
-        LinearLayout parent_layout, icAC, linDirection, icFreezer, llDistparent, llDistcal;
+        LinearLayout parent_layout, icAC, linDirection, icFreezer, llDistparent, llDistcal,llOutletCal;
         RecyclerView lstTdyView, lstPreView;
         ImageView icMob;
         ImageView ivEdit;
@@ -321,6 +340,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
 
                 txRetailName = view.findViewById(R.id.retailername);
                 txRetailCode = view.findViewById(R.id.retailorCode);
+                llOutletCal=view.findViewById(R.id.btnCallMob);
                 txRetNo = view.findViewById(R.id.txRetNo);
                 txAdd = view.findViewById(R.id.txAdd);
                 txOwnerNm = view.findViewById(R.id.txOwnerNm);

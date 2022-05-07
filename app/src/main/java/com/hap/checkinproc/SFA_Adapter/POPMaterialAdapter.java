@@ -75,7 +75,11 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                 String[] res = images.split("[,]", 0);
                 for (String myStr : res) {
                     if (!Common_Class.isNullOrEmpty(myStr)) {
-                        items.add(myStr);
+                       // items.add(myStr);
+                        String sname = ApiClient.BASE_URL +myStr;
+                        sname = sname.replaceAll("server/", "");
+                        items.add(sname);
+
                     }
 
                 }

@@ -52,7 +52,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -375,7 +374,10 @@ public class Login extends AppCompatActivity {
                         Intent aIntent;
                         String sDeptType = UserDetails.getString("DeptType", "");
                         if (sDeptType.equalsIgnoreCase("1")) {
-                            aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                            //bommu
+                            // aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+
                         } else {
                             Shared_Common_Pref.Sync_Flag = "0";
                             if (checkValueStore())
@@ -394,6 +396,8 @@ public class Login extends AppCompatActivity {
                 }
             }
         }
+
+
     }
 
     boolean checkValueStore() {
@@ -436,6 +440,7 @@ public class Login extends AppCompatActivity {
             handleSignInResult(result, requestCode);
         }
     }
+
     private void handleSignInResult(GoogleSignInResult result, int requestCode) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
@@ -603,11 +608,13 @@ public class Login extends AppCompatActivity {
                 }
                 //eMail = "srinivas.p@hap.in";
                 //eMail = "sajan@hap.in";
-                //eMail = "1005985@hap.in";
-                  eMail = "haptest5@hap.in";
-               // eMail = "ciadmin@hap.in";
+                //   eMail = "1005985@hap.in";
+                  //eMail = "haptest5@hap.in";
+
+
+                // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
-                // eMail = "haptest5@hap.in";
+              //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
                 // eMail = "pachamuthu.m@hap.in";
                 // eMail="akshay.r@hap.in";
@@ -617,7 +624,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-                //  eMail = "anbu@saneforce.com";
+                // eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -630,7 +637,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-                //eMail = "1013362@hap.in";//(-18)
+                //  eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -648,6 +655,17 @@ public class Login extends AppCompatActivity {
                 // eMail="rajasekaranm@hap.in";
                 //   eMail="1018368@hap.in";
                 //     eMail="sajan@hap.in";
+                // eMail="1022081@hap.in";
+                // eMail="johnkennedy.i@hap.in";
+                //eMail = "1018937@hap.in";
+
+                // eMail="1006812@hap.in";//ramalakshmi
+                // eMail="1018821@hap.in";//md food services
+                // eMail="1006815@hap.in";
+                //  eMail="1977ananthkumar@gmail.com";
+               // eMail = "gpmuthu11@gmail.com";
+//                eMail = "1015742@hap.in";
+//                eMail = "1021230@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -660,7 +678,7 @@ public class Login extends AppCompatActivity {
 
                                     try {
                                         Gson gson = new Gson();
-//                                        assignLoginData(response.body(), requestCode);
+                                        assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
 
 //                                        try {
@@ -708,9 +726,9 @@ public class Login extends AppCompatActivity {
 //
 //                                        handler.postDelayed(new Runnable() {
 //                                            public void run() {
-                                                assignLoginData(response.body(), requestCode);
-
-
+//                                                assignLoginData(response.body(), requestCode);
+//
+//
 //                                            }
 //                                        }, 1000);
 
@@ -872,7 +890,7 @@ public class Login extends AppCompatActivity {
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
 
-                shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory()==null?0:response.getData().get(0).getFreezer_Mandatory());
+                shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
 
 
                 /* Unwanted Lines */

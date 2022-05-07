@@ -144,6 +144,11 @@
         <activity
             android:name=".SFA_Activity.ProjectionCategorySelectActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".SFA_Activity.StockAuditCategorySelectActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".SFA_Activity.Grn_Category_Select"
             android:screenOrientation="portrait" />

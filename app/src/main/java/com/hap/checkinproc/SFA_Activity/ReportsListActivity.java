@@ -77,8 +77,8 @@ public class ReportsListActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), Reports_Outler_Name.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(getApplicationContext(), WebReportsActivity.class);
-                            startActivity(intent);
+//                            Intent intent = new Intent(getApplicationContext(), WebReportsActivity.class);
+//                            startActivity(intent);
                         }
                     } catch (Exception e) {
 

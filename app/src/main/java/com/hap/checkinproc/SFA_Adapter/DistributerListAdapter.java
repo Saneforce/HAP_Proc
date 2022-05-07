@@ -47,12 +47,14 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
     private double ACBalance = 0.0;
     Shared_Common_Pref shared_common_pref;
     AdapterOnClick mAdapterOnClick;
+    Common_Class common_class;
 
     public DistributerListAdapter(JSONArray jAryDta, int rowLayout, Context mContext) {
         AryDta = jAryDta;
         context = mContext;
         salRowDetailLayout = rowLayout;
         shared_common_pref = new Shared_Common_Pref(context);
+        common_class=new Common_Class(context);
     }
 
     @NonNull
@@ -251,6 +253,16 @@ public class DistributerListAdapter extends RecyclerView.Adapter<DistributerList
                 ;
                 holder.tvMobile.setText("" + itm.getString("Mobile"));
             }
+
+
+            holder.llMobile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    common_class.showCalDialog(context, "Do you want to Call this Franchise?",
+                            holder.tvMobile.getText().toString().replaceAll(",", ""));
+
+                }
+            });
 
             if (!Common_Class.isNullOrEmpty(itm.getString("Latlong"))) {
                 String[] latlongs = itm.getString("Latlong").split(":");
