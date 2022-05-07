@@ -734,9 +734,11 @@ public class ViewActivity extends AppCompatActivity {
                                         array_view.add(new ModelDynamicView("19", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", "", ""));
                                     }
                                     for (int i = 0; i < jsonArray.length(); i++) {
+
                                         ArrayList<SelectionModel> arr = new ArrayList<>();
                                         JSONObject json = jsonArray.getJSONObject(i);
                                         JSONArray jarray = json.getJSONArray("input");
+                                        try{
                                         String filterText = json.getString("Filter_Text");
                                         String filterValue = json.getString("Filter_Value");
                                         if (!filterText.equals("")) {
@@ -750,39 +752,54 @@ public class ViewActivity extends AppCompatActivity {
                                                 filterList.add(new SelectionModel(filterText, filterValue));
                                             }
                                             Log.e("ListValues_fil", filterList.toString());
+                                        }}
+                                        catch (Exception e){
+                                            Log.v("NO_INPUT:0", e.getMessage());
                                         }
 
                                         Log.v("Printing_ctrl_id", json.getString("Control_id"));
                                         if (json.getString("Control_id").equalsIgnoreCase("23")) {
-                                            String gettingfield = json.getString("Fld_Src_Field");
-                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
-                                            fab_value = json.getString("type");
-                                            btnShow = json.getString("target");
-                                            tool_header.setText(json.getString("header"));
-                                            header = json.getString("header");
-                                        } else if (json.getString("Control_id").equalsIgnoreCase("19")) {
-                                            String gettingfield = json.getString("Fld_Src_Field");
-                                            array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", "", ""));
-                                            fab_value = json.getString("type");
-                                            btnShow = json.getString("target");
-                                            tool_header.setText(json.getString("header"));
-                                            header = json.getString("header");
-                                        } else {
-                                            if (jarray.length() != 0) {
-                                                for (int m = 0; m < jarray.length(); m++) {
-                                                    JSONObject jjss = jarray.getJSONObject(m);
-                                                    Log.v("json_input_iss", jjss.getString(json.getString("code")));
-                                                    arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
-                                                }
+                                            try {
+                                                String gettingfield = json.getString("Fld_Src_Field");
+                                                array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
+                                                fab_value = json.getString("type");
+                                                btnShow = json.getString("target");
+                                                tool_header.setText(json.getString("header"));
+                                                header = json.getString("header");
+                                            } catch (Exception e) {
+                                                Log.v("NO_INPUT:1", e.getMessage());
                                             }
-                                            fab_value = json.getString("type");
-                                            btnShow = json.getString("target");
-                                            tool_header.setText(json.getString("header"));
-                                            header = json.getString("header");
+                                        } else if (json.getString("Control_id").equalsIgnoreCase("19")) {
+                                            try {
+                                                String gettingfield = json.getString("Fld_Src_Field");
+                                                array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", "", ""));
+                                                fab_value = json.getString("type");
+                                                btnShow = json.getString("target");
+                                                tool_header.setText(json.getString("header"));
+                                                header = json.getString("header");
+                                            } catch (Exception e) {
+                                                Log.v("NO_INPUT:2", e.getMessage());
+                                            }
+                                        } else {
+                                            try {
+                                                if (jarray.length() != 0) {
+                                                    for (int m = 0; m < jarray.length(); m++) {
+                                                        JSONObject jjss = jarray.getJSONObject(m);
+                                                        Log.v("json_input_iss", jjss.getString(json.getString("code")));
+                                                        arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
+                                                    }
+                                                }
+                                                fab_value = json.getString("type");
+                                                btnShow = json.getString("target");
+                                                tool_header.setText(json.getString("header"));
+                                                header = json.getString("header");
 
-                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
-                                                    arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
-                                                    json.getString("Fld_Mandatory"), json.getString("Field_Col")));
+                                                array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
+                                                        arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
+                                                        json.getString("Fld_Mandatory"), json.getString("Field_Col")));
+                                            } catch (Exception e) {
+                                                Log.v("NO_INPUT:3", e.getMessage());
+                                            }
                                         }
                                     }
 
@@ -806,6 +823,11 @@ public class ViewActivity extends AppCompatActivity {
 
                         } catch (Exception e) {
                             Log.v("Exception_fmcg", e.getMessage());
+                            progressDialog.dismiss();
+                            adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
+                            list.setAdapter(adp_view);
+                            adp_view.notifyDataSetChanged();
+
                         }
 
                     }

@@ -37,7 +37,7 @@ import java.util.List;
 
 public class ProjectionHistoryActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
-    TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot, tvHistory;
+    TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot;
     Common_Class common_class;
 
     Projection_History_Adapter mReportViewAdapter;
