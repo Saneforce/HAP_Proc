@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,7 +52,7 @@ public class AttachementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_attachement);
-
+     //   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         shared_common_pref = new Shared_Common_Pref(this);
         frameLayout = findViewById(R.id.frame_Layout_imag_preview);
         frameLayout.setBackgroundColor(Color.TRANSPARENT);

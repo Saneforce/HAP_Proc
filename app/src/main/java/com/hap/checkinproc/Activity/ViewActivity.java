@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -71,9 +70,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ViewActivity extends AppCompatActivity {
+public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSelectionList.OnSelectItemClick */ {
 
-    String filePathing = "", btnShow = "V", MyPREFERENCES = "MyPrefs", SF_code = "", fab_value = "0", frm_id;
+    String filePathing = "", btnShow = "V", MyPREFERENCES = "MyPrefs", SF_code = "", fab_value = "0", frm_id, mCreationId = "";
     public static String key = "", header = "";
     SimpleDateFormat sdf, sdf_or;
     boolean isEmpty = false;
@@ -87,7 +86,7 @@ public class ViewActivity extends AppCompatActivity {
     FilterDemoAdapter adpt;
     ProgressDialog progressDialog = null;
     ListView list;
-    int pos_upload_file = 0, CAMERA_REQUEST = 12, value = 0;
+    int pos_upload_file = 0, CAMERA_REQUEST = 12, value = 0, arrayViewPos;
     Uri outputFileUri;
     FloatingActionButton fab;
     RecyclerView relist_view;
@@ -96,6 +95,7 @@ public class ViewActivity extends AppCompatActivity {
     ImageView iv_dwnldmaster_back;
     TextView tool_header;
     Button btn_save;
+    private Dialog dialog;
 
 
     @Override
@@ -286,43 +286,88 @@ public class ViewActivity extends AppCompatActivity {
                     Toast.makeText(ViewActivity.this, "Please fill the mandatory fields", Toast.LENGTH_SHORT).show();
             }
         });
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (array_view.size() == 0) {
-
-                } else {
-                    if (array_view.get(i).getViewid().equalsIgnoreCase("4") || array_view.get(i).getViewid().equalsIgnoreCase("5")) {
-                        popupSpinner(0, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
-                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-                        datePick(i, 8);
-                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("6") || array_view.get(i).getViewid().equalsIgnoreCase("7")) {
-                        popupSpinner(1, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
-
-
-                    }
-                }
-
-            }
-        });
+//click function added for field label (spinner)
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (array_view.size() == 0) {
+//
+//                } else {
+//                    if (array_view.get(i).getViewid().equalsIgnoreCase("4") || array_view.get(i).getViewid().equalsIgnoreCase("5")) {
+//                        popupSpinner(0, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
+//                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+//                        datePick(i, 8);
+//                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("6") || array_view.get(i).getViewid().equalsIgnoreCase("7")) {
+//                        popupSpinner(1, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
+//
+//
+//                    }
+//                }
+//
+//            }
+//        });
 
         AdapterForDynamicView.bindListernerForDateRange(new UpdateUi() {
             @Override
             public void update(int value, int pos) {
-                if (value == 15) {
-                    pos_upload_file = pos;
-                    uploadFile();
-                } else if (value == 16) {
-                    pos_upload_file = pos;
-                    captureFile();
-                } else if (value == 17) {
-                    pos_upload_file = pos;
-                    popupCapture();
-                } else if (value > 5 && value < 10) {
-                    datePick(pos, value);
-                } else
-                    timePicker(pos, value);
+                switch (value) {
+                    case 15:
+                        pos_upload_file = pos;
+                        uploadFile();
+                        break;
+                    case 16:
+                        pos_upload_file = pos;
+                        captureFile();
+                        break;
+                    case 17:
+                        pos_upload_file = pos;
+                        popupCapture();
+                        break;
+                    case 4:
+                        popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+                        break;
+                    case 5:
+                        popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+                        break;
+                    case 6:
+                        popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+                        break;
+                    case 7:
+                        popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+                        break;
+                    case 8:
+                        datePick(pos, value);
+                        break;
+                    case 9:
+                        datePick(pos, value);
+                        break;
+                    default:
+                        timePicker(pos, value);
+                        break;
+                }
+
+
+//                if (value == 15) {
+//                    pos_upload_file = pos;
+//                    uploadFile();
+//                } else if (value == 16) {
+//                    pos_upload_file = pos;
+//                    captureFile();
+//                } else if (value == 17) {
+//                    pos_upload_file = pos;
+//                    popupCapture();
+//                } else if (value == 4) {
+//                    popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+//                } else if (value == 5) {
+//                    popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+//                } else if (value == 6) {
+//                    popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+//                } else if (value == 7) {
+//                    popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
+//                } else if (value > 5 && value < 10) {
+//                    datePick(pos, value);
+//                } else
+//                    timePicker(pos, value);
             }
         });
     }
@@ -436,7 +481,7 @@ public class ViewActivity extends AppCompatActivity {
     }
 
     public void popupSpinner(int type, final ArrayList<SelectionModel> array_selection, final int pos, String creationId) {
-        final Dialog dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
+        dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_dynamic_view1);
         dialog.setCanceledOnTouchOutside(false);
@@ -452,35 +497,25 @@ public class ViewActivity extends AppCompatActivity {
             isEmpty = false;
         } else
             isEmpty = true;
+        arrayViewPos = pos;
+        mCreationId = creationId;
 
         AdapterForSelectionList adapt = new AdapterForSelectionList(ViewActivity.this, array_selection, type, new AdapterOnClick() {
             @Override
-            public void onIntentClick(int itemPos) {
+            public void onIntentClick(SelectionModel selectionModel) {
 
-
-//                if (array_selection.contains(new SelectionModel(true))) {
-//                    for (int i = 0; i < array_selection.size(); i++) {
-//                        SelectionModel m = array_selection.get(i);
-//                        if (m.isClick()) {
-                array_view.get(pos).setValue(array_selection.get(itemPos).getTxt());
+                array_view.get(pos).setValue(selectionModel.getTxt());
                 if (filterList.size() != 0) {
                     for (int j = 0; j < filterList.size(); j++) {
                         if (filterList.get(j).getTxt().equals(creationId)) {
-                            selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), array_selection.get(itemPos).getTxt()));
+                            selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), selectionModel.getTxt()));
                         }
                     }
                     Log.e("ListValues_fil", filterList.toString());
                     Log.e("ListValues_select", selectedFilter.toString());
                 }
                 adp_view.notifyDataSetChanged();
-                //  break;
-//                        }
-//                    }
-//
-//                } else {
-//                    array_view.get(pos).setValue("");
-//                    adp_view.notifyDataSetChanged();
-//                }
+
                 dialog.dismiss();
                 commonFun();
             }
@@ -559,10 +594,6 @@ public class ViewActivity extends AppCompatActivity {
         });
     }
 
-    public void filterLogic() {
-
-
-    }
 
     public void datePick(final int pos, final int value) {
         Calendar newCalendar = Calendar.getInstance();
@@ -737,66 +768,79 @@ public class ViewActivity extends AppCompatActivity {
 
                                         ArrayList<SelectionModel> arr = new ArrayList<>();
                                         JSONObject json = jsonArray.getJSONObject(i);
-                                        JSONArray jarray = json.getJSONArray("input");
-                                        try{
-                                        String filterText = json.getString("Filter_Text");
-                                        String filterValue = json.getString("Filter_Value");
-                                        if (!filterText.equals("")) {
-                                            if (filterText.contains(",")) {
-                                                String[] txtArray = filterText.split(",");
-                                                String[] valueArray = filterValue.split(",");
-                                                for (int j = 0; j < txtArray.length; j++) {
-                                                    filterList.add(new SelectionModel(txtArray[j], valueArray[j]));
+                                        JSONArray jarray = null;
+                                        try {
+                                            jarray = json.getJSONArray("input");
+                                            String filterText = json.getString("Filter_Text");
+                                            String filterValue = json.getString("Filter_Value");
+                                            if (!filterText.equals("")) {
+                                                if (filterText.contains(",")) {
+                                                    String[] txtArray = filterText.split(",");
+                                                    String[] valueArray = filterValue.split(",");
+                                                    for (int j = 0; j < txtArray.length; j++) {
+                                                        filterList.add(new SelectionModel(txtArray[j], valueArray[j]));
+                                                    }
+                                                } else {
+                                                    filterList.add(new SelectionModel(filterText, filterValue));
                                                 }
-                                            } else {
-                                                filterList.add(new SelectionModel(filterText, filterValue));
+                                                Log.e("ListValues_fil", filterList.toString());
                                             }
-                                            Log.e("ListValues_fil", filterList.toString());
-                                        }}
-                                        catch (Exception e){
+                                        } catch (Exception e) {
                                             Log.v("NO_INPUT:0", e.getMessage());
                                         }
 
                                         Log.v("Printing_ctrl_id", json.getString("Control_id"));
                                         if (json.getString("Control_id").equalsIgnoreCase("23")) {
                                             try {
+                                                Log.v("NO_INPUT:1", "In:" + i);
                                                 String gettingfield = json.getString("Fld_Src_Field");
                                                 array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
                                                 fab_value = json.getString("type");
                                                 btnShow = json.getString("target");
                                                 tool_header.setText(json.getString("header"));
                                                 header = json.getString("header");
+                                                Log.v("NO_INPUT:1", "OUT:" + i);
                                             } catch (Exception e) {
                                                 Log.v("NO_INPUT:1", e.getMessage());
                                             }
                                         } else if (json.getString("Control_id").equalsIgnoreCase("19")) {
                                             try {
+                                                Log.v("NO_INPUT:2", "In:" + i);
                                                 String gettingfield = json.getString("Fld_Src_Field");
                                                 array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", "", ""));
                                                 fab_value = json.getString("type");
                                                 btnShow = json.getString("target");
                                                 tool_header.setText(json.getString("header"));
                                                 header = json.getString("header");
+                                                Log.v("NO_INPUT:2", "Out:" + i);
+
                                             } catch (Exception e) {
                                                 Log.v("NO_INPUT:2", e.getMessage());
                                             }
                                         } else {
                                             try {
-                                                if (jarray.length() != 0) {
+                                                if (jarray != null && jarray.length() != 0) {
                                                     for (int m = 0; m < jarray.length(); m++) {
+                                                        Log.v("NO_INPUT:3", "InArr:" + m + ":com:" + i);
+
                                                         JSONObject jjss = jarray.getJSONObject(m);
                                                         Log.v("json_input_iss", jjss.getString(json.getString("code")));
                                                         arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
+                                                        Log.v("NO_INPUT:3", "OUTArr:" + m + ":com:" + i);
                                                     }
                                                 }
+                                                Log.v("NO_INPUT:3", "In:" + i);
+
                                                 fab_value = json.getString("type");
                                                 btnShow = json.getString("target");
                                                 tool_header.setText(json.getString("header"));
                                                 header = json.getString("header");
+                                                Log.v("NO_INPUT:3", "Out:1" + i);
 
                                                 array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
                                                         arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
                                                         json.getString("Fld_Mandatory"), json.getString("Field_Col")));
+                                                Log.v("NO_INPUT:3", "Out:2" + i);
                                             } catch (Exception e) {
                                                 Log.v("NO_INPUT:3", e.getMessage());
                                             }
@@ -822,7 +866,7 @@ public class ViewActivity extends AppCompatActivity {
                             }
 
                         } catch (Exception e) {
-                            Log.v("Exception_fmcg", e.getMessage());
+                            Log.v("NO_INPUT:Ex", e.getMessage());
                             progressDialog.dismiss();
                             adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
                             list.setAdapter(adp_view);
@@ -1133,4 +1177,27 @@ public class ViewActivity extends AppCompatActivity {
         super.onPostResume();
         header = tool_header.getText().toString();
     }
+
+//    @Override
+//    public void itemClick(SelectionModel selectionModel) {
+//        try {
+//            array_view.get(arrayViewPos).setValue(selectionModel.getTxt());
+//            if (filterList.size() != 0) {
+//                for (int j = 0; j < filterList.size(); j++) {
+//                    if (filterList.get(j).getTxt().equals(mCreationId)) {
+//                        selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), selectionModel.getTxt()));
+//                    }
+//                }
+//                Log.e("ListValues_fil", filterList.toString());
+//                Log.e("ListValues_select", selectedFilter.toString());
+//            }
+//            adp_view.notifyDataSetChanged();
+//
+//            dialog.dismiss();
+//            commonFun();
+//        } catch (Exception e) {
+//            Log.v("itemClick:", e.getMessage());
+//        }
+//
+//    }
 }

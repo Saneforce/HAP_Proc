@@ -288,13 +288,14 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
 
                 if (etTagNo.getText().toString().equals(""))
                     common_class.showMsg(this, "Enter Tag No");
-                else if (etMake.getText().toString().equals("")) {
-                    common_class.showMsg(this, "Enter Make");
-                } else if (etCoolerType.getText().toString().equals("")) {
-                    common_class.showMsg(this, "Enter Cooler Type");
-                } else if (tvReceivedDate.getText().toString().equals("")) {
-                    common_class.showMsg(this, "Enter Received Date");
-                } else if (cbPurity.isChecked() && (coolerFileList.get(0).getFileUrls() == null || coolerFileList.get(0).getFileUrls().size() == 0)) {
+//                else if (etMake.getText().toString().equals("")) {
+//                    common_class.showMsg(this, "Enter Make");
+//                } else if (etCoolerType.getText().toString().equals("")) {
+//                    common_class.showMsg(this, "Enter Cooler Type");
+//                } else if (tvReceivedDate.getText().toString().equals("")) {
+//                    common_class.showMsg(this, "Enter Received Date");
+                    //}
+                else if (cbPurity.isChecked() && (coolerFileList.get(0).getFileUrls() == null || coolerFileList.get(0).getFileUrls().size() == 0)) {
                     common_class.showMsg(this, "Kindly Attach Purity Files");
                 } else if (cbFrontage.isChecked() && (coolerFileList.get(1).getFileUrls() == null || coolerFileList.get(1).getFileUrls().size() == 0)) {
                     common_class.showMsg(this, "Kindly Attach Frontage Files");

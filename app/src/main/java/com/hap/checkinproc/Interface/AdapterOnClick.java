@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Interface;
 
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.Util.SelectionModel;
 
 import org.json.JSONObject;
 
@@ -17,6 +18,10 @@ public interface AdapterOnClick {
 
     };
     default void CallMobile(String MobileNo){
+
+    };
+
+    default void onIntentClick(SelectionModel selectionModel){
 
     };
 

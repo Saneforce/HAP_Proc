@@ -50,6 +50,7 @@ public class AdapterForSelectionList extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(final int i, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.row_item_selection, parent, false);
@@ -102,8 +103,9 @@ public class AdapterForSelectionList extends BaseAdapter {
         lay_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapterOnClick.onIntentClick(i);
+                 adapterOnClick.onIntentClick(array.get(i));
 
+              //  onSelectItemClick.itemClick(dummyList.get(i));
 
                 if (type == 0) {
                     for (int k = 0; k < array.size(); k++) {
@@ -195,5 +197,6 @@ public class AdapterForSelectionList extends BaseAdapter {
             }
         };
     }
+
 
 }

@@ -340,8 +340,28 @@ public class AdapterForDynamicView extends BaseAdapter {
         rlay_spin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mm.getViewid().equalsIgnoreCase("11"))
-                    updateUi.update(11, i);
+                switch (mm.getViewid()) {
+                    case "11":
+                        updateUi.update(11, i);
+                        break;
+                    case "5":
+                        updateUi.update(5, i);
+                        break;
+                    case "4":
+                        updateUi.update(4, i);
+                        break;
+                    case "6":
+                        updateUi.update(6, i);
+                        break;
+                    case "7":
+                        updateUi.update(7, i);
+                        break;
+                    case "8":
+                        updateUi.update(8,i);
+                        break;
+                }
+//                if (mm.getViewid().equalsIgnoreCase("11"))
+//                    updateUi.update(11, i);
             }
         });
 

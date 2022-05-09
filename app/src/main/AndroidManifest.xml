@@ -239,7 +239,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.AttachementActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialogs" />
         <activity
             android:name=".Activity.TaApprovalDisplay"
