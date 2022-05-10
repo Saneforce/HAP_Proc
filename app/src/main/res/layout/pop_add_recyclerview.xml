@@ -27,10 +27,10 @@
                 android:padding="@dimen/C5dp">
 
                 <TextView
-                    android:gravity="center_vertical"
-                    android:layout_centerInParent="true"
                     android:id="@+id/etPopMaterial"
                     style="@style/TextStyle"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
                     android:hint="Select the POP Material"
                     android:textColorHint="@color/black" />
 

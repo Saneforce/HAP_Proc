@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -13,6 +12,7 @@
         android:orientation="vertical">
 
         <include layout="@layout/sfatoolbar"></include>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
 
 
             <TextView
@@ -115,25 +114,48 @@
                 android:layout_height="@dimen/C20dp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_baseline_date_range_24"
-                app:tint="@color/colorPrimaryDark"
-               ></ImageView>
-
-
+                app:tint="@color/colorPrimaryDark"></ImageView>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/C10dp"
-                android:layout_below="@+id/tvLabelNmae"
+                android:id="@+id/llRemarks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tvLabelNmae"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:drawablePadding="@dimen/C3dp"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Remarks" />
+
+                <EditText
+                    android:id="@+id/etRemarks"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="@dimen/C5dp"
+                    android:layout_toLeftOf="@+id/ivDate"
+                    android:background="@drawable/textbox_bg"
+                    android:hint="Enter Remarks"
+                    android:padding="@dimen/C8dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llRemarks"
+                android:layout_marginTop="@dimen/C10dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:visibility="invisible"
                     android:id="@+id/rlOtherBrand"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/C40dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_whitebg">
+                    android:background="@drawable/button_whitebg"
+                    android:visibility="invisible">
 
 
                     <TextView
@@ -182,7 +204,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
 
 
         <ScrollView

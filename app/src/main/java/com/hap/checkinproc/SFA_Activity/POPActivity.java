@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +68,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     public static POPActivity popActivity;
     private int selectedPos;
     Shared_Common_Pref shared_common_pref;
-
+    EditText etRemarks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
         btnSubmit = findViewById(R.id.btnSubmit);
         tvViewStatus = findViewById(R.id.tvPOPViewStatus);
+        etRemarks = findViewById(R.id.etRemarks);
 
         tvOrder = (TextView) findViewById(R.id.tvOrder);
         tvQPS = (TextView) findViewById(R.id.tvQPS);
@@ -119,7 +121,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
         tvCoolerInfo.setVisibility(View.GONE);
 
-        if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+        if (Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
             tvCoolerInfo.setVisibility(View.VISIBLE);
 
     }
@@ -231,6 +233,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                             HeadItem.put("StkCode", shared_common_pref.getvalue(Constants.Distributor_Id));
                             HeadItem.put("Datetime", Common_Class.GetDate());
                             HeadItem.put("date", tvBookingDate.getText().toString());
+                            HeadItem.put("remarks", etRemarks.getText().toString());
+
                             ActivityData.put("Json_Head", HeadItem);
 
 
