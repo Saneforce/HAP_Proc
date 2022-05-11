@@ -111,6 +111,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     private int plantPos;
     LinearLayout llPlant;
     private String plantId = "";
+    private ArrayList<Common_Model> uomList;
+    private int uomPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -411,7 +413,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.llPlant:
-                common_class.showCommonDialog(plantList, 1, this);
+                common_class.showCommonDialog(plantList, 2, this);
                 break;
             case R.id.tvHistory:
                 startActivity(new Intent(this, ProjectionHistoryActivity.class));
@@ -536,6 +538,11 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
+
+                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
+                            ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
+                            ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
+
 //                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
 //                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
 //                                    Getorder_Array_List.get(z).getRegularQty());
@@ -893,11 +900,20 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             common_class.dismissCommonDialog(type);
             switch (type) {
                 case 1:
+
+//                    int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
+//                    if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
+                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_projection_recyclerview, getApplicationContext(), 1);
+//                    } else {
+//                        common_class.showMsg(this, "Can't exceed Stock");
+//                    }
+                    break;
+                case 2:
                     tvPlant.setText("" + myDataset.get(position).getName());
                     plantId = myDataset.get(position).getId();
-//                    Product_ModalSetAdapter.get(plantPos).setPlantId(myDataset.get(position).getId());
-//                    Product_ModalSetAdapter.get(plantPos).setPlant(myDataset.get(position).getName());
-//                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_projection_pay_recyclerview, getApplicationContext(), 1);
                     break;
 
             }
@@ -1060,6 +1076,17 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
+                    holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+                else {
+                    holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+
+
+                }
+
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
@@ -1096,7 +1123,26 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                         @Override
                         public void onClick(View v) {
                             plantPos = position;
-                            common_class.showCommonDialog(plantList, 1, ProjectionCategorySelectActivity.this);
+                            common_class.showCommonDialog(plantList, 2, ProjectionCategorySelectActivity.this);
+                        }
+                    });
+
+                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            uomPos = position;
+                            uomList = new ArrayList<>();
+
+                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+
+                                }
+                                common_class.showCommonDialog(uomList, 1, ProjectionCategorySelectActivity.this);
+                            } else {
+                                common_class.showMsg(ProjectionCategorySelectActivity.this, "No Records Found.");
+                            }
                         }
                     });
                 }
@@ -1154,6 +1200,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                                 holder.totalQty.setText("" + (int) totQty);
+
+
                             }
 
 
@@ -1345,11 +1393,11 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvPlant;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvPlant;
             ImageView ImgVwProd, QtyPls, QtyMns;
             EditText Qty;
 
-            LinearLayout llRegular;
+            LinearLayout llRegular, rlUOM;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -1364,6 +1412,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
+                tvUOM = view.findViewById(R.id.tvUOM);
 
 
                 if (CategoryType >= 0) {
@@ -1373,6 +1422,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                     regularAmt = view.findViewById(R.id.RegularAmt);
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
+                    rlUOM = view.findViewById(R.id.rlUOM);
                 }
 
 

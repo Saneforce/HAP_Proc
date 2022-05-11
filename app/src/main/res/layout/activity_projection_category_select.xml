@@ -182,13 +182,13 @@
 
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/C15dp"
             android:layout_marginTop="@dimen/C8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
 
             <TextView
@@ -470,6 +470,22 @@
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="0.4"
+                                    android:visibility="visible">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="UOM"
+                                        android:gravity="end"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:visibility="gone">
 
@@ -689,14 +705,14 @@
                                     android:textSize="@dimen/C13dp"></TextView>
 
                                 <TextView
-                                    android:textStyle="bold"
                                     android:id="@+id/totalitem"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="5"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp"
+                                    android:textStyle="bold"></TextView>
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -718,10 +734,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="10"
-                                    android:textStyle="bold"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp"
+                                    android:textStyle="bold"></TextView>
                             </RelativeLayout>
 
 
