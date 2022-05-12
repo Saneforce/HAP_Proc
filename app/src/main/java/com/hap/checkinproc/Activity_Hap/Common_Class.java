@@ -1,19 +1,23 @@
 package com.hap.checkinproc.Activity_Hap;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Common_Class {
-    public static String Version_Name="Ver 8.1.0";
+    public static String Version_Name="Ver 7.1.0";
     public static String Work_Type="0";
     public static Location location=null;
 
@@ -21,6 +25,46 @@ public class Common_Class {
     public void openDateTimeSetting() {
         Intent intent = new Intent(Settings.ACTION_DATE_SETTINGS);
         //this.webView.getContext().startActivity(intent);
+    }
+    public static String GetDatewothouttime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+    public void showMsg(Activity activity, String msg) {
+        Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+    public boolean checkDates(String stDate, String endDate, Activity activity) {
+        boolean b = false;
+        try {
+            SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date date1 = dfDate.parse(stDate);
+            Date date2 = dfDate.parse(endDate);
+            long diff = date2.getTime() - date1.getTime();
+            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
+                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
+                    b = true;//If start date is before end date
+                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
+                    b = true;//If two dates are equal
+                } else {
+                    b = false; //If start date is after the end date
+                }
+
+            } else {
+                Toast.makeText(activity, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return b;
     }
 
     public static boolean isTimeAutomatic(Context c) {

@@ -95,7 +95,6 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     ImageView iv_dwnldmaster_back;
     TextView tool_header;
     Button btn_save;
-    private Dialog dialog;
 
 
     @Override
@@ -481,7 +480,9 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     }
 
     public void popupSpinner(int type, final ArrayList<SelectionModel> array_selection, final int pos, String creationId) {
-        dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
+      try{
+
+        Dialog  dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_dynamic_view1);
         dialog.setCanceledOnTouchOutside(false);
@@ -591,7 +592,10 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                 dialog.dismiss();
                 commonFun();
             }
-        });
+        });}
+      catch (Exception e){
+          Log.v("ViewActivity:POP:",e.getMessage());
+      }
     }
 
 

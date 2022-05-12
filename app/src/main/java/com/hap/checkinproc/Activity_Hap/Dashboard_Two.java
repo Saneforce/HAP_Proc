@@ -309,6 +309,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             if (sSFType.equals("0"))
                 StActivity.setVisibility(View.GONE);
 
+            Log.v("GATE:",CheckInDetails.getString("On_Duty_Flag", "0")+" :sfType:"+sSFType);
 
             if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
                 btnGateIn.setVisibility(View.VISIBLE);

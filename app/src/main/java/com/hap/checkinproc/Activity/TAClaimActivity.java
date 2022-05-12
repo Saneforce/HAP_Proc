@@ -4046,7 +4046,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("ldg_type", lodgContvw.getVisibility() == View.VISIBLE ? txt_ldg_type.getText().toString() : "");
             ldgSave.put("sty_dte", lodgContvw.getVisibility() == View.VISIBLE ? sty_date + " " + ldg_cin.getText().toString() : "");
             ldgSave.put("to_dte", lodgContvw.getVisibility() == View.VISIBLE ? ldg_cout.getText().toString() : "");
-            ldgSave.put("toout_dte", lodgContvw.getVisibility() == View.VISIBLE ? ldg_coutDt.getText().toString() : "");
+
+            String toDate= ldg_coutDt.getText().toString().replaceAll("/","-");
+            toDate=toDate+" "+ldg_cout.getText().toString();
+
+            ldgSave.put("toout_dte", lodgContvw.getVisibility() == View.VISIBLE ?/* ldg_coutDt.getText().toString()*/toDate : "");
             ldgSave.put("elgble", lodgContvw.getVisibility() == View.VISIBLE ?
                     txtMyEligi.getText().toString().replaceAll("₹", "") : "");
             ldgSave.put("LocID", lodgContvw.getVisibility() == View.VISIBLE ? sLocId : "");
