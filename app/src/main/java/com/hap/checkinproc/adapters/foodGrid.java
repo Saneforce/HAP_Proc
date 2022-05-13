@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -47,8 +45,19 @@ public class foodGrid extends BaseAdapter {
         JsonObject item = (JsonObject) getItem(position);
         TextView txtNm = listitemView.findViewById(R.id.txt_name);
         TextView txtAmt = listitemView.findViewById(R.id.txt_fAmt);
+        TextView txtOnDuty = listitemView.findViewById(R.id.txt_onDuty);
+        TextView txtPlant = listitemView.findViewById(R.id.txt_plant);
+
         txtNm.setText(item.get("name").getAsString());
-        txtAmt.setText("Rs. "+ new DecimalFormat("##0.00").format(Double.valueOf(item.get("amount").getAsString())));
+        txtAmt.setText("Rs. " + new DecimalFormat("##0.00").format(Double.valueOf(item.get("amount").getAsString())));
+
+        try {
+            txtPlant.setText(item.get("plantName").getAsString() + "-" + item.get("plant").getAsString());
+            txtOnDuty.setText(item.get("On-duty").getAsString().equalsIgnoreCase("Yes") ? "On-duty" : item.get("freeMeal").getAsString().equalsIgnoreCase("yes") ? "FreeMeal" : "");
+
+        } catch (Exception e) {
+
+        }
 
         return listitemView;
     }

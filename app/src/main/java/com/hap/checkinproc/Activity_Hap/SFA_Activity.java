@@ -117,7 +117,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public static String updateTime = "";
     ApiInterface apiService;
 
-    boolean isSFA = true;
+    boolean isSFA = false;
 
 
     @Override

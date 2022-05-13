@@ -414,6 +414,13 @@ public interface ApiInterface {
     Call<ResponseBody> CheckImage(@Query("sfCode") String sfcode,
                                   @Part MultipartBody.Part files);
 
+
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/checkinimage")
+    Call<ResponseBody> onTAFileUpload(@Query("sfCode") String sfcode, @Query("FileName") String FileName, @Query("Mode") String Mode,
+                                      @Part MultipartBody.Part file);
+
+
     @Multipart
     @POST("db_new_activity.php?axn=upload/checkinimage")
     Single<ResponseBody> onFileUpload(@Query("sfCode") String sfcode, @Query("FileName") String FileName, @Query("Mode") String Mode,

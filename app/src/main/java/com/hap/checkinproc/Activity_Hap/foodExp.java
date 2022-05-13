@@ -107,7 +107,7 @@ public class foodExp extends AppCompatActivity implements View.OnClickListener {
                     Log.d("Res Data:", res.toString());
                     if (res.size() < 1) {
                         Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
-                        return;
+                        //return;
                     }
 
                     lsExp = new adFoodexp(res, foodExp.this);
