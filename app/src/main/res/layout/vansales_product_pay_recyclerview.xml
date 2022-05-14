@@ -357,7 +357,6 @@
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvTaxLabel"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
 

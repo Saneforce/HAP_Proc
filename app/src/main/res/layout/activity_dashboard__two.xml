@@ -629,9 +629,16 @@
                                 android:layout_height="@dimen/C30dp"
                                 android:layout_marginLeft="@dimen/C5dp"
 
-                                android:layout_marginTop="5dp"
-                              />
+                                android:layout_marginTop="5dp" />
 
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/iv_checkout"
+                                android:layout_width="@dimen/C30dp"
+                                android:layout_height="@dimen/C30dp"
+                                android:layout_marginLeft="@dimen/C5dp"
+
+                                android:layout_marginTop="5dp" />
 
                             <TextView
                                 android:id="@+id/lTDyTx"

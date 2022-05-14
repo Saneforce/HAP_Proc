@@ -69,6 +69,7 @@ public class foodExp extends AppCompatActivity implements View.OnClickListener {
 
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
+        btHome.setOnClickListener(this);
 
         btMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,25 +103,25 @@ public class foodExp extends AppCompatActivity implements View.OnClickListener {
             rptCall.enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                    try{
-                    JsonArray res = response.body();
-                    Log.d("Res Data:", res.toString());
-                    if (res.size() < 1) {
-                        Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
-                        //return;
-                    }
+                    try {
+                        JsonArray res = response.body();
+                        Log.d("Res Data:", res.toString());
+                        if (res.size() < 1) {
+                            Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
+                            //return;
+                        }
 
-                    lsExp = new adFoodexp(res, foodExp.this);
-                    mRecyclerView.setAdapter(lsExp);
-                    Double amt = 0.0;
-                    for (int il = 0; il < res.size(); il++) {
-                        JsonObject item = res.get(il).getAsJsonObject();
-                        amt += item.get("amount").getAsDouble();
-                    }
+                        lsExp = new adFoodexp(res, foodExp.this);
+                        mRecyclerView.setAdapter(lsExp);
+                        Double amt = 0.0;
+                        for (int il = 0; il < res.size(); il++) {
+                            JsonObject item = res.get(il).getAsJsonObject();
+                            amt += item.get("amount").getAsDouble();
+                        }
 
-                    txtTot.setText("Rs. " + new DecimalFormat("##0.00").format(amt));}
-                    catch (Exception e){
-                        Log.d("Res:Ex:",e.getMessage());
+                        txtTot.setText("Rs. " + new DecimalFormat("##0.00").format(amt));
+                    } catch (Exception e) {
+                        Log.d("Res:Ex:", e.getMessage());
                     }
 
                 }
@@ -143,8 +144,7 @@ public class foodExp extends AppCompatActivity implements View.OnClickListener {
                 int month = monthOfYear + 1;
 
 
-
-                String date = ("" + year + "-" + (month<10?"0":"")+month + "-" + ((dayOfMonth)<10?"0":"")+ dayOfMonth);
+                String date = ("" + year + "-" + (month < 10 ? "0" : "") + month + "-" + ((dayOfMonth) < 10 ? "0" : "") + dayOfMonth);
                 if (val == 1) {
                     if (common_class.checkDates(date, tvEndDate.getText().toString(), foodExp.this) ||
                             tvEndDate.getText().toString().equals("")) {
@@ -182,6 +182,9 @@ public class foodExp extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.tvEndDate:
                 selectDate(2);
+                break;
+            case R.id.toolbar_home:
+                common_class.openHome(foodExp.this);
                 break;
         }
 

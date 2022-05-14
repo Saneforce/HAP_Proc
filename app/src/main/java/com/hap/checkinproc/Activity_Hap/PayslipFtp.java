@@ -1,9 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,16 +8,17 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hap.checkinproc.Activity.PdfViewerActivity;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.Interface.onPayslipItemClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HAPListItem;
 import com.hap.checkinproc.adapters.adBackFolders;
 
@@ -37,13 +34,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 
-public class PayslipFtp extends AppCompatActivity {
+public class PayslipFtp extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "FTPActivity";
     public static final String UserDetail = "MyPrefs";
     public FTPClient mFTPClient = null;
 
-    RecyclerView mRecyclerView,mRecylPrvFldr;
+    RecyclerView mRecyclerView, mRecylPrvFldr;
     TextView btnCanteen;
     JSONArray lsFiles;
     HAPListItem listItems;
@@ -51,42 +48,48 @@ public class PayslipFtp extends AppCompatActivity {
 
     SharedPreferences UserDetails;
 
-    String HomePath="/home/hapftp/Payroll",CurrPath="",
-            EmpId="";
-    String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+ "/" ;
+    String HomePath = "/home/hapftp/Payroll", CurrPath = "",
+            EmpId = "";
+    String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+    Common_Class common_class;
+    ImageView ivHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payslip_ftp);
-        CurrPath=HomePath;
+        common_class = new Common_Class();
+        ivHome = findViewById(R.id.toolbar_home);
+        ivHome.setOnClickListener(this);
+
+
+        CurrPath = HomePath;
         //refreshCurrFolder();
         getPaySlipFolder("");
-        btnCanteen=findViewById(R.id.btnCanteen);
+        btnCanteen = findViewById(R.id.btnCanteen);
         btnCanteen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent frmCanteen=new Intent(PayslipFtp.this,foodExp.class);
+                Intent frmCanteen = new Intent(PayslipFtp.this, foodExp.class);
                 startActivity(frmCanteen);
                 finish();
             }
         });
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-        EmpId=UserDetails.getString("EmpId","");
+        EmpId = UserDetails.getString("EmpId", "");
         HAPListItem.SetPayOnClickListener(new onPayslipItemClick() {
             @Override
             public void onClick(JSONObject item) {
                 try {
-                    if(item.getString("type").equalsIgnoreCase("dir")){
+                    if (item.getString("type").equalsIgnoreCase("dir")) {
                         getPaySlipFolder(item.getString("name"));
-                    }else
-                    {
-                       if(ftpDownload(CurrPath+"/"+item.getString("name"),pdfPath+item.getString("name"))){
-                           Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
-                           stat.putExtra("PDF_FILE","local");
-                           stat.putExtra("PDF_ONE", pdfPath+item.getString("name"));
-                           startActivity(stat);
-                       }
+                    } else {
+                        if (ftpDownload(CurrPath + "/" + item.getString("name"), pdfPath + item.getString("name"))) {
+                            Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                            stat.putExtra("PDF_FILE", "local");
+                            stat.putExtra("PDF_ONE", pdfPath + item.getString("name"));
+                            startActivity(stat);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -97,7 +100,7 @@ public class PayslipFtp extends AppCompatActivity {
             @Override
             public void onItemClick(JSONObject item) {
                 try {
-                    CurrPath=item.getString("path");
+                    CurrPath = item.getString("path");
 
                     getPaySlipFolder("");
                     //refreshCurrFolder();
@@ -107,28 +110,29 @@ public class PayslipFtp extends AppCompatActivity {
             }
         });
     }
-    public void refreshCurrFolder(){
-        String[] folders=CurrPath.replace(HomePath,"").split("/");
-        JSONArray FldrItems=new JSONArray();
-        String path=HomePath;
-        for(int il=0;il<folders.length;il++){
-            JSONObject jsonObject=new JSONObject();
+
+    public void refreshCurrFolder() {
+        String[] folders = CurrPath.replace(HomePath, "").split("/");
+        JSONArray FldrItems = new JSONArray();
+        String path = HomePath;
+        for (int il = 0; il < folders.length; il++) {
+            JSONObject jsonObject = new JSONObject();
             try {
-                if(!folders[il].equalsIgnoreCase("")){
-                    jsonObject.put("name",folders[il]);
-                    path=path+"/"+folders[il];
-                    jsonObject.put("path",path);
+                if (!folders[il].equalsIgnoreCase("")) {
+                    jsonObject.put("name", folders[il]);
+                    path = path + "/" + folders[il];
+                    jsonObject.put("path", path);
                     FldrItems.put(jsonObject);
-                }else{
-                    jsonObject.put("name","Pay Slip");
-                    jsonObject.put("path",path);
+                } else {
+                    jsonObject.put("name", "Pay Slip");
+                    jsonObject.put("path", path);
                     FldrItems.put(jsonObject);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        bkFldrItems=new adBackFolders(FldrItems,this);
+        bkFldrItems = new adBackFolders(FldrItems, this);
         mRecylPrvFldr = findViewById(R.id.prvFolder);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -136,11 +140,11 @@ public class PayslipFtp extends AppCompatActivity {
 
         mRecylPrvFldr.setAdapter(bkFldrItems);
     }
-    public void getPaySlipFolder(String mCurrPath)
-    {
-        if(ftpConnect("sf.hap.in","hapftp","VFAY$du3@=9^",21)){
-            CurrPath=CurrPath+((mCurrPath!="")?"/":"")+mCurrPath;
-            lsFiles=ftpGetFilesList(CurrPath);
+
+    public void getPaySlipFolder(String mCurrPath) {
+        if (ftpConnect("sf.hap.in", "hapftp", "VFAY$du3@=9^", 21)) {
+            CurrPath = CurrPath + ((mCurrPath != "") ? "/" : "") + mCurrPath;
+            lsFiles = ftpGetFilesList(CurrPath);
 
             listItems = new HAPListItem(lsFiles, this);
             mRecyclerView = findViewById(R.id.fileList);
@@ -152,6 +156,7 @@ public class PayslipFtp extends AppCompatActivity {
             refreshCurrFolder();
         }
     }
+
     public boolean ftpConnect(String host, String username, String password, int port) {
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -161,7 +166,7 @@ public class PayslipFtp extends AppCompatActivity {
 
             mFTPClient = new FTPClient();
             mFTPClient.setConnectTimeout(5000);
-            mFTPClient.connect(host,port);
+            mFTPClient.connect(host, port);
             if (FTPReply.isPositiveCompletion(mFTPClient.getReplyCode())) {
                 boolean status = mFTPClient.login(username, password);
                 mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -170,11 +175,12 @@ public class PayslipFtp extends AppCompatActivity {
                 return status;
             }
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not connect to host " + host+"\n"+e.getMessage());
+            Log.d(TAG, "Error: could not connect to host " + host + "\n" + e.getMessage());
         }
 
         return false;
     }
+
     public boolean ftpDisconnect() {
         try {
             mFTPClient.logout();
@@ -223,18 +229,18 @@ public class PayslipFtp extends AppCompatActivity {
                 String name = ftpFiles[i].getName();
                 boolean isFile = ftpFiles[i].isFile();
                 if (isFile) {
-                    if(name.indexOf("-"+EmpId+".pdf")>-1){ //"-"+
-                        JSONObject jsonObject=new JSONObject();
-                        jsonObject.put("name",name);
-                        jsonObject.put("type","FILE");
+                    if (name.indexOf("-" + EmpId + ".pdf") > -1) { //"-"+
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("name", name);
+                        jsonObject.put("type", "FILE");
                         fileList.put(jsonObject);
                     }
-                    Log.i(TAG, "File : " + name+"= -"+EmpId+".pdf");
+                    Log.i(TAG, "File : " + name + "= -" + EmpId + ".pdf");
                 } else {
-                        JSONObject jsonObject=new JSONObject();
-                        jsonObject.put("name",name);
-                        jsonObject.put("type","DIR");
-                        fileList.put(jsonObject);
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("name", name);
+                    jsonObject.put("type", "DIR");
+                    fileList.put(jsonObject);
 
                     Log.i(TAG, "Directory : " + name);
                 }
@@ -309,7 +315,7 @@ public class PayslipFtp extends AppCompatActivity {
     public boolean ftpDownload(String srcFilePath, String desFilePath) {
         boolean status = false;
         try {
-            if(ftpConnect("sf.hap.in","hapftp","VFAY$du3@=9^",21)){
+            if (ftpConnect("sf.hap.in", "hapftp", "VFAY$du3@=9^", 21)) {
                 FileOutputStream desFileStream = new FileOutputStream(desFilePath);
                 status = mFTPClient.retrieveFile(srcFilePath, desFileStream);
 
@@ -319,7 +325,7 @@ public class PayslipFtp extends AppCompatActivity {
                 return status;
             }
         } catch (Exception e) {
-            Log.d(TAG, "download failed"+e.getMessage());
+            Log.d(TAG, "download failed" + e.getMessage());
         }
 
         return status;
@@ -353,5 +359,14 @@ public class PayslipFtp extends AppCompatActivity {
         }
 
         return status;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.toolbar_home:
+                common_class.openHome(PayslipFtp.this);
+                break;
+        }
     }
 }

@@ -578,7 +578,10 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     sharedCommonPref.getvalue(Constants.CUTOFF_TIME).equals("--:--:--")) {
                 ResetSubmitBtn(0);
                 common_class.showMsg(this, "Time UP...");
-            } else {
+            }
+
+
+            else {
                 String sLoc = sharedCommonPref.getvalue("CurrLoc");
                 if (sLoc.equalsIgnoreCase("")) {
                     new LocationFinder(getApplication(), new LocationEvents() {
