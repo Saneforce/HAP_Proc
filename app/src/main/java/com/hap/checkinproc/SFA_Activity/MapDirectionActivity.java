@@ -74,20 +74,24 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_direction);
-        // geofencingClient = LocationServices.getGeofencingClient(this);
-        common_class = new Common_Class(this);
-        AddressTextview = findViewById(R.id.AddressTextview);
-        ReachedOutlet = findViewById(R.id.tvStartDirection);
-        imag_back = findViewById(R.id.imag_back);
-        imag_back.setOnClickListener(this);
-        ReachedOutlet.setOnClickListener(this);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        // getDirection();
-        ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
-        common_class.gotoHomeScreen(this, ivToolbarHome);
-
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_map_direction);
+            // geofencingClient = LocationServices.getGeofencingClient(this);
+            common_class = new Common_Class(this);
+            AddressTextview = findViewById(R.id.AddressTextview);
+            ReachedOutlet = findViewById(R.id.tvStartDirection);
+            imag_back = findViewById(R.id.imag_back);
+            imag_back.setOnClickListener(this);
+            ReachedOutlet.setOnClickListener(this);
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            // getDirection();
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
+        }
+        catch (Exception e){
+            Log.v(TAG+"onCreate:",e.getMessage());
+        }
 
     }
 

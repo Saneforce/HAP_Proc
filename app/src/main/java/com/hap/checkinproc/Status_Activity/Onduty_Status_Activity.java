@@ -122,7 +122,7 @@ public class Onduty_Status_Activity extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<Onduty_Status_Model>>() {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new Onduty_Status_Adapter(approvalList, R.layout.onduty_status_listitem, getApplicationContext(),AMOD));
+                recyclerView.setAdapter(new Onduty_Status_Adapter(approvalList, R.layout.onduty_status_listitem, Onduty_Status_Activity.this,AMOD));
             }
 
             @Override

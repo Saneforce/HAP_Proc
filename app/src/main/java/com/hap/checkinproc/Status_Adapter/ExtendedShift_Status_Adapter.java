@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.Status_Model_Class.ExtendedShift_Status_Model;
 
 import java.util.List;
@@ -48,11 +52,11 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
         holder.outtime.setText(extendedShift_status_models.get(position).getETime());
         holder.geoin.setText(extendedShift_status_models.get(position).getCheckin());
         holder.geoout.setText(extendedShift_status_models.get(position).getCheckout());
-        holder.applieddate.setText("Applied : "+extendedShift_status_models.get(position).getSubmissionDate());
+        holder.applieddate.setText("Applied : " + extendedShift_status_models.get(position).getSubmissionDate());
         holder.OStatus.setText(Onduty_Status_Model.getEStatus());
         if (Onduty_Status_Model.getWrkType() == 0) {
             holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
-            holder.OStatus.setPadding(20,5,20,0);
+            holder.OStatus.setPadding(20, 5, 20, 0);
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
                 holder.SfName.setText(Onduty_Status_Model.getSFNm());
@@ -68,7 +72,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-            holder.OStatus.setPadding(20,5,20,0);
+            holder.OStatus.setPadding(20, 5, 20, 0);
             holder.Papproved.setText("Approved : " + extendedShift_status_models.get(position).getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_green);
         } else {
@@ -79,11 +83,40 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-            holder.OStatus.setPadding(20,5,20,0);
-            holder.Papproved.setText("Rejected : "+extendedShift_status_models.get(position).getApproveddate());
+            holder.OStatus.setPadding(20, 5, 20, 0);
+            holder.Papproved.setText("Rejected : " + extendedShift_status_models.get(position).getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
         }
+
+
+        holder.geoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMapDir(Onduty_Status_Model.getCheckin());
+            }
+        });
+
+        holder.geoout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMapDir(Onduty_Status_Model.getCheckout());
+            }
+        });
     }
+
+    void navigateMapDir(String value) {
+        if (!Common_Class.isNullOrEmpty(value)) {
+            String[] latlongs = value.split(",");
+            Intent intent = new Intent(context, MapDirectionActivity.class);
+            intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+            intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+            intent.putExtra(Constants.DEST_NAME, "Destination");
+            intent.putExtra(Constants.NEW_OUTLET, "");
+            context.startActivity(intent);
+
+        }
+    }
+
 
     @Override
     public int getItemCount() {

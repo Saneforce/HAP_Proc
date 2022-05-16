@@ -138,7 +138,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
         TextMode = findViewById(R.id.txt_mode);
         edtFrom.setText("" + getIntent().getSerializableExtra("Start"));
         edtTo.setText("" + getIntent().getSerializableExtra("End"));
-        edtPersonal.setText("0");
+      //  edtPersonal.setText("0");
 
         TextMode.setText(MOTNm);
 
@@ -168,7 +168,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
                 if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+              //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 if (!edtTo.getText().toString().equals("")) {
 
@@ -184,7 +184,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
             public void afterTextChanged(Editable s) {
                 if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
                 if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+              //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 inEdtTo = Integer.parseInt(edtTo.getText().toString());
                 intSum = inEdtTo - inEdtFrom;
@@ -207,7 +207,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
                 if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+               // if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 if (!edtTo.getText().toString().equals("")) {
 
@@ -224,7 +224,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
             public void afterTextChanged(Editable s) {
                 if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
                 if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+            //    if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 inEdtTo = Integer.parseInt(edtTo.getText().toString());
                 intSum = inEdtTo - inEdtFrom;
@@ -241,7 +241,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
         if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
         if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-        if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+       // if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
 
         if (edtFrom.getText().toString() != null && !edtFrom.getText().toString().isEmpty() && !edtFrom.getText().toString().equals("null")) {
             if (edtTo.getText().toString() != null && !edtTo.getText().toString().isEmpty() && !edtTo.getText().toString().equals("null")) {
@@ -258,7 +258,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
                     jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
                     jj.put("startKm", edtFrom.getText().toString());
                     jj.put("endKm", edtTo.getText().toString());
-                    jj.put("personalKm", edtPersonal.getText().toString());
+                    jj.put("personalKm", edtPersonal.getText().toString().equalsIgnoreCase("")?"0":edtPersonal.getText().toString());
                     Log.v("printing_allow", jj.toString());
 
                     Call<JsonObject> Callto;

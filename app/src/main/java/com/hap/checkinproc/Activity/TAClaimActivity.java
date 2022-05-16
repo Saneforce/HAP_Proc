@@ -4496,11 +4496,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     Log.v("TA_Response", response.body().toString());
                     //startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                    openHome();
+                   // openHome();
                     if (responseVal.equals("Save")) {
                         Toast.makeText(TAClaimActivity.this, "Saved Successfully ", Toast.LENGTH_SHORT).show();
+                        openHome();
                     } else {
                         Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(TAClaimActivity.this,ViewTAStatus.class));
+
                     }
                     ResetSubmitBtn(1, btnAnim);
                 }

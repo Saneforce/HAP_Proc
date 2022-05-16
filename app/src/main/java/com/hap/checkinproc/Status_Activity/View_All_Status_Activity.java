@@ -230,7 +230,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
 
                     }
 
-                    recyclerView.setAdapter(new ViewAll_Status_Adapter(approvalList, R.layout.view_all_status_listitem, getApplicationContext(), AMOD));
+                    recyclerView.setAdapter(new ViewAll_Status_Adapter(approvalList, R.layout.view_all_status_listitem, View_All_Status_Activity.this, AMOD));
                 } catch (Exception e) {
                 }
             }

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
@@ -17,10 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.Status_Model_Class.View_All_Model;
 
 import org.json.JSONException;
@@ -39,6 +42,7 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
     private Context context;
     Shared_Common_Pref shared_common_pref;
     String AMod;
+    Common_Class common_class;
 
     public ViewAll_Status_Adapter(List<View_All_Model> View_Status_ModelsList, int rowLayout, Context context, String AMod) {
         this.View_Status_ModelsList = View_Status_ModelsList;
@@ -46,6 +50,7 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         this.context = context;
         this.AMod = AMod;
         shared_common_pref = new Shared_Common_Pref(context);
+        common_class=new Common_Class(context);
     }
 
     @Override
@@ -91,7 +96,38 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
             }
         });
 
+        holder.txt_in_geo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMapDir(View_Status_ModelsList.get(position).getGeoin().toString());
+            }
+        });
 
+        holder.txt_out_geo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMapDir(View_Status_ModelsList.get(position).getGeoout().toString());
+            }
+        });
+
+
+    }
+
+    void navigateMapDir(String value) {
+        try {
+            if (!com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(value)) {
+                String[] latlongs = value.split(",");
+                Intent intent = new Intent(context, MapDirectionActivity.class);
+                intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+                intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+                intent.putExtra(Constants.DEST_NAME, "Destination");
+                intent.putExtra(Constants.NEW_OUTLET, "new");
+                context.startActivity(intent);
+
+            }
+        } catch (Exception e) {
+            Log.v("ViewAllStatus:", e.getMessage());
+        }
     }
 
     private void sendStatusUpdate(int flag, View_All_Model data) {

@@ -482,7 +482,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                         intent.putExtra(Constants.DEST_LAT, obj.getString("Lat"));
                         intent.putExtra(Constants.DEST_LNG, obj.getString("Lon"));
                         intent.putExtra(Constants.DEST_NAME, obj.getString("HQ_Name"));
-                        intent.putExtra(Constants.NEW_OUTLET, "");
+                        intent.putExtra(Constants.NEW_OUTLET, "new");
                         startActivity(intent);
                     } catch (Exception e) {
 

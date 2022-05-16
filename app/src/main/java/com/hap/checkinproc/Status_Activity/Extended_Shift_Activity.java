@@ -126,7 +126,7 @@ public class Extended_Shift_Activity extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<ExtendedShift_Status_Model>>() {
                 }.getType();
                 missedPunchStatusModelList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new ExtendedShift_Status_Adapter(missedPunchStatusModelList, R.layout.extended_shift_status_listitem, getApplicationContext(),AMOD));
+                recyclerView.setAdapter(new ExtendedShift_Status_Adapter(missedPunchStatusModelList, R.layout.extended_shift_status_listitem, Extended_Shift_Activity.this,AMOD));
             }
 
             @Override

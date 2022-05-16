@@ -2,6 +2,7 @@ package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         MissedPunch_Status_Model Onduty_Status_Model = missedPunchStatusModelList.get(position);
         holder.ondutydate.setText("" + missedPunchStatusModelList.get(position).getMissedPunchDate());
-        holder.type.setText("" + missedPunchStatusModelList.get(position).getShiftName().replaceAll("]", "").replaceAll("\\[",""));
         holder.intime.setText("" + missedPunchStatusModelList.get(position).getCheckinTime());
         holder.outtime.setText("" + missedPunchStatusModelList.get(position).getCheckoutTme());
         holder.POV.setText("" + missedPunchStatusModelList.get(position).getReason());
@@ -82,7 +82,11 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
         }
-
+        try {
+            holder.type.setText("" + missedPunchStatusModelList.get(position).getShiftName().replaceAll("]", "").replaceAll("\\[", ""));
+        } catch (Exception e) {
+            Log.v("viewAllStatus:", e.getMessage());
+        }
     }
 
     @Override

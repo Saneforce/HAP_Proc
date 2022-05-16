@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.Status_Model_Class.Onduty_Status_Model;
 
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Adapter.MyViewHolder> {
 
@@ -22,8 +25,9 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
     private int rowLayout;
     private Context context;
     String AMod;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ondutydate, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved,SfName;
+        public TextView ondutydate, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved, SfName;
         RelativeLayout sf_namelayout;
 
         public MyViewHolder(View view) {
@@ -46,7 +50,7 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
     }
 
 
-    public Onduty_Status_Adapter(List<Onduty_Status_Model> Onduty_Status_ModelsList, int rowLayout, Context context,String AMod) {
+    public Onduty_Status_Adapter(List<Onduty_Status_Model> Onduty_Status_ModelsList, int rowLayout, Context context, String AMod) {
         this.Onduty_Status_ModelsList = Onduty_Status_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
@@ -92,7 +96,7 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-            holder.OStatus.setPadding(20,5,20,0);
+            holder.OStatus.setPadding(20, 5, 20, 0);
             holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
 
             holder.Papproved.setText("");
@@ -106,7 +110,7 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
             }
             holder.Papproved.setText("Approved : " + Onduty_Status_Model.getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_green);
-            holder.OStatus.setPadding(20,5,20,0);
+            holder.OStatus.setPadding(20, 5, 20, 0);
         } else {
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -117,10 +121,42 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
             }
             holder.Papproved.setText("Rejected : " + Onduty_Status_Model.getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
-            holder.OStatus.setPadding(20,5,20,0);
+            holder.OStatus.setPadding(20, 5, 20, 0);
         }
 
+        holder.geoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMapDir(Onduty_Status_Model.getCheckin());
+            }
+        });
+
+        holder.geoout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMapDir(Onduty_Status_Model.getCheckout());
+            }
+        });
+
     }
+
+    void navigateMapDir(String value) {
+        try {
+            if (!com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(value)) {
+                String[] latlongs = value.split(",");
+                Intent intent = new Intent(context, MapDirectionActivity.class);
+                intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+                intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+                intent.putExtra(Constants.DEST_NAME, "Destination");
+                intent.putExtra(Constants.NEW_OUTLET, "new");
+                context.startActivity(intent);
+
+            }
+        } catch (Exception e) {
+            Log.v("ViewAllStatus:", e.getMessage());
+        }
+    }
+
 
     @Override
     public int getItemCount() {

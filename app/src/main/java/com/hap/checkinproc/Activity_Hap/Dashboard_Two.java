@@ -36,7 +36,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
-import com.hap.checkinproc.Activity.TAClaimAwsActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -115,7 +114,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     DatabaseHandler db;
     private String key;
     Gson gson;
-    private String checkInUrl="";
+    private String checkInUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,7 +308,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             if (sSFType.equals("0"))
                 StActivity.setVisibility(View.GONE);
 
-            Log.v("GATE:",CheckInDetails.getString("On_Duty_Flag", "0")+" :sfType:"+sSFType);
+            Log.v("GATE:", CheckInDetails.getString("On_Duty_Flag", "0") + " :sfType:" + sSFType);
 
             if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
                 btnGateIn.setVisibility(View.VISIBLE);
@@ -557,17 +556,26 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
 
             CircleImageView ivCheckIn = findViewById(R.id.ivCheckIn);
+            CircleImageView ivCheckOut = findViewById(R.id.iv_checkout);
             checkInUrl = ApiClient.BASE_URL.replaceAll("server/", "");
             checkInUrl = checkInUrl + fItm.get("ImgName").getAsString();
 
-            if(Common_Class.isNullOrEmpty(fItm.get("ImgName").getAsString()))
+            if (Common_Class.isNullOrEmpty(fItm.get("ImgName").getAsString()))
                 ivCheckIn.setVisibility(View.GONE);
             else {
                 ivCheckIn.setVisibility(View.VISIBLE);
-            Picasso.with(Dashboard_Two.this)
-                    .load(checkInUrl)
-                    .into(ivCheckIn);}
+                Picasso.with(Dashboard_Two.this)
+                        .load(checkInUrl)
+                        .into(ivCheckIn);
+            }
 
+            try {
+                Picasso.with(Dashboard_Two.this)
+                        .load(ApiClient.BASE_URL.replaceAll("server/", "") + fItm.get("EImgName").getAsString())
+                        .into(ivCheckOut);
+            } catch (Exception e) {
+
+            }
 
 
             ivCheckIn.setOnClickListener(new View.OnClickListener() {
@@ -576,6 +584,18 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
                     intent.putExtra("ImageUrl", checkInUrl);
                     startActivity(intent);
+
+                }
+            });
+
+            ivCheckOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!Common_Class.isNullOrEmpty(fItm.get("EImgName").getAsString())) {
+                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                        intent.putExtra("ImageUrl", ApiClient.BASE_URL.replaceAll("server/", "") + fItm.get("EImgName").getAsString());
+                        startActivity(intent);
+                    }
 
                 }
             });
@@ -838,7 +858,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.btn_da_exp_entry:
                 Shared_Common_Pref.TravelAllowance = 0;
                 intent = new Intent(this, TAClaimActivity.class);
-              //  intent = new Intent(this, TAClaimAwsActivity.class);
+                //  intent = new Intent(this, TAClaimAwsActivity.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);

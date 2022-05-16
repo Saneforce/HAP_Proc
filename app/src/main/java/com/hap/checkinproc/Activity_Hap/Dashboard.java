@@ -82,6 +82,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
         profilePic = findViewById(R.id.profile_image);
+        linReCheck = findViewById(R.id.lin_RecheckIn);
 
         linCheckin = findViewById(R.id.lin_check_in);
         linMyday = findViewById(R.id.lin_myday_plan);
@@ -136,8 +137,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
-        else
+        else {
             linSFA.setVisibility(View.VISIBLE);
+            linReCheck.setVisibility(View.VISIBLE);
+        }
 
         if (linOnDuty.getVisibility() == View.VISIBLE) {
             linCheckin.setVisibility(View.VISIBLE);
@@ -155,7 +158,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTourPlan.setVisibility(View.GONE);
         if (sSFType.equals("1")) linTourPlan.setVisibility(View.VISIBLE);
         linExit = (findViewById(R.id.lin_exit));
-        linReCheck = findViewById(R.id.lin_RecheckIn);
         approvalcount = findViewById(R.id.approvalcount);
 
         if (UserDetails.getInt("CheckCount", 0) <= 0) {
@@ -479,8 +481,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     }
                     Log.v("MOT_COUNT", String.valueOf(MotCount));
 
-                    if (MotCount > 0)
-                        linReCheck.setVisibility(View.VISIBLE);
+//                    if (MotCount > 0)
+//                        linReCheck.setVisibility(View.VISIBLE);
 
                     onDuty = jsonObject.getString("CheckOnduty");
                     Log.v("ONDUTY_RESPONSE", jsonObject.getString("CheckOnduty"));
