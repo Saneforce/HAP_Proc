@@ -463,7 +463,7 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
-    @POST("db_v310.php?axn=save/projection")
+    @POST("db_v310.php?axn=save/projectionnew")
     Call<JsonObject> saveProjection(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
@@ -487,9 +487,6 @@ public interface ApiInterface {
     @POST("db_v310.php?axn=save/posorder")
     Call<JsonObject> savePOS(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
-//    @FormUrlEncoded
-//    @POST("db_v310_1.php?axn=save/primaryorder")
-//    Call<JsonObject> savePrimaryOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/primaryorder")

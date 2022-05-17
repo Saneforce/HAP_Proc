@@ -876,6 +876,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                         if (jsonObjects.getString("success").equals("true")) {
                                             sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
                                             // common_class.CommonIntentwithFinish(SFA_Activity.class);
+                                            finish();
                                             startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
 
                                         }
@@ -1588,8 +1589,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject dataObj = arr.getJSONObject(i);
+                          //  slotList.add(new Datum(dataObj.getString("Tm")));
+                            slotList.add(new Datum("13:30:00"));
 
-                            slotList.add(new Datum(dataObj.getString("Tm")));
                         }
 
 

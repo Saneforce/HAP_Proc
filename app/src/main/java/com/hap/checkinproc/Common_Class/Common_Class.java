@@ -52,7 +52,6 @@ import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
-import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
@@ -134,7 +133,6 @@ public class Common_Class {
         shared_common_pref = new Shared_Common_Pref(context);
 
     }
-
 
 
     public static String GetDatemonthyearformat() {
@@ -475,7 +473,6 @@ public class Common_Class {
             updateUi = ((UpdateResponseUI) activity);
             DatabaseHandler db = new DatabaseHandler(activity);
             ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
             Call<Object> call = service.GetRouteObject(QueryString, QuerySTring1);
             call.enqueue(new Callback<Object>() {
                 @Override
