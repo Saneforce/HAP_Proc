@@ -48,7 +48,7 @@ import retrofit2.Response;
 public class Approvals extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout linProjectionApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout linProjectionApprove,linQpsApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -164,8 +164,11 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
         linProjectionApprove = findViewById(R.id.lin_productProjectionApproval);
+        linQpsApprove=findViewById(R.id.lin_qps);
         /*Status text*/
         /*SetOnClickListner*/
+
+        linQpsApprove.setOnClickListener(this);
         LeaveRequest.setOnClickListener(this);
         PermissionRequest.setOnClickListener(this);
         OnDuty.setOnClickListener(this);
@@ -288,6 +291,11 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(Approvals.this, Tp_Approval.class));
                 finish();
                 break;
+            case R.id.lin_qps:
+                startActivity(new Intent(Approvals.this, QPS_Approval.class));
+                finish();
+                break;
+
 
             case R.id.lin_daExp_entry:
                 startActivity(new Intent(Approvals.this, DAExcApproval.class));

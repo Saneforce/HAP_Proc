@@ -12,6 +12,7 @@
 
 
         <include layout="@layout/sfatoolbar"></include>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,6 +101,67 @@
                         android:orientation="vertical"
                         android:visibility="visible">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="Date" />
+
+                            <TextView
+                                android:id="@+id/etQPSBookingDate"
+                                style="@style/TextStyle"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:hint="Enter date here"
+                                android:padding="@dimen/C8dp" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:drawableRight="@drawable/mandatory"
+                                android:drawablePadding="@dimen/C3dp"
+                                android:paddingTop="@dimen/C10dp"
+                                android:text="Claim Type" />
+
+                            <RelativeLayout
+                                android:id="@+id/rlClaimType"
+                                style="@style/TextStyle"
+                                android:layout_width="wrap_content"
+
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:padding="@dimen/C5dp">
+
+                                <TextView
+                                    android:id="@+id/tvClaimType"
+                                    style="@style/TextStyle"
+                                    android:layout_width="match_parent"
+                                    android:hint="Select Claim Type" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/C10dp"
+                                    android:layout_height="@dimen/C10dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/C10dp"
+                                    android:src="@drawable/spin_down_arrow" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -165,7 +227,32 @@
                                 android:paddingTop="@dimen/C10dp"
                                 android:text="New Order (ltr)" />
 
+                            <RelativeLayout
+                                android:id="@+id/rlNewOrder"
+                                style="@style/TextStyle"
+                                android:layout_width="wrap_content"
+
+                                android:background="@drawable/textbox_bg"
+                                android:elevation="5dp"
+                                android:padding="@dimen/C5dp">
+
+                                <TextView
+                                    android:id="@+id/tvNewOrder"
+                                    style="@style/TextStyle"
+                                    android:layout_width="match_parent"
+                                    android:hint="Select New Order" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/C10dp"
+                                    android:layout_height="@dimen/C10dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/C10dp"
+                                    android:src="@drawable/spin_down_arrow" />
+                            </RelativeLayout>
+
                             <LinearLayout
+                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -323,31 +410,6 @@
 
 
                             </LinearLayout>
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:drawableRight="@drawable/mandatory"
-                                android:drawablePadding="@dimen/C3dp"
-                                android:paddingTop="@dimen/C10dp"
-                                android:text="Date" />
-
-                            <TextView
-                                android:id="@+id/etQPSBookingDate"
-                                style="@style/TextStyle"
-                                android:layout_width="match_parent"
-                                android:background="@drawable/textbox_bg"
-                                android:elevation="5dp"
-                                android:hint="Enter date here"
-                                android:padding="@dimen/C8dp" />
 
 
                         </LinearLayout>

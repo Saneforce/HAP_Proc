@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,16 +57,19 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     public Common_Class common_class;
     TextView etBookingDate;
     DatePickerDialog fromDatePickerDialog;
-    TextView tvHapBrand, tvPeriod, tvGift, tvAvailble, tvTarget;
+    TextView tvHapBrand, tvPeriod, tvGift, tvAvailble, tvTarget, tvClaimType;
     ImageView ivEye;
     EditText etNewOrder, etOtherBrand;
     TextView tvRetailorName;
     ImageView ivToolbarHome;
 
     private List<Common_Model> qpsComboList = new ArrayList<>();
+    private List<Common_Model> claimList = new ArrayList<>();
+
     private String QPS_Code = "";
     Shared_Common_Pref shared_common_pref;
     public static QPSActivity qpsActivity;
+    RelativeLayout rlClaimType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         btnSubmit.setOnClickListener(this);
         tvViewStatus.setOnClickListener(this);
         etBookingDate.setOnClickListener(this);
+        rlClaimType.setOnClickListener(this);
 
         findViewById(R.id.tvQPS).setVisibility(View.GONE);
 
@@ -126,7 +131,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
 
         tvCoolerInfo.setVisibility(View.GONE);
 
-        if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+        if (Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
             tvCoolerInfo.setVisibility(View.VISIBLE);
     }
 
@@ -231,6 +236,9 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.rlClaimType:
+                common_class.showCommonDialog(claimList, 3, QPSActivity.this);
+                break;
             case R.id.etQPSBookingDate:
                 Calendar newCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(QPSActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -330,10 +338,18 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         common_class.dismissCommonDialog(type);
-        tvPeriod.setText("" + myDataset.get(position).getName());
-        tvGift.setText("" + myDataset.get(position).getQPS_Name());
-        tvTarget.setText("" + myDataset.get(position).getTotal_Ltrs());
-        QPS_Code = myDataset.get(position).getQPS_Code();
+        switch (type) {
+            case 500:
+                tvPeriod.setText("" + myDataset.get(position).getName());
+                tvGift.setText("" + myDataset.get(position).getQPS_Name());
+                tvTarget.setText("" + myDataset.get(position).getTotal_Ltrs());
+                QPS_Code = myDataset.get(position).getQPS_Code();
+                break;
+            case 3:
+                tvClaimType.setText(myDataset.get(position).getName());
+                break;
+
+        }
 
     }
 
@@ -360,6 +376,11 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         etOtherBrand = (EditText) findViewById(R.id.etQPSotherBrand);
         ivToolbarHome = findViewById(R.id.toolbar_home);
         tvRetailorName = findViewById(R.id.Category_Nametext);
+        rlClaimType = findViewById(R.id.rlClaimType);
+        tvClaimType = findViewById(R.id.tvClaimType);
+
+        claimList.add(new Common_Model("QPS"));
+        claimList.add(new Common_Model("Gift"));
 
 
     }

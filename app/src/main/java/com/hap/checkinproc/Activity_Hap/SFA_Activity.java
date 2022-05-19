@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.ListModel;
 import com.hap.checkinproc.Activity.ViewActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -70,6 +71,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -117,7 +119,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public static String updateTime = "";
     ApiInterface apiService;
 
-    boolean isSFA = true;
+    boolean isSFA = false;
 
 
     @Override
@@ -163,7 +165,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Franchise", "", "", "", R.drawable.ic_franchise));
                     menuList.add(new ListModel("", "My Team", "", "", "", R.drawable.ic_baseline_groups_24));
                     menuList.add(new ListModel("", "Projection", "", "", "", R.drawable.ic_projection));
-                   // menuList.add(new ListModel("", "Stock Audit", "", "", "", R.drawable.ic_stock_audit));
+                    // menuList.add(new ListModel("", "Stock Audit", "", "", "", R.drawable.ic_stock_audit));
                     if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
                         common_class.getDb_310Data(Constants.Distributor_List, this);
                     break;
@@ -192,7 +194,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
             setMenuAdapter();
         } else {
-            callDynamicmenu();
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
+                callDynamicmenu();
+            else {
+                menuList.clear();
+                Type userType = new TypeToken<ArrayList<ListModel>>() {
+                }.getType();
+                menuList = gson.fromJson(sharedCommonPref.getvalue(Constants.PROCUR_MENU), userType);
+                setMenuAdapter();
+            }
         }
 
 
@@ -254,6 +264,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "Stock Audit":
                         getStockAuditDetails(SFA_Activity.this);
                         break;
+                    case "Sync":
+                        saveFormData();
+                        break;
+
                     default:
                         Intent ii = new Intent(SFA_Activity.this, ViewActivity.class);
                         ii.putExtra("btn_need", menuList.get(pos).getTargetForm());
@@ -267,6 +281,73 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         });
         rvMenu.setAdapter(menuAdapter);
 
+    }
+
+    private void saveFormData() {
+        try {
+
+            common_class.ProgressdialogShow(1, "");
+
+            for (int i = 0; i < menuList.size(); i++) {
+                String formid = menuList.get(i).getFormid();
+
+                if (!Common_Class.isNullOrEmpty(formid)) {
+
+
+                    JSONObject json = new JSONObject();
+
+                    json.put("slno", menuList.get(i).getFormid());
+
+                    String formname = menuList.get(i).getFormName();
+
+
+                    Log.v("printing_sf_code", json.toString());
+                    Call<ResponseBody> approval = apiService.getView(json.toString());
+
+                    int finalI = i;
+                    approval.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Log.v("procure:" + formname + ":", response.body().byteStream() + "");
+                                JSONObject jsonObject = null;
+                                String jsonData = null;
+
+                                InputStreamReader ip = null;
+                                StringBuilder is = new StringBuilder();
+                                String line = null;
+                                try {
+                                    ip = new InputStreamReader(response.body().byteStream());
+                                    BufferedReader bf = new BufferedReader(ip);
+
+                                    while ((line = bf.readLine()) != null) {
+                                        is.append(line);
+                                    }
+
+                                    sharedCommonPref.save(formid, is.toString());
+
+                                    if (menuList.size() == finalI + 2)
+                                        common_class.ProgressdialogShow(0, "");
+
+
+                                } catch (Exception e) {
+                                    common_class.ProgressdialogShow(0, "");
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            common_class.ProgressdialogShow(0, "");
+
+                        }
+                    });
+                }
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     public void getProjectionProductDetails(Activity activity) {
@@ -823,6 +904,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                 JSONObject jj = js.getJSONObject(i);
                                 menuList.add(new ListModel(jj.getString("Frm_ID"), jj.getString("Frm_Name"), jj.getString("Frm_Table"), jj.getString("Targt_Frm"), jj.getString("Frm_Type"), R.drawable.ic_outline_assignment_48));
                             }
+                            menuList.add(new ListModel("", "Sync", "", "", "", R.drawable.ic_round_sync_24));
+
+
+                            sharedCommonPref.save(Constants.PROCUR_MENU, gson.toJson(menuList));
+
                             setMenuAdapter();
 
                         } catch (Exception e) {

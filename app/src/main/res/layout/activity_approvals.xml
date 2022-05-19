@@ -94,6 +94,58 @@
 
                         </LinearLayout>
                         <include layout="@layout/part_view" />
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lin_qps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C10dp"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:textSize="16sp"
+                                style="@style/TextStyle"
+                                android:text="QPS"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"></TextView>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <LinearLayout
+                                    android:layout_width="23dp"
+                                    android:layout_height="23dp"
+                                    >
+
+                                    <TextView
+                                        android:id="@+id/txt_qps_count"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:maxEms="2"
+                                        android:text="0"
+                                        android:background="@drawable/circle"
+                                        android:textColor="@android:color/white"></TextView>
+
+                                </LinearLayout>
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/arrow_right"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                        <include
+                            android:visibility="gone"
+                            layout="@layout/part_view" />
+
                         <LinearLayout
                             android:id="@+id/lin_leave_cancel"
                             android:layout_width="match_parent"
@@ -108,10 +160,6 @@
                                 <TextView
                                     android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_marginStart="4dp"
-                                    android:layout_marginBottom="5dp"
                                     android:text="Leave Cancel"></TextView>
 
                                 <LinearLayout
@@ -347,9 +395,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Travel Allowance"></TextView>
+                                    android:text="Travel Allowance"
+                                    android:textSize="16sp"></TextView>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -396,9 +444,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Work Plan-PJP"></TextView>
+                                    android:text="Work Plan-PJP"
+                                    android:textSize="16sp"></TextView>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"

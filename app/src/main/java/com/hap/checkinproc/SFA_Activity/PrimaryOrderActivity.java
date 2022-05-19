@@ -1589,19 +1589,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject dataObj = arr.getJSONObject(i);
-                          //  slotList.add(new Datum(dataObj.getString("Tm")));
-                            slotList.add(new Datum("13:30:00"));
+                            slotList.add(new Datum(dataObj.getString("Tm")));
 
                         }
-
 
                         sharedCommonPref.save(Constants.SlotTime, gson.toJson(slotList));
                     } else {
                         sharedCommonPref.clear_pref(Constants.SlotTime);
 
                     }
-
-
                     break;
                 case Constants.REPEAT_PRIMARY_ORDER:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
@@ -1644,13 +1640,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                         sharedCommonPref.save(Constants.PRIMARY_SCHEME, gson.toJson(product_details_modalArrayList));
 
-
                     } else {
                         sharedCommonPref.clear_pref(Constants.PRIMARY_SCHEME);
-
                     }
-
-
                     break;
 
             }

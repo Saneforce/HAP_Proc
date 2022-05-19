@@ -402,6 +402,10 @@
         <activity
             android:name=".Activity_Hap.Tp_Approval"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Activity_Hap.QPS_Approval"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.Tp_Approval_Reject"
             android:screenOrientation="portrait" />
