@@ -102,7 +102,7 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
-        sharedCommonPref=new Shared_Common_Pref(this);
+        sharedCommonPref = new Shared_Common_Pref(this);
         extra = getIntent().getExtras();
         frm_id = extra.getString("frmid");
         value = Integer.parseInt(extra.getString("btn_need"));
@@ -482,122 +482,122 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     }
 
     public void popupSpinner(int type, final ArrayList<SelectionModel> array_selection, final int pos, String creationId) {
-      try{
+        try {
 
-        Dialog  dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.popup_dynamic_view1);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+            Dialog dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.popup_dynamic_view1);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
 
-        ListView popup_list = (ListView) dialog.findViewById(R.id.popup_list);
-        TextView tv_todayplan_popup_head = (TextView) dialog.findViewById(R.id.tv_todayplan_popup_head);
-        tv_todayplan_popup_head.setText(array_view.get(pos).getFieldname());
-        Button iv_close_popup = (Button) dialog.findViewById(R.id.btnClose);
-        Button ok = (Button) dialog.findViewById(R.id.ok);
+            ListView popup_list = (ListView) dialog.findViewById(R.id.popup_list);
+            TextView tv_todayplan_popup_head = (TextView) dialog.findViewById(R.id.tv_todayplan_popup_head);
+            tv_todayplan_popup_head.setText(array_view.get(pos).getFieldname());
+            Button iv_close_popup = (Button) dialog.findViewById(R.id.btnClose);
+            Button ok = (Button) dialog.findViewById(R.id.ok);
 
-        if (array_selection.contains(new SelectionModel(true))) {
-            isEmpty = false;
-        } else
-            isEmpty = true;
-        arrayViewPos = pos;
-        mCreationId = creationId;
+            if (array_selection.contains(new SelectionModel(true))) {
+                isEmpty = false;
+            } else
+                isEmpty = true;
+            arrayViewPos = pos;
+            mCreationId = creationId;
 
-        AdapterForSelectionList adapt = new AdapterForSelectionList(ViewActivity.this, array_selection, type, new AdapterOnClick() {
-            @Override
-            public void onIntentClick(SelectionModel selectionModel) {
+            AdapterForSelectionList adapt = new AdapterForSelectionList(ViewActivity.this, array_selection, type, new AdapterOnClick() {
+                @Override
+                public void onIntentClick(SelectionModel selectionModel) {
 
-                array_view.get(pos).setValue(selectionModel.getTxt());
-                if (filterList.size() != 0) {
-                    for (int j = 0; j < filterList.size(); j++) {
-                        if (filterList.get(j).getTxt().equals(creationId)) {
-                            selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), selectionModel.getTxt()));
+                    array_view.get(pos).setValue(selectionModel.getTxt());
+                    if (filterList.size() != 0) {
+                        for (int j = 0; j < filterList.size(); j++) {
+                            if (filterList.get(j).getTxt().equals(creationId)) {
+                                selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), selectionModel.getTxt()));
+                            }
+                        }
+                        Log.e("ListValues_fil", filterList.toString());
+                        Log.e("ListValues_select", selectedFilter.toString());
+                    }
+                    adp_view.notifyDataSetChanged();
+
+                    dialog.dismiss();
+                    commonFun();
+                }
+
+
+            });
+            popup_list.setAdapter(adapt);
+            final SearchView search_view = (SearchView) dialog.findViewById(R.id.search_view);
+            search_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    search_view.setIconified(false);
+                    InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
+                    im.showSoftInput(search_view, 0);
+                }
+            });
+            search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    Log.v("search_view_str", s);
+                    adapt.getFilter().filter(s);
+                    return false;
+                }
+            });
+
+            iv_close_popup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isEmpty) {
+                        if (array_selection.contains(new SelectionModel(true))) {
+                            for (int i = 0; i < array_selection.size(); i++) {
+                                SelectionModel m = array_selection.get(i);
+                                m.setClick(false);
+                            }
                         }
                     }
-                    Log.e("ListValues_fil", filterList.toString());
-                    Log.e("ListValues_select", selectedFilter.toString());
+                    dialog.dismiss();
+                    commonFun();
                 }
-                adp_view.notifyDataSetChanged();
-
-                dialog.dismiss();
-                commonFun();
-            }
-
-
-        });
-        popup_list.setAdapter(adapt);
-        final SearchView search_view = (SearchView) dialog.findViewById(R.id.search_view);
-        search_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search_view.setIconified(false);
-                InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
-                im.showSoftInput(search_view, 0);
-            }
-        });
-        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.v("search_view_str", s);
-                adapt.getFilter().filter(s);
-                return false;
-            }
-        });
-
-        iv_close_popup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEmpty) {
+            });
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (array_selection.contains(new SelectionModel(true))) {
                         for (int i = 0; i < array_selection.size(); i++) {
                             SelectionModel m = array_selection.get(i);
-                            m.setClick(false);
-                        }
-                    }
-                }
-                dialog.dismiss();
-                commonFun();
-            }
-        });
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (array_selection.contains(new SelectionModel(true))) {
-                    for (int i = 0; i < array_selection.size(); i++) {
-                        SelectionModel m = array_selection.get(i);
-                        if (m.isClick()) {
-                            array_view.get(pos).setValue(m.getTxt());
-                            i = array_selection.size();
-                            if (filterList.size() != 0) {
-                                for (int j = 0; j < filterList.size(); j++) {
-                                    if (filterList.get(j).getTxt().equals(creationId)) {
-                                        selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), m.getTxt()));
+                            if (m.isClick()) {
+                                array_view.get(pos).setValue(m.getTxt());
+                                i = array_selection.size();
+                                if (filterList.size() != 0) {
+                                    for (int j = 0; j < filterList.size(); j++) {
+                                        if (filterList.get(j).getTxt().equals(creationId)) {
+                                            selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), m.getTxt()));
+                                        }
                                     }
+                                    Log.e("ListValues_fil", filterList.toString());
+                                    Log.e("ListValues_select", selectedFilter.toString());
                                 }
-                                Log.e("ListValues_fil", filterList.toString());
-                                Log.e("ListValues_select", selectedFilter.toString());
+                                adp_view.notifyDataSetChanged();
+                                break;
                             }
-                            adp_view.notifyDataSetChanged();
-                            break;
                         }
-                    }
 
-                } else {
-                    array_view.get(pos).setValue("");
-                    adp_view.notifyDataSetChanged();
+                    } else {
+                        array_view.get(pos).setValue("");
+                        adp_view.notifyDataSetChanged();
+                    }
+                    dialog.dismiss();
+                    commonFun();
                 }
-                dialog.dismiss();
-                commonFun();
-            }
-        });}
-      catch (Exception e){
-          Log.v("ViewActivity:POP:",e.getMessage());
-      }
+            });
+        } catch (Exception e) {
+            Log.v("ViewActivity:POP:", e.getMessage());
+        }
     }
 
 
@@ -731,49 +731,52 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     public void callDynamicViewList() {
         try {
 
-            if(Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(frm_id))){
-            JSONObject json = new JSONObject();
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(frm_id + ":"))) {
 
-            json.put("slno", frm_id);
+                Log.v("FORM_ID:", frm_id);
+                JSONObject json = new JSONObject();
 
-            Log.v("printing_sf_code", json.toString());
-            Call<ResponseBody> approval = apiService.getView(json.toString());
+                json.put("slno", frm_id);
 
-            approval.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        Log.v("printing_res_track_dV", response.body().byteStream() + "");
-                        JSONObject jsonObject = null;
-                        String jsonData = null;
+                Log.v("printing_sf_code", json.toString());
+                Call<ResponseBody> approval = apiService.getView(json.toString());
 
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            ip = new InputStreamReader(response.body().byteStream());
-                            BufferedReader bf = new BufferedReader(ip);
+                approval.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            Log.v("printing_res_track_dV", response.body().byteStream() + "");
+                            JSONObject jsonObject = null;
+                            String jsonData = null;
 
-                            while ((line = bf.readLine()) != null) {
-                                is.append(line);
+                            InputStreamReader ip = null;
+                            StringBuilder is = new StringBuilder();
+                            String line = null;
+                            try {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                }
+
+                                sharedCommonPref.save(frm_id + ":", is.toString());
+                                createDynamicView(is.toString());
+
+
+                            } catch (Exception e) {
+
                             }
 
-                            createDynamicView(is.toString());
-
-
-                        } catch (Exception e) {
-
                         }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            });}
-            else {
+                });
+            } else {
                 createDynamicView(sharedCommonPref.getvalue(frm_id));
             }
 
@@ -783,8 +786,8 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     }
 
 
-    void createDynamicView(String data){
-        try{
+    void createDynamicView(String data) {
+        try {
 
             array_view.clear();
             Log.v("printing_dynamic_view", data);
@@ -793,8 +796,7 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
             if (jsonArray.length() == 0) {
                 Toast.makeText(ViewActivity.this, "No controls available for this form ", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-            }
-            else {
+            } else {
                 JSONObject jsonjk = jsonArray.getJSONObject(0);
                 if (jsonjk.getString("Control_id").equalsIgnoreCase("19")) {
                     callDynamicViewListView();
@@ -802,6 +804,14 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                     if (share.getString("exist", "").equalsIgnoreCase("E") && share.getString("fab", "").equalsIgnoreCase("1")) {
                         ArrayList<SelectionModel> arr = new ArrayList<>();
                         array_view.add(new ModelDynamicView("19", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", "", ""));
+
+                        SharedPreferences.Editor edit = share.edit();
+                        edit.putString("exist", "");
+                        edit.putString("fab", "");
+                        edit.putString("value", "");
+                        edit.putString("arr", "");
+                        edit.commit();
+
                     }
                     for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -850,6 +860,8 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                                 fab_value = json.getString("type");
                                 btnShow = json.getString("target");
                                 tool_header.setText(json.getString("header"));
+                                Log.v("FORM_NAME:", json.getString("header"));
+
                                 header = json.getString("header");
                                 Log.v("NO_INPUT:2", "Out:" + i);
 

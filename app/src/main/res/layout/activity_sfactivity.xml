@@ -43,6 +43,15 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:id="@+id/ivProcureSync"
+            android:layout_width="@dimen/C30dp"
+            android:layout_height="@dimen/C30dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/ic_round_sync_24" />
+
+        <ImageView
             android:id="@+id/toolbar_home"
             android:layout_width="@dimen/C30dp"
             android:layout_height="@dimen/C30dp"

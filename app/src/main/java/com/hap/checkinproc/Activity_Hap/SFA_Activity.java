@@ -36,6 +36,7 @@ import com.hap.checkinproc.Activity.Util.ListModel;
 import com.hap.checkinproc.Activity.ViewActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
@@ -97,7 +98,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences UserDetails;
     DatabaseHandler db;
 
-    ImageView ivLogout, ivCalendar;
+    ImageView ivLogout, ivCalendar, ivProcureSync;
 
     LinearLayout llGridParent;
 
@@ -119,7 +120,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public static String updateTime = "";
     ApiInterface apiService;
 
-    boolean isSFA = false;
+    boolean isSFA = true;
 
 
     @Override
@@ -154,6 +155,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         common_class.getDb_310Data(Constants.GroupFilter, this);
 
         if (isSFA) {
+            ivProcureSync.setVisibility(View.GONE);
             switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
                 case Constants.CHECKIN_TYPE:
                     menuList.add(new ListModel("", "Primary Order", "", "", "", R.drawable.ic_outline_add_chart_48));
@@ -194,6 +196,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
             setMenuAdapter();
         } else {
+            ivProcureSync.setVisibility(View.VISIBLE);
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
                 callDynamicmenu();
             else {
@@ -288,62 +291,74 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
             common_class.ProgressdialogShow(1, "");
 
+            ArrayList<Common_Model> formList = new ArrayList<>();
+
             for (int i = 0; i < menuList.size(); i++) {
-                String formid = menuList.get(i).getFormid();
+                if (!menuList.get(i).getFormid().equalsIgnoreCase(""))
+                    formList.add(new Common_Model(menuList.get(i).getFormName(), menuList.get(i).getFormid()));
+            }
 
-                if (!Common_Class.isNullOrEmpty(formid)) {
-
-
-                    JSONObject json = new JSONObject();
-
-                    json.put("slno", menuList.get(i).getFormid());
-
-                    String formname = menuList.get(i).getFormName();
+            formList.add(new Common_Model("New Farmer", "2"));
+            formList.add(new Common_Model("Existing Farmer", "3"));
+            formList.add(new Common_Model("Competitor Activity", "12"));
+            formList.add(new Common_Model("General Activities", "8"));
 
 
-                    Log.v("printing_sf_code", json.toString());
-                    Call<ResponseBody> approval = apiService.getView(json.toString());
-
-                    int finalI = i;
-                    approval.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful()) {
-                                Log.v("procure:" + formname + ":", response.body().byteStream() + "");
-                                JSONObject jsonObject = null;
-                                String jsonData = null;
-
-                                InputStreamReader ip = null;
-                                StringBuilder is = new StringBuilder();
-                                String line = null;
-                                try {
-                                    ip = new InputStreamReader(response.body().byteStream());
-                                    BufferedReader bf = new BufferedReader(ip);
-
-                                    while ((line = bf.readLine()) != null) {
-                                        is.append(line);
-                                    }
-
-                                    sharedCommonPref.save(formid, is.toString());
-
-                                    if (menuList.size() == finalI + 2)
-                                        common_class.ProgressdialogShow(0, "");
+            for (int i = 0; i < formList.size(); i++) {
+                String formid = formList.get(i).getName();
 
 
-                                } catch (Exception e) {
+                JSONObject json = new JSONObject();
+
+                json.put("slno", formList.get(i).getId());
+
+                String formname = formList.get(i).getName();
+
+
+                Log.v("printing_sf_code", json.toString());
+                Call<ResponseBody> approval = apiService.getView(json.toString());
+
+                int finalI = i;
+                approval.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            Log.v("procure:" + formname + ":" + formid + ":", response.body().byteStream() + "");
+                            JSONObject jsonObject = null;
+                            String jsonData = null;
+
+                            InputStreamReader ip = null;
+                            StringBuilder is = new StringBuilder();
+                            String line = null;
+                            try {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                }
+
+                                sharedCommonPref.save(formid + ":", is.toString());
+
+                                Log.v("sizeCheck:", "" + menuList.size() + ":current:" + (finalI + 1));
+                                if (formList.size() == finalI + 1)
                                     common_class.ProgressdialogShow(0, "");
 
-                                }
+
+                            } catch (Exception e) {
+                                common_class.ProgressdialogShow(0, "");
+
                             }
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            common_class.ProgressdialogShow(0, "");
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        common_class.ProgressdialogShow(0, "");
 
-                        }
-                    });
-                }
+                    }
+                });
+
             }
         } catch (Exception e) {
 
@@ -520,6 +535,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders.setOnClickListener(this);
         Logout.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
+        ivProcureSync.setOnClickListener(this);
 
     }
 
@@ -614,6 +630,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         ivCalendar = (ImageView) findViewById(R.id.ivSFACalendar);
         tvDate = (TextView) findViewById(R.id.tvSFADate);
+        ivProcureSync = (ImageView) findViewById(R.id.ivProcureSync);
 
 
         tvServiceOutlet = (TextView) findViewById(R.id.tvServiceOutlet);
@@ -652,6 +669,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivProcureSync:
+                saveFormData();
+
+                break;
 
             case R.id.linorders:
                 common_class.CommonIntentwithNEwTask(Dashboard_Order_Reports.class);
@@ -904,7 +925,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                 JSONObject jj = js.getJSONObject(i);
                                 menuList.add(new ListModel(jj.getString("Frm_ID"), jj.getString("Frm_Name"), jj.getString("Frm_Table"), jj.getString("Targt_Frm"), jj.getString("Frm_Type"), R.drawable.ic_outline_assignment_48));
                             }
-                            menuList.add(new ListModel("", "Sync", "", "", "", R.drawable.ic_round_sync_24));
+                            //  menuList.add(new ListModel("", "Sync", "", "", "", R.drawable.ic_round_sync_24));
 
 
                             sharedCommonPref.save(Constants.PROCUR_MENU, gson.toJson(menuList));
