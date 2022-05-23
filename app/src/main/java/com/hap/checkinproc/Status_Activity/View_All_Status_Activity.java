@@ -64,6 +64,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
 
     JSONArray arr;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,10 @@ public class View_All_Status_Activity extends AppCompatActivity {
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
+        TextView tvHeader = findViewById(R.id.tvHeader);
+        tvHeader.setText("" + getIntent().getStringExtra("name"));
         ImageView imgHome = findViewById(R.id.toolbar_home);
+
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

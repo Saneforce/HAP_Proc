@@ -1,6 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -23,7 +22,6 @@ import androidx.cardview.widget.CardView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -48,10 +46,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
-    EditText edtFrom, edtTo, edtPersonal,edtTraveled;
-    String SLNO = "", MOT = "", MOTNm = "", starEd = "", DriverNeed = "false", startEnd = "",DriverMode = "", modeId = "" ;
+    EditText edtFrom, edtTo, edtPersonal, edtTraveled;
+    String SLNO = "", MOT = "", MOTNm = "", starEd = "", DriverNeed = "false", startEnd = "", DriverMode = "", modeId = "";
     Shared_Common_Pref mShared_common_pref;
-    Integer inEdtFrom, inEdtTo,intSum;
+    Integer inEdtFrom, inEdtTo, intSum;
     CardView ModeTravel;
     List<Common_Model> modelTravelType = new ArrayList<>();
     CustomListViewDialog customDialog;
@@ -89,7 +87,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
                     String name = modelOfTravel.get(i).getName();
                     String modeId = String.valueOf(modelOfTravel.get(i).getId());
                     String driverMode = String.valueOf(modelOfTravel.get(i).getDriverNeed());
-                    if(id.equalsIgnoreCase("1")){
+                    if (id.equalsIgnoreCase("1")) {
                         Model_Pojo = new Common_Model(id, name, modeId, driverMode);
                         modelTravelType.add(Model_Pojo);
                     }
@@ -109,9 +107,11 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
     }
 
     static DistanceMeterWatcher ReadingChanger;
-    public static void onDistanceMeterWatcher(DistanceMeterWatcher mReadingChange){
-        ReadingChanger=mReadingChange;
+
+    public static void onDistanceMeterWatcher(DistanceMeterWatcher mReadingChange) {
+        ReadingChanger = mReadingChange;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,16 +138,16 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
         TextMode = findViewById(R.id.txt_mode);
         edtFrom.setText("" + getIntent().getSerializableExtra("Start"));
         edtTo.setText("" + getIntent().getSerializableExtra("End"));
-      //  edtPersonal.setText("0");
+        //  edtPersonal.setText("0");
 
         TextMode.setText(MOTNm);
 
         gson = new Gson();
-        inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
-        inEdtTo = Integer.parseInt(edtTo.getText().toString());
+        inEdtFrom = Integer.valueOf(Common_Class.isNullOrEmpty(edtFrom.getText().toString()) ? "0" : edtFrom.getText().toString());
+        inEdtTo = Integer.parseInt(Common_Class.isNullOrEmpty(edtTo.getText().toString()) ? "0" : edtTo.getText().toString());
         intSum = inEdtTo - inEdtFrom;
         Log.v("INT_SUM", String.valueOf(intSum));
-        edtTraveled.setText(""+intSum);
+        edtTraveled.setText("" + intSum);
         edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
 
         ModeTravel = findViewById(R.id.card_travel_mode);
@@ -166,35 +166,39 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
-                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-              //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
-                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
-                if (!edtTo.getText().toString().equals("")) {
+                try {
 
-                    try {
-                        inEdtTo = Integer.parseInt(edtTo.getText().toString());
-                    } catch (NumberFormatException ex) { // handle your exception
+//                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+//                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                    //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+                    inEdtFrom = Integer.valueOf(edtFrom.getText().toString().equalsIgnoreCase("") ? "0" : edtFrom.getText().toString());
+                    // if (!edtTo.getText().toString().equals("")) {
 
-                    }
+                    inEdtTo = Integer.parseInt(edtTo.getText().toString().equalsIgnoreCase("0") ? "0" : edtTo.getText().toString());
+                } catch (NumberFormatException ex) { // handle your exception
+
                 }
+                // }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
-                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-              //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
-                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
-                inEdtTo = Integer.parseInt(edtTo.getText().toString());
-                intSum = inEdtTo - inEdtFrom;
-                Log.v("INT_SUM", String.valueOf(intSum));
-                edtTraveled.setText(""+intSum);
+                try {
+//                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+//                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                    //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+                    inEdtFrom = Integer.valueOf(edtFrom.getText().toString().equalsIgnoreCase("") ? "0" : edtFrom.getText().toString());
+                    inEdtTo = Integer.parseInt(edtTo.getText().toString().equalsIgnoreCase("") ? "0" : edtTo.getText().toString());
+                    intSum = inEdtTo - inEdtFrom;
+                    Log.v("INT_SUM", String.valueOf(intSum));
+                    edtTraveled.setText("" + intSum);
 
-                edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+                    edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+                } catch (Exception e) {
+
+                }
             }
         });
-
 
 
         edtTo.addTextChangedListener(new TextWatcher() {
@@ -205,33 +209,43 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
-                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-               // if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
-                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
-                if (!edtTo.getText().toString().equals("")) {
+                try {
+
+
+//                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+//                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                    // if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+                    inEdtFrom = Integer.valueOf(edtFrom.getText().toString().equalsIgnoreCase("") ? "0" : edtFrom.getText().toString());
+                    //  if (!edtTo.getText().toString().equals("")) {
 
                     try {
-                        inEdtTo = Integer.parseInt(edtTo.getText().toString());
+                        inEdtTo = Integer.parseInt(edtTo.getText().toString().equalsIgnoreCase("") ? "0" : edtTo.getText().toString());
                     } catch (NumberFormatException ex) { // handle your exception
 
                     }
+                    //   }
+                } catch (Exception e) {
+
                 }
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
-                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-            //    if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
-                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
-                inEdtTo = Integer.parseInt(edtTo.getText().toString());
-                intSum = inEdtTo - inEdtFrom;
-                Log.v("INT_SUM", String.valueOf(intSum));
-                edtTraveled.setText(""+intSum);
+                try {
+//                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+//                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                    //    if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+                    inEdtFrom = Integer.valueOf(edtFrom.getText().toString().equalsIgnoreCase("") ? "0" : edtFrom.getText().toString());
+                    inEdtTo = Integer.parseInt(edtTo.getText().toString().equalsIgnoreCase("") ? "0" : edtTo.getText().toString());
+                    intSum = inEdtTo - inEdtFrom;
+                    Log.v("INT_SUM", String.valueOf(intSum));
+                    edtTraveled.setText("" + intSum);
 
-                edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+                    edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+                } catch (Exception e) {
+
+                }
             }
         });
 
@@ -239,61 +253,66 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
     public void UpdteAllowance(View v) throws JSONException {
 
-        if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
-        if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
-       // if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+//        if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+//        if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+        // if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
 
-        if (edtFrom.getText().toString() != null && !edtFrom.getText().toString().isEmpty() && !edtFrom.getText().toString().equals("null")) {
-            if (edtTo.getText().toString() != null && !edtTo.getText().toString().isEmpty() && !edtTo.getText().toString().equals("null")) {
+//        if (edtFrom.getText().toString() != null && !edtFrom.getText().toString().isEmpty() && !edtFrom.getText().toString().equals("null")) {
+//            if (edtTo.getText().toString() != null && !edtTo.getText().toString().isEmpty() && !edtTo.getText().toString().equals("null")) {
 
-                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
-                inEdtTo = Integer.parseInt(edtTo.getText().toString());
-                String drvAllw= (driverAllowance.isChecked()?"true":"false");
-                if (inEdtFrom < inEdtTo) {
-                    JSONObject jj = new JSONObject();
-                    jj.put("sl_no", SLNO);
-                    jj.put("mot", MOT);
-                    jj.put("motnm", MOTNm);
-                    jj.put("driverAllow",drvAllw);
-                    jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-                    jj.put("startKm", edtFrom.getText().toString());
-                    jj.put("endKm", edtTo.getText().toString());
-                    jj.put("personalKm", edtPersonal.getText().toString().equalsIgnoreCase("")?"0":edtPersonal.getText().toString());
-                    Log.v("printing_allow", jj.toString());
+        inEdtFrom = Integer.valueOf(com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(edtFrom.getText().toString()) ? "0" : edtFrom.getText().toString().equalsIgnoreCase("null") ? "0" : edtFrom.getText().toString());
+        inEdtTo = Integer.valueOf(com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(edtTo.getText().toString()) ? "0" : edtTo.getText().toString().equalsIgnoreCase("null") ? "0" : edtTo.getText().toString());
+        String drvAllw = (driverAllowance.isChecked() ? "true" : "false");
 
-                    Call<JsonObject> Callto;
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Callto = apiInterface.upteAllowance(jj.toString());
-                    Callto.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            JsonObject json = response.body();
-                            Log.v("CHECKING", json.get("success").getAsString());
-                            if(ReadingChanger!=null) ReadingChanger.onKilometerChange(jj);
-                            if (json.get("success").getAsString().equalsIgnoreCase("true")) {
-                                finish();
-                            }
-                        }
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                        }
-                    });
-                } else {
-                    Toast.makeText(this, "Should be greater than Start Km", Toast.LENGTH_SHORT).show();
+        if (inEdtFrom < 1)
+            Toast.makeText(this, "Started km should be greater than zero", Toast.LENGTH_SHORT).show();
+        else if (inEdtFrom < inEdtTo) {
+            JSONObject jj = new JSONObject();
+            jj.put("sl_no", SLNO);
+            jj.put("mot", MOT);
+            jj.put("motnm", MOTNm);
+            jj.put("driverAllow", drvAllw);
+            jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("startKm", edtFrom.getText().toString());
+            jj.put("endKm", edtTo.getText().toString());
+            jj.put("personalKm", edtPersonal.getText().toString().equalsIgnoreCase("") ? "0" : edtPersonal.getText().toString());
+            Log.v("printing_allow", jj.toString());
+
+            Call<JsonObject> Callto;
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Callto = apiInterface.upteAllowance(jj.toString());
+            Callto.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    JsonObject json = response.body();
+                    Log.v("CHECKING", json.get("success").getAsString());
+                    if (ReadingChanger != null) ReadingChanger.onKilometerChange(jj);
+                    if (json.get("success").getAsString().equalsIgnoreCase("true")) {
+                        finish();
+                    }
                 }
 
-            }
-
-
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                }
+            });
+        } else {
+            Toast.makeText(this, "Closing km should be greater than Start Km", Toast.LENGTH_SHORT).show();
         }
+
+        // }
+
+
+        // }
     }
+
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
         if (type == 8) {
             TextMode.setText(myDataset.get(position).getName());
-            MOTNm=myDataset.get(position).getName();
+            MOTNm = myDataset.get(position).getName();
             MOT = myDataset.get(position).getFlag();
 
 

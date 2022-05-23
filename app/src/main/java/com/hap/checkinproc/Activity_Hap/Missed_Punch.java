@@ -303,7 +303,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         }
 
         if (sharedpreferences.contains("shiftType")) {
-            shiftType.setText(sharedpreferences.getString("shiftType", ""));
+            shiftType.setText(""+sharedpreferences.getString("shiftType", "").replaceAll("]", "").replaceAll("\\[", ""));
         }
 
 
@@ -621,7 +621,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             missedShift = myDataset.get(position).getName();
             missedCHeckin = myDataset.get(position).getFlag();
             checkIn.setText(myDataset.get(position).getFlag());
-            shiftType.setText(myDataset.get(position).getName());
+            shiftType.setText(""+myDataset.get(position).getName().replaceAll("]", "").replaceAll("\\[", ""));
             misseddateselect.setText(myDataset.get(position).getId());
             checkOutTime.setText(myDataset.get(position).getAddress());
             missedCheckOut = myDataset.get(position).getAddress();
@@ -696,7 +696,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                         missedShift = Model_Pojo.getName();
                         missedCHeckin = Model_Pojo.getFlag();
                         checkIn.setText(Model_Pojo.getFlag());
-                        shiftType.setText(Model_Pojo.getName());
+                        shiftType.setText(""+Model_Pojo.getName().replaceAll("]", "").replaceAll("\\[", ""));
                         misseddateselect.setText(Model_Pojo.getId());
                         checkOutTime.setText(Model_Pojo.getAddress());
                         missedCheckOut = Model_Pojo.getAddress();

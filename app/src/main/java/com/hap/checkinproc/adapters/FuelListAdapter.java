@@ -16,6 +16,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Activity_Hap.TaFuelEdit;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
 
@@ -81,8 +82,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
         if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
 
-            Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
-            Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
+            Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString())?"0":jsFuel.get("Start_Km").getAsString());
+            Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString())?"0":jsFuel.get("End_Km").getAsString());
 
             if (end != 0) {
                 String total = String.valueOf(end - start);
@@ -96,7 +97,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
                     if (Total >= TWMax_Km) {
                         Total = TWMax_Km;
-                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);
                         Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
@@ -111,10 +112,10 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
                         holder.TextTotalAmount.setText("Rs. " +  new DecimalFormat("##0.00").format(q*z));
                     }else{
-                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);
-                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        Double FuelaAmt = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString())?"0":jsFuel.get("FuelAmt").getAsString());
                         holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
                         Double q = Double.valueOf(TotalPersonal);
                         Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
@@ -129,10 +130,10 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                 } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
                     if (Total >= FWMax_Km) {
                         Total = FWMax_Km;
-                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);
-                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        Double FuelaAmt = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString())?"0":jsFuel.get("FuelAmt").getAsString());
                         holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
                         Double q = Double.valueOf(TotalPersonal);
                         Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
@@ -143,13 +144,13 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         double qz =  q * z;
                         holder.TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(qz));
                     }else{
-                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);
-                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        Double FuelaAmt = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString())?"0":jsFuel.get("FuelAmt").getAsString());
                         holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
                         Double q = Double.valueOf(TotalPersonal);
-                        Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        Double z = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString())?"0":jsFuel.get("FuelAmt").getAsString());
                         double qz =  q * z;
                         holder.TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(qz) );
                     }

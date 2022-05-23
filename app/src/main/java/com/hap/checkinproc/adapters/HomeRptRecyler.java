@@ -73,6 +73,7 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                             Intent intent = new Intent(mContext, View_All_Status_Activity.class);
                             intent.putExtra("Priod", itm.get("Priod").getAsString());
                             intent.putExtra("Status", holder.txtLable.getText());
+                            intent.putExtra("name", "View All " + itm.get("name").getAsString() + " Status");
                             mContext.startActivity(intent);
                         }
                     });
@@ -100,8 +101,8 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (itm.get("name").getAsString().equalsIgnoreCase("Geo In")||itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
-                            navigateMapDir(itm.get("value").getAsString());
+                        if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
+                            navigateMapDir(itm.get("value").getAsString(), itm.get("name").getAsString());
                         }
                     } catch (Exception e) {
 
@@ -117,14 +118,14 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
     }
 
 
-    void navigateMapDir(String value) {
+    void navigateMapDir(String value, String tag) {
         if (!Common_Class.isNullOrEmpty(value)) {
             String[] latlongs = value.split(",");
             Intent intent = new Intent(mContext, MapDirectionActivity.class);
             intent.putExtra(Constants.DEST_LAT, latlongs[0]);
             intent.putExtra(Constants.DEST_LNG, latlongs[1]);
-            intent.putExtra(Constants.DEST_NAME, "Destination");
-            intent.putExtra(Constants.NEW_OUTLET, "");
+            intent.putExtra(Constants.DEST_NAME, tag);
+            intent.putExtra(Constants.NEW_OUTLET, "GEO");
             mContext.startActivity(intent);
 
         }

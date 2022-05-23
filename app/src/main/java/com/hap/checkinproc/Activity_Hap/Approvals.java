@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.TAApprovalActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -48,7 +47,7 @@ import retrofit2.Response;
 public class Approvals extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout linProjectionApprove,linQpsApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -164,7 +163,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
         linProjectionApprove = findViewById(R.id.lin_productProjectionApproval);
-        linQpsApprove=findViewById(R.id.lin_qps);
+        linQpsApprove = findViewById(R.id.lin_qps);
         /*Status text*/
         /*SetOnClickListner*/
 
@@ -227,6 +226,53 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     txt_holiday_count.setText(jsonObject.getString("HolidayCount"));
                     txt_deviation_count.setText(jsonObject.getString("DeviationC"));
                     txt_leavecancel_count.setText(jsonObject.getString("CancelLeave"));
+
+
+                    if (Integer.parseInt(jsonObject.getString("leave")) < 1) {
+                        findViewById(R.id.llLeave).setVisibility(View.GONE);
+                        LeaveRequest.setVisibility(View.GONE);
+                    }
+
+                    if (Integer.parseInt(jsonObject.getString("Permission")) < 1) {
+                        findViewById(R.id.llPermission).setVisibility(View.GONE);
+                        PermissionRequest.setVisibility(View.GONE);
+                    }
+
+                    if (Integer.parseInt(jsonObject.getString("vwOnduty")) < 1) {
+                        findViewById(R.id.llOnDuty).setVisibility(View.GONE);
+                        OnDuty.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("ExpList")) < 1) {
+                        findViewById(R.id.llTrvlAlow).setVisibility(View.GONE);
+                        TravelAllowance.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("vwmissedpunch")) < 1) {
+                        findViewById(R.id.llMissedPunch).setVisibility(View.GONE);
+                        MissedPunch.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("TountPlanCount")) < 1) {
+                        findViewById(R.id.llWrkPln).setVisibility(View.GONE);
+                        TourPlan.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("vwExtended")) < 1) {
+                        findViewById(R.id.llExtndSft).setVisibility(View.GONE);
+                        ExtendedShift.setVisibility(View.GONE);
+                    }
+
+                    if (Integer.parseInt(jsonObject.getString("HolidayCount")) < 1) {
+                        findViewById(R.id.llHoliEntry).setVisibility(View.GONE);
+                        lin_holidayentryApproval.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("DeviationC")) < 1) {
+                        findViewById(R.id.llDevEntry).setVisibility(View.GONE);
+                        lin_DeviationApproval.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("CancelLeave")) < 1) {
+                        findViewById(R.id.llLvCancel).setVisibility(View.GONE);
+                        linLeaveCancel.setVisibility(View.GONE);
+                    }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -396,8 +442,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     JSONObject obj = new JSONObject(apiDataResponse);
                     if (obj.getBoolean("success")) {
                         startActivity(new Intent(Approvals.this, TACumulativeApproval.class));
-                      //  startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
-                       // finish();
+                        //  startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
+                        // finish();
                     } else {
                         common_class.showMsg(this, obj.getString("Msg"));
                     }

@@ -278,7 +278,7 @@
                             <TextView
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
-                                android:text="On-duty Status"
+                                android:text="On-Duty Status"
                                 android:textSize="16sp" />
 
                             <ImageView
@@ -322,7 +322,7 @@
                             <TextView
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
-                                android:text="Weekly-off Status"
+                                android:text="Weekly-Off Status"
                                 android:textSize="16sp" />
 
                             <ImageView
@@ -345,7 +345,7 @@
                             <TextView
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
-                                android:text="Extended shift Status"
+                                android:text="Extended Shift Status"
                                 android:textSize="16sp" />
 
                             <ImageView

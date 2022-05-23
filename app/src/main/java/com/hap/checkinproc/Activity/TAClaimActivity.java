@@ -1369,7 +1369,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         TaFuelEdit.onDistanceMeterWatcher(new DistanceMeterWatcher() {
             @Override
             public void onKilometerChange(JSONObject KMDetails) {
-                Toast.makeText(TAClaimActivity.this, "Fule Changed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TAClaimActivity.this, "Updated", Toast.LENGTH_SHORT).show();
                 changeDate(DateTime);
                 SumOFTAAmount();
             }
@@ -2243,8 +2243,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
                             jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
-                                Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
-                                Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
+                                Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString()) ? "0" :
+                                        jsFuel.get("Start_Km").getAsString());
+                                Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString()) ? "0" : jsFuel.get("End_Km").getAsString());
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
@@ -2254,7 +2255,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
                                         if (Total >= FWMax_Km) Total = FWMax_Km;
                                     }
-                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                    Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
                                     String TotalPersonal = String.valueOf(Total - Personal);
                                     Double q = Double.valueOf(TotalPersonal);
                                     Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
@@ -2802,7 +2803,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     for (int i = 0; i < ldArray.size(); i++) {
                         // ldgAdd.setText("- Remove");
                         ldraft = (JsonObject) ldArray.get(i);
-                        elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
+                        elibs = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Eligible").getAsString())?"0":ldraft.get("Eligible").getAsString());
                         txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
                         TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
                         // changes chk
@@ -3050,19 +3051,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
 
             stayDays.setVisibility(View.VISIBLE);
-            Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
-            Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
+//            Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
+//            Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
 
             txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
 
-            double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
+            double elibs = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Eligible").getAsString())?"0":ldraft.get("Eligible").getAsString());
 
 
             txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
 
-            double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
+            double srtjdgAmt = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Joining_Ldg_Amount").getAsString())?"0":ldraft.get("Joining_Ldg_Amount").getAsString());
             txtJNEligi.setText("₹" + new DecimalFormat("##0.00").format(srtjdgAmt));
-            Double wobal = Double.valueOf(ldraft.get("WOB_Amt").getAsString());
+            Double wobal = Double.valueOf(Common_Class.isNullOrEmpty(ldraft.get("WOB_Amt").getAsString())?"0":ldraft.get("WOB_Amt").getAsString());
 
             Log.v("ldgWOBBal", String.valueOf(wobal));
             ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(wobal));
@@ -4496,13 +4497,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     Log.v("TA_Response", response.body().toString());
                     //startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                   // openHome();
+                    // openHome();
                     if (responseVal.equals("Save")) {
                         Toast.makeText(TAClaimActivity.this, "Saved Successfully ", Toast.LENGTH_SHORT).show();
                         openHome();
                     } else {
                         Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(TAClaimActivity.this,ViewTAStatus.class));
+                        startActivity(new Intent(TAClaimActivity.this, ViewTAStatus.class));
 
                     }
                     ResetSubmitBtn(1, btnAnim);
@@ -5579,8 +5580,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
                             jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
-                                Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
-                                Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
+                                Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString())?"0":jsFuel.get("Start_Km").getAsString());
+                                Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString())?"0":jsFuel.get("End_Km").getAsString());
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
@@ -5589,10 +5590,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= FWMax_Km)
                                         Total = FWMax_Km;
 
-                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                    Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());
                                     String TotalPersonal = String.valueOf(Total - Personal);
                                     Double q = Double.valueOf(TotalPersonal);
-                                    Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                    Double z = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString())?"0":jsFuel.get("FuelAmt").getAsString());
                                     String qz = String.valueOf(q * z);
                                     Log.v("TA_FUEL_TOTAL", qz);
                                     fuelAmt = fuelAmt + (q * z);

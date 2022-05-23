@@ -553,7 +553,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
             JsonObject fItm = res.get(0).getAsJsonObject();
             TextView txDyDet = findViewById(R.id.lTDyTx);
-            txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
+            //  txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
+
+            txDyDet.setText(fItm.get("AttDtNm").getAsString() + "   " + fItm.get("AttDate").getAsString());
 
             CircleImageView ivCheckIn = findViewById(R.id.ivCheckIn);
             CircleImageView ivCheckOut = findViewById(R.id.iv_checkout);
@@ -962,6 +964,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, View_All_Status_Activity.class);
                 intent.putExtra("Priod", mPriod);
                 intent.putExtra("Status", "");
+                intent.putExtra("name", "View All Status");
                 break;
             case R.id.btnExit:
                 SharedPreferences.Editor editor = UserDetails.edit();

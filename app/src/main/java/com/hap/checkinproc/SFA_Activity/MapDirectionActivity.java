@@ -71,6 +71,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     private Polyline mPolyline;
     Marker currentLocationMarker;
     public static String TAG = "MapDirectionActivity";
+    private String status = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +79,27 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_map_direction);
             // geofencingClient = LocationServices.getGeofencingClient(this);
+            status = getIntent().getStringExtra(Constants.NEW_OUTLET);
+            status = status == null ? "" : status;
+
             common_class = new Common_Class(this);
             AddressTextview = findViewById(R.id.AddressTextview);
             ReachedOutlet = findViewById(R.id.tvStartDirection);
             imag_back = findViewById(R.id.imag_back);
             imag_back.setOnClickListener(this);
             ReachedOutlet.setOnClickListener(this);
+
+            if(status.equalsIgnoreCase("GEO"))
+                ReachedOutlet.setVisibility(View.GONE);
+
+
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
             // getDirection();
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
-        }
-        catch (Exception e){
-            Log.v(TAG+"onCreate:",e.getMessage());
+
+        } catch (Exception e) {
+            Log.v(TAG + "onCreate:", e.getMessage());
         }
 
     }
@@ -111,7 +120,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     // Start downloading json data from Google Directions API
                     //downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
                     String url = common_class.getDirectionsUrl(getIntent().getStringExtra(Constants.DEST_LAT) + "," +
-                            getIntent().getStringExtra(Constants.DEST_LNG),MapDirectionActivity.this);
+                            getIntent().getStringExtra(Constants.DEST_LNG), MapDirectionActivity.this);
 
                     downloadTask.execute(url);
                 } catch (Exception e) {
@@ -182,8 +191,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
             if (currentLocationMarker != null)
                 currentLocationMarker.remove();
-            currentLocationMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                    .title(("your location")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+            if (!status.equalsIgnoreCase("GEO"))
+                currentLocationMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(("your location")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
 
             distance();
@@ -355,8 +366,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         endPoint.setLongitude(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
         double distance = startPoint.distanceTo(endPoint);
 
-
-        String status = getIntent().getStringExtra(Constants.NEW_OUTLET);
         if (distance > 200 || (status != null && status.equalsIgnoreCase("new"))) {
             ReachedOutlet.setText("START ");
         } else {

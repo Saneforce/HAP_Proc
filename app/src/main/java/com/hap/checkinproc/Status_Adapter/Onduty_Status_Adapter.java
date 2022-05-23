@@ -127,28 +127,28 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
         holder.geoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateMapDir(Onduty_Status_Model.getCheckin());
+                navigateMapDir(Onduty_Status_Model.getCheckin(),"Geo In");
             }
         });
 
         holder.geoout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateMapDir(Onduty_Status_Model.getCheckout());
+                navigateMapDir(Onduty_Status_Model.getCheckout(),"Geo Out");
             }
         });
 
     }
 
-    void navigateMapDir(String value) {
+    void navigateMapDir(String value,String tag) {
         try {
             if (!com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(value)) {
                 String[] latlongs = value.split(",");
                 Intent intent = new Intent(context, MapDirectionActivity.class);
                 intent.putExtra(Constants.DEST_LAT, latlongs[0]);
                 intent.putExtra(Constants.DEST_LNG, latlongs[1]);
-                intent.putExtra(Constants.DEST_NAME, "Destination");
-                intent.putExtra(Constants.NEW_OUTLET, "new");
+                intent.putExtra(Constants.DEST_NAME, tag);
+                intent.putExtra(Constants.NEW_OUTLET, "GEO");
                 context.startActivity(intent);
 
             }
