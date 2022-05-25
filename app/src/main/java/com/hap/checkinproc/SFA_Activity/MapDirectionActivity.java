@@ -89,7 +89,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             imag_back.setOnClickListener(this);
             ReachedOutlet.setOnClickListener(this);
 
-            if(status.equalsIgnoreCase("GEO"))
+            if (status.equalsIgnoreCase("GEO"))
                 ReachedOutlet.setVisibility(View.GONE);
 
 
@@ -582,9 +582,13 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     }
 
                     // Adding all the points in the route to LineOptions
-                    lineOptions.addAll(points);
-                    lineOptions.width(8);
-                    lineOptions.color(getResources().getColor(R.color.colorPrimaryDark));
+
+                    if (!status.equalsIgnoreCase("GEO")) {
+                        lineOptions.addAll(points);
+                        lineOptions.width(8);
+                        lineOptions.color(getResources().getColor(R.color.colorPrimaryDark));
+
+                    }
                 }
 
                 // Drawing polyline in the Google Map for the i-th route

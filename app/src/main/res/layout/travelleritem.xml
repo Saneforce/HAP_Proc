@@ -134,7 +134,25 @@
                     android:layout_marginEnd="@dimen/C10dp"
                     />
             </RadioGroup>
+
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/txTrvRemarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Remarks"
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/C5dp"
+                />
+        </LinearLayout>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

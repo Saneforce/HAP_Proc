@@ -202,7 +202,7 @@
                                     android:layout_marginLeft="5dp"
                                     android:layout_marginTop="5dp"
                                     android:fontFamily="@font/basic"
-                                    android:text="Mode of Travels "
+                                    android:text="Mode of Travel "
                                     android:textAllCaps="false"
                                     android:textColor="#000"
                                     android:textStyle="bold" />

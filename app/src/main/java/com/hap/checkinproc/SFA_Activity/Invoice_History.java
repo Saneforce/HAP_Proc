@@ -209,9 +209,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 //                findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
 
 
-            if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
+            if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
                 linVanSales.setVisibility(View.VISIBLE);
-
+                lin_invoice.setVisibility(View.GONE);
+            }
             if (!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)) {
                 //  common_class.getDentDatas(this);
                 linintent.setVisibility(View.VISIBLE);

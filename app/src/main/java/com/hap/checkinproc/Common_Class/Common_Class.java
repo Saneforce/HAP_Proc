@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 7.4.0";
+    public static String Version_Name = "ver 7.4.1";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -717,6 +717,14 @@ public class Common_Class {
                         axnname = "get/retailerorderstatusch";
                         data.put("distname", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
+
+//                    case Constants.DIST_STOCK:
+//                        axnname = "get/diststock";
+//                        data.put("distid", shared_common_pref.getvalue(Constants.Distributor_Id));
+//                        data.put("dt", Common_Class.GetDatewothouttime());
+//                        data.put("divisionCode", UserDetails.getString("Divcode", ""));
+//                        data.put("sfCode", UserDetails.getString("Sfcode", ""));
+//                        break;
                     case Constants.PAYMODES:
                         axnname = "get/paymenttype";
                         data.put("divisionCode", UserDetails.getString("Divcode", ""));
@@ -836,6 +844,24 @@ public class Common_Class {
                         data.put("SF", UserDetails.getString("Sfcode", ""));
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
+
+                    case Constants.STOCK_LEDGER:
+                        //dist stock for stock loading
+                        axnname = "get/stockistledger";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("dt", Common_Class.GetDatewothouttime());
+                        break;
+
+                    case Constants.VAN_STOCK:
+                        //dist stock for stock loading
+                        axnname = "get/vanstock";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("dt", Common_Class.GetDatewothouttime());
                         break;
 
                 }

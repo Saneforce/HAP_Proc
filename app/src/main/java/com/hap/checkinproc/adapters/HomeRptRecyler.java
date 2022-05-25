@@ -124,6 +124,7 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
             Intent intent = new Intent(mContext, MapDirectionActivity.class);
             intent.putExtra(Constants.DEST_LAT, latlongs[0]);
             intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+
             intent.putExtra(Constants.DEST_NAME, tag);
             intent.putExtra(Constants.NEW_OUTLET, "GEO");
             mContext.startActivity(intent);

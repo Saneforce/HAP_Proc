@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
+import static com.hap.checkinproc.Common_Class.Constants.VAN_STOCK;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -63,6 +64,7 @@ import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.SFA_Activity.StockAuditCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -160,7 +162,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 case Constants.CHECKIN_TYPE:
                     menuList.add(new ListModel("", "Primary Order", "", "", "", R.drawable.ic_outline_add_chart_48));
                     menuList.add(new ListModel("", "Secondary Order", "", "", "", R.drawable.ic_outline_assignment_48));
-                    menuList.add(new ListModel("", "Van Sales", "", "", "", R.drawable.ic_outline_local_shipping_24));
+                    // menuList.add(new ListModel("", "Van Sales", "", "", "", R.drawable.ic_outline_local_shipping_24));
                     menuList.add(new ListModel("", "Outlets", "", "", "", R.drawable.ic_baseline_storefront_24));
                     menuList.add(new ListModel("", "Nearby Outlets", "", "", "", R.drawable.ic_outline_near_me_24));
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
@@ -244,6 +246,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
 
                     case "Van Sales":
+                        if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING)))
+                            common_class.getDb_310Data(Constants.VAN_STOCK, SFA_Activity.this);
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
                         startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
                         break;
@@ -758,7 +762,24 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+                    case VAN_STOCK:
+                        JSONObject stkObj = new JSONObject(apiDataResponse);
 
+                        if (stkObj.getBoolean("success")) {
+                            JSONArray arr = stkObj.getJSONArray("Data");
+                            List<Product_Details_Modal> stkList = new ArrayList<>();
+                            for (int i = 0; i < arr.getJSONObject(i).length(); i++) {
+                                JSONObject obj = arr.getJSONObject(i);
+                                stkList.add(new Product_Details_Modal(obj.getString("PCode"), obj.getInt("cr"), obj.getInt("Dr"), String.valueOf(obj.getInt("Bal"))));
+                            }
+
+                            sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stkList));
+
+                        }
+
+
+                        Log.v(key, apiDataResponse);
+                        break;
                     case GroupFilter:
                         Log.v(key, apiDataResponse);
 

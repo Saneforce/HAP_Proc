@@ -65,7 +65,7 @@
 
                 <TextView
                     style="@style/TextStyle"
-                    android:text="Mode of Travels " />
+                    android:text="Mode of Travel " />
 
                     <LinearLayout
                         android:layout_width="match_parent"

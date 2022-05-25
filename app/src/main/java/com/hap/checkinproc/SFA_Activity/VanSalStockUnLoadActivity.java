@@ -71,7 +71,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VanSalesOrderActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
+public class VanSalStockUnLoadActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
 
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -116,9 +116,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_vansalesorder_category);
+            setContentView(R.layout.activity_vansale_unload);
             db = new DatabaseHandler(this);
-            sharedCommonPref = new Shared_Common_Pref(VanSalesOrderActivity.this);
+            sharedCommonPref = new Shared_Common_Pref(VanSalStockUnLoadActivity.this);
             common_class = new Common_Class(this);
             tvHeader = findViewById(R.id.tvHeader);
             Grpgrid = findViewById(R.id.PGroup);
@@ -169,12 +169,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
 
-//            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)))
-//                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA), userType);
-//            else {
-            Product_Modal = gson.fromJson(OrdersTable, userType);
-            //   }
+            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)) && Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
+                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA), userType);
+            else {
+                Product_Modal = gson.fromJson(OrdersTable, userType);
 
+            }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -371,54 +371,27 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             tvHeader.setText(Constants.VAN_SALES_MODE);
 
 
-            switch (Constants.VAN_SALES_MODE) {
-                case Constants.VAN_STOCK_LOADING:
-                    axn = "save/stockloading";
-                    break;
-                case Constants.VAN_STOCK_UNLOADING:
-                    axn = "save/stockunloading";
-                    break;
-                case Constants.VAN_SALES_ORDER:
-                    axn = "save/vansales";
-                    break;
-            }
+//            switch (Constants.VAN_SALES_MODE) {
+//                case Constants.VAN_STOCK_LOADING:
+//                    axn = "save/stockloading";
+//                    break;
+//                case Constants.VAN_STOCK_UNLOADING:
+            axn = "save/stockunloading";
+//                    break;
+//                case Constants.VAN_SALES_ORDER:
+//                    axn = "save/vansales";
+//                    break;
+//            }
 
 
             tvCoolerInfo.setVisibility(View.GONE);
 
             if (Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
                 tvCoolerInfo.setVisibility(View.VISIBLE);
-
-
-            //   common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
-
-            getStockBalance();
-
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
         }
-    }
-
-    private void getStockBalance() {
-
-        if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING))) {
-            String OrdersTable = String.valueOf(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING));
-
-            List<Product_Details_Modal> stockList = gson.fromJson(OrdersTable, userType);
-
-            for (int i = 0; i < stockList.size(); i++) {
-                for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                    if (stockList.get(i).getId().equalsIgnoreCase(Product_Modal.get(pm).getId())) {
-                        Product_Modal.get(pm).setBalance(stockList.get(i).getBalance());
-                        break;
-                    }
-                }
-            }
-            mProdct_Adapter.notifyDataSetChanged();
-
-        }
-
     }
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
@@ -525,12 +498,14 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                 selectedPos = 0;
 
-                VanSalesOrderActivity.CategoryAdapter customAdapteravail = new VanSalesOrderActivity.CategoryAdapter(getApplicationContext(),
+                VanSalStockUnLoadActivity.CategoryAdapter customAdapteravail = new VanSalStockUnLoadActivity.CategoryAdapter(getApplicationContext(),
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
-
-                showOrderItemList(selectedPos, "");
+                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
+                    showOrderList();
+                else
+                    showOrderItemList(selectedPos, "");
             }
 
         } catch (JSONException e) {
@@ -553,7 +528,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             Toast.makeText(getApplicationContext(), "Order is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
-
 
     }
 
@@ -580,7 +554,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnCallMob:
-                common_class.showCalDialog(VanSalesOrderActivity.this, "Do you want to Call this Distributor?",
+                common_class.showCalDialog(VanSalStockUnLoadActivity.this, "Do you want to Call this Distributor?",
                         tvRetailorPhone.getText().toString().replaceAll(",", ""));
 
                 break;
@@ -658,7 +632,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     private void SaveOrder(String axn) {
         // if (common_class.isNetworkAvailable(this)) {
 
-        AlertDialogBox.showDialog(VanSalesOrderActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+        AlertDialogBox.showDialog(VanSalStockUnLoadActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
                 common_class.ProgressdialogShow(1, "");
@@ -672,7 +646,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                     // HeadItem.put("Daywise_Remarks", "");
                     HeadItem.put("UKey", Ukey);
-                      HeadItem.put("orderValue", formatter.format(totalvalues));
+                    //  HeadItem.put("orderValue", formatter.format(totalvalues));
                     HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                     HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                     ActivityData.put("Activity_Report_Head", HeadItem);
@@ -682,15 +656,15 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 //                        OutletItem.put("modified_time", Common_Class.GetDate());
                     OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
                     OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                     OutletItem.put("orderValue", formatter.format(totalvalues));
+                    // OutletItem.put("orderValue", formatter.format(totalvalues));
                     // OutletItem.put("CashDiscount", cashDiscount);
-                     OutletItem.put("NetAmount", formatter.format(totalvalues));
+                    // OutletItem.put("NetAmount", formatter.format(totalvalues));
                     OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                     //  OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                     OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                     OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                     OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                    OutletItem.put("ordertype", "Van Sales Order");
+                    OutletItem.put("ordertype", "Van Stock UnLoading");
 
                     if (strLoc.length > 0) {
                         OutletItem.put("Lat", strLoc[0]);
@@ -700,7 +674,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         OutletItem.put("Long", "");
                     }
                     JSONArray Order_Details = new JSONArray();
-                    JSONArray totTaxArr = new JSONArray();
+                    // JSONArray totTaxArr = new JSONArray();
 
                     for (int z = 0; z < Getorder_Array_List.size(); z++) {
                         JSONObject ProdItem = new JSONObject();
@@ -710,8 +684,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                         ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                         //   ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                        ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty());
-                        ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+//                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
+//                                    Getorder_Array_List.get(z).getRegularQty());
+                        //   ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                         ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
 //                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
@@ -728,45 +703,45 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
 
-                        JSONArray tax_Details = new JSONArray();
-
-
-                        if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
-                                Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-
-                            for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
-                                JSONObject taxData = new JSONObject();
-
-                                String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
-                                Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
-                                taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
-                                taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
-                                taxData.put("Tax_Type", label);
-                                taxData.put("Tax_Amt", formatter.format(amt));
-                                tax_Details.put(taxData);
-
-
-                            }
-
-
-                        }
-
-                        ProdItem.put("TAX_details", tax_Details);
+//                            JSONArray tax_Details = new JSONArray();
+//
+//
+//                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+//                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
+//
+//                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+//                                    JSONObject taxData = new JSONObject();
+//
+//                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+//                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+//                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+//                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+//                                    taxData.put("Tax_Type", label);
+//                                    taxData.put("Tax_Amt", formatter.format(amt));
+//                                    tax_Details.put(taxData);
+//
+//
+//                                }
+//
+//
+//                            }
+//
+//                            ProdItem.put("TAX_details", tax_Details);
 
                         Order_Details.put(ProdItem);
 
                     }
 
-                    for (int i = 0; i < orderTotTax.size(); i++) {
-                        JSONObject totTaxObj = new JSONObject();
+//                        for (int i = 0; i < orderTotTax.size(); i++) {
+//                            JSONObject totTaxObj = new JSONObject();
+//
+//                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
+//                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
+//                            totTaxArr.put(totTaxObj);
+//
+//                        }
 
-                        totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                        totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
-                        totTaxArr.put(totTaxObj);
-
-                    }
-
-                    OutletItem.put("TOT_TAX_details", totTaxArr);
+                    //  OutletItem.put("TOT_TAX_details", totTaxArr);
                     ActivityData.put("Activity_Doctor_Report", OutletItem);
                     ActivityData.put("Order_Details", Order_Details);
                     data.put(ActivityData);
@@ -787,10 +762,12 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                 Log.e("Success_Message", san);
                                 ResetSubmitBtn(1);
                                 if (san.equals("true")) {
-                                    updateStockBal();
+                                    sharedCommonPref.clear_pref(Constants.LOC_VANSALES_DATA);
+                                    sharedCommonPref.clear_pref(Constants.VAN_STOCK_LOADING);
+                                    //  common_class.CommonIntentwithFinish(Invoice_History.class);
                                     finish();
                                 }
-                                common_class.showMsg(VanSalesOrderActivity.this, jsonObjects.getString("Msg"));
+                                common_class.showMsg(VanSalStockUnLoadActivity.this, jsonObjects.getString("Msg"));
 
                             } catch (Exception e) {
                                 common_class.ProgressdialogShow(0, "");
@@ -821,25 +798,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 //        }
     }
 
-    void updateStockBal() {
-        String OrdersTable = String.valueOf(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING));
-
-        List<Product_Details_Modal> stockList = gson.fromJson(OrdersTable, userType);
-
-        for (int i = 0; i < stockList.size(); i++) {
-            for (int pm = 0; pm < Getorder_Array_List.size(); pm++) {
-                if (stockList.get(i).getId().equalsIgnoreCase(Getorder_Array_List.get(pm).getId())) {
-                    stockList.get(i).setBalance((int) (stockList.get(i).getBalance() -
-                            Getorder_Array_List.get(pm).getQty() * Getorder_Array_List.get(pm).getCnvQty()));
-                    break;
-                }
-            }
-        }
-
-        sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stockList));
-
-    }
-
     private void FilterProduct(List<Product_Details_Modal> orderList) {
         findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
@@ -851,7 +809,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
 
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansales_product_pay_recyclerview, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansales_unload_pay_recyclerview, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
     }
@@ -1022,24 +980,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         try {
             switch (key) {
 
-                case Constants.STOCK_LEDGER:
-                    JSONObject stkObj = new JSONObject(apiDataResponse);
-                    if (stkObj.getBoolean("success")) {
-                        JSONArray arr = stkObj.getJSONArray("Data");
-                        for (int i = 0; i < arr.length(); i++) {
-                            JSONObject obj = arr.getJSONObject(i);
-
-                            for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                                if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
-                                    Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
-                                    Log.v("name:" + Product_Modal.get(pm).getName(), ":Bal:" + obj.getInt("Balance"));
-                                    break;
-                                }
-                            }
-                        }
-
-                        mProdct_Adapter.notifyDataSetChanged();
-                    }
+                case Constants.VAN_STOCK:
                     break;
             }
         } catch (Exception e) {
@@ -1096,16 +1037,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
-                int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty
-                    /*|| Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0*/) {
-                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
-                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
-                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
-                } else {
-                    common_class.showMsg(this, "Can't exceed Stock");
-                }
+                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
                 break;
         }
     }
@@ -1289,6 +1224,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 //                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 //                }
 
+                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
+                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
+
+
                 if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                     holder.ImgVwProd.clearColorFilter();
                     Glide.with(this.context)
@@ -1305,18 +1244,15 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     holder.QtyMns.setVisibility(View.INVISIBLE);
                     holder.Qty.setEnabled(false);
                 }
-                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
-                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
-
-
-                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()));
-
-                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
-                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
-                else
-                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 if (CategoryType >= 0) {
+
+                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+
+                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
+                        holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                    else
+                        holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
 
                     holder.tvMRP.setText("₹" + Product_Details_Modal.getMRP());
@@ -1342,9 +1278,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                     uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
                                 }
-                                common_class.showCommonDialog(uomList, 1, VanSalesOrderActivity.this);
+                                common_class.showCommonDialog(uomList, 1, VanSalStockUnLoadActivity.this);
                             } else {
-                                common_class.showMsg(VanSalesOrderActivity.this, "No Records Found.");
+                                common_class.showMsg(VanSalStockUnLoadActivity.this, "No Records Found.");
                             }
                         }
                     });
@@ -1369,35 +1305,16 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     public void onClick(View v) {
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-
-                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
-                        int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if ((balance >= order) /*|| Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0*/) {
-                            //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
-                            holder.tvStock.setText("" + (int) (balance - order));
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        } else {
-                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
-                        }
+                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
-                            String sVal = holder.Qty.getText().toString();
-                            if (sVal.equalsIgnoreCase("")) sVal = "0";
-                            if (Integer.parseInt(sVal) > 0) {
-                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
-
-                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
-                                int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                                //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
-                                holder.tvStock.setText("" + (int) (balance - order));
-                            }
-
-                        } catch (Exception e) {
-                            Log.v(TAG + "QtyMns:", e.getMessage());
+                        String sVal = holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+                        if (Integer.parseInt(sVal) > 0) {
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
                         }
                     }
                 });
@@ -1413,19 +1330,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
-
-
-                            if (/*Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
-                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
-                                enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
-                                common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
-
-                            }
-
-                            /*      if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)*/
-                            holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty));
+                            double totQty = ((enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) * Product_Details_Modal.getCnvQty());
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
@@ -1433,10 +1338,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
-
-
+                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
+                                holder.totalQty.setText("Total Qty : " + (int)/* totQty*/enterQty);
                             }
 
 
@@ -1500,7 +1403,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                                         )) / 100);
 
 
-                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(((discountVal)));
+                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((Math.round(discountVal)));
 
                                                     } else {
                                                         //Rs
@@ -1510,7 +1413,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                                             double freeVal = freePer * (product_details_modalArrayList.
                                                                     get(i).getDiscount());
 
-                                                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(((freeVal)));
+                                                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount((Math.round(freeVal)));
                                                         } else {
                                                             int val = (int) (totQty / highestScheme);
                                                             double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
@@ -1573,21 +1476,21 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
 
                             }
-
-
                             sumofTax(Product_Details_Modalitem, holder.getAdapterPosition());
                             holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
                             holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getTax()));
 
                             updateToTALITEMUI();
 
-
 //                            if (CategoryType == -1) {
 //                                String amt = holder.Amount.getText().toString();
+//                                Log.v(TAG + position, ":OUT:amt:" + amt);
 //                                if (amt.equals("₹0.00")) {
+//                                    Log.v(TAG + position, ":IN:amt:" + amt);
 //                                    Product_Details_Modalitem.remove(position);
 //                                    notifyDataSetChanged();
 //                                }
+//
 //                                showFreeQtyList();
 //                            }
 
@@ -1601,6 +1504,8 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void beforeTextChanged(CharSequence s, int start,
                                                   int count, int after) {
+
+
                     }
 
                     @Override
@@ -1608,7 +1513,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                     }
                 });
-
 
                 if (CategoryType == -1) {
 
@@ -1619,7 +1523,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public void onClick(View v) {
 
-                            AlertDialogBox.showDialog(VanSalesOrderActivity.this, "HAP SFA",
+                            AlertDialogBox.showDialog(VanSalStockUnLoadActivity.this, "HAP SFA",
                                     "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
                                     , "OK", "Cancel", false, new AlertBox() {
                                         @Override
@@ -1666,10 +1570,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             try {
 
 
-                LayoutInflater inflater = LayoutInflater.from(VanSalesOrderActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(VanSalStockUnLoadActivity.this);
 
                 final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
-                AlertDialog alertDialog = new AlertDialog.Builder(VanSalesOrderActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(VanSalStockUnLoadActivity.this).create();
                 alertDialog.setCancelable(false);
 
                 final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
@@ -1680,9 +1584,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onClick(View v) {
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
-                            common_class.showMsg(VanSalesOrderActivity.this, "Empty value is not allowed");
+                            common_class.showMsg(VanSalStockUnLoadActivity.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getRate())) {
-                            common_class.showMsg(VanSalesOrderActivity.this, "Enter Rate is greater than MRP");
+                            common_class.showMsg(VanSalStockUnLoadActivity.this, "Enter Rate is greater than MRP");
 
                         } else {
                             alertDialog.dismiss();
@@ -1711,7 +1615,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,tvSalesQty,tvSalesAmt,tvunloadQty,tvUnloadAmt;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1733,7 +1637,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 llRegular = view.findViewById(R.id.llRegular);
                 tvUOM = view.findViewById(R.id.tvUOM);
                 ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
-                tvStock = view.findViewById(R.id.tvStockBal);
+
 
                 if (CategoryType >= 0) {
                     tvMRP = view.findViewById(R.id.MrpRate);
@@ -1742,6 +1646,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
                     rlUOM = view.findViewById(R.id.rlUOM);
+                    tvStock = view.findViewById(R.id.tvStockBal);
 
 
                 } else {

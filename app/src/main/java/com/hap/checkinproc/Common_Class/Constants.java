@@ -123,6 +123,9 @@ public class Constants {
     public static final String STOCK_AUDIT_MFSCFA ="stockAuditMFSCFA" ;
     public static final String AUDIT_STOCK_ONHAND ="auditStockOnHand" ;
     public static final String PROCUR_MENU = "procurementMenu";
+    public static final String DIST_STOCK = "distStock";
+    public static final String STOCK_LEDGER = "stockLedger";
+    public static final String VAN_STOCK = "vanStock";
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";
 

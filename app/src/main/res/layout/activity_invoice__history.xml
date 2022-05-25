@@ -718,7 +718,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/C3dp"
-                        android:text="Van Sales"
+                        android:text="INVOICE"
                         android:textColor="@color/white"
                         android:textSize="11sp"
                         android:textStyle="bold" />

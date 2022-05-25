@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Product_Details_Modal {
+
     @SerializedName("Package")
     @Expose
     private String Package;
@@ -57,6 +58,7 @@ public class Product_Details_Modal {
     private String plantId = "";
 
     private String saveMode = "";
+    private int cr, Dr, Bal;
 
     public String getERP_Code() {
         return ERP_Code;
@@ -174,6 +176,16 @@ public class Product_Details_Modal {
     public Product_Details_Modal(double cnvQty, String UOM_Nm) {
         this.CnvQty = cnvQty;
         this.UOM_Nm = UOM_Nm;
+    }
+
+    // "Cr": 23,
+//         "Dr": 0,
+//         "Bal": 23
+    public Product_Details_Modal(String id, int cr, int Dr, String Balance) {
+        this.id = id;
+        this.cr = cr;
+        this.Dr = Dr;
+        this.Balance = Bal;
     }
 
     public Product_Details_Modal(String UOM_Nm, int Qty, int Multiple_Qty) {

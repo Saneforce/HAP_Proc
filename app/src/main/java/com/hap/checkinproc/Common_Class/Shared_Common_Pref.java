@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Shared_Common_Pref {
-    public static  String ORDER_TYPE ="orderType" ;
+    public static String ORDER_TYPE = "orderType";
 
     public static String SFA_MENU = "";
     public static String CUSTOMER_CODE = "";
@@ -68,6 +68,7 @@ public class Shared_Common_Pref {
     public static String Tp_SFCode = "Tp_SFCode";
     public static String DCRMode = "DCRMode";
 
+    public static int MaxKm = 1000;
 
     public Shared_Common_Pref(Activity Ac) {
         activity = Ac;

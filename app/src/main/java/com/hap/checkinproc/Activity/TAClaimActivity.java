@@ -2246,6 +2246,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString()) ? "0" :
                                         jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString()) ? "0" : jsFuel.get("End_Km").getAsString());
+                              Shared_Common_Pref.MaxKm=jsFuel.get("Maxkm").getAsInt();
+
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
@@ -5582,6 +5584,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
                                 Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString())?"0":jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString())?"0":jsFuel.get("End_Km").getAsString());
+                                Shared_Common_Pref.MaxKm=jsFuel.get("Maxkm").getAsInt();
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);

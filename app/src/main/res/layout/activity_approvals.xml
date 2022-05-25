@@ -930,7 +930,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
 
                             <RelativeLayout

@@ -4,6 +4,7 @@ import static android.Manifest.permission.CALL_PHONE;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
+import static com.hap.checkinproc.Common_Class.Constants.STOCK_LEDGER;
 
 import android.content.Context;
 import android.content.Intent;
@@ -563,6 +564,18 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
         }
+
+        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
+            tvStockUnload.setTextColor(getResources().getColor(R.color.grey_500));
+            tvStockUnload.setEnabled(false);
+
+        }
+
+
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
+            tvStockLoad.setTextColor(getResources().getColor(R.color.grey_500));
+            tvStockLoad.setEnabled(false);
+        }
     }
 
     @Override
@@ -635,7 +648,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "", "","");
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "", "", "");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -655,17 +668,18 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 }
                 break;
             case R.id.tvStockLoad:
-                Intent load = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
+                common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
+                Intent load = new Intent(getApplicationContext(), VanSalStockLoadActivity.class);
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                 Constants.VAN_SALES_MODE = Constants.VAN_STOCK_LOADING;
                 startActivity(load);
                 overridePendingTransition(R.anim.in, R.anim.out);
                 break;
             case R.id.tvStockUnload:
-                if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.LOC_VANSALES_DATA))) {
+                if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
                     common_class.showMsg(this, "No Stock");
                 } else {
-                    Intent unload = new Intent(getApplicationContext(), VanSalesOrderActivity.class);
+                    Intent unload = new Intent(getApplicationContext(), VanSalStockUnLoadActivity.class);
                     Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                     Constants.VAN_SALES_MODE = Constants.VAN_STOCK_UNLOADING;
                     startActivity(unload);
@@ -798,6 +812,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         try {
             if (apiDataResponse != null) {
                 switch (key) {
+                    case STOCK_LEDGER:
+                        Log.v(key + "bommu:", apiDataResponse);
+                        break;
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
@@ -900,9 +917,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
 
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", "", "","");
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", "", "", "");
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "", "","");
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "", "", "");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
@@ -941,7 +958,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-                        } else if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.LOC_VANSALES_DATA))) {
+                        } else if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
                             common_class.showMsg(getActivity(), "No Stock");
                         } else {
 

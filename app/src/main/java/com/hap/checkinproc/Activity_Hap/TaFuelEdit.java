@@ -265,8 +265,8 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
         String drvAllw = (driverAllowance.isChecked() ? "true" : "false");
 
 
-        if (inEdtFrom < 1)
-            Toast.makeText(this, "Started km should be greater than zero", Toast.LENGTH_SHORT).show();
+        if ((inEdtTo - inEdtFrom) >= (Shared_Common_Pref.MaxKm))
+            Toast.makeText(this, "Traveled km should be less than Maximum Km", Toast.LENGTH_SHORT).show();
         else if (inEdtFrom < inEdtTo) {
             JSONObject jj = new JSONObject();
             jj.put("sl_no", SLNO);

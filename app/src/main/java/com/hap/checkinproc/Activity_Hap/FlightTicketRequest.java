@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -30,13 +32,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -45,16 +45,12 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationFinder;
-import com.hap.checkinproc.common.TimerService;
-
-import java.text.DecimalFormat;
-import java.util.Calendar;
-
-import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
@@ -63,19 +59,21 @@ import retrofit2.Response;
 
 public class FlightTicketRequest extends AppCompatActivity {
     RadioGroup radioGrp;
-    RadioButton radioOne, radioRound,radoMor,radoEve,retradoMor,retradoEve;
+    RadioButton radioOne, radioRound, radoMor, radoEve, retradoMor, retradoEve;
     LinearLayout LinearReturn, LinearHome, TrvlrList;
-    EditText FrmPlc,ToPlc,retFrmPlc,retToPlc,edtDepature,retedtDepature, edtReturn;
-    TextView Name,addTrvlr;
-    String tominYear = "", tominMonth = "", tominDay = "", maxTWoDate = "", SFName = "",TrvTyp="ONE";
+    EditText FrmPlc, ToPlc, retFrmPlc, retToPlc, edtDepature, retedtDepature, edtReturn;
+    TextView Name, addTrvlr;
+    String tominYear = "", tominMonth = "", tominDay = "", maxTWoDate = "", SFName = "", TrvTyp = "ONE";
     SharedPreferences CheckInDetails, UserDetails, sharedpreferences;
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
     CircularProgressButton buttonSave;
     JSONArray jTrvDets;
-    Location clocation=null;
+    Location clocation = null;
     final Handler handler = new Handler();
     ApiInterface apiInterface;
+    String departureDt = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,14 +85,14 @@ public class FlightTicketRequest extends AppCompatActivity {
         radioOne = findViewById(R.id.radio_oneway);
         radioRound = findViewById(R.id.radio_twoway);
 
-        FrmPlc= findViewById(R.id.from_place);
-        ToPlc= findViewById(R.id.to_place);
+        FrmPlc = findViewById(R.id.from_place);
+        ToPlc = findViewById(R.id.to_place);
         edtDepature = findViewById(R.id.edt_dep);
         radoMor = findViewById(R.id.radio_depMor);
         radoEve = findViewById(R.id.radio_depEve);
 
-        retFrmPlc= findViewById(R.id.from_place);
-        retToPlc= findViewById(R.id.to_place);
+        retFrmPlc = findViewById(R.id.from_place);
+        retToPlc = findViewById(R.id.to_place);
         retedtDepature = findViewById(R.id.edt_dep);
         retradoMor = findViewById(R.id.radio_depMor);
         retradoEve = findViewById(R.id.radio_depEve);
@@ -102,7 +100,7 @@ public class FlightTicketRequest extends AppCompatActivity {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         LinearReturn = findViewById(R.id.lin_return);
         TrvlrList = findViewById(R.id.TrvlrList);
-        addTrvlr=findViewById(R.id.addTrvlr);
+        addTrvlr = findViewById(R.id.addTrvlr);
         LinearHome = findViewById(R.id.lin_name);
         edtReturn = findViewById(R.id.edt_return);
         Name = findViewById(R.id.txt_name);
@@ -189,21 +187,21 @@ public class FlightTicketRequest extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(!validate()){
-                            ResetSubmitBtn(0,buttonSave);
+                        if (!validate()) {
+                            ResetSubmitBtn(0, buttonSave);
                             return;
                         }
                         AlertDialogBox.showDialog(FlightTicketRequest.this, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Submit Flight Booking Request.")), "Yes", "No", false, new AlertBox() {
                             @Override
                             public void PositiveMethod(DialogInterface dialog, int id) {
                                 dialog.dismiss();
-                                if(clocation!=null){
+                                if (clocation != null) {
                                     submitData();
-                                }else{
+                                } else {
                                     new LocationFinder(getApplication(), new LocationEvents() {
                                         @Override
                                         public void OnLocationRecived(Location location) {
-                                            clocation=location;
+                                            clocation = location;
                                             submitData();
                                         }
                                     });
@@ -213,32 +211,33 @@ public class FlightTicketRequest extends AppCompatActivity {
 
                             @Override
                             public void NegativeMethod(DialogInterface dialog, int id) {
-                                ResetSubmitBtn(0,buttonSave);
+                                ResetSubmitBtn(0, buttonSave);
                                 dialog.dismiss();
                             }
                         });
 
                     }
-                },100);
+                }, 100);
             }
         });
         new LocationFinder(getApplication(), new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
-                clocation=location;
+                clocation = location;
             }
         });
     }
-    private void addTraveller(){
+
+    private void addTraveller() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(15, 15, 15, 15);
         final View rowView = inflater.inflate(R.layout.travelleritem, null);
         TrvlrList.addView(rowView, layoutParams);
-        ImageView btnDel=rowView.findViewById(R.id.btnDelete);
-        RadioGroup radHAPOTH=rowView.findViewById(R.id.radio_HAPOth);
-        LinearLayout linGetEmpId=rowView.findViewById(R.id.linGetEmpId);
+        ImageView btnDel = rowView.findViewById(R.id.btnDelete);
+        RadioGroup radHAPOTH = rowView.findViewById(R.id.radio_HAPOth);
+        LinearLayout linGetEmpId = rowView.findViewById(R.id.linGetEmpId);
         Button btnGetEmp = rowView.findViewById(R.id.btnGetEmp);
 
         btnDel.setOnClickListener(new View.OnClickListener() {
@@ -269,8 +268,9 @@ public class FlightTicketRequest extends AppCompatActivity {
             }
         });
     }
-    private void RemoveTraveller(View v){
-        View pv= (View) v.getParent().getParent().getParent();
+
+    private void RemoveTraveller(View v) {
+        View pv = (View) v.getParent().getParent().getParent();
         TrvlrList.removeView(pv);
     }
 
@@ -281,45 +281,46 @@ public class FlightTicketRequest extends AppCompatActivity {
         String sEmpID = String.valueOf(edtGEmpid.getText());
 
 
-            Call<JsonArray> Callto = apiInterface.getDataArrayListA("get/EmpByID",
-                    UserDetails.getString("Divcode", ""),
-                    UserDetails.getString("Sfcode", ""), sEmpID, "", "", null);
-            Callto.enqueue(new Callback<JsonArray>() {
-                @Override
-                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                    JsonArray res = response.body();
-                    if (res.size() < 1) {
-                        Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
+        Call<JsonArray> Callto = apiInterface.getDataArrayListA("get/EmpByID",
+                UserDetails.getString("Divcode", ""),
+                UserDetails.getString("Sfcode", ""), sEmpID, "", "", null);
+        Callto.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray res = response.body();
+                if (res.size() < 1) {
+                    Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
+                JsonObject EmpDet = res.get(0).getAsJsonObject();
+                if (EmpDet.has("Msg")) {
+                    if (!EmpDet.get("Msg").getAsString().equalsIgnoreCase("")) {
+                        Toast.makeText(getApplicationContext(), EmpDet.get("Msg").getAsString(), Toast.LENGTH_LONG).show();
                         return;
                     }
-
-
-                    JsonObject EmpDet = res.get(0).getAsJsonObject();
-                    if(EmpDet.has("Msg")){
-                        if(!EmpDet.get("Msg").getAsString().equalsIgnoreCase("")){
-                            Toast.makeText(getApplicationContext(), EmpDet.get("Msg").getAsString(), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-                    EditText txtTrvName,txtTrvDept,txtTrvMob;
-
-                    txtTrvName = pv.findViewById(R.id.txTrvName);
-                    txtTrvDept = pv.findViewById(R.id.txCmpName);
-                    txtTrvMob = pv.findViewById(R.id.txTrvMobile);
-
-                    txtTrvName.setText(EmpDet.get("Name").getAsString());
-                    //txtJNDesig.setText(EmpDet.get("Desig").getAsString());
-                    txtTrvDept.setText(EmpDet.get("DeptName").getAsString());
-                    //txtJNHQ.setText(EmpDet.get("HQ").getAsString());
-                    txtTrvMob.setText(EmpDet.get("Mob").getAsString());
                 }
+                EditText txtTrvName, txtTrvDept, txtTrvMob;
 
-                @Override
-                public void onFailure(Call<JsonArray> call, Throwable t) {
-                    Log.d("Error:", "Some Error" + t.getMessage());
-                }
-            });
+                txtTrvName = pv.findViewById(R.id.txTrvName);
+                txtTrvDept = pv.findViewById(R.id.txCmpName);
+                txtTrvMob = pv.findViewById(R.id.txTrvMobile);
+
+                txtTrvName.setText(EmpDet.get("Name").getAsString());
+                //txtJNDesig.setText(EmpDet.get("Desig").getAsString());
+                txtTrvDept.setText(EmpDet.get("DeptName").getAsString());
+                //txtJNHQ.setText(EmpDet.get("HQ").getAsString());
+                txtTrvMob.setText(EmpDet.get("Mob").getAsString());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("Error:", "Some Error" + t.getMessage());
+            }
+        });
     }
+
     public void openHome() {
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
@@ -334,6 +335,7 @@ public class FlightTicketRequest extends AppCompatActivity {
         } else
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
+
     public void DepDtePker(View v) {
         hideKeyBoard();
         final Calendar c = Calendar.getInstance();
@@ -346,7 +348,8 @@ public class FlightTicketRequest extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        edtDepature.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        edtDepature.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        departureDt = "" + (year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                         maxTWoDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                         MaxMinDateTo(maxTWoDate);
 
@@ -354,6 +357,7 @@ public class FlightTicketRequest extends AppCompatActivity {
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
+
     public void RetunDtePker(View v) {
         hideKeyBoard();
         final Calendar cldr = Calendar.getInstance();
@@ -378,6 +382,7 @@ public class FlightTicketRequest extends AppCompatActivity {
             Toast.makeText(this, "Please choose depature date", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void hideKeyBoard() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = this.getCurrentFocus();
@@ -386,6 +391,7 @@ public class FlightTicketRequest extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
     public void MaxMinDateTo(String strMinDate) {
         String[] separated1 = strMinDate.split("-");
         separated1[0] = separated1[0].trim();
@@ -395,92 +401,104 @@ public class FlightTicketRequest extends AppCompatActivity {
         tominMonth = separated1[1];
         tominDay = separated1[2];
     }
-    public Boolean validate(){
-        TrvTyp="ONE";
-        if(FrmPlc.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(FlightTicketRequest.this,"Enter the From Place",Toast.LENGTH_LONG).show();
+
+    public Boolean validate() {
+        TrvTyp = "ONE";
+        if (FrmPlc.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(FlightTicketRequest.this, "Enter the From Place", Toast.LENGTH_LONG).show();
             return false;
         }
-        if(ToPlc.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(FlightTicketRequest.this,"Enter the To Place",Toast.LENGTH_LONG).show();
+        if (ToPlc.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(FlightTicketRequest.this, "Enter the To Place", Toast.LENGTH_LONG).show();
             return false;
         }
-        if(edtDepature.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(FlightTicketRequest.this,"Enter the Depature Date",Toast.LENGTH_LONG).show();
+        if (edtDepature.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(FlightTicketRequest.this, "Enter the Depature Date", Toast.LENGTH_LONG).show();
             return false;
         }
-        if(!(radoMor.isChecked() || radoEve.isChecked())){
-            Toast.makeText(FlightTicketRequest.this,"Enter the Time Session",Toast.LENGTH_LONG).show();
+        if (!(radoMor.isChecked() || radoEve.isChecked())) {
+            Toast.makeText(FlightTicketRequest.this, "Enter the Time Session", Toast.LENGTH_LONG).show();
             return false;
         }
-        if(radioRound.isChecked()){
-            TrvTyp="TWO";
-            if(retFrmPlc.getText().toString().equalsIgnoreCase("")){
-                Toast.makeText(FlightTicketRequest.this,"Enter the From Place",Toast.LENGTH_LONG).show();
+        if (radioRound.isChecked()) {
+            TrvTyp = "TWO";
+            if (retFrmPlc.getText().toString().equalsIgnoreCase("")) {
+                Toast.makeText(FlightTicketRequest.this, "Enter the From Place", Toast.LENGTH_LONG).show();
                 return false;
             }
-            if(retToPlc.getText().toString().equalsIgnoreCase("")){
-                Toast.makeText(FlightTicketRequest.this,"Enter the To Place",Toast.LENGTH_LONG).show();
+            if (retToPlc.getText().toString().equalsIgnoreCase("")) {
+                Toast.makeText(FlightTicketRequest.this, "Enter the To Place", Toast.LENGTH_LONG).show();
                 return false;
             }
-            if(retedtDepature.getText().toString().equalsIgnoreCase("")){
-                Toast.makeText(FlightTicketRequest.this,"Enter the Depature Date",Toast.LENGTH_LONG).show();
+            if (retedtDepature.getText().toString().equalsIgnoreCase("")) {
+                Toast.makeText(FlightTicketRequest.this, "Enter the Depature Date", Toast.LENGTH_LONG).show();
                 return false;
             }
-            if(!(retradoMor.isChecked() || retradoEve.isChecked())){
-                Toast.makeText(FlightTicketRequest.this,"Enter the Time Session",Toast.LENGTH_LONG).show();
+            if (!(retradoMor.isChecked() || retradoEve.isChecked())) {
+                Toast.makeText(FlightTicketRequest.this, "Enter the Time Session", Toast.LENGTH_LONG).show();
                 return false;
             }
+
+
         }
-        jTrvDets=new JSONArray();
-        for(int il=0;il<TrvlrList.getChildCount();il++){
+        jTrvDets = new JSONArray();
+        for (int il = 0; il < TrvlrList.getChildCount(); il++) {
             try {
-                LinearLayout LayChild=(LinearLayout) TrvlrList.getChildAt(il);
+                LinearLayout LayChild = (LinearLayout) TrvlrList.getChildAt(il);
                 RadioButton radHap = LayChild.findViewById(R.id.radio_HAP);
                 RadioButton radOth = LayChild.findViewById(R.id.radio_OTH);
                 EditText txTrvEmpid = LayChild.findViewById(R.id.edtGEmpid);
-                EditText txTrvName= LayChild.findViewById(R.id.txTrvName);
-                EditText txCmpName= LayChild.findViewById(R.id.txCmpName);
-                EditText txMobile= LayChild.findViewById(R.id.txTrvMobile);
+                EditText txTrvName = LayChild.findViewById(R.id.txTrvName);
+                EditText txCmpName = LayChild.findViewById(R.id.txCmpName);
+                EditText txMobile = LayChild.findViewById(R.id.txTrvMobile);
+                EditText txRemark = LayChild.findViewById(R.id.txTrvRemarks);
                 RadioButton radGenM = LayChild.findViewById(R.id.radio_TrvGenM);
                 RadioButton radGenF = LayChild.findViewById(R.id.radio_TrvGenF);
-                JSONObject nItem=new JSONObject();
-                String CmpCat="";
-                if(radHap.isChecked())
-                    CmpCat="HAP";
-                else if(radOth.isChecked())
-                    CmpCat="OTH";
+                JSONObject nItem = new JSONObject();
+                String CmpCat = "";
+                if (radHap.isChecked())
+                    CmpCat = "HAP";
+                else if (radOth.isChecked())
+                    CmpCat = "OTH";
                 else {
-                    Toast.makeText(FlightTicketRequest.this,"Enter the Company Type",Toast.LENGTH_LONG).show();
+                    Toast.makeText(FlightTicketRequest.this, "Enter the Company Type", Toast.LENGTH_LONG).show();
                     return false;
                 }
-                if(txTrvName.getText().toString().equalsIgnoreCase("")){
-                    Toast.makeText(FlightTicketRequest.this,"Enter the Traveller Name",Toast.LENGTH_LONG).show();
+                if (txTrvName.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(FlightTicketRequest.this, "Enter the Traveller Name", Toast.LENGTH_LONG).show();
                     return false;
                 }
-                if(txCmpName.getText().toString().equalsIgnoreCase("")){
-                    Toast.makeText(FlightTicketRequest.this,"Enter the Company Name",Toast.LENGTH_LONG).show();
+                if (txCmpName.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(FlightTicketRequest.this, "Enter the Company Name", Toast.LENGTH_LONG).show();
                     return false;
                 }
-                if(txMobile.getText().toString().equalsIgnoreCase("")){
-                    Toast.makeText(FlightTicketRequest.this,"Enter the Mobile No",Toast.LENGTH_LONG).show();
+                if (txMobile.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(FlightTicketRequest.this, "Enter the Mobile No", Toast.LENGTH_LONG).show();
                     return false;
                 }
-                String TrvGen="";
-                if(radGenM.isChecked())
-                    TrvGen="M";
-                else if(radGenF.isChecked())
-                    TrvGen="F";
+
+
+                String TrvGen = "";
+                if (radGenM.isChecked())
+                    TrvGen = "M";
+                else if (radGenF.isChecked())
+                    TrvGen = "F";
                 else {
-                    Toast.makeText(FlightTicketRequest.this,"Select the Gender",Toast.LENGTH_LONG).show();
+                    Toast.makeText(FlightTicketRequest.this, "Select the Gender", Toast.LENGTH_LONG).show();
                     return false;
                 }
-                nItem.put("CmpTyp",CmpCat);
-                nItem.put("EmpID",txTrvEmpid.getText().toString());
-                nItem.put("TrvName",txTrvName.getText().toString());
-                nItem.put("TrvCmp",txCmpName.getText().toString());
-                nItem.put("CmpMob",txMobile.getText().toString());
-                nItem.put("CmpGen",TrvGen);
+
+                if (txRemark.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(FlightTicketRequest.this, "Enter the Remarks", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                nItem.put("CmpTyp", CmpCat);
+                nItem.put("EmpID", txTrvEmpid.getText().toString());
+                nItem.put("TrvName", txTrvName.getText().toString());
+                nItem.put("TrvCmp", txCmpName.getText().toString());
+                nItem.put("CmpMob", txMobile.getText().toString());
+                nItem.put("CmpGen", TrvGen);
+                nItem.put("remarks", txRemark.getText().toString());
 
                 jTrvDets.put(nItem);
             } catch (JSONException e) {
@@ -489,59 +507,60 @@ public class FlightTicketRequest extends AppCompatActivity {
         }
         return true;
     }
-    public void submitData(){
-        JSONObject jObj=new JSONObject();
+
+    public void submitData() {
+        JSONObject jObj = new JSONObject();
         try {
-            TrvTyp="ONE";
-            if(radioRound.isChecked()) TrvTyp="TWO";
-            String TrvMorEve="";
-            if(radoMor.isChecked()) TrvMorEve="M";
-            if(radoEve.isChecked()) TrvMorEve="E";
+            TrvTyp = "ONE";
+            if (radioRound.isChecked()) TrvTyp = "TWO";
+            String TrvMorEve = "";
+            if (radoMor.isChecked()) TrvMorEve = "M";
+            if (radoEve.isChecked()) TrvMorEve = "E";
 
-            String retTrvMorEve="";
-            if(retradoMor.isChecked()) retTrvMorEve="M";
-            if(retradoEve.isChecked()) retTrvMorEve="E";
+            String retTrvMorEve = "";
+            if (retradoMor.isChecked()) retTrvMorEve = "M";
+            if (retradoEve.isChecked()) retTrvMorEve = "E";
 
-            jObj.put("SF",UserDetails.getString("Sfcode", ""));
-            jObj.put("SFNm",UserDetails.getString("SfName", ""));
-            jObj.put("TrvMdType",TrvTyp);
-            jObj.put("TrvFrmPlc",FrmPlc.getText().toString());
-            jObj.put("TrvToPlc",ToPlc.getText().toString());
-            jObj.put("TrvDepDt",edtDepature.getText().toString());
-            jObj.put("TrvSes",TrvMorEve);
+            jObj.put("SF", UserDetails.getString("Sfcode", ""));
+            jObj.put("SFNm", UserDetails.getString("SfName", ""));
+            jObj.put("TrvMdType", TrvTyp);
+            jObj.put("TrvFrmPlc", FrmPlc.getText().toString());
+            jObj.put("TrvToPlc", ToPlc.getText().toString());
+            jObj.put("TrvDepDt", departureDt);
+            jObj.put("TrvSes", TrvMorEve);
 
-            jObj.put("retTrvFrmPlc",retFrmPlc.getText().toString());
-            jObj.put("retTrvToPlc",retToPlc.getText().toString());
-            jObj.put("retTrvDepDt",retedtDepature.getText().toString());
-            jObj.put("retTrvSes",retTrvMorEve);
+            jObj.put("retTrvFrmPlc", retFrmPlc.getText().toString());
+            jObj.put("retTrvToPlc", retToPlc.getText().toString());
+            jObj.put("retTrvDepDt", retedtDepature.getText().toString());
+            jObj.put("retTrvSes", retTrvMorEve);
 
-            jObj.put("Traveller",jTrvDets);
+            jObj.put("Traveller", jTrvDets);
 
-            apiInterface.JsonSave("save/flightbook",jObj.toString()).enqueue(new Callback<JsonObject>() {
+            apiInterface.JsonSave("save/flightbook", jObj.toString()).enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    JsonObject Res=response.body();
-                    String Msg= Res.get("Msg").getAsString();
-                    if(!Msg.equalsIgnoreCase("")){
+                    JsonObject Res = response.body();
+                    String Msg = Res.get("Msg").getAsString();
+                    if (!Msg.equalsIgnoreCase("")) {
                         AlertDialog alertDialog = new AlertDialog.Builder(FlightTicketRequest.this)
-                            .setTitle("HAP Check-In")
-                            .setMessage(Html.fromHtml(Msg))
-                            .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if(Res.get("Success").getAsString().equalsIgnoreCase("true"))
-                                    {
-                                        openHome();
+                                .setTitle("HAP Check-In")
+                                .setMessage(Html.fromHtml(Msg))
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (Res.get("Success").getAsString().equalsIgnoreCase("true")) {
+                                            openHome();
+                                        }
                                     }
-                                }
-                            })
-                            .show();
+                                })
+                                .show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    ResetSubmitBtn(2, buttonSave);
 
                 }
             });
@@ -551,12 +570,13 @@ public class FlightTicketRequest extends AppCompatActivity {
         }
 
     }
-    public void ResetSubmitBtn(int resetMode,CircularProgressButton btnAnim){
-        long dely=10;
-        if(resetMode!=0) dely=1000;
-        if (resetMode==1){
+
+    public void ResetSubmitBtn(int resetMode, CircularProgressButton btnAnim) {
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
             btnAnim.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
-        }else {
+        } else {
             btnAnim.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
         }
         handler.postDelayed(new Runnable() {
@@ -566,7 +586,7 @@ public class FlightTicketRequest extends AppCompatActivity {
                 btnAnim.revertAnimation();
                 btnAnim.setBackground(getDrawable(R.drawable.button_blueg));
             }
-        },dely);
+        }, dely);
 
     }
 //    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
