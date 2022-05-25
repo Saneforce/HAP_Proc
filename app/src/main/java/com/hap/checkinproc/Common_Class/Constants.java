@@ -179,4 +179,5 @@ public class Constants {
     public static final String CusSubGrpErp="CusSubGrpErp";
     public static final String GroupFilter="groupFilter";
     public static final String Freezer_Mandatory="freezerMandatory";
+    public static final String VanSalOrderList="vansalOrderList";
 }

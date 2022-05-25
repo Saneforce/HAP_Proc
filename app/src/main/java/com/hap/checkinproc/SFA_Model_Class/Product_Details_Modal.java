@@ -58,7 +58,51 @@ public class Product_Details_Modal {
     private String plantId = "";
 
     private String saveMode = "";
-    private int cr, Dr, Bal;
+    private int cr;
+    private int Dr;
+
+    public int getCr() {
+        return cr;
+    }
+
+    public void setCr(int cr) {
+        this.cr = cr;
+    }
+
+    public int getDr() {
+        return Dr;
+    }
+
+    public void setDr(int dr) {
+        Dr = dr;
+    }
+
+    public int getBal() {
+        return Bal;
+    }
+
+    public void setBal(int bal) {
+        Bal = bal;
+    }
+
+    public double getCrAmt() {
+        return crAmt;
+    }
+
+    public void setCrAmt(double crAmt) {
+        this.crAmt = crAmt;
+    }
+
+    public double getDrAmt() {
+        return DrAmt;
+    }
+
+    public void setDrAmt(double drAmt) {
+        DrAmt = drAmt;
+    }
+
+    private int Bal;
+    private double crAmt,DrAmt,BalAmt;
 
     public String getERP_Code() {
         return ERP_Code;
@@ -181,11 +225,11 @@ public class Product_Details_Modal {
     // "Cr": 23,
 //         "Dr": 0,
 //         "Bal": 23
-    public Product_Details_Modal(String id, int cr, int Dr, String Balance) {
+    public Product_Details_Modal(String id, int cr, int Dr, int Balance) {
         this.id = id;
         this.cr = cr;
         this.Dr = Dr;
-        this.Balance = Bal;
+        this.Balance = Balance;
     }
 
     public Product_Details_Modal(String UOM_Nm, int Qty, int Multiple_Qty) {
@@ -855,6 +899,14 @@ public class Product_Details_Modal {
 
     public void setSaveMode(String saveMode) {
         this.saveMode = saveMode;
+    }
+
+    public double getBalAmt() {
+        return BalAmt;
+    }
+
+    public void setBalAmt(double balAmt) {
+        BalAmt = balAmt;
     }
 
 

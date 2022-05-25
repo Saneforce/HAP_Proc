@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -1076,7 +1077,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
         @Override
-        public void onBindViewHolder(CategoryAdapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(CategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             try {
                 holder.icon.setText(listt.get(position).getName());
                 if (!listt.get(position).getCatImage().equalsIgnoreCase("")) {
@@ -1197,7 +1198,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
         @Override
-        public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));

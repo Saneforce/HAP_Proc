@@ -248,8 +248,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "Van Sales":
                         if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING)))
                             common_class.getDb_310Data(Constants.VAN_STOCK, SFA_Activity.this);
-                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
-                        startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                            sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
+                            startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+
                         break;
                     case "Outlets":
                         common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
@@ -768,15 +769,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         if (stkObj.getBoolean("success")) {
                             JSONArray arr = stkObj.getJSONArray("Data");
                             List<Product_Details_Modal> stkList = new ArrayList<>();
-                            for (int i = 0; i < arr.getJSONObject(i).length(); i++) {
+                            for (int i = 0; i < arr.length(); i++) {
                                 JSONObject obj = arr.getJSONObject(i);
-                                stkList.add(new Product_Details_Modal(obj.getString("PCode"), obj.getInt("cr"), obj.getInt("Dr"), String.valueOf(obj.getInt("Bal"))));
+                                stkList.add(new Product_Details_Modal(obj.getString("PCode"), obj.getInt("Cr"), obj.getInt("Dr"), (obj.getInt("Bal"))));
                             }
 
                             sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stkList));
 
                         }
-
 
                         Log.v(key, apiDataResponse);
                         break;
@@ -902,6 +902,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         } catch (Exception e) {
+            Log.v(key+"Ex:",e.getMessage());
 
         }
     }

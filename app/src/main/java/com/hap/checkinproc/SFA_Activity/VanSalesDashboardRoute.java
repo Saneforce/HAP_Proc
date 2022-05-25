@@ -569,12 +569,19 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             tvStockUnload.setTextColor(getResources().getColor(R.color.grey_500));
             tvStockUnload.setEnabled(false);
 
+            tvStockLoad.setTextColor(getResources().getColor(R.color.black));
+            tvStockLoad.setEnabled(true);
+
         }
 
 
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
             tvStockLoad.setTextColor(getResources().getColor(R.color.grey_500));
             tvStockLoad.setEnabled(false);
+
+            tvStockUnload.setTextColor(getResources().getColor(R.color.black));
+            tvStockUnload.setEnabled(true);
+
         }
     }
 

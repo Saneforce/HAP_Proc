@@ -37,6 +37,23 @@
 
                 android:textStyle="bold" />
 
+
+            <TextView
+                android:id="@+id/tvVanSalPay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/basic"
+                android:gravity="center_vertical"
+                android:paddingRight="@dimen/C5dp"
+                android:text="Payment"
+                android:textAlignment="textEnd"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="13sp" />
+
+
         </LinearLayout>
 
 

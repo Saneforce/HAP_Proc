@@ -60,6 +60,14 @@
           }
         },
         {
+          "client_id": "92787437164-7iua3gkfsi3ngspqvdgbdu6rttes0rir.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hap.checkin",
+            "certificate_hash": "6c3d19fe7ad73b9e94b3d02582f63a994e67bd79"
+          }
+        },
+        {
           "client_id": "92787437164-hd1pb937qt8ko1djhss3lco2nvhqu7u2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -113,11 +121,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "92787437164-08pqk6thli3mq777uv30ji0utq9d4lt1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hap.checkinproc",
+            "certificate_hash": "5fd97f2a3596ad36f576f0caf04bf7a37a50ff6f"
+          }
+        },
+        {
           "client_id": "92787437164-3hod8r2632t2ik0va4b68cf5kdc3nmh4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hap.checkinproc",
             "certificate_hash": "e322a125d37ce95a1f223aff4f02571833ac3217"
+          }
+        },
+        {
+          "client_id": "92787437164-856e6ohbk1s410be3t14tcb12tbtkeqt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hap.checkinproc",
+            "certificate_hash": "674482ce65232a2d19b66a2854e714e916e5c330"
+          }
+        },
+        {
+          "client_id": "92787437164-jq8nt7qqg7eqp8cioohg60g303fj0krk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hap.checkinproc",
+            "certificate_hash": "9c1db650bcdce060b546bd34dd7852e4379556f5"
           }
         },
         {
