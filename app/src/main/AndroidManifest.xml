@@ -182,6 +182,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".SFA_Activity.VanStockViewActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
             android:name=".SFA_Activity.More_Info_Activity"
             android:screenOrientation="portrait" />
         <activity

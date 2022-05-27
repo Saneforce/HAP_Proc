@@ -502,9 +502,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
-                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
-                    showOrderList();
-                else
+//                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
+//                    showOrderList();
+//                else
                     showOrderItemList(selectedPos, "");
             }
 

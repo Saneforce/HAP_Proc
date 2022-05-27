@@ -85,7 +85,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader, tvVanSalPay;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader, tvVanSalPay,tvStockView;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -125,6 +125,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             common_class = new Common_Class(this);
             tvHeader = findViewById(R.id.tvHeader);
             tvVanSalPay = findViewById(R.id.tvVanSalPay);
+            tvStockView=findViewById(R.id.tvStockView);
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
@@ -194,6 +195,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             tvCoolerInfo.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
             tvVanSalPay.setOnClickListener(this);
+            tvStockView.setOnClickListener(this);
 
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
 
@@ -566,6 +568,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 intent.putExtra("stkLoadAmt",totStkAmt);
                 startActivity(intent);
                 break;
+            case R.id.tvStockView:
+                startActivity(new Intent(VanSalStockUnLoadActivity.this, VanStockViewActivity.class));
+                break;
+
             case R.id.btnCallMob:
                 common_class.showCalDialog(VanSalStockUnLoadActivity.this, "Do you want to Call this Distributor?",
                         tvRetailorPhone.getText().toString().replaceAll(",", ""));
@@ -643,7 +649,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     }
 
     private void SaveOrder(String axn) {
-        // if (common_class.isNetworkAvailable(this)) {
+         if (common_class.isNetworkAvailable(this)) {
 
         AlertDialogBox.showDialog(VanSalStockUnLoadActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
             @Override
@@ -669,9 +675,9 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 //                        OutletItem.put("modified_time", Common_Class.GetDate());
                     OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
                     OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                    // OutletItem.put("orderValue", formatter.format(totalvalues));
-                    // OutletItem.put("CashDiscount", cashDiscount);
-                    // OutletItem.put("NetAmount", formatter.format(totalvalues));
+                     OutletItem.put("orderValue", formatter.format(totalvalues));
+                     OutletItem.put("CashDiscount", cashDiscount);
+                     OutletItem.put("NetAmount", formatter.format(totalvalues));
                     OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                     //  OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                     OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
@@ -687,7 +693,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                         OutletItem.put("Long", "");
                     }
                     JSONArray Order_Details = new JSONArray();
-                    // JSONArray totTaxArr = new JSONArray();
+                     JSONArray totTaxArr = new JSONArray();
 
                     for (int z = 0; z < Getorder_Array_List.size(); z++) {
                         JSONObject ProdItem = new JSONObject();
@@ -699,7 +705,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                         //   ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
 //                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
 //                                    Getorder_Array_List.get(z).getRegularQty());
-                        //   ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+                           ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                         ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
 //                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
@@ -716,45 +722,45 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                         ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
 
-//                            JSONArray tax_Details = new JSONArray();
-//
-//
-//                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
-//                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-//
-//                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
-//                                    JSONObject taxData = new JSONObject();
-//
-//                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
-//                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
-//                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
-//                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
-//                                    taxData.put("Tax_Type", label);
-//                                    taxData.put("Tax_Amt", formatter.format(amt));
-//                                    tax_Details.put(taxData);
-//
-//
-//                                }
-//
-//
-//                            }
-//
-//                            ProdItem.put("TAX_details", tax_Details);
+                            JSONArray tax_Details = new JSONArray();
+
+
+                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
+
+                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+                                    JSONObject taxData = new JSONObject();
+
+                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+                                    taxData.put("Tax_Type", label);
+                                    taxData.put("Tax_Amt", formatter.format(amt));
+                                    tax_Details.put(taxData);
+
+
+                                }
+
+
+                            }
+
+                            ProdItem.put("TAX_details", tax_Details);
 
                         Order_Details.put(ProdItem);
 
                     }
 
-//                        for (int i = 0; i < orderTotTax.size(); i++) {
-//                            JSONObject totTaxObj = new JSONObject();
-//
-//                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-//                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
-//                            totTaxArr.put(totTaxObj);
-//
-//                        }
+                        for (int i = 0; i < orderTotTax.size(); i++) {
+                            JSONObject totTaxObj = new JSONObject();
 
-                    //  OutletItem.put("TOT_TAX_details", totTaxArr);
+                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
+                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
+                            totTaxArr.put(totTaxObj);
+
+                        }
+
+                      OutletItem.put("TOT_TAX_details", totTaxArr);
                     ActivityData.put("Activity_Doctor_Report", OutletItem);
                     ActivityData.put("Order_Details", Order_Details);
                     data.put(ActivityData);
@@ -805,10 +811,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 ResetSubmitBtn(0);
             }
         });
-//        } else {
-//            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
-//            ResetSubmitBtn(0);
-//        }
+        } else {
+            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            ResetSubmitBtn(0);
+        }
     }
 
     private void FilterProduct(List<Product_Details_Modal> orderList) {

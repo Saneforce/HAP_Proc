@@ -170,9 +170,12 @@
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.25" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_primary_order_layout.xml" value="0.25" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_van_sal_payment.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_van_stockview.xml" value="0.24895833333333334" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_vansale_unload.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_vansales_dashboard__route.xml" value="0.24895833333333334" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_vansalesorder_category.xml" value="0.25" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/adapter_vansales_pay.xml" value="0.24895833333333334" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/adapter_vansales_stockview.xml" value="0.25" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/vansales_unload_pay_recyclerview.xml" value="0.25" />
         <entry key="app/src/main/res/drawable/blue_bg.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/bugetoutletno.xml" value="0.27395833333333336" />

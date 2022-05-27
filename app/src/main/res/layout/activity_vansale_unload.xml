@@ -23,10 +23,10 @@
             android:padding="@dimen/C3dp">
 
             <TextView
-                android:id="@+id/tvHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/tvHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/basic"
                 android:paddingLeft="@dimen/C5dp"
                 android:text="Van Sales Order"
@@ -37,12 +37,27 @@
 
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvStockView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/basic"
+                android:gravity="center_vertical"
+                android:paddingRight="@dimen/C5dp"
+                android:text="Stock View"
+                android:textAlignment="textEnd"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="13sp" />
+
+
 
             <TextView
+                android:layout_marginLeft="5dp"
                 android:id="@+id/tvVanSalPay"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:fontFamily="@font/basic"
                 android:gravity="center_vertical"
                 android:paddingRight="@dimen/C5dp"

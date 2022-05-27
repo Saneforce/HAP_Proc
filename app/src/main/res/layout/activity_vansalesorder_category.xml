@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/basic"
                 android:paddingLeft="@dimen/C5dp"
-                android:text="Van Sales Order"
+                android:text="Van Sales Invoice"
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
                 android:textColor="#FFF"
