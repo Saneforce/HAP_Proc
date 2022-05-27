@@ -335,12 +335,15 @@ public class Common_Class {
                     QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
                     QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+
                     break;
 
                 case Constants.VanSalOrderList:
                     QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
                     break;
 
 

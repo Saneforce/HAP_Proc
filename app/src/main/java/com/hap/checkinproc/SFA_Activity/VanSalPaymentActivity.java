@@ -1,8 +1,5 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,27 +9,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.List;
 
 public class VanSalPaymentActivity extends AppCompatActivity implements UpdateResponseUI {
 
     Common_Class common_class;
-    TextView tvDt, tvLoadAmt, tvUnLoadAmt,tvTotVanSal;
+    TextView tvDt, tvLoadAmt, tvUnLoadAmt, tvTotVanSal;
     NumberFormat formatter = new DecimalFormat("##0.00");
     RecyclerView rvVanSales;
     private double salAmt;
+    private double totStkAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +43,23 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
         tvUnLoadAmt = findViewById(R.id.tvUnLoadStkAmt);
         tvDt = findViewById(R.id.tvVSPayDate);
         rvVanSales = findViewById(R.id.rvVanSal);
-        tvTotVanSal=findViewById(R.id.tvTotSal);
-
-
+        tvTotVanSal = findViewById(R.id.tvTotSal);
         tvDt.setText("Date : " + Common_Class.GetDatemonthyearformat());
-        tvLoadAmt.setText("₹" + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0)));
+
+        totStkAmt = getIntent().getDoubleExtra("stkLoadAmt", 0);
+
+        if (totStkAmt == -1) {
+            common_class.getDb_310Data(Constants.VAN_STOCK, this);
+        } else {
+            tvLoadAmt.setText("₹" + formatter.format(totStkAmt));
+
+        }
+
         common_class.getDataFromApi(Constants.VanSalOrderList, this, false);
 
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
+
 
     }
 
@@ -65,6 +71,19 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                 case Constants.VanSalOrderList:
                     Log.v(key, apiDataResponse);
                     setHistoryAdapter(apiDataResponse);
+                    break;
+                case Constants.VAN_STOCK:
+                    JSONObject stkObj = new JSONObject(apiDataResponse);
+                    totStkAmt = 0;
+                    if (stkObj.getBoolean("success")) {
+                        JSONArray arr = stkObj.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject obj = arr.getJSONObject(i);
+                            totStkAmt += obj.getDouble("CrAmt");
+
+                        }
+                    }
+
 
                     break;
 
@@ -94,12 +113,11 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                 }
                 tvTotVanSal.setText("₹" + formatter.format(salAmt));
 
-
-                tvUnLoadAmt.setText("₹" + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0) - salAmt));
+                tvUnLoadAmt.setText("₹" + formatter.format(totStkAmt - salAmt));
                 rvVanSales.setAdapter(new Pay_Adapter(filterArr, R.layout.adapter_vansales_pay, VanSalPaymentActivity.this));
             }
         } catch (Exception e) {
-Log.v("adap:",e.getMessage());
+            Log.v("adap:", e.getMessage());
         }
 
     }

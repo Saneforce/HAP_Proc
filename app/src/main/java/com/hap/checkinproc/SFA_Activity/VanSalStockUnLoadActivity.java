@@ -1007,7 +1007,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     if (stkObj.getBoolean("success")) {
                         JSONArray arr = stkObj.getJSONArray("Data");
                         List<Product_Details_Modal> stkList = new ArrayList<>();
-                        for (int i = 0; i < arr.getJSONObject(i).length(); i++) {
+                        for (int i = 0; i < arr.length(); i++) {
                             JSONObject obj = arr.getJSONObject(i);
 
                             //  Getorder_Array_List.clear();

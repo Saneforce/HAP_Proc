@@ -83,7 +83,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     Gson gson;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, tvDistname, retaileAddress, tvHeader;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -141,6 +141,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
+            tvDistname = findViewById(R.id.tvDistName);
 
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
@@ -157,12 +158,14 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Retailor_PHNo)))
                 llCalMob.setVisibility(View.GONE);
             else
-                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
-            retaileAddress.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
+                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
+            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
+            Out_Let_Name.setText(Shared_Common_Pref.OutletName);
+
+            tvDistname.setText("" + sharedCommonPref.getvalue(Constants.Distributor_name));
 
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
@@ -672,7 +675,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                     HeadItem.put("dcr_activity_date", Common_Class.GetDate());
                     // HeadItem.put("Daywise_Remarks", "");
                     HeadItem.put("UKey", Ukey);
-                      HeadItem.put("orderValue", formatter.format(totalvalues));
+                    HeadItem.put("orderValue", formatter.format(totalvalues));
                     HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                     HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                     ActivityData.put("Activity_Report_Head", HeadItem);
@@ -682,9 +685,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 //                        OutletItem.put("modified_time", Common_Class.GetDate());
                     OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
                     OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                     OutletItem.put("orderValue", formatter.format(totalvalues));
+                    OutletItem.put("orderValue", formatter.format(totalvalues));
                     // OutletItem.put("CashDiscount", cashDiscount);
-                     OutletItem.put("NetAmount", formatter.format(totalvalues));
+                    OutletItem.put("NetAmount", formatter.format(totalvalues));
                     OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                     //  OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                     OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);

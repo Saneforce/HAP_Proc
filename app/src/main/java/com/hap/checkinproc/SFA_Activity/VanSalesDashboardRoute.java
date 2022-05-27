@@ -90,7 +90,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll, tvStockLoad, tvStockUnload,
+    TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll, tvStockLoad, tvStockUnload,tvVanSalPay,tvStockView,
             txTotUniOtlt, txTotUniOtltCnt, txSrvOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
     EditText txSearchRet;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni, btTotUniOtlt;
@@ -219,6 +219,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             txTotUniOtltCnt = findViewById(R.id.txTotUnivOtltCnt);
             txTotUniOtlt = findViewById(R.id.txTotUnivOtlt);
             underTotUni = findViewById(R.id.undrTotUniv);
+            tvVanSalPay = findViewById(R.id.tvVanSalPay);
+            tvStockView=findViewById(R.id.tvStockView);
+
 
 
             ReachedOutlet.setOnClickListener(this);
@@ -233,6 +236,10 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             llInvoice.setOnClickListener(this);
             tvStockLoad.setOnClickListener(this);
             tvStockUnload.setOnClickListener(this);
+
+            tvVanSalPay.setOnClickListener(this);
+            tvStockView.setOnClickListener(this);
+
 
             txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             txTotUniOtlt.setTypeface(null, Typeface.BOLD);
@@ -663,6 +670,15 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvVanSalPay:
+                Intent payIntent=new Intent(VanSalesDashboardRoute.this, VanSalPaymentActivity.class);
+                payIntent.putExtra("stkLoadAmt",-1);
+                startActivity(payIntent);
+                break;
+            case R.id.tvStockView:
+                startActivity(new Intent(VanSalesDashboardRoute.this, VanStockViewActivity.class));
+                break;
+
 
             case R.id.llOrder:
                 if (smryOrd.getText().toString().equals("0"))

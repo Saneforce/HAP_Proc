@@ -126,10 +126,12 @@ public class Login extends AppCompatActivity {
         shared_common_pref = new Shared_Common_Pref(this);
 
 
-        if (com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime().equalsIgnoreCase(shared_common_pref.getvalue(Constants.LOGIN_DATE)))
+        if (com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime().equalsIgnoreCase(shared_common_pref.getvalue(Constants.LOGIN_DATE))) {
             Shared_Common_Pref.LOGINTYPE = shared_common_pref.getvalue(Constants.LOGIN_TYPE);
-        else
+        } else {
             shared_common_pref.clear_pref(Constants.LOGIN_DATA);
+            shared_common_pref.clear_pref(Constants.VAN_STOCK_LOADING);
+        }
 
 
         JSONArray pendingPhotos = db.getAllPendingPhotos();
@@ -614,7 +616,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-                // eMail = "ciadmin@hap.in";
+              //   eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -639,7 +641,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-                  //eMail = "1013362@hap.in";//(-18)
+               // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";

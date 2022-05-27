@@ -76,6 +76,7 @@
         <activity android:name=".Activity.ModeOfTravel" />
         <activity android:name=".Activity.TAViewStatus" />
         <activity android:name=".Activity_Hap.ViewTAStatus" />
+
         <activity android:name=".Activity_Hap.FlightTicketRequest" />
         <activity android:name=".Activity_Hap.CateenToken" />
         <activity android:name=".Common_Class.ToolBarMethod" />
@@ -179,6 +180,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.VanSalPaymentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.TAHistory"
             android:screenOrientation="portrait" />
 
         <activity

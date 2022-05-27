@@ -37,6 +37,21 @@
 
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvDistName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/basic"
+                android:gravity="center_vertical"
+                android:paddingRight="@dimen/C5dp"
+                android:text=""
+                android:textAlignment="textEnd"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="13sp" />
+
+
         </LinearLayout>
 
 

@@ -77,9 +77,6 @@ public class VanStockViewActivity extends AppCompatActivity implements UpdateRes
         try {
 
             JSONObject stkObj = new JSONObject(apiDataResponse);
-
-
-            JSONArray filterArr = new JSONArray();
             salAmt = 0;
             totStk = 0;
             totSal = 0;

@@ -48,7 +48,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
-    LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
+    LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
+            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -71,6 +72,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_leaveholidaystatus = findViewById(R.id.lin_leaveholidaystatus);
         linLeaveCancel = findViewById(R.id.lin_leave_cancel);
         linDaExceptionEntry = findViewById(R.id.lin_daExp_entry);
+        llTrvlAllowStatus = findViewById(R.id.lin_travel_histry);
         DaExcptStaus = findViewById(R.id.lin_da_excep_status);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -189,7 +191,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linDaExceptionEntry.setOnClickListener(this);
         DaExcptStaus.setOnClickListener(this);
         linProjectionApprove.setOnClickListener(this);
-
+        llTrvlAllowStatus.setOnClickListener(this);
 
         getcountdetails();
     }
@@ -290,7 +292,9 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.lin_travel_histry:
+                startActivity(new Intent(Approvals.this, TAHistory.class));
+                break;
             case R.id.lin_leave_req:
                 startActivity(new Intent(Approvals.this, Leave_Approval.class));
                 finish();
