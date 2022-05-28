@@ -167,11 +167,15 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/tp_clander.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/vansales_product_order_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/vansales_product_pay_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/drawable/button_red.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_allowance.xml" value="0.5" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_approvals.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_extended__shift_.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_t_a_approval.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_t_a_claim.xml" value="0.21557971014492755" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_t_a_history.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_t_a_view_status.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_ta_cumulative_approval.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_today_primorder_history.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_van_stockview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_vansale_unload.xml" value="0.27291666666666664" />
@@ -180,7 +184,9 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/activity_view_t_a_status.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/adapter_history_ta_status.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/adapter_t_a_history.xml" value="0.28489583333333335" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/category_order_types_ryclv.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/extended_shift_status_listitem.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/item_ta_appr.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_27_5_2022/app/src/main/res/layout/row_view_ta_status.xml" value="0.27291666666666664" />
         <entry key="app/src/main/res/drawable/blue_bg.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/bugetoutletno.xml" value="0.27395833333333336" />

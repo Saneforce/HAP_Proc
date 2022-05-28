@@ -2,6 +2,7 @@ package com.hap.checkinproc.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,15 +60,19 @@ public class TAApprovHistoryAdapter extends RecyclerView.Adapter<TAApprovHistory
             holder.taOeAmt.setText(jsonObject.get("Oe_totalAmt").getAsString());
 
             holder.taStatus.setPadding(20, 5, 20, 5);
+            holder.taName.setText(""+jsonObject.get("SFName").getAsString());
 
             if (jsonObject.get("ApSTatus").getAsString().equalsIgnoreCase("Rejected")) {
                 holder.taStatus.setBackgroundResource(R.drawable.button_red);
+                holder.taName.setTextColor(Color.parseColor("#ff3700"));
 
             } else if (jsonObject.get("ApSTatus").getAsString().equalsIgnoreCase("Approved")) {
                 holder.taStatus.setBackgroundResource(R.drawable.button_green);
+                holder.taName.setTextColor(Color.parseColor("#008000"));
 
             } else {
                 holder.taStatus.setBackgroundResource(R.drawable.button_yellows);
+                holder.taName.setTextColor(Color.parseColor("#ff9819"));
 
             }
 
@@ -84,7 +89,7 @@ public class TAApprovHistoryAdapter extends RecyclerView.Adapter<TAApprovHistory
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView taDate, taStatus, taTotalAmt, taDaAmt, taTLAmt, taFaAmt, taLaAmt, taLcAmt, taOeAmt;
+        TextView taDate, taStatus, taTotalAmt, taDaAmt, taTLAmt, taFaAmt, taLaAmt, taLcAmt, taOeAmt,taName;
         CardView mCardView;
         Button btnCancel;
 
@@ -101,6 +106,7 @@ public class TAApprovHistoryAdapter extends RecyclerView.Adapter<TAApprovHistory
             taOeAmt = (TextView) itemView.findViewById(R.id.txt_oe);
             mCardView = itemView.findViewById(R.id.ta_row_item);
             btnCancel = itemView.findViewById(R.id.btn_cancel);
+            taName=itemView.findViewById(R.id.SfName);
         }
     }
 

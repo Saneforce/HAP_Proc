@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +22,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +44,6 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.ImageCapture;
 import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.Activity_Hap.Mydayplan_Activity;
 import com.hap.checkinproc.Activity_Hap.PayslipFtp;
@@ -62,10 +59,7 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.DatabaseHandler;
-import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,25 +84,41 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     static TransferUtility transferUtility;
     // Reference to the utility class
     static Util util;
+    final Handler handler = new Handler();
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
 
-    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate,TextDtTrv;
+                    if (!(ClosingCon.equals("") || ClosingCon.equalsIgnoreCase("null"))) {
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                    } else {
+                        Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
+                        Dashboard.putExtra("Mode", "CIN");
+                        startActivity(Dashboard);
+                    }
+                    //startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                }
+            });
+    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate, TextDtTrv;
     ImageView StartedKmImage, EndedKmImage;
     CircularProgressButton submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
-    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0,StartedKM=0;
+    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0, StartedKM = 0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
     ApiInterface apiInterface;
     String Photo_Name = "", imageConvert = "", StartedKm = "", EndedImage = "", CheckInfo = "CheckInDetail",
             UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref", StrToCode = "",
             toPlace = "", ImageStart = "", Hq = "", ClosingCon = "", ClosingDate = "";
-    LinearLayout linToPlace, takeEndedPhoto,vwlblHead;
+    LinearLayout linToPlace, takeEndedPhoto, vwlblHead;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
     Common_Class common_class;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     Location mlocation;
-    final Handler handler = new Handler();
+    Bitmap bitmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +132,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
         TextModeTravel = findViewById(R.id.txt_mode_travel);
-        vwlblHead=findViewById(R.id.vwlblHead);
+        vwlblHead = findViewById(R.id.vwlblHead);
         TextDtTrv = findViewById(R.id.DtTrv);
         TextCloseDate = findViewById(R.id.closing_date);
         TextStartedKm = findViewById(R.id.txt_started_km);
@@ -146,7 +156,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         new LocationFinder(getApplication(), new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
-                mlocation=location;
+                mlocation = location;
             }
         });
 
@@ -186,10 +196,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     endKm = Integer.parseInt(EndedEditText.getText().toString());
                     if (StartedKM < endKm) {
 
-                        if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
-                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
-                        }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
-                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
+                        if (TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")) {
+                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
+                        } else if (TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")) {
+                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
                         }
                     }
                     totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
@@ -242,10 +252,13 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                         @Override
                         public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
-                            Photo_Name = FileName;
-                            imageConvert=fullPath;
-                            EndedImage="file://"+fullPath;
-                            EndedKmImage.setImageBitmap(image);
+//                            Photo_Name = FileName;
+//                            imageConvert=fullPath;
+//                            EndedImage="file://"+fullPath;
+//                            EndedKmImage.setImageBitmap(image);
+
+                            UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), FileName, "Travel", image);
+
                         }
                     });
                     Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
@@ -262,71 +275,71 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             @Override
             public void onClick(View v) {
                 submitAllowance.startAnimation();
-                common_class.ProgressdialogShow(1,"Validating Please wait...");
+                common_class.ProgressdialogShow(1, "Validating Please wait...");
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (EndedEditText.getText().toString().matches("")) {
                             Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
-                            ResetSubmitBtn(0);return;
-                        }
-                        else if (imageConvert.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
+                            ResetSubmitBtn(0);
+                            return;
+                        } else if (imageConvert.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
                             Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
-                            ResetSubmitBtn(0);return;
-                        }
-                        else {
+                            ResetSubmitBtn(0);
+                            return;
+                        } else {
 
-                    try {
-                        stKM = Integer.valueOf(TextStartedKm.getText().toString());
-                    } catch (NumberFormatException ex) { // handle your exception
+                            try {
+                                stKM = Integer.valueOf(TextStartedKm.getText().toString());
+                            } catch (NumberFormatException ex) { // handle your exception
 
-                    }
-                    endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
-                    if (stKM < endKm) {
-                        endKm = Integer.parseInt(EndedEditText.getText().toString());
-                        if (StartedKM < endKm) {
-                            if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
-                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
-                            }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
-                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                             }
-                        }
-                        if((StartedKM+maxKM)<endKm){
-                            Toast.makeText(AllowanceActivityTwo.this, "KM Limit is Exceeded", Toast.LENGTH_SHORT).show();
-                            ResetSubmitBtn(0);return;
-                        }
-                        if(mlocation!=null){
-                            common_class.ProgressdialogShow(1, "Submitting Please wait...");
-                            if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
-                                submitData(ClosingDate);
-                            } else {
-                                submitData(Common_Class.GetDate());
-                            }
-                        }
-                        else {
-                            common_class.ProgressdialogShow(1, "Getting location please wait...");
-                            new LocationFinder(getApplication(), new LocationEvents() {
-                                @Override
-                                public void OnLocationRecived(Location location) {
-                                    mlocation=location;
-//                                if (!ClosingDate.equals("")) {
+                            endKm = Integer.valueOf(EndedEditText.getText().toString());
+                            if (stKM < endKm) {
+                                endKm = Integer.parseInt(EndedEditText.getText().toString());
+                                if (StartedKM < endKm) {
+                                    if (TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")) {
+                                        EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
+                                    } else if (TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")) {
+                                        EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
+                                    }
+                                }
+                                if ((StartedKM + maxKM) < endKm) {
+                                    Toast.makeText(AllowanceActivityTwo.this, "KM Limit is Exceeded", Toast.LENGTH_SHORT).show();
+                                    ResetSubmitBtn(0);
+                                    return;
+                                }
+                                if (mlocation != null) {
                                     common_class.ProgressdialogShow(1, "Submitting Please wait...");
                                     if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
                                         submitData(ClosingDate);
                                     } else {
                                         submitData(Common_Class.GetDate());
                                     }
+                                } else {
+                                    common_class.ProgressdialogShow(1, "Getting location please wait...");
+                                    new LocationFinder(getApplication(), new LocationEvents() {
+                                        @Override
+                                        public void OnLocationRecived(Location location) {
+                                            mlocation = location;
+//                                if (!ClosingDate.equals("")) {
+                                            common_class.ProgressdialogShow(1, "Submitting Please wait...");
+                                            if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
+                                                submitData(ClosingDate);
+                                            } else {
+                                                submitData(Common_Class.GetDate());
+                                            }
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    } else {
-                        ResetSubmitBtn(0);
-                        Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
+                            } else {
+                                ResetSubmitBtn(0);
+                                Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
 
+                            }
+                        }
                     }
-                }
-                    }
-                },100);
+                }, 100);
             }
         });
 
@@ -343,6 +356,85 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
     }
 
+    private void UploadPhoto(String path, String SF, String FileName, String Mode, Bitmap image) {
+        try {
+            common_class.ProgressdialogShow(1, "");
+
+            MultipartBody.Part imgg;
+            if (path != null && (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg"))) {
+                imgg = convertimg("file", path);
+
+            } else {
+                common_class.ProgressdialogShow(0, "");
+                common_class.showMsg(this, "Image file only supported");
+                return;
+            }
+
+
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<ResponseBody> mCall = apiInterface.onTAFileUpload(SF, FileName, Mode, imgg);
+
+            Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
+
+            mCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    try {
+                        if (response.isSuccessful()) {
+
+
+                            JSONObject js = new JSONObject(response.body().string());
+                            Log.v("Res", js.toString());
+
+                            if (js.getBoolean("success")) {
+
+                                if (image != null) {
+                                    Photo_Name = FileName;
+                                    imageConvert = path;
+                                    EndedImage = "file://" + path;
+                                    EndedKmImage.setImageBitmap(image);
+
+
+                                }
+
+
+                                common_class.ProgressdialogShow(0, "");
+
+                                common_class.showMsg(AllowanceActivityTwo.this, "File uploading successful ");
+                            } else {
+                                common_class.ProgressdialogShow(0, "");
+                                common_class.showMsg(AllowanceActivityTwo.this, "Failed.Try Again...");
+                            }
+                        } else {
+
+                            common_class.ProgressdialogShow(0, "");
+                            common_class.showMsg(AllowanceActivityTwo.this, "Failed.Try Again...");
+
+                        }
+
+                    } catch (Exception e) {
+                        common_class.ProgressdialogShow(0, "");
+                        common_class.showMsg(AllowanceActivityTwo.this, "Failed.Try Again...");
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    common_class.ProgressdialogShow(0, "");
+                    common_class.showMsg(AllowanceActivityTwo.this, "Failed.Try Again...");
+
+                    Log.e("SEND_IMAGE_Response", "ERROR");
+                }
+            });
+
+
+        } catch (Exception e) {
+            Log.e("TAClaim:", e.getMessage());
+        }
+    }
+
     /*Submit*/
     public void submitData(String date) {
 
@@ -356,12 +448,12 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
         try {
 
-            Intent mIntent = new Intent(this, FileUploadService.class);
-            mIntent.putExtra("mFilePath", imageConvert);
-            mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
-            mIntent.putExtra("FileName", Photo_Name);
-            mIntent.putExtra("Mode", "Travel");
-            FileUploadService.enqueueWork(this, mIntent);
+//            Intent mIntent = new Intent(this, FileUploadService.class);
+//            mIntent.putExtra("mFilePath", imageConvert);
+//            mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
+//            mIntent.putExtra("FileName", Photo_Name);
+//            mIntent.putExtra("Mode", "Travel");
+//            FileUploadService.enqueueWork(this, mIntent);
 
             JSONObject jj = new JSONObject();
             jj.put("km", EndedEditText.getText().toString());
@@ -376,12 +468,12 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             jj.put("to_code", StrToCode);
             jj.put("fare", "");
             jj.put("Activity_Date", date);
-            jj.put("location", mlocation.getLatitude()+":"+mlocation.getLongitude());
+            jj.put("location", mlocation.getLatitude() + ":" + mlocation.getLongitude());
             //saveAllowance
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
 
-           // if (!ClosingDate.equals("")  ) {
+            // if (!ClosingDate.equals("")  ) {
 
             if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
                 Callto = apiInterface.updateAllowance("update/predayallowance", jj.toString());
@@ -417,7 +509,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 shared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
 
                                 //if (!ClosingCon.equals("")) {
-                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null")) && Common_Class.GetDate()!=ClosingDate) {
+                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null")) && Common_Class.GetDate() != ClosingDate) {
                                     startActivity(new Intent(getApplicationContext(), Mydayplan_Activity.class));
                                 } else {
                                     Intent takePhoto = new Intent(AllowanceActivityTwo.this, Login.class);
@@ -429,7 +521,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 ResetSubmitBtn(2);
                                 Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
                             }
-                        }else{
+                        } else {
                             ResetSubmitBtn(2);
                             Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
                         }
@@ -452,14 +544,13 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         }
     }
 
-
-    public void ResetSubmitBtn(int resetMode){
+    public void ResetSubmitBtn(int resetMode) {
         common_class.ProgressdialogShow(0, "");
-        long dely=100;
+        long dely = 100;
         //if(resetMode!=0) dely=1000;
-        if (resetMode==1){
+        if (resetMode == 1) {
             submitAllowance.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
-        }else {
+        } else {
             submitAllowance.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
         }
         handler.postDelayed(new Runnable() {
@@ -468,9 +559,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 submitAllowance.stopAnimation();
                 submitAllowance.revertAnimation();
             }
-        },dely);
+        }, dely);
 
     }
+
     public void BusToValue() {
 
         JSONObject jj = new JSONObject();
@@ -555,22 +647,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         });
     }
 
-    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
-            new OnBackPressedDispatcher(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (!(ClosingCon.equals("") || ClosingCon.equalsIgnoreCase("null"))) {
-                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                    } else {
-                        Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
-                        Dashboard.putExtra("Mode", "CIN");
-                        startActivity(Dashboard);
-                    }
-                    //startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                }
-            });
-
     @Override
     public void onBackPressed() {
 
@@ -625,11 +701,11 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 TextMaxKm.setVisibility(View.GONE);
                                 StratKm = Integer.valueOf(json_oo.getString("Start_Km"));
 
-                                StartedKM  = Integer.valueOf(json_oo.getString("Start_Km"));
+                                StartedKM = Integer.valueOf(json_oo.getString("Start_Km"));
                                 ImageStart = json_oo.getString("start_Photo");
-                                String[] FilNMs= ImageStart.split("/");
-                                String[] imgDet= FilNMs[FilNMs.length-1].split("[.]");
-                                DownloadPhoto(StartedKmImage,imgDet[0],imgDet[1]);
+                                String[] FilNMs = ImageStart.split("/");
+                                String[] imgDet = FilNMs[FilNMs.length - 1].split("[.]");
+                                DownloadPhoto(StartedKmImage, imgDet[0], imgDet[1]);
 
                                 StrToCode = json_oo.getString("To_Place_Id");
                                 TextToPlace.setText(json_oo.getString("To_Place"));
@@ -720,7 +796,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         JSONObject jb = null;
                         String jsonData = null;
                         jsonData = response.body().string();
-                        Log.v("request_data_upload", String.valueOf(jsonData));
+                        Log.v("request_data_upload", jsonData);
                         JSONObject js = new JSONObject(jsonData);
                         if (js.getString("success").equalsIgnoreCase("true")) {
                             Photo_Name = js.getString("url");
@@ -751,20 +827,20 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     }
 
 
-    private void DownloadPhoto(ImageView ImgViewer, String FileName,String FileExt){
-        try{
+    private void DownloadPhoto(ImageView ImgViewer, String FileName, String FileExt) {
+        try {
 
-            final File file = File.createTempFile(FileName,"."+FileExt);
+            final File file = File.createTempFile(FileName, "." + FileExt);
 
             TransferObserver downloadObserver =
-                    transferUtility.download("happic","TAPhotos/" + FileName+"."+FileExt , file);
+                    transferUtility.download("happic", "TAPhotos/" + FileName + "." + FileExt, file);
 
             downloadObserver.setTransferListener(new TransferListener() {
 
                 @Override
                 public void onStateChanged(int id, TransferState state) {
                     if (TransferState.COMPLETED == state) {
-                        Bitmap bmp=BitmapFactory.decodeFile(file.getAbsolutePath());
+                        Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
                         ImgViewer.setImageBitmap(bmp);
                         Toast.makeText(getApplicationContext(), "Upload Completed!", Toast.LENGTH_SHORT).show();
                     }
@@ -784,8 +860,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 }
 
             });
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             // Log.e(TAG,e.getMessage());
         }
     }

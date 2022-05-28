@@ -124,6 +124,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     boolean isSFA = true;
 
+    int menuItem = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,8 +250,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "Van Sales":
                         if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING)))
                             common_class.getDb_310Data(Constants.VAN_STOCK, SFA_Activity.this);
-                            sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
-                            startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
+                        startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
 
                         break;
                     case "Outlets":
@@ -274,12 +276,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case "Sync":
                         saveFormData();
+                        common_class.ProgressdialogShow(1, "");
                         break;
 
                     default:
                         Intent ii = new Intent(SFA_Activity.this, ViewActivity.class);
                         ii.putExtra("btn_need", menuList.get(pos).getTargetForm());
                         ii.putExtra("frmid", menuList.get(pos).getFormid());
+                        ii.putExtra("frmname", menuList.get(pos).getFormName());
                         startActivity(ii);
 
 
@@ -294,7 +298,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     private void saveFormData() {
         try {
 
-            common_class.ProgressdialogShow(1, "");
 
             ArrayList<Common_Model> formList = new ArrayList<>();
 
@@ -309,28 +312,29 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             formList.add(new Common_Model("General Activities", "8"));
 
 
-            for (int i = 0; i < formList.size(); i++) {
-                String formid = formList.get(i).getName();
-
+            if (formList.size() == menuItem) {
+                common_class.ProgressdialogShow(0, "");
+                menuItem = 0;
+                return;
+            } else {
+                String formid = formList.get(menuItem).getName();
 
                 JSONObject json = new JSONObject();
 
-                json.put("slno", formList.get(i).getId());
+                json.put("slno", formList.get(menuItem).getId());
 
-                String formname = formList.get(i).getName();
+                String formname = formList.get(menuItem).getName();
 
 
                 Log.v("printing_sf_code", json.toString());
                 Call<ResponseBody> approval = apiService.getView(json.toString());
 
-                int finalI = i;
+
                 approval.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
                             Log.v("procure:" + formname + ":" + formid + ":", response.body().byteStream() + "");
-                            JSONObject jsonObject = null;
-                            String jsonData = null;
 
                             InputStreamReader ip = null;
                             StringBuilder is = new StringBuilder();
@@ -343,11 +347,13 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                     is.append(line);
                                 }
 
-                                sharedCommonPref.save(formid + ":", is.toString());
+                                sharedCommonPref.save(formname, is.toString());
 
-                                Log.v("sizeCheck:", "" + menuList.size() + ":current:" + (finalI + 1));
-                                if (formList.size() == finalI + 1)
-                                    common_class.ProgressdialogShow(0, "");
+                                //   Log.v("PROC:" + formList.get(menuItem).getName() + ":", sharedCommonPref.getvalue(formid));
+                                menuItem = menuItem + 1;
+                                saveFormData();
+//
+                                Log.v("sizeCheck:", "" + formList.size() + ":current:" + menuItem);
 
 
                             } catch (Exception e) {
@@ -364,7 +370,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
+
             }
+
+
+            //  }
         } catch (Exception e) {
 
         }
@@ -676,6 +686,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.ivProcureSync:
                 saveFormData();
+                common_class.ProgressdialogShow(1, "");
 
                 break;
 
@@ -902,7 +913,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         } catch (Exception e) {
-            Log.v(key+"Ex:",e.getMessage());
+            Log.v(key + "Ex:", e.getMessage());
 
         }
     }

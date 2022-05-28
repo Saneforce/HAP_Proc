@@ -731,11 +731,9 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     public void callDynamicViewList() {
         try {
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(frm_id + ":"))) {
-
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")))) {
                 Log.v("FORM_ID:", frm_id);
                 JSONObject json = new JSONObject();
-
                 json.put("slno", frm_id);
 
                 Log.v("printing_sf_code", json.toString());
@@ -760,7 +758,7 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                                     is.append(line);
                                 }
 
-                                sharedCommonPref.save(frm_id + ":", is.toString());
+                                sharedCommonPref.save(getIntent().getStringExtra("frmname"), is.toString());
                                 createDynamicView(is.toString());
 
 
@@ -777,7 +775,7 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                     }
                 });
             } else {
-                createDynamicView(sharedCommonPref.getvalue(frm_id));
+                createDynamicView(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
             }
 
         } catch (Exception e) {

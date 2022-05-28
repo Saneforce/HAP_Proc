@@ -4505,6 +4505,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         openHome();
                     } else {
                         Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
+                      finish();
                         startActivity(new Intent(TAClaimActivity.this, ViewTAStatus.class));
 
                     }
