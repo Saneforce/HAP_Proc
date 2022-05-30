@@ -33,7 +33,7 @@
                     android:background="@drawable/button_yellow"
                     android:gravity="center"
                     android:padding="@dimen/C10dp"
-                    android:text="Missed Punch Entry"
+                    android:text="Travel Mode Exception Request"
                     android:textAllCaps="true"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/C14dp"
