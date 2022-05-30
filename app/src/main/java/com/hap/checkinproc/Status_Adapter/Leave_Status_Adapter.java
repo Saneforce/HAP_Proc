@@ -109,7 +109,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-            holder.txtApproved.setText("Appproved : "+Leave_Status_ModelsList.get(position).getLastUpdtDate());
+            holder.txtApproved.setText("Approved : "+Leave_Status_ModelsList.get(position).getLastUpdtDate());
         } else if (Leave_Status_ModelsList.get(position).getLeaveActiveFlag() == 2) {
             holder.LStatus.setBackgroundResource(R.drawable.button_yellows);
             holder.LStatus.setPadding(20,5,20,0);

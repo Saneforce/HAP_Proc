@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 7.4.4";
+    public static String Version_Name = "ver 7.4.6";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -1538,9 +1538,6 @@ public class Common_Class {
                 SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 if (CheckIn == true) {
-//                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-//                        Dashboard.putExtra("Mode", "CIN");
-//                        startActivity(Dashboard);
                     CommonIntentwithoutFinish(SFA_Activity.class);
                 } else
                     context.startActivity(new Intent(context, Dashboard.class));

@@ -3,7 +3,9 @@ package com.hap.checkinproc.SFA_Activity;
 import static com.hap.checkinproc.SFA_Activity.Nearby_Outlets.shared_common_pref;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -37,7 +39,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -71,7 +77,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     private Polyline mPolyline;
     Marker currentLocationMarker;
     public static String TAG = "MapDirectionActivity";
-    private String status = "";
+    private String status = "", CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
+    SharedPreferences UserDetails, CheckInDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,9 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             status = status == null ? "" : status;
 
             common_class = new Common_Class(this);
+            CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
             AddressTextview = findViewById(R.id.AddressTextview);
             ReachedOutlet = findViewById(R.id.tvStartDirection);
             imag_back = findViewById(R.id.imag_back);
@@ -96,13 +106,34 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
             // getDirection();
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
-            common_class.gotoHomeScreen(this, ivToolbarHome);
+            ivToolbarHome.setOnClickListener(this);
+            //  common_class.gotoHomeScreen(this, ivToolbarHome);
 
         } catch (Exception e) {
             Log.v(TAG + "onCreate:", e.getMessage());
         }
 
     }
+
+
+    public void openHome() {
+        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+
+        if (CheckIn == true) {
+            if (status.equalsIgnoreCase("GEO")) {
+                Intent Dashboard = new Intent(MapDirectionActivity.this, Dashboard_Two.class);
+                Dashboard.putExtra("Mode", "CIN");
+                startActivity(Dashboard);
+            } else {
+                common_class.CommonIntentwithoutFinish(SFA_Activity.class);
+
+            }
+        } else {
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+        }
+
+    }
+
 
     @Override
     protected void onResume() {
@@ -145,20 +176,29 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                    Shared_Common_Pref.Outletlat = currentLocation.getLatitude();
-                    Shared_Common_Pref.Outletlong = currentLocation.getLongitude();
-                    Shared_Common_Pref.OutletAddress = getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude());
-                    // Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                try {
+                    if (location != null) {
+                        currentLocation = location;
+                        Shared_Common_Pref.Outletlat = currentLocation.getLatitude();
+                        Shared_Common_Pref.Outletlong = currentLocation.getLongitude();
+                        Shared_Common_Pref.OutletAddress = getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude());
+                        // Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
 
-                    AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        if (status.equalsIgnoreCase("GEO"))
+                            AddressTextview.setText("" + getCompleteAddressString(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT))
+                                    , Double.valueOf(getIntent().getStringExtra(Constants.DEST_LNG))));
 
-                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-                    assert supportMapFragment != null;
-                    supportMapFragment.getMapAsync(MapDirectionActivity.this);
+                        else
+                            AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+                        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+                        assert supportMapFragment != null;
+                        supportMapFragment.getMapAsync(MapDirectionActivity.this);
+                    }
+                } catch (Exception e) {
                 }
             }
+
         });
     }
 
@@ -186,7 +226,12 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-            AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            if (status.equalsIgnoreCase("GEO"))
+                AddressTextview.setText("" + getCompleteAddressString(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT))
+                        , Double.valueOf(getIntent().getStringExtra(Constants.DEST_LNG))));
+
+            else
+                AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
 
             if (currentLocationMarker != null)
@@ -320,6 +365,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     public void onClick(View v) {
         try {
             switch (v.getId()) {
+                case R.id.toolbar_home:
+                    openHome();
                 case R.id.imag_back:
                     finish();
                     break;

@@ -73,7 +73,7 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                             Intent intent = new Intent(mContext, View_All_Status_Activity.class);
                             intent.putExtra("Priod", itm.get("Priod").getAsString());
                             intent.putExtra("Status", holder.txtLable.getText());
-                            intent.putExtra("name", "View All " + itm.get("name").getAsString() + " Status");
+                            intent.putExtra("name", "View " + itm.get("name").getAsString() + " Status");
                             mContext.startActivity(intent);
                         }
                     });

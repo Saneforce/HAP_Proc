@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -39,15 +40,20 @@ import androidx.core.content.FileProvider;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Common_Class.Common_Class;
+
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +80,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
     EditText cardDate, edtActual, edtEarly, edtAmt;
     DatePickerDialog picker;
-    String minDate, minYear, minMonth, minDay, fullPath = "", finalPath = "", filePath = "", imgUrl = "";
+    String minDate, minYear, minMonth, minDay, fullPath = "", finalPath = "", filePath = "", imgUrl = "", imageConvert = "";
     ArrayList<String> travelTypeList;
     ArrayList<String> trainTypeList;
     Common_Model mCommon_model_spinner;
@@ -84,9 +90,9 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     List<Common_Model> TrainTypeModel = new ArrayList<>();
     CustomListViewDialog customDialog;
     CardView expType, expModetype, trainType, toModeType;
-    TextView typeText, TxtActl, TxtErly,txtRmks, txtTotalAmt;
-    LinearLayout dataVisiblity, modeTravel, trainAllowance;
-    ImageView imgAttach;
+    TextView typeText, TxtActl, TxtErly, txtRmks, txtTotalAmt;
+    LinearLayout dataVisiblity, modeTravel, trainAllowance, llCapture;
+    ImageView imgAttach, ivCaptureImg;
     Dialog dialog;
     Uri outputFileUri;
     Shared_Common_Pref mShared_common_pref;
@@ -96,17 +102,22 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     List<ModeOfTravel> TomodelOfTravels;
     Type userType;
     String IdFrom, IdTo, NameFrom, NameTo;
+    Common_Class common_class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_da_exception_entry);
+
+        common_class = new Common_Class(this);
         gson = new Gson();
         getTool();
         MaxMinDate();
         ModeOfType();
         cardDate = findViewById(R.id.choose_date);
         expType = findViewById(R.id.exp_card_type);
+        ivCaptureImg = findViewById(R.id.capture_img);
         expModetype = findViewById(R.id.exp_mode_type);
         TxtActl = findViewById(R.id.actual_timer);
         TxtErly = findViewById(R.id.early_timer);
@@ -124,7 +135,8 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         trainAllowance = findViewById(R.id.train_linear);
         toModeType = findViewById(R.id.exp_to_mode_type);
         txtToTravel = findViewById(R.id.txt_to_mode_tpe);
-        txtRmks=findViewById(R.id.remarks);
+        txtRmks = findViewById(R.id.remarks);
+        llCapture = findViewById(R.id.llCapture);
         expType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,7 +271,52 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
 
+
+        llCapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CameraPermission cameraPermission = new CameraPermission(DaExceptionEntry.this, getApplicationContext());
+
+                if (!cameraPermission.checkPermission()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        cameraPermission.requestPermission();
+                    }
+                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                } else {
+                    Log.v("PERMISSION", "PERMISSION");
+
+                    AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                        @Override
+                        public void OnImageURIPick(Bitmap bitmap, String FileName, String fullPath) {
+
+                            MultipartBody.Part imgg = convertimg("file", fullPath);
+                            HashMap<String, RequestBody> values = field(Shared_Common_Pref.Sf_Code);
+                            Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
+                            sendImageToServer(values, imgg, bitmap, fullPath);
+
+                        }
+                    });
+                    Intent intent = new Intent(DaExceptionEntry.this, AllowancCapture.class);
+                    intent.putExtra("allowance", "One");
+                    startActivity(intent);
+                }
+            }
+        });
+
+        ivCaptureImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                intent.putExtra("ImageUrl", imageConvert);
+                startActivity(intent);
+            }
+        });
+
+
     }
+
+
     public void popupCapture() {
         dialog = new Dialog(DaExceptionEntry.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -280,6 +337,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     public void selectMultiImage() {
         dialog.dismiss();
         Intent intent = new Intent();
@@ -289,6 +347,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
 
     }
+
     public void captureFile() {
         dialog.dismiss();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -298,6 +357,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         startActivityForResult(intent, 1);
 
     }
+
     public void MaxMinDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
@@ -315,6 +375,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         minMonth = separated1[1];
         minDay = separated1[2];
     }
+
     public void OrderType() {
         travelTypeList = new ArrayList<>();
         travelTypeList.add("TRAVEL EARLY CHECK-IN");
@@ -333,6 +394,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
     }
+
     public void TrainType() {
         trainTypeList = new ArrayList<>();
         trainTypeList.add("SS");
@@ -354,6 +416,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         customDialog.show();
 
     }
+
     public void ModeOfType() {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "get/exceptravel");
@@ -378,7 +441,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                     Integer ModeTyp = modelOfTravels.get(i).getEligible();
                     Log.v("Name_of_mode_travel", name);
                     mCommon_model_spinner = new Common_Model(id, name, modeId, driverMode);
-                    if (ModeTyp==1)
+                    if (ModeTyp == 1)
                         ModeOfTravel.add(mCommon_model_spinner);
                     else
                         ToModeOfTravel.add(mCommon_model_spinner);
@@ -391,6 +454,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     public void getTool() {
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -439,6 +503,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -545,7 +610,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         MultipartBody.Part imgg = convertimg("file", path);
         HashMap<String, RequestBody> values = field(Shared_Common_Pref.Sf_Code);
         Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
-        sendImageToServer(values, imgg);
+        //sendImageToServer(values, imgg);
     }
 
     public HashMap<String, RequestBody> field(String val) {
@@ -559,7 +624,9 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void sendImageToServer(HashMap<String, RequestBody> values, MultipartBody.Part imgg) {
+    private void sendImageToServer(HashMap<String, RequestBody> values, MultipartBody.Part imgg, Bitmap bitmap, String path) {
+        common_class.ProgressdialogShow(1, "");
+
         Call<ResponseBody> Callto;
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Callto = apiService.uploadProcPic(values, imgg);
@@ -571,6 +638,8 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
                 try {
                     if (response.isSuccessful()) {
+                        common_class.ProgressdialogShow(0, "");
+
 
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
@@ -579,17 +648,34 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                         Log.v("request_data_upload", String.valueOf(jsonData));
                         JSONObject js = new JSONObject(jsonData);
                         if (js.getBoolean("success")) {
+                            common_class.showMsg(DaExceptionEntry.this, "File uploading successful ");
+
                             Log.v("printing_dynamic_cou", js.getString("url"));
                             imgUrl = js.getString("url");
+                            imageConvert = path;
+
+                            ivCaptureImg.setVisibility(View.VISIBLE);
+
+                            ivCaptureImg.setImageBitmap(bitmap);
+                        } else {
+                            common_class.ProgressdialogShow(0, "");
+                            common_class.showMsg(DaExceptionEntry.this, "Failed.Try Again...");
+
                         }
                     }
                 } catch (Exception e) {
+                    common_class.ProgressdialogShow(0, "");
+                    common_class.showMsg(DaExceptionEntry.this, "Failed.Try Again...");
+
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.v("print_failure", "ggg" + t.getMessage());
+                common_class.ProgressdialogShow(0, "");
+                common_class.showMsg(DaExceptionEntry.this, t.getMessage() + "Try Again...");
+
             }
         });
 
@@ -614,24 +700,30 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     }
 
     public void DaException(View v) {
-        if(validateTAExcep()) daExpen();
+        if (validateTAExcep()) daExpen();
     }
 
-    public boolean validateTAExcep(){
-        if(typeText.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(DaExceptionEntry.this,"Select the exception type",Toast.LENGTH_LONG).show();
+    public boolean validateTAExcep() {
+        if (typeText.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(DaExceptionEntry.this, "Select the exception type", Toast.LENGTH_LONG).show();
             return false;
         }
-        if(typeText.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(DaExceptionEntry.this,"Select the exception type",Toast.LENGTH_LONG).show();
+        if (typeText.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(DaExceptionEntry.this, "Select the exception type", Toast.LENGTH_LONG).show();
             return false;
         }
-        if(txtRmks.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(DaExceptionEntry.this,"Enter the Remarks",Toast.LENGTH_LONG).show();
+        if (txtRmks.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(DaExceptionEntry.this, "Enter the Remarks", Toast.LENGTH_LONG).show();
             return false;
         }
+        if (imgUrl.equalsIgnoreCase("")) {
+            Toast.makeText(DaExceptionEntry.this, "Please attach file", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
     }
+
     public void daExpen() {
 
         Log.v("SF_CODE", Shared_Common_Pref.Sf_Code);
@@ -668,7 +760,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
                 JsonObject jsonObject = response.body();
                 Log.v("RESPONSE_ORDER", jsonObject.toString());
-                if(jsonObject.get("success").toString().equalsIgnoreCase("true")){
+                if (jsonObject.get("success").toString().equalsIgnoreCase("true")) {
                     finish();
                 }
 

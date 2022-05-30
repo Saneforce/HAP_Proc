@@ -48,10 +48,10 @@
 
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:visibility="gone"
                             android:id="@+id/rvApprovals"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:visibility="gone"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
                         </androidx.recyclerview.widget.RecyclerView>
@@ -83,6 +83,7 @@
                                     android:layout_height="23dp">
 
                                     <TextView
+
                                         android:id="@+id/txt_leave_req_count"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
@@ -96,6 +97,7 @@
                                 </LinearLayout>
 
                                 <ImageView
+                                    android:id="@+id/ivLvArw"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/arrow_right" />
@@ -185,15 +187,16 @@
                                     android:orientation="horizontal">
 
                                     <LinearLayout
+
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_leave_cancel_req_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -202,14 +205,16 @@
                                     </LinearLayout>
 
                                     <include
-                                        android:id="@+id/llLvCancel"
+                                        android:id="@+id/ivLvCancelArw"
                                         layout="@layout/image_arrow"></include>
 
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
 
-                        <include layout="@layout/part_view" />
+                        <include
+                            android:id="@+id/llLvCancel"
+                            layout="@layout/part_view" />
 
                         <LinearLayout
                             android:id="@+id/lin_per_req"
@@ -238,14 +243,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_per_req_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -253,7 +258,9 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivPermissionArw"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
@@ -289,14 +296,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_on_duty_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -304,7 +311,9 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivOnDutyArw"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
@@ -340,14 +349,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_miss_punch_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -355,7 +364,9 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivMissPunchArw"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
 
                             </RelativeLayout>
@@ -393,14 +404,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_week_off_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -408,24 +419,26 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivXtndSft"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
 
                         </LinearLayout>
 
                         <include
-                            android:visibility="gone"
                             android:id="@+id/llExtndSft"
-                            layout="@layout/part_view" />
+                            layout="@layout/part_view"
+                            android:visibility="visible" />
 
                         <LinearLayout
-                            android:visibility="visible"
                             android:id="@+id/lin_travel_allow"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="visible">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -446,14 +459,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_trvl_all"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -461,7 +474,10 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+
+                                        android:id="@+id/ivTrvlAllowArr"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
 
@@ -497,14 +513,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_tour_plan"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -512,7 +528,9 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivWrkPlanArw"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
 
@@ -548,14 +566,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_deviation_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -563,7 +581,9 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivDevEntryArw"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
 
@@ -600,14 +620,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_holiday_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
@@ -615,24 +635,26 @@
 
                                     </LinearLayout>
 
-                                    <include layout="@layout/image_arrow" />
+                                    <include
+                                        android:id="@+id/ivHoliEntryArw"
+                                        layout="@layout/image_arrow" />
                                 </LinearLayout>
                             </RelativeLayout>
 
                         </LinearLayout>
 
                         <include
-                            android:visibility="gone"
                             android:id="@+id/llHoliEntry"
-                            layout="@layout/part_view" />
+                            layout="@layout/part_view"
+                            android:visibility="gone" />
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:id="@+id/lin_daExp_entry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -653,14 +675,14 @@
 
                                     <LinearLayout
                                         android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        android:layout_height="23dp">
 
                                         <TextView
                                             android:id="@+id/txt_Exception_count"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:background="@drawable/circle"
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"

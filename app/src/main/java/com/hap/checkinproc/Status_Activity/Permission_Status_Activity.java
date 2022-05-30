@@ -28,11 +28,17 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.Permission_Status_Adapter;
+import com.hap.checkinproc.Status_Model_Class.Onduty_Status_Model;
 import com.hap.checkinproc.Status_Model_Class.Permission_Status_Model;
 import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -125,10 +131,10 @@ public class Permission_Status_Activity extends AppCompatActivity {
                 common_class.ProgressdialogShow(2, "Permission Status");
                 userType = new TypeToken<ArrayList<Permission_Status_Model>>() {
                 }.getType();
-                approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
+                approvalList = sortDate(gson.fromJson(new Gson().toJson(response.body()), userType));
 
                 recyclerView.setAdapter(new Permission_Status_Adapter(approvalList, R.layout.permission_sattus_listitem, getApplicationContext(), AMOD));
-              
+
 
             }
 
@@ -140,11 +146,32 @@ public class Permission_Status_Activity extends AppCompatActivity {
 
     }
 
+    List<Permission_Status_Model> sortDate(List<Permission_Status_Model> approvalList) {
+        try {
+            Collections.sort(approvalList, new Comparator<Permission_Status_Model>() {
+                DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+                @Override
+                public int compare(Permission_Status_Model lhs, Permission_Status_Model rhs) {
+                    try {
+                        return f.parse(rhs.getPermissiondate()).compareTo(f.parse(lhs.getPermissiondate()));
+                    } catch (ParseException e) {
+                        throw new IllegalArgumentException(e);
+                    }
+                }
+            });
+            return approvalList;
+        } catch (Exception e) {
+            Log.v("Sorting:", e.getMessage());
+        }
+        return approvalList;
+    }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                   finish();
+                    finish();
                 }
             });
 

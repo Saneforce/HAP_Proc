@@ -26,22 +26,57 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/C10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
->
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:background="@drawable/button_yellow"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:textStyle="bold"
-                        android:text="ON-DUTY STATUS"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_yellow"
-                        android:gravity="center"
+                        android:layout_weight="1"
                         android:padding="@dimen/C10dp"
+                        android:text="ON-DUTY STATUS"
                         android:textAllCaps="true"
                         android:textColor="@color/color_white"
-                        android:textSize="@dimen/C14dp" />
+                        android:textSize="@dimen/C14dp"
+                        android:textStyle="bold" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rlStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/ivStatus"
+                            android:gravity="center"
+                            android:padding="@dimen/C10dp"
+                            android:text="All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/C13dp" />
+
+                        <ImageView
+                            android:id="@+id/ivStatus"
+                            android:layout_width="@dimen/C15dp"
+                            android:layout_height="@dimen/C15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/spin_down_arrow"
+                            android:tint="@color/white"
+                            tools:ignore="UseAppTint"></ImageView>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -63,17 +98,15 @@
 
 
         <ImageView
+            android:id="@+id/imag_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/imag_back"
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"
             android:src="@drawable/back_arrow"></ImageView>
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
