@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Common_Class {
-    public static String Version_Name = "Ver 7.4.7";
+    public static String Version_Name = "Ver 7.4.9";
     public static String Work_Type = "0";
     public static Location location = null;
     SharedPreferences CheckInDetails;
@@ -32,7 +32,6 @@ public class Common_Class {
         Intent intent = new Intent(Settings.ACTION_DATE_SETTINGS);
         //this.webView.getContext().startActivity(intent);
     }
-
     public static String GetDatewothouttime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");

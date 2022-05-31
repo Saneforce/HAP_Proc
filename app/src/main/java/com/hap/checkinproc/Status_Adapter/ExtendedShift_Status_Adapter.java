@@ -13,7 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Activity_Hap.Common_Class;
+import com.hap.checkinproc.Activity_Hap.Webview_Activity;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
@@ -27,12 +28,14 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
     private int rowLayout;
     private Context context;
     String AMod;
+    Common_Class common_class;
 
     public ExtendedShift_Status_Adapter(List<ExtendedShift_Status_Model> onduty_Status_ModelsList, int rowLayout, Context context, String AMod) {
         extendedShift_status_models = onduty_Status_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
         this.AMod = AMod;
+        common_class = new Common_Class(context);
         Log.e("ONDUTY_DATA", String.valueOf(onduty_Status_ModelsList));
     }
 
@@ -92,19 +95,36 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
         holder.geoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateMapDir(Onduty_Status_Model.getCheckin(),"Geo In");
+                //navigateMapDir(Onduty_Status_Model.getCheckin(),"Geo In");
+
+                try {
+                    Intent intent = new Intent(context, Webview_Activity.class);
+                    intent.putExtra("Locations", Onduty_Status_Model.getCheckin());
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    Log.v("ExtendGeoIn:", e.getMessage());
+                }
+
             }
         });
 
         holder.geoout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateMapDir(Onduty_Status_Model.getCheckout(),"Geo Out");
+                try {
+                    //  navigateMapDir(Onduty_Status_Model.getCheckout(),"Geo Out");
+                    Intent intent = new Intent(context, Webview_Activity.class);
+                    intent.putExtra("Locations", Onduty_Status_Model.getCheckout());
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    Log.v("ExtendGeoOut:", e.getMessage());
+                }
+
             }
         });
     }
 
-    void navigateMapDir(String value,String tag) {
+   /* void navigateMapDir(String value, String tag) {
         if (!Common_Class.isNullOrEmpty(value)) {
             String[] latlongs = value.split(",");
             Intent intent = new Intent(context, MapDirectionActivity.class);
@@ -115,7 +135,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             context.startActivity(intent);
 
         }
-    }
+    }*/
 
 
     @Override

@@ -590,7 +590,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     Log.e("TOTAl_COUNT", String.valueOf(Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"))));
                     //count = count +
 
-                    Shared_Common_Pref.TotalCountApproval = Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"));
+                    Shared_Common_Pref.TotalCountApproval = jsonObject.getInt("leave") + jsonObject.getInt("Permission") +
+                            jsonObject.getInt("vwOnduty") + jsonObject.getInt("vwmissedpunch") +
+                            jsonObject.getInt("vwExtended") + jsonObject.getInt("TountPlanCount") +
+                            jsonObject.getInt("HolidayCount") + jsonObject.getInt("DeviationC") +
+                            jsonObject.getInt("CancelLeave") + jsonObject.getInt("ExpList");
                     approvalcount.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));
                 } catch (JSONException e) {
                     e.printStackTrace();

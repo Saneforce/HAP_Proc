@@ -616,7 +616,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-                 //eMail = "ciadmin@hap.in";
+               // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -641,14 +641,14 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-               // eMail = "1013362@hap.in";//(-18)
+                // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
                 // eMail="anbu@saneforce.com";
                 // eMail="1018656@hap.in";
 
-                 //eMail="sivakumar.s@hap.in";
+                //eMail="sivakumar.s@hap.in";
 
                 // eMail = "1026710@hap.in";
 
@@ -658,7 +658,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "1006208@hap.in";
                 // eMail="rajasekaranm@hap.in";
                 //   eMail="1018368@hap.in";
-                //  eMail="sajan@hap.in";
+                  //eMail="sajan@hap.in";
                 // eMail="1022081@hap.in";
                 // eMail="johnkennedy.i@hap.in";
                 //eMail = "1018937@hap.in";
@@ -984,9 +984,9 @@ public class Login extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (shouldProvideRationale) {
             Snackbar.make(
-                    findViewById(R.id.activity_main),
-                    R.string.permission_rationale,
-                    Snackbar.LENGTH_INDEFINITE)
+                            findViewById(R.id.activity_main),
+                            R.string.permission_rationale,
+                            Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.ok, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -1018,9 +1018,9 @@ public class Login extends AppCompatActivity {
                 } else {
                     // Permission denied.
                     Snackbar.make(
-                            findViewById(R.id.activity_main),
-                            R.string.permission_denied_explanation,
-                            Snackbar.LENGTH_INDEFINITE)
+                                    findViewById(R.id.activity_main),
+                                    R.string.permission_denied_explanation,
+                                    Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.settings, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

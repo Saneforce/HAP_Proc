@@ -146,7 +146,7 @@
                             android:layout_centerVertical="true"
                             android:orientation="horizontal">
 
-                            <Space
+                            <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/C10dp"
                                 android:layout_weight="1" />

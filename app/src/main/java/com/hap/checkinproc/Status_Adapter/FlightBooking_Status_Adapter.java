@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Status_Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -79,7 +80,7 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
     }
 
     @Override
-    public void onBindViewHolder(FlightBooking_Status_Adapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(FlightBooking_Status_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try {
             JSONObject obj = mArr.getJSONObject(position);
             holder.tvDate.setText("" + obj.getString("RequestDate"));

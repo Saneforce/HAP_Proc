@@ -1172,6 +1172,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
                     }
+
+                    if (taxList.size() == 0 && tcsVal > 0)
+                        taxList.add(new Product_Details_Modal("TCS", tcsVal));
+
                     uomList = new ArrayList<>();
 
                     for (int i = 0; i < uomArr.length(); i++) {

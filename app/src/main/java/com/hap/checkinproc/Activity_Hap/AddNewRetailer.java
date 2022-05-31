@@ -1002,7 +1002,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 try {
                     btnRefLoc.stopAnimation();
                     btnRefLoc.revertAnimation();
-                    btnRefLoc.setBackground(getDrawable(R.drawable.button_blueg));
+                    btnRefLoc.setBackgroundResource((R.drawable.button_blueg));
                 } catch (Exception e) {
                     Log.v(TAG, "LOC2:" + e.getMessage());
 
