@@ -333,6 +333,39 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
+                    <LinearLayout android:id="@+id/vwReject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="130dp"
+                            android:layout_gravity="end|bottom"
+                            android:gravity="end|bottom"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+                            <EditText
+                                android:id="@+id/edtRejectRmk"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                />
+                            <Button
+                                android:id="@+id/btnSvReject"
+                                android:layout_width="130dp"
+                                android:layout_height="33dp"
+                                android:layout_gravity="right"
+                                android:background="@drawable/button_green"
+                                android:elevation="@dimen/C5dp"
+                                android:layout_margin="5dp"
+                                android:padding="1dp"
+                                android:text="Approve Ticket"
+                                android:textColor="#ffffff"
+                                android:textFontWeight="900"
+                                android:textSize="12sp"
+
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -340,17 +373,48 @@
                         android:layout_gravity="end|bottom"
                         android:layout_weight="1"
                         android:gravity="end|bottom"
-                        android:orientation="vertical"
-                        android:paddingTop="5dp">
+                        android:orientation="horizontal"
+                        android:padding="5dp">
 
                         <Button
-                            android:id="@+id/canceltkt"
+                            android:id="@+id/Approvetkt"
                             android:layout_width="130dp"
-                            android:layout_height="28dp"
+                            android:layout_height="33dp"
+                            android:layout_gravity="right"
+                            android:background="@drawable/button_green"
+                            android:padding="@dimen/C1dp"
+                            android:elevation="@dimen/C5dp"
+                            android:layout_margin="5dp"
+                            android:text="Approve Ticket"
+                            android:textColor="#ffffff"
+                            android:textFontWeight="900"
+                            android:textSize="12sp"
+
+                            />
+                        <Button
+                            android:id="@+id/rejecttkt"
+                            android:layout_width="130dp"
+                            android:layout_height="33dp"
                             android:layout_gravity="right"
                             android:background="@drawable/button_red"
                             android:elevation="@dimen/C5dp"
                             android:padding="1dp"
+                            android:layout_margin="5dp"
+                            android:text="Reject Ticket"
+                            android:textColor="#ffffff"
+                            android:textFontWeight="900"
+                            android:textSize="12sp"
+
+                            />
+                        <Button
+                            android:id="@+id/canceltkt"
+                            android:layout_width="130dp"
+                            android:layout_height="33dp"
+                            android:layout_gravity="right"
+                            android:background="@drawable/button_red"
+                            android:elevation="@dimen/C5dp"
+                            android:padding="1dp"
+                            android:layout_margin="5dp"
                             android:text="Cancel Ticket"
                             android:textColor="#ffffff"
                             android:textFontWeight="900"

@@ -712,8 +712,10 @@ public class Common_Class {
                     case Constants.FlightBookingStatus:
                         axnname = "get/flightbookings";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
-                        data.put("FDT", jparam.get("FDT").getAsString());
-                        data.put("TDT", jparam.get("TDT").getAsString());
+                        break;
+                    case Constants.FlightBookingPending:
+                        axnname = "get/flightpbookings";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
 
                         break;
                     case Constants.DASHBOARD_TYPE_INFO:

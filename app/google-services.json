@@ -129,6 +129,14 @@
           }
         },
         {
+          "client_id": "92787437164-2i6ps38ls3vr2bhoupo89atapl0m113j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hap.checkinproc",
+            "certificate_hash": "fb1aa5c1f19d4d3b701e1a27db50450372f155c0"
+          }
+        },
+        {
           "client_id": "92787437164-3hod8r2632t2ik0va4b68cf5kdc3nmh4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

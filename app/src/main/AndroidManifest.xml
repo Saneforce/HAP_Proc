@@ -88,6 +88,7 @@
         <activity android:name=".Activity_Hap.Deviation_Approval_Reject" />
         <activity android:name=".Activity_Hap.Holiday_Entry_Approval" />
         <activity android:name=".Activity_Hap.Holiday_Approval_Reject" />
+        <activity android:name=".Activity_Hap.FlightBookingApproval" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
         <activity
