@@ -102,7 +102,7 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
         return mlist.length();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView icon;
         LinearLayout gridcolor;
 

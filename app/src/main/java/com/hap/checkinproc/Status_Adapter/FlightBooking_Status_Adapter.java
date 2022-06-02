@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Status_Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,8 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
 
     private Context context;
     private String sSF;
+    public int IsCancelBtnVisible;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvDate, tvStatus, tvNoOfTraveler, tvbookedBy, tvViewSta,btnCancel,
         txFrmPlc,txToPlc,txTrvDate,txRetTrvDate,txRetFrmPlc,txRetToPlc,txRet;
@@ -65,10 +68,11 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
     }
 
 
-    public FlightBooking_Status_Adapter(JSONArray arr, Context context,String mSF) {
+    public FlightBooking_Status_Adapter(JSONArray arr, Context context,String mSF,int mIsCancelBtnVisible) {
         this.mArr = arr;
         this.context = context;
         this.sSF=mSF;
+        this.IsCancelBtnVisible = mIsCancelBtnVisible;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
     }
 
     @Override
-    public void onBindViewHolder(FlightBooking_Status_Adapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(FlightBooking_Status_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try {
             JSONObject obj = mArr.getJSONObject(position);
             holder.tvDate.setText("" + obj.getString("RequestDate"));
@@ -116,60 +120,61 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
                     }
                 }
             });
-            holder.btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialogBox.showDialog(context, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Submit Flight Booking Request.")), "Yes", "No", false, new AlertBox() {
-                        @Override
-                        public void PositiveMethod(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                            JSONObject jObj=new JSONObject();
-                            try {
-                                jObj.put("SF",sSF);
-                                jObj.put("BookID",obj.getString("BookID"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            apiInterface.JsonSave("cancel/flightbook",jObj.toString()).enqueue(new Callback<JsonObject>() {
-                                @Override
-                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                    JsonObject Res=response.body();
-                                    String Msg= Res.get("Msg").getAsString();
-                                    if(!Msg.equalsIgnoreCase("")){
-                                        AlertDialog alertDialog = new AlertDialog.Builder(context)
-                                                .setTitle("HAP Check-In")
-                                                .setMessage(Html.fromHtml(Msg))
-                                                .setCancelable(false)
-                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                                    }
-                                                })
-                                                .show();
+            if (IsCancelBtnVisible == 0) {
+                holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialogBox.showDialog(context, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Submit Flight Booking Request.")), "Yes", "No", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                                JSONObject jObj = new JSONObject();
+                                try {
+                                    jObj.put("SF", sSF);
+                                    jObj.put("BookID", obj.getString("BookID"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                apiInterface.JsonSave("cancel/flightbook", jObj.toString()).enqueue(new Callback<JsonObject>() {
+                                    @Override
+                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                        JsonObject Res = response.body();
+                                        String Msg = Res.get("Msg").getAsString();
+                                        if (!Msg.equalsIgnoreCase("")) {
+                                            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                                                    .setTitle("HAP Check-In")
+                                                    .setMessage(Html.fromHtml(Msg))
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                        }
+                                                    })
+                                                    .show();
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(Call<JsonObject> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(Call<JsonObject> call, Throwable t) {
 
-                                }
-                            });
+                                    }
+                                });
+                            }
 
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }else{
+                holder.btnCancel.setVisibility(View.GONE);
+            }
 
-                        }
-
-                        @Override
-                        public void NegativeMethod(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-
-
-                }
-            });
             holder.tvViewSta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

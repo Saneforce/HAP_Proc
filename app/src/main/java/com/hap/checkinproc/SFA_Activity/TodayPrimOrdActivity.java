@@ -42,7 +42,6 @@ import java.util.List;
 public class TodayPrimOrdActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
 
     TextView tvStartDate, tvEndDate, distributor_text, route_text, tvGrandTot;
-    ;
     Common_Class common_class;
 
     PrimaryOrder_History_Adapter mReportViewAdapter;
@@ -55,9 +54,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
     LinearLayout llDistributor, btnCmbRoute;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     Common_Model Model_Pojo;
-
     String groupType = "All";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +135,6 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
                 common_class.getDb_310Data(Constants.GroupFilter, this);
-
                 common_class.getDataFromApi(Constants.GetTodayPrimaryOrder_List, TodayPrimOrdActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);

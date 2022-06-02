@@ -3,6 +3,7 @@ package com.hap.checkinproc.Status_Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -42,12 +43,13 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
     public static FlightBooking_Status_Activity activity;
     SharedPreferences  UserDetails;
     public static final String UserInfo = "MyPrefs";
+    int isApprovalPage=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-
             setContentView(R.layout.activity_flight_booking_status);
             init();
 
@@ -69,6 +71,8 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
         } catch (Exception e) {
 
         }
+        Intent intent=getIntent();
+        isApprovalPage = intent.getIntExtra("ApprovalPage", 0);
 
     }
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
@@ -168,7 +172,7 @@ public class FlightBooking_Status_Activity extends AppCompatActivity implements 
 
                     if (obj.getBoolean("success")) {
                         String sSF=UserDetails.getString("Sfcode", "");
-                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this,sSF));
+                        rv.setAdapter(new FlightBooking_Status_Adapter(obj.getJSONArray("data"), this, sSF, isApprovalPage));
                     }
 
                 } catch (Exception e) {

@@ -59,7 +59,6 @@ public interface ApiInterface {
     @POST("Db_v310.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
 
-
     // @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonArray> getStockAudit(@Query("axn") String axn, @Query("div") String div);
@@ -131,8 +130,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_activity.php?axn=save/view")
     Call<ResponseBody> saveView(@Field("data") String userData);
-
-
 
     /*LEAVE APPROVAL*/
 
@@ -624,5 +621,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonObject> submit(@Query("axn") String axn, @Field("data") String toString);
+
 
 }

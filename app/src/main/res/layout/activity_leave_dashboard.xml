@@ -477,20 +477,12 @@
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/arrow_right" />
 
-
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
-
         </ScrollView>
-
     </LinearLayout>
 
     <include layout="@layout/back_arrow"></include>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,6 +29,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.ProjectionApprovListActivity;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
+import com.hap.checkinproc.Status_Activity.FlightBooking_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
 import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Onduty_Status_Activity;
@@ -49,7 +50,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout linProjectionApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
-    LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
+    LinearLayout LeaveStatus, DaExcptStaus, flightbooking, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -58,6 +59,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     public static final String SetupsInfo = "MySettings";
     TextView countLeaveRequest, extendedcount, countPermissionRequest, countOnDuty, countMissedPunch,
             countTravelAllowance, countTourPlan, txt_holiday_count, txt_deviation_count, txt_leavecancel_count;
+    Shared_Common_Pref mShared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linLeaveCancel = findViewById(R.id.lin_leave_cancel);
         linDaExceptionEntry = findViewById(R.id.lin_daExp_entry);
         DaExcptStaus = findViewById(R.id.lin_da_excep_status);
+        flightbooking= findViewById(R.id.lin_flight_booking_status);
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -186,9 +190,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_DeviationApproval.setOnClickListener(this);
         linDaExceptionEntry.setOnClickListener(this);
         DaExcptStaus.setOnClickListener(this);
+        flightbooking.setOnClickListener(this);
         linProjectionApprove.setOnClickListener(this);
-
-
         getcountdetails();
     }
 
@@ -345,10 +348,14 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(Approvals.this, Deviation_Entry_Approval.class));
                 finish();
                 break;
-
+            case R.id.lin_flight_booking_status:
+                Intent intent=new Intent(Approvals.this, FlightBooking_Status_Activity.class);
+                intent.putExtra("ApprovalPage",1);
+                startActivity(intent);
+                //startActivity(new Intent(Approvals.this, FlightBooking_Status_Activity.class));
+                finish();
+                break;
         }
-
-
     }
 
     @Override

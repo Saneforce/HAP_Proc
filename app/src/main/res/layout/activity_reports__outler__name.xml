@@ -34,7 +34,6 @@
                 android:textAllCaps="true"
                 android:textColor="#FFF"
                 android:textSize="18dp"
-
                 android:textStyle="bold" />
 
         </LinearLayout>

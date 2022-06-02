@@ -79,6 +79,8 @@ public class ReportsListActivity extends AppCompatActivity {
                         } else {
 //                            Intent intent = new Intent(getApplicationContext(), WebReportsActivity.class);
 //                            startActivity(intent);
+                            Intent intent = new Intent(getApplicationContext(),SalesSummaryActivity.class);
+                            startActivity(intent);
                         }
                     } catch (Exception e) {
 

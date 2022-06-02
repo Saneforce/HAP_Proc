@@ -183,8 +183,9 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.lin_flight_booking_status:
                 //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
-                startActivity(new Intent(Leave_Dashboard.this, FlightBooking_Status_Activity.class));
-                mShared_common_pref.save("AMod", "0");
+                Intent intent=new Intent(Leave_Dashboard.this, FlightBooking_Status_Activity.class);
+                intent.putExtra("ApprovalPage",0);
+                startActivity(intent);
                 break;
             case R.id.lin_per_sta:
                 // startActivity(new Intent(Leave_Dashboard.this, Permission_Status_Activity.class));

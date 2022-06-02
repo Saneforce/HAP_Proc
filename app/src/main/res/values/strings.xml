@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">HAP Check-In</string>
-<!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
-<!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
+    <!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
+    <!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
 
     <string name="loading_please_wait" translatable="false">Loading Please Wait......</string>
     <string name="todo" translatable="false">TODO</string>

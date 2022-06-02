@@ -71,8 +71,6 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:textSize="13sp" />
-
-
             </LinearLayout>
 
             <ImageView
@@ -373,13 +371,10 @@
             app:cardCornerRadius="@dimen/C5dp">
 
             <LinearLayout
-
                 android:id="@+id/lin_orderrecyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                >
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/rlSearchParent"
@@ -400,10 +395,7 @@
                         android:textSize="16dp"
                         android:textStyle="bold"
                         android:visibility="visible" />
-
-
                 </RelativeLayout>
-
 
                 <RelativeLayout
                     android:id="@+id/rlCategoryItemSearch"
@@ -438,7 +430,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/C5dp"
-                        android:src="@drawable/ic_baseline_close_24"></ImageView>
+                        android:src="@drawable/ic_baseline_close_24"/>
                 </RelativeLayout>
 
                 <LinearLayout
