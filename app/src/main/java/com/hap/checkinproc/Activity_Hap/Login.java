@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -304,6 +305,7 @@ public class Login extends AppCompatActivity {
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                shared_common_pref.clear_pref(Constants.LOGIN_DATA);
                 SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
@@ -616,7 +618,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-               // eMail = "ciadmin@hap.in";
+                //eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -676,8 +678,9 @@ public class Login extends AppCompatActivity {
 
                 //   eMail="1026594@hap.in";
                 //   eMail = "gnanaoli.j@hap.in";
-                //eMail = "shrinivas.t@hap.in";
-                // eMail = "haptest3@hap.in";
+               // eMail = "testhap3@hap.in";
+                 //eMail = "shanmugam@hap.in";
+                //eMail = "anbu@saneforce.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -811,6 +814,7 @@ public class Login extends AppCompatActivity {
                 userEditor.putString("Sfcode", response.getData().get(0).getDistCode());
                 userEditor.putString("Divcode", response.getData().get(0).getDivisionCode());
                 userEditor.putString("State_Code", response.getData().get(0).getState_Code());
+                userEditor.putInt("FlightAllowed", 0);
 
                 Shared_Common_Pref.Sf_Code = response.getData().get(0).getDistCode();
                 Shared_Common_Pref.Div_Code = response.getData().get(0).getDivisionCode();
@@ -901,7 +905,8 @@ public class Login extends AppCompatActivity {
                 String mProfile = response.getData().get(0).getProfile();
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
-
+                Integer Flight = response.getData().get(0).getFlightAllowed();
+                if(Flight==null) Flight=0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
 
 
@@ -939,6 +944,7 @@ public class Login extends AppCompatActivity {
                 userEditor.putString("DeptCd", DeptCd);
                 userEditor.putString("DeptNm", DeptNm);
                 userEditor.putString("DeptType", DeptType);
+                userEditor.putInt("FlightAllowed", Flight);
                 userEditor.putInt("OTFlg", OTFlg);
                 Log.d("DeptType", String.valueOf(DeptType));
                 userEditor.putString("State_Code", Sf_type);
@@ -1017,7 +1023,8 @@ public class Login extends AppCompatActivity {
                     //mLUService.requestLocationUpdates();
                 } else {
                     // Permission denied.
-                    Snackbar.make(
+                    //Snackbar snackbar =
+                            Snackbar.make(
                                     findViewById(R.id.activity_main),
                                     R.string.permission_denied_explanation,
                                     Snackbar.LENGTH_INDEFINITE)
@@ -1035,6 +1042,7 @@ public class Login extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             })
+                            .setTextColor(Color.WHITE)
                             .show();
                 }
         }

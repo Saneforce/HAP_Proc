@@ -37,11 +37,14 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus, LinearException, DaExcptStaus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
+    SharedPreferences  UserDetails;
+    public static final String UserInfo = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave_dashboard);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +140,12 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         DaExcptStaus.setOnClickListener(this);
         MissedPunc.setOnClickListener(this);
         flightBookStatus.setOnClickListener(this);
-
+        FlightTick.setVisibility(View.GONE);
+        flightBookStatus.setVisibility(View.GONE);
+        if(UserDetails.getInt("FlightAllowed", 0)!=0){
+            FlightTick.setVisibility(View.VISIBLE);
+            flightBookStatus.setVisibility(View.VISIBLE);
+        }
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override

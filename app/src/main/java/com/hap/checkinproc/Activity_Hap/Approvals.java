@@ -47,16 +47,16 @@ import retrofit2.Response;
 public class Approvals extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest,FlightAppr, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
-            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus;
+            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus,llFlightApprHist;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
     public static final String SetupsInfo = "MySettings";
-    TextView countLeaveRequest, extendedcount, countPermissionRequest, countOnDuty, countMissedPunch,
+    TextView countLeaveRequest, extendedcount,countFlightAppr , countPermissionRequest, countOnDuty, countMissedPunch,
             countTravelAllowance, countTourPlan, txt_holiday_count, txt_deviation_count, txt_leavecancel_count;
 
     @Override
@@ -137,6 +137,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
 
         LeaveRequest = findViewById(R.id.lin_leave_req);
+        FlightAppr = findViewById(R.id.lin_FlightAppr);
         PermissionRequest = findViewById(R.id.lin_per_req);
         OnDuty = findViewById(R.id.lin_on_duty);
         MissedPunch = findViewById(R.id.lin_miss_punch);
@@ -154,6 +155,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         extendedcount = findViewById(R.id.txt_week_off_count);
         countLeaveRequest = findViewById(R.id.txt_leave_req_count);
         countPermissionRequest = findViewById(R.id.txt_per_req_count);
+        countFlightAppr = findViewById(R.id.txt_FlightAppr_count);
         countOnDuty = findViewById(R.id.txt_on_duty_count);
         countMissedPunch = findViewById(R.id.txt_miss_punch_count);
         countTravelAllowance = findViewById(R.id.txt_trvl_all);
@@ -165,6 +167,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
         linProjectionApprove = findViewById(R.id.lin_productProjectionApproval);
+        llFlightApprHist=findViewById(R.id.lin_FlightApprHist);
         linQpsApprove = findViewById(R.id.lin_qps);
         /*Status text*/
         /*SetOnClickListner*/
@@ -172,6 +175,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linQpsApprove.setOnClickListener(this);
         LeaveRequest.setOnClickListener(this);
         PermissionRequest.setOnClickListener(this);
+        FlightAppr.setOnClickListener(this);
         OnDuty.setOnClickListener(this);
         MissedPunch.setOnClickListener(this);
         ExtendedShift.setOnClickListener(this);
@@ -184,6 +188,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         ExtdShift.setOnClickListener(this);
         lin_weekoff.setOnClickListener(this);
         lin_leavecancel_histry.setOnClickListener(this);
+        llFlightApprHist.setOnClickListener(this);
         lin_leaveholidaystatus.setOnClickListener(this);
         linLeaveCancel.setOnClickListener(this);
         lin_holidayentryApproval.setOnClickListener(this);
@@ -193,6 +198,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linProjectionApprove.setOnClickListener(this);
         llTrvlAllowStatus.setOnClickListener(this);
 
+        FlightAppr.setVisibility(View.GONE);
+        llFlightApprHist.setVisibility(View.GONE);
+        if(UserDetails.getInt("FlightAllowed", 0)==2){
+            FlightAppr.setVisibility(View.VISIBLE);
+            llFlightApprHist.setVisibility(View.VISIBLE);
+        }
         getcountdetails();
     }
 
@@ -220,6 +231,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     countLeaveRequest.setText(jsonObject.getString("leave"));
                     countPermissionRequest.setText(jsonObject.getString("Permission"));
+                    countFlightAppr.setText(jsonObject.getString("FlightAppr"));
                     countOnDuty.setText(jsonObject.getString("vwOnduty"));
                     countTravelAllowance.setText(jsonObject.getString("ExpList"));
                     countMissedPunch.setText(jsonObject.getString("vwmissedpunch"));
@@ -237,6 +249,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 //                        LeaveRequest.setVisibility(View.GONE);
                     }
 
+                    if (Integer.parseInt(jsonObject.getString("FlightAppr")) < 1) {
+                        countFlightAppr.setVisibility(View.GONE);
+                        findViewById(R.id.ivFlightApprArw).setVisibility(View.GONE);
+//                        findViewById(R.id.llPermission).setVisibility(View.GONE);
+//                        PermissionRequest.setVisibility(View.GONE);
+                    }
                     if (Integer.parseInt(jsonObject.getString("Permission")) < 1) {
                         countPermissionRequest.setVisibility(View.GONE);
                         findViewById(R.id.ivPermissionArw).setVisibility(View.GONE);
@@ -321,6 +339,14 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 finish();
                 break;
 
+            case R.id.lin_FlightAppr:
+                startActivity(new Intent(Approvals.this, FlightBookingApproval.class));
+                finish();
+                break;
+            case R.id.lin_FlightApprHist:
+                startActivity(new Intent(Approvals.this, FlightBooking_Approval_History.class));
+                finish();
+                break;
             case R.id.lin_productProjectionApproval:
                 startActivity(new Intent(Approvals.this, ProjectionApprovListActivity.class));
                 finish();

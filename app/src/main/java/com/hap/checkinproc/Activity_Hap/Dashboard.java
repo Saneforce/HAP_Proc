@@ -27,6 +27,7 @@ import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -296,6 +297,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(this, SFA_Activity.class));
                 break;
             case R.id.lin_exit:
+                shared_common_pref.clear_pref(Constants.LOGIN_DATA);
                 SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
@@ -593,6 +595,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     Shared_Common_Pref.TotalCountApproval = jsonObject.getInt("leave") + jsonObject.getInt("Permission") +
                             jsonObject.getInt("vwOnduty") + jsonObject.getInt("vwmissedpunch") +
                             jsonObject.getInt("vwExtended") + jsonObject.getInt("TountPlanCount") +
+                            jsonObject.getInt("FlightAppr") +
                             jsonObject.getInt("HolidayCount") + jsonObject.getInt("DeviationC") +
                             jsonObject.getInt("CancelLeave") + jsonObject.getInt("ExpList");
                     approvalcount.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));

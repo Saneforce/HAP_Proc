@@ -1,11 +1,9 @@
-package com.hap.checkinproc.Status_Adapter;
+package com.hap.checkinproc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,39 +11,37 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
-import com.hap.checkinproc.Activity_Hap.FlightTicketRequest;
+import com.hap.checkinproc.Activity_Hap.FlightBookingApproval;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.FlightBooking_Status_Activity;
-import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBooking_Status_Adapter.MyViewHolder> {
+public class FlightBooking_Approval_Adapter extends RecyclerView.Adapter<FlightBooking_Approval_Adapter.MyViewHolder> {
     private JSONArray mArr;
 
     private Context context;
     private String sSF;
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvDate, tvStatus, tvNoOfTraveler, tvbookedBy, tvViewSta,btnCancel,
+        public TextView tvDate, tvStatus, tvNoOfTraveler, tvbookedBy, tvViewSta,
         txFrmPlc,txToPlc,txTrvDate,txRetTrvDate,txRetFrmPlc,txRetToPlc,txRet;
-        Button btnApproval,btnReject,btnSvReject,btncancelRej;
+        Button btnApproval,btnReject,btnCancel,btnSvReject,btncancelRej;
         EditText RejectRmk;
         public View vwReject;
 
@@ -61,12 +57,10 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
             txRetFrmPlc = view.findViewById(R.id.tvRetFrom);
             txRetToPlc = view.findViewById(R.id.tvRetTo);
             txRet = view.findViewById(R.id.tvReturn);
-
             vwReject = view.findViewById(R.id.vwReject);
-            RejectRmk = view.findViewById(R.id.edtRejectRmk);
-
             txTrvDate = view.findViewById(R.id.tvTrvDate);
             txRetTrvDate = view.findViewById(R.id.tvRetTrvDate);
+            RejectRmk = view.findViewById(R.id.edtRejectRmk);
 
             btnApproval= view.findViewById(R.id.Approvetkt);
             btnReject= view.findViewById(R.id.rejecttkt);
@@ -77,21 +71,21 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
     }
 
 
-    public FlightBooking_Status_Adapter(JSONArray arr, Context context,String mSF) {
+    public FlightBooking_Approval_Adapter(JSONArray arr, Context context, String mSF) {
         this.mArr = arr;
         this.context = context;
         this.sSF=mSF;
     }
 
     @Override
-    public FlightBooking_Status_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FlightBooking_Approval_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.flight_booking_status_listitem, null, false);
-        return new FlightBooking_Status_Adapter.MyViewHolder(listItem);
+        return new FlightBooking_Approval_Adapter.MyViewHolder(listItem);
     }
 
     @Override
-    public void onBindViewHolder(FlightBooking_Status_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(FlightBooking_Approval_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try {
             JSONObject obj = mArr.getJSONObject(position);
             holder.tvDate.setText("" + obj.getString("RequestDate"));
@@ -108,30 +102,46 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
             holder.txTrvDate.setText("" + obj.getString("BookDt") + " - "+ obj.getString("BookSes"));
             holder.txRetTrvDate.setText("" + obj.getString("BookRetDt") + " - "+ obj.getString("BookRetSes"));
 
-            holder.btnApproval.setVisibility(View.GONE);
-            holder.btnReject.setVisibility(View.GONE);
-            holder.vwReject.setVisibility(View.GONE);
-            holder.btnCancel.setVisibility(View.VISIBLE);
-            holder.tvViewSta.setVisibility(View.VISIBLE);
-            if (obj.getInt("ApprvFlg")>1) holder.btnCancel.setVisibility(View.GONE);
-            if(obj.getInt("ApprvFlg")!=2) holder.tvViewSta.setVisibility(View.GONE);
+            holder.btnApproval.setVisibility(View.VISIBLE);
+            holder.btnReject.setVisibility(View.VISIBLE);
+            holder.btnCancel.setVisibility(View.GONE);
+            holder.tvViewSta.setVisibility(View.GONE);
             if (obj.getString("BookingStatus").equalsIgnoreCase("Booked")) {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_green);
-            }else if (obj.getInt("ApprvFlg")==1) {
-                holder.tvStatus.setBackgroundResource(R.drawable.button_blue);
-            }else if (obj.getInt("ApprvFlg")==4) {
-                holder.tvStatus.setBackgroundResource(R.drawable.button_red);
-            }  else {
+            } else {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_yellows);
             }
 
+            holder.vwReject.setVisibility(View.GONE);
             holder.tvStatus.setPadding(20, 5, 20, 5);
 
+            holder.btnReject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        holder.vwReject.setVisibility(View.VISIBLE);
+                        holder.btnApproval.setVisibility(View.GONE);
+                        holder.btnReject.setVisibility(View.GONE);
+                    } catch (Exception e) {
+                    }
+                }
+            });
+            holder.btncancelRej.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        holder.vwReject.setVisibility(View.GONE);
+                        holder.btnApproval.setVisibility(View.VISIBLE);
+                        holder.btnReject.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                    }
+                }
+            });
             holder.tvNoOfTraveler.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-                        FlightBooking_Status_Activity.activity.showTravelersDialog(mArr.getJSONObject(position).getJSONArray("TrvDetails"));
+                        FlightBookingApproval.activity.showTravelersDialog(mArr.getJSONObject(position).getJSONArray("TrvDetails"));
                     } catch (Exception e) {
                     }
                 }
@@ -190,6 +200,53 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
 
                 }
             });
+            holder.btnApproval.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialogBox.showDialog(context, "HAP Check-In", String.valueOf(Html.fromHtml("Are you confirm to  <span style=\"color:#cc2311\"><b>Approve</b></span> this booking request.")), "Yes", "No", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            try {
+                                ApproveFlightBooking(sSF ,obj.getString("BookID"),"",1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            });
+            holder.btnSvReject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.RejectRmk.getText().equals("")){
+                        Toast.makeText(context,"Enter the Reject Reason",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    AlertDialogBox.showDialog(context, "HAP Check-In", String.valueOf(Html.fromHtml("Are you confirm to  <span style=\"color:#cc2311\"><b>Reject</b></span> this booking request.")), "Yes", "No", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            try {
+                                ApproveFlightBooking(sSF ,obj.getString("BookID"),holder.RejectRmk.getText().toString(),4);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            });
+
             holder.tvViewSta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -207,7 +264,44 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
 
         }
     }
+public void ApproveFlightBooking(String SF,String Bookid,String Rmks,int flag){
+    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+    JSONObject jObj=new JSONObject();
+    try {
+        jObj.put("SF",SF);
+        jObj.put("BookID",Bookid);
+        jObj.put("Rmks",Rmks);
+        jObj.put("flag",flag);
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+    apiInterface.JsonSave("apprv/flightbook",jObj.toString()).enqueue(new Callback<JsonObject>() {
+        @Override
+        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            JsonObject Res=response.body();
+            String Msg= Res.get("Msg").getAsString();
+            if(!Msg.equalsIgnoreCase("")){
+                FlightBookingApproval.activity.refreshData();
+                AlertDialog alertDialog = new AlertDialog.Builder(context)
+                        .setTitle("HAP Check-In")
+                        .setMessage(Html.fromHtml(Msg))
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
+                            }
+                        })
+                        .show();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<JsonObject> call, Throwable t) {
+
+        }
+    });
+}
     @Override
     public int getItemCount() {
         return mArr.length();

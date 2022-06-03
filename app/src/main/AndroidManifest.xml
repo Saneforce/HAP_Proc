@@ -58,6 +58,9 @@
             android:name=".SFA_Activity.PayLedgerActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Activity_Hap.FlightBooking_Approval_History"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.DashboardInfoActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -88,6 +91,7 @@
         <activity android:name=".Activity_Hap.Deviation_Approval_Reject" />
         <activity android:name=".Activity_Hap.Holiday_Entry_Approval" />
         <activity android:name=".Activity_Hap.Holiday_Approval_Reject" />
+        <activity android:name=".Activity_Hap.FlightBookingApproval" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
         <activity

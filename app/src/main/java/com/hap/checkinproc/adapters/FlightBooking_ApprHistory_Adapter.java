@@ -1,11 +1,9 @@
-package com.hap.checkinproc.Status_Adapter;
+package com.hap.checkinproc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,15 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
-import com.hap.checkinproc.Activity_Hap.FlightTicketRequest;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.FlightBooking_Status_Activity;
-import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBooking_Status_Adapter.MyViewHolder> {
+public class FlightBooking_ApprHistory_Adapter extends RecyclerView.Adapter<FlightBooking_ApprHistory_Adapter.MyViewHolder> {
     private JSONArray mArr;
 
     private Context context;
@@ -77,21 +72,21 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
     }
 
 
-    public FlightBooking_Status_Adapter(JSONArray arr, Context context,String mSF) {
+    public FlightBooking_ApprHistory_Adapter(JSONArray arr, Context context, String mSF) {
         this.mArr = arr;
         this.context = context;
         this.sSF=mSF;
     }
 
     @Override
-    public FlightBooking_Status_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FlightBooking_ApprHistory_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.flight_booking_status_listitem, null, false);
-        return new FlightBooking_Status_Adapter.MyViewHolder(listItem);
+        return new FlightBooking_ApprHistory_Adapter.MyViewHolder(listItem);
     }
 
     @Override
-    public void onBindViewHolder(FlightBooking_Status_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(FlightBooking_ApprHistory_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try {
             JSONObject obj = mArr.getJSONObject(position);
             holder.tvDate.setText("" + obj.getString("RequestDate"));
@@ -111,17 +106,18 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
             holder.btnApproval.setVisibility(View.GONE);
             holder.btnReject.setVisibility(View.GONE);
             holder.vwReject.setVisibility(View.GONE);
-            holder.btnCancel.setVisibility(View.VISIBLE);
-            holder.tvViewSta.setVisibility(View.VISIBLE);
+            holder.btnCancel.setVisibility(View.GONE);
             if (obj.getInt("ApprvFlg")>1) holder.btnCancel.setVisibility(View.GONE);
+            holder.tvViewSta.setVisibility(View.VISIBLE);
             if(obj.getInt("ApprvFlg")!=2) holder.tvViewSta.setVisibility(View.GONE);
+
             if (obj.getString("BookingStatus").equalsIgnoreCase("Booked")) {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_green);
             }else if (obj.getInt("ApprvFlg")==1) {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_blue);
             }else if (obj.getInt("ApprvFlg")==4) {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_red);
-            }  else {
+            } else {
                 holder.tvStatus.setBackgroundResource(R.drawable.button_yellows);
             }
 
