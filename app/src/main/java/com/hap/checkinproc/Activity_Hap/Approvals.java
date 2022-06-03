@@ -49,7 +49,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     Common_Class common_class;
     LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest,FlightAppr, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
-            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus;
+            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus,llFlightApprHist;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -167,6 +167,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
         linProjectionApprove = findViewById(R.id.lin_productProjectionApproval);
+        llFlightApprHist=findViewById(R.id.lin_FlightApprHist);
         linQpsApprove = findViewById(R.id.lin_qps);
         /*Status text*/
         /*SetOnClickListner*/
@@ -187,6 +188,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         ExtdShift.setOnClickListener(this);
         lin_weekoff.setOnClickListener(this);
         lin_leavecancel_histry.setOnClickListener(this);
+        llFlightApprHist.setOnClickListener(this);
         lin_leaveholidaystatus.setOnClickListener(this);
         linLeaveCancel.setOnClickListener(this);
         lin_holidayentryApproval.setOnClickListener(this);
@@ -196,6 +198,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linProjectionApprove.setOnClickListener(this);
         llTrvlAllowStatus.setOnClickListener(this);
 
+        FlightAppr.setVisibility(View.GONE);
+        llFlightApprHist.setVisibility(View.GONE);
+        if(UserDetails.getInt("FlightAllowed", 0)==2){
+            FlightAppr.setVisibility(View.VISIBLE);
+            llFlightApprHist.setVisibility(View.VISIBLE);
+        }
         getcountdetails();
     }
 
@@ -333,6 +341,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_FlightAppr:
                 startActivity(new Intent(Approvals.this, FlightBookingApproval.class));
+                finish();
+                break;
+            case R.id.lin_FlightApprHist:
+                startActivity(new Intent(Approvals.this, FlightBooking_Approval_History.class));
                 finish();
                 break;
             case R.id.lin_productProjectionApproval:

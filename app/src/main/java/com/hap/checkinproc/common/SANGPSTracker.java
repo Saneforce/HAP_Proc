@@ -462,13 +462,19 @@ public class SANGPSTracker extends Service {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         float batteryPct =-1;
         if(ifilter!=null) {
-            BroadcastReceiver recvr=new PowerConnectionReceiver();
-            Intent batteryStatus = mContext.registerReceiver(recvr, ifilter);
+            batteryPct = -1;
+            try {
+                BroadcastReceiver recvr = new PowerConnectionReceiver();
+                Intent batteryStatus = mContext.registerReceiver(recvr, ifilter);
 
-            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-             batteryPct = (level * 100) / (float) scale;
-             mContext.unregisterReceiver(recvr);
+                int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+                batteryPct = (level * 100) / (float) scale;
+                mContext.unregisterReceiver(recvr);
+            }
+            catch (Exception e){
+                Log.d(TAG, "sendLocationDataToWebsite: "+ e.getLocalizedMessage());
+            }
         }
         DatabaseHandler db = new DatabaseHandler(this);
         mLocation = location;

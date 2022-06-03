@@ -51,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
@@ -61,7 +62,7 @@ public class FlightTicketRequest extends AppCompatActivity {
     RadioGroup radioGrp;
     RadioButton radioOne, radioRound, radoMor, radoEve, retradoMor, retradoEve;
     LinearLayout LinearReturn, LinearHome, TrvlrList;
-    EditText FrmPlc, ToPlc, retFrmPlc, retToPlc, edtDepature, retedtDepature, edtReturn;
+    EditText FrmPlc, ToPlc, retFrmPlc, retToPlc, edtDepature, retedtDepature;
     TextView Name, addTrvlr;
     String tominYear = "", tominMonth = "", tominDay = "", maxTWoDate = "", SFName = "", TrvTyp = "ONE";
     SharedPreferences CheckInDetails, UserDetails, sharedpreferences;
@@ -72,7 +73,8 @@ public class FlightTicketRequest extends AppCompatActivity {
     Location clocation = null;
     final Handler handler = new Handler();
     ApiInterface apiInterface;
-    String departureDt = "";
+    String departureDt = "",dtReturn="";
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,18 +93,17 @@ public class FlightTicketRequest extends AppCompatActivity {
         radoMor = findViewById(R.id.radio_depMor);
         radoEve = findViewById(R.id.radio_depEve);
 
-        retFrmPlc = findViewById(R.id.from_place);
-        retToPlc = findViewById(R.id.to_place);
-        retedtDepature = findViewById(R.id.edt_dep);
-        retradoMor = findViewById(R.id.radio_depMor);
-        retradoEve = findViewById(R.id.radio_depEve);
+        retFrmPlc = findViewById(R.id.retfrom_place);
+        retToPlc = findViewById(R.id.retto_place);
+        retedtDepature = findViewById(R.id.edt_return);
+        retradoMor = findViewById(R.id.radio_retdepMor);
+        retradoEve = findViewById(R.id.radio_retdepEve);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         LinearReturn = findViewById(R.id.lin_return);
         TrvlrList = findViewById(R.id.TrvlrList);
         addTrvlr = findViewById(R.id.addTrvlr);
         LinearHome = findViewById(R.id.lin_name);
-        edtReturn = findViewById(R.id.edt_return);
         Name = findViewById(R.id.txt_name);
         radioGrp.clearCheck();
         radioOne.setChecked(true);
@@ -342,19 +343,35 @@ public class FlightTicketRequest extends AppCompatActivity {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(FlightTicketRequest.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-
-                        edtDepature.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        departureDt = "" + (year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        Date time=DT.GetCurrDateTime(FlightTicketRequest.this);
+                        radoMor.setEnabled(true);
+                        departureDt = "" + (year + "-" + ((monthOfYear<9)?"0":"")+(monthOfYear + 1) + "-" + ((dayOfMonth<10)?"0":"")+dayOfMonth);
+                        if (DT.getDateWithFormat(time,"yyyy-MM-dd").equals(departureDt)){
+                            if(c.get(Calendar.HOUR_OF_DAY)>12){
+                                radoMor.setChecked(false);
+                                radoEve.setChecked(true);
+                                radoMor.setEnabled(false);
+                            }
+                        }
+                        edtDepature.setText(((dayOfMonth<10)?"0":"")+dayOfMonth + "-" + ((monthOfYear<9)?"0":"")+(monthOfYear + 1) + "-" + year);
                         maxTWoDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                         MaxMinDateTo(maxTWoDate);
+                        dtReturn = "";
+                        retedtDepature.setText("");
 
                     }
                 }, mYear, mMonth, mDay);
+
+        Calendar calendarmin = Calendar.getInstance();
+
+        calendarmin.set(mYear, mMonth , mDay);
+        datePickerDialog.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
         datePickerDialog.show();
     }
 
@@ -370,7 +387,18 @@ public class FlightTicketRequest extends AppCompatActivity {
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            edtReturn.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            dtReturn = year + "-" + ((monthOfYear<9)?"0":"")+(monthOfYear + 1) + "-" + ((dayOfMonth<10)?"0":"")+dayOfMonth;
+                            retedtDepature.setText( ((dayOfMonth<10)?"0":"")+dayOfMonth + "-" + ((monthOfYear<9)?"0":"")+(monthOfYear + 1) + "-" + year);
+                            Date time=DT.GetCurrDateTime(FlightTicketRequest.this);
+
+                            retradoMor.setEnabled(true);
+                            if (DT.getDateWithFormat(time,"yyyy-MM-dd").equals(dtReturn)){
+                                if(cldr.get(Calendar.HOUR_OF_DAY)>12){
+                                    retradoMor.setChecked(false);
+                                    retradoEve.setChecked(true);
+                                    retradoMor.setEnabled(false);
+                                }
+                            }
                         }
                     }, year, month, day);
             Calendar calendarmin = Calendar.getInstance();
@@ -488,10 +516,10 @@ public class FlightTicketRequest extends AppCompatActivity {
                     return false;
                 }
 
-                if (txRemark.getText().toString().equalsIgnoreCase("")) {
+               /* if (txRemark.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(FlightTicketRequest.this, "Enter the Remarks", Toast.LENGTH_LONG).show();
                     return false;
-                }
+                }*/
                 nItem.put("CmpTyp", CmpCat);
                 nItem.put("EmpID", txTrvEmpid.getText().toString());
                 nItem.put("TrvName", txTrvName.getText().toString());
@@ -531,7 +559,7 @@ public class FlightTicketRequest extends AppCompatActivity {
 
             jObj.put("retTrvFrmPlc", retFrmPlc.getText().toString());
             jObj.put("retTrvToPlc", retToPlc.getText().toString());
-            jObj.put("retTrvDepDt", retedtDepature.getText().toString());
+            jObj.put("retTrvDepDt", dtReturn);
             jObj.put("retTrvSes", retTrvMorEve);
 
             jObj.put("Traveller", jTrvDets);

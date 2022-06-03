@@ -1,5 +1,6 @@
 package com.hap.checkinproc.common;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -7,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -24,8 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
+import com.hap.checkinproc.Activity_Hap.Check_in;
 import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
@@ -266,11 +272,20 @@ public class TimerService extends Service {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+
+                        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q))
+                        {
+                            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(cAtivity, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1001);
+                                return;
+                            }
+                        }else{
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
                     }
                 });
                 relative.addView(btn);

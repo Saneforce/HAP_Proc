@@ -3,6 +3,39 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_distributor.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_heatmeter.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_add_new_retailer.xml" value="0.13044579533941236" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_approvals.xml" value="0.24094202898550723" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard__route.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dashboard__two.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_dist_name.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_login.xml" value="0.23550724637681159" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_nearby__outlets.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.2682291666666667" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_order_dash_board.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_outlet__info_.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_report.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_secondary_order.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_sfactivity.xml" value="0.23550724637681159" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/activity_t_a_claim.xml" value="0.23233695652173914" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/dist_info_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/oe_claim_approval.xml" value="0.2682291666666667" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/primaryorder_history_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/team_loc_detail_layout.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/tl_claim_appro_one.xml" value="0.25" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/layout/travel_allowance_dynamic.xml" value="0.14010416666666667" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/mipmap-anydpi-v26/ic_ffa_launcher.xml" value="0.2846153846153846" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/mipmap-anydpi-v26/ic_ffa_launcher_round.xml" value="0.2846153846153846" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2846153846153846" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/mipmap-anydpi-v26/ic_so_launcher.xml" value="0.2846153846153846" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/mipmap-anydpi-v26/ic_so_launcher_round.xml" value="0.2846153846153846" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/drawable/blue_bg.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/drawable/bottom_button.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/drawable/button_blueg.xml" value="0.2890625" />
@@ -188,6 +221,7 @@
         <entry key="app/src/main/res/layout/activity_allowance.xml" value="0.11956521739130435" />
         <entry key="app/src/main/res/layout/activity_allowance_two.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_approvals.xml" value="0.1726851851851852" />
+        <entry key="app/src/main/res/layout/activity_block_information.xml" value="0.2006340579710145" />
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />

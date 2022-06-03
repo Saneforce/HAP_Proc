@@ -58,6 +58,9 @@
             android:name=".SFA_Activity.PayLedgerActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Activity_Hap.FlightBooking_Approval_History"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.DashboardInfoActivity"
             android:screenOrientation="portrait" />
         <activity

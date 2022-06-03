@@ -151,6 +151,8 @@ public class Constants {
     public static final String DivERP = "divERP";
     public static final String FlightBookingStatus = "flightBookingStatus";
     public static final String FlightBookingPending = "flightBookingPending";
+    public static final String FlightBookingApprovalHistory = "flightBookingApprovalHistory";
+
     public static final String Freezer_Status = "freezerStatus";
     public static final String Freezer_capacity = "freezerCapacity";
     public static final String GetPosOrderHistory = "getPosOrderHistory";

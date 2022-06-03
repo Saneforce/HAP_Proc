@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 7.4.9";
+    public static String Version_Name = "ver 7.5.0";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -712,10 +712,19 @@ public class Common_Class {
                     case Constants.FlightBookingStatus:
                         axnname = "get/flightbookings";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("FDT", jparam.get("FDT").getAsString());
+                        data.put("TDT", jparam.get("TDT").getAsString());
                         break;
                     case Constants.FlightBookingPending:
                         axnname = "get/flightpbookings";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
+
+                        break;
+                    case Constants.FlightBookingApprovalHistory:
+                        axnname = "get/fbapprhist";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("FDT", jparam.get("FDT").getAsString());
+                        data.put("TDT", jparam.get("TDT").getAsString());
 
                         break;
                     case Constants.DASHBOARD_TYPE_INFO:

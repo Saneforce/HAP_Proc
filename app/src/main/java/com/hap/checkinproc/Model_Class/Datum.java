@@ -114,6 +114,10 @@ public class Datum {
     @Expose
     private Integer oTFlg;
 
+    @SerializedName("FlightAllowed")
+    @Expose
+    private Integer FlightAllowed;
+
     public Integer getFreezer_Mandatory() {
         return Freezer_Mandatory;
     }
@@ -318,6 +322,13 @@ public class Datum {
         this.deptType = deptType;
     }
 
+    public Integer getFlightAllowed() {
+        return FlightAllowed;
+    }
+
+    public void setFlightAllowed(Integer flightAllowed) {
+        FlightAllowed = flightAllowed;
+    }
     public Integer getOTFlg() {
         return oTFlg;
     }

@@ -348,7 +348,17 @@
                                 android:id="@+id/edtRejectRmk"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
-                                />
+                                android:textSize="11sp"
+                                android:textStyle="bold"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="35dp"
+                                android:orientation="horizontal"
+                                android:padding="1dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                >
                             <Button
                                 android:id="@+id/btnSvReject"
                                 android:layout_width="130dp"
@@ -358,12 +368,28 @@
                                 android:elevation="@dimen/C5dp"
                                 android:layout_margin="5dp"
                                 android:padding="1dp"
-                                android:text="Approve Ticket"
+                                android:text="Save"
                                 android:textColor="#ffffff"
                                 android:textFontWeight="900"
                                 android:textSize="12sp"
 
                                 />
+                            <Button
+                                android:id="@+id/btncancelRej"
+                                android:layout_width="130dp"
+                                android:layout_height="33dp"
+                                android:layout_gravity="right"
+                                android:background="@drawable/button_red"
+                                android:elevation="@dimen/C5dp"
+                                android:padding="1dp"
+                                android:layout_margin="5dp"
+                                android:text="Cancel"
+                                android:textColor="#ffffff"
+                                android:textFontWeight="900"
+                                android:textSize="12sp"
+
+                                />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
