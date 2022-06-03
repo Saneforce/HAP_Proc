@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.reflect.TypeToken;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +54,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -83,9 +83,7 @@ public class Login extends AppCompatActivity {
     ImageView profileImage;
     String photo;
     String idToken, eMail, UserLastName, UserLastName1;
-
     Button signInButton, ReportsButton, ExitButton;
-
     Shared_Common_Pref shared_common_pref;
     private static final String TAG = "LoginActivity";
     private GoogleApiClient googleApiClient;
@@ -101,7 +99,6 @@ public class Login extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     final Handler handler = new Handler();
-
     private LocationReceiver rcvMReceiver;
     private SANGPSTracker mLUService;
     private LocationReceiver myReceiver;
@@ -682,6 +679,7 @@ public class Login extends AppCompatActivity {
                // eMail = "testhap3@hap.in";
                  //eMail = "shanmugam@hap.in";
                 //eMail = "anbu@saneforce.in";
+
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
