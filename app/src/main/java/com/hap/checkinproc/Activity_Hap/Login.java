@@ -83,6 +83,7 @@ public class Login extends AppCompatActivity {
     ImageView profileImage;
     String photo;
     String idToken, eMail, UserLastName, UserLastName1;
+
     Button signInButton, ReportsButton, ExitButton;
 
     Shared_Common_Pref shared_common_pref;
