@@ -14,7 +14,6 @@ android {
         versionCode 3316
         versionName "7.4.9"
         multiDexEnabled true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
