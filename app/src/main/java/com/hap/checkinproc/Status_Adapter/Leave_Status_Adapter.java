@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Status_Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -70,7 +71,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     }
 
     @Override
-    public void onBindViewHolder(Leave_Status_Adapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(Leave_Status_Adapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Leave_Status_Model Leave_Status_Model = Leave_Status_ModelsList.get(position);
         holder.fromdatetodate.setText(Leave_Status_ModelsList.get(position).getFromDate() + " TO " + Leave_Status_ModelsList.get(position).getToDate());
         holder.leavetype.setText("" + Leave_Status_ModelsList.get(position).getLeaveType());
