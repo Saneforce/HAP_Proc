@@ -70,10 +70,6 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         JsonObject jsFuel = (JsonObject) jsonArray.get(position);
-
-        Log.v("FUEL_REPSONE", jsFuel.toString());
-
-
         holder.txtTaClaim.setText(jsFuel.get("MOT_Name").getAsString());
         holder.TxtStartedKm.setText(jsFuel.get("Start_Km").getAsString());
         holder.TxtClosingKm.setText(jsFuel.get("End_Km").getAsString());
@@ -89,7 +85,6 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                 String total = String.valueOf(end - start);
                 holder.TotalTravelledKm.setText(total);
                 holder.PersonalKiloMeter.setText(jsFuel.get("Personal_Km").getAsString());
-
 
                 Integer Total = Integer.valueOf(total);
 
