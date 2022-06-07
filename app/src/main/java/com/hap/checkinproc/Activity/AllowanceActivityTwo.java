@@ -100,7 +100,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     //startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
-    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate, TextDtTrv;
+    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate, TextDtTrv,tottrv_km,totclm_km;
     ImageView StartedKmImage, EndedKmImage;
     CircularProgressButton submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
@@ -146,6 +146,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         linToPlace = findViewById(R.id.lin_to);
         TextToPlace = findViewById(R.id.txt_to);
         ReasonMode = findViewById(R.id.reason_mode);
+        tottrv_km = findViewById(R.id.tottrv_km);
+        totclm_km = findViewById(R.id.totclm_km);
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         common_class = new Common_Class(this);
@@ -189,25 +191,56 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
-
-                    Log.v("StartedKM", String.valueOf(StartedKM));
-
-                    endKm = Integer.parseInt(EndedEditText.getText().toString());
-                    if (StartedKM < endKm) {
-
-                        if (TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")) {
-                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
-                        } else if (TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")) {
-                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
-                        }
-                    }
-                    totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
-                    PersonalKmEdit.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, totalPM)});
-
+                if (TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")) {
+                    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM), new InputFilter.LengthFilter(6)});
+                } else if (TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")) {
+                    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM), new InputFilter.LengthFilter(6)});
                 }
 
+                if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
+                    endKm = Integer.parseInt(EndedEditText.getText().toString());
+                    totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
+                    if(totalPM<0) totalPM=0;
+                    PersonalKmEdit.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, totalPM)});
+                    String sPerKM=PersonalKmEdit.getText().toString();
+                    if(sPerKM.equals("")) sPerKM="0";
+                    int perPM = Integer.valueOf(sPerKM);
+                    if(perPM<0) perPM=0;
+                    tottrv_km.setText(String.valueOf(totalPM));
+                    int clmKM=totalPM-perPM;
+                    if(clmKM<0) clmKM=0;
+                    totclm_km.setText(String.valueOf(clmKM));
 
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        PersonalKmEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+              if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
+                    endKm = Integer.parseInt(EndedEditText.getText().toString());
+                    totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
+                    if(totalPM<0) totalPM=0;
+                    String sPerKM=PersonalKmEdit.getText().toString();
+
+                    if(sPerKM.equals("")) sPerKM="0";
+                    int perPM = Integer.valueOf(sPerKM);
+                    if(perPM<0) perPM=0;
+                    tottrv_km.setText(String.valueOf(totalPM));
+                    int clmKM=totalPM-perPM;
+                    if(clmKM<0) clmKM=0;
+                    totclm_km.setText(String.valueOf(clmKM));
+
+                }
             }
 
             @Override
@@ -288,23 +321,17 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                             ResetSubmitBtn(0);
                             return;
                         } else {
-
                             try {
                                 stKM = Integer.valueOf(TextStartedKm.getText().toString());
                             } catch (NumberFormatException ex) { // handle your exception
-
                             }
                             endKm = Integer.valueOf(EndedEditText.getText().toString());
+                            String pkm=PersonalKmEdit.getText().toString();
+                            if(pkm.equals("")) pkm="0";
+                            personalKM = Integer.valueOf(pkm);
+
                             if (stKM < endKm) {
-                                endKm = Integer.parseInt(EndedEditText.getText().toString());
-                                if (StartedKM < endKm) {
-                                    if (TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")) {
-                                        EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
-                                    } else if (TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")) {
-                                        EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM)});
-                                    }
-                                }
-                                if ((StartedKM + maxKM) < endKm) {
+                                if (((endKm-StartedKM)-personalKM)>maxKM) {
                                     Toast.makeText(AllowanceActivityTwo.this, "KM Limit is Exceeded", Toast.LENGTH_SHORT).show();
                                     ResetSubmitBtn(0);
                                     return;
