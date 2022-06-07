@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -47,7 +48,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
 
             if (AryDta != null && AryDta.size() > 0) {
                 itm = AryDta.get(position);
-                Picasso.with(context)
+                Glide.with(context)
                         .load(itm)
                         .error(R.drawable.profile_img)
                         .into(holder.ivFile);

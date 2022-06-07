@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import static android.widget.Toast.LENGTH_LONG;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -119,11 +120,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
         db = new DatabaseHandler(this);
         shared_common_pref = new Shared_Common_Pref(this);
-
 
         if (com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime().equalsIgnoreCase(shared_common_pref.getvalue(Constants.LOGIN_DATE))) {
             Shared_Common_Pref.LOGINTYPE = shared_common_pref.getvalue(Constants.LOGIN_TYPE);
@@ -439,7 +437,9 @@ public class Login extends AppCompatActivity {
             Log.e("Result_success", result.getStatus().toString());
 
             Log.e("Result_googel", String.valueOf(result));
-            handleSignInResult(result, requestCode);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                handleSignInResult(result, requestCode);
+            }
         }
     }
 
@@ -603,10 +603,12 @@ public class Login extends AppCompatActivity {
                 assignLoginData(response, requestCode);
             } else {
 
-                if (eMail.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
-                    mProgress.dismiss();
-                    return;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                    if (eMail.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Invalid Email ID", LENGTH_LONG).show();
+                        mProgress.dismiss();
+                        return;
+                    }
                 }
 
                 //eMail = "sakthivel.sa@hap.in";
@@ -616,7 +618,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-               // eMail = "ciadmin@hap.in";
+                eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -658,7 +660,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "1006208@hap.in";
                 // eMail="rajasekaranm@hap.in";
                 //   eMail="1018368@hap.in";
-                  //eMail="sajan@hap.in";
+                //eMail="sajan@hap.in";
                 // eMail="1022081@hap.in";
                 // eMail="johnkennedy.i@hap.in";
                 //eMail = "1018937@hap.in";
@@ -676,8 +678,8 @@ public class Login extends AppCompatActivity {
 
                 //   eMail="1026594@hap.in";
                 //   eMail = "gnanaoli.j@hap.in";
-               // eMail = "testhap3@hap.in";
-                 //eMail = "shanmugam@hap.in";
+                // eMail = "testhap3@hap.in";
+                //eMail = "shanmugam@hap.in";
                 //eMail = "anbu@saneforce.in";
 
 
@@ -756,7 +758,7 @@ public class Login extends AppCompatActivity {
                                     } catch (Exception e) {
 
                                     }
-                                    Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Check username and password", LENGTH_LONG).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -767,7 +769,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<Model> call, Throwable t) {
 
-                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), t.getMessage(), LENGTH_LONG).show();
                         try {
                             mProgress.dismiss();
                         } catch (Exception e) {
@@ -782,6 +784,7 @@ public class Login extends AppCompatActivity {
     }
 
 
+    @SuppressLint("NewApi")
     void assignLoginData(Model response, int requestCode) {
         try {
 
@@ -829,7 +832,9 @@ public class Login extends AppCompatActivity {
                 userEditor.putString("SfName", response.getData().get(0).getStockist_Name());
 
                 userEditor.putString("url", String.valueOf(profile));
-                userEditor.apply();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                    userEditor.apply();
+                }
                 if (requestCode == RC_SIGN_IN || requestCode == 0)
                     userEditor.putBoolean("Login", true);
                 else
@@ -905,7 +910,7 @@ public class Login extends AppCompatActivity {
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
-                if(Flight==null) Flight=0;
+                if (Flight == null) Flight = 0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
 
 
@@ -964,7 +969,9 @@ public class Login extends AppCompatActivity {
                     userEditor.putBoolean("Login", false);
                 userEditor.apply();
                 startActivity(intent);
-                overridePendingTransition(R.anim.in, R.anim.out);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                }
 
                 try {
                     mProgress.dismiss();
@@ -1023,7 +1030,7 @@ public class Login extends AppCompatActivity {
                 } else {
                     // Permission denied.
                     //Snackbar snackbar =
-                            Snackbar.make(
+                    Snackbar.make(
                                     findViewById(R.id.activity_main),
                                     R.string.permission_denied_explanation,
                                     Snackbar.LENGTH_INDEFINITE)

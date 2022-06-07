@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -566,13 +567,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 ivCheckIn.setVisibility(View.GONE);
             else {
                 ivCheckIn.setVisibility(View.VISIBLE);
-                Picasso.with(Dashboard_Two.this)
+                Glide.with(Dashboard_Two.this)
                         .load(checkInUrl)
                         .into(ivCheckIn);
             }
 
             try {
-                Picasso.with(Dashboard_Two.this)
+                Glide.with(Dashboard_Two.this)
                         .load(ApiClient.BASE_URL.replaceAll("server/", "") + fItm.get("EImgName").getAsString())
                         .into(ivCheckOut);
             } catch (Exception e) {

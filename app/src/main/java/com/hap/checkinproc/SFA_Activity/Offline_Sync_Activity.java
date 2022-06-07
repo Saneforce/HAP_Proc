@@ -1,12 +1,12 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class Offline_Sync_Activity extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
+public class Offline_Sync_Activity extends Activity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
     Type userType;

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Interface.ChildListInterface;
 import com.hap.checkinproc.Interface.ParentListInterface;
@@ -101,7 +102,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
 
         List<Product> mProducts = evenParent.get(position).getProduct();
 
-        Picasso.with(activity)
+        Glide.with(activity)
                 .load(evenParent.get(position).getCatImage())
                 .error(R.drawable.no_prod)
                 .into(holder.subProdcutImage);

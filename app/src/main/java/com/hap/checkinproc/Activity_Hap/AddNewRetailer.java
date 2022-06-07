@@ -44,6 +44,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -1802,7 +1803,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             name = ApiClient.BASE_URL + Retailer_Modal_List.get(getOutletPosition()).getImagename();
             name = name.replaceAll("server/", "");
             name = name.replaceAll(",", "");
-            Picasso.with(AddNewRetailer.this)
+            Glide.with(AddNewRetailer.this)
                     .load(name)
                     .error(R.drawable.profile_img)
                     .into(ivPhotoShop);

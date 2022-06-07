@@ -8,8 +8,8 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.hap.checkinproc"
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 3316
         versionName "7.5.0"
         multiDexEnabled true
@@ -104,8 +104,11 @@ dependencies {
     //flex Layout
     implementation 'com.google.android:flexbox:2.0.1'
     //Picasso
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
+//    implementation 'com.squareup.picasso:picasso:3.0.0'
+//    implementation 'com.squareup.picasso:picasso:3.0.0-SNAPSHOT'
+
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 
     /*Room Database*/
     implementation 'androidx.room:room-runtime:2.4.2'

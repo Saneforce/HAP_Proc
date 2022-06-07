@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Model_Class.ERTChild;
 import com.hap.checkinproc.R;
@@ -69,7 +70,7 @@ public class ERTSubAdapter extends RecyclerView.Adapter<ERTSubAdapter.SubMenuVie
 
         ERTChild menu = menus.get(position);
 
-        Picasso.with(context)
+        Glide.with(context)
                 .load(menus.get(position).getProfilePic())
                 .into(holder.profileImage);
         holder.name.setText(menu.getName());
