@@ -32,6 +32,7 @@ import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Activity.ViewActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -357,7 +358,7 @@ public class AdapterForDynamicView extends BaseAdapter {
                         updateUi.update(7, i);
                         break;
                     case "8":
-                        updateUi.update(8,i);
+                        updateUi.update(8, i);
                         break;
                 }
 //                if (mm.getViewid().equalsIgnoreCase("11"))
@@ -479,6 +480,12 @@ public class AdapterForDynamicView extends BaseAdapter {
                 }
                 Intent i = new Intent(context, ViewActivity.class);
                 i.putExtra("frmid", String.valueOf(ll.getId()));
+                if (String.valueOf(ll.getId()).equalsIgnoreCase("12"))
+                    i.putExtra("frmname", "Competitor Activity");
+
+                else if (String.valueOf(ll.getId()).equalsIgnoreCase("8"))
+                    i.putExtra("frmname", "General Activities");
+
                 i.putExtra("btn_need", "0");
                 i.putExtra("fab", "1");
                 context.startActivity(i);

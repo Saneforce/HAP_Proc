@@ -894,8 +894,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                                 mShared_common_pref.save("ActivityStart", "true");
                                 if (sDeptType.equalsIgnoreCase("1")) {
-                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
-                                    startActivity(aIntent);
+//                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+//                                    startActivity(aIntent);
+
+                                    startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+
 
                                 } else {
 

@@ -122,8 +122,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public static String updateTime = "";
     ApiInterface apiService;
 
-    boolean isSFA = true;
-
     int menuItem = 0;
 
 
@@ -158,7 +156,20 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         getPrimaryData("All");
         common_class.getDb_310Data(Constants.GroupFilter, this);
 
-        if (isSFA) {
+        if (UserDetails.getString("DeptType", "").equalsIgnoreCase("1")) {
+            ivProcureSync.setVisibility(View.VISIBLE);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
+                callDynamicmenu();
+            else {
+                menuList.clear();
+                Type userType = new TypeToken<ArrayList<ListModel>>() {
+                }.getType();
+                menuList = gson.fromJson(sharedCommonPref.getvalue(Constants.PROCUR_MENU), userType);
+                setMenuAdapter();
+            }
+
+
+        } else {
             ivProcureSync.setVisibility(View.GONE);
             switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
                 case Constants.CHECKIN_TYPE:
@@ -199,17 +210,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     break;
             }
             setMenuAdapter();
-        } else {
-            ivProcureSync.setVisibility(View.VISIBLE);
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
-                callDynamicmenu();
-            else {
-                menuList.clear();
-                Type userType = new TypeToken<ArrayList<ListModel>>() {
-                }.getType();
-                menuList = gson.fromJson(sharedCommonPref.getvalue(Constants.PROCUR_MENU), userType);
-                setMenuAdapter();
-            }
         }
 
 
@@ -307,6 +307,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
 
             formList.add(new Common_Model("New Farmer", "2"));
+
             formList.add(new Common_Model("Existing Farmer", "3"));
             formList.add(new Common_Model("Competitor Activity", "12"));
             formList.add(new Common_Model("General Activities", "8"));
