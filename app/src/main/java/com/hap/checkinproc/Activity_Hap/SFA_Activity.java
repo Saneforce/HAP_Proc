@@ -275,16 +275,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         getStockAuditDetails(SFA_Activity.this);
                         break;
                     case "Sync":
-                        saveFormData();
+                        saveFormData(-1);
                         common_class.ProgressdialogShow(1, "");
                         break;
 
                     default:
-                        Intent ii = new Intent(SFA_Activity.this, ViewActivity.class);
-                        ii.putExtra("btn_need", menuList.get(pos).getTargetForm());
-                        ii.putExtra("frmid", menuList.get(pos).getFormid());
-                        ii.putExtra("frmname", menuList.get(pos).getFormName());
-                        startActivity(ii);
+                        if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(menuList.get(pos).getFormName())))
+                            saveFormData(pos);
+                        else
+                            navigateFormScreen(pos);
 
 
                 }
@@ -295,7 +294,16 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void saveFormData() {
+    void navigateFormScreen(int pos) {
+        Intent ii = new Intent(SFA_Activity.this, ViewActivity.class);
+        ii.putExtra("btn_need", menuList.get(pos).getTargetForm());
+        ii.putExtra("frmid", menuList.get(pos).getFormid());
+        ii.putExtra("frmname", menuList.get(pos).getFormName());
+        startActivity(ii);
+
+    }
+
+    private void saveFormData(int pos) {
         try {
 
 
@@ -316,6 +324,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             if (formList.size() == menuItem) {
                 common_class.ProgressdialogShow(0, "");
                 menuItem = 0;
+                if (pos >= 0) {
+                    navigateFormScreen(pos);
+                }
                 return;
             } else {
                 String formid = formList.get(menuItem).getName();
@@ -352,7 +363,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                                 //   Log.v("PROC:" + formList.get(menuItem).getName() + ":", sharedCommonPref.getvalue(formid));
                                 menuItem = menuItem + 1;
-                                saveFormData();
+                                saveFormData(pos);
 //
                                 Log.v("sizeCheck:", "" + formList.size() + ":current:" + menuItem);
 
@@ -686,7 +697,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivProcureSync:
-                saveFormData();
+                saveFormData(-1);
                 common_class.ProgressdialogShow(1, "");
 
                 break;
