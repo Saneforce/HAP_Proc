@@ -158,6 +158,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         if (UserDetails.getString("DeptType", "").equalsIgnoreCase("1")) {
             ivProcureSync.setVisibility(View.VISIBLE);
+            findViewById(R.id.cvOutletSummary).setVisibility(View.GONE);
+            findViewById(R.id.cvTodayOrders).setVisibility(View.GONE);
+            findViewById(R.id.cvSalesData).setVisibility(View.GONE);
+            findViewById(R.id.cvCalls).setVisibility(View.GONE);
+
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
                 callDynamicmenu();
             else {
@@ -1054,8 +1059,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 tvDesc = view.findViewById(R.id.tvDesc);
                 tvValue = view.findViewById(R.id.tvValue);
                 pbVisitCount = view.findViewById(R.id.pbVisitCount);
-
-
             }
         }
 

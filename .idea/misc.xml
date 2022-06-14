@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_procurement_dashboard.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_sfactivity.xml" value="0.27355072463768115" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_distributor.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_heatmeter.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />
@@ -204,9 +206,6 @@
         <entry key="..\:/HAP/HAP_Proc/app/src/main/res/layout/activity_flight_booking_status.xml" value="0.15052083333333333" />
         <entry key="..\:/HAP/HAP_Proc/app/src/main/res/layout/flight_booking_approval.xml" value="0.13645833333333332" />
         <entry key="..\:/HAP/HAP_Proc/app/src/main/res/layout/flight_booking_status_listitem.xml" value="0.15052083333333333" />
-        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/activity_view.xml" value="0.25" />
-        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/loading_progress.xml" value="0.25" />
-        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc/app/src/main/res/layout/popup_dynamic_view1.xml" value="0.10989583333333333" />
         <entry key="app/src/main/res/drawable/blue_bg.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/bugetoutletno.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/drawable/button_blueg.xml" value="0.22395833333333334" />
@@ -300,7 +299,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
