@@ -652,7 +652,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     common_class.brandPos = 0;
                     mCategoryName = categoryName;
                     setSubCatAdapter();
-
                     setPagerAdapter(true);
                 }
             }));
@@ -672,12 +671,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
         for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
             if (!Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getSpeciality()) && ((mCategoryName.equalsIgnoreCase("ALL") ||
-                    mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass()))
-            ))
-
+                    mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass()))))
                 subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
-
-
         }
         HashSet sub = new HashSet();
         sub.addAll(subList);

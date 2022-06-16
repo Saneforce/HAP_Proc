@@ -618,7 +618,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-                //eMail = "ciadmin@hap.in";
+              //  eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -630,7 +630,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-                // eMail = "anbu@saneforce.com";
+                 //eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";

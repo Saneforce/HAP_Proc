@@ -23,7 +23,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -136,7 +135,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         linSFA.setVisibility(View.GONE);
 
-        linOnDuty.setVisibility(View.GONE);
+       // linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
         else {
             linSFA.setVisibility(View.VISIBLE);
@@ -204,6 +203,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
+
+
                 String ETime = CheckInDetails.getString("CINEnd", "");
                 if (!ETime.equalsIgnoreCase("")) {
                     String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
@@ -331,7 +332,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) flxlastChild.getLayoutParams();
                 Log.d("TagName", flxlastChild.toString() + " - " + lp.getFlexBasisPercent() + "-" + flg);
                 lp.setFlexBasisPercent(0.47f);
-
                 flxlastChild.setLayoutParams(lp);
             }
         }

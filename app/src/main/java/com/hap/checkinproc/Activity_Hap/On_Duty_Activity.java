@@ -741,6 +741,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("mode_name", TextMode.getText().toString());
             jj.put("mod", modeId);
             jj.put("sf", SF_code);
+            jj.put("sf_type", UserDetails.getString("Sf_Type", ""));
             jj.put("div", div);
             jj.put("StEndNeed", startEnd);
             jj.put("url", imageServer);
