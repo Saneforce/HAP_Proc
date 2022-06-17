@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
@@ -173,7 +174,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
         }
 
         if (!jsFuel.get("start_Photo").getAsString().equalsIgnoreCase("")) {
-            Picasso.with(context)
+            Glide.with(context)
                     .load(jsFuel.get("start_Photo").getAsString())
                     .into(holder.imgStart);
 
@@ -188,7 +189,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
             });
         }
         if (!jsFuel.get("End_photo").getAsString().equalsIgnoreCase("")) {
-            Picasso.with(context)
+            Glide.with(context)
                     .load(jsFuel.get("End_photo").getAsString())
                     .into(holder.imgEnd);
 

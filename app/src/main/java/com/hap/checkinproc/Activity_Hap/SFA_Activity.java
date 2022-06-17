@@ -122,8 +122,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public static String updateTime = "";
     ApiInterface apiService;
 
-    boolean isSFA = true;
-
     int menuItem = 0;
 
 
@@ -158,7 +156,25 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         getPrimaryData("All");
         common_class.getDb_310Data(Constants.GroupFilter, this);
 
-        if (isSFA) {
+        if (UserDetails.getString("DeptType", "").equalsIgnoreCase("1")) {
+            ivProcureSync.setVisibility(View.VISIBLE);
+            findViewById(R.id.cvOutletSummary).setVisibility(View.GONE);
+            findViewById(R.id.cvTodayOrders).setVisibility(View.GONE);
+            findViewById(R.id.cvSalesData).setVisibility(View.GONE);
+            findViewById(R.id.cvCalls).setVisibility(View.GONE);
+
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
+                callDynamicmenu();
+            else {
+                menuList.clear();
+                Type userType = new TypeToken<ArrayList<ListModel>>() {
+                }.getType();
+                menuList = gson.fromJson(sharedCommonPref.getvalue(Constants.PROCUR_MENU), userType);
+                setMenuAdapter();
+            }
+
+
+        } else {
             ivProcureSync.setVisibility(View.GONE);
             switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
                 case Constants.CHECKIN_TYPE:
@@ -199,17 +215,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     break;
             }
             setMenuAdapter();
-        } else {
-            ivProcureSync.setVisibility(View.VISIBLE);
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
-                callDynamicmenu();
-            else {
-                menuList.clear();
-                Type userType = new TypeToken<ArrayList<ListModel>>() {
-                }.getType();
-                menuList = gson.fromJson(sharedCommonPref.getvalue(Constants.PROCUR_MENU), userType);
-                setMenuAdapter();
-            }
         }
 
 
@@ -275,16 +280,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         getStockAuditDetails(SFA_Activity.this);
                         break;
                     case "Sync":
-                        saveFormData();
+                        saveFormData(-1);
                         common_class.ProgressdialogShow(1, "");
                         break;
 
                     default:
-                        Intent ii = new Intent(SFA_Activity.this, ViewActivity.class);
-                        ii.putExtra("btn_need", menuList.get(pos).getTargetForm());
-                        ii.putExtra("frmid", menuList.get(pos).getFormid());
-                        ii.putExtra("frmname", menuList.get(pos).getFormName());
-                        startActivity(ii);
+                        if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(menuList.get(pos).getFormName())))
+                            saveFormData(pos);
+                        else
+                            navigateFormScreen(pos);
 
 
                 }
@@ -295,7 +299,16 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void saveFormData() {
+    void navigateFormScreen(int pos) {
+        Intent ii = new Intent(SFA_Activity.this, ViewActivity.class);
+        ii.putExtra("btn_need", menuList.get(pos).getTargetForm());
+        ii.putExtra("frmid", menuList.get(pos).getFormid());
+        ii.putExtra("frmname", menuList.get(pos).getFormName());
+        startActivity(ii);
+
+    }
+
+    private void saveFormData(int pos) {
         try {
 
 
@@ -307,6 +320,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
 
             formList.add(new Common_Model("New Farmer", "2"));
+
             formList.add(new Common_Model("Existing Farmer", "3"));
             formList.add(new Common_Model("Competitor Activity", "12"));
             formList.add(new Common_Model("General Activities", "8"));
@@ -315,6 +329,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             if (formList.size() == menuItem) {
                 common_class.ProgressdialogShow(0, "");
                 menuItem = 0;
+                if (pos >= 0) {
+                    navigateFormScreen(pos);
+                }
                 return;
             } else {
                 String formid = formList.get(menuItem).getName();
@@ -351,7 +368,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                                 //   Log.v("PROC:" + formList.get(menuItem).getName() + ":", sharedCommonPref.getvalue(formid));
                                 menuItem = menuItem + 1;
-                                saveFormData();
+                                saveFormData(pos);
 //
                                 Log.v("sizeCheck:", "" + formList.size() + ":current:" + menuItem);
 
@@ -685,7 +702,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivProcureSync:
-                saveFormData();
+                saveFormData(-1);
                 common_class.ProgressdialogShow(1, "");
 
                 break;
@@ -1042,8 +1059,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 tvDesc = view.findViewById(R.id.tvDesc);
                 tvValue = view.findViewById(R.id.tvValue);
                 pbVisitCount = view.findViewById(R.id.pbVisitCount);
-
-
             }
         }
 

@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
@@ -105,12 +106,12 @@ public class AttachementActivity extends AppCompatActivity {
                     if (jsonObject.get("Imageurl").getAsString().endsWith(".png") || jsonObject.get("Imageurl").getAsString().endsWith(".jpeg") ||
                             jsonObject.get("Imageurl").getAsString().endsWith(".jpg")) {
 
-                        Picasso.with(AttachementActivity.this)
+                        Glide.with(AttachementActivity.this)
                                 .load(jsonObject.get("Imageurl").getAsString())
                                 .into(taAttach);
 
                     } else {
-                        Picasso.with(AttachementActivity.this)
+                        Glide.with(AttachementActivity.this)
                                 .load(R.drawable.pdf)
                                 .into(taAttach);
                     }

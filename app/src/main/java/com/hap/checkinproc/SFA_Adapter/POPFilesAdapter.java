@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
@@ -56,7 +57,7 @@ public class POPFilesAdapter extends RecyclerView.Adapter<POPFilesAdapter.MyView
 
             if (AryDta != null && AryDta.size() > 0) {
                 itm = AryDta.get(position);
-                Picasso.with(context)
+                Glide.with(context)
                         .load(itm)
                         .into(holder.ivFile);
             } else {

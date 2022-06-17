@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.viewProduct;
@@ -93,7 +94,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
             holder.txtPrice.setText("Total :" + mProductArray.getProductRate());
             holder.txtQty.setText("Qty :" + mProductArray.getProductqty());
             holder.totalAmount.setText("Total :" + mProduct_arrays.get(position).getProductqty() * mProduct_arrays.get(position).getProductRate());
-            Picasso.with(context).load(mProductArray.getCatImage()).error(R.drawable.no_prod).into(holder.productImage);
+            Glide.with(context).load(mProductArray.getCatImage()).error(R.drawable.no_prod).into(holder.productImage);
             holder.editCount.setText("" + quntaity);
 
 

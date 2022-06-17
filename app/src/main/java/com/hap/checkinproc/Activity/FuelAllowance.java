@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.PayslipFtp;
@@ -150,10 +151,10 @@ public class FuelAllowance extends AppCompatActivity {
                 startImage = findViewById(R.id.startkmimage);
                 EndImage = findViewById(R.id.endkmimage);
 
-                Picasso.with(FuelAllowance.this)
+                Glide.with(FuelAllowance.this)
                         .load(String.valueOf(getIntent().getSerializableExtra("start_Photo")))
                         .into(startImage);
-                Picasso.with(FuelAllowance.this)
+                Glide.with(FuelAllowance.this)
                         .load(String.valueOf(getIntent().getSerializableExtra("End_photo")))
                         .into(EndImage);
 

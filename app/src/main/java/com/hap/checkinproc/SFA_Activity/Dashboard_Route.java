@@ -652,7 +652,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     common_class.brandPos = 0;
                     mCategoryName = categoryName;
                     setSubCatAdapter();
-
                     setPagerAdapter(true);
                 }
             }));
@@ -671,22 +670,14 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
         subList.add("ALL");
 
         for (int i = 0; i < Retailer_Modal_ListFilter.size(); i++) {
-            if ((mCategoryName.equalsIgnoreCase("ALL") ||
-                    mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass())
-                            && !Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getSpeciality())))
+            if (!Common_Class.isNullOrEmpty(Retailer_Modal_ListFilter.get(i).getSpeciality()) && ((mCategoryName.equalsIgnoreCase("ALL") ||
+                    mCategoryName.equalsIgnoreCase(Retailer_Modal_ListFilter.get(i).getOutletClass()))))
                 subList.add(Retailer_Modal_ListFilter.get(i).getSpeciality());
-
-
         }
         HashSet sub = new HashSet();
         sub.addAll(subList);
         subList.clear();
         subList.addAll(sub);
-
-        for (int i = 0; i < subList.size(); i++) {
-            if (Common_Class.isNullOrEmpty(subList.get(i)))
-                subList.remove(i);
-        }
 
         rvOutletCategory.setAdapter(new OutletCategoryFilterAdapter(subList, this, new AdapterOnClick() {
             @Override

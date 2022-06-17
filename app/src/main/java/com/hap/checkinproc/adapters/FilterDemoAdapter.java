@@ -154,6 +154,7 @@ public class FilterDemoAdapter extends BaseAdapter {
                         }catch (Exception e){}
                         Intent i = new Intent(context, ViewActivity.class);
                         i.putExtra("frmid", target);
+                        i.putExtra("frmname", "Existing Farmer");
                         i.putExtra("btn_need", "0");
                         context.startActivity(i);
                     }
