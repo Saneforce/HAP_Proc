@@ -525,14 +525,10 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
             }
 
             if (type.equals("1")) {
-
                 selectedPos = 0;
-
                 VanSalesOrderActivity.CategoryAdapter customAdapteravail = new VanSalesOrderActivity.CategoryAdapter(getApplicationContext(),
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
-
-
                 showOrderItemList(selectedPos, "");
             }
 
