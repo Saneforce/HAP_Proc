@@ -68,6 +68,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
+    String[] mns = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     Shared_Common_Pref mShared_common_pref;
     GateEntryQREvents GateEvents;
@@ -340,7 +341,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             String loginDate = mShared_common_pref.getvalue(Constants.LOGIN_DATE);
             if (!loginDate.equalsIgnoreCase(currentDate)) {
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()-1]);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()]);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()+1]);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
             }
 
@@ -417,7 +420,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     private void getMnthReports(int m) {
         if (cModMnth == m) return;
-        String[] mns = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         Common_Class Dt = new Common_Class();
         String sDt = Dt.GetDateTime(getApplicationContext(), "yyyy-MM-dd HH:mm:ss");
         Date dt = Dt.getDate(sDt);
@@ -435,7 +437,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         txUserName.setText("23," + mns[fmn - 1] + " - 22," + mns[tmn - 1]);
 
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
-        if (Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_TWO_GET_MREPORTS))) {
+        if (Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_TWO_GET_MREPORTS+"_"+mns[fmn - 1]))) {
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Call<JsonArray> rptMnCall = apiInterface.getDataArrayList("get/AttndMn", m,
                     UserDetails.getString("Divcode", ""),
@@ -444,7 +446,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     assignMnthReports(response.body(), m);
-                    mShared_common_pref.save(Constants.DB_TWO_GET_MREPORTS, gson.toJson(response.body()));
+                    mShared_common_pref.save(Constants.DB_TWO_GET_MREPORTS+"_"+mns[fmn - 1], gson.toJson(response.body()));
 
                 }
 
@@ -458,7 +460,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         } else {
             Type userType = new TypeToken<JsonArray>() {
             }.getType();
-            JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_MREPORTS), userType));
+            JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_MREPORTS+"_"+mns[fmn - 1]), userType));
             assignMnthReports(arr, m);
         }
     }

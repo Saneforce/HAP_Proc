@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -159,16 +160,8 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
                     // locationList=response.body();
                     try {
                         Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-
-//                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-//                    if (flag == 1) {
-//                        Toast.makeText(getApplicationContext(), "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
-//
-//                    }
-////
-
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        Toast.makeText(context.getApplicationContext(), jsonObject.getString("Msg"), Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

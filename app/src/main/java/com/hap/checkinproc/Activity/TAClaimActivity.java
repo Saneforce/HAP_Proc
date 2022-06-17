@@ -1180,8 +1180,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         stat.putExtra("mode", editMode);
                         stat.putExtra("date", DateTime);
                         startActivity(stat);
-
-
                     }
                 });
                 taAttach.setOnClickListener(new View.OnClickListener() {
@@ -2307,6 +2305,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             //drvldgEliAmt = jsonObject.get("drvLdgAmt").getAsString();
                             sDALocId = jsonObject.get("To_Place").getAsString();
                             sDALocName = jsonObject.get("To_Place_Id").getAsString();
+                            String AttaFlg = jsonObject.get("AttaFL").getAsString();
 
                             drvBrdEliAmt = jsonObject.get("drvBrdAmt").getAsString();
                             start_Image = jsonObject.get("start_Photo").getAsString();
@@ -2476,6 +2475,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 enterTo = tvchildView.findViewById(R.id.enter_to);
                                 enterFare = tvchildView.findViewById(R.id.enter_fare);
                                 tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+                                TextView txRwID = tvchildView.findViewById(R.id.TARwID);
 
                                 editText.setText(StrDaName);
                                 enterFrom.setText(StrBus);
@@ -2493,6 +2493,25 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
                                 previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
+                                enterFare.setVisibility(View.VISIBLE);
+                                taAttach.setVisibility(View.VISIBLE);
+                                previewss.setVisibility(View.VISIBLE);
+
+                                String sRWID = StrDaName + "_" + System.nanoTime();
+                                txRwID.setText(sRWID);
+
+                                List<CtrlsListModel.Ctrls> users = new ArrayList<>();
+                                CtrlsListModel.Ctrls Ctrl = new CtrlsListModel.Ctrls("From", enterFrom);
+                                users.add(Ctrl);
+                                Ctrl = new CtrlsListModel.Ctrls("To", enterTo);
+                                users.add(Ctrl);
+                                CtrlsListModel UTAItem = new CtrlsListModel(users, AttaFlg);
+                                uTAItems.put(sRWID, UTAItem);
+                                if(AttaFlg.equals("0")){
+                                    enterFare.setVisibility(View.GONE);
+                                    taAttach.setVisibility(View.GONE);
+                                    previewss.setVisibility(View.GONE);
+                                }
                                 enterFare.addTextChangedListener(new TextWatcher() {
                                     @Override
                                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
