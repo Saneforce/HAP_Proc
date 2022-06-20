@@ -118,6 +118,10 @@ public class Datum {
     @Expose
     private Integer FlightAllowed;
 
+    @SerializedName("radius")
+    @Expose
+    private Double radius;
+
     public Integer getFreezer_Mandatory() {
         return Freezer_Mandatory;
     }
@@ -449,5 +453,13 @@ public class Datum {
 
     public void setCusSubGrpErp(String cusSubGrpErp) {
         CusSubGrpErp = cusSubGrpErp;
+    }
+
+    public Double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(Double radius) {
+        this.radius = radius;
     }
 }

@@ -32,6 +32,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
@@ -135,7 +136,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         linSFA.setVisibility(View.GONE);
 
-       // linOnDuty.setVisibility(View.GONE);
+        // linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
         else {
             linSFA.setVisibility(View.VISIBLE);
@@ -203,29 +204,41 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
+                if (sSFType.equals("0")) {
+                    String[] latlongs = UserDetails.getString("HOLocation", "").split(":");
+                    //  String[] latlongs = "13.0299326:80.2414088".split(":");
 
-
-                String ETime = CheckInDetails.getString("CINEnd", "");
-                if (!ETime.equalsIgnoreCase("")) {
-                    String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
-                    String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
-                    if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
-                        ETime = "";
-                    }
-                }
-                if (!ETime.equalsIgnoreCase("")) {
-                    Intent takePhoto = new Intent(this, ImageCapture.class);
-                    takePhoto.putExtra("Mode", "CIN");
-                    takePhoto.putExtra("ShiftId", CheckInDetails.getString("Shift_Selected_Id", ""));
-                    takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
-                    takePhoto.putExtra("On_Duty_Flag", CheckInDetails.getString("On_Duty_Flag", "0"));
-                    takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", "0"));
-                    takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
-                    takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
-                    startActivity(takePhoto);
+                    Intent intent = new Intent(Dashboard.this, MapDirectionActivity.class);
+                    intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+                    intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+                    intent.putExtra(Constants.DEST_NAME, "HOLocation");
+                    intent.putExtra(Constants.NEW_OUTLET, "checkin");
+                    startActivity(intent);
                 } else {
-                    Intent i = new Intent(this, Checkin.class);
-                    startActivity(i);
+
+                    String ETime = CheckInDetails.getString("CINEnd", "");
+                    if (!ETime.equalsIgnoreCase("")) {
+                        String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
+                        String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
+                        if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
+                            ETime = "";
+                        }
+                    }
+                    if (!ETime.equalsIgnoreCase("")) {
+                        Intent takePhoto = new Intent(this, ImageCapture.class);
+                        takePhoto.putExtra("Mode", "CIN");
+                        takePhoto.putExtra("ShiftId", CheckInDetails.getString("Shift_Selected_Id", ""));
+                        takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
+                        takePhoto.putExtra("On_Duty_Flag", CheckInDetails.getString("On_Duty_Flag", "0"));
+                        takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", "0"));
+                        takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
+                        takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
+                        startActivity(takePhoto);
+                    } else {
+                        Intent i = new Intent(this, Checkin.class);
+                        startActivity(i);
+                    }
+
                 }
                 break;
 

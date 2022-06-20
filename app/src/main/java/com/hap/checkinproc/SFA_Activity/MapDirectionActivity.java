@@ -39,10 +39,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Activity_Hap.Checkin;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
+import com.hap.checkinproc.Activity_Hap.ImageCapture;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -79,6 +80,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     public static String TAG = "MapDirectionActivity";
     private String status = "", CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
     SharedPreferences UserDetails, CheckInDetails;
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -371,8 +373,38 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     finish();
                     break;
                 case R.id.tvStartDirection:
+                    if (ReachedOutlet.getText().toString().contains("Check-In")) {
+//                        String val = UserDetails.getString("radius", "");
+//                        Double radius = Common_Class.isNullOrEmpty(val) ? 0.0 : Double.parseDouble(val);
 
-                    if (ReachedOutlet.getText().toString().contains("START")) {
+                        if (/*(radius > 0 && radius < distance())
+                                ||*/ distance() < 100) {
+                            String ETime = CheckInDetails.getString("CINEnd", "");
+                            if (!ETime.equalsIgnoreCase("")) {
+                                String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
+                                String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
+                                if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
+                                    ETime = "";
+                                }
+                            }
+                            if (!ETime.equalsIgnoreCase("")) {
+                                Intent takePhoto = new Intent(this, ImageCapture.class);
+                                takePhoto.putExtra("Mode", "CIN");
+                                takePhoto.putExtra("ShiftId", CheckInDetails.getString("Shift_Selected_Id", ""));
+                                takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
+                                takePhoto.putExtra("On_Duty_Flag", CheckInDetails.getString("On_Duty_Flag", "0"));
+                                takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", "0"));
+                                takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
+                                takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
+                                startActivity(takePhoto);
+                            } else {
+                                Intent i = new Intent(this, Checkin.class);
+                                startActivity(i);
+                            }
+                        } else {
+                            common_class.showMsg(this, "Please Check-In your nearby HO Location");
+                        }
+                    } else if (ReachedOutlet.getText().toString().contains("START")) {
                         try {
                             shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
                         } catch (Exception e) {
@@ -413,7 +445,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         endPoint.setLongitude(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
         double distance = startPoint.distanceTo(endPoint);
 
-        if (distance > 200 || (status != null && status.equalsIgnoreCase("new"))) {
+        if (status != null && status.equalsIgnoreCase("checkin")) {
+            ReachedOutlet.setText("Check-In ");
+
+        } else if (distance > 200 || (status != null && status.equalsIgnoreCase("new"))) {
             ReachedOutlet.setText("START ");
         } else {
             ReachedOutlet.setText("Create Outlet ");

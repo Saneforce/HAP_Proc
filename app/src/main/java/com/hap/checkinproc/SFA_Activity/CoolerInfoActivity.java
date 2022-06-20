@@ -493,7 +493,8 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                             etCoolerType.setText("" + arrObj.getString("CoolerType"));
                             tvReceivedDate.setText("" + arrObj.getString("ReceivedDate"));
                         }
-                    } else {
+                    }
+                    else {
                         common_class.showMsg(this, obj.getString("Msg"));
                         common_class.CommonIntentwithFinish(Invoice_History.class);
                     }

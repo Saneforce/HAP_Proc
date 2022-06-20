@@ -9,13 +9,17 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_da_exception_entry.xml" value="0.18802083333333333" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_da_exception_status.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_dashboard.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_dashboard__two.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_dashboard__two.xml" value="0.33" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_image_capture.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_leave_dashboard.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_map_direction.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_nearby__outlets.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_on__duty_.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_procurement_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_sfactivity.xml" value="0.27355072463768115" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_tp__mydayplan.xml" value="0.18802083333333333" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/item_ta_appr.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/row_view_ta_status.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_distributor.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_heatmeter.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />

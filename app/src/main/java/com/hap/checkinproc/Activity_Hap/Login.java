@@ -630,7 +630,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-               //  eMail = "anbu@saneforce.com";
+                //  eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -647,7 +647,7 @@ public class Login extends AppCompatActivity {
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
-                // eMail="anbu@saneforce.com";
+                 //eMail="anbu@saneforce.com";
                 // eMail="1018656@hap.in";
 
                 //eMail="sivakumar.s@hap.in";
@@ -681,9 +681,8 @@ public class Login extends AppCompatActivity {
                 // eMail = "testhap3@hap.in";
                 //eMail = "shanmugam@hap.in";
                 //eMail = "anbu@saneforce.in";
-               //  eMail="1010057@hap.in";
-               // eMail="1008672@hap.in";
-
+                //  eMail="1010057@hap.in";
+                // eMail="1008672@hap.in";
 
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
@@ -956,6 +955,12 @@ public class Login extends AppCompatActivity {
                 Log.d("DeptType", String.valueOf(DeptType));
                 userEditor.putString("State_Code", Sf_type);
                 userEditor.putString("email", eMail);
+                userEditor.putString("HOLocation", SFHQLoc);
+                try {
+                    userEditor.putString("radius", String.valueOf(response.getData().get(0).getRadius()));
+                } catch (Exception e) {
+
+                }
                 if (!UserLastName.equalsIgnoreCase("")) {
                     userEditor.putString("DesigNm", UserLastName);
                     userEditor.putString("DepteNm", UserLastName1);
