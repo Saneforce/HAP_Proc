@@ -131,6 +131,14 @@ public class Product_Details_Modal {
     @Expose
     private Double Rate;
 
+    public Double getBillRate() {
+        return BillRate;
+    }
+
+    @SerializedName("BillRate")
+    @Expose
+    private Double BillRate;
+
     @SerializedName("SBRate")
     @Expose
     private Double SBRate;
