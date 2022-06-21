@@ -191,6 +191,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linSFA.setOnClickListener(this);
         getcountdetails();
         updateFlxlayout();
+
+//        Log.v("wrkType:",shared_common_pref.getvalue("worktype", ""));
+//        if (shared_common_pref.getvalue("worktype", "").equalsIgnoreCase("43")) {
+//            linCheckin.setVisibility(View.GONE);
+//            linReCheck.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -513,13 +519,21 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     if (flag == 1 && sSFType.equals("1")) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
                         if (jsoncc.length() > 0) {
+
                             if (jsoncc.getJSONObject(0).getInt("Cnt") < 1) {
                                 Intent intent = new Intent(Dashboard.this, AllowanceActivity.class);
                                 intent.putExtra("My_Day_Plan", "One");
                                 startActivity(intent);
                             } else {
                                 linMyday.setVisibility(View.GONE);
-                                linCheckin.setVisibility(View.VISIBLE);
+
+                                if (jsoncc.getJSONObject(0).getString("wtype").equalsIgnoreCase("43")) {
+                                    linCheckin.setVisibility(View.GONE);
+                                    linReCheck.setVisibility(View.GONE);
+
+                                } else {
+                                    linCheckin.setVisibility(View.VISIBLE);
+                                }
                                 linHolidayWorking.setVisibility(View.VISIBLE);
                                 updateFlxlayout();
                             }
@@ -529,6 +543,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                             linMyday.setVisibility(View.VISIBLE);
                             updateFlxlayout();
                         }
+
+//                        Log.v("wrkType:",shared_common_pref.getvalue("worktype", ""));
+//                        if (shared_common_pref.getvalue("worktype", "").equalsIgnoreCase("43")) {
+//                            linCheckin.setVisibility(View.GONE);
+//                            linReCheck.setVisibility(View.GONE);
+//                        }
+
                     } else {
                         String success = jsonObject.getString("success");
                         String Msg = jsonObject.getString("msg");

@@ -81,6 +81,15 @@ import retrofit2.Response;
 
 public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
 
+    public static final String Name = "Allowance";
+    public static final String MOT = "ModeOfTravel";
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                }
+            });
     Spinner worktypespinner, worktypedistributor, worktyperoute;
     List<Common_Model> worktypelist = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
@@ -92,8 +101,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     List<Common_Model> Shift_Typelist = new ArrayList<>();
     List<Common_Model> Jointworklistview = new ArrayList<>();
     List<Common_Model> Savejointwork = new ArrayList<>();
-    private Main_Model.presenter presenter;
-
     DatePickerDialog DatePickerDialog;
     TimePickerDialog timePickerDialog;
     ArrayList<Tp_Dynamic_Modal> Tp_dynamicArraylist = new ArrayList<>();
@@ -103,7 +110,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     String TpDate, worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
-    private TextClock tClock;
     Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
     ImageView backarow;
@@ -118,10 +124,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     DatePickerDialog picker;
     CardView ModeTravel, card_Toplace, CardDailyAllowance, card_from;
     EditText BusFrom, EditRemarks;
-    public static final String Name = "Allowance";
-    public static final String MOT = "ModeOfTravel";
     String STRCode = "", DM = "", DriverNeed = "false", DriverMode = "", modeTypeVale = "", mode = "", imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", strDailyAllowance = "", strDriverAllowance = "", StToEnd = "", StrID = "";
-    private ArrayList<String> travelTypeList;
     CheckBox driverAllowance;
     String driverAllowanceBoolean = "";
     List<ModeOfTravel> modelOfTravel;
@@ -141,8 +144,10 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     Integer count = 0;
     boolean ExpNeed = false;
     Shared_Common_Pref sharedCommonPref;
-
     DatabaseHandler db;
+    private Main_Model.presenter presenter;
+    private TextClock tClock;
+    private ArrayList<String> travelTypeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +203,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         frmPlace = findViewById(R.id.lin_from);
         ToPlace = findViewById(R.id.lin_to_place);
         GetEmpId = findViewById(R.id.GetEmpId);
-        empidedittext = (EditText) findViewById(R.id.empidedittext);
+        empidedittext = findViewById(R.id.empidedittext);
         BusTo = findViewById(R.id.lin_to_place);
         GetEmpId.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
@@ -250,7 +255,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
     }
 
-
     @Override
     public void showProgress() {
 
@@ -296,14 +300,14 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
     public void loadroute(String id) {
         Log.e("Select Franchise", String.valueOf(id));
-        if (common_class.isNullOrEmpty(String.valueOf(id))) {
+        if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
         }
 
         FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
             if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
+                Log.e("Route_Masterlist", id + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
 
@@ -311,7 +315,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
 
     }
-
 
     @Override
     public void onResponseFailure(Throwable throwable) {
@@ -487,7 +490,11 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                                 common_class.ProgressdialogShow(2, "Tour  plan");
                                 if (response.code() == 200 || response.code() == 201) {
-                                    if (ExpNeed == true) {
+                                    if (worktype_id.equalsIgnoreCase("43")) {
+                                        common_class.CommonIntentwithFinish(Dashboard.class);
+                                        shared_common_pref.save("worktype",worktype_id);
+
+                                    } else if (ExpNeed == true) {
                                         Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
                                         intent.putExtra("My_Day_Plan", "One");
                                         startActivity(intent);
@@ -504,7 +511,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                             @Override
                             public void onFailure(Call<Object> call, Throwable t) {
                                 common_class.ProgressdialogShow(2, "Tour  plan");
-                                Log.e("Reponse TAG", "onFailure : " + t.toString());
+                                Log.e("Reponse TAG", "onFailure : " + t);
                             }
                         });
 
@@ -561,7 +568,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     String flag = jItem.optString("FWFlg");
                     String ETabs = jItem.optString("ETabs");
                     String PlInv = jItem.optString("Place_Involved");
-                    boolean tExpNeed = (PlInv.equalsIgnoreCase("Y") ? true : false);
+                    boolean tExpNeed = (PlInv.equalsIgnoreCase("Y"));
                     Common_Model item = new Common_Model(id, name, flag, ETabs, tExpNeed);
                     worktypelist.add(item);
                 }
@@ -613,14 +620,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         return true;
     }
 
-    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
-            new OnBackPressedDispatcher(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                }
-            });
-
     @Override
     public void onBackPressed() {
 
@@ -638,7 +637,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
                     String PlInv = jsonObject1.optString("Place_Involved");
-                    boolean tExpNeed = (PlInv.equalsIgnoreCase("Y") ? true : false);
+                    boolean tExpNeed = (PlInv.equalsIgnoreCase("Y"));
                     Model_Pojo = new Common_Model(id, name, flag, ETabs, tExpNeed);
                     worktypelist.add(Model_Pojo);
                     Log.e("WORK_TYPE", String.valueOf(worktypelist));
@@ -996,27 +995,53 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         });
     }
 
-    public class DynamicViewAdapter extends RecyclerView.Adapter<Mydayplan_Activity.DynamicViewAdapter.MyViewHolder> {
-        private int rowLayout;
-        private Context context;
-        AdapterOnClick mAdapterOnClick;
-        private int Categorycolor;
+    public void openspinnerbox(int position, ArrayList<Common_Model> ArrayList) {
+        customDialog = new CustomListViewDialog(Mydayplan_Activity.this, ArrayList, position);
+        Window windowww = customDialog.getWindow();
+        windowww.setGravity(Gravity.CENTER);
+        windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+    }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView tpcaptions, Textspinnerview;
-            EditText edittextid;
-            RadioGroup radiogroup;
-            LinearLayout worktypelayout;
-
-            public MyViewHolder(View view) {
-                super(view);
-                tpcaptions = view.findViewById(R.id.tpcaptions);
-                Textspinnerview = view.findViewById(R.id.Textspinnerview);
-                edittextid = view.findViewById(R.id.edittextid);
-                worktypelayout = view.findViewById(R.id.worktypelayout);
-                radiogroup = view.findViewById(R.id.radiogroup);
+    public void timePicker(int position, ArrayList<Common_Model> ArrayList) {
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        timePickerDialog = new TimePickerDialog(Mydayplan_Activity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                //eReminderTime.setText( selectedHour + ":" + selectedMinute);
+                dynamicarray.get(position).setFilter_Value(selectedHour + ":" + selectedMinute);
+                dynamicadapter = new Mydayplan_Activity.DynamicViewAdapter(Tp_dynamicArraylist, R.layout.tp_dynamic_layout, getApplicationContext(), -1);
+                dynamicrecyclerview.setAdapter(dynamicadapter);
+                dynamicadapter.notifyDataSetChanged();
+                dynamicrecyclerview.setItemViewCacheSize(dynamicarray.size());
             }
-        }
+        }, hour, minute, true);//Yes 24 hour time
+        timePickerDialog.setTitle("Select Time");
+        timePickerDialog.show();
+    }
+
+    public void datePicker(int position, ArrayList<Common_Model> ArrayList) {
+        Calendar newCalendar = Calendar.getInstance();
+        DatePickerDialog = new DatePickerDialog(Mydayplan_Activity.this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                int mnth = monthOfYear + 1;
+                dynamicarray.get(position).setFilter_Value(dayOfMonth + "-" + mnth + "-" + year);
+                dynamicadapter.notifyDataSetChanged();
+
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog.show();
+    }
+
+    public class DynamicViewAdapter extends RecyclerView.Adapter<Mydayplan_Activity.DynamicViewAdapter.MyViewHolder> {
+        AdapterOnClick mAdapterOnClick;
+        private final int rowLayout;
+        private final Context context;
+        private final int Categorycolor;
 
         public DynamicViewAdapter(ArrayList<Tp_Dynamic_Modal> array, int rowLayout, Context context, int Categorycolor) {
             dynamicarray = array;
@@ -1115,7 +1140,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     holder.radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         public void onCheckedChanged(RadioGroup group, int checkedId) {
                             // This will get the radiobutton that has changed in its check state
-                            RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
+                            RadioButton checkedRadioButton = group.findViewById(checkedId);
                             // This puts the value (true/false) into the variable
                             boolean isChecked = checkedRadioButton.isChecked();
                             // If the radiobutton that has changed in check state is now checked...
@@ -1150,48 +1175,22 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             return dynamicarray.size();
         }
 
-    }
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView tpcaptions, Textspinnerview;
+            EditText edittextid;
+            RadioGroup radiogroup;
+            LinearLayout worktypelayout;
 
-    public void openspinnerbox(int position, ArrayList<Common_Model> ArrayList) {
-        customDialog = new CustomListViewDialog(Mydayplan_Activity.this, ArrayList, position);
-        Window windowww = customDialog.getWindow();
-        windowww.setGravity(Gravity.CENTER);
-        windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-    }
-
-    public void timePicker(int position, ArrayList<Common_Model> ArrayList) {
-        Calendar mcurrentTime = Calendar.getInstance();
-        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mcurrentTime.get(Calendar.MINUTE);
-        timePickerDialog = new TimePickerDialog(Mydayplan_Activity.this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                //eReminderTime.setText( selectedHour + ":" + selectedMinute);
-                dynamicarray.get(position).setFilter_Value(selectedHour + ":" + selectedMinute);
-                dynamicadapter = new Mydayplan_Activity.DynamicViewAdapter(Tp_dynamicArraylist, R.layout.tp_dynamic_layout, getApplicationContext(), -1);
-                dynamicrecyclerview.setAdapter(dynamicadapter);
-                dynamicadapter.notifyDataSetChanged();
-                dynamicrecyclerview.setItemViewCacheSize(dynamicarray.size());
+            public MyViewHolder(View view) {
+                super(view);
+                tpcaptions = view.findViewById(R.id.tpcaptions);
+                Textspinnerview = view.findViewById(R.id.Textspinnerview);
+                edittextid = view.findViewById(R.id.edittextid);
+                worktypelayout = view.findViewById(R.id.worktypelayout);
+                radiogroup = view.findViewById(R.id.radiogroup);
             }
-        }, hour, minute, true);//Yes 24 hour time
-        timePickerDialog.setTitle("Select Time");
-        timePickerDialog.show();
-    }
+        }
 
-    public void datePicker(int position, ArrayList<Common_Model> ArrayList) {
-        Calendar newCalendar = Calendar.getInstance();
-        DatePickerDialog = new DatePickerDialog(Mydayplan_Activity.this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-                int mnth = monthOfYear + 1;
-                dynamicarray.get(position).setFilter_Value(dayOfMonth + "-" + mnth + "-" + year);
-                dynamicadapter.notifyDataSetChanged();
-
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        DatePickerDialog.show();
     }
 
 
