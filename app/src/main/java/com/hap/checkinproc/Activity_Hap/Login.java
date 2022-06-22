@@ -618,6 +618,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
+                //eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -629,7 +630,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-                // eMail = "anbu@saneforce.com";
+               //  eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -659,7 +660,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "1006208@hap.in";
                 // eMail="rajasekaranm@hap.in";
                 //   eMail="1018368@hap.in";
-                  //eMail="sajan@hap.in";
+                //eMail="sajan@hap.in";
                 // eMail="1022081@hap.in";
                 // eMail="johnkennedy.i@hap.in";
                 //eMail = "1018937@hap.in";
@@ -668,7 +669,7 @@ public class Login extends AppCompatActivity {
                 // eMail="1018821@hap.in";//md food services
                 // eMail="1006815@hap.in";
                 //  eMail="1977ananthkumar@gmail.com";
-                //  eMail = "gpmuthu11@gmail.com";
+                //eMail = "gpmuthu11@gmail.com";
 //                eMail = "1015742@hap.in";
 //                eMail = "1021230@hap.in";
                 // eMail="shiva.saneforce@gmail.com";
@@ -681,10 +682,9 @@ public class Login extends AppCompatActivity {
                 //eMail = "shanmugam@hap.in";
                 //eMail = "anbu@saneforce.in";
                //  eMail="1010057@hap.in";
-                eMail="1017419@hap.in";
+               // eMail="1008672@hap.in";
 
                  eMail = "ciadmin@hap.in";
-
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -956,6 +956,12 @@ public class Login extends AppCompatActivity {
                 Log.d("DeptType", String.valueOf(DeptType));
                 userEditor.putString("State_Code", Sf_type);
                 userEditor.putString("email", eMail);
+                userEditor.putString("HOLocation", SFHQLoc);
+                try {
+                    userEditor.putString("radius", String.valueOf(response.getData().get(0).getRadius()) == null ? "0.0" : String.valueOf(response.getData().get(0).getRadius()));
+                } catch (Exception e) {
+
+                }
                 if (!UserLastName.equalsIgnoreCase("")) {
                     userEditor.putString("DesigNm", UserLastName);
                     userEditor.putString("DepteNm", UserLastName1);

@@ -175,7 +175,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 //                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
                     //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                     inEdtFrom = Integer.valueOf(edtFrom.getText().toString().equalsIgnoreCase("") ? "0" : edtFrom.getText().toString());
-                    int mxKm = inEdtFrom+Shared_Common_Pref.MaxKm;
+                    int mxKm = inEdtFrom + Shared_Common_Pref.MaxKm;
                     edtTo.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, mxKm), new InputFilter.LengthFilter(6)});
                     edtTo.setText("");
                     // if (!edtTo.getText().toString().equals("")) {
@@ -254,6 +254,15 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
             }
         });
 
+        showDriveAllowance();
+    }
+
+    void showDriveAllowance() {
+        if (TextMode.getText().toString().equalsIgnoreCase("Four Wheeler"))
+            linCheckdriver.setVisibility(View.VISIBLE);
+        else
+            linCheckdriver.setVisibility(View.GONE);
+
     }
 
     public void UpdteAllowance(View v) throws JSONException {
@@ -268,11 +277,11 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
         inEdtFrom = Integer.valueOf(com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(edtFrom.getText().toString()) ? "0" : edtFrom.getText().toString().equalsIgnoreCase("null") ? "0" : edtFrom.getText().toString());
         inEdtTo = Integer.valueOf(com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(edtTo.getText().toString()) ? "0" : edtTo.getText().toString().equalsIgnoreCase("null") ? "0" : edtTo.getText().toString());
         String drvAllw = (driverAllowance.isChecked() ? "true" : "false");
-        if(inEdtFrom<=0){
+        if (inEdtFrom <= 0) {
             Toast.makeText(this, "Enter the Starting Km", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(inEdtTo<=0){
+        if (inEdtTo <= 0) {
             Toast.makeText(this, "Enter the Ending Km", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -338,6 +347,8 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
             }
             DriverNeed = "";
             driverAllowance.setChecked(false);
+
+            showDriveAllowance();
 
         }
     }

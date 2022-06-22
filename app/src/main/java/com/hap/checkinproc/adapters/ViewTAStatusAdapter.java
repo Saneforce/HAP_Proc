@@ -1,6 +1,7 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAViewStatus;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
 
 
@@ -76,7 +79,20 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
         holder.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapterOnClick.onIntentClick(jsonObject, position);
+                AlertDialogBox.showDialog(context, "HAP SFA", "Are You Sure Want to Cancel?", "OK", "Cancel", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+                        adapterOnClick.onIntentClick(jsonObject, position);
+                    }
+
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+
+                    }
+                });
+
+
             }
         });
     }

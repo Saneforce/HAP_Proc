@@ -3,20 +3,13 @@ package com.hap.checkinproc.Activity_Hap;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,15 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -49,17 +38,12 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
-import com.hap.checkinproc.common.LocationFinder;
-import com.hap.checkinproc.common.LocationReceiver;
-import com.hap.checkinproc.common.SANGPSTracker;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,11 +73,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
 
-    CardView ModeTravel, BusCardTo, cardHapLoaction,CardOthPlc;
-    Button haplocationbutton, otherlocationbutton, submitbutton, closebutton, exitclose,btn_submit;
-    EditText purposeofvisitedittext, ondutyedittext,StartKm, onDutyFrom, EditRemarks,txtOthPlc;
+    CardView ModeTravel, BusCardTo, cardHapLoaction, CardOthPlc;
+    Button haplocationbutton, otherlocationbutton, submitbutton, closebutton, exitclose, btn_submit;
+    EditText purposeofvisitedittext, ondutyedittext, StartKm, onDutyFrom, EditRemarks, txtOthPlc;
     LinearLayout ModeOfTravel, haplocationtext, purposeofvisittext, ondutylocations, linearBus, lincheck,
-        BikeMode, BusMode, ReasonPhoto, ProofImage,vwHlyDyEntry;
+            BikeMode, BusMode, ReasonPhoto, ProofImage, vwHlyDyEntry;
     TextView TextMode, TextToAddress, dailyAllowance, selecthaplocationss;
     CheckBox chkHlyDyFlg;
     ImageView capture_img, attachedImage;
@@ -101,7 +85,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     Common_Model mCommon_model_spinner;
 
     String imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "";
-    Boolean HAPLocMode=false;
+    Boolean HAPLocMode = false;
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
 
@@ -113,14 +97,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     List<Common_Model> getfieldforcehqlist = new ArrayList<>();
     List<com.hap.checkinproc.Model_Class.ModeOfTravel> modelOfTravel;
 
-    String mode,hapLocid;
+    String mode, hapLocid;
     Gson gson;
 
     /*AllowanceActivity*/
     ApiInterface apiInterface;
     DatabaseHandler db;
 
-    String SF_code = "", div = "",SFType="";
+    String SF_code = "", div = "", SFType = "";
     Shared_Common_Pref mShared_common_pref;
 
 
@@ -148,6 +132,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> travelTypeList;
     String driverAllowanceBoolean = "", StrToCode = "", STRCode = "";
 
+    CheckBox cbReturnHQ;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -163,28 +148,28 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         common_class = new Common_Class(this);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
-        SFType= UserDetails.getString("State_Code","");
+        SFType = UserDetails.getString("State_Code", "");
 
         db = new DatabaseHandler(this);
         try {
-            JSONArray HAPLoca=db.getMasterData("HAPLocations");
-            for(int li=0;li<HAPLoca.length();li++){
-                JSONObject jItem=HAPLoca.getJSONObject(li);
-                Common_Model item=new Common_Model(jItem.getString("id"),jItem.getString("name"),jItem);
+            JSONArray HAPLoca = db.getMasterData("HAPLocations");
+            for (int li = 0; li < HAPLoca.length(); li++) {
+                JSONObject jItem = HAPLoca.getJSONObject(li);
+                Common_Model item = new Common_Model(jItem.getString("id"), jItem.getString("name"), jItem);
                 modelRetailDetails.add(item);
                 String flag = jItem.optString("ODFlag");
                 if (flag.equals("1")) {
                     getfieldforcehqlist.add(item);
                 }
             }
-            Common_Model itemOth = new Common_Model("-1","Other Location","");
+            Common_Model itemOth = new Common_Model("-1", "Other Location", "");
             modelRetailDetails.add(itemOth);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         dynamicMode();
-     //   GetfieldforceHq();
+        //   GetfieldforceHq();
         OrderType();
 
         lincheck = findViewById(R.id.lin_mode);
@@ -253,10 +238,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         exitclose = findViewById(R.id.exitclose);
         ModeOfTravel = findViewById(R.id.mode_of_travel);
         cardHapLoaction = findViewById(R.id.card_hap_loaction);
-        vwHlyDyEntry=findViewById(R.id.vwHlyDyEntry);
+        vwHlyDyEntry = findViewById(R.id.vwHlyDyEntry);
 
-        CardOthPlc=findViewById(R.id.CardOthPlc);
-        txtOthPlc=findViewById(R.id.txtOthPlc);
+        CardOthPlc = findViewById(R.id.CardOthPlc);
+        txtOthPlc = findViewById(R.id.txtOthPlc);
 
         TextMode = findViewById(R.id.txt_mode);
         TextToAddress = findViewById(R.id.on_duty_to);
@@ -285,48 +270,48 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
-                if (HAPLocMode==true && selecthaplocationss.getText().toString().matches("")) {
+                if (HAPLocMode == true && selecthaplocationss.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Select the Location", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
-                if (HAPLocMode==false && ondutyedittext.getText().toString().matches("")) {
+                if (HAPLocMode == false && ondutyedittext.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
                 if (purposeofvisitedittext.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
                 if (TextMode.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
                 if (dailyAllowance.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
-                if (onDutyFrom.getText().toString().matches("")) {
+                if (!cbReturnHQ.isChecked() && onDutyFrom.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
                 if (startEnd.equals("1") || count.equals("1")) {
-                    if(!(dailyAllowance.getText().toString().equalsIgnoreCase("HQ"))){
+                    if (!(dailyAllowance.getText().toString().equalsIgnoreCase("HQ"))) {
                         if (StrToCode.equalsIgnoreCase("")) {
                             Toast.makeText(On_Duty_Activity.this, "Select the To Location", Toast.LENGTH_SHORT).show();
-                            return ;
+                            return;
                         }
                         if (StrToCode.equalsIgnoreCase("-1") && txtOthPlc.getText().toString().equalsIgnoreCase("")) {
                             Toast.makeText(On_Duty_Activity.this, "Enter Other To Location", Toast.LENGTH_SHORT).show();
-                            return ;
+                            return;
                         }
                     }
                     if (StartKm.getText().toString().matches("")) {
                         Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
-                        return ;
+                        return;
                     }
                     if (imageURI.matches("")) {
                         Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
-                        return ;
+                        return;
                     }
                 }
                 submitData();
@@ -392,10 +377,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 } else {
                     AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                         @Override
-                        public void OnImageURIPick(Bitmap image, String FileName,String fullPath) {
+                        public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
                             //getMulipart(fullPath, 0);
                             imageServer = FileName;
-                            imageURI=fullPath;
+                            imageURI = fullPath;
                             attachedImage.setImageBitmap(image);
                         }
                     });
@@ -418,7 +403,28 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
         lincheck.setVisibility(View.VISIBLE);
+
+        cbReturnHQ = findViewById(R.id.cbReturnHQ);
+        cbReturnHQ.setVisibility(View.VISIBLE);
+
+        cbReturnHQ.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    findViewById(R.id.cvFromPlace).setVisibility(View.GONE);
+                    findViewById(R.id.tvToLabel).setVisibility(View.GONE);
+                    TextToAddress.setHint("From Place");
+
+                } else {
+                    findViewById(R.id.cvFromPlace).setVisibility(View.VISIBLE);
+                    findViewById(R.id.tvToLabel).setVisibility(View.VISIBLE);
+                    TextToAddress.setHint("To Place");
+
+                }
+            }
+        });
     }
+
     public void OrderType() {
         travelTypeList = new ArrayList<>();
         travelTypeList.add("HQ");
@@ -431,6 +437,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             listOrderType.add(mCommon_model_spinner);
         }
     }
+
     public void dynamicMode() {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
@@ -474,7 +481,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.otherlocationbutton:
                 flag = 1;
-                HAPLocMode=false;
+                HAPLocMode = false;
                 vwHlyDyEntry.setVisibility(View.VISIBLE);
                 ondutylocations.setVisibility(View.VISIBLE);
                 purposeofvisittext.setVisibility(View.VISIBLE);
@@ -493,7 +500,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.haplocationbutton:
-                HAPLocMode=true;
+                HAPLocMode = true;
 
                 vwHlyDyEntry.setVisibility(View.VISIBLE);
                 ondutyedittext.setText("");
@@ -591,7 +598,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
             CardOthPlc.setVisibility(View.GONE);
             txtOthPlc.setVisibility(View.GONE);
-            if(StrToCode.equalsIgnoreCase("-1")){
+            if (StrToCode.equalsIgnoreCase("-1")) {
                 CardOthPlc.setVisibility(View.VISIBLE);
                 txtOthPlc.setVisibility(View.VISIBLE);
             }
@@ -610,6 +617,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             TextToAddress.setText("");
         }
     }
+
     public void GetfieldforceHq() {
         String commonLeaveType = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -619,11 +627,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             public void onResponse(Call<Object> call, Response<Object> response) {
                 GetJsonData(new Gson().toJson(response.body()), "0");
             }
+
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
             }
         });
     }
+
     private void GetJsonData(String jsonResponse, String type) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
@@ -672,9 +682,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         xx.put("data", createFromString(val));
         return xx;
     }
+
     private RequestBody createFromString(String txt) {
         return RequestBody.create(MultipartBody.FORM, txt);
     }
+
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -729,6 +741,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     public void submitData() {
         try {
             JSONObject jj = new JSONObject();
@@ -742,15 +755,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("mod", modeId);
             jj.put("sf", SF_code);
             jj.put("sf_type", UserDetails.getString("Sf_Type", ""));
+            jj.put("returnHQ", cbReturnHQ.isChecked() ? 1 : 0);
+
             jj.put("div", div);
             jj.put("StEndNeed", startEnd);
             jj.put("url", imageServer);
             jj.put("from", onDutyFrom.getText().toString());
-            flag=(HAPLocMode==true)?0:1;
+            flag = (HAPLocMode == true) ? 0 : 1;
             jj.put("ODFlag", String.valueOf(flag));
-            if(StrToCode.equalsIgnoreCase("-1")){
+            if (StrToCode.equalsIgnoreCase("-1")) {
                 jj.put("to", txtOthPlc.getText().toString());
-            }else{
+            } else {
                 jj.put("to", TextToAddress.getText().toString());
             }
             if (flag == 1) {
@@ -765,7 +780,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("driverAllowance", DriverNeed);
             jj.put("HolidayFlag", (chkHlyDyFlg.isChecked()) ? "1" : "0");
             jj.put("vstPurpose", purposeofvisitedittext.getText().toString());
-            if(!imageServer.equalsIgnoreCase("")) {
+            if (!imageServer.equalsIgnoreCase("")) {
                 Intent mIntent = new Intent(this, FileUploadService.class);
                 mIntent.putExtra("mFilePath", imageURI);
                 mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
@@ -777,9 +792,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             Intent intent = new Intent(getApplicationContext(), Checkin.class);
             Bundle extras = new Bundle();
             extras.putString("Mode", "onduty");
-            extras.putString("data",jj.toString());
+            extras.putString("data", jj.toString());
 
-            flag=(HAPLocMode==true)?0:1;
+            flag = (HAPLocMode == true) ? 0 : 1;
 
             extras.putString("ODFlag", String.valueOf(flag));
             extras.putString("Mode", "onduty");

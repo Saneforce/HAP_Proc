@@ -18,6 +18,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -30,25 +31,28 @@
                     android:gravity="center"
 
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:id="@+id/vwHlyDyEntry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="@dimen/C10dp"
+                        android:orientation="horizontal"
                         android:visibility="gone">
+
                         <CheckBox
                             android:id="@+id/chkHlyDyFlg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"></CheckBox>
+
                         <TextView
+                            style="@style/TextStyleOne"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="2dp"
                             android:gravity="center_vertical"
                             android:text="Holiday Entry"
-                            style="@style/TextStyleOne"
-                            android:layout_marginTop="2dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -314,19 +318,40 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
 
-                                    <TextView
-                                        android:id="@+id/txt_frm"
-                                        android:layout_width="wrap_content"
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
-                                        android:layout_marginTop="8dp"
-                                        android:fontFamily="@font/basic"
-                                        android:text="From"
-                                        android:textAllCaps="false"
-                                        android:textColor="#000"
-                                        android:textStyle="bold" />
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/txt_frm"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginTop="8dp"
+                                            android:layout_weight="1"
+                                            android:fontFamily="@font/basic"
+                                            android:text="From"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textStyle="bold" />
+
+                                        <CheckBox
+                                            android:visibility="gone"
+                                            android:id="@+id/cbReturnHQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginTop="8dp"
+                                            android:fontFamily="@font/basic"
+                                            android:text="Return to HQ"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
 
                                     <androidx.cardview.widget.CardView
+                                        android:id="@+id/cvFromPlace"
                                         android:layout_width="fill_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/txt_frm"
@@ -360,6 +385,7 @@
                                     android:orientation="vertical">
 
                                     <TextView
+                                        android:id="@+id/tvToLabel"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="5dp"
@@ -396,6 +422,7 @@
                                             android:textSize="13sp" />
 
                                     </androidx.cardview.widget.CardView>
+
                                     <androidx.cardview.widget.CardView
                                         android:id="@+id/CardOthPlc"
                                         android:layout_width="fill_parent"
@@ -404,19 +431,19 @@
                                         android:layout_marginTop="6dp"
                                         android:background="#B1AFAF"
                                         android:padding="18dp"
+                                        android:visibility="gone"
                                         app:cardCornerRadius="5dp"
                                         app:cardElevation="2dp"
-                                        app:cardUseCompatPadding="true"
-                                        android:visibility="gone">
+                                        app:cardUseCompatPadding="true">
 
                                         <EditText
+                                            android:id="@+id/txtOthPlc"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:background="@color/white"
+                                            android:hint="Enter To Other Place"
                                             android:padding="8dp"
                                             android:textSize="14sp"
-                                            android:hint="Enter To Other Place"
-                                            android:id="@+id/txtOthPlc"
                                             android:textStyle="bold" />
 
                                     </androidx.cardview.widget.CardView>
@@ -453,34 +480,37 @@
                                     app:cardCornerRadius="5dp"
                                     app:cardElevation="2dp"
                                     app:cardUseCompatPadding="true">
+
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="horizontal">
+
                                         <EditText
                                             android:id="@+id/on_duty_start"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_toRightOf="@+id/txt"
+                                            android:layout_weight="1"
                                             android:background="@null"
                                             android:digits="1234567890."
                                             android:fontFamily="@font/basic"
-                                            android:maxLength="8"
                                             android:hint="Starting Km"
                                             android:inputType="number"
+                                            android:maxLength="8"
                                             android:padding="@dimen/C10dp"
                                             android:text=""
-                                            android:layout_weight="1"
                                             android:textAllCaps="false"
                                             android:textColor="#515151"
                                             android:textSize="13sp" />
+
                                         <ImageView
                                             android:id="@+id/capture_imgs"
                                             android:layout_width="@dimen/C50dp"
                                             android:layout_height="@dimen/C50dp"
                                             android:layout_marginRight="@dimen/C8dp"
-                                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                                            />
+                                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
                                         <LinearLayout
                                             android:id="@+id/proof_pics"
                                             android:layout_width="wrap_content"
@@ -493,7 +523,7 @@
                                             <TextView
                                                 style="@style/TextStyle"
                                                 android:text="Photo"
-                                                android:textColor="#fff"  />
+                                                android:textColor="#fff" />
 
                                         </LinearLayout>
                                     </LinearLayout>
@@ -507,8 +537,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/C10dp"
                                 android:orientation="vertical"
-                                android:visibility="visible">
-                            </LinearLayout>
+                                android:visibility="visible"></LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -573,33 +602,39 @@
 
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/C20dp">
+                        android:layout_marginTop="@dimen/C20dp"
+                        android:orientation="vertical">
+
                         <Button
-                        android:id="@+id/haplocationbutton"
-                        style="@style/DashboardButton"
-                        android:background="@drawable/otherlocations"
+                            android:id="@+id/haplocationbutton"
+                            style="@style/DashboardButton"
+                            android:background="@drawable/otherlocations"
                             android:text="HAP Locations" />
+
                         <Button
                             android:id="@+id/otherlocationbutton"
                             style="@style/DashboardButton"
                             android:background="@drawable/other_location"
                             android:text="Other Location" />
+
                         <Button
                             android:id="@+id/exitclose"
                             style="@style/DashboardButton"
                             android:background="@drawable/button_check_out"
                             android:text="Exit" />
                     </LinearLayout>
+
                     <Button
                         android:id="@+id/submitbutton"
                         style="@style/DashboardButton"
                         android:background="@drawable/other_location"
                         android:text="Submit"
                         android:visibility="gone" />
+
                     <Button
                         android:id="@+id/closebutton"
                         style="@style/DashboardButton"
@@ -617,9 +652,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ECEAEA"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"
-        android:visibility="gone">
+        tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/imag_back"
@@ -628,7 +663,7 @@
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"
-            android:src="@drawable/back_arrow"/>
+            android:src="@drawable/back_arrow" />
     </LinearLayout>
 
 
