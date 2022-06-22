@@ -174,7 +174,7 @@
                             </LinearLayout>
 
                             <androidx.cardview.widget.CardView
-                                android:id="@+id/cbReturnHQ"
+                                android:id="@+id/cvFromPlace"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/txt_frm"

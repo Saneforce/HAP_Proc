@@ -374,11 +374,16 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     break;
                 case R.id.tvStartDirection:
                     if (ReachedOutlet.getText().toString().contains("Check-In")) {
-//                        String val = UserDetails.getString("radius", "");
-//                        Double radius = Common_Class.isNullOrEmpty(val) ? 0.0 : Double.parseDouble(val);
+                        String val = UserDetails.getString("radius", "");
 
-//                        if (/*(radius > 0 && radius < distance())
-//                                ||*/ distance() < 100) {
+                        Double radius = 0.0;
+
+                        if (!Common_Class.isNullOrEmpty(val) && !val.equalsIgnoreCase("null"))
+                            radius = Double.parseDouble(val);
+
+
+                        if ((radius > 0 && radius < distance())
+                                || distance() < 100) {
                             String ETime = CheckInDetails.getString("CINEnd", "");
                             if (!ETime.equalsIgnoreCase("")) {
                                 String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
@@ -401,9 +406,9 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                                 Intent i = new Intent(this, Checkin.class);
                                 startActivity(i);
                             }
-//                        } else {
-//                            common_class.showMsg(this, "Please Check-In your nearby HO Location");
-//                        }
+                        } else {
+                            common_class.showMsg(this, "Please Check-In your nearby HO Location");
+                        }
                     } else if (ReachedOutlet.getText().toString().contains("START")) {
                         try {
                             shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));

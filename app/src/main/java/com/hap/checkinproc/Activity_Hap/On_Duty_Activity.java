@@ -290,7 +290,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (onDutyFrom.getText().toString().matches("")) {
+                if (!cbReturnHQ.isChecked() && onDutyFrom.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
                     return;
                 }
