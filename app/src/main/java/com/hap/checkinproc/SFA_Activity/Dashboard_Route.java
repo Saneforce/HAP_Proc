@@ -378,7 +378,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                     setPagerAdapter(true);
 
 

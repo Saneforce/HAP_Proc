@@ -8,10 +8,10 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.hap.checkinproc"
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 3316
-        versionName "7.5.3"
+        versionName "7.5.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <include layout="@layout/sfatoolbar"></include>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,13 +40,12 @@
         </LinearLayout>
 
 
-
         <LinearLayout
-            android:layout_margin="@dimen/C5dp"
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/C5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -60,7 +60,6 @@
                 android:textStyle="bold" />
 
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                android:visibility="visible"
                 android:id="@+id/btnRepeat"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/C30dp"
@@ -75,6 +74,7 @@
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 android:theme="@style/BluePrimaryButton"
+                android:visibility="visible"
                 app:finalCornerAngle="50dp"
                 app:initialCornerAngle="10dp"
                 app:spinning_bar_color="#FFFFFFFF"
@@ -355,9 +355,9 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="UOM"
                                         android:layout_gravity="center"
                                         android:gravity="end"
+                                        android:text="UOM"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
@@ -365,10 +365,10 @@
 
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:id="@+id/RegularQty"
@@ -400,14 +400,13 @@
                                 </LinearLayout>
 
                                 <ImageView
-                                    android:visibility="invisible"
                                     android:id="@+id/ivDel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/C5dp"
                                     android:padding="@dimen/C5dp"
-                                    android:src="@drawable/delete_cart"></ImageView>
-
+                                    android:src="@drawable/delete_cart"
+                                    android:visibility="invisible"></ImageView>
 
 
                                 <LinearLayout
@@ -489,63 +488,6 @@
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                     </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cdFreeQtyParent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C5dp"
-                        android:visibility="gone"
-                        app:cardBackgroundColor="@color/grey_50"
-                        app:cardCornerRadius="@dimen/C5dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C3dp"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/C3dp"
-                                android:orientation="horizontal"
-                                android:weightSum="2">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:maxLines="1"
-                                    android:text="SKU"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"></TextView>
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.5"
-                                    android:gravity="end"
-                                    android:text="Free"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"></TextView>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/freeRecyclerview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
 
                     <LinearLayout
                         android:id="@+id/llPayNetAmountDetail"
@@ -1063,6 +1005,94 @@
                                 android:textSize="@dimen/C13dp"></TextView>
 
                         </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:fontFamily="sans-serif"
+                            android:text="Zero Invoices"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold" />
+
+                        <!--                        <androidx.cardview.widget.CardView-->
+                        <!--                            android:id="@+id/cdFreeQtyParent"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_margin="@dimen/C5dp"-->
+                        <!--                            android:visibility="gone"-->
+                        <!--                            app:cardBackgroundColor="@color/grey_50"-->
+                        <!--                            app:cardCornerRadius="@dimen/C5dp">-->
+
+
+                        <LinearLayout
+
+                            android:id="@+id/cdFreeQtyParent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/black"
+                                android:outlineAmbientShadowColor="@color/statuscolor"></View>
+
+
+                            <LinearLayout
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1"
+                                    android:text="SKU"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"
+                                    android:textStyle="bold"></TextView>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="end"
+                                    android:text="Free"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"
+                                    android:textStyle="bold"></TextView>
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/black"
+                                android:outlineAmbientShadowColor="@color/statuscolor"></View>
+
+
+                            <LinearLayout
+                                android:layout_marginTop="@dimen/C3dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/freeRecyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="visible"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <!--                        </androidx.cardview.widget.CardView>-->
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -1108,26 +1138,26 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:textStyle="bold"
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text="Items : 0"
                     android:textColor="@color/white"
-                    android:textSize="11sp">
+                    android:textSize="11sp"
+                    android:textStyle="bold">
 
                 </TextView>
 
                 <TextView
-                    android:textStyle="bold"
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text=" ₹ : 0"
                     android:textColor="@color/white"
-                    android:textSize="13sp">
+                    android:textSize="13sp"
+                    android:textStyle="bold">
 
                 </TextView>
 
