@@ -319,7 +319,8 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
-                showOrderItemList(selectedPos, "");
+                //  showOrderItemList(selectedPos, "");
+                showOrderList();
             }
 
         } catch (JSONException e) {
@@ -621,7 +622,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
-        rlAddProduct.setVisibility(View.VISIBLE);
+        //rlAddProduct.setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
@@ -1775,12 +1776,12 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
-                moveProductScreen();
-            } else {
-                common_class.commonDialog(this, GrnListActivity.class, "GRN?");
+//            if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
+//                moveProductScreen();
+//            } else {
+            common_class.commonDialog(this, GrnListActivity.class, "GRN?");
 
-            }
+            // }
             return true;
         }
         return false;

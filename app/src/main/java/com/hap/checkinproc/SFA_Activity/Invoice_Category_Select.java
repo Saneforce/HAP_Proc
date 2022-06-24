@@ -1767,14 +1767,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             updateToTALITEMUI();
 
 
-//                            if (CategoryType == -1) {
-//                                String amt = holder.Amount.getText().toString();
+                            if (CategoryType == -1) {
+                              //  String amt = holder.Amount.getText().toString();
 //                                if (amt.equals("₹0.00")) {
 //                                    Product_Details_Modalitem.remove(position);
 //                                    notifyDataSetChanged();
 //                                }
-//                                showFreeQtyList();
-//                            }
+                                showFreeQtyList();
+                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
