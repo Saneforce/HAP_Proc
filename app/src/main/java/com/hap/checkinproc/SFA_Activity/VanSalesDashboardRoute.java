@@ -500,6 +500,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
 
+            common_class.getDb_310Data(Constants.Product_List,this);
 
         } catch (Exception e) {
             Log.e("Retailor List:ex ", e.getMessage());
@@ -691,7 +692,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 }
                 break;
             case R.id.tvStockLoad:
+
                 common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
+
                 Intent load = new Intent(getApplicationContext(), VanSalStockLoadActivity.class);
                 Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                 Constants.VAN_SALES_MODE = Constants.VAN_STOCK_LOADING;

@@ -5,13 +5,13 @@ apply plugin: 'com.google.firebase.crashlytics'
 //4.x.x//primary--distri
 //6.x.x//start hsfa--checkin
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     defaultConfig {
         applicationId "com.hap.checkinproc"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 3316
-        versionName "7.5.2"
+        versionName "7.5.4"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -165,5 +165,8 @@ dependencies {
     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
     implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
     // END AWS DEPENDENCIES
+
+    //for 12version
+    implementation 'androidx.work:work-runtime:2.7.1'
 
 }
