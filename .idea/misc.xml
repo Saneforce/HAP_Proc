@@ -28,10 +28,15 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_sfactivity.xml" value="0.27355072463768115" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_ta_fuel_edit.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_tp__mydayplan.xml" value="0.18802083333333333" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_van_sal_payment.xml" value="0.18802083333333333" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_vansale_unload.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_vansales_dashboard__route.xml" value="0.21614583333333334" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/invoice_pay_recyclerview_edit.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/item_ta_appr.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/row_view_ta_status.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/vansales_product_order_recyclerview.xml" value="0.21614583333333334" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/vansales_unload_pay_recyclerview.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_distributor.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_heatmeter.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />
