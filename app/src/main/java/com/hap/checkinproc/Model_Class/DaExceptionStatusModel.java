@@ -48,7 +48,9 @@ public class DaExceptionStatusModel {
     @Expose
     private String DA_Type;
 
-
+    @SerializedName("DA_Url")
+    @Expose
+    private String DA_Url;
 
     public String getSfCode() {
         return sfCode;
@@ -192,5 +194,13 @@ public class DaExceptionStatusModel {
 
     public void setDA_Type(String DA_Type) {
         this.DA_Type = DA_Type;
+    }
+
+    public String getDA_Url() {
+        return DA_Url;
+    }
+
+    public void setDA_Url(String DA_Url) {
+        this.DA_Url = DA_Url;
     }
 }

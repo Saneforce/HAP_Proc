@@ -31,9 +31,11 @@
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_van_sal_payment.xml" value="0.18802083333333333" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_vansale_unload.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_vansales_dashboard__route.xml" value="0.21614583333333334" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/adapter_primary_pay_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/invoice_pay_recyclerview_edit.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/item_ta_appr.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/row_deviation_entry_status.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/row_view_ta_status.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/vansales_product_order_recyclerview.xml" value="0.21614583333333334" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/vansales_unload_pay_recyclerview.xml" value="0.36666666666666664" />
