@@ -23,7 +23,6 @@ import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Webview_Activity;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 
 public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHolder> {

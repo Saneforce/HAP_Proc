@@ -618,7 +618,7 @@ public class Login extends AppCompatActivity {
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-              //  eMail = "ciadmin@hap.in";
+                  //eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -626,11 +626,11 @@ public class Login extends AppCompatActivity {
                 // eMail="akshay.r@hap.in";
                 // eMail = "1025751@hap.in";//test
 
-                  // eMail = "1014700@hap.in";
+                // eMail = "1014700@hap.in";
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-                 // eMail = "anbu@saneforce.com";
+                // eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -674,7 +674,7 @@ public class Login extends AppCompatActivity {
 //                eMail = "1021230@hap.in";
                 // eMail="shiva.saneforce@gmail.com";
                 // eMail="rajasekaranm@hap.in";
-                // eMail="1014700@hap.in";
+              //  eMail = "1014700@hap.in";
 
                 //   eMail="1026594@hap.in";
                 //   eMail = "gnanaoli.j@hap.in";
@@ -915,6 +915,7 @@ public class Login extends AppCompatActivity {
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
+
                 if (Flight == null) Flight = 0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
 
@@ -959,8 +960,15 @@ public class Login extends AppCompatActivity {
                 userEditor.putString("State_Code", Sf_type);
                 userEditor.putString("email", eMail);
                 userEditor.putString("HOLocation", SFHQLoc);
+
                 try {
                     userEditor.putString("radius", String.valueOf(response.getData().get(0).getRadius()) == null ? "0.0" : String.valueOf(response.getData().get(0).getRadius()));
+                } catch (Exception e) {
+
+                }
+                try {
+                    userEditor.putInt("checkRadius", response.getData().get(0).getCheckRadius());
+
                 } catch (Exception e) {
 
                 }

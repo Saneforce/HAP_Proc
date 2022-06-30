@@ -984,9 +984,13 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
                         } else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-                        } else if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
-                            common_class.showMsg(getActivity(), "No Stock");
-                        } else {
+                        }
+
+//                        else if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
+//                            common_class.showMsg(getActivity(), "No Stock");
+//                        }
+
+                        else {
 
                             if (!Shared_Common_Pref.OutletCode.equalsIgnoreCase(mRetailer_Modal_ListFilter.get(position).getId())) {
                                 shared_common_pref.clear_pref(Constants.LOC_SECONDARY_DATA);

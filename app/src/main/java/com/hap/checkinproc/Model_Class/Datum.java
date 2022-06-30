@@ -174,6 +174,10 @@ public class Datum {
     @Expose
     private String DivERP;
 
+    @SerializedName("checkRadius")
+    @Expose
+    private int checkRadius;
+
     public String getSfUserName() {
         return sfUserName;
     }
@@ -461,5 +465,13 @@ public class Datum {
 
     public void setRadius(Double radius) {
         this.radius = radius;
+    }
+
+    public int getCheckRadius() {
+        return checkRadius;
+    }
+
+    public void setCheckRadius(int checkRadius) {
+        this.checkRadius = checkRadius;
     }
 }
