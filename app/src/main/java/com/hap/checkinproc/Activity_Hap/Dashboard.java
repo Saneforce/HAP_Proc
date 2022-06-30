@@ -210,7 +210,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
-                if (sSFType.equals("0")) {
+                int val = UserDetails.getInt("checkRadius", 0);
+                Log.v("CHECKIN:", "" + val);
+                if (/*sSFType.equals("0")*/UserDetails.getInt("checkRadius", 0) == 1) {
                     String[] latlongs = UserDetails.getString("HOLocation", "").split(":");
                     //  String[] latlongs = "13.0299326:80.2414088".split(":");
 

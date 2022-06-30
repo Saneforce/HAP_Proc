@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hap.checkinproc.Activity_Hap.Webview_Activity;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.Status_Model_Class.Onduty_Status_Model;
 
 import java.util.List;

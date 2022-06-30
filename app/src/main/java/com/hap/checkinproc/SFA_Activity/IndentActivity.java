@@ -288,7 +288,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                                     jsonObject1.getInt("Quantity"));
 
                             Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getQty() *
-                                    Product_Modal.get(pm).getSBRate())));
+                                    Product_Modal.get(pm).getRate())));
 
 
                             double enterQty = Product_Modal.get(pm).getQty();

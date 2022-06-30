@@ -167,7 +167,7 @@ public class LocationFinder {
                                 try {
                                     // Show the dialog by calling startResolutionForResult(), and check the
                                     // result in onActivityResult().
-                                    Log.i(TAG, "PendingIntent INSAP.");
+                                   // Log.i(TAG, "PendingIntent INSAP.");
 
                                     Log.v("LOACTION_SUCCESS","ONFAILURE");
                                     ResolvableApiException rae = (ResolvableApiException) e;

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Interface.LeaveCancelReason;
 import com.hap.checkinproc.Model_Class.DaExceptionStatusModel;
 import com.hap.checkinproc.R;
@@ -105,6 +107,14 @@ public class DaExceptionStatusAdapt extends RecyclerView.Adapter<DaExceptionStat
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_yellows);
         }
 
+        try {
+            Glide.with(context)
+                    .load(holiday_status_modelist.get(position).getDA_Url())
+                    .into(holder.ivUrl);
+        } catch (Exception e) {
+
+        }
+
     }
 
     @Override
@@ -120,6 +130,7 @@ public class DaExceptionStatusAdapt extends RecyclerView.Adapter<DaExceptionStat
         TextView Actutalcheckin, EarlyCheckin, ActualLateCheck, LateCheckout, FromType, ToType, amount;
 
         LinearLayout Approvereject, rejectonly, LinEarly, LinLate, LinMode;
+        ImageView ivUrl;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -146,6 +157,7 @@ public class DaExceptionStatusAdapt extends RecyclerView.Adapter<DaExceptionStat
             LinEarly = itemView.findViewById(R.id.lin_actual);
             LinLate = itemView.findViewById(R.id.lin_late);
             LinMode = itemView.findViewById(R.id.lin_daType);
+            ivUrl = itemView.findViewById(R.id.ivExp);
         }
     }
 }

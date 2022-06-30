@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 7.5.2";
+    public static String Version_Name = "ver 7.5.5";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -853,6 +853,7 @@ public class Common_Class {
                         data.put("SF", UserDetails.getString("Sfcode", ""));
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("outletId", "");
                         break;
                     case Constants.Primary_Product_List:
                         axnname = "get/prodprimarydets";
@@ -912,6 +913,13 @@ public class Common_Class {
 
                                 if (key.equals(Constants.Distributor_List)) {
                                     setDefDist();
+                                }
+
+                                if (key.equals(Constants.Product_List)) {
+                                    DatabaseHandler db = new DatabaseHandler(activity);
+
+                                    db.deleteMasterData(Constants.Product_List);
+                                    db.addMasterData(Constants.Product_List, is.toString());
                                 }
                             }
 
@@ -1016,19 +1024,22 @@ public class Common_Class {
 
                     }
                 });
-                service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("SEC_Product_List", response.body().toString());
-                        db.deleteMasterData(Constants.Product_List);
-                        db.addMasterData(Constants.Product_List, response.body());
-                    }
+                if (!Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
 
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
+                    service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            Log.v("SEC_Product_List", response.body().toString());
+                            db.deleteMasterData(Constants.Product_List);
+                            db.addMasterData(Constants.Product_List, response.body());
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                        }
+                    });
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

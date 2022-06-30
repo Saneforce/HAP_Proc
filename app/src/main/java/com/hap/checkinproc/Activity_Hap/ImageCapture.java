@@ -1215,7 +1215,17 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         intent.putExtra("ID", String.valueOf(AlmID));
         intent.putExtra("Title", NotifyTitle);
         intent.putExtra("Message", NotifyMsg);
-        PendingIntent pIntent = PendingIntent.getBroadcast(this.getApplicationContext(), AlmID, intent, 0);
+        PendingIntent pIntent = null;
+        // PendingIntent.getBroadcast(this.getApplicationContext(), AlmID, intent, 0);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pIntent = PendingIntent.getBroadcast
+                    (this, 0, intent, PendingIntent.FLAG_MUTABLE);
+        } else {
+            pIntent = PendingIntent.getBroadcast
+                    (this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        }
+
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, AlmTm, pIntent);
     }

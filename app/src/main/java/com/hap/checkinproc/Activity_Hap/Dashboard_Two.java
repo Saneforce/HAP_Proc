@@ -35,7 +35,6 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -51,7 +50,6 @@ import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
-import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -1123,7 +1121,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         intent.putExtra("ID", String.valueOf(AlmID));
         intent.putExtra("Title", NotifyTitle);
         intent.putExtra("Message", NotifyMsg);
-        PendingIntent pIntent = PendingIntent.getBroadcast(this.getApplicationContext(), AlmID, intent, 0);
+        PendingIntent pIntent = null;
+
+        //PendingIntent.getBroadcast(this.getApplicationContext(), AlmID, intent, 0);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pIntent = PendingIntent.getBroadcast
+                    (this, 0, intent, PendingIntent.FLAG_MUTABLE);
+        } else {
+            pIntent = PendingIntent.getBroadcast
+                    (this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        }
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, AlmTm, pIntent);
     }

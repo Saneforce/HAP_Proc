@@ -46,7 +46,7 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
         tvTotVanSal = findViewById(R.id.tvTotSal);
         tvDt.setText("Date : " + Common_Class.GetDatemonthyearformat());
 
-        totStkAmt = getIntent().getDoubleExtra("stkLoadAmt", 0);
+        totStkAmt = getIntent().getDoubleExtra("stkLoadAmt", -1);
 
         if (totStkAmt == -1) {
             common_class.getDb_310Data(Constants.VAN_STOCK, this);
@@ -84,6 +84,8 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                         }
                     }
 
+                    tvLoadAmt.setText("₹" + formatter.format(totStkAmt));
+                    tvUnLoadAmt.setText("₹" + formatter.format(totStkAmt - salAmt));
 
                     break;
 

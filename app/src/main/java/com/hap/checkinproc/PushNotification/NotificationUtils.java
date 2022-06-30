@@ -7,14 +7,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.Html;
@@ -63,17 +61,25 @@ public class NotificationUtils {
         final int icon = R.mipmap.ic_launcher;
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        final PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        mContext,
-                        0,
-                        intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
-                );
+        PendingIntent resultPendingIntent = null;
+//                PendingIntent.getActivity(
+//                        mContext,
+//                        0,
+//                        intent,
+//                        PendingIntent.FLAG_CANCEL_CURRENT
+//                );
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            resultPendingIntent = PendingIntent.getActivity
+                    (mContext, 0, intent, PendingIntent.FLAG_MUTABLE);
+        } else {
+            resultPendingIntent = PendingIntent.getActivity
+                    (mContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        }
 
 
         showSmallNotification(icon, title, message, timeStamp, resultPendingIntent);
-    //    playNotificationSound();
+        //    playNotificationSound();
 
    /*     if (!TextUtils.isEmpty(imageUrl)) {
 

@@ -90,6 +90,7 @@
                             android:textAllCaps="true"
                             android:textColor="@color/dark_greys"
                             android:textSize="11dp" />
+
                         <TextView
                             android:id="@+id/deviation_entry"
                             style="@style/TextStyleOne"
@@ -101,27 +102,29 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="vertical"
                         android:id="@+id/lin_actual"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <TextView
                                 style="@style/TextStyleOne"
-                                android:textColor="@color/dark_greys"
                                 android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:text="Actual Check-in Time" />
+                                android:text="Actual Check-in Time"
+                                android:textColor="@color/dark_greys" />
 
                             <TextView
                                 android:id="@+id/workinghours"
                                 style="@style/TextStyleOne"
                                 android:textColor="@color/green" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -130,8 +133,8 @@
                                 style="@style/TextStyleOne"
                                 android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:textColor="@color/dark_greys"
-                                android:text="Early Check-in Time"/>
+                                android:text="Early Check-in Time"
+                                android:textColor="@color/dark_greys" />
 
                             <TextView
                                 android:id="@+id/shiftdate"
@@ -141,37 +144,39 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="vertical"
                         android:id="@+id/lin_late"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <TextView
                                 style="@style/TextStyleOne"
-                                android:textColor="@color/dark_greys"
                                 android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:text="Actual Check-out Time" />
+                                android:text="Actual Check-out Time"
+                                android:textColor="@color/dark_greys" />
 
                             <TextView
                                 android:id="@+id/lateactualout"
                                 style="@style/TextStyleOne"
                                 android:textColor="@color/green" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <TextView
                                 style="@style/TextStyleOne"
-                                android:textColor="@color/dark_greys"
                                 android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:text="Late Check-out Time"/>
+                                android:text="Late Check-out Time"
+                                android:textColor="@color/dark_greys" />
 
                             <TextView
                                 android:id="@+id/latecheckout"
@@ -181,27 +186,29 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="vertical"
                         android:id="@+id/lin_daType"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <TextView
                                 style="@style/TextStyleOne"
-                                android:textColor="@color/dark_greys"
                                 android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:text="From Type" />
+                                android:text="From Type"
+                                android:textColor="@color/dark_greys" />
 
                             <TextView
                                 android:id="@+id/from_type"
                                 style="@style/TextStyleOne"
                                 android:textColor="@color/green" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -210,8 +217,8 @@
                                 style="@style/TextStyleOne"
                                 android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:textColor="@color/dark_greys"
-                                android:text="To Type"/>
+                                android:text="To Type"
+                                android:textColor="@color/dark_greys" />
 
                             <TextView
                                 android:id="@+id/to_type"
@@ -226,17 +233,17 @@
                         android:layout_height="wrap_content">
 
 
-                            <TextView
-                                style="@style/TextStyleOne"
-                                android:textColor="@color/dark_greys"
-                                android:layout_width="match_parent"
-                                android:layout_weight="1"
-                                android:text="Amount" />
+                        <TextView
+                            style="@style/TextStyleOne"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Amount"
+                            android:textColor="@color/dark_greys" />
 
-                            <TextView
-                                android:id="@+id/amnt_txt"
-                                style="@style/TextStyleOne"
-                                android:textColor="@color/green" />
+                        <TextView
+                            android:id="@+id/amnt_txt"
+                            style="@style/TextStyleOne"
+                            android:textColor="@color/green" />
 
 
                     </LinearLayout>
@@ -246,18 +253,18 @@
                         style="@style/TextStyleOne"
                         android:layout_marginTop="@dimen/C10dp"
                         android:text="Reason"
-                        android:visibility="gone"
                         android:textAllCaps="true"
                         android:textColor="@color/dark_greys"
-                        android:textSize="11dp" />
+                        android:textSize="11dp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/deviation_reason"
                         style="@style/TextStyleOne"
                         android:text="-"
-                        android:visibility="gone"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
 
                     <LinearLayout
@@ -286,7 +293,12 @@
                                 android:textColor="@color/dark_greys"
                                 android:textSize="13dp"
                                 android:textStyle="bold" />
+
+
+                            />
                         </LinearLayout>
+
+
 
 
                         <LinearLayout
@@ -296,8 +308,8 @@
                             android:gravity="right">
 
                             <TextView
-                                style="@style/TextStyleOne"
                                 android:id="@+id/deviation_rejected"
+                                style="@style/TextStyleOne"
                                 android:textColor="@color/dark_greys"
                                 android:textSize="13dp"
                                 android:textStyle="bold" />
@@ -305,8 +317,15 @@
 
                         </LinearLayout>
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/ivExp"
+                            android:layout_width="@dimen/C30dp"
+                            android:layout_height="@dimen/C30dp"
+                            android:layout_gravity="end"
+                            android:layout_marginLeft="@dimen/C5dp"
+                            android:src="@drawable/ic_launcher_background"></ImageView>
 
+                    </LinearLayout>
 
 
                 </LinearLayout>

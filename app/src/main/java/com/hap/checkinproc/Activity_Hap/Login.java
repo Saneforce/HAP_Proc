@@ -613,12 +613,12 @@ public class Login extends AppCompatActivity {
 
                 //eMail = "sakthivel.sa@hap.in";
                 //eMail = "srinivas.p@hap.in";
-                // eMail = "sajan@hap.in";
+                //eMail = "sajan@hap.in";
                 //   eMail = "1005985@hap.in";
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
 
-                //eMail = "ciadmin@hap.in";
+                  //eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -626,11 +626,11 @@ public class Login extends AppCompatActivity {
                 // eMail="akshay.r@hap.in";
                 // eMail = "1025751@hap.in";//test
 
-                //   eMail = "1014700@hap.in";
+                // eMail = "1014700@hap.in";
                 // eMail = "1006208@hap.in";
                 // eMail = "1009998@hap.in";
                 // eMail = "testuser@gmail.com";
-               //  eMail = "anbu@saneforce.com";
+                // eMail = "anbu@saneforce.com";
 //                eMail = "1016431@hap.in";
 //                eMail = "1022324@hap.in";
                 // eMail = "1025257@hap.in";
@@ -647,7 +647,7 @@ public class Login extends AppCompatActivity {
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
-                // eMail="anbu@saneforce.com";
+                //eMail = "anbu@saneforce.com";
                 // eMail="1018656@hap.in";
 
                 //eMail="sivakumar.s@hap.in";
@@ -674,17 +674,19 @@ public class Login extends AppCompatActivity {
 //                eMail = "1021230@hap.in";
                 // eMail="shiva.saneforce@gmail.com";
                 // eMail="rajasekaranm@hap.in";
-                // eMail="1014700@hap.in";
+              //  eMail = "1014700@hap.in";
 
                 //   eMail="1026594@hap.in";
                 //   eMail = "gnanaoli.j@hap.in";
                 // eMail = "testhap3@hap.in";
                 //eMail = "shanmugam@hap.in";
                 //eMail = "anbu@saneforce.in";
-               //  eMail="1010057@hap.in";
-               // eMail="1008672@hap.in";
+                //  eMail="1010057@hap.in";
+                // eMail="1008672@hap.in";
+                // eMail = "1014499@hap.in";//FRom
+                //eMail="1015603@hap.in";//TO
+                // eMail = "1015750@hap.in";
 
-                 eMail = "ciadmin@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -761,7 +763,7 @@ public class Login extends AppCompatActivity {
                                     } catch (Exception e) {
 
                                     }
-                                    Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Check username and password", LENGTH_LONG).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -772,7 +774,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<Model> call, Throwable t) {
 
-                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), t.getMessage(), LENGTH_LONG).show();
                         try {
                             mProgress.dismiss();
                         } catch (Exception e) {
@@ -913,6 +915,7 @@ public class Login extends AppCompatActivity {
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
+
                 if (Flight == null) Flight = 0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
 
@@ -957,8 +960,15 @@ public class Login extends AppCompatActivity {
                 userEditor.putString("State_Code", Sf_type);
                 userEditor.putString("email", eMail);
                 userEditor.putString("HOLocation", SFHQLoc);
+
                 try {
                     userEditor.putString("radius", String.valueOf(response.getData().get(0).getRadius()) == null ? "0.0" : String.valueOf(response.getData().get(0).getRadius()));
+                } catch (Exception e) {
+
+                }
+                try {
+                    userEditor.putInt("checkRadius", response.getData().get(0).getCheckRadius());
+
                 } catch (Exception e) {
 
                 }

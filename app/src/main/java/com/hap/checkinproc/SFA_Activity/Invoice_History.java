@@ -233,7 +233,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
             tvCoolerInfo.setVisibility(View.GONE);
 
-            if(Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
+            if (Shared_Common_Pref.Freezer_Required.equalsIgnoreCase("yes"))
                 tvCoolerInfo.setVisibility(View.VISIBLE);
 
         } catch (Exception e) {
@@ -380,9 +380,13 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
 
             case R.id.lin_vanSales:
-                Constants.VAN_SALES_MODE = Constants.VAN_SALES_ORDER;
-                startActivity(new Intent(getApplicationContext(), VanSalesOrderActivity.class));
-                overridePendingTransition(R.anim.in, R.anim.out);
+                if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING))) {
+                    common_class.showMsg(Invoice_History.this, "No Stock");
+                } else {
+                    Constants.VAN_SALES_MODE = Constants.VAN_SALES_ORDER;
+                    startActivity(new Intent(getApplicationContext(), VanSalesOrderActivity.class));
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                }
 
                 break;
             case R.id.lin_indent:
@@ -453,7 +457,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 service.getDataArrayList("get/indentprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                         Log.v(TAG, response.toString());
+                        Log.v(TAG, response.toString());
                         db.deleteMasterData(Constants.INDENT_ProdGroups_List);
                         db.addMasterData(Constants.INDENT_ProdGroups_List, response.body());
                     }

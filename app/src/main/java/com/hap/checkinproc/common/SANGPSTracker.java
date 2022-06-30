@@ -312,12 +312,24 @@ public class SANGPSTracker extends Service {
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
 
         // The PendingIntent that leads to a call to onStartCommand() in this service.
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, intent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
 
         // The PendingIntent to launch activity.
-        PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+        PendingIntent activityPendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            activityPendingIntent = PendingIntent.getActivity
+                    (this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_MUTABLE);
+        }
+        else
+        {
+            activityPendingIntent = PendingIntent.getActivity
+                    (this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_ONE_SHOT);
+        }
+
+
+//                PendingIntent.getActivity(this, 0,
+//                new Intent(this, MainActivity.class), 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
