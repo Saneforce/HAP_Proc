@@ -686,6 +686,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1014499@hap.in";//FRom
                 //eMail="1015603@hap.in";//TO
                 // eMail = "1015750@hap.in";
+              //  eMail="1025740@hap.in";
 
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
@@ -915,6 +916,7 @@ public class Login extends AppCompatActivity {
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
+                Integer checkRadius = response.getData().get(0).getCheckRadius();
 
                 if (Flight == null) Flight = 0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
@@ -967,7 +969,7 @@ public class Login extends AppCompatActivity {
 
                 }
                 try {
-                    userEditor.putInt("checkRadius", response.getData().get(0).getCheckRadius());
+                    userEditor.putInt("checkRadius", checkRadius);
 
                 } catch (Exception e) {
 

@@ -1532,6 +1532,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
     }
 
     public void viewStaus(View v) {
+        finish();
         startActivity(new Intent(getApplicationContext(), ViewTAStatus.class));
     }
 

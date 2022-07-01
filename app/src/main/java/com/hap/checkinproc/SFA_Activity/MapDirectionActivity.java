@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -81,6 +83,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     private String status = "", CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
     SharedPreferences UserDetails, CheckInDetails;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+    private double radius = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -376,14 +379,14 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     if (ReachedOutlet.getText().toString().contains("Check-In")) {
                         String val = UserDetails.getString("radius", "");
 
-                        Double radius = 0.0;
+                        radius = 0.0;
 
                         if (!Common_Class.isNullOrEmpty(val) && !val.equalsIgnoreCase("null"))
-                            radius = Double.parseDouble(val);
-
+                            radius = Double.parseDouble(val) * 1000;
+                        Log.v("distance", ":" + distance());
 
                         if ((radius > 0 && radius < distance())
-                                || distance() < 1000) {
+                                || distance() < 200) {
                             String ETime = CheckInDetails.getString("CINEnd", "");
                             if (!ETime.equalsIgnoreCase("")) {
                                 String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
@@ -431,6 +434,25 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         }
     }
 
+    private void drawCircle(LatLng point) {
+
+        // Instantiating CircleOptions to draw a circle around the marker
+        CircleOptions circleOptions = new CircleOptions();
+        // Specifying the center of the circle
+        circleOptions.center(point);
+        // Radius of the circle
+        circleOptions.radius(radius <= 0 ? 200 : radius);
+        // Border color of the circle
+        circleOptions.strokeColor(Color.BLUE);
+        // Fill color of the circle
+        // circleOptions.fillColor(0x30ff0000);
+        // Border width of the circle
+        circleOptions.strokeWidth(1);
+        // Adding the circle to the GoogleMap
+        mGoogleMap.addCircle(circleOptions);
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -452,6 +474,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
         if (status != null && status.equalsIgnoreCase("checkin")) {
             ReachedOutlet.setText("Check-In ");
+            drawCircle(new LatLng(endPoint.getLatitude(), endPoint.getLongitude()));
 
         } else if (distance > 200 || (status != null && status.equalsIgnoreCase("new"))) {
             ReachedOutlet.setText("START ");
