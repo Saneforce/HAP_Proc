@@ -377,15 +377,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     break;
                 case R.id.tvStartDirection:
                     if (ReachedOutlet.getText().toString().contains("Check-In")) {
-                        String val = UserDetails.getString("radius", "");
 
-                        radius = 0.0;
+                        Log.v("distance", ":" + distance() + ":Radius:" + radius);
 
-                        if (!Common_Class.isNullOrEmpty(val) && !val.equalsIgnoreCase("null"))
-                            radius = Double.parseDouble(val) * 1000;
-                        Log.v("distance", ":" + distance());
-
-                        if ((radius > 0 && radius < distance())
+                        if ((radius > 0 && distance() < radius)
                                 || distance() < 200) {
                             String ETime = CheckInDetails.getString("CINEnd", "");
                             if (!ETime.equalsIgnoreCase("")) {
@@ -436,6 +431,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
     private void drawCircle(LatLng point) {
 
+        String val = UserDetails.getString("radius", "");
+        if (!Common_Class.isNullOrEmpty(val) && !val.equalsIgnoreCase("null"))
+            radius = Double.parseDouble(val) * 1000;
+
         // Instantiating CircleOptions to draw a circle around the marker
         CircleOptions circleOptions = new CircleOptions();
         // Specifying the center of the circle
@@ -443,13 +442,14 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         // Radius of the circle
         circleOptions.radius(radius <= 0 ? 200 : radius);
         // Border color of the circle
-        circleOptions.strokeColor(Color.BLUE);
+        circleOptions.strokeColor(Color.RED);
         // Fill color of the circle
-        // circleOptions.fillColor(0x30ff0000);
+        circleOptions.fillColor(0x1AFF0000);
         // Border width of the circle
         circleOptions.strokeWidth(1);
         // Adding the circle to the GoogleMap
         mGoogleMap.addCircle(circleOptions);
+
 
     }
 

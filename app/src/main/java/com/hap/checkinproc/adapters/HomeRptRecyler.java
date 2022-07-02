@@ -82,13 +82,17 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
             try {
                 if (itm.get("type").getAsString().equalsIgnoreCase("geo")) {
                     holder.mapImage.setVisibility(View.VISIBLE);
-                    holder.txtValue.setOnClickListener(new View.OnClickListener() {
+                    holder.mapImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps?q=" + latLong));
-                            mContext.startActivity(browserIntent);
-                            Log.v("Lat_Long", latLong);
+//                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps?q=" + latLong));
+//                            mContext.startActivity(browserIntent);
+//                            Log.v("Lat_Long", latLong);
+
+                            Intent intent = new Intent(mContext, Webview_Activity.class);
+                            intent.putExtra("Locations", latLong);
+                            mContext.startActivity(intent);
 
                         }
                     });
