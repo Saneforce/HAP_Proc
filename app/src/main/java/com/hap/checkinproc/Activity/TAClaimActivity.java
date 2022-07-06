@@ -537,6 +537,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         listAllwType.add(mCommon_model_spinner);
         mCommon_model_spinner = new Common_Model("Out Station", "Out Station", "flag");
         listAllwType.add(mCommon_model_spinner);
+        mCommon_model_spinner = new Common_Model("None", "None", "flag");
+        listAllwType.add(mCommon_model_spinner);
 
 
         ldgAdd.setOnClickListener(new View.OnClickListener() {
@@ -597,7 +599,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                     data.put("SF", UserDetails.getString("Sfcode", ""));
                     data.put("ExpDt", DateTime);
-                    data.put("DAType", txt_DATyp.getText());
+                    data.put("DAType", txt_DATyp.getText().toString().equalsIgnoreCase("NONE") ? "NA" : txt_DATyp.getText().toString());
                     data.put("DALocId", sDALocId);
                     sDALocName = txt_DAStyloc.getText().toString();
                     if (sDALocId.equalsIgnoreCase("-1")) {
@@ -2246,7 +2248,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString()) ? "0" :
                                         jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString()) ? "0" : jsFuel.get("End_Km").getAsString());
-                              Shared_Common_Pref.MaxKm=jsFuel.get("Maxkm").getAsInt();
+                                Shared_Common_Pref.MaxKm = jsFuel.get("Maxkm").getAsInt();
 
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
@@ -2805,7 +2807,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     for (int i = 0; i < ldArray.size(); i++) {
                         // ldgAdd.setText("- Remove");
                         ldraft = (JsonObject) ldArray.get(i);
-                        elibs = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Eligible").getAsString())?"0":ldraft.get("Eligible").getAsString());
+                        elibs = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Eligible").getAsString()) ? "0" : ldraft.get("Eligible").getAsString());
                         txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
                         TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
                         // changes chk
@@ -3058,14 +3060,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
 
-            double elibs = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Eligible").getAsString())?"0":ldraft.get("Eligible").getAsString());
+            double elibs = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Eligible").getAsString()) ? "0" : ldraft.get("Eligible").getAsString());
 
 
             txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
 
-            double srtjdgAmt = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Joining_Ldg_Amount").getAsString())?"0":ldraft.get("Joining_Ldg_Amount").getAsString());
+            double srtjdgAmt = Integer.valueOf(Common_Class.isNullOrEmpty(ldraft.get("Joining_Ldg_Amount").getAsString()) ? "0" : ldraft.get("Joining_Ldg_Amount").getAsString());
             txtJNEligi.setText("₹" + new DecimalFormat("##0.00").format(srtjdgAmt));
-            Double wobal = Double.valueOf(Common_Class.isNullOrEmpty(ldraft.get("WOB_Amt").getAsString())?"0":ldraft.get("WOB_Amt").getAsString());
+            Double wobal = Double.valueOf(Common_Class.isNullOrEmpty(ldraft.get("WOB_Amt").getAsString()) ? "0" : ldraft.get("WOB_Amt").getAsString());
 
             Log.v("ldgWOBBal", String.valueOf(wobal));
             ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(wobal));
@@ -4307,7 +4309,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     enterTo.requestFocus();
                     return;
                 }
-                if (enterFare.getText().toString().equalsIgnoreCase("")) {
+                if (!editMode.equalsIgnoreCase("NONE") && enterFare.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(TAClaimActivity.this, "Enter the " + editMode + " Amount", Toast.LENGTH_LONG).show();
                     ResetSubmitBtn(0, btnAnim);
                     enterFare.requestFocus();
@@ -4393,7 +4395,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         lcModeRef.put(AditionallLocalConvenyance);
                     }
 
-                    if (editLaFare.getText().toString().equalsIgnoreCase("")) {
+                    if (!editMode.equalsIgnoreCase("NONE") && editLaFare.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(TAClaimActivity.this, "Enter the " + editMode + " Amount", Toast.LENGTH_LONG).show();
                         ResetSubmitBtn(0, btnAnim);
                         editLaFare.requestFocus();
@@ -4455,7 +4457,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         lcModeRef1.put(AditionallLocalConvenyance);
                     }
-                    if (edtOE.getText().toString().equalsIgnoreCase("")) {
+                    if (!editMode.equalsIgnoreCase("NONE")&&edtOE.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(TAClaimActivity.this, "Enter the " + editMode + " Amount", Toast.LENGTH_LONG).show();
                         edtOE.requestFocus();
                         ResetSubmitBtn(0, btnAnim);
@@ -4505,7 +4507,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         openHome();
                     } else {
                         Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
-                      finish();
+                        finish();
                         startActivity(new Intent(TAClaimActivity.this, ViewTAStatus.class));
 
                     }
@@ -4781,6 +4783,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         if (type == 14) {
             sDALType = myDataset.get(position).getName();
             txt_DATyp.setText(sDALType);
+
+            if (myDataset.get(position).getName().equalsIgnoreCase("NONE")) {
+                findViewById(R.id.llAllowLocParent).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.llAllowLocParent).setVisibility(View.VISIBLE);
+            }
         }
         if (type == 10) {
             clearAll();
@@ -5583,9 +5591,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
                             jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
-                                Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString())?"0":jsFuel.get("Start_Km").getAsString());
-                                Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString())?"0":jsFuel.get("End_Km").getAsString());
-                                Shared_Common_Pref.MaxKm=jsFuel.get("Maxkm").getAsInt();
+                                Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString()) ? "0" : jsFuel.get("Start_Km").getAsString());
+                                Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString()) ? "0" : jsFuel.get("End_Km").getAsString());
+                                Shared_Common_Pref.MaxKm = jsFuel.get("Maxkm").getAsInt();
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
@@ -5594,10 +5602,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= FWMax_Km)
                                         Total = FWMax_Km;
 
-                                    Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());
+                                    Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
                                     String TotalPersonal = String.valueOf(Total - Personal);
                                     Double q = Double.valueOf(TotalPersonal);
-                                    Double z = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString())?"0":jsFuel.get("FuelAmt").getAsString());
+                                    Double z = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString()) ? "0" : jsFuel.get("FuelAmt").getAsString());
                                     String qz = String.valueOf(q * z);
                                     Log.v("TA_FUEL_TOTAL", qz);
                                     fuelAmt = fuelAmt + (q * z);

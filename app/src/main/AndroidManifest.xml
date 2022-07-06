@@ -28,7 +28,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:name=".SFA_Activity.HAPApp"
@@ -98,7 +98,8 @@
         <activity
             android:name=".Activity.PDFActivity"
             android:theme="@style/AppTheme.Dialogs" />
-        <activity android:name=".Activity.PdfViewerActivity"
+        <activity
+            android:name=".Activity.PdfViewerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
@@ -184,9 +185,9 @@
         <activity
             android:name=".SFA_Activity.VanSalStockLoadActivity"
             android:screenOrientation="portrait" />
-<!--        <activity-->
-<!--            android:name=".SFA_Activity.VanSalPaymentActivity"-->
-<!--            android:screenOrientation="portrait" />-->
+        <!--        <activity-->
+        <!--            android:name=".SFA_Activity.VanSalPaymentActivity"-->
+        <!--            android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activity_Hap.TAHistory"
             android:screenOrientation="portrait" />
@@ -234,8 +235,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.Print_Invoice_Activity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
 
@@ -348,6 +349,11 @@
         <activity
             android:name=".Activity.ViewActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Activity.ProcPrimaryOrderActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity_Hap.Reports"
             android:screenOrientation="portrait" />
@@ -497,8 +503,8 @@
 
         <activity
             android:name=".Activity_Hap.MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -582,7 +588,8 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/black" /> <!-- Notification -->
-        <service android:name=".PushNotification.MyFirebaseMessagingService"
+        <service
+            android:name=".PushNotification.MyFirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

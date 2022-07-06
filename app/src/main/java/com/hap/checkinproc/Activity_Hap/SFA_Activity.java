@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.ProcPrimaryOrderActivity;
 import com.hap.checkinproc.Activity.Util.ListModel;
 import com.hap.checkinproc.Activity.ViewActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -162,6 +163,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.cvTodayOrders).setVisibility(View.GONE);
             findViewById(R.id.cvSalesData).setVisibility(View.GONE);
             findViewById(R.id.cvCalls).setVisibility(View.GONE);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
+                common_class.getDb_310Data(Constants.Distributor_List, this);
 
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.PROCUR_MENU)))
                 callDynamicmenu();
@@ -174,7 +177,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else {
+        }
+        else {
             ivProcureSync.setVisibility(View.GONE);
             switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
                 case Constants.CHECKIN_TYPE:
@@ -216,7 +220,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
             setMenuAdapter();
         }
-
 
     }
 
@@ -863,7 +866,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case Constants.PrimaryTAXList:
                         sharedCommonPref.save(Constants.PrimaryTAXList, apiDataResponse);
-                        common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
+                        if (UserDetails.getString("DeptType", "").equalsIgnoreCase("1"))
+                            common_class.CommonIntentwithoutFinish(ProcPrimaryOrderActivity.class);
+                        else
+                            common_class.CommonIntentwithoutFinish(PrimaryOrderActivity.class);
                         overridePendingTransition(R.anim.in, R.anim.out);
                         break;
 
