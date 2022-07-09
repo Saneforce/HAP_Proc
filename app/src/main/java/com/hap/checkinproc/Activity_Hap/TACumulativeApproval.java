@@ -5,15 +5,12 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +32,11 @@ public class TACumulativeApproval extends AppCompatActivity {
     TAApprListItem mAdapter;
     Shared_Common_Pref sharedCommonPref;
     public static TACumulativeApproval taCumulativeApproval;
+
+    @Override
+    public void onBackPressed() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +104,12 @@ public class TACumulativeApproval extends AppCompatActivity {
             recyclerView.setAdapter(mAdapter);
 
             ImageView backView = findViewById(R.id.imag_back);
-//        backView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(), Approvals.class));
-//            }
-//        });
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
 
         } catch (Exception e) {
         }

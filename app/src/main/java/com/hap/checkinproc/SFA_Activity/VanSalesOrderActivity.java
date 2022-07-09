@@ -665,6 +665,9 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                 JSONObject ActivityData = new JSONObject();
                 try {
                     JSONObject HeadItem = new JSONObject();
+                    HeadItem.put("id", sharedCommonPref.getvalue(Constants
+                            .VAN_ID));
+
                     HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
                     HeadItem.put("Worktype_code", Worktype_code);
                     HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));

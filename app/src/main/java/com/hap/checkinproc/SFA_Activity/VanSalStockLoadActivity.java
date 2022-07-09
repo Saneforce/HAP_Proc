@@ -110,6 +110,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     private ArrayList<Common_Model> uomList;
 
     String axn = "";
+    private String van_id = "";
 
 
     @Override
@@ -505,7 +506,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 //                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
 //                    showOrderList();
 //                else
-                    showOrderItemList(selectedPos, "");
+                showOrderItemList(selectedPos, "");
             }
 
         } catch (JSONException e) {
@@ -649,6 +650,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 JSONObject ActivityData = new JSONObject();
                 try {
                     JSONObject HeadItem = new JSONObject();
+                    van_id = "VAN" + System.currentTimeMillis();
+                    HeadItem.put("id", van_id);
+
                     HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
                     HeadItem.put("Worktype_code", Worktype_code);
                     HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
@@ -771,11 +775,13 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                                 Log.e("Success_Message", san);
                                 ResetSubmitBtn(1);
                                 if (san.equals("true")) {
+
                                     // sharedCommonPref.clear_pref(Constants.LOC_VANSALES_DATA);
                                     //  common_class.CommonIntentwithFinish(Invoice_History.class);
 
                                     String data = gson.toJson(Product_Modal);
                                     sharedCommonPref.save(Constants.LOC_VANSALES_DATA, data);
+                                    sharedCommonPref.save(Constants.VAN_ID, van_id);
 
                                     updateStockBal();
 

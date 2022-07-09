@@ -2491,6 +2491,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     //   enterFare.setText(tldraftJson.get("Fare").getAsString());
                                     enterFare.setEnabled(true);
                                 }
+                                enterFare.setVisibility(View.VISIBLE);
+                                if (StrDaName.equalsIgnoreCase("NONE")) {
+                                    enterFare.setText("0");
+                                    enterFare.setVisibility(View.GONE);
+                                }
 
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
@@ -2622,6 +2627,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 enterFare.setText(tldraftJson.get("Fare").getAsString());
                                 enterFare.setEnabled(true);
                             }
+                            enterFare.setVisibility(View.VISIBLE);
+                            if (editText.getText().toString().equalsIgnoreCase("NONE")) {
+                                enterFare.setText("0");
+                                enterFare.setVisibility(View.GONE);
+                            }
+
 
                             String sRWID = tldraftJson.get("Mode").getAsString() + "_" + System.nanoTime();
                             txRwID.setText(sRWID);
@@ -4457,7 +4468,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         lcModeRef1.put(AditionallLocalConvenyance);
                     }
-                    if (!editMode.equalsIgnoreCase("NONE")&&edtOE.getText().toString().equalsIgnoreCase("")) {
+                    if (!editMode.equalsIgnoreCase("NONE") && edtOE.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(TAClaimActivity.this, "Enter the " + editMode + " Amount", Toast.LENGTH_LONG).show();
                         edtOE.requestFocus();
                         ResetSubmitBtn(0, btnAnim);
@@ -4875,6 +4886,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtTAFare.setEnabled(false);
             } else {
                 txtTAFare.setEnabled(true);
+            }
+
+            if (myDataset.get(position).getName().equalsIgnoreCase("NONE")) {
+                txtTAFare.setText("0");
+                txtTAFare.setVisibility(View.GONE);
+            } else {
+                txtTAFare.setVisibility(View.VISIBLE);
             }
         } else if (type == 80) {
             editTextPositionss = myDataset.get(position).getPho();

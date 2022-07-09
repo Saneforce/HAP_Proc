@@ -617,8 +617,7 @@ public class Login extends AppCompatActivity {
                 //   eMail = "1005985@hap.in";
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
-
-                //eMail = "ciadmin@hap.in";
+               // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -643,7 +642,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-                // eMail = "1013362@hap.in";//(-18)
+               // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -687,7 +686,7 @@ public class Login extends AppCompatActivity {
                 //eMail="1015603@hap.in";//TO
                 // eMail = "1015750@hap.in";
                 //  eMail="1025740@hap.in";
-              //  eMail = "1021007@hap.in";
+                //  eMail = "1021007@hap.in";
 
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
