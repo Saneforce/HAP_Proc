@@ -650,7 +650,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 JSONObject ActivityData = new JSONObject();
                 try {
                     JSONObject HeadItem = new JSONObject();
-                    van_id = "VAN" + System.currentTimeMillis();
+                    van_id = Common_Class.GetEkey();
                     HeadItem.put("id", van_id);
 
                     HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
