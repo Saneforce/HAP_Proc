@@ -2037,6 +2037,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 cbFreezerYes.setChecked(true);
                 cbFreezerNo.setChecked(false);
                 cbFreezerNo.setEnabled(false);
+
+
                 break;
             } else if (serviceTypeList.get(i).getName().equalsIgnoreCase("+4") && serviceTypeList.get(i).isSelected()) {
                 cbFreezerYes.setEnabled(true);
@@ -2049,7 +2051,16 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 cbFreezerYes.setEnabled(false);
                 break;
             }
+
         }
+
+        if(cbFreezerYes.isChecked())
+            findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+
+
+        if(cbFreezerNo.isChecked())
+            findViewById(R.id.llFreezer).setVisibility(View.GONE);
+
         // cbFreezerYes.setChecked(isChecked);
 
     }

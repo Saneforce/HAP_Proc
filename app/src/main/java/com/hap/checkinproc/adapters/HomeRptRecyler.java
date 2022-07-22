@@ -80,45 +80,44 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                 }
             }
             try {
-                if(itm.has("type")){
-                    if (itm.get("type").getAsString().equalsIgnoreCase("geo")) {
-                        holder.mapImage.setVisibility(View.VISIBLE);
-                        holder.txtValue.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps?q=" + latLong));
-                                mContext.startActivity(browserIntent);
-                                Log.v("Lat_Long", latLong);
-
-                            }
-                        });
-                    }
-                }else{
-                    holder.txtValue.setOnClickListener(new View.OnClickListener() {
+                if (itm.get("type").getAsString().equalsIgnoreCase("geo")) {
+                    holder.mapImage.setVisibility(View.VISIBLE);
+                    holder.mapImage.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            try {
-                                if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
+                        public void onClick(View view) {
 
-                                    Intent intent = new Intent(mContext, Webview_Activity.class);
-                                    intent.putExtra("Locations", itm.get("value").getAsString());
-                                    mContext.startActivity(intent);
-                                }
-                            } catch(
-                            Exception e)
+//                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps?q=" + latLong));
+//                            mContext.startActivity(browserIntent);
+//                            Log.v("Lat_Long", latLong);
 
-                            {
+                            Intent intent = new Intent(mContext, Webview_Activity.class);
+                            intent.putExtra("Locations", latLong);
+                            mContext.startActivity(intent);
 
-                            }
                         }
                     });
                 }
-
             } catch (Exception e) {
 
             }
 
+            holder.txtValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
+                            //navigateMapDir(itm.get("value").getAsString(), itm.get("name").getAsString());
+
+                            Intent intent = new Intent(mContext, Webview_Activity.class);
+                            intent.putExtra("Locations", itm.get("value").getAsString());
+                            mContext.startActivity(intent);
+
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
 
 
         } catch (Exception e) {

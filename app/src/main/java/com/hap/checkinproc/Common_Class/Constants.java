@@ -126,6 +126,7 @@ public class Constants {
     public static final String DIST_STOCK = "distStock";
     public static final String STOCK_LEDGER = "stockLedger";
     public static final String VAN_STOCK = "vanStock";
+    public static final String VAN_ID = "vanId";
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";
 

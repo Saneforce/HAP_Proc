@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Common_Class {
-    public static String Version_Name = "Ver 7.5.5";
+    public static String Version_Name = "Ver 7.5.8";
     public static String Work_Type = "0";
     public static Location location = null;
     SharedPreferences CheckInDetails;

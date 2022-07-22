@@ -176,7 +176,7 @@ public class Datum {
 
     @SerializedName("checkRadius")
     @Expose
-    private int checkRadius;
+    private Integer checkRadius;
 
     public String getSfUserName() {
         return sfUserName;
@@ -471,7 +471,7 @@ public class Datum {
         return checkRadius;
     }
 
-    public void setCheckRadius(int checkRadius) {
+    public void setCheckRadius(Integer checkRadius) {
         this.checkRadius = checkRadius;
     }
 }

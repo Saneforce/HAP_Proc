@@ -617,8 +617,7 @@ public class Login extends AppCompatActivity {
                 //   eMail = "1005985@hap.in";
                 //eMail = "haptest5@hap.in";
                 //eMail = "testhap3@hap.in";
-
-                  //eMail = "ciadmin@hap.in";
+               // eMail = "ciadmin@hap.in";
                 // eMail = "rajkumar@hap.in";
                 //  eMail = "haptest5@hap.in";
                 // eMail = "senthilraja.d@hap.in";
@@ -643,7 +642,7 @@ public class Login extends AppCompatActivity {
                 // eMail = "1006626@hap.in";
                 // eMail = "1006345@hap.in";
                 //eMail = "1006812@hap.in";
-                // eMail = "1013362@hap.in";//(-18)
+               // eMail = "1013362@hap.in";//(-18)
                 // eMail="ssiva2519@gmail.com";
                 //  eMail = "1013362@hap.in";
                 // eMail="1021453@hap.in";
@@ -669,12 +668,12 @@ public class Login extends AppCompatActivity {
                 // eMail="1018821@hap.in";//md food services
                 // eMail="1006815@hap.in";
                 //  eMail="1977ananthkumar@gmail.com";
-                //eMail = "gpmuthu11@gmail.com";
+                // eMail = "gpmuthu11@gmail.com";
 //                eMail = "1015742@hap.in";
 //                eMail = "1021230@hap.in";
                 // eMail="shiva.saneforce@gmail.com";
                 // eMail="rajasekaranm@hap.in";
-              //  eMail = "1014700@hap.in";
+                //  eMail = "1014700@hap.in";
 
                 //   eMail="1026594@hap.in";
                 //   eMail = "gnanaoli.j@hap.in";
@@ -686,6 +685,9 @@ public class Login extends AppCompatActivity {
                 // eMail = "1014499@hap.in";//FRom
                 //eMail="1015603@hap.in";//TO
                 // eMail = "1015750@hap.in";
+                //  eMail="1025740@hap.in";
+                //  eMail = "1021007@hap.in";
+//             /   eMail="1021079@hap.in";
 
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
@@ -915,6 +917,7 @@ public class Login extends AppCompatActivity {
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
+                Integer checkRadius = response.getData().get(0).getCheckRadius();
 
                 if (Flight == null) Flight = 0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
@@ -967,7 +970,7 @@ public class Login extends AppCompatActivity {
 
                 }
                 try {
-                    userEditor.putInt("checkRadius", response.getData().get(0).getCheckRadius());
+                    userEditor.putInt("checkRadius", checkRadius);
 
                 } catch (Exception e) {
 
