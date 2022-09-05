@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -24,10 +25,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -66,11 +70,13 @@ import com.hap.checkinproc.SFA_Activity.StockAuditCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.VanSalesDashboardRoute;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.adapters.OffersAdapter;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -80,7 +86,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -101,22 +109,22 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences UserDetails;
     DatabaseHandler db;
 
-    ImageView ivLogout, ivCalendar, ivProcureSync;
+    ImageView ivLogout, ivCalendar, ivProcureSync,btnCloseOffer;
 
-    LinearLayout llGridParent;
+    LinearLayout llGridParent,linOffer;
 
     OutletDashboardInfoAdapter cumulativeInfoAdapter;
     private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
     RecyclerView recyclerView;
     TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls,
             tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls, tvUserName,
-            tvPrimOrder, tvNoOrder, tvTotalValOrder, tvUpdTime;
+            tvPrimOrder, tvNoOrder, tvTotalValOrder, tvUpdTime, lblSlideNo;
     private DatePickerDialog fromDatePickerDialog;
 
     public static String sfa_date = "";
 
     MenuAdapter menuAdapter;
-    RecyclerView rvMenu, rvPrimOrd;
+    RecyclerView rvMenu, rvPrimOrd, ryclOffers;
     private List<ListModel> menuList = new ArrayList<>();
     NumberFormat formatter = new DecimalFormat("##0.00");
 
@@ -138,9 +146,25 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         apiService = ApiClient.getClient().create(ApiInterface.class);
 
 
+        linOffer=findViewById(R.id.linOffer);
+        linOffer.setVisibility(View.GONE);
+        ryclOffers= findViewById(R.id.ryclOffers);
+        lblSlideNo =findViewById(R.id.lblSlideNo);
+        btnCloseOffer =findViewById(R.id.btnCloseOffer);
         init();
         setOnClickListener();
 
+        String sOffShown=sharedCommonPref.getvalue(Constants.DB_OfferShownOn,"");
+
+        if (!Common_Class.GetDatewothouttime().equalsIgnoreCase(sOffShown)){
+            sharedCommonPref.clear_pref(Constants.DB_Offer_NOTIFY);
+        }
+        btnCloseOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linOffer.setVisibility(View.GONE);
+            }
+        });
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
 
 
@@ -154,6 +178,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         common_class.getProductDetails(this);
         getNoOrderRemarks();
         showDashboardData();
+        getOfferNotify();
         getPrimaryData("All");
         common_class.getDb_310Data(Constants.GroupFilter, this);
 
@@ -781,6 +806,92 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         Log.v("CHECKING", "CHECKING");
     }
 
+    private void getOfferNotify() {
+        if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.DB_Offer_NOTIFY))) {
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("axn", "get/offernotify");
+            QueryString.put("CusCode", UserDetails.getString("Sfcode", ""));
+            QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptCall = apiInterface.getDataArrayList(QueryString, null);
+            rptCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    try {
+                        JsonArray res = response.body();
+                        Log.d("getOfferNotify", String.valueOf(response.body()));
+                        //  Log.d("NotifyMsg", response.body().toString());
+                        JSONArray sArr=new JSONArray(String.valueOf(response.body()));
+                        assignOffGetNotify(sArr);
+                        sharedCommonPref.save(Constants.DB_Offer_NOTIFY, gson.toJson(response.body()));
+                    } catch (Exception e) {
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    Log.d("Tag", String.valueOf(t));
+                }
+            });
+
+        } else {
+            try {
+                JSONArray sArr=new JSONArray(String.valueOf(sharedCommonPref.getvalue(Constants.DB_Offer_NOTIFY)));
+                //assignOffGetNotify(sArr);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void assignOffGetNotify(JSONArray res) {
+        JSONArray fRes= res;
+        if (fRes.length()>0){
+            LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
+            TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            ryclOffers.setLayoutManager(TypgridlayManager);
+            SnapHelper snapHelper = new PagerSnapHelper();
+            snapHelper.attachToRecyclerView(ryclOffers);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ryclOffers.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                        LinearLayoutManager layoutManager = ((LinearLayoutManager)ryclOffers.getLayoutManager());
+                        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+                        lblSlideNo.setText((firstVisiblePosition+1)+"/"+fRes.length());
+                    }
+                });
+            }else{
+                ryclOffers.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        LinearLayoutManager layoutManager = ((LinearLayoutManager)ryclOffers.getLayoutManager());
+                        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+                        lblSlideNo.setText((firstVisiblePosition+1)+"/"+fRes.length());
+                    }
+                });
+            }
+            OffersAdapter TyplistItems = new OffersAdapter(fRes, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+                    try {
+                        //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", item.getString("id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            ryclOffers.setAdapter(TyplistItems);
+            linOffer.setVisibility(View.VISIBLE);
+
+            sharedCommonPref.save(Constants.DB_OfferShownOn,Common_Class.GetDatewothouttime());
+        }
+    }
     void showDashboardData() {
         common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
         //common_class.getDb_310Data(Constants.SERVICEOUTLET, this);

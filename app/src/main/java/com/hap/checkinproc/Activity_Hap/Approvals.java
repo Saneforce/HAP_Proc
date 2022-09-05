@@ -27,6 +27,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.ProjectionApprovListActivity;
+import com.hap.checkinproc.Status_Activity.Advance_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
 import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
@@ -47,8 +48,8 @@ import retrofit2.Response;
 public class Approvals extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest,FlightAppr, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
-    LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
+    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest, AdvanceRequest,FlightAppr, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout LeaveStatus, advanceStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
             lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus,llFlightApprHist;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -137,6 +138,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
 
         LeaveRequest = findViewById(R.id.lin_leave_req);
+        AdvanceRequest = findViewById(R.id.lin_Advance_req);
         FlightAppr = findViewById(R.id.lin_FlightAppr);
         PermissionRequest = findViewById(R.id.lin_per_req);
         OnDuty = findViewById(R.id.lin_on_duty);
@@ -146,6 +148,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         TourPlan = findViewById(R.id.lin_tour_plan);
         /*Status Linear*/
         LeaveStatus = findViewById(R.id.lin_leav_sta);
+        advanceStatus = findViewById(R.id.lin_Advance_sta);
         PermissionStatus = findViewById(R.id.lin_per_sta);
         OnDutyStatus = findViewById(R.id.lin_duty_sta);
         MissedStatus = findViewById(R.id.lin_miss_sta);
@@ -174,6 +177,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
         linQpsApprove.setOnClickListener(this);
         LeaveRequest.setOnClickListener(this);
+        AdvanceRequest.setOnClickListener(this);
         PermissionRequest.setOnClickListener(this);
         FlightAppr.setOnClickListener(this);
         OnDuty.setOnClickListener(this);
@@ -182,6 +186,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         TravelAllowance.setOnClickListener(this);
         TourPlan.setOnClickListener(this);
         LeaveStatus.setOnClickListener(this);
+        advanceStatus.setOnClickListener(this);
         PermissionStatus.setOnClickListener(this);
         OnDutyStatus.setOnClickListener(this);
         MissedStatus.setOnClickListener(this);
@@ -338,6 +343,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(Approvals.this, Leave_Approval.class));
                 finish();
                 break;
+            case R.id.lin_Advance_req:
+                startActivity(new Intent(Approvals.this, Advance_Approval.class));
+                finish();
+                break;
 
             case R.id.lin_FlightAppr:
                 startActivity(new Intent(Approvals.this, FlightBookingApproval.class));
@@ -401,6 +410,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_leav_sta:
                 common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "1");
+                finish();
+                break;
+            case R.id.lin_Advance_sta:
+                common_class.CommonIntentwithoutFinishputextra(Advance_Status_Activity.class, "AMod", "1");
                 finish();
                 break;
 

@@ -157,6 +157,8 @@ public class Login extends AppCompatActivity {
                         }
                         // Get new FCM registration token
                         deviceToken = task.getResult();
+                        shared_common_pref.save(Shared_Common_Pref.Dv_ID, deviceToken);
+
                         Log.e("LoginActivity", deviceToken);
                     }
                 });
@@ -611,83 +613,14 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
-                //eMail = "sakthivel.sa@hap.in";
-                //eMail = "srinivas.p@hap.in";
-                //eMail = "sajan@hap.in";
-                //   eMail = "1005985@hap.in";
-                //eMail = "haptest5@hap.in";
-                //eMail = "testhap3@hap.in";
-               // eMail = "ciadmin@hap.in";
-                // eMail = "rajkumar@hap.in";
-                //  eMail = "haptest5@hap.in";
-                // eMail = "senthilraja.d@hap.in";
-                // eMail = "pachamuthu.m@hap.in";
-                // eMail="akshay.r@hap.in";
-                // eMail = "1025751@hap.in";//test
+                //eMail="ciadmin@hap.in";
 
-                // eMail = "1014700@hap.in";
-                // eMail = "1006208@hap.in";
-                // eMail = "1009998@hap.in";
-                // eMail = "testuser@gmail.com";
-                // eMail = "anbu@saneforce.com";
-//                eMail = "1016431@hap.in";
-//                eMail = "1022324@hap.in";
-                // eMail = "1025257@hap.in";
-                // eMail = "1026494@hap.in";
-//                eMail = "1007660@hap.in";//pranita
-                //eMail = "1026508@hap.in";//alaguselvi
-                // eMail = "1012639@hap.in";//md
-                //  eMail="1014022@hap.in";//rmk
-
-                // eMail = "1006626@hap.in";
-                // eMail = "1006345@hap.in";
-                //eMail = "1006812@hap.in";
-               // eMail = "1013362@hap.in";//(-18)
-                // eMail="ssiva2519@gmail.com";
-                //  eMail = "1013362@hap.in";
-                // eMail="1021453@hap.in";
-                //eMail = "anbu@saneforce.com";
-                // eMail="1018656@hap.in";
-
-                //eMail="sivakumar.s@hap.in";
-
-                // eMail = "1026710@hap.in";
-
-                // eMail="1017169@hap.in";
+                //eMail="1023176@hap.in";
+               // eMail="1025499@hap.in";
+                //eMail="1014604@hap.in";
+                eMail="harishbabu.bh@hap.in";
 
 
-                //eMail = "1006208@hap.in";
-                // eMail="rajasekaranm@hap.in";
-                //   eMail="1018368@hap.in";
-                //eMail="sajan@hap.in";
-                // eMail="1022081@hap.in";
-                // eMail="johnkennedy.i@hap.in";
-                //eMail = "1018937@hap.in";
-
-                // eMail="1006812@hap.in";//ramalakshmi
-                // eMail="1018821@hap.in";//md food services
-                // eMail="1006815@hap.in";
-                //  eMail="1977ananthkumar@gmail.com";
-                // eMail = "gpmuthu11@gmail.com";
-//                eMail = "1015742@hap.in";
-//                eMail = "1021230@hap.in";
-                // eMail="shiva.saneforce@gmail.com";
-                // eMail="rajasekaranm@hap.in";
-                //  eMail = "1014700@hap.in";
-
-                //   eMail="1026594@hap.in";
-                //   eMail = "gnanaoli.j@hap.in";
-                // eMail = "testhap3@hap.in";
-                //eMail = "shanmugam@hap.in";
-                //eMail = "anbu@saneforce.in";
-                //  eMail="1010057@hap.in";
-                // eMail="1008672@hap.in";
-                // eMail = "1014499@hap.in";//FRom
-                //eMail="1015603@hap.in";//TO
-                // eMail = "1015750@hap.in";
-                //  eMail="1025740@hap.in";
-                //  eMail = "1021007@hap.in";
-//             /   eMail="1021079@hap.in";
 
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);

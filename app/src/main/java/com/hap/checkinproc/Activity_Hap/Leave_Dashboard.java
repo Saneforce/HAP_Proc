@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.Status_Activity.Advance_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
 import com.hap.checkinproc.Status_Activity.FlightBooking_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
@@ -32,8 +33,8 @@ import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,flightBookStatus,
+    LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry,lin_Advance_req;
+    LinearLayout LeaveStatus,AdvanceStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,flightBookStatus,
             ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus, LinearException, DaExcptStaus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
@@ -99,10 +100,12 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         PermissionRequest = findViewById(R.id.lin_per_req);
         FlightTick = findViewById(R.id.lin_fligh_mode);
         WeeklyOff = findViewById(R.id.lin_week_off);
+        lin_Advance_req = findViewById(R.id.lin_Advance_req);
         DeveiationEntry = findViewById(R.id.lin_deviation_entry);
 
         /*Status Linear*/
         LeaveStatus = findViewById(R.id.lin_leav_sta);
+        AdvanceStatus = findViewById(R.id.lin_Advance_sta);
         flightBookStatus=findViewById(R.id.lin_flight_booking_status);
         PermissionStatus = findViewById(R.id.lin_per_sta);
         OnDutyStatus = findViewById(R.id.lin_duty_sta);
@@ -121,6 +124,8 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         countMissedPunch = findViewById(R.id.txt_miss_punch_count);
         countWeeklyOff = findViewById(R.id.txt_week_off_count);
         /*Status text*/
+        AdvanceStatus.setOnClickListener(this);
+        lin_Advance_req.setOnClickListener(this);
         LeaveRequest.setOnClickListener(this);
         PermissionRequest.setOnClickListener(this);
         FlightTick.setOnClickListener(this);
@@ -162,6 +167,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
 
+            case R.id.lin_Advance_req:
+                startActivity(new Intent(Leave_Dashboard.this, AdvanceReq.class));
+                break;
+
             case R.id.lin_leave_req:
                 startActivity(new Intent(Leave_Dashboard.this, Leave_Request.class));
                 break;
@@ -187,6 +196,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             case R.id.lin_leav_sta:
                 //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
                 startActivity(new Intent(Leave_Dashboard.this, Leave_Status_Activity.class));
+                mShared_common_pref.save("AMod", "0");
+                break;
+            case R.id.lin_Advance_sta:
+                startActivity(new Intent(Leave_Dashboard.this, Advance_Status_Activity.class));
                 mShared_common_pref.save("AMod", "0");
                 break;
             case R.id.lin_flight_booking_status:

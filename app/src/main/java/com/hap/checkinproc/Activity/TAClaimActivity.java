@@ -145,13 +145,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Uri outputFileUri;
     FuelListAdapter fuelListAdapter;
     LinearLayout Dynamicallowance, OtherExpense, localTotal, otherExpenseLayout, linAll, linRemarks,
-            linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner, ldg_StylocSpinner, DA_TypSpinner, DA_locSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
+            linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner, ldg_StylocSpinner,ldg_DrvStylocSpinner, DA_TypSpinner, DA_locSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding, linAddplaces,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, travelPlaces, linDailyAllowance, linback, lin,
             linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView;
     LinearLayout viewContinue, viewContinueTotal, ViewData;
-    RelativeLayout lnChangePlace;
+    RelativeLayout lnChangePlace,lnRetVehicle;
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara, cardTrvPlcs;
     TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
             TotalTravelledKm, txtBusFrom, txtBusTo, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
@@ -160,12 +160,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
             lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey,
-            txt_Styloc, txt_DAStyloc, txt_DATyp, txtAllwType, txtCAllwType, txEligDt, NoofNight, txldgTdyAmt,
+            txt_Styloc,txt_drvStyloc, txt_DAStyloc, txt_DATyp, txtAllwType, txtCAllwType, txEligDt, NoofNight, txldgTdyAmt,
             edtRwID;
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill, txDAOthName;
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
-            img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck, imgEdtPlace, btnDAclose;
+            img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck, imgEdtPlace, btnDAclose,btnVRetclose;
     String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
             DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
             attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
@@ -175,13 +175,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", lodEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
             DATE = "", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "",
-            sLocId = "", sLocName = "", sDALocId = "", sDALocName = "", sDALType, CInDate = "", COutDate = "", Alw_Eligibilty = "";
+            sLocId = "",sDrvLocId="", sLocName = "",sDrvLocName="", sDALocId = "", sDALocName = "", sDALType, CInDate = "", COutDate = "", Alw_Eligibilty = "";
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
     int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0, OnlyNight = 0, transferflg = 0, TWMax_Km = 300, FWMax_Km = 1000;
     long styDate = 0, nofNght = 0;
     ScrollView scrlMain;
-    Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
+    Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0,ldgDrvAlw = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
             otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0, sumsTot = 0.0, BusAmount = 0.0;
     double TotDA = 0.0, sTotal = 0.0, sums = 0.0, sumsTa = 0.0, tTotAmt = 0.0, stayEgTotal = 0.0;
@@ -189,7 +189,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     //ArrayList<CtrlsListModel> uLCItems,uOEItems;
     float tJointAmt = 0;
     boolean changeStay = false;
-    Button btnDAChange;
+    Button btnDAChange,btnVehiRet;
     CircularProgressButton btn_sub, buttonSave;
     int countLoding = 0;
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -221,7 +221,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Switch ldgNeeded;
     View viw, viewBilling;
     ScrollView mLc;
-    CheckBox mChckCont, mChckEarly, mChckLate;
+    CheckBox mChckCont, mChckEarly, mChckLate,chkDrvAlw;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editors;
     JsonArray jsonArray = null, ExpSetup = null, trvPlcsArray = null, jsonFuelAllowance = null, jsonExpHead = null, lcDraftArray = null, oeDraftArray = null,
@@ -328,10 +328,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ldg_ara = findViewById(R.id.linear_loadge);
         ldg_typ_sp = findViewById(R.id.ldg_typ_spiner);
         ldg_StylocSpinner = findViewById(R.id.ldg_StylocSpinner);
+        ldg_DrvStylocSpinner = findViewById(R.id.ldg_drvStylocSpinner);
         txDAOthName = findViewById(R.id.txDAOthName);
         DA_locSpinner = findViewById(R.id.DA_locSpinner);
         DA_TypSpinner = findViewById(R.id.DA_TypSpinner);
         lnChangePlace = findViewById(R.id.lnChangePlace);
+        lnRetVehicle = findViewById(R.id.lnRetVehicle);
         imgEdtPlace = findViewById(R.id.img_edit);
         scrlMain = findViewById(R.id.scrlMain);
 
@@ -352,6 +354,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         txt_totDA = findViewById(R.id.txt_totDA);
         txtMyEligi = findViewById(R.id.txtMyEligi);
         txtDrivEligi = findViewById(R.id.txtDrvLgd);
+        chkDrvAlw = findViewById(R.id.chk_Drv_alw);
         lbl_ldg_eligi = findViewById(R.id.lbl_ldg_eligi);
         lblHdBill = findViewById(R.id.lblHdBill);
         lblHdBln = findViewById(R.id.lblHdBln);
@@ -383,6 +386,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         stayDays = findViewById(R.id.lin_stay_view);
         txtLodgUKey = findViewById(R.id.log_ukey);
         txt_Styloc = findViewById(R.id.txt_Styloc);
+        txt_drvStyloc = findViewById(R.id.txt_drvStyloc);
         txt_DATyp = findViewById(R.id.txt_DATyp);
         txtAllwType = findViewById(R.id.txtAllwType);
         txtCAllwType = findViewById(R.id.cAllwType);
@@ -413,6 +417,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ViewData = findViewById(R.id.data);
         TextCheckInDate = findViewById(R.id.txt_hotel_date);
         btnDAChange = findViewById(R.id.btnDAChange);
+        btnVehiRet = findViewById(R.id.btnVehiRet);
+        btnVRetclose = findViewById(R.id.btnVRetclose);
         btnDAclose = findViewById(R.id.btnDAclose);
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
@@ -488,7 +494,20 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 }
             }
         });
-
+        chkDrvAlw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ldgDrvEligi=ldgDrvAlw;
+                    txtDrivEligi.setVisibility(View.VISIBLE);
+                } else {
+                    ldgDrvEligi=0.0;
+                    txtDrivEligi.setVisibility(View.GONE);
+                }
+                txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgDrvEligi));
+                SumOFLodging(0);
+            }
+        });
         img_lodg_atta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -530,6 +549,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         drvldgEAra.setVisibility(View.VISIBLE);
         lnChangePlace.setVisibility(View.GONE);
+        lnRetVehicle.setVisibility(View.GONE);
 
         mCommon_model_spinner = new Common_Model("HQ", "HQ", "flag");
         listAllwType.add(mCommon_model_spinner);
@@ -556,6 +576,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     JNLdgEAra.setVisibility(View.GONE);
                     TotalDays.setVisibility(View.GONE);
                     txt_Styloc.setText("");
+                    txt_drvStyloc.setText("");
                     lodgStyLocation.setText("");
                     txt_ldg_type.setText("");
                     lodgJoin.setVisibility(View.GONE);
@@ -679,6 +700,20 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 }
             }
         });
+
+        btnVehiRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                lnRetVehicle.setVisibility(View.VISIBLE);
+            }
+        });
+        btnVRetclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lnRetVehicle.setVisibility(View.GONE);
+            }
+        });
         imgEdtPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -719,6 +754,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onClick(View v) {
 
                 customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgLocations, 12);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+        });
+        ldg_DrvStylocSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgLocations, 15);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -2847,6 +2892,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     lodgStyLocation.setText("");
                     txt_Styloc.setText("");
+                    txt_drvStyloc.setText("");
                     ldg_StylocSpinner.setClickable(true);
                     viewContinue.removeAllViews();
                     viewContinueTotal.removeAllViews();
@@ -2878,6 +2924,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         if (sLocId.equalsIgnoreCase("-1"))
                             sLocName = "Other Location";
                         txt_Styloc.setText(sLocName);
+                        txt_drvStyloc.setText(sLocName);
                         getStayAllow();
                     }
                     if (LodingCon.size() != 0) {
@@ -3036,13 +3083,21 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 if (sLocId.equalsIgnoreCase("-1"))
                     sLocName = "Other Location";
                 txt_Styloc.setText(sLocName);
+                txt_drvStyloc.setText(sLocName);
             }
             Double drvAmt = Double.valueOf(ldraft.get("Driver_Ldg_Amount").getAsString());
             txtDrivEligi.setVisibility(View.GONE);
+            chkDrvAlw.setVisibility(View.GONE);
             if (drvAmt != 0) {
                 txtDrivEligi.setVisibility(View.VISIBLE);
+                chkDrvAlw.setVisibility(View.VISIBLE);
+                chkDrvAlw.setChecked(true);
                 txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(drvAmt));
                 ldgDrvEligi = drvAmt;
+                ldgDrvAlw=drvAmt;
+            }else{
+                chkDrvAlw.setChecked(false);
+                ldgDrvEligi = 0.0;
             }
             ConStay = ldraft.get("Continuous_Stay").getAsString();
             ErlyStay = ldraft.get("Early_Checkin").getAsString();
@@ -4777,9 +4832,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             SumOFLodging(0);
         }
         if (type == 12) {
+            boolean sameDrvldg=false;
+            if (sDrvLocId=="" || sDrvLocId==sLocId) sameDrvldg=true;
             sLocId = myDataset.get(position).getId();
             sLocName = myDataset.get(position).getName();
+            if(sameDrvldg==true){
+                sDrvLocId = myDataset.get(position).getId();
+                sDrvLocName = myDataset.get(position).getName();
+            }
             txt_Styloc.setText(sLocName);
+            txt_drvStyloc.setText(sLocName);
             lodgStyLocation.setText(sLocName);
             lodgStyLocation.setVisibility(View.GONE);
             if (sLocId.equalsIgnoreCase("-1")) {
@@ -4788,6 +4850,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
             getStayAllow();
         }
+        if (type == 15) {
+            sDrvLocId = myDataset.get(position).getId();
+            sDrvLocName = myDataset.get(position).getName();
+            txt_drvStyloc.setText(sLocName);
+            getStayAllow();
+        }
+
         if (type == 13) {
             sDALocId = myDataset.get(position).getId();
             sDALocName = myDataset.get(position).getName();
@@ -5051,6 +5120,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         try {
             item.put("sfCode", UserDetails.getString("Sfcode", ""));
             item.put("HQID", sLocId);
+            item.put("DHQID", sDrvLocId);
             item.put("ExpDt", DateTime);
         } catch (JSONException e) {
 
@@ -5064,6 +5134,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 JsonArray AlwDets = response.body();
                 drvldgEAra.setVisibility(View.GONE);
                 ldgDrvEligi = 0.0;
+                chkDrvAlw.setVisibility(View.GONE);
                 txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgDrvEligi));
                 if (AlwDets.size() > 0) {
                     JsonObject item = AlwDets.get(0).getAsJsonObject();
@@ -5071,7 +5142,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
                     if (DriverNeed.equalsIgnoreCase("true")) {
                         drvldgEAra.setVisibility(View.VISIBLE);
+                        chkDrvAlw.setVisibility(View.VISIBLE);
+                        chkDrvAlw.setChecked(true);
                         ldgDrvEligi = item.get("DrvLdgAmt").getAsDouble();
+                        ldgDrvAlw=ldgDrvEligi;
                         txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgDrvEligi));
                     }
                     SumOFLodging(0);

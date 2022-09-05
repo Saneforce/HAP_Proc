@@ -9,10 +9,15 @@ public class Constants {
     public static final String DistributorERP = "distributorERP";
 
 
+    public static final String DB_TWO_GET_NOTIFY = "dashboardTwoNotify";
+    public static final String DB_Offer_NOTIFY = "OfferNotify";
+    public static final String DB_OfferShownOn = "OfferShown";
+
     public static final String Retailer_OutletList = "retailerOutletList";
     public static final String Distributor_List = "distributorList";
     public static final String Product_List = "productList";
     public static final String Primary_Product_List = "primaryproList";
+    public static final String Primary_Shortage_List = "PrimaryShortageList";
     public static final String Category_List = "categoryList";
     public static final String ProdTypes_List = "ProdTypeList";
     public static final String ProdGroups_List = "ProdGroupList";
@@ -91,7 +96,6 @@ public class Constants {
     public static final String VAN_STOCK_UNLOADING = "Stock UnLoading";
     public static final String VAN_SALES_ORDER = "Van Sales Order";
     public static final String LOGIN_DATA = "loginData";
-    public static final String DB_TWO_GET_NOTIFY = "dashboardTwoNotify";
     public static final String DB_TWO_GET_DYREPORTS = "dashboardTwoDyReports";
     public static final String DB_TWO_GET_MREPORTS = "dashboardMnthReports";
     public static final String LOGIN_DATE = "loginDate";

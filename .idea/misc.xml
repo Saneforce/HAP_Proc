@@ -3,49 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/drawable/hash_border.xml" value="0.359" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/drawable/ic_search_icon.xml" value="0.359" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/font/basic.xml" value="0.396875" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_add_new_retailer.xml" value="0.30434782608695654" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_allowance.xml" value="0.33" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_approvals.xml" value="0.27355072463768115" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_checkin.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_da_exception_entry.xml" value="0.18802083333333333" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_da_exception_status.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_dashboard.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_dashboard__route.xml" value="0.30434782608695654" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_dashboard__two.xml" value="0.33" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_grn_category__select.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_image_capture.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_leave_dashboard.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_map_direction.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_mydayplan_.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_nearby__outlets.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_on__duty_.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_print__invoice_.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_procurement_dashboard.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_sfactivity.xml" value="0.27355072463768115" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_t_a_claim.xml" value="0.30434782608695654" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_t_a_view_status.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_ta_cumulative_approval.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_ta_fuel_edit.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_tp__mydayplan.xml" value="0.18802083333333333" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_van_sal_payment.xml" value="0.18802083333333333" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_vansale_unload.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_vansales_dashboard__route.xml" value="0.21614583333333334" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/activity_view_t_a_status.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/adapter_primary_pay_layout.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/back_arrow.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/homerptrecyler.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/invoice_pay_recyclerview_edit.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/item_ta_appr.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/row_deviation_entry_status.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/row_view_ta_status.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/vansales_product_order_recyclerview.xml" value="0.21614583333333334" />
-        <entry key="..\:/AndroidCode/HAPCODE/HAP_13_6_2022/app/src/main/res/layout/vansales_unload_pay_recyclerview.xml" value="0.36666666666666664" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.1235370611183355" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_distributor.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_heatmeter.xml" value="0.2890625" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc/app/src/main/res/drawable/ic_so_launcher_background.xml" value="0.2890625" />
@@ -247,24 +205,55 @@
         <entry key="..\:/HAP/HAP_Proc/app/src/main/res/layout/activity_flight_booking_status.xml" value="0.15052083333333333" />
         <entry key="..\:/HAP/HAP_Proc/app/src/main/res/layout/flight_booking_approval.xml" value="0.13645833333333332" />
         <entry key="..\:/HAP/HAP_Proc/app/src/main/res/layout/flight_booking_status_listitem.xml" value="0.15052083333333333" />
+        <entry key="app/src/main/res/drawable-mdpi/ic_check_circle.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/blue_bg.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/bottom_border.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/bugetoutletno.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/drawable/button_blueg.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/button_white.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/button_whitebg.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/button_yellow.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/cardbtnprimary.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/cardbutton.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.27395833333333336" />
+        <entry key="app/src/main/res/drawable/disable_minus.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/hash_border.xml" value="0.27395833333333336" />
+        <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/ic_baseline_date_range_24.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/ic_baseline_fiber_manual_record_24.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/ic_baseline_pending_24.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/ic_baseline_shopping_cart_24.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/ic_baseline_shopping_cart_grey24.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/ic_outline_assignment_48.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/ic_outline_assignment_turned_in_24.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/ic_round_done_outline_24.xml" value="0.27395833333333336" />
+        <entry key="app/src/main/res/drawable/ic_round_pending_24.xml" value="0.1215" />
+        <entry key="app/src/main/res/drawable/ic_round_print_24.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/ic_round_share_24.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/line_dash_background.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/order_amount_back.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/rect_dash_background.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/round_rect_green.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/round_rect_yellow.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/round_status_blue.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/search_backround.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/shape_user.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/drawable/sign_bg.xml" value="0.21197916666666666" />
-        <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.32689655172413795" />
-        <entry key="app/src/main/res/layout/activity_allowance.xml" value="0.11956521739130435" />
+        <entry key="app/src/main/res/drawable/textbox_bg.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/txt_rect_red.xml" value="0.211" />
+        <entry key="app/src/main/res/drawable/zoom_in.xml" value="0.211" />
+        <entry key="app/src/main/res/font/lato.xml" value="0.2838541666666667" />
+        <entry key="app/src/main/res/layout/Advance_status_listitem.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_Advance__status_.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.31437908496732025" />
+        <entry key="app/src/main/res/layout/activity_advance__approval.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_advance__approval__reject.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_advance_req.xml" value="0.32091979980468754" />
+        <entry key="app/src/main/res/layout/activity_allowance.xml" value="0.5971563981042654" />
         <entry key="app/src/main/res/layout/activity_allowance_two.xml" value="0.5178082191780822" />
         <entry key="app/src/main/res/layout/activity_approvals.xml" value="0.1726851851851852" />
         <entry key="app/src/main/res/layout/activity_block_information.xml" value="0.2006340579710145" />
+        <entry key="app/src/main/res/layout/activity_choose_printer.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />
@@ -280,22 +269,32 @@
         <entry key="app/src/main/res/layout/activity_invoice__category__select.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_invoice__orderid_layout.xml" value="0.12335359675785208" />
         <entry key="app/src/main/res/layout/activity_lead_.xml" value="0.45048543689320386" />
-        <entry key="app/src/main/res/layout/activity_leave__request.xml" value="0.13043478260869565" />
+        <entry key="app/src/main/res/layout/activity_leave__approval.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_leave__approval__reject.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_leave__request.xml" value="0.2853297442799462" />
+        <entry key="app/src/main/res/layout/activity_leave__status_.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_leave_dashboard.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_ledger_stmt.xml" value="0.11041666666666666" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_missed__punch.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_mydayplan_.xml" value="0.13043478260869565" />
         <entry key="app/src/main/res/layout/activity_myteam_layout.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_nearby__outlets.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.15848007414272475" />
-        <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.46518375241779497" />
         <entry key="app/src/main/res/layout/activity_order_category.xml" value="0.17685185185185184" />
         <entry key="app/src/main/res/layout/activity_other_brand_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_outlet__info_.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/activity_outlet__report__view.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/activity_permission__request.xml" value="0.17407407407407408" />
         <entry key="app/src/main/res/layout/activity_pop_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_pos_layout.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.40471118909668696" />
-        <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_primary_order_layout.xml" value="0.3220064724919094" />
+        <entry key="app/src/main/res/layout/activity_print__invoice_.xml" value="0.4421218872070313" />
+        <entry key="app/src/main/res/layout/activity_projection_category_select.xml" value="0.20409189860026045" />
+        <entry key="app/src/main/res/layout/activity_projection_history.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_q_r_code_scanner.xml" value="0.24592391304347827" />
         <entry key="app/src/main/res/layout/activity_qps.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_route__product__info.xml" value="0.16666666666666666" />
@@ -308,22 +307,44 @@
         <entry key="app/src/main/res/layout/activity_t_a_claim.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/activity_t_a_view_status.xml" value="0.11296296296296296" />
         <entry key="app/src/main/res/layout/activity_t_l_cliam__apprval.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/activity_ta_fuel_edit.xml" value="0.3414810180664063" />
+        <entry key="app/src/main/res/layout/activity_tp__approval.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_view_t_a_status.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/adapter_ledger_layout.xml" value="0.11041666666666666" />
         <entry key="app/src/main/res/layout/adapter_primary_pay_layout.xml" value="0.17592592592592593" />
-        <entry key="app/src/main/res/layout/adapter_primary_product.xml" value="0.17592592592592593" />
+        <entry key="app/src/main/res/layout/adapter_primary_product.xml" value="0.4877450980392157" />
+        <entry key="app/src/main/res/layout/adapter_qps_layout.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/layout/advance_approval_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/advance_status_listitem.xml" value="0.25" />
         <entry key="app/src/main/res/layout/category_order_horizantal_universe_gridview.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/category_order_types_ryclv.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/categorywise_sales_adp.xml" value="0.5508345978755691" />
         <entry key="app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.23505434782608695" />
         <entry key="app/src/main/res/layout/custom_dialog_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/custom_toolbar_help.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/device_item.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/explorelist.xml" value="0.16394927536231885" />
         <entry key="app/src/main/res/layout/flight_booking_status_listitem.xml" value="0.4400921658986175" />
+        <entry key="app/src/main/res/layout/fragment_device_list.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/fragment_outletdata_info.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_tab_outlet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fruit_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/history_info_adapter_layout.xml" value="0.11041666666666666" />
+        <entry key="app/src/main/res/layout/history_more_info_layout.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/history_orderinvoice_adapter_layout.xml" value="0.11041666666666666" />
+        <entry key="app/src/main/res/layout/history_sales_adapter_layout.xml" value="0.11041666666666666" />
+        <entry key="app/src/main/res/layout/invoice_history_recyclerview.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/invoice_pay_recyclerview_edit.xml" value="0.25" />
         <entry key="app/src/main/res/layout/leave_approval_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/leave_status_listitem.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/loading_progress_bottom.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/month_year_picker.xml" value="0.11041666666666666" />
         <entry key="app/src/main/res/layout/myteam_category_adapter_layout.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/offers_ryclv_adb.xml" value="0.12395833333333334" />
+        <entry key="app/src/main/res/layout/onduty_status_listitem.xml" value="0.37069858910464953" />
         <entry key="app/src/main/res/layout/outlet_info_recyclerview.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/permission_sattus_listitem.xml" value="0.5267326732673268" />
+        <entry key="app/src/main/res/layout/print_invoice_recyclerview.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
         <entry key="app/src/main/res/layout/product_free_recyclerview.xml" value="4.316222932399262" />
         <entry key="app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.2078125" />
@@ -332,15 +353,23 @@
         <entry key="app/src/main/res/layout/product_pay_recyclerview_edit.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/product_pos_pay_recyclerview.xml" value="0.22" />
         <entry key="app/src/main/res/layout/product_pos_recyclerview.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/product_projection_pay_recyclerview.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/product_projection_recyclerview.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/rcyl_ledger_detail.xml" value="0.11041666666666666" />
+        <entry key="app/src/main/res/layout/replc_detail_adb.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/layout/replc_itmdetail_adb.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.35318559556786705" />
         <entry key="app/src/main/res/layout/row_ta_fuel_allowance.xml" value="0.12047101449275362" />
+        <entry key="app/src/main/res/layout/sfa_menu_layout.xml" value="0.11803444782168186" />
         <entry key="app/src/main/res/layout/sfatoolbar.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/team_loc_detail_layout.xml" value="0.494077834179357" />
+        <entry key="app/src/main/res/layout/travel_allowance_dynamic.xml" value="0.3136520385742187" />
         <entry key="app/src/main/res/layout/travelleritem.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/view_all_status_listitem.xml" value="0.4992355764093371" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -50,6 +50,9 @@ public class Product_Details_Modal {
     @SerializedName("product_unit")
     @Expose
     private String productUnit;
+    @SerializedName("BatchNo")
+    @Expose
+    private String batchNo = "";
     @SerializedName("Unit_code")
     @Expose
     private String unitCode;
@@ -249,7 +252,6 @@ public class Product_Details_Modal {
     private String mfg = "";
     private String exp = "";
     private String remarks = "";
-    private String batchNo = "";
 
     public String getExp() {
         return exp;
@@ -340,7 +342,30 @@ public class Product_Details_Modal {
     @Expose
     private String discount_value;
 
+    public String getReplace_qty() {
+        return replace_qty;
+    }
 
+
+    @SerializedName("replace_qty")
+    @Expose
+    private String replace_qty;
+
+    @SerializedName("replace_value")
+    @Expose
+    private String replace_value;
+
+    public void setReplace_qty(String replace_qty) {
+        this.replace_qty = replace_qty;
+    }
+
+    public String getReplace_value() {
+        return replace_value;
+    }
+
+    public void setReplace_value(String replace_value) {
+        this.replace_value = replace_value;
+    }
     public String getDiscount_type() {
         return discount_type;
     }

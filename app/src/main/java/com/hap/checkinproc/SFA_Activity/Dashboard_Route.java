@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +33,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -51,6 +55,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.PushNotification.MyFirebaseMessagingService;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.OutletCategoryFilterAdapter;
@@ -70,8 +75,10 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -92,7 +99,9 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     Gson gson;
     Type userTypeRetailor, userTypeReport;
     TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll,
-            txSrvOtlt, txTotUniOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txTotUniOtltCnt, txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal, tvDistributor;
+            txSrvOtlt, txTotUniOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txTotUniOtltCnt,
+            txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal,
+            tvDistributor;
     EditText txSearchRet;
     LinearLayout btnCmbRoute, btTotUniOtlt, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni;
     Common_Model Model_Pojo;
@@ -110,7 +119,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     ApiInterface apiInterface;
     boolean updSale = true;
     String ViewDist;
-    RecyclerView rvOutletCategory, rvMasterCategory;
+    RecyclerView rvOutletCategory, rvMasterCategory;;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
     private TabLayout tabLayout;
     private ViewPager viewPager;

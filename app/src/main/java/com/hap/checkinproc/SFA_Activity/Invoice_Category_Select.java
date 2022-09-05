@@ -308,7 +308,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                 Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
                                 Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
-//                                Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("free")));
+                                Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("discount_price")));
+                                Product_Modal.get(pm).setOff_Pro_code(String.valueOf(jsonObject1.getString("Offer_ProductCd")));
+                                Product_Modal.get(pm).setOff_Pro_name(String.valueOf(jsonObject1.getString("Offer_ProductNm")));
                                 Product_Modal.get(pm).setRate((jsonObject1.getDouble("Rate")));
 
                                 JSONArray taxArr = jsonObject1.getJSONArray("TAX_details");
@@ -376,7 +378,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
 
-            common_class.getDb_310Data(Constants.STOCK_DATA, this);
+            //common_class.getDb_310Data(Constants.STOCK_DATA, this);
 
         } catch (Exception e) {
 
@@ -663,12 +665,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
+                            ProdItem.put("BatchNo", Getorder_Array_List.get(z).getBatchNo());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
                             double cf = (Getorder_Array_List.get(z).getCnvQty());
                             ProdItem.put("Product_Total_Qty", cf > 0 ? (Getorder_Array_List.get(z).getQty()) *
                                     cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+                            ProdItem.put("MRP", String.valueOf(Getorder_Array_List.get(z).getMRP()));
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
@@ -1381,7 +1385,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock, tvMRP;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvBatchNo, tvMRP;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1401,7 +1405,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 tvUOM = view.findViewById(R.id.tvUOM);
                 tvStock = view.findViewById(R.id.tvStockBal);
-
+                tvBatchNo= view.findViewById(R.id.tvBatchNo);
 
                 if (CategoryType >= 0) {
                     tvMRP = view.findViewById(R.id.MrpRate);
@@ -1527,6 +1531,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                    holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                         holder.tvStock.setTextColor(getResources().getColor(R.color.green));
@@ -1604,9 +1609,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0 && Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
                                 totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
                                 enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
-                                common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
-
+                                String pName=Product_Details_Modalitem.get(holder.getAdapterPosition()).getName();
+                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+                                common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock - " + pName);
                             }
 
                             if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
@@ -1942,7 +1947,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         public void onBindViewHolder(Free_Adapter.MyViewHolder holder, int position) {
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                holder.productname.setText("" + Product_Details_Modal.getOff_Pro_name().toUpperCase());
                 holder.Free.setText("" + Product_Details_Modal.getFree());
                 updateToTALITEMUI();
             } catch (Exception e) {

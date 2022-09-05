@@ -513,7 +513,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
-
+                        common_class.showMsg(Invoice_History.this, t.getMessage());
                     }
                 });
 
@@ -697,7 +697,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                            if (jsonArray != null && jsonArray.length() > 1) {
+                            if (jsonArray != null && jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 

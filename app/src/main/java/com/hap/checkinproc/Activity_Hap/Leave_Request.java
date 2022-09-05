@@ -413,10 +413,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Log.e("halfType", leavetype_id);
-
                 if (leaveType.getText().toString().matches("")) {
                     Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();
                     return;
@@ -485,8 +482,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         minDay = separated1[2];
 
     }
-
-
     public void MaxMinDateTo(String strMinDate) {
         Log.e("MAX_DATE_TWO", " " + strMinDate);
 

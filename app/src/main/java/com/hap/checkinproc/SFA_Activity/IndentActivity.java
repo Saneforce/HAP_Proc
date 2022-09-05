@@ -1425,7 +1425,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
                                 totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()* Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
                                 enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
                                 common_class.showMsg(IndentActivity.this, "Can't exceed stock");
                             }
 

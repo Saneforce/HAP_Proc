@@ -1717,7 +1717,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                 // common_class.showMsg(POSActivity.this, "No stock");
                                 totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
                                 enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
 
                                 common_class.showMsg(POSActivity.this, "Can't exceed stock");
 

@@ -1688,7 +1688,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
 
 
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                holder.productname.setText("" + Product_Details_Modal.getOff_Pro_name().toUpperCase());
 
                 holder.Free.setText("" + Product_Details_Modal.getFree());
 

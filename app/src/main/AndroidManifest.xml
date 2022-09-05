@@ -44,6 +44,18 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".Activity_Hap.AdvanceReq"
+            android:exported="false" />
+        <activity
+            android:name=".Status_Activity.Advance_Status_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Hap.Advance_Approval_Reject"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Hap.Advance_Approval"
+            android:exported="false" />
+        <activity
             android:name=".SFA_Activity.VanSalPaymentActivity"
             android:exported="true" />
         <activity
@@ -80,7 +92,6 @@
         <activity android:name=".Activity.ModeOfTravel" />
         <activity android:name=".Activity.TAViewStatus" />
         <activity android:name=".Activity_Hap.ViewTAStatus" />
-
         <activity android:name=".Activity_Hap.FlightTicketRequest" />
         <activity android:name=".Activity_Hap.CateenToken" />
         <activity android:name=".Common_Class.ToolBarMethod" />
@@ -184,19 +195,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.VanSalStockLoadActivity"
-            android:screenOrientation="portrait" />
-        <!--        <activity-->
-        <!--            android:name=".SFA_Activity.VanSalPaymentActivity"-->
-        <!--            android:screenOrientation="portrait" />-->
+            android:screenOrientation="portrait" /> <!-- <activity -->
+        <!-- android:name=".SFA_Activity.VanSalPaymentActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".Activity_Hap.TAHistory"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".SFA_Activity.VanStockViewActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".SFA_Activity.More_Info_Activity"
             android:screenOrientation="portrait" />
@@ -349,11 +356,9 @@
         <activity
             android:name=".Activity.ViewActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Activity.ProcPrimaryOrderActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Activity_Hap.Reports"
             android:screenOrientation="portrait" />

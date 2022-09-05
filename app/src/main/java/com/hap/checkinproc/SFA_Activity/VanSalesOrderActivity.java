@@ -1421,7 +1421,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                             if (/*Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
                                 totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
                                 enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
                                 common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
 
                             }

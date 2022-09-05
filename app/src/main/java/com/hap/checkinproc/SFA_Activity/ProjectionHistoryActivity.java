@@ -121,7 +121,7 @@ public class ProjectionHistoryActivity extends AppCompatActivity implements Mast
                 sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
 
-                common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
+                common_class.getDataFromApi(Constants.GetProjectionOrderHistory, ProjectionHistoryActivity.this, false);
                 common_class.getDb_310Data(Rout_List, this);
                 common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
@@ -172,7 +172,7 @@ public class ProjectionHistoryActivity extends AppCompatActivity implements Mast
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
-                        common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
+                        common_class.getDataFromApi(Constants.GetProjectionOrderHistory, ProjectionHistoryActivity.this, false);
                     } else
                         common_class.showMsg(ProjectionHistoryActivity.this, "Please select valid date");
                 } else {
@@ -180,7 +180,7 @@ public class ProjectionHistoryActivity extends AppCompatActivity implements Mast
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();
-                        common_class.getDataFromApi(Constants.GetPosOrderHistory, ProjectionHistoryActivity.this, false);
+                        common_class.getDataFromApi(Constants.GetProjectionOrderHistory, ProjectionHistoryActivity.this, false);
 
                     } else
                         common_class.showMsg(ProjectionHistoryActivity.this, "Please select valid date");

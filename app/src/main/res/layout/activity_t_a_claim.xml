@@ -1209,7 +1209,6 @@
                                                     android:text=""
                                                     android:visibility="gone" />
                                             </LinearLayout>
-
                                             <LinearLayout
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content">
@@ -1226,6 +1225,22 @@
                                             </LinearLayout>
                                         </LinearLayout>
 
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal"
+                                            android:gravity="center_horizontal">
+                                            <Button
+                                                android:id="@+id/btnVehiRet"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_horizontal"
+                                                android:background="@drawable/button_blueg"
+                                                android:gravity="center_horizontal"
+                                                android:padding="@dimen/C8dp"
+                                                android:text="Add Vehicle Return"
+                                                android:textColor="#ffffff" />
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
@@ -1309,8 +1324,6 @@
                                                 android:layout_marginTop="@dimen/C5dp"
                                                 android:layout_weight="1"
                                                 android:orientation="vertical">
-
-
                                                 <TextView
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
@@ -1321,7 +1334,6 @@
                                                     android:textSize="13sp" />
 
                                                 <androidx.cardview.widget.CardView
-
                                                     android:layout_width="@dimen/C80dp"
                                                     android:layout_height="wrap_content"
                                                     android:layout_below="@+id/txt_rmk"
@@ -1946,14 +1958,81 @@
                                                 android:layout_margin="@dimen/C5dp"
                                                 android:orientation="vertical"
                                                 android:visibility="gone">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <CheckBox
+        android:id="@+id/chk_cnt_sty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/C2dp"
+        android:text="Continue Stay"
+        android:layout_weight="1"/>
+    <CheckBox
+        android:id="@+id/chk_Drv_alw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/C2dp"
+        android:layout_weight="1"
+        android:text="Driver Lodging" />
+</LinearLayout>
 
-                                                <CheckBox
-                                                    android:id="@+id/chk_cnt_sty"
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/C2dp"
-                                                    android:text="Continue Stay" />
+    <LinearLayout
+        android:id="@+id/ldg_drvstayloc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:text="Driver Stay Location"
+            android:textSize="10sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/ldg_drvStylocSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/C8dp"
+            android:layout_marginRight="@dimen/C8dp"
+            android:layout_marginBottom="@dimen/C5dp"
+            android:background="@drawable/item_border"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+
+            <TextView
+                android:id="@+id/txt_drvStyloc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Select the Driver Stay Location"
+                android:textSize="@dimen/C13dp" />
+
+            <ImageView
+                android:layout_width="@dimen/C20dp"
+                android:layout_height="match_parent"
+                android:padding="@dimen/C5dp"
+                android:src="@drawable/spin_down_arrow" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edt_drvstay_loc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/C8dp"
+            android:layout_marginRight="@dimen/C8dp"
+            android:hint="Enter Stay Location"
+            android:paddingTop="5dp"
+            android:textColorHint="#C0C0C0"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
                                                 <CheckBox
                                                     android:id="@+id/chk_early"
                                                     android:layout_width="match_parent"
@@ -3093,6 +3172,128 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/lnRetVehicle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#700B0A0A"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/C5dp"
+            app:cardCornerRadius="@dimen/C5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorPrimaryDark">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#ffffff"
+                        android:text="Add Vehicle Return"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:padding="@dimen/C8dp"/>
+                    <ImageView
+                        android:id="@+id/btnVRetclose"
+                        android:layout_width="@dimen/C15dp"
+                        android:layout_height="@dimen/C15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/C10dp"
+                        android:src="@drawable/close"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Started km" />
+
+                    <EditText
+                        android:id="@+id/VRet_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Start km"
+                        android:inputType="number"
+                        android:maxLength="8"
+                        android:textSize="@dimen/C13dp" />
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Closing km" />
+
+                    <EditText
+                        android:id="@+id/VRet_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="End km"
+                        android:inputType="number"
+                        android:maxLength="8"
+                        android:textSize="@dimen/C13dp" />
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Traveled km" />
+
+                    <EditText
+                        android:id="@+id/VRet_travelled"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:padding="@dimen/C10dp"
+                        android:background="#0D000000"
+                        android:inputType="number"
+                        android:maxLength="8"
+                        android:textSize="@dimen/C13dp" />
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Personal km" />
+
+                    <EditText
+                        android:id="@+id/VRet_pers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Personal km"
+                        android:inputType="number"
+                        android:maxLength="8"
+                        android:textSize="@dimen/C13dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/C20dp">
+
+                        <Button
+                            android:id="@+id/btnVRetIns"
+                            style="@style/ButtonStyle"
+                            android:background="@drawable/button_blueg"
+                            android:onClick="UpdteAllowance"
+                            android:text="Submit" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/lnChangePlace"
         android:layout_width="match_parent"

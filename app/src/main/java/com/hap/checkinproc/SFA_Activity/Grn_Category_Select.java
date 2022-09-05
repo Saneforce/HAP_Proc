@@ -1219,9 +1219,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setBatchNo(s.toString());
-
                         }
 
                         @Override
@@ -1379,7 +1377,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                             if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty() < totQty) {
                                 totQty = 0;
                                 enterQty = 0;
-                                holder.Qty.setText("0");
+                                //holder.Qty.setText("0");
                                 common_class.showMsg(Grn_Category_Select.this, "Can't exceed Invoice Qty");
                             }
 //                            double enterQty = 0;

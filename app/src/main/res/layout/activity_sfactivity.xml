@@ -945,8 +945,57 @@
             </LinearLayout>
 
         </ScrollView>
+        <LinearLayout
+            android:id="@+id/linOffer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ablack"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                >
 
+                <ImageView
+                    android:id="@+id/btnCloseOffer"
+                    android:layout_width="@dimen/C40dp"
+                    android:layout_height="@dimen/C40dp"
+                    android:layout_alignParentRight="true"
+                    android:elevation="@dimen/C16dp"
+                    android:src="@drawable/closebtn" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/crdOffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C16dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/ryclOffers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C8dp"
+                            android:background="@color/white" />
+                        <TextView
+                            android:id="@+id/lblSlideNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="1/2"
+                            android:textAlignment="textEnd"
+                            android:paddingEnd="@dimen/C8dp"
+                            android:paddingBottom="@dimen/C8dp"
+                            android:textSize="12sp"
+                            />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>

@@ -101,7 +101,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     public int selectedPos = 0;
     private TextView tvTotalAmount, tvPlant;
     private double totalvalues, taxVal;
-    private Integer totalQty;
+    private double totalQty;
     private TextView tvBillTotItem;
     final Handler handler = new Handler();
     public static ProjectionCategorySelectActivity order_category_select;
@@ -499,26 +499,15 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                         HeadItem.put("Worktype_code", Worktype_code);
                         HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
                         HeadItem.put("dcr_activity_date", Common_Class.GetDate());
-                        // HeadItem.put("Daywise_Remarks", "");
                         HeadItem.put("UKey", Ukey);
-                        // HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();
-//                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
-//                        OutletItem.put("modified_time", Common_Class.GetDate());
                         OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
                         OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-//                        OutletItem.put("orderValue", formatter.format(totalvalues));
-//                        OutletItem.put("CashDiscount", cashDiscount);
-//                        OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
-//                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-//                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
-//                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-//                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "projection");
                         OutletItem.put("plantName", tvPlant.getText().toString());
                         OutletItem.put("plantId", plantId);
@@ -543,60 +532,10 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                             ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
                             ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
-//                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-//                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
-//                                    Getorder_Array_List.get(z).getRegularQty());
-//                            ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-//                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
-
-//                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
-//                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
-//                            ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
-//                            ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
-//                            ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
-//                            ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
-//                            ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
-//                            ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
-
-//                            JSONArray tax_Details = new JSONArray();
-//
-//
-//                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
-//                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-//
-//                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
-//                                    JSONObject taxData = new JSONObject();
-//
-//                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
-//                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
-//                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
-//                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
-//                                    taxData.put("Tax_Type", label);
-//                                    taxData.put("Tax_Amt", formatter.format(amt));
-//                                    tax_Details.put(taxData);
-//
-//
-//                                }
-//
-//
-//                            }
-//
-//                            ProdItem.put("TAX_details", tax_Details);
-
                             Order_Details.put(ProdItem);
 
                         }
 
-//                        for (int i = 0; i < orderTotTax.size(); i++) {
-//                            JSONObject totTaxObj = new JSONObject();
-//
-//                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-//                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
-//                            totTaxArr.put(totTaxObj);
-//
-//                        }
-
-                        //  OutletItem.put("TOT_TAX_details", totTaxArr);
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
@@ -711,7 +650,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
 
                     totalvalues += Product_Modal.get(pm).getAmount();
 
-                    totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
+                    totalQty += (Product_Modal.get(pm).getQty()  * Product_Modal.get(pm).getCnvQty());//Product_Modal.get(pm).getRegularQty();
 
                     if (Product_Modal.get(pm).getTax() > 0)
                         taxVal += Product_Modal.get(pm).getTax();
@@ -1099,8 +1038,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                     }
                     holder.tvPlant.setText(Product_Details_Modal.getPlant());
 
-                    holder.totalQty.setText("" + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
-                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("" + ((
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1190,7 +1129,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = (enterQty + Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty());
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);

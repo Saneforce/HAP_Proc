@@ -1033,13 +1033,20 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         try {
             if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE"))
                 Shared_Common_Pref.TransSlNo = Shared_Common_Pref.TransSlNo.replace("HAPH", "");
-            billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
+
             Order_Outlet_Filter = new ArrayList<>();
             Order_Outlet_Filter.clear();
 
             int total_qtytext = 0;
             double tcsVal = 0;
             subTotalVal = 0.00;
+
+            if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection"))
+            {
+                billnumber.setText(Shared_Common_Pref.TransSlNo);
+            } else {
+                billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
+            }
 
             taxList = new ArrayList<>();
             taxList.clear();
@@ -1240,11 +1247,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         }
 
+                        if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection")) {
+                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
+                                    "1", "5", obj.getString("UOM"), 0, "0", 0.0,
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
+                        }else{
+                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
+                                    "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"),
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
 
-                        Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
-                                "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"),
-                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
-
+                        }
 
                     }
 

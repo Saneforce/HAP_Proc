@@ -93,7 +93,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 7.5.8";
+    public static String Version_Name = "ver 5.1.4";
     public static String Work_Type = "0";
     public static int count;
     private UpdateResponseUI updateUi;
@@ -854,6 +854,12 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         data.put("outletId", "");
+                        break;
+                    case Constants.Primary_Shortage_List:
+                        axnname = "get/prodprishortage";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
                         break;
                     case Constants.Primary_Product_List:
                         axnname = "get/prodprimarydets";

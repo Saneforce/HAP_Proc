@@ -493,7 +493,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                     ClosingKm = Integer.valueOf(jsonObject.getString("CheckEndKM"));
                     ClosingDate = jsonObject.getString("CheckEndDT");
-
+                    /* *********  Missing KM Auto Asking ******* */
                     if (ClosingKm == 1) {
                         Intent closingIntet = new Intent(Dashboard.this, AllowanceActivityTwo.class);
                         closingIntet.putExtra("Cls_con", "cls");
@@ -502,6 +502,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         finish();
                         return;
                     }
+
+
                     Log.v("MOT_COUNT", String.valueOf(MotCount));
 
 //                    if (MotCount > 0)

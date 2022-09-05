@@ -60,6 +60,10 @@ public interface ApiInterface {
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
 
 
+    @FormUrlEncoded
+    @POST("Db_v300.php?")
+    Call<JsonArray> getDataArrayList(@QueryMap Map<String, String> params, @Field("data") String body);
+
     // @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonArray> getStockAudit(@Query("axn") String axn, @Query("div") String div);
