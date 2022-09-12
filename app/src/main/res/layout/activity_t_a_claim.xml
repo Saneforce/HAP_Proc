@@ -747,7 +747,7 @@
                                                     android:textAllCaps="true"
                                                     android:textColor="@android:color/black"
                                                     android:textSize="11sp"
-                                                    android:textStyle="bold"></TextView>
+                                                    android:textStyle="bold" />
 
                                                 <TextView
                                                     android:id="@+id/txt_BrdAmt"
@@ -787,7 +787,7 @@
                                                     android:textAllCaps="true"
                                                     android:textColor="@android:color/black"
                                                     android:textSize="11sp"
-                                                    android:textStyle="bold"></TextView>
+                                                    android:textStyle="bold" />
 
                                                 <TextView
                                                     android:id="@+id/txt_DrvBrdAmt"
@@ -826,12 +826,12 @@
                                                     android:textAllCaps="true"
                                                     android:textColor="@android:color/black"
                                                     android:textSize="11sp"
-                                                    android:textStyle="bold"></TextView>
+                                                    android:textStyle="bold" />
 
                                                 <Switch
                                                     android:id="@+id/sw_ldgNeed"
                                                     android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"></Switch>
+                                                    android:layout_height="wrap_content" />
                                             </LinearLayout>
                                         </LinearLayout>
                                     </LinearLayout>
@@ -848,7 +848,7 @@
                                             android:text="Lodging"
                                             android:textAllCaps="false"
                                             android:textColor="#000"
-                                            android:textSize="12sp"></TextView>
+                                            android:textSize="12sp" />
 
 
                                         <TextView
@@ -858,7 +858,7 @@
                                             android:text="Lodging"
                                             android:textAllCaps="false"
                                             android:textColor="#000"
-                                            android:textSize="12sp"></TextView>
+                                            android:textSize="12sp" />
 
 
                                     </LinearLayout>
@@ -868,7 +868,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:layout_margin="@dimen/C10dp"
-                                    android:background="@color/grey_300"></View>
+                                    android:background="@color/grey_300" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -885,7 +885,7 @@
                                         android:text="Total"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C15dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/txt_totDA"
@@ -895,7 +895,7 @@
                                         android:text="₹0.00"
                                         android:textColor="@android:color/black"
                                         android:textSize="@dimen/C15dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -938,7 +938,7 @@
                                     android:layout_margin="@dimen/C8dp"
                                     android:orientation="vertical"
                                     android:padding="@dimen/C5dp"
-                                    android:visibility="gone">
+                                    android:visibility="visible">
 
                                     <androidx.core.widget.NestedScrollView
                                         android:layout_width="match_parent"
@@ -3222,12 +3222,74 @@
                     android:layout_centerVertical="true"
                     android:orientation="vertical"
                     android:padding="16dp">
-                    <TextView
-                        style="@style/TextStyle"
-                        android:text="Started km" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="From" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="*" />
+                    </LinearLayout>
+
 
                     <EditText
-                        android:id="@+id/VRet_from"
+                        android:id="@+id/edt_placeFAFrom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="From"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:maxLength="20"
+                        android:textSize="@dimen/C13dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="To" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="*" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/edt_placeFATo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="To"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:maxLength="20"
+                        android:textSize="@dimen/C13dp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="Started km" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="*" />
+                    </LinearLayout>
+
+
+                    <EditText
+                        android:id="@+id/edt_FAstartKm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Start km"
@@ -3235,12 +3297,23 @@
                         android:maxLength="8"
                         android:textSize="@dimen/C13dp" />
 
-                    <TextView
-                        style="@style/TextStyle"
-                        android:text="Closing km" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="Closing km" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="*" />
+                    </LinearLayout>
 
                     <EditText
-                        android:id="@+id/VRet_to"
+                        android:id="@+id/edt_FAendkm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="End km"
@@ -3253,7 +3326,7 @@
                         android:text="Traveled km" />
 
                     <EditText
-                        android:id="@+id/VRet_travelled"
+                        android:id="@+id/FATravelledkm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
@@ -3268,7 +3341,7 @@
                         android:text="Personal km" />
 
                     <EditText
-                        android:id="@+id/VRet_pers"
+                        android:id="@+id/edt_FApersonalkm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Personal km"
@@ -3282,7 +3355,7 @@
                         android:layout_marginTop="@dimen/C20dp">
 
                         <Button
-                            android:id="@+id/btnVRetIns"
+                            android:id="@+id/btnFASubmit"
                             style="@style/ButtonStyle"
                             android:background="@drawable/button_blueg"
                             android:onClick="UpdteAllowance"

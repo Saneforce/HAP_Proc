@@ -74,6 +74,7 @@ import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.CtrlsListModel;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Common_Class.Util;
@@ -163,7 +164,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             txt_Styloc,txt_drvStyloc, txt_DAStyloc, txt_DATyp, txtAllwType, txtCAllwType, txEligDt, NoofNight, txldgTdyAmt,
             edtRwID;
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
-            edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill, txDAOthName;
+            edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill, txDAOthName,
+            edtFAFrom,edtFAStartKm,edtFATo,edtFACloseKm,edtFAPersonalKm,FAtravelledkm;
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
             img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck, imgEdtPlace, btnDAclose,btnVRetclose;
     String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
@@ -189,7 +191,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     //ArrayList<CtrlsListModel> uLCItems,uOEItems;
     float tJointAmt = 0;
     boolean changeStay = false;
-    Button btnDAChange,btnVehiRet;
+    Button btnDAChange,btnVehiRet,btnFASubmit;
     CircularProgressButton btn_sub, buttonSave;
     int countLoding = 0;
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -236,6 +238,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
     private ShimmerFrameLayout mShimmerViewContainer;
     private String Ukey = "";
+    String StartFrom,EndTo,StartKM,EndKM,PersonalKM,TravelledKM;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -244,6 +247,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         setContentView(R.layout.activity_t_a_claim);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
         mShimmerViewContainer.startShimmerAnimation();
+
 
         mCommon_class = new Common_Class(this);
         util = new Util();
@@ -426,6 +430,48 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mFuelRecycler.setNestedScrollingEnabled(false);
 
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
+
+/*--- Fuel Allowance - Add Vehicle Returns ---*/
+
+        edtFACloseKm=findViewById(R.id.edt_FAendkm);
+        edtFAFrom=findViewById(R.id.edt_placeFAFrom);
+        edtFAStartKm=findViewById(R.id.edt_FAstartKm);
+        edtFATo=findViewById(R.id.edt_placeFATo);
+        edtFAPersonalKm=findViewById(R.id.edt_FApersonalkm);
+        FAtravelledkm=findViewById(R.id.FATravelledkm);
+        btnFASubmit=findViewById(R.id.btnFASubmit);
+
+        TextWatcher textWatcher =new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (!edtFACloseKm.getText().toString().equals("") && !edtFAStartKm.getText().toString().equals("")) {
+                        int temp1 = Integer.parseInt(edtFACloseKm.getText().toString());
+                        int temp2 = Integer.parseInt(edtFAStartKm.getText().toString());
+                        FAtravelledkm.setText(String.valueOf(temp1 - temp2));
+                        Log.v("FA-travelledKm",String.valueOf(temp1 - temp2));
+                    }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+
+        btnFASubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FASubmit();
+            }
+        });
+
+        edtFACloseKm.addTextChangedListener(textWatcher);
+        edtFAStartKm.addTextChangedListener(textWatcher);
+
+/*---------*/
 
         ldgLocations.clear();
         loadLocations();
@@ -1425,6 +1471,58 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
+
+    private void FASubmit() {
+
+        JSONObject jObj = new JSONObject();
+        try {
+
+            jObj.put("StartFrom", edtFAFrom.getText().toString());
+            jObj.put("EndTo", edtFATo.getText().toString());
+            jObj.put("StartKM", edtFAStartKm.getText().toString());
+            jObj.put("CloseKM", edtFACloseKm.getText().toString());
+            jObj.put("PersonalKM", edtFAPersonalKm.getText().toString());
+            jObj.put("TravelledKM", FAtravelledkm.getText().toString());
+            Log.d("hjj","ghkj"+jObj.toString());
+
+
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            service.getDataArrayList("Add/VHRet", jObj.toString()).enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    if (edtFAFrom.getText().toString().length()==0 || edtFATo.getText().toString().length()==0 || edtFAStartKm.getText().toString().length()==0 || edtFACloseKm.getText().toString().length()==0){
+                        Toast.makeText(TAClaimActivity.this,"Enter all the Mandatory fields to Submit",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
+                        lnRetVehicle.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                }
+            });
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+//    @Override
+//    public void onRestart()
+//    {
+//        super.onRestart();
+//        finish();
+//        startActivity(getIntent());
+//    }
+
     public void getHapLocations() {
         String commonLeaveType = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -2277,6 +2375,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
                         fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance, TWMax_Km, FWMax_Km);
                         mFuelRecycler.setAdapter(fuelListAdapter);
+                        fuelListAdapter.notifyDataSetChanged();
                         JsonObject jsFuel;
                         linMode.setVisibility(View.VISIBLE);
                         TravelBike.setVisibility(View.VISIBLE);
@@ -5775,4 +5874,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         });
     }
+
+
 }
