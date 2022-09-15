@@ -1,5 +1,6 @@
 package com.hap.checkinproc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -67,6 +68,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
         return new FuelListAdapter.MyViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
@@ -123,7 +125,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
                         holder.TextTotalAmount.setText("Rs. " +  new DecimalFormat("##0.00").format(q*z));
                     }
-                } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
+                } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") || jsFuel.get("MOT_Name").getAsString().equals("Ret Vehicle") ) {
                     if (Total >= FWMax_Km) {
                         Total = FWMax_Km;
                         Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());

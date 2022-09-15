@@ -134,7 +134,7 @@
                                 android:layout_gravity="center"
                                 android:onClick="ImagePdf"
                                 android:src="@drawable/info"
-                                app:tint="@color/background"></ImageView>
+                                app:tint="@color/background" />
 
                         </LinearLayout>
 
@@ -938,7 +938,7 @@
                                     android:layout_margin="@dimen/C8dp"
                                     android:orientation="vertical"
                                     android:padding="@dimen/C5dp"
-                                    android:visibility="visible">
+                                    android:visibility="gone">
 
                                     <androidx.core.widget.NestedScrollView
                                         android:layout_width="match_parent"
@@ -1029,10 +1029,9 @@
                                                         android:textStyle="bold" />
 
                                                     <ImageView
-
                                                         android:id="@+id/startkmimage"
                                                         android:layout_width="@dimen/C70dp"
-                                                        android:layout_height="wrap_content"></ImageView>
+                                                        android:layout_height="wrap_content" />
 
 
                                                 </LinearLayout>
@@ -1071,7 +1070,7 @@
                                                         android:id="@+id/endkmimage"
                                                         android:layout_width="@dimen/C70dp"
                                                         android:layout_height="wrap_content"
-                                                        android:src="@drawable/button_grey"></ImageView>
+                                                        android:src="@drawable/button_grey" />
 
                                                 </LinearLayout>
 
@@ -1209,6 +1208,7 @@
                                                     android:text=""
                                                     android:visibility="gone" />
                                             </LinearLayout>
+
                                             <LinearLayout
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content">
@@ -1221,7 +1221,7 @@
                                                     android:text=""
                                                     android:textColor="@android:color/black"
                                                     android:textSize="@dimen/C15dp"
-                                                    android:textStyle="bold"></TextView>
+                                                    android:textStyle="bold" />
                                             </LinearLayout>
                                         </LinearLayout>
 
@@ -1230,6 +1230,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_horizontal"
                                             android:gravity="center_horizontal">
+
                                             <Button
                                                 android:id="@+id/btnVehiRet"
                                                 android:layout_width="wrap_content"
@@ -1238,6 +1239,7 @@
                                                 android:background="@drawable/button_blueg"
                                                 android:gravity="center_horizontal"
                                                 android:padding="@dimen/C8dp"
+                                                android:visibility="gone"
                                                 android:text="Add Vehicle Return"
                                                 android:textColor="#ffffff" />
                                         </LinearLayout>
@@ -1324,6 +1326,7 @@
                                                 android:layout_marginTop="@dimen/C5dp"
                                                 android:layout_weight="1"
                                                 android:orientation="vertical">
+
                                                 <TextView
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
@@ -1520,7 +1523,7 @@
                                     android:layout_height="1dp"
                                     android:layout_margin="@dimen/C10dp"
                                     android:background="@color/grey_300"
-                                    android:visibility="gone"></View>
+                                    android:visibility="gone" />
 
                                 <LinearLayout
                                     android:id="@+id/lin_tl"
@@ -1539,7 +1542,7 @@
                                         android:text="Total"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C15dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/txt_trav_loca"
@@ -1549,7 +1552,7 @@
                                         android:text="₹0.00"
                                         android:textColor="@android:color/black"
                                         android:textSize="@dimen/C15dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -1613,7 +1616,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/C10dp"
                                     android:orientation="vertical"
-                                    android:visibility="gone">
+                                    android:visibility="visible">
 
                                     <TextView
                                         android:layout_width="match_parent"
@@ -1656,7 +1659,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:orientation="vertical"
-                                        android:visibility="gone">
+                                        android:visibility="visible">
 
                                         <LinearLayout
                                             android:id="@+id/prm_linear_orders"
@@ -1664,7 +1667,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:orientation="vertical"
-                                            android:visibility="gone"></LinearLayout>
+                                            android:visibility="gone" />
 
                                         <LinearLayout
                                             android:id="@+id/ldg_stayloc"
@@ -1690,7 +1693,6 @@
                                                 android:background="@drawable/item_border"
                                                 android:orientation="horizontal"
                                                 android:padding="5dp">
-
 
                                                 <TextView
                                                     android:id="@+id/txt_Styloc"
@@ -1757,6 +1759,7 @@
                                                     <LinearLayout
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
+                                                        android:padding="1dp"
                                                         android:orientation="horizontal">
 
                                                         <TextView
@@ -1774,9 +1777,11 @@
                                                             android:layout_height="wrap_content"
                                                             android:layout_marginLeft="@dimen/C5dp"
                                                             android:layout_weight="1"
+                                                            android:layout_gravity="center"
                                                             android:background="@drawable/item_border"
                                                             android:focusable="false"
                                                             android:hint="Time"
+                                                            android:paddingStart="3dp"
                                                             android:inputType="date"
                                                             android:text="00:00"
                                                             android:textSize="12sp" />
@@ -1829,7 +1834,8 @@
                                                         <LinearLayout
                                                             android:layout_width="match_parent"
                                                             android:layout_height="match_parent"
-                                                            android:orientation="horizontal">
+                                                            android:orientation="horizontal"
+                                                            android:padding="1dp">
 
                                                             <TextView
                                                                 android:id="@+id/toDt_picker"
@@ -1851,8 +1857,10 @@
                                                                 android:background="@drawable/item_border"
                                                                 android:focusable="false"
                                                                 android:hint="Time"
+                                                                android:layout_gravity="center"
                                                                 android:inputType="date"
                                                                 android:text="00:00"
+                                                                android:paddingStart="3dp"
                                                                 android:textSize="12sp" />
                                                         </LinearLayout>
                                                     </LinearLayout>
@@ -1957,82 +1965,89 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_margin="@dimen/C5dp"
                                                 android:orientation="vertical"
-                                                android:visibility="gone">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <CheckBox
-        android:id="@+id/chk_cnt_sty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C2dp"
-        android:text="Continue Stay"
-        android:layout_weight="1"/>
-    <CheckBox
-        android:id="@+id/chk_Drv_alw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C2dp"
-        android:layout_weight="1"
-        android:text="Driver Lodging" />
-</LinearLayout>
+                                                android:visibility="visible">
 
-    <LinearLayout
-        android:id="@+id/ldg_drvstayloc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C10dp"
-            android:text="Driver Stay Location"
-            android:textSize="10sp"
-            android:textStyle="bold"/>
+                                                    <CheckBox
+                                                        android:id="@+id/chk_cnt_sty"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/C2dp"
+                                                        android:layout_weight="1"
+                                                        android:checked="false"
+                                                        android:text="Continue Stay" />
 
-        <LinearLayout
-            android:id="@+id/ldg_drvStylocSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/C8dp"
-            android:layout_marginRight="@dimen/C8dp"
-            android:layout_marginBottom="@dimen/C5dp"
-            android:background="@drawable/item_border"
-            android:orientation="horizontal"
-            android:padding="5dp">
+                                                    <CheckBox
+                                                        android:id="@+id/chk_Drv_alw"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/C2dp"
+                                                        android:layout_weight="1"
+                                                        android:checked="false"
+                                                        android:text="Driver Lodging" />
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:id="@+id/ldg_drvstayloc"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical"
+                                                    android:visibility="gone">
+
+                                                    <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginLeft="@dimen/C10dp"
+                                                        android:text="Driver Stay Location"
+                                                        android:textSize="10sp"
+                                                        android:textStyle="bold" />
+
+                                                    <LinearLayout
+                                                        android:id="@+id/ldg_drvStylocSpinner"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_marginLeft="@dimen/C8dp"
+                                                        android:layout_marginRight="@dimen/C8dp"
+                                                        android:layout_marginBottom="@dimen/C5dp"
+                                                        android:background="@drawable/item_border"
+                                                        android:orientation="horizontal"
+                                                        android:padding="5dp">
 
 
-            <TextView
-                android:id="@+id/txt_drvStyloc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Select the Driver Stay Location"
-                android:textSize="@dimen/C13dp" />
+                                                        <TextView
+                                                            android:id="@+id/txt_drvStyloc"
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:hint="Select the Driver Stay Location"
+                                                            android:textSize="@dimen/C13dp" />
 
-            <ImageView
-                android:layout_width="@dimen/C20dp"
-                android:layout_height="match_parent"
-                android:padding="@dimen/C5dp"
-                android:src="@drawable/spin_down_arrow" />
+                                                        <ImageView
+                                                            android:layout_width="@dimen/C20dp"
+                                                            android:layout_height="match_parent"
+                                                            android:padding="@dimen/C5dp"
+                                                            android:src="@drawable/spin_down_arrow" />
 
-        </LinearLayout>
+                                                    </LinearLayout>
 
-        <EditText
-            android:id="@+id/edt_drvstay_loc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C8dp"
-            android:layout_marginRight="@dimen/C8dp"
-            android:hint="Enter Stay Location"
-            android:paddingTop="5dp"
-            android:textColorHint="#C0C0C0"
-            android:textSize="14sp"
-            android:visibility="gone" />
-    </LinearLayout>
+                                                    <EditText
+                                                        android:id="@+id/edt_drvstay_loc"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginLeft="@dimen/C8dp"
+                                                        android:layout_marginRight="@dimen/C8dp"
+                                                        android:hint="Enter Stay Location"
+                                                        android:paddingTop="5dp"
+                                                        android:textColorHint="#C0C0C0"
+                                                        android:textSize="14sp"
+                                                        android:visibility="gone" />
+                                                </LinearLayout>
+
                                                 <CheckBox
                                                     android:id="@+id/chk_early"
                                                     android:layout_width="match_parent"
@@ -2363,6 +2378,7 @@
                                                         android:layout_weight="1"
                                                         android:text="Join Stay Eligible"
                                                         android:textAllCaps="true"
+                                                        android:layout_gravity="center"
                                                         android:textColor="#000"
                                                         android:textSize="10sp" />
 
@@ -2507,7 +2523,7 @@
                                                     android:layout_width="match_parent"
                                                     android:layout_height="1dp"
                                                     android:layout_margin="@dimen/C10dp"
-                                                    android:background="@color/grey_300"></View>
+                                                    android:background="@color/grey_300" />
 
                                                 <LinearLayout
                                                     android:layout_width="match_parent"
@@ -2653,7 +2669,7 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="1dp"
                                                 android:layout_margin="@dimen/C10dp"
-                                                android:background="@color/grey_300"></View>
+                                                android:background="@color/grey_300" />
 
 
                                             <LinearLayout
@@ -2781,7 +2797,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="1dp"
                                         android:layout_margin="@dimen/C10dp"
-                                        android:background="@color/grey_300"></View>
+                                        android:background="@color/grey_300" />
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -2798,7 +2814,7 @@
                                             android:text="Total"
                                             android:textColor="@color/black"
                                             android:textSize="@dimen/C15dp"
-                                            android:textStyle="bold"></TextView>
+                                            android:textStyle="bold" />
 
                                         <TextView
                                             android:id="@+id/txt_local"
@@ -2808,7 +2824,7 @@
                                             android:text="₹0.00"
                                             android:textColor="@android:color/black"
                                             android:textSize="@dimen/C15dp"
-                                            android:textStyle="bold"></TextView>
+                                            android:textStyle="bold" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -2900,7 +2916,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="1dp"
                                         android:layout_margin="@dimen/C10dp"
-                                        android:background="@color/grey_300"></View>
+                                        android:background="@color/grey_300" />
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -2917,7 +2933,7 @@
                                             android:text="Total"
                                             android:textColor="@color/black"
                                             android:textSize="@dimen/C15dp"
-                                            android:textStyle="bold"></TextView>
+                                            android:textStyle="bold" />
 
                                         <TextView
                                             android:id="@+id/txt_oe"
@@ -2927,7 +2943,7 @@
                                             android:text="₹0.00"
                                             android:textColor="@android:color/black"
                                             android:textSize="@dimen/C15dp"
-                                            android:textStyle="bold"></TextView>
+                                            android:textStyle="bold" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -3015,7 +3031,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grey_300"></View>
+            android:background="@color/grey_300" />
 
         <LinearLayout
 
@@ -3100,12 +3116,12 @@
                     android:layout_margin="@dimen/C5dp"
                     android:paddingLeft="@dimen/C8dp"
                     android:paddingRight="@dimen/C8dp"
-                    android:src="@drawable/back_arrow"></ImageView>
+                    android:src="@drawable/back_arrow" />
 
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"></Space>
+                    android:layout_weight="1" />
 
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                     android:id="@+id/save_button"
@@ -3120,7 +3136,7 @@
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:theme="@style/BluePrimaryButton"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:finalCornerAngle="50dp"
                     app:initialCornerAngle="10dp"
                     app:spinning_bar_color="#FFFFFFFF"
@@ -3141,7 +3157,7 @@
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:theme="@style/BluePrimaryButton"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:finalCornerAngle="50dp"
                     app:initialCornerAngle="10dp"
                     app:spinning_bar_color="#FFFFFFFF"
@@ -3167,7 +3183,7 @@
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"
-            android:src="@drawable/back_arrow"></ImageView>
+            android:src="@drawable/back_arrow" />
 
 
     </LinearLayout>
