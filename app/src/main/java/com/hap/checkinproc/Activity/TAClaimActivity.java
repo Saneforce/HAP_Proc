@@ -2426,7 +2426,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
 
 
-
                         if (jsonFuelAllowance.size() < 1) {
                             TravelBike.setVisibility(View.GONE);
                             linBikeMode.setVisibility(View.GONE);
@@ -2449,16 +2448,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                         if (Total >= FWMax_Km) Total = FWMax_Km;
                                     }
 
-                                  if (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler") && Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Ret Vehicle") && Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Two Wheeler")){
-                                      btnVehiRet.setVisibility(View.GONE);
-                                  }
 
-                                    if (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler")){
-                                        btnVehiRet.setVisibility(View.VISIBLE);
+                                  if((txtTaClaim.equals("Ret Vehicle")) && (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler"))){
+                                      btnVehiRet.setVisibility(View.GONE);
                                     }
 
+                                    if (jsFuel.get("MOT_Name").getAsString().contains("Ret Vehicle") || jsFuel.get("MOT_Name").getAsString().contains("Two Wheeler")){
+                                        btnVehiRet.setVisibility(View.GONE);
+                                    }
 
-
+                                    if (jsFuel.get("MOT_Name").getAsString().contains("Four Wheeler")){
+                                        btnVehiRet.setVisibility(View.VISIBLE);
+                                    }
 
 
                                     Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
@@ -3084,6 +3085,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         sDrvLocName = StayDate.get(0).getAsJsonObject().get("StayLoc").getAsString();
                         lodgStyLocation.setText(sLocName);
                         drvStyLocation.setText(sDrvLocName);
+
+                        Log.v("driverSpinner",sDrvLocName);
+
                         if (sLocId.equalsIgnoreCase("-1"))
                             sLocName = "Other Location";
                         txt_Styloc.setText(sLocName);
@@ -4457,6 +4461,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             } else {
                 ldgSave.put("ldg_type_sty", lodgContvw.getVisibility() == View.VISIBLE ? sLocName : "");
             }
+
+            ldgSave.put("ldg_type_drvSty",sDrvLocName);
+            Log.v("SpinnerDriver",ldgSave.toString());
+
             ldgSave.put("noOfDays", "");
             ldgSave.put("bil_amt", lodgContvw.getVisibility() == View.VISIBLE ? edt_ldg_bill.getText().toString() : "");
             ldgSave.put("con_sty", lodgContvw.getVisibility() == View.VISIBLE ? cnSty : "");
