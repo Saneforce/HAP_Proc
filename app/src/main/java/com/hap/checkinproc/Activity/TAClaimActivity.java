@@ -1494,19 +1494,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         if (edtFAFrom.getText().toString().length()==0 || edtFATo.getText().toString().length()==0 || edtFAStartKm.getText().toString().length()==0 || edtFACloseKm.getText().toString().length()==0){
             Toast.makeText(TAClaimActivity.this,"Enter all the Mandatory fields to Submit",Toast.LENGTH_SHORT).show();
         }
-        else {
-            Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
-            lnRetVehicle.setVisibility(View.GONE);
-            btnVehiRet.setVisibility(View.GONE);
-
-            edtFAFrom.setText("");
-            edtFATo.setText("");
-            edtFAStartKm.setText("");
-            edtFACloseKm.setText("");
-            edtFAPersonalKm.setText("");
-            FAtravelledkm.setText("");
-
-        }
         JSONObject jObj = new JSONObject();
         try {
 
@@ -1533,6 +1520,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 //                    edtFAPersonalKm.setText("");
 //                    FAtravelledkm.setText("");
 
+                    Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
+                    lnRetVehicle.setVisibility(View.GONE);
+                    btnVehiRet.setVisibility(View.GONE);
+
+                    edtFAFrom.setText("");
+                    edtFATo.setText("");
+                    edtFAStartKm.setText("");
+                    edtFACloseKm.setText("");
+                    edtFAPersonalKm.setText("");
+                    FAtravelledkm.setText("");
 
 
                 }
@@ -1652,6 +1649,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         LteChecOut = "";
         sLocId = "";
         sLocName = "";
+        sDrvLocId ="";
+        sDrvLocName="";
+
         sDALocId = "";
         sDALocName = "";
         sDALType = "";
@@ -3082,7 +3082,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         sLocId = StayDate.get(0).getAsJsonObject().get("LocId").getAsString();
                         sLocName = StayDate.get(0).getAsJsonObject().get("StayLoc").getAsString();
-                        sDrvLocName = StayDate.get(0).getAsJsonObject().get("StayLoc").getAsString();
+                        sDrvLocId = StayDate.get(0).getAsJsonObject().get("DrvLocId").getAsString();
+                        sDrvLocName = StayDate.get(0).getAsJsonObject().get("DrvStayLoc").getAsString();
                         lodgStyLocation.setText(sLocName);
                         drvStyLocation.setText(sDrvLocName);
 
@@ -3090,6 +3091,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         if (sLocId.equalsIgnoreCase("-1"))
                             sLocName = "Other Location";
+
+                        if (sDrvLocId.equalsIgnoreCase("-1"))
+                            sDrvLocName = "Other Location";
+
                         txt_Styloc.setText(sLocName);
                         txt_drvStyloc.setText(sDrvLocName);
                         getStayAllow();
@@ -5019,7 +5024,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if(sameDrvldg==true){
                 sDrvLocId = myDataset.get(position).getId();
                 sDrvLocName = myDataset.get(position).getName();
-
             }
             txt_Styloc.setText(sLocName);
             txt_drvStyloc.setText(sDrvLocName);
