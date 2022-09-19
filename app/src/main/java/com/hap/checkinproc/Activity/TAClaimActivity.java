@@ -768,6 +768,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onClick(View v) {
 
                 lnRetVehicle.setVisibility(View.VISIBLE);
+                edtFAFrom.setText("");
+                edtFATo.setText("");
+                edtFAStartKm.setText("");
+                edtFACloseKm.setText("");
+                edtFAPersonalKm.setText("");
+                FAtravelledkm.setText("");
             }
         });
         btnVRetclose.setOnClickListener(new View.OnClickListener() {
@@ -1494,6 +1500,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         if (edtFAFrom.getText().toString().length()==0 || edtFATo.getText().toString().length()==0 || edtFAStartKm.getText().toString().length()==0 || edtFACloseKm.getText().toString().length()==0){
             Toast.makeText(TAClaimActivity.this,"Enter all the Mandatory fields to Submit",Toast.LENGTH_SHORT).show();
         }
+        else {
+            Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
+            lnRetVehicle.setVisibility(View.GONE);
+            btnVehiRet.setVisibility(View.GONE);
+
+
+
+        }
         JSONObject jObj = new JSONObject();
         try {
 
@@ -1519,17 +1533,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 //                    edtFACloseKm.setText("");
 //                    edtFAPersonalKm.setText("");
 //                    FAtravelledkm.setText("");
-
-                    Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
-                    lnRetVehicle.setVisibility(View.GONE);
-                    btnVehiRet.setVisibility(View.GONE);
-
-                    edtFAFrom.setText("");
-                    edtFATo.setText("");
-                    edtFAStartKm.setText("");
-                    edtFACloseKm.setText("");
-                    edtFAPersonalKm.setText("");
-                    FAtravelledkm.setText("");
 
 
                 }
@@ -2449,9 +2452,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     }
 
 
-                                  if((txtTaClaim.equals("Ret Vehicle")) && (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler"))){
+                                  /*if((txtTaClaim.equals("Ret Vehicle")) && (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler"))){
                                       btnVehiRet.setVisibility(View.GONE);
-                                    }
+                                    }*/
+
 
                                     if (jsFuel.get("MOT_Name").getAsString().contains("Ret Vehicle") || jsFuel.get("MOT_Name").getAsString().contains("Two Wheeler")){
                                         btnVehiRet.setVisibility(View.GONE);
