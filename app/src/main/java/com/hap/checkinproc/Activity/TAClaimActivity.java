@@ -768,6 +768,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onClick(View v) {
 
                 lnRetVehicle.setVisibility(View.VISIBLE);
+                edtFAFrom.setText("");
+                edtFATo.setText("");
+                edtFAStartKm.setText("");
+                edtFACloseKm.setText("");
+                edtFAPersonalKm.setText("");
+                FAtravelledkm.setText("");
             }
         });
         btnVRetclose.setOnClickListener(new View.OnClickListener() {
@@ -1499,12 +1505,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lnRetVehicle.setVisibility(View.GONE);
             btnVehiRet.setVisibility(View.GONE);
 
-            edtFAFrom.setText("");
-            edtFATo.setText("");
-            edtFAStartKm.setText("");
-            edtFACloseKm.setText("");
-            edtFAPersonalKm.setText("");
-            FAtravelledkm.setText("");
+
 
         }
         JSONObject jObj = new JSONObject();
@@ -1532,7 +1533,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 //                    edtFACloseKm.setText("");
 //                    edtFAPersonalKm.setText("");
 //                    FAtravelledkm.setText("");
-
 
 
                 }
@@ -2449,9 +2449,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     }
 
 
-                                  if((txtTaClaim.equals("Ret Vehicle")) && (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler"))){
+                                  /*if((txtTaClaim.equals("Ret Vehicle")) && (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler"))){
                                       btnVehiRet.setVisibility(View.GONE);
-                                    }
+                                    }*/
+
 
                                     if (jsFuel.get("MOT_Name").getAsString().contains("Ret Vehicle") || jsFuel.get("MOT_Name").getAsString().contains("Two Wheeler")){
                                         btnVehiRet.setVisibility(View.GONE);
@@ -2460,6 +2461,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     if (jsFuel.get("MOT_Name").getAsString().contains("Four Wheeler")){
                                         btnVehiRet.setVisibility(View.VISIBLE);
                                     }
+
+                                    /*if(jsFuel.get("MOT_Name").getAsString().contains("Ret Vehicle")){
+                                        btnVehiRet.setVisibility(View.GONE);
+                                    }*/
+
 
 
                                     Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
@@ -2480,6 +2486,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             }
                         }
                     }
+
                     JsonObject jRremarks = null;
                     for (int i = 0; i < jsonExpHead.size(); i++) {
                         jRremarks = jsonExpHead.get(i).getAsJsonObject();
