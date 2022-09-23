@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 public class Shared_Common_Pref {
     public static String ORDER_TYPE = "orderType";
 
+    public static String SFCutoff = "SFCutoff";
+
     public static String SFA_MENU = "";
     public static String CUSTOMER_CODE = "";
     public static String SALES_MODE = "";
@@ -84,9 +86,10 @@ public class Shared_Common_Pref {
         editor = Common_pref.edit();
     }
 
-    public void save(String key, String value) {
+    public String save(String key, String value) {
         editor.putString(key, value);
         editor.commit();
+        return key;
     }
 
     public void save(String key, Boolean value) {
