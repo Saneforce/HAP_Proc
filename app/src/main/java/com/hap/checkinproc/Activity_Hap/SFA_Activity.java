@@ -229,6 +229,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
                     menuList.add(new ListModel("", "POS", "", "", "", R.drawable.ic_outline_assignment_48));
                     menuList.add(new ListModel("", "GRN", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
+//                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
+
 
                     common_class.getPOSProduct(this);
                     common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
@@ -311,6 +313,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         saveFormData(-1);
                         common_class.ProgressdialogShow(1, "");
                         break;
+//                    case "Inshop":
+//
+////                        Intent i = new Intent(SFA_Activity.this,InshopActivity .class);
+////                        startActivity(i);
+//                        break;
 
                     default:
                         if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(menuList.get(pos).getFormName())))

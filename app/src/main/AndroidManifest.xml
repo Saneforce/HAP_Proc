@@ -44,6 +44,9 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".InshopActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity_Hap.AdvanceReq"
             android:exported="false" />
         <activity
