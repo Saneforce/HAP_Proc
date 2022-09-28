@@ -44,7 +44,19 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".InshopActivity"
+            android:name=".SFA_Activity.InshopRetailerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SFA_Activity.InshopOutletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SFA_Activity.InshopCheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SFA_Activity.InshopCheckinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SFA_Activity.InshopActivity"
             android:exported="false" />
         <activity
             android:name=".Activity_Hap.AdvanceReq"

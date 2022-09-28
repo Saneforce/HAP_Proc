@@ -1452,6 +1452,13 @@ public class Common_Class {
         return plantime;
     }
 
+    public static String GetRunTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("HH:mm:ss aaa");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+
     public void GetTP_Result(String name, String values, int Month, int year) {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
