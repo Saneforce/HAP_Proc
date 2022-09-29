@@ -7,6 +7,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -615,6 +616,12 @@ public class InshopRetailerActivity extends AppCompatActivity implements View.On
         data.addProperty("RetailerID", outletId);
         data.addProperty("SlNo", String.valueOf(sequence));
         common_class.getDb_310Data(Constants.DELIVERY_SEQUENCE, this, data);
+    }
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(InshopRetailerActivity.this, InshopCheckinActivity.class));
+        super.onBackPressed();
     }
 }
 

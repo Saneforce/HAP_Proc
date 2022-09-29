@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,9 +11,12 @@ import android.widget.TextView;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class InshopCheckoutActivity extends AppCompatActivity {
 
-    TextView checkoutTunTime, checkinTime, retailerName;
+    TextView checkoutTunTime, checkinTime, retailerName,tvDate;
     final Handler handler = new Handler();
 
 
@@ -24,14 +28,23 @@ public class InshopCheckoutActivity extends AppCompatActivity {
         checkoutTunTime = findViewById(R.id.tvCheckoutRunTime);
         checkinTime = findViewById(R.id.tvCheckinTime);
         retailerName = findViewById(R.id.ischeckoutRetName);
+        tvDate = findViewById(R.id.iscoutDate);
 
-        checkinTime.setText(InshopCheckinActivity.getValue());
+        retailerName.setText(InshopCheckinActivity.getName());
+        checkinTime.setText(InshopCheckinActivity.getDate());
 
-        /*SharedPreferences sharedPreferences = getSharedPreferences("myKey", MODE_PRIVATE);
-        String value = sharedPreferences.getString("value","");
-        checkinTime.setText(value);*/
 
-        retailerName.setText(InshopCheckinActivity.getValue());
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        String dateToStr = format.format(today);
+        tvDate.setText(dateToStr);
+
+//        SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences("retailername", Context.MODE_PRIVATE);
+//
+//        String name = sharedPreferences.getString("name","");
+//        retailerName.setText(name);
+
+
 
         handler.postDelayed(new Runnable() {
             public void run() {

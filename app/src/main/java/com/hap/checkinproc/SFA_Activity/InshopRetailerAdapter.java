@@ -57,7 +57,7 @@ public class InshopRetailerAdapter extends RecyclerView.Adapter<InshopRetailerAd
                 Intent intent = new Intent(context, InshopCheckinActivity.class);
                 intent.putExtra("idData",Retailer_Modal_List.getName());
 
-                Toast.makeText(context,"posdsfdghfghfgg ppp   " + position,Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context,"posdsfdghfghfgg ppp   " + position,Toast.LENGTH_SHORT).show();
                 Log.v("position", String.valueOf(position));
                 Log.v("position", Retailer_Modal_List.getName());
                 context.startActivity(intent);
