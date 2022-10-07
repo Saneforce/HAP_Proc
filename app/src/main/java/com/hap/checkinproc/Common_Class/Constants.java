@@ -3,6 +3,7 @@ package com.hap.checkinproc.Common_Class;
 public class Constants {
 
     public static  final String RSM_CUTOFF_TIME="SFCutoff";
+    public static final String Vansales_VehNo="Vansales_VehNo";
 
     public static final String MAP_KEYLIST = "mapKeyList";
     public static final String MAP_KEY = "mapKey";

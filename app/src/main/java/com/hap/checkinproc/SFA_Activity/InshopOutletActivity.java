@@ -766,6 +766,8 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                 HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                                 ActivityData.put("Activity_Report_Head", HeadItem);
 
+                                Log.v("dfvgbhnjk",ActivityData.toString());
+
                                 JSONObject OutletItem = new JSONObject();
                                 OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
                                 OutletItem.put("modified_time", Common_Class.GetDate());
@@ -783,6 +785,7 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                 OutletItem.put("totAmtTax", formatter.format(totTax));
                                 OutletItem.put("groupCode", grpCode);
                                 OutletItem.put("groupName", grpName);
+                                Log.v("dfvgbhnjk",OutletItem.toString());
 
                                 if (strLoc.length > 0) {
                                     OutletItem.put("Lat", strLoc[0]);
@@ -820,6 +823,7 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                     ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
                                     ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
                                     ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getConversionFactor());
+                                    Log.v("dfvgbhnjk",ProdItem.toString());
 
                                     JSONArray tax_Details = new JSONArray();
 
@@ -836,6 +840,7 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                             taxData.put("Tax_Type", label);
                                             taxData.put("Tax_Amt", formatter.format(amt));
                                             tax_Details.put(taxData);
+                                            Log.v("dfvgbhnjk",tax_Details.toString());
 
                                         }
 
@@ -855,10 +860,12 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                     totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
                                     totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
                                     totTaxArr.put(totTaxObj);
+                                    Log.v("dfvgbhnjk",totTaxObj.toString());
 
                                 }
 
                                 OutletItem.put("TOT_TAX_details", totTaxArr);
+                                Log.v("dfvgbhnjk",totTaxArr.toString());
 
 
 //                            for (int i = 0; i < multiList.size(); i++) {
@@ -886,7 +893,6 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
 
                                 OutletItem.put("uom_details", uomArr);
 
-
                                 ActivityData.put("Activity_Doctor_Report", OutletItem);
                                 ActivityData.put("Order_Details", Order_Details);
                                 data.put(ActivityData);
@@ -895,21 +901,24 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                 e.printStackTrace();
                             }
                             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                            Call<JsonObject> responseBodyCall = apiInterface.savePrimaryOrder(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                            Call<JsonObject> responseBodyCall = apiInterface.saveInshopsOrder(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                             responseBodyCall.enqueue(new Callback<JsonObject>() {
                                 @Override
                                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                     if (response.isSuccessful()) {
                                         try {
-                                            Log.e("JSON_VALUES", response.body().toString());
+                                            Log.d("JSON_VALUES", response.body().toString());
                                             JSONObject jsonObjects = new JSONObject(response.body().toString());
+
+                                            Log.v("dfvgbhnjk",jsonObjects.toString());
+
                                             ResetSubmitBtn(1);
                                             common_class.showMsg(InshopOutletActivity.this, jsonObjects.getString("Msg"));
                                             if (jsonObjects.getString("success").equals("true")) {
                                                 sharedCommonPref.clear_pref(Constants.LOC_PRIMARY_DATA);
                                                 // common_class.CommonIntentwithFinish(SFA_Activity.class);
                                                 finish();
-                                                startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
+//                                                startActivity(new Intent(getApplicationContext(), TodayPrimOrdActivity.class));
 
                                             }
 
@@ -1289,7 +1298,6 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                 }
                 tvTotQtyLabel.setText("" + qtyLabel);
                 tvBillTotQty.setText("" + qtyVal);
-
 
                 tvTotUOM.setText(uomName);
                 tvTotUOM.setMovementMethod(new ScrollingMovementMethod());
