@@ -1499,14 +1499,20 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         if (edtFAFrom.getText().toString().length()==0 || edtFATo.getText().toString().length()==0 || edtFAStartKm.getText().toString().length()==0 || edtFACloseKm.getText().toString().length()==0){
             Toast.makeText(TAClaimActivity.this,"Enter all the Mandatory fields to Submit",Toast.LENGTH_SHORT).show();
+            return;
         }
-        else {
-            Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
-            lnRetVehicle.setVisibility(View.GONE);
-            btnVehiRet.setVisibility(View.GONE);
 
-
-
+        String sVhPkm=edtFAPersonalKm.getText().toString();if(sVhPkm.equalsIgnoreCase("")) sVhPkm="0";
+        String sVhTkm=FAtravelledkm.getText().toString();if(sVhTkm.equalsIgnoreCase("")) sVhTkm="0";
+        double vhPkm=Double.parseDouble(sVhPkm);
+        double vhTkm=Double.parseDouble(sVhTkm);
+        if((vhTkm-vhPkm)<0) {
+            Toast.makeText(TAClaimActivity.this,"Please Enter valid KM Details",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if ((vhTkm-vhPkm)>FWMax_Km){
+            Toast.makeText(TAClaimActivity.this,"KM Limit is Exceeded",Toast.LENGTH_SHORT).show();
+            return;
         }
         JSONObject jObj = new JSONObject();
         try {
@@ -1526,19 +1532,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             service.getDataArrayList("Add/VHRet", jObj.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-//                    Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
-//                    edtFAFrom.setText("");
-//                    edtFATo.setText("");
-//                    edtFAStartKm.setText("");
-//                    edtFACloseKm.setText("");
-//                    edtFAPersonalKm.setText("");
-//                    FAtravelledkm.setText("");
+
+                    Toast.makeText(TAClaimActivity.this, "Vehicle Returns Submitted Successfully", Toast.LENGTH_SHORT).show();
+                    lnRetVehicle.setVisibility(View.GONE);
+                    btnVehiRet.setVisibility(View.GONE);
+                    RefreshFare();
 
 
                 }
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Toast.makeText(TAClaimActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -1589,6 +1594,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         shortName = "";
         Exp_Name = "";
         Id = "";
+        ldgAdd.setText("+ Add");
         userEnter = "";
         attachment = "";
         maxAllowonce = "";
@@ -1871,8 +1877,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         //if(nofNght==0) nofNght=1;
                         NoofNight.setText(" - " + nofNght + " Nights - ");
                         linContinueStay.setVisibility(View.VISIBLE);
-                        if (DT.Daybetween(DateTime + " 00:00:00", ldg_coutDt.getText().toString() + " 00:00:00") < 1)
-                            linContinueStay.setVisibility(View.GONE);
+                        // if (DT.Daybetween(DateTime + " 00:00:00", ldg_coutDt.getText().toString() + " 00:00:00") < 1)
+                        //    linContinueStay.setVisibility(View.GONE);
                         getStayAllow();
                     }
                 }, yr, mnth, day);
@@ -3211,8 +3217,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                     SumOFLodging(0);
                     linContinueStay.setVisibility(View.VISIBLE);
-                    if (DT.Daybetween(COutDate + " 00:00:00", DateTime + " 00:00:00") < 1)
-                        linContinueStay.setVisibility(View.GONE);
+                 //   if (DT.Daybetween(COutDate + " 00:00:00", DateTime + " 00:00:00") < 1)
+                 //       linContinueStay.setVisibility(View.GONE);
 
                     /*
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -3255,7 +3261,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (ContSty.size() < 1) {
                 sLocId = ldraft.get("LocId").getAsString();
                 sLocName = ldraft.get("Ldg_Stay_Loc").getAsString();
-                sDrvLocName = ldraft.get("Ldg_Stay_Loc").getAsString();
+                sDrvLocId=ldraft.get("DrvLocId").getAsString();
+                sDrvLocName = ldraft.get("DrvStayLoc").getAsString();
 
 
                 lodgStyLocation.setText(sLocName);
@@ -3277,6 +3284,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(drvAmt));
                 ldgDrvEligi = drvAmt;
                 ldgDrvAlw=drvAmt;
+                drvldgEAra.setVisibility(View.VISIBLE);
+                driverStayLocLayout.setVisibility(View.VISIBLE);
             }else{
                 chkDrvAlw.setChecked(false);
                 ldgDrvEligi = 0.0;
@@ -4471,8 +4480,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 ldgSave.put("ldg_type_sty", lodgContvw.getVisibility() == View.VISIBLE ? sLocName : "");
             }
 
-            ldgSave.put("ldg_type_drvSty",sDrvLocName);
-            Log.v("SpinnerDriver",ldgSave.toString());
+            ldgSave.put("ldg_drv_Styid",sDrvLocId);
+            ldgSave.put("ldg_drv_StyNm",sDrvLocName);
+            ldgSave.put("ldg_drv_need",((chkDrvAlw.isChecked()==true)?1:0));
 
             ldgSave.put("noOfDays", "");
             ldgSave.put("bil_amt", lodgContvw.getVisibility() == View.VISIBLE ? edt_ldg_bill.getText().toString() : "");
@@ -5845,91 +5855,91 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     @Override
     protected void onResume() {
         super.onResume();
+        RefreshFare();
+
+    }
+    public void RefreshFare(){
+    try {
+
+        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+        JSONObject jj = new JSONObject();
         try {
+            jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jj.put("Selectdate", DateTime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        Log.v("Json_date_fomrat", jj.toString());
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> call = apiInterface.getTAdateDetails(jj.toString());
+        String finalChoosedDate = DateTime;
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                fuelAmt = 0.0;
+                JsonObject jsonObjects = response.body();
 
-            JSONObject jj = new JSONObject();
-            try {
-                jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-                jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
-                jj.put("Selectdate", DateTime);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                Log.v("JSON_TRAVEL_DETAILS", jsonObjects.toString());
 
-            Log.v("Json_date_fomrat", jj.toString());
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<JsonObject> call = apiInterface.getTAdateDetails(jj.toString());
-            String finalChoosedDate = DateTime;
-            call.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    fuelAmt = 0.0;
-                    JsonObject jsonObjects = response.body();
-
-                    Log.v("JSON_TRAVEL_DETAILS", jsonObjects.toString());
-
-                    jsonFuelAllowance = jsonObjects.getAsJsonArray("FuelAllowance");
+                jsonFuelAllowance = jsonObjects.getAsJsonArray("FuelAllowance");
 
 
 
-                    Log.v("jsonFuelAllowance", jsonFuelAllowance.toString());
+                Log.v("jsonFuelAllowance", jsonFuelAllowance.toString());
 
-                    if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
-                        Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
-                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance, TWMax_Km, FWMax_Km);
-                        mFuelRecycler.setAdapter(fuelListAdapter);
-                        JsonObject jsFuel;
+                if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
+                    Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
+                    fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance, TWMax_Km, FWMax_Km);
+                    mFuelRecycler.setAdapter(fuelListAdapter);
+                    JsonObject jsFuel;
 
-
-
-                        for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
-                            jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
+                    for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
+                        jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
 
 
 
-                            if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
-                                Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString()) ? "0" : jsFuel.get("Start_Km").getAsString());
-                                Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString()) ? "0" : jsFuel.get("End_Km").getAsString());
-                                Shared_Common_Pref.MaxKm = jsFuel.get("Maxkm").getAsInt();
-                                if (end != 0) {
-                                    String total = String.valueOf(end - start);
-                                    Integer Total = Integer.valueOf(total);
-                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler") && Total >= TWMax_Km)
-                                        Total = TWMax_Km;
-                                    if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= FWMax_Km)
-                                        Total = FWMax_Km;
+                        if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
+                            Integer start = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Start_Km").getAsString()) ? "0" : jsFuel.get("Start_Km").getAsString());
+                            Integer end = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("End_Km").getAsString()) ? "0" : jsFuel.get("End_Km").getAsString());
+                            Shared_Common_Pref.MaxKm = jsFuel.get("Maxkm").getAsInt();
+                            if (end != 0) {
+                                String total = String.valueOf(end - start);
+                                Integer Total = Integer.valueOf(total);
+                                if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler") && Total >= TWMax_Km)
+                                    Total = TWMax_Km;
+                                if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= FWMax_Km)
+                                    Total = FWMax_Km;
 
 
-                                    Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
-                                    String TotalPersonal = String.valueOf(Total - Personal);
-                                    Double q = Double.valueOf(TotalPersonal);
-                                    Double z = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString()) ? "0" : jsFuel.get("FuelAmt").getAsString());
-                                    String qz = String.valueOf(q * z);
-                                    Log.v("TA_FUEL_TOTAL", qz);
-                                    fuelAmt = fuelAmt + (q * z);
-                                    fuelAmount.setText("₹" + fuelAmt);
+                                Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
+                                String TotalPersonal = String.valueOf(Total - Personal);
+                                Double q = Double.valueOf(TotalPersonal);
+                                Double z = Double.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("FuelAmt").getAsString()) ? "0" : jsFuel.get("FuelAmt").getAsString());
+                                String qz = String.valueOf(q * z);
+                                Log.v("TA_FUEL_TOTAL", qz);
+                                fuelAmt = fuelAmt + (q * z);
+                                fuelAmount.setText("₹" + fuelAmt);
 
-                                    TextTotalAmount.setText("₹" + new DecimalFormat("##0.00").format(fuelAmt));
-                                }
+                                TextTotalAmount.setText("₹" + new DecimalFormat("##0.00").format(fuelAmt));
                             }
                         }
                     }
-                    tofuel = fuelAmt;
-                    calOverAllTotal(localCov, otherExp, tTotAmt);
                 }
+                tofuel = fuelAmt;
+                calOverAllTotal(localCov, otherExp, tTotAmt);
+            }
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                }
-            });
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
 
-        } catch (Exception exception) {
-        }
-
+    } catch (Exception exception) {
     }
-
+}
     public void MaxMinDateTo(String strMinDate) {
         Log.e("MAX_DATE_TWO", " " + strMinDate);
 

@@ -125,7 +125,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
                         holder.TextTotalAmount.setText("Rs. " +  new DecimalFormat("##0.00").format(q*z));
                     }
-                } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") || jsFuel.get("MOT_Name").getAsString().equals("Ret Vehicle") ) {
+                } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") || jsFuel.get("MOT_Name").getAsString().equalsIgnoreCase("Car return") ) {
                     if (Total >= FWMax_Km) {
                         Total = FWMax_Km;
                         Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString())?"0":jsFuel.get("Personal_Km").getAsString());

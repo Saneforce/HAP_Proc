@@ -604,7 +604,6 @@ public class Login extends AppCompatActivity {
                 Model response = gson.fromJson(loginData, userType);
                 assignLoginData(response, requestCode);
             } else {
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                     if (eMail.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Invalid Email ID", LENGTH_LONG).show();
@@ -613,7 +612,7 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
-                eMail="ciadmin@hap.in";
+                //eMail="ciadmin@hap.in";
 
                 //eMail="1023176@hap.in";
                // eMail="1025499@hap.in";

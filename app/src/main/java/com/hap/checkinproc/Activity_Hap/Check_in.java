@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -253,7 +254,7 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
             paramObjectdata.put("slfy", "1601103391878.jpg");
             paramObjectdata.put("WrkType", Common_Class.Work_Type);//static
             paramObjectdata.put("sfCode", Scode);
-            paramObjectdata.put("App_version", Common_Class.Version_Name);//static
+            paramObjectdata.put("App_version", BuildConfig.VERSION_NAME);//static
             paramObjectdata.put("CheckDutyFlag", null);
             paramObjectdata.put("Shift_Selected_Id", ID);
 

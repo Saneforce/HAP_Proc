@@ -53,6 +53,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -188,7 +189,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                         CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
                         CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
                     }
-                    CheckInInf.put("App_Version", Common_Class.Version_Name);
+                    CheckInInf.put("App_Version", BuildConfig.VERSION_NAME);
                     CheckInInf.put("WrkType", WrkType);
                     CheckInInf.put("CheckDutyFlag", "0");
                     CheckInInf.put("On_Duty_Flag", WrkType);
@@ -206,7 +207,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                         CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
                         CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
                         CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                        CheckInInf.put("App_Version", Common_Class.Version_Name);
+                        CheckInInf.put("App_Version", BuildConfig.VERSION_NAME);
                         CheckInInf.put("Ekey", "EK" + UserDetails.getString("Sfcode", "") + dfw.format(calobjw.getTime()).hashCode());
                         CheckInInf.put("update", "0");
                         CheckInInf.put("WrkType", "0");
