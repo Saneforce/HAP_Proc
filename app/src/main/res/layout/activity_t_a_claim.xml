@@ -75,7 +75,8 @@
                 android:padding="@dimen/C3dp"
                 android:text="View TA Status"
                 android:textColor="@color/white"
-                android:textSize="@dimen/C12dp" />
+                android:textSize="@dimen/C12dp"
+                tools:ignore="TouchTargetSizeCheck" />
 
 
             <ImageView
@@ -409,7 +410,8 @@
                                     android:layout_gravity="center"
                                     android:layout_marginRight="@dimen/C10dp"
                                     android:onClick="ImagePdf"
-                                    android:src="@drawable/info">
+                                    android:src="@drawable/info"
+                                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
 
                                 </ImageView>
                             </LinearLayout>

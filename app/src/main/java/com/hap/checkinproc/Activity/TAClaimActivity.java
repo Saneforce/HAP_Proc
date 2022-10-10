@@ -182,7 +182,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             sLocId = "",sDrvLocId="", sLocName = "",sDrvLocName="", sDALocId = "", sDALocName = "", sDALType, CInDate = "", COutDate = "", Alw_Eligibilty = "";
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
-    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0, OnlyNight = 0, transferflg = 0, TWMax_Km = 300, FWMax_Km = 1000;
+    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0, OnlyNight = 0, transferflg = 0, TWMax_Km = 300, FWMax_Km = 1000,VHRetFlag=0;
     long styDate = 0, nofNght = 0;
     ScrollView scrlMain;
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0,ldgDrvAlw = 0.0, gTotal = 0.0, TotLdging = 0.0,
@@ -2422,6 +2422,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     transferflg = itmSetup.get("TRFlag").getAsInt();
                     TWMax_Km = itmSetup.get("TWMax_Km").getAsInt();
                     FWMax_Km = itmSetup.get("FWMax_Km").getAsInt();
+//                    VHRetFlag=itmSetup.get("VHRetNeeded").getAsInt();
+//
+//                    if(VHRetFlag==1){
+//                        btnVehiRet.setVisibility(View.VISIBLE);
+//                    }
+//                    else if(VHRetFlag==0){
+//                        btnVehiRet.setVisibility(View.GONE);
+//                    }
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
@@ -2458,18 +2466,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     }
 
 
-                                  /*if((txtTaClaim.equals("Ret Vehicle")) && (Objects.equals(jsFuel.get("MOT_Name").getAsString(),"Four Wheeler"))){
-                                      btnVehiRet.setVisibility(View.GONE);
-                                    }*/
 
 
-                                    if (jsFuel.get("MOT_Name").getAsString().contains("Ret Vehicle") || jsFuel.get("MOT_Name").getAsString().contains("Two Wheeler")){
-                                        btnVehiRet.setVisibility(View.GONE);
-                                    }
 
-                                    if (jsFuel.get("MOT_Name").getAsString().contains("Four Wheeler")){
-                                        btnVehiRet.setVisibility(View.VISIBLE);
-                                    }
+//                                    if (jsFuel.get("MOT_Name").getAsString().contains("Ret Vehicle") || jsFuel.get("MOT_Name").getAsString().contains("Two Wheeler")){
+//                                        btnVehiRet.setVisibility(View.GONE);
+//                                    }
+//
+//                                    if (jsFuel.get("MOT_Name").getAsString().contains("Four Wheeler")){
+//                                        btnVehiRet.setVisibility(View.VISIBLE);
+//                                    }
+
+
+
 
 
                                     Integer Personal = Integer.valueOf(Common_Class.isNullOrEmpty(jsFuel.get("Personal_Km").getAsString()) ? "0" : jsFuel.get("Personal_Km").getAsString());
@@ -4293,7 +4302,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     public void captureFile(Integer reqCode) {
         dialog.dismiss();
 
-
         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
             @Override
             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
@@ -5038,6 +5046,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if(sameDrvldg==true){
                 sDrvLocId = myDataset.get(position).getId();
                 sDrvLocName = myDataset.get(position).getName();
+
             }
             txt_Styloc.setText(sLocName);
             txt_drvStyloc.setText(sDrvLocName);

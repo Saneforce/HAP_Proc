@@ -21,7 +21,7 @@ import java.net.URL;
 public class ProductImageView extends Activity {
 
     GestureImageView ProductZoomImage;
-    String ImageUrl = "";
+    String ImageUrl = "",ImageUrl1 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class ProductImageView extends Activity {
         setContentView(R.layout.activity_product_image_view);
 
         ImageUrl = getIntent().getStringExtra("ImageUrl");
+        ImageUrl1 = getIntent().getStringExtra("ImageUrl1");
         ProductZoomImage = findViewById(R.id.product_image);
        // ProductZoomImage.setRotation(90);
         if(ImageUrl.length()>4){
@@ -36,6 +37,12 @@ public class ProductImageView extends Activity {
                 ImageUrl="file://"+ImageUrl;
             }
             new DownLoadImageTask(ProductZoomImage).execute(ImageUrl);
+        }
+        if(ImageUrl1.length()>4){
+            if(ImageUrl1.substring(0,1).equalsIgnoreCase("/")){
+                ImageUrl1="file://"+ImageUrl1;
+            }
+            new DownLoadImageTask(ProductZoomImage).execute(ImageUrl1);
         }
     }
 

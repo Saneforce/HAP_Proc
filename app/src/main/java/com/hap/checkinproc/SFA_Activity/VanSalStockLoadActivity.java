@@ -1,15 +1,24 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Activity_Hap.AllowancCapture.setOnImagePickListener;
+
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,8 +44,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -46,6 +60,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -60,13 +75,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import id.zelory.compressor.Compressor;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,6 +104,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
+    Dialog dialog;
     CircularProgressButton takeorder;
     TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
@@ -88,14 +112,18 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
-    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
+    String Worktype_code = "",UserInfo = "MyPrefs", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
+
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+
     Prodct_Adapter mProdct_Adapter;
     String TAG = "VanSalesOrderActivity";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose;
-    EditText etCategoryItemSearch;
+    ImageView ivClose,img_lodg_atta,attachedImage;
+    EditText etCategoryItemSearch, edtVehicleNo, edtStartKm;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -109,9 +137,13 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     private int uomPos;
     private ArrayList<Common_Model> uomList;
 
-    String axn = "";
-    private String van_id = "";
+    String axn = "",ImageUKey = "",keyEk = "EK",modeId = "",imageSet = "", imageServer = "",imageConvert = "";
+    private String van_id = "", vehNo="";
 
+//    private static String vehNo;
+//    public static String getVehNo() {
+//        return vehNo;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +152,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             setContentView(R.layout.activity_vansalesorder_category);
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(VanSalStockLoadActivity.this);
+
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
             common_class = new Common_Class(this);
             tvHeader = findViewById(R.id.tvHeader);
             Grpgrid = findViewById(R.id.PGroup);
@@ -134,6 +169,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
+            attachedImage = findViewById(R.id.attachedImage);
+            edtVehicleNo = findViewById(R.id.edtVehNo);
+            edtStartKm = findViewById(R.id.edtStartKm);
 
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
             tvPOP = (TextView) findViewById(R.id.tvPOP);
@@ -142,7 +180,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
-
+            img_lodg_atta = findViewById(R.id.startkm_attach);
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
             Product_ModalSetAdapter = new ArrayList<>();
@@ -187,8 +225,84 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             tvCoolerInfo.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
 
+//            vehNo=edtVehicleNo.getText().toString().trim();
+
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
 
+//            img_lodg_atta.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.v("MODE_ID", "DATA " + modeId);
+//
+//                    CameraPermission cameraPermission = new CameraPermission(VanSalStockLoadActivity.this, getApplicationContext());
+//
+//                    if (!cameraPermission.checkPermission()) {
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                            cameraPermission.requestPermission();
+//                        }
+//                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+//                    } else {
+//                        Log.v("PERMISSION", "PERMISSION");
+//
+//                        setOnImagePickListener(new OnImagePickListener() {
+//                            @Override
+//                            public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+////                            imageServer = FileName;
+////                            imageConvert = fullPath;
+////                            attachedImage.setImageBitmap(image);
+////                            attachedImage.setVisibility(View.VISIBLE);
+////
+//                                UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), FileName, "Travel", image);
+//                            }
+//                        });
+//                        Intent intent = new Intent(VanSalStockLoadActivity.this, AllowancCapture.class);
+//                       intent.putExtra("allowance", "One");
+//                        startActivity(intent);
+//                    }
+//                }
+//            });
+            img_lodg_atta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    CameraPermission cameraPermission = new CameraPermission(VanSalStockLoadActivity.this, getApplicationContext());
+
+                    if (!cameraPermission.checkPermission()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            cameraPermission.requestPermission();
+                        }
+                    } else {
+
+                        AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                            @Override
+                            public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+//                            Photo_Name = FileName;
+//                            imageConvert=fullPath;
+//                            EndedImage="file://"+fullPath;
+//                            EndedKmImage.setImageBitmap(image);
+
+                                UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), FileName, "Travel", image);
+
+                            }
+                        });
+                        Intent intent = new Intent(VanSalStockLoadActivity.this, AllowancCapture.class);
+                        intent.putExtra("allowance", "Two");
+                        startActivity(intent);
+
+                    }
+
+                }
+            });
+
+
+            attachedImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                    intent.putExtra("ImageUrl1", imageSet);
+                    startActivity(intent);
+                }
+            });
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -394,6 +508,106 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
         }
     }
+
+    public MultipartBody.Part convertimg(String tag, String path) {
+        MultipartBody.Part yy = null;
+        try {
+            if (!TextUtils.isEmpty(path)) {
+
+                File file = new File(path);
+                if (path.contains(".png") || path.contains(".jpg") || path.contains(".jpeg"))
+                    file = new Compressor(getApplicationContext()).compressToFile(new File(path));
+                else
+                    file = new File(path);
+                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
+                yy = MultipartBody.Part.createFormData(tag, file.getName(), requestBody);
+            }
+        } catch (Exception e) {
+        }
+        return yy;
+    }
+
+    private void UploadPhoto(String path, String SF, String FileName, String Mode, Bitmap image) {
+        try {
+            common_class.ProgressdialogShow(1, "");
+
+            MultipartBody.Part imgg;
+            if (path != null && (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg"))) {
+                imgg = convertimg("file", path);
+
+            } else {
+                common_class.ProgressdialogShow(0, "");
+                common_class.showMsg(this, "Image file only supported");
+                return;
+            }
+
+
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<ResponseBody> mCall = apiInterface.onTAFileUpload(SF, FileName, Mode, imgg);
+
+            Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
+
+            mCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    try {
+                        if (response.isSuccessful()) {
+
+
+                            JSONObject js = new JSONObject(response.body().string());
+                            Log.v("Res", js.toString());
+
+                            if (js.getBoolean("success")) {
+
+                                if (image != null) {
+
+                                    imageServer=FileName;
+                                    imageConvert = path;
+                                    imageSet = "file://" + path;
+                                    attachedImage.setImageBitmap(image);
+                                    attachedImage.setVisibility(View.VISIBLE);
+
+                                }
+
+
+                                common_class.ProgressdialogShow(0, "");
+
+                                common_class.showMsg(VanSalStockLoadActivity.this, "File uploading successful ");
+                            } else {
+                                common_class.ProgressdialogShow(0, "");
+                                common_class.showMsg(VanSalStockLoadActivity.this, "Failed.Try Again...");
+                            }
+                        } else {
+
+                            common_class.ProgressdialogShow(0, "");
+                            common_class.showMsg(VanSalStockLoadActivity.this, "Failed.Try Again...");
+
+                        }
+
+                    } catch (Exception e) {
+                        common_class.ProgressdialogShow(0, "");
+                        common_class.showMsg(VanSalStockLoadActivity.this, "Failed.Try Again...");
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    common_class.ProgressdialogShow(0, "");
+                    common_class.showMsg(VanSalStockLoadActivity.this, "Failed.Try Again...");
+
+                    Log.e("SEND_IMAGE_Response", "ERROR");
+                }
+            });
+
+
+        } catch (Exception e) {
+            Log.e("TAClaim:", e.getMessage());
+        }
+    }
+
+
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
@@ -648,6 +862,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 common_class.ProgressdialogShow(1, "");
                 JSONArray data = new JSONArray();
                 JSONObject ActivityData = new JSONObject();
+
                 try {
                     JSONObject HeadItem = new JSONObject();
                     van_id = Common_Class.GetEkey();
@@ -662,6 +877,17 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     //  HeadItem.put("orderValue", formatter.format(totalvalues));
                     HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                     HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+                    HeadItem.put("Vansales_VehNo",edtVehicleNo.getText().toString());
+                    HeadItem.put("Vansales_StartKm",edtStartKm.getText().toString());
+                    HeadItem.put("Vansales_Startkm_Image",imageSet);
+
+                    Log.v("vansalesLoad",HeadItem.toString());
+                    Log.v("dsrte1",imageSet);
+//                    Log.v("dsrte1",sharedCommonPref.getvalue(Constants.Vansales_VehNo));
+
+                    sharedCommonPref.save(Constants.Vansales_VehNo,edtVehicleNo.getText().toString());
+                    Log.v("dsrte2",sharedCommonPref.getvalue(Constants.Vansales_VehNo));
+
                     ActivityData.put("Activity_Report_Head", HeadItem);
 
                     JSONObject OutletItem = new JSONObject();
@@ -757,7 +983,12 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     //  OutletItem.put("TOT_TAX_details", totTaxArr);
                     ActivityData.put("Activity_Doctor_Report", OutletItem);
                     ActivityData.put("Order_Details", Order_Details);
+
+
+
+
                     data.put(ActivityData);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -772,6 +1003,13 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                                 Log.e("JSON_VALUES", response.body().toString());
                                 JSONObject jsonObjects = new JSONObject(response.body().toString());
                                 String san = jsonObjects.getString("success");
+
+//                                Log.v("VEHNO & STARTKM",jsonObjects.toString());
+//
+//                                jsonObjects.put("VansalesVehNo",edtVehicleNo);
+//                                jsonObjects.put("VansalesStartKm",edtStartKm);
+
+
                                 Log.e("Success_Message", san);
                                 ResetSubmitBtn(1);
                                 if (san.equals("true")) {
@@ -1084,6 +1322,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 //                } else {
 //                    common_class.showMsg(this, "Can't exceed Stock");
 //                }
+
+
+
                 break;
         }
     }

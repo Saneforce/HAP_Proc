@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -94,7 +93,7 @@
             <LinearLayout
                 android:id="@+id/llPlant"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/C30dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/C5dp"
                 android:gravity="center_vertical"
@@ -131,15 +130,35 @@
                 android:layout_width="@dimen/C30dp"
                 android:layout_height="@dimen/C30dp"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="@dimen/C3dp"
                 android:layout_marginRight="@dimen/C8dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:padding="5dp"
+                android:padding="3dp"
                 android:src="@drawable/ic_home" />
+
         </LinearLayout>
 
 
         <!--        <include layout="@layout/sfatoolbar"></include>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/tvProjectionTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="@dimen/C10dp"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

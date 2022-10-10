@@ -78,6 +78,10 @@ public class Datum {
     @Expose
     private String CutoffTime;
 
+    @SerializedName("SFCutoff")
+    @Expose
+    private String RSMCutOffTime;
+
     @SerializedName("Tm")
     @Expose
     private String Tm;
@@ -414,9 +418,17 @@ public class Datum {
         return CutoffTime;
     }
 
+    public String getRSMCutoffTime() {
+        return RSMCutOffTime;
+    }
+
 
     public void setCutoffTime(String cutoffTime) {
         CutoffTime = cutoffTime;
+    }
+
+    public void setRSMCutoffTime(String cutoffTime) {
+        RSMCutOffTime = cutoffTime;
     }
 
     public List<Datum> getSlotTime() {

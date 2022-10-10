@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +56,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
+import com.hap.checkinproc.SFA_Activity.InshopActivity;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
@@ -229,6 +231,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
                     menuList.add(new ListModel("", "POS", "", "", "", R.drawable.ic_outline_assignment_48));
                     menuList.add(new ListModel("", "GRN", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
+                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
+
 
                     common_class.getPOSProduct(this);
                     common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
@@ -241,6 +245,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
                     menuList.add(new ListModel("", "POS", "", "", "", R.drawable.ic_outline_assignment_48));
                     menuList.add(new ListModel("", "GRN", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
+                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
+
                     break;
             }
             setMenuAdapter();
@@ -310,6 +316,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "Sync":
                         saveFormData(-1);
                         common_class.ProgressdialogShow(1, "");
+                        break;
+                    case "Inshop":
+
+//                        Toast.makeText(SFA_Activity.this,"Inshop clicked",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SFA_Activity.this, InshopActivity.class));
                         break;
 
                     default:

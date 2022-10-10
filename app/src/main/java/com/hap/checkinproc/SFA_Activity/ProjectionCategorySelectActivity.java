@@ -48,6 +48,7 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
+import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
@@ -63,7 +64,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -82,7 +85,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress, tvHistory;
+    TextView Out_Let_Name, Category_Nametext, tvRetailorPhone, retaileAddress, tvHistory, tvProjectionTimer;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
@@ -107,6 +110,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     public static ProjectionCategorySelectActivity order_category_select;
     private List<Product_Details_Modal> orderTotTax;
 
+
+
     ArrayList<Common_Model> plantList = new ArrayList<>();
     private int plantPos;
     LinearLayout llPlant;
@@ -124,6 +129,8 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             sharedCommonPref = new Shared_Common_Pref(ProjectionCategorySelectActivity.this);
             common_class = new Common_Class(this);
             //common_class.getProductDetails(this);
+
+            tvProjectionTimer = findViewById(R.id.tvProjectionTimer);
 
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
@@ -209,6 +216,29 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                 }
             });
 
+//            getOrder();
+
+
+            Log.d("ssds","nhgjku"+sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
+
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    findNearCutOfftime();
+                    tvProjectionTimer.setText(Common_Class.GetTime() + "   /   " + sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
+
+                    Log.v("cutoffTimeProjection", sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
+                    handler.postDelayed(this, 1000);
+
+                }
+            }, 1000);
+
+            /*if(Common_Class.GetTime().equals(sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME))){
+                Toast.makeText(ProjectionCategorySelectActivity.this,"Times up",Toast.LENGTH_SHORT).show();
+                takeorder.setVisibility(View.GONE);
+            }*/
+
+
+
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
@@ -252,6 +282,45 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
             common_class.getDb_310Data(Constants.PLANT_MASTER, this);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
+
+        }
+    }
+
+
+    private void findNearCutOfftime() {
+        try {
+            Type type = new TypeToken<ArrayList<Datum>>() {
+            }.getType();
+            List<Datum> slotList = new ArrayList<>();
+            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SlotTime))) {
+                slotList = gson.fromJson(sharedCommonPref.getvalue(Constants.SlotTime), type);
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+            long val = 0;
+            String time = "";
+            for (int i = 0; i < slotList.size(); i++) {
+                Date d1 = sdf.parse(Common_Class.GetTime());
+                Date d2 = sdf.parse(slotList.get(i).getTm());
+                long elapsed = d2.getTime() - d1.getTime();
+                Log.v(TAG + "time:" + slotList.get(i).getTm(), "Elapse:" + elapsed + ":val" + val);
+                if ((val == 0 && elapsed > 0) || (elapsed < val && elapsed > 0)) {
+                    val = elapsed;
+                    time = slotList.get(i).getTm();
+                }
+            }
+
+            if (slotList != null && slotList.size() > 0 && time.equals("")) {
+                time = slotList.get(0).getTm();
+            }
+
+            /*if (!Common_Class.isNullOrEmpty(time))
+                sharedCommonPref.save(Constants.RSM_CUTOFF_TIME, time);
+            else {
+                sharedCommonPref.save(Constants.RSM_CUTOFF_TIME, "16:43:00");
+            }*/
+
+        } catch (Exception e) {
 
         }
     }
@@ -334,6 +403,9 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
         //type =1 product category data values
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
+
+            Log.v("CatergoryList",jsonArray.toString());
+
             if (type.equals("1")) Category_Modal.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -440,7 +512,19 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                 break;
 
             case R.id.takeorder:
+
                 try {
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                    Date d1 = sdf.parse(Common_Class.GetTime());
+                    Date d2 = sdf.parse(sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
+                    long elapsed = d2.getTime() - d1.getTime();
+                    if (elapsed < 0 || Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME)) ||
+                            sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME).equals("--:--:--")) {
+                        ResetSubmitBtn(0);
+                        common_class.showMsg(this, "Time UP...");
+                        takeorder.setVisibility(View.GONE);
+                    }
 
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
 
@@ -467,6 +551,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                                         strLoc = sLoc.split(":");
                                         SaveOrder();
                                     }
+
                                 }
                             }, 500);
                         } else {
@@ -485,6 +570,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
     }
 
     private void SaveOrder() {
+
         if (common_class.isNetworkAvailable(this)) {
 
             AlertDialogBox.showDialog(ProjectionCategorySelectActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
@@ -511,6 +597,9 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                         OutletItem.put("ordertype", "projection");
                         OutletItem.put("plantName", tvPlant.getText().toString());
                         OutletItem.put("plantId", plantId);
+                        OutletItem.put("SFCutoff", sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
+
+                        Log.v("projectionResponse",OutletItem.toString());
 
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);

@@ -60,6 +60,7 @@ import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -73,6 +74,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -365,6 +368,7 @@ public class Login extends AppCompatActivity {
                 Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+                Shared_Common_Pref.SFCutoff = UserDetails.getString("SFCutoff","");
 
                 String ActStarted = shared_common_pref.getvalue("ActivityStart");
 
@@ -398,7 +402,6 @@ public class Login extends AppCompatActivity {
                 }
             }
         }
-
 
     }
 
@@ -599,11 +602,13 @@ public class Login extends AppCompatActivity {
             Gson gson = new Gson();
             if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.LOGIN_DATA))) {
                 String loginData = shared_common_pref.getvalue(Constants.LOGIN_DATA);
+
                 Type userType = new TypeToken<Model>() {
                 }.getType();
                 Model response = gson.fromJson(loginData, userType);
                 assignLoginData(response, requestCode);
             } else {
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                     if (eMail.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Invalid Email ID", LENGTH_LONG).show();
@@ -612,7 +617,13 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
-                //eMail="ciadmin@hap.in";
+                eMail="1013663@hap.in";
+//                eMail="1027397@hap.in";
+
+//                eMail="ciadmin@hap.in";
+
+//                eMail="1014700@hap.in";
+//                 eMail="anandaraj.s@hap.in";
 
                 //eMail="1023176@hap.in";
                // eMail="1025499@hap.in";
@@ -629,12 +640,48 @@ public class Login extends AppCompatActivity {
                         try {
                             if (response.isSuccessful()) {
 
-                                if (response.body().getSuccess() == true) {
+                                if (response.body().getSuccess()) {
 
                                     try {
                                         Gson gson = new Gson();
                                         assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
+                                        Model model=new Model();
+                                        model=response.body();
+                                        List<Datum> datumList= new ArrayList<>();
+                                        datumList=model.getData();
+                                        Log.d("kl","kdllfsd"+datumList);
+                                        String sfcut=datumList.get(0).getRSMCutoffTime();
+                                        Log.d("kl","kdcut"+sfcut);
+                                        shared_common_pref.save(Constants.RSM_CUTOFF_TIME,sfcut);
+                                        Log.d("kl","kdsave"+shared_common_pref.getvalue(Constants.RSM_CUTOFF_TIME));
+
+
+
+                                        Log.v("cutoff_response",response.toString());
+                                        Log.d("jmn","jj"+shared_common_pref.getvalue(Constants.LOGIN_DATA));
+                                        String ss = shared_common_pref.getvalue(Constants.LOGIN_DATA);
+
+
+
+
+
+                                        /*try {
+                                           JsonObject jsonObject= new JsonObject(response.body());
+
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                                JSONArray jsonArr = jsonObject.getJSONArray("Data");
+                                                String SFcutoff = jsonArr.getJSONObject(0).getString("SFCutoff");
+
+                                                Log.v("ijklm", SFcutoff);
+
+                                            }
+                                        }
+                                        catch (Exception e){
+                                            Log.d("exception","jhh"+e.toString());
+                                        }*/
 
 //                                        try {
 //                                            PackageManager manager = getPackageManager();
@@ -695,7 +742,7 @@ public class Login extends AppCompatActivity {
                                     try {
                                         mProgress.dismiss();
                                     } catch (Exception e) {
-
+                                        Log.v("Login:assign1", e.getMessage());
                                     }
                                     Toast.makeText(getApplicationContext(), "Check username and password", LENGTH_LONG).show();
                                 }
@@ -745,6 +792,10 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Constants.Distributor_phone, response.getData().get(0).getStockist_Mobile());
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                 shared_common_pref.save(Constants.CUTOFF_TIME, response.getData().get(0).getCutoffTime());
+
+               // shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
+
+
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
                 shared_common_pref.save(Constants.DistributorERP, response.getData().get(0).getERP_Code());
                 shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
@@ -759,9 +810,12 @@ public class Login extends AppCompatActivity {
 
                 Shared_Common_Pref.Sf_Code = response.getData().get(0).getDistCode();
                 Shared_Common_Pref.Div_Code = response.getData().get(0).getDivisionCode();
+                Shared_Common_Pref.SFCutoff = response.getData().get(0).getRSMCutoffTime();
 
                 shared_common_pref.save(Shared_Common_Pref.Div_Code, response.getData().get(0).getDivisionCode());
                 shared_common_pref.save(Shared_Common_Pref.Sf_Code, response.getData().get(0).getDistCode());
+                shared_common_pref.save(Shared_Common_Pref.SFCutoff, response.getData().get(0).getDistCode());
+
 
                 userEditor.putString("email", eMail);
                 if (!UserLastName.equalsIgnoreCase("")) {

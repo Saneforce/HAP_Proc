@@ -196,7 +196,7 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
 
-    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0,OnlyNight=0,transferflg=0,TWMax_Km=300,FWMax_Km=1000;
+    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0,OnlyNight=0,transferflg=0,TWMax_Km=300,FWMax_Km=1000,VHRetFlag=0;
     long styDate = 0,nofNght=0;
     ScrollView scrlMain;
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
@@ -207,7 +207,7 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
     float tJointAmt = 0;
 
     boolean changeStay=false;
-    Button  btnDAChange;
+    Button  btnDAChange,btnVehiRet;
     CircularProgressButton btn_sub, buttonSave;
     int countLoding = 0;
 
@@ -493,6 +493,8 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
         TextCheckInDate = findViewById(R.id.txt_hotel_date);
         btnDAChange=findViewById(R.id.btnDAChange);
         btnDAclose=findViewById(R.id.btnDAclose);
+        btnVehiRet = findViewById(R.id.btnVehiRet);
+
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
         mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -2111,6 +2113,14 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
                     transferflg=itmSetup.get("TRFlag").getAsInt();
                     TWMax_Km=itmSetup.get("TWMax_Km").getAsInt();
                     FWMax_Km=itmSetup.get("FWMax_Km").getAsInt();
+                    /*VHRetFlag=itmSetup.get("VHRetNeeded").getAsInt();
+
+                    if(VHRetFlag==1){
+                        btnVehiRet.setVisibility(View.VISIBLE);
+                    }
+                    else if(VHRetFlag==0){
+                        btnVehiRet.setVisibility(View.GONE);
+                    }*/
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());

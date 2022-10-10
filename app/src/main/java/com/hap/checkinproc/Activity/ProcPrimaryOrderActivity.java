@@ -598,6 +598,8 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                 }
 
             }
+
+            Log.v("time",sharedCommonPref.getvalue(Constants.CUTOFF_TIME));
         } catch (Exception e) {
             common_class.showMsg(this, e.getMessage());
             ResetSubmitBtn(0);
@@ -752,6 +754,8 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                             OutletItem.put("totAmtTax", formatter.format(totTax));
                             OutletItem.put("groupCode", grpCode);
                             OutletItem.put("groupName", grpName);
+
+                            Log.v("responseOrder",OutletItem.toString());
 
                             if (strLoc.length > 0) {
                                 OutletItem.put("Lat", strLoc[0]);
