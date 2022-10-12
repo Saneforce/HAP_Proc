@@ -55,6 +55,7 @@ import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
+import com.hap.checkinproc.SFA_Activity.VanStockViewActivity;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -890,6 +891,8 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         data.put("dt", Common_Class.GetDatewothouttime());
+                        data.put("fromdate", VanStockViewActivity.stDate);
+                        data.put("todate", VanStockViewActivity.endDate);
                         break;
 
                 }
