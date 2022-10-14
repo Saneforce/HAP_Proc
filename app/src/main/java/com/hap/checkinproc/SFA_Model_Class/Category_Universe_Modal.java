@@ -28,9 +28,10 @@ public class Category_Universe_Modal {
     }
 
 
-    public Category_Universe_Modal(String name, String value){
+    public Category_Universe_Modal(String id, String name, String value){
         this.name = name;
         this.value = value;
+        this.id = id;
 
     }
 
