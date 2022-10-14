@@ -94,7 +94,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode;
+    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode, tvCounterEntrySales;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -148,6 +148,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             rlQtyParent = findViewById(R.id.rlQtyParent);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
+            tvCounterEntrySales = findViewById(R.id.btnPosEntrySales);
+
+            tvCounterEntrySales.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(POSActivity.this, POS_SalesEntryActivity.class));
+
+                }
+            });
 
 
             etCategoryItemSearch = findViewById(R.id.searchView);

@@ -52,13 +52,11 @@
                 app:cardCornerRadius="@dimen/C5dp">
 
                 <LinearLayout
-android:layout_marginBottom="@dimen/C10dp"
+                    android:layout_marginBottom="@dimen/C10dp"
                     android:id="@+id/lin_orderrecyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-
-                    >
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvVSPayDate"
