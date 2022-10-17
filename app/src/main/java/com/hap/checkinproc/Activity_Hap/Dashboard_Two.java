@@ -159,6 +159,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             txDeptName = findViewById(R.id.txDeptName);
             txRptName = findViewById(R.id.txRptName);
             txHQName.setText(UserDetails.getString("DesigNm", ""));
+
 //        txHQName.setText(UserDetails.getString("SFHQ",""));
 //        txDesgName.setText(UserDetails.getString("SFDesig",""));
 //        txDeptName.setText(UserDetails.getString("DepteNm",""));
