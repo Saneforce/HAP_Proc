@@ -121,6 +121,7 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
     }
 
     @Override

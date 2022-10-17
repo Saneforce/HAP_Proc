@@ -188,6 +188,8 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
     }
 
     public void loadroute() {

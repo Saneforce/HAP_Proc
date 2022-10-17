@@ -653,7 +653,7 @@ public class Login extends AppCompatActivity {
                                         Log.d("kl","kdllfsd"+datumList);
                                         String sfcut=datumList.get(0).getRSMCutoffTime();
                                         Log.d("kl","kdcut"+sfcut);
-                                        shared_common_pref.save(Constants.RSM_CUTOFF_TIME,sfcut);
+//                                        shared_common_pref.save(Constants.RSM_CUTOFF_TIME,sfcut);
                                         Log.d("kl","kdsave"+shared_common_pref.getvalue(Constants.RSM_CUTOFF_TIME));
 
 
@@ -793,7 +793,6 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                 shared_common_pref.save(Constants.CUTOFF_TIME, response.getData().get(0).getCutoffTime());
 
-               // shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
 
 
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
@@ -858,6 +857,7 @@ public class Login extends AppCompatActivity {
                     cInEditor.putString("ShiftEnd", CinObj.getAsJsonObject("sft_ETime").get("date").getAsString());
                     cInEditor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
                     cInEditor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
+                     shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
 
                     String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
                     int Type = CinObj.get("Type").getAsInt();

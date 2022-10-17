@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SFA_Activity.Order_Category_Select">
+    tools:context=".SFA_Activity.POSActivity">
 
     <LinearLayout
         android:id="@+id/db1_root"
@@ -96,10 +96,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/blue_bg"
             android:orientation="horizontal"
-            android:padding="@dimen/C3dp">
+            android:weightSum="2"
+            android:padding="@dimen/C5dp">
 
             <TextView
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -110,7 +110,19 @@
                 android:textAllCaps="true"
                 android:textColor="#FFF"
                 android:textSize="18dp"
-
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/btnPosEntrySales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:fontFamily="@font/basic"
+                android:paddingEnd="@dimen/C20dp"
+                android:text="Counter Sales Entry"
+                android:textAlignment="textEnd"
+                android:textColor="#FFF"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -165,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"></androidx.recyclerview.widget.RecyclerView>
+                app:spanCount="2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -537,7 +549,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/C5dp"
-                        android:src="@drawable/ic_baseline_close_24"></ImageView>
+                        android:src="@drawable/ic_baseline_close_24" />
                 </RelativeLayout>
 
 
@@ -583,11 +595,10 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C5dp"
                         android:background="@color/black"
-                        android:outlineAmbientShadowColor="@color/statuscolor"></View>
+                        android:outlineAmbientShadowColor="@color/statuscolor" />
 
 
                     <LinearLayout
@@ -617,7 +628,7 @@
                                     android:text="SKU"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"></TextView>
+                                    android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -640,7 +651,7 @@
                                         android:text="Free"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -656,7 +667,7 @@
                                         android:textAlignment="center"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
 
@@ -676,7 +687,7 @@
                                         android:text="Regular"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -694,7 +705,7 @@
                                         android:text="UOM"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
 
@@ -711,7 +722,7 @@
                                         android:text="Qty"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                                 <ImageView
@@ -721,7 +732,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/C5dp"
                                     android:padding="@dimen/C5dp"
-                                    android:src="@drawable/delete_cart"></ImageView>
+                                    android:src="@drawable/delete_cart" />
 
 
                                 <LinearLayout
@@ -736,7 +747,7 @@
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -752,7 +763,7 @@
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
 
@@ -769,7 +780,7 @@
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -779,10 +790,9 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C5dp"
-                        android:background="@color/black"></View>
+                        android:background="@color/black" />
 
                 </LinearLayout>
 
@@ -837,7 +847,7 @@
                                         android:text="SKU"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:layout_width="0dp"
@@ -847,7 +857,7 @@
                                         android:text="Free"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold"></TextView>
+                                        android:textStyle="bold" />
 
                                 </LinearLayout>
 
@@ -880,13 +890,13 @@
                                 android:text="PRICE DETAILS"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/grey_600"
-                                android:textSize="@dimen/C13dp"></TextView>
+                                android:textSize="@dimen/C13dp" />
 
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/grey_200"></View>
+                                android:background="@color/grey_200" />
 
 
                             <RelativeLayout
@@ -901,7 +911,7 @@
                                     android:text="Subtotal"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/subtotal"
@@ -911,7 +921,7 @@
                                     android:text="200.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -925,7 +935,7 @@
                                     android:text="Total item"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/totalitem"
@@ -934,7 +944,7 @@
                                     android:text="5"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -948,7 +958,7 @@
                                     android:text="Total Qty"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/tvtotalqty"
@@ -957,7 +967,7 @@
                                     android:text="10"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -971,7 +981,7 @@
                                     android:text="Total Free Qty"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/totalfreeqty"
@@ -980,7 +990,7 @@
                                     android:text="2"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -995,7 +1005,7 @@
                                     android:text="Net Amount Tax"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/tvNetAmtTax"
@@ -1004,7 +1014,7 @@
                                     android:fontFamily="sans-serif"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
 
@@ -1019,7 +1029,7 @@
                                     android:fontFamily="sans-serif"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/tvTaxVal"
@@ -1028,7 +1038,7 @@
                                     android:fontFamily="sans-serif"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
 
@@ -1043,7 +1053,7 @@
                                     android:text="Discount"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
 
                                 <TextView
                                     android:id="@+id/tvcashdiscount"
@@ -1053,7 +1063,7 @@
                                     android:text="0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/green"
-                                    android:textSize="@dimen/C13dp"></TextView>
+                                    android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
 
@@ -1062,7 +1072,7 @@
                                 android:layout_height="3dp"
                                 android:layout_marginTop="-10dp"
                                 android:background="@color/black"
-                                android:outlineAmbientShadowColor="@color/black"></View>
+                                android:outlineAmbientShadowColor="@color/black" />
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
@@ -1075,19 +1085,18 @@
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"
-                                    android:textStyle="bold"></TextView>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/tvnetamount"
                                     android:layout_width="match_parent"
-
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
                                     android:text="1000.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"
-                                    android:textStyle="bold"></TextView>
+                                    android:textStyle="bold" />
                             </RelativeLayout>
 
                             <View
@@ -1095,7 +1104,7 @@
                                 android:layout_height="3dp"
                                 android:background="@color/black"
                                 android:outlineAmbientShadowColor="@color/black"
-                                android:visibility="visible"></View>
+                                android:visibility="visible" />
 
 
                             <TextView
@@ -1103,12 +1112,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp"
-
                                 android:fontFamily="sans-serif"
                                 android:text=""
                                 android:textColor="@color/green"
                                 android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:textStyle="bold" />
 
 
                             <TextView
@@ -1177,9 +1185,8 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="sans-serif"
-
                                         android:textColor="@color/black"
-                                        android:textSize="@dimen/C13dp"></TextView>
+                                        android:textSize="@dimen/C13dp" />
 
                                 </LinearLayout>
                             </LinearLayout>
@@ -1207,14 +1214,13 @@
             android:visibility="visible">
 
             <ImageView
-
                 android:id="@+id/ivCart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/C5dp"
                 android:src="@drawable/ic_round_shopping_bag_24"
-                app:tint="@color/white"></ImageView>
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/tvCart"
@@ -1306,7 +1312,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.9"
-            android:background="@color/black"></RelativeLayout>
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -1318,7 +1324,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical" />
 
             <androidx.cardview.widget.CardView
 

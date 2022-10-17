@@ -14,6 +14,10 @@ public class Category_Universe_Modal {
     @Expose
     private String ColorFlag;
 
+    @SerializedName("counterValue")
+    @Expose
+    private String value;
+
     public Category_Universe_Modal(String id, String name, String divisionCode, String catImage, String sampleQty, String ColorFlag) {
         this.id = id;
         this.name = name;
@@ -21,6 +25,14 @@ public class Category_Universe_Modal {
         this.catImage = catImage;
         this.sampleQty = sampleQty;
         this.ColorFlag= ColorFlag;
+    }
+
+
+    public Category_Universe_Modal(String id, String name, String value){
+        this.name = name;
+        this.value = value;
+        this.id = id;
+
     }
 
     @SerializedName("Division_Code")
@@ -53,10 +65,18 @@ public class Category_Universe_Modal {
     public String getName() {
         return name;
     }
+    public String getValue() {
+        return value;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
 
     public String getDivisionCode() {
         return divisionCode;

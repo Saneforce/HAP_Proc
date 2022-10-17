@@ -45,7 +45,13 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-
+        <activity
+            android:name=".SFA_Activity.POS_SalesEntryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".SFA_Activity.InshopRetailerActivity"
             android:exported="false" />

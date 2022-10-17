@@ -2422,14 +2422,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     transferflg = itmSetup.get("TRFlag").getAsInt();
                     TWMax_Km = itmSetup.get("TWMax_Km").getAsInt();
                     FWMax_Km = itmSetup.get("FWMax_Km").getAsInt();
-//                    VHRetFlag=itmSetup.get("VHRetNeeded").getAsInt();
-//
-//                    if(VHRetFlag==1){
-//                        btnVehiRet.setVisibility(View.VISIBLE);
-//                    }
-//                    else if(VHRetFlag==0){
-//                        btnVehiRet.setVisibility(View.GONE);
-//                    }
+                    VHRetFlag=itmSetup.get("VHRetNeeded").getAsInt();
+
+                    if(VHRetFlag==1){
+                        btnVehiRet.setVisibility(View.VISIBLE);
+                    }
+                    else if(VHRetFlag==0){
+                        btnVehiRet.setVisibility(View.GONE);
+                    }
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());

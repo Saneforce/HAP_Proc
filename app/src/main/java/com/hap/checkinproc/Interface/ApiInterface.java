@@ -51,6 +51,9 @@ public interface ApiInterface {
     @GET("Db_v300.php?")
     Call<JsonArray> getSetups(@Query("axn") String axn, @Query("rSF") String Sf_code);
 
+
+
+
     /* get Data as Array List */
     @GET("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
@@ -502,7 +505,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/inshopsorder")
-    Call<JsonObject> saveInshopsOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+    Call<JsonObject>  saveInshopsOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/invoice")
