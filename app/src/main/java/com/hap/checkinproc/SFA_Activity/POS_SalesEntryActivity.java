@@ -167,9 +167,11 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                    String name = jsonObject1.optString("pname");
+                    String name = jsonObject1.optString("name");
                     String value = jsonObject1.optString("pvalue");
-                    String id = jsonObject1.optString("pid");
+                    String id = jsonObject1.optString("id");
+
+                    Log.v("jsonarray123",jsonArray.toString());
 
                 list.add(new Category_Universe_Modal(id,name, value ));
             }
