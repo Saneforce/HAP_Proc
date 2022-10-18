@@ -47,7 +47,8 @@
         tools:targetApi="n">
         <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
