@@ -1606,6 +1606,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/text_bg_grey"
                                     android:gravity="start"
+                                    android:maxLength="13"
                                     android:hint="Enter the Freezer/Cooler Tag Number"
                                     android:padding="10dp"
                                     android:textSize="13sp" />
