@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +27,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -42,9 +44,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class POS_SalesEntryActivity extends AppCompatActivity implements View.OnClickListener{
+public class POS_SalesEntryActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI{
 
-    List<Category_Universe_Modal> list=new ArrayList<>();
+    List<Product_Details_Modal> list=new ArrayList<>();
 
     RecyclerView recyclerView;
     Common_Class common_class;
@@ -54,7 +56,6 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
     Gson gson;
     DatabaseHandler db;
     final Handler handler = new Handler();
-    public static final String UserDetail = "MyPrefs";
     SharedPreferences UserDetails;
     Button btnSubmit;
     ApiInterface apiInterface;
@@ -64,7 +65,7 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
     private DatePickerDialog fromDatePickerDialog;
 
-    public static TextView tvStartDate, tvEndDate, currDate, totalExpense;
+    public static TextView tvStartDate, tvEndDate, currDate, totalExpense, tvView;
     public static String stDate = "", endDate = "";
     String date = "", SF_code = "";
 
@@ -76,6 +77,16 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
         db = new DatabaseHandler(this);
         sharedCommonPref = new Shared_Common_Pref(POS_SalesEntryActivity.this);
         common_class = new Common_Class(this);
+
+        tvView = findViewById(R.id.tvView);
+
+//        tvView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(POS_SalesEntryActivity.this, POSViewEntryActivity.class));
+//
+//            }
+//        });
 
 
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -100,7 +111,7 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
         tvStartDate.setText(stDate);
         tvEndDate.setText(endDate);
 
-        GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)));
+        common_class.getDb_310Data(Constants.POS_Category_EntryList, this);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +171,22 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
     }
 
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            switch (key) {
+                case Constants.POS_Category_EntryList:
+                    Log.v("posCategoryEntryList", apiDataResponse);
+
+                    GetJsonData(apiDataResponse);
+
+                    break;
+
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
     private void GetJsonData(String jsonResponse) {
 
         try {
@@ -168,12 +195,12 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     String name = jsonObject1.optString("name");
-                    String value = jsonObject1.optString("pvalue");
+//                    String value = jsonObject1.optString("pvalue");
                     String id = jsonObject1.optString("id");
 
                     Log.v("jsonarray123",jsonArray.toString());
 
-                list.add(new Category_Universe_Modal(id,name, value ));
+                list.add(new Product_Details_Modal(id,name ));
             }
 
 
@@ -202,7 +229,6 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
                         stDate = tvStartDate.getText().toString();
 
                         Log.v("sdatefd",stDate);
-//                            common_class.getDb_310Data(Constants.VAN_STOCK, VanStockViewActivity.this);
                     } else
                         common_class.showMsg(POS_SalesEntryActivity.this, "Please select valid date");
                 } else {
@@ -212,7 +238,6 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
                         endDate = tvEndDate.getText().toString();
                         Log.v("sdatefd",endDate);
 
-//                            common_class.getDb_310Data(Constants.VAN_STOCK, VanStockViewActivity.this);
 
                     } else
                         common_class.showMsg(POS_SalesEntryActivity.this, "Please select valid date");
