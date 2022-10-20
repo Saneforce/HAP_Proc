@@ -161,6 +161,9 @@ public class Product_Details_Modal {
     @Expose
     private String ConversionFactor;
 
+    @SerializedName("counterValue")
+    @Expose
+    private String value;
 
     public int getOnHand() {
         return onHand;
@@ -247,6 +250,18 @@ public class Product_Details_Modal {
         this.UOM_Nm = UOM_Nm;
         this.Qty = Qty;
         this.Multiple_Qty = Multiple_Qty;
+    }
+
+    public Product_Details_Modal(String id, String name, String value){
+        this.name = name;
+        this.value = value;
+        this.id = id;
+    }
+
+    public Product_Details_Modal(String id, String name){
+        this.name = name;
+        this.value = value;
+        this.id = id;
     }
 
     private String mfg = "";
@@ -789,6 +804,16 @@ public class Product_Details_Modal {
     public void setConversionFactor(String conversionFactor) {
         ConversionFactor = conversionFactor;
     }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+
+    public String getValue() {
+        return value;
+    }
+
 
     public String getPaidAmount() {
         return PaidAmount;
