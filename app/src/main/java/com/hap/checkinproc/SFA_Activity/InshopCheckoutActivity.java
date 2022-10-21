@@ -276,7 +276,7 @@ public class InshopCheckoutActivity extends AppCompatActivity {
             jObj.put("inshopCheckoutImage",imageSet);
             jObj.put("c_flag",0);
 
-            Log.d("hjj","ghkj"+jObj.toString());
+            Log.d("isCheckouthjj","ghkj"+jObj.toString());
 
 
 

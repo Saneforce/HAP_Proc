@@ -131,25 +131,31 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
     private void submitData() {
 
+
         JSONObject jObj = new JSONObject();
 
 
         try {
 
+            jObj.put("eKey",common_class.GetEkey());
             jObj.put("SFCode",SF_code);
             jObj.put("currentDate",currDate.getText().toString());
             jObj.put("fromDate",stDate);
             jObj.put("toDate",endDate);
             jObj.put("totalExpense", totalExpense.getText().toString());
 
+            JSONArray jArr=new JSONArray();
             for (int i = 0; i < list.size(); i++) {
                 JSONObject obj1 = new JSONObject();
                 obj1.put("productID", list.get(i).getId());
                 obj1.put("productName",list.get(i).getName());
-                obj1.put("productValue",list.get(i).getValue());
-                jObj.accumulate("POSEntryData" , obj1);
+                obj1.put("productValue",list.get(i).getentryValue());
+                jArr.put(obj1);
             }
-            Log.d("hjj","ghkj"+jObj.toString());
+            jObj.accumulate("POSEntryData" , jArr);
+
+
+            Log.d("savehjj","ghkj"+jObj.toString());
 
             apiInterface.JsonSave("save/posCounterSalesEntry", jObj.toString()).enqueue(new Callback<JsonObject>() {
                 @Override

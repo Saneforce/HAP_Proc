@@ -144,7 +144,7 @@ public class InshopCheckinActivity extends AppCompatActivity {
             jObj.put("inshopRetailerName", retailerName.getText().toString());
             jObj.put("c_flag",1);
 
-            Log.d("hjj","ghkj"+jObj.toString());
+            Log.d("isCheckinhjj","ghkj"+jObj.toString());
 
             if(jObj.getString("c_flag").equals("1")){
                 checkinLay.setVisibility(View.GONE);

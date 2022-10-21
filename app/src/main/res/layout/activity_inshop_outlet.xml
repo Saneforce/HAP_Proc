@@ -1068,7 +1068,7 @@
                 </LinearLayout>
 
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                    android:id="@+id/takeorder"
+                    android:id="@+id/is_takeorder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/C15dp"

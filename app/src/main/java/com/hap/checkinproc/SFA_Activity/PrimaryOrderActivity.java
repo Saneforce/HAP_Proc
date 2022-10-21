@@ -681,7 +681,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.takeorder:
                 try {
-                    bRmRow = false;
+                    bRmRow = true;
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
@@ -983,7 +983,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
         takeorder.setText("SUBMIT");
 
         if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.CHECKIN_TYPE))
-            takeorder.setVisibility(View.INVISIBLE);
+            takeorder.setVisibility(View.VISIBLE);
 
         btnRepeat.setVisibility(View.GONE);
         //  sumofTax();

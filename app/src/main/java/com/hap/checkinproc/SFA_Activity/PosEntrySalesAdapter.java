@@ -68,7 +68,7 @@ public class PosEntrySalesAdapter extends RecyclerView.Adapter<PosEntrySalesAdap
                 //so this will trigger each time user enter value in editText box
 
                 String s=editable.toString();
-                listt.get(position).setValue(s);
+                listt.get(position).setentryValue(s);
                 final_total = 0;
                 if (isOnTextChanged) {
                     isOnTextChanged = false;

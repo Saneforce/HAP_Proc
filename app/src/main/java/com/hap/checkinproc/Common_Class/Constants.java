@@ -23,6 +23,8 @@ public class Constants {
     public static final String Primary_Product_List = "primaryproList";
     public static final String Primary_Shortage_List = "PrimaryShortageList";
     public static final String Category_List = "categoryList";
+    public static final String POS_Category_EntryList = "Mas_POSCategory";
+
     public static final String ProdTypes_List = "ProdTypeList";
     public static final String ProdGroups_List = "ProdGroupList";
     public static final String Rout_List = "routList";
@@ -134,6 +136,8 @@ public class Constants {
     public static final String DIST_STOCK = "distStock";
     public static final String STOCK_LEDGER = "stockLedger";
     public static final String VAN_STOCK = "vanStock";
+    public static final String POS_ENTRY_LIST = "posEntryList";
+
     public static final String VAN_ID = "vanId";
     public static String View_SUMMARY_MODE = "";
     public static String VAN_SALES_MODE = "Van Sales Order";

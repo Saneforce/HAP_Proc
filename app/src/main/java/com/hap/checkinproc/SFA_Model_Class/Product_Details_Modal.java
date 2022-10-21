@@ -260,7 +260,6 @@ public class Product_Details_Modal {
 
     public Product_Details_Modal(String id, String name){
         this.name = name;
-        this.value = value;
         this.id = id;
     }
 
@@ -805,12 +804,12 @@ public class Product_Details_Modal {
         ConversionFactor = conversionFactor;
     }
 
-    public void setValue(String value) {
+    public void setentryValue(String value) {
         this.value = value;
     }
 
 
-    public String getValue() {
+    public String getentryValue() {
         return value;
     }
 

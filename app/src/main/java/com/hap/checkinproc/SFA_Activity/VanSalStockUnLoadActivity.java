@@ -5,13 +5,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,8 +41,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -48,6 +55,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -62,6 +70,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -69,6 +78,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import id.zelory.compressor.Compressor;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,21 +96,22 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
+    SharedPreferences UserDetails;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext,
+    TextView Out_Let_Name, Category_Nametext,tvVehNo,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader, tvVanSalPay, tvStockView;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
-    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
+    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "",vehNo="", UserInfo = "MyPrefs";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
     String TAG = "VanSalesOrderActivity";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose;
-    EditText etCategoryItemSearch;
+    ImageView ivClose, attachedImage, endKmImg;
+    EditText etCategoryItemSearch, edtEndKm;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -111,7 +125,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     private int uomPos;
     private ArrayList<Common_Model> uomList;
 
-    String axn = "";
+    String axn = "",imageSet = "", imageServer = "",imageConvert = "";
     private double totStkAmt;
 
 
@@ -121,6 +135,9 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_vansale_unload);
             db = new DatabaseHandler(this);
+
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
             sharedCommonPref = new Shared_Common_Pref(VanSalStockUnLoadActivity.this);
             common_class = new Common_Class(this);
             tvHeader = findViewById(R.id.tvHeader);
@@ -138,6 +155,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
+            tvVehNo = findViewById(R.id.tvUnloadVehNo);
 
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
             tvPOP = (TextView) findViewById(R.id.tvPOP);
@@ -146,6 +164,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
+            edtEndKm=findViewById(R.id.edtEndKm);
+
+            endKmImg=findViewById(R.id.endKm_attach);
+            attachedImage=findViewById(R.id.attachedUnloadEndImage);
 
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
@@ -162,6 +184,56 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
+
+            vehNo=sharedCommonPref.getvalue(Constants.Vansales_VehNo);
+            Log.v("vehNo_ghj",vehNo);
+            tvVehNo.setText(vehNo);
+
+            endKmImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    CameraPermission cameraPermission = new CameraPermission(VanSalStockUnLoadActivity.this, getApplicationContext());
+
+                    if (!cameraPermission.checkPermission()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            cameraPermission.requestPermission();
+                        }
+                    } else {
+
+                        AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                            @Override
+                            public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+//                            Photo_Name = FileName;
+//                            imageConvert=fullPath;
+//                            EndedImage="file://"+fullPath;
+//                            EndedKmImage.setImageBitmap(image);
+
+                                UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), FileName, "Travel", image);
+
+                            }
+                        });
+                        Intent intent = new Intent(VanSalStockUnLoadActivity.this, AllowancCapture.class);
+                        intent.putExtra("allowance", "Two");
+                        startActivity(intent);
+
+                    }
+
+                }
+            });
+
+
+            attachedImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                    intent.putExtra("ImageUrl1", imageSet);
+                    startActivity(intent);
+                }
+            });
+
+
+
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
                 llCalMob.setVisibility(View.GONE);
             else
@@ -401,6 +473,104 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
+        }
+    }
+
+    public MultipartBody.Part convertimg(String tag, String path) {
+        MultipartBody.Part yy = null;
+        try {
+            if (!TextUtils.isEmpty(path)) {
+
+                File file = new File(path);
+                if (path.contains(".png") || path.contains(".jpg") || path.contains(".jpeg"))
+                    file = new Compressor(getApplicationContext()).compressToFile(new File(path));
+                else
+                    file = new File(path);
+                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
+                yy = MultipartBody.Part.createFormData(tag, file.getName(), requestBody);
+            }
+        } catch (Exception e) {
+        }
+        return yy;
+    }
+
+    private void UploadPhoto(String path, String SF, String FileName, String Mode, Bitmap image) {
+        try {
+            common_class.ProgressdialogShow(1, "");
+
+            MultipartBody.Part imgg;
+            if (path != null && (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg"))) {
+                imgg = convertimg("file", path);
+
+            } else {
+                common_class.ProgressdialogShow(0, "");
+                common_class.showMsg(this, "Image file only supported");
+                return;
+            }
+
+
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<ResponseBody> mCall = apiInterface.onTAFileUpload(SF, FileName, Mode, imgg);
+
+            Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
+
+            mCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    try {
+                        if (response.isSuccessful()) {
+
+
+                            JSONObject js = new JSONObject(response.body().string());
+                            Log.v("Res", js.toString());
+
+                            if (js.getBoolean("success")) {
+
+                                if (image != null) {
+
+                                    imageServer=FileName;
+                                    imageConvert = path;
+                                    imageSet = "file://" + path;
+                                    attachedImage.setImageBitmap(image);
+                                    attachedImage.setVisibility(View.VISIBLE);
+
+                                }
+
+
+                                common_class.ProgressdialogShow(0, "");
+
+                                common_class.showMsg(VanSalStockUnLoadActivity.this, "File uploading successful ");
+                            } else {
+                                common_class.ProgressdialogShow(0, "");
+                                common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+                            }
+                        } else {
+
+                            common_class.ProgressdialogShow(0, "");
+                            common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+
+                        }
+
+                    } catch (Exception e) {
+                        common_class.ProgressdialogShow(0, "");
+                        common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    common_class.ProgressdialogShow(0, "");
+                    common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+
+                    Log.e("SEND_IMAGE_Response", "ERROR");
+                }
+            });
+
+
+        } catch (Exception e) {
+            Log.e("TAClaim:", e.getMessage());
         }
     }
 
@@ -671,6 +841,13 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                         //  HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+
+                        HeadItem.put("Vansales_VehNo",vehNo);
+                        HeadItem.put("Vansales_EndKm",edtEndKm.getText().toString());
+                        HeadItem.put("Vansales_Endkm_Image",imageSet);
+
+                        Log.v("vansalesUnload",HeadItem.toString());
+
                         ActivityData.put("Activity_Report_Head", HeadItem);
 
                         JSONObject OutletItem = new JSONObject();
