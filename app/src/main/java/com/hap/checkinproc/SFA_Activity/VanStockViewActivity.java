@@ -74,7 +74,7 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
 //        tvStartDate.setText(Common_Class.GetDatewothouttime());
 //        tvEndDate.setText(Common_Class.GetDatewothouttime());
 
-        common_class.getDb_310Data(Constants.VAN_STOCK, this);
+        common_class.getDb_310Data(Constants.VAN_STOCK_DTWS, this);
 
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -97,7 +97,7 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
                         stDate = tvStartDate.getText().toString();
 
                         Log.v("sdatefd",stDate);
-                        common_class.getDb_310Data(Constants.VAN_STOCK, VanStockViewActivity.this);
+                        common_class.getDb_310Data(Constants.VAN_STOCK_DTWS, VanStockViewActivity.this);
                     } else
                         common_class.showMsg(VanStockViewActivity.this, "Please select valid date");
                 } else {
@@ -107,7 +107,7 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
                         endDate = tvEndDate.getText().toString();
                         Log.v("sdatefd",endDate);
 
-                        common_class.getDb_310Data(Constants.VAN_STOCK, VanStockViewActivity.this);
+                        common_class.getDb_310Data(Constants.VAN_STOCK_DTWS, VanStockViewActivity.this);
 
                     } else
                         common_class.showMsg(VanStockViewActivity.this, "Please select valid date");
@@ -140,7 +140,7 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             switch (key) {
-                case Constants.VAN_STOCK:
+                case Constants.VAN_STOCK_DTWS:
                     Log.v("vanstocks_date", apiDataResponse);
 
                     setHistoryAdapter(apiDataResponse);

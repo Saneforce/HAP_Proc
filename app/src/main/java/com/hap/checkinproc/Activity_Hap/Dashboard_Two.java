@@ -306,8 +306,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 //StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
             }
-            if (sSFType.equals("0"))
-                StActivity.setVisibility(View.GONE);
+            if (sSFType.equals("0")) StActivity.setVisibility(View.GONE);
+            StActivity.setVisibility(View.VISIBLE);
 
             Log.v("GATE:", CheckInDetails.getString("On_Duty_Flag", "0") + " :sfType:" + sSFType);
 

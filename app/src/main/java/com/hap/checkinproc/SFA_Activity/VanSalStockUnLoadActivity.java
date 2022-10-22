@@ -1982,8 +1982,6 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Free;
-
-
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);

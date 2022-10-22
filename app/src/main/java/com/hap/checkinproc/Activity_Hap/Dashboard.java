@@ -134,7 +134,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linOnDuty = (findViewById(R.id.lin_onduty));
         linSFA = findViewById(R.id.lin_sfa);
 
-        linSFA.setVisibility(View.GONE);
+        linSFA.setVisibility(View.VISIBLE);
 
         // linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);

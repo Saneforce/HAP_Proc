@@ -893,6 +893,16 @@ public class Common_Class {
                         data.put("fromdate", VanStockViewActivity.stDate);
                         data.put("todate", VanStockViewActivity.endDate);
                         break;
+                    case Constants.VAN_STOCK_DTWS:
+                        //dist stock for stock loading
+                        axnname = "get/vanstockleg";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("dt", Common_Class.GetDatewothouttime());
+                        data.put("fromdate", VanStockViewActivity.stDate);
+                        data.put("todate", VanStockViewActivity.endDate);
+                        break;
 
                 }
 
