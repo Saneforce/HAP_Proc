@@ -58,18 +58,37 @@
             android:padding="5dp"
             android:src="@drawable/ic_home" />
     </LinearLayout>
-    <TextView
+    <LinearLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Counter Sales Entry"
-        android:textColor="@color/white"
-        android:textAlignment="center"
+        android:layout_height="@dimen/C50dp"
+        android:orientation="horizontal"
         android:background="@color/colorPrimaryDark"
-        android:textSize="16sp"
-        android:textFontWeight="500"
-        app:layout_constraintTop_toBottomOf="@id/header_layout"/>
+        android:weightSum="2"
+        app:layout_constraintTop_toBottomOf="@id/header_layout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Counter Sales Entry"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:padding="@dimen/C10dp"
+            android:textFontWeight="500"/>
+        <TextView
+            android:id="@+id/tvView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textAlignment="textEnd"
+            android:textSize="16sp"
+            android:padding="@dimen/C10dp"
+            android:textFontWeight="500"/>
+    </LinearLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"

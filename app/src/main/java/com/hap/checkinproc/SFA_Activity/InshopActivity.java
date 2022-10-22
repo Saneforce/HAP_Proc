@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.R;
 
 public class InshopActivity extends AppCompatActivity {
@@ -42,5 +43,12 @@ public class InshopActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(InshopActivity.this, SFA_Activity.class));
+        super.onBackPressed();
     }
 }

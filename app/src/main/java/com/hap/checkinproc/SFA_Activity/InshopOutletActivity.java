@@ -161,7 +161,7 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             rvShortageData = findViewById(R.id.rcylPrdRplc);
-            takeorder = findViewById(R.id.takeorder);
+            takeorder = findViewById(R.id.is_takeorder);
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
             distributor_text = findViewById(R.id.outlet_name);
@@ -683,9 +683,9 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                     showOrderItemList(selectedPos, "");
                     break;
 
-                case R.id.takeorder:
+                case R.id.is_takeorder:
                     try {
-                        bRmRow = false;
+                        bRmRow = true;
                         if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                             if (Getorder_Array_List != null
                                     && Getorder_Array_List.size() > 0) {
@@ -900,8 +900,14 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
                                 isSubmit = false;
                                 e.printStackTrace();
                             }
+
+                            Log.d("isOutlethjj","ghkj"+data.toString());
+
                             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                             Call<JsonObject> responseBodyCall = apiInterface.saveInshopsOrder(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+
+
+
                             responseBodyCall.enqueue(new Callback<JsonObject>() {
                                 @Override
                                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -957,27 +963,26 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        public void ResetSubmitBtn(int resetMode) {
-            common_class.ProgressdialogShow(0, "");
-            long dely = 10;
-            if (resetMode != 0) dely = 1000;
-            if (resetMode == 1) {
-                takeorder.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
-            } else {
-                takeorder.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
-            }
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    takeorder.stopAnimation();
-                    takeorder.revertAnimation();
-                    btnRepeat.stopAnimation();
-                    btnRepeat.revertAnimation();
-                }
-            }, dely);
-
+    public void ResetSubmitBtn(int resetMode) {
+        common_class.ProgressdialogShow(0, "");
+        long dely = 10;
+        if (resetMode != 0) dely = 1000;
+        if (resetMode == 1) {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        } else {
+            takeorder.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
         }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                takeorder.stopAnimation();
+                takeorder.revertAnimation();
+                btnRepeat.stopAnimation();
+                btnRepeat.revertAnimation();
+            }
+        }, dely);
 
+    }
         private void FilterProduct() {
 
             try {
@@ -996,7 +1001,7 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
             takeorder.setText("SUBMIT");
 
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equalsIgnoreCase(Constants.CHECKIN_TYPE))
-                takeorder.setVisibility(View.INVISIBLE);
+                takeorder.setVisibility(View.VISIBLE);
 
             btnRepeat.setVisibility(View.GONE);
             //  sumofTax();
@@ -1030,21 +1035,15 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
         public void updateToTALITEMUI() {
             try {
                 TextView tvTotLabel = findViewById(R.id.tvTotLabel);
-
-
                 TextView tvTax = findViewById(R.id.tvTaxVal);
-
                 TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
-
                 TextView tvBillSubTotal = findViewById(R.id.subtotal);
                 TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
-
                 tvBillTotItem = findViewById(R.id.totalitem);
                 tvBillTotQty = findViewById(R.id.tvtotalqty);
                 tvTotQtyLabel = findViewById(R.id.tvTotQtyLabel);
                 TextView tvBillToPay = findViewById(R.id.tvnetamount);
                 TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
-
 
                 Getorder_Array_List = new ArrayList<>();
                 Getorder_Array_List.clear();
@@ -2512,12 +2511,11 @@ public class InshopOutletActivity extends AppCompatActivity implements View.OnCl
 
         }
 
-//    @Override
-//    public void onBackPressed()
-//    {
-//        startActivity(new Intent(InshopOutletActivity.this, InshopActivity.class));
-//        super.onBackPressed();
-//    }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(InshopOutletActivity.this, InshopActivity.class));
+        super.onBackPressed();
+    }
     }
 
 

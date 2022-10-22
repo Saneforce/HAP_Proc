@@ -52,6 +52,7 @@ import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
+import com.hap.checkinproc.SFA_Activity.POSViewEntryActivity;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
@@ -904,6 +905,24 @@ public class Common_Class {
                         data.put("todate", VanStockViewActivity.endDate);
                         break;
 
+                    case Constants.POS_ENTRY_LIST:
+                        //dist stock for stock loading
+                        axnname = "get/posEntryList";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("dt", Common_Class.GetDatewothouttime());
+                        data.put("fromdate", POSViewEntryActivity.stDate);
+                        data.put("todate", POSViewEntryActivity.endDate);
+                        break;
+
+                    case Constants.POS_Category_EntryList:
+                        axnname = "get/poscat";
+//                        data.put("SF", UserDetails.getString("Sfcode", ""));
+//                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+//                        data.put("div", UserDetails.getString("Divcode", ""));
+                        break;
+
                 }
 
                 QueryString.put("axn", axnname);
@@ -1047,7 +1066,7 @@ public class Common_Class {
                     service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                         @Override
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                            Log.v("SEC_Product_List", response.body().toString());
+//                            Log.v("SEC_Product_List", response.body().toString());
                             db.deleteMasterData(Constants.Product_List);
                             db.addMasterData(Constants.Product_List, response.body());
                         }

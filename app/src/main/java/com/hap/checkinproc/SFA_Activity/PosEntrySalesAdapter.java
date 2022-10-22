@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class PosEntrySalesAdapter extends RecyclerView.Adapter<PosEntrySalesAdap
     View rootView;
 
     Context context;
-    List<Category_Universe_Modal> listt;
+    List<Product_Details_Modal> listt;
 
     ArrayList<String> amtArray = new ArrayList<String>();
 
@@ -30,7 +31,7 @@ public class PosEntrySalesAdapter extends RecyclerView.Adapter<PosEntrySalesAdap
 
 
 
-    public PosEntrySalesAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
+    public PosEntrySalesAdapter(Context applicationContext, List<Product_Details_Modal> list) {
         this.context = applicationContext;
         listt = list;
     }
@@ -67,7 +68,7 @@ public class PosEntrySalesAdapter extends RecyclerView.Adapter<PosEntrySalesAdap
                 //so this will trigger each time user enter value in editText box
 
                 String s=editable.toString();
-                listt.get(position).setValue(s);
+                listt.get(position).setentryValue(s);
                 final_total = 0;
                 if (isOnTextChanged) {
                     isOnTextChanged = false;

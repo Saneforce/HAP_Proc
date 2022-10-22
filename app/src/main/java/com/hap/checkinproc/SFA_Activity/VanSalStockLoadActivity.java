@@ -861,6 +861,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             public void PositiveMethod(DialogInterface dialog, int id) {
                 common_class.ProgressdialogShow(1, "");
                 JSONArray data = new JSONArray();
+
+                Log.d("vsloadhjj","ghkj"+data.toString());
+
                 JSONObject ActivityData = new JSONObject();
 
                 try {
