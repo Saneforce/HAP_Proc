@@ -569,8 +569,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Bitmap logo = Printama.getBitmapFromVector(this, R.drawable.hap_logo);
             Printama.with(this).connect(printama -> {
 
-                printama.printImage(Printama.RIGHT, logo, 170);
-                printama.addNewLine();
+                printama.printImage(Printama.RIGHT, logo, 140);
                 printama.addNewLine();
 
 
@@ -582,29 +581,29 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 if (tvDistAdd.getVisibility() == View.VISIBLE) {
                     printama.printTextln(Printama.LEFT, "Address :");
                     printama.setNormalText();
-                    printama.addNewLine();
+//                    printama.addNewLine();
 
                     printama.printTextln(Printama.LEFT, address);
                 }
                 if (tvDistributorPh.getVisibility() == View.VISIBLE)
                     printama.printTextln(Printama.LEFT, phone);
-                printama.addNewLine(2);
+                printama.addNewLine(1);
                 printama.setBold();
-                printama.printText(billnumber.getText().toString() + "          " + invoicedate.getText().toString());
+                printama.printText(billnumber.getText().toString() + "    " + invoicedate.getText().toString());
                 printama.addNewLine();
                 printama.printLine();
                 printama.addNewLine(2);
                 printama.setBold();
-                printama.printTextln("Item       " + "     Qty" + "       Price" + "      Total");
+                printama.printTextln(" Item       " + "     Qty" + "      Price" + "     Total");
                 printama.printLine();
-                printama.addNewLine();
-                printama.addNewLine();
+                printama.addNewLine(2);
+
 
 
                 for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
                     printama.setBold();
                     printama.printTextln(Order_Outlet_Filter.get(i).getName().toString().trim());
-                    printama.addNewLine();
+                    printama.addNewLine(1);
 
                     printama.setNormalText();
 
@@ -617,7 +616,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     qty = qty.substring(qtyValue.length(), qty.length());
 
                     String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
-                    String rate = "           " + rateValue;
+                    String rate = "            " + rateValue;
                     rate = (rate.substring(rateValue.length(), rate.length()));
 
                     String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
@@ -650,7 +649,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 if (uomList != null) {
                     for (int i = 0; i < uomList.size(); i++) {
                         String uomQty = "           " + (int) uomList.get(i).getCnvQty();
-                        printama.printText(uomList.get(i).getUOM_Nm() + "                      " + uomQty.substring(String.valueOf((int) uomList.get(i).getCnvQty()).toString().length(), uomQty.length()));
+                        printama.printText(uomList.get(i).getUOM_Nm() + "                         " + uomQty.substring(String.valueOf((int) uomList.get(i).getCnvQty()).toString().length(), uomQty.length()));
                         printama.addNewLine();
 
                     }
@@ -684,10 +683,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 String strAmount = "           " + formatter.format(subTotalVal);
 
                 printama.printText("Net amount" + "                     " + strAmount.substring(String.valueOf(subTotalVal).length(), strAmount.length()));
-                printama.addNewLine(2);
+                printama.addNewLine(1);
                 printama.printLine();
+                printama.addNewLine(2);
 
-                printama.setLineSpacing(5);
+                printama.setLineSpacing(3);
                 printama.feedPaper();
                 printama.close();
             });
@@ -738,10 +738,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 //        canvas.drawCircle(50, 50, 30, paint);
 
             paint.setColor(Color.BLACK);
-            paint.setTextSize(17);
+            paint.setTextSize(14);
 
             int x = 10;
-            int y = 50;
+            int y = 30;
 
             canvas.drawText(storeName, x, y, paint);
 
@@ -752,7 +752,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 //        d.draw(canvas);
 
             paint.setColor(Color.BLACK);
-            paint.setTextSize(14);
+            paint.setTextSize(12);
             paint.setTextAlign(Paint.Align.LEFT);
 
             y = y + 30;
@@ -760,7 +760,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             if (tvDistAdd.getVisibility() == View.VISIBLE) {
                 canvas.drawText("Address :", x, y, paint);
                 paint.setColor(Color.DKGRAY);
-                paint.setTextSize(14);
+                paint.setTextSize(13);
                 y = y + 20;
 
                 String[] lines = Split(address, 60, address.length());
@@ -787,9 +787,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             y = y + 35;
             paint.setColor(Color.BLACK);
-            paint.setTextSize(15);
+            paint.setTextSize(12);
             canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
-            canvas.drawText("" + invoicedate.getText().toString(), (widthSize / 2) + 100, y, paint);
+            canvas.drawText("" + invoicedate.getText().toString(), (widthSize / 2) + 80, y, paint);
 
             y = y + 25;
             paint.setColor(Color.BLACK);
@@ -797,10 +797,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             canvas.drawLine(0, y, widthSize, y, paint);
 
 
-            String space = "     ";
+            String space = "    ";
             y = y + 20;
             paint.setColor(Color.BLACK);
-            paint.setTextSize(15);
+            paint.setTextSize(14);
 
             canvas.drawText("Item", x, y, paint);
             canvas.drawText("Qty", (widthSize / 2) + 20, y, paint);
@@ -817,7 +817,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 y = y + 20;
                 paint.setColor(Color.DKGRAY);
-                paint.setTextSize(14);
+                paint.setTextSize(13);
 
 
                 String name = Order_Outlet_Filter.get(i).getName() + "                               ";
@@ -829,11 +829,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 qty = qty.substring(qtyValue.length(), qty.length());
 
                 String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
-                String rate = "           " + rateValue;
+                String rate = "               " + rateValue;
                 rate = (rate.substring(rateValue.length(), rate.length()));
 
                 String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
-                String amt = "           " + amtValue;
+                String amt = "             " + amtValue;
                 amt = (amt.substring(amtValue.length(), amt.length()));
 
                 Log.e("Values length: ", "item: " + name.length() + " qty: " + qty.length() + " rate: " + rate.length() + " amt : " + amt.length());
@@ -905,7 +905,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setStrokeWidth(5);
             canvas.drawLine(0, y, widthSize, y, paint);
 
-            paint.setTextSize(16);
+            paint.setTextSize(15);
             y = y + 30;
             canvas.drawText("Net Amount", x, y, paint);
             canvas.drawText(netamount.getText().toString(), (widthSize / 2) + 150, y, paint);
@@ -1045,7 +1045,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             {
                 billnumber.setText(Shared_Common_Pref.TransSlNo);
             } else {
-                billnumber.setText("Order " + Shared_Common_Pref.TransSlNo);
+                billnumber.setText("Order" + Shared_Common_Pref.TransSlNo);
             }
 
             taxList = new ArrayList<>();
