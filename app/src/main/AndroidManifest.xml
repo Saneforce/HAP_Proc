@@ -46,13 +46,13 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".SFA_Activity.POSViewEntryActivity"
+            android:exported="false"/>
+        <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".SFA_Activity.InshopRetailerActivity"
             android:exported="false" />

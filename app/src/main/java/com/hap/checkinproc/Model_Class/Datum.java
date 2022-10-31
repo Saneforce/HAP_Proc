@@ -70,6 +70,18 @@ public class Datum {
     @Expose
     private String sfCode;
 
+    @SerializedName("GSTN")
+    @Expose
+    private String disGSTN;
+
+    @SerializedName("FSSAI")
+    @Expose
+    private String disFSSAI;
+
+    @SerializedName("gst")
+    @Expose
+    private String retGST;
+
     @SerializedName("SF_Code")
     @Expose
     private String distCode;
@@ -384,6 +396,17 @@ public class Datum {
 
     public String getDistCode() {
         return distCode;
+    }
+
+    public String getDisGSTN() {
+        return disGSTN;
+    }
+
+    public String getDisFSSAI() {
+        return disFSSAI;
+    }
+    public String getRetGST() {
+        return retGST;
     }
 
     public void setDistCode(String distCode) {

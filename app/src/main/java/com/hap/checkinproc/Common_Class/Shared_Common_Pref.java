@@ -43,6 +43,9 @@ public class Shared_Common_Pref {
     public static String SecOrdOutletType = "";
     public static String Freezer_Required = "";
 
+    public static String DistributorGst = "GSTN";
+
+
     public static int TravelAllowance = 0;
 
 

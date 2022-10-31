@@ -253,7 +253,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/C18dp"
             android:textColor="@color/green"
-            android:text="Total : "
+            android:text="Total : Rs."
             android:textStyle="bold" />
         <TextView
             android:id="@+id/totalExpense"

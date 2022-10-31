@@ -221,6 +221,10 @@ public class Printama {
         util.addNewLine(count);
     }
 
+    public void addNewLine(double count) {
+        util.addNewLine((int) count);
+    }
+
     //----------------------------------------------------------------------------------------------
     // PRINT IMAGE BITMAP
     //----------------------------------------------------------------------------------------------
