@@ -589,7 +589,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     printama.printTextln(Printama.LEFT, phone);
                 printama.addNewLine(1);
                 printama.setBold();
-                printama.printText(billnumber.getText().toString() + "    " + invoicedate.getText().toString());
+                printama.printText(billnumber.getText().toString());
+                printama.printText(invoicedate.getText().toString());
                 printama.addNewLine();
                 printama.printLine();
                 printama.addNewLine(2);
