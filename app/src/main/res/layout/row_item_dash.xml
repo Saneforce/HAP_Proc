@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
         <TextView
-            style="@style/TextStyle"
+            style="@style/DrawerTextStyle"
             android:id="@+id/txt_name"
             android:text="Select the doctor"
             android:textColor="#fff" />

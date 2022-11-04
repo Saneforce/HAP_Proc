@@ -44,13 +44,15 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".SFA_Activity.POSViewEntryActivity"
+            android:name=".Activity_Hap.Invoice_Vansales_Select"
             android:exported="false"/>
+        <activity
+            android:name=".SFA_Activity.POSViewEntryActivity"
+            android:exported="false" />
         <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SFA_Activity.InshopRetailerActivity"
             android:exported="false" />
