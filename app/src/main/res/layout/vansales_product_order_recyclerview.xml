@@ -312,7 +312,6 @@
                         <TextView
                             android:id="@+id/tvStockBal"
                             android:layout_width="wrap_content"
-
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@id/tvStockLabel"
                             android:gravity="center_vertical"
@@ -353,7 +352,6 @@
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/tvFreeLabel"
                             android:gravity="center_vertical"
-
                             android:hint=""
                             android:inputType="number"
                             android:text="0"

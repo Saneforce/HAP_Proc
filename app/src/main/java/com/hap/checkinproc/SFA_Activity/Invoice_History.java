@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.Invoice_Vansales_Select;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -384,10 +385,24 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING))) {
                     common_class.showMsg(Invoice_History.this, "No Stock");
                 } else {
+                Shared_Common_Pref.Invoicetoorder = "1";
                     Constants.VAN_SALES_MODE = Constants.VAN_SALES_ORDER;
-                    startActivity(new Intent(getApplicationContext(), VanSalesOrderActivity.class));
+                    startActivity(new Intent(getApplicationContext(), Invoice_Vansales_Select.class));
                     overridePendingTransition(R.anim.in, R.anim.out);
                 }
+
+
+//                if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING))) {
+//                    common_class.showMsg(Invoice_History.this, "No Stock");
+//                }
+//                else {
+//                    Shared_Common_Pref.Invoicetoorder = "1";
+//                    common_class.getDb_310Data(Constants.VAN_SALES_ORDER, this);
+//
+//                    startActivity(new Intent(getApplicationContext(), Invoice_Vansales_Select.class));
+//                    overridePendingTransition(R.anim.in, R.anim.out);
+//                }
+
 
                 break;
             case R.id.lin_indent:
