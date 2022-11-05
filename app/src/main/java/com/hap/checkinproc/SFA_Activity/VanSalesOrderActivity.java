@@ -72,7 +72,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VanSalesOrderActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
-
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
     List<Product_Details_Modal> Product_ModalSetAdapter;
@@ -110,7 +109,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
     private ArrayList<Common_Model> uomList;
 
     String axn = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

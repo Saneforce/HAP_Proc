@@ -106,7 +106,7 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
             }
         });
         name = findViewById(R.id.name);
-        applieddate = findViewById(R.id.name);
+        applieddate = findViewById(R.id.applieddate);
         Oapprovebutton = findViewById(R.id.Oapprovebutton);
         empcode = findViewById(R.id.empcode);
         reason = findViewById(R.id.reason);
@@ -132,13 +132,13 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
         geocheckout.setOnClickListener(this);
         i = getIntent();
         Log.e("MOBILE_NUMBER", i.getExtras().getString("MobileNumber"));
-        applieddate.setText("" + i.getExtras().getString("Applieddate"));
         name.setText("" + i.getExtras().getString("Username"));
         empcode.setText("" + i.getExtras().getString("Emp_Code"));
         hq.setText(" " + i.getExtras().getString("HQ"));
         designation.setText(" " + i.getExtras().getString("Designation"));
         mobilenumber.setText("" + i.getExtras().getString("MobileNumber"));
         workinghours.setText(" " + i.getExtras().getString("workinghours"));
+        applieddate.setText("" + i.getExtras().getString("Applieddate"));
         shiftdate.setText(" " + i.getExtras().getString("shiftdate"));
         geocheckin.setText("" + i.getExtras().getString("geoin"));
         geocheckout.setText(" " + i.getExtras().getString("geoout"));

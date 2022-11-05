@@ -399,7 +399,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                             }
                         });
                     } else {
-                        AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "YES", "NO", false, new AlertBox() {
+                        AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", "Do you want to check-in with Extended Shift?", "YES", "NO", false, new AlertBox() {
                             @Override
                             public void PositiveMethod(DialogInterface dialog, int id) {
                                 dialog.dismiss();

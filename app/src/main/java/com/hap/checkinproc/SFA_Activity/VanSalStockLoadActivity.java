@@ -149,7 +149,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_vansalesorder_category);
+            setContentView(R.layout.activity_vanstock_loading);
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(VanSalStockLoadActivity.this);
 

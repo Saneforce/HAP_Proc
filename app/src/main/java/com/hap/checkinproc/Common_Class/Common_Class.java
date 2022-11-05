@@ -52,7 +52,7 @@ import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
-import com.hap.checkinproc.SFA_Activity.POSViewEntryActivity;
+//import com.hap.checkinproc.SFA_Activity.POSViewEntryActivity;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
@@ -912,8 +912,8 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         data.put("dt", Common_Class.GetDatewothouttime());
-                        data.put("fromdate", POSViewEntryActivity.stDate);
-                        data.put("todate", POSViewEntryActivity.endDate);
+                       // data.put("fromdate", POSViewEntryActivity.stDate);
+                        //data.put("todate", POSViewEntryActivity.endDate);
                         break;
 
                     case Constants.POS_Category_EntryList:

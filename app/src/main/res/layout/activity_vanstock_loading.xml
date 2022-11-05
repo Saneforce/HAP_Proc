@@ -578,9 +578,9 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="gone">
                             <TextView
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="PRICE DETAILS"
@@ -593,7 +593,7 @@
                                 android:background="@color/grey_200" />
 
                             <RelativeLayout
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp">
@@ -621,7 +621,7 @@
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -642,7 +642,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -667,7 +667,7 @@
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -688,7 +688,7 @@
                             </RelativeLayout>
 
                             <RelativeLayout
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -714,7 +714,7 @@
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -901,7 +901,7 @@
                 android:gravity="center_vertical"
                 android:text="|"
                 android:textColor="@color/white"
-                android:visibility="visible">
+                android:visibility="gone">
 
 
             </TextView>
@@ -975,5 +975,3 @@
 
 
 </RelativeLayout>
-
-

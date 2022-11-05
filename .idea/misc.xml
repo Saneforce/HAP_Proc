@@ -260,8 +260,10 @@
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_dashboard__two.xml" value="0.1644021739130435" />
+        <entry key="app/src/main/res/layout/activity_dashboard_info.xml" value="0.12135416666666667" />
         <entry key="app/src/main/res/layout/activity_deviation_entry.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/activity_dist__locations.xml" value="0.18432971014492755" />
+        <entry key="app/src/main/res/layout/activity_extended__approval__reject.xml" value="0.24583333333333332" />
         <entry key="app/src/main/res/layout/activity_flight_booking_status.xml" value="0.14212962962962963" />
         <entry key="app/src/main/res/layout/activity_flight_ticket_request.xml" value="0.24394463667820068" />
         <entry key="app/src/main/res/layout/activity_fp_primary_order_layout.xml" value="0.15" />
@@ -312,6 +314,9 @@
         <entry key="app/src/main/res/layout/activity_tp__approval.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_van_stockview.xml" value="0.40682830810546877" />
         <entry key="app/src/main/res/layout/activity_vansale_unload.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_vansales_dashboard__route.xml" value="0.5695887247721355" />
+        <entry key="app/src/main/res/layout/activity_vansalesorder_category.xml" value="0.12239583333333333" />
+        <entry key="app/src/main/res/layout/activity_vanstock_loading.xml" value="0.12239583333333333" />
         <entry key="app/src/main/res/layout/activity_view_t_a_status.xml" value="0.1" />
         <entry key="app/src/main/res/layout/adapter_ledger_layout.xml" value="0.11041666666666666" />
         <entry key="app/src/main/res/layout/adapter_primary_pay_layout.xml" value="0.17592592592592593" />

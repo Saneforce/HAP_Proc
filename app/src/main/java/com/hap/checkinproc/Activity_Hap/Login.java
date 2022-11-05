@@ -390,13 +390,21 @@ public class Login extends AppCompatActivity {
                                 aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                             else {
                                 aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
-                                aIntent.putExtra("Mode", "CIN");
+                                int Type=CheckInDetails.getInt("CIType",0);
+                                if (Type==1)
+                                    aIntent.putExtra("Mode", "extended");
+                                else
+                                    aIntent.putExtra("Mode", "CIN");
                             }
                         }
                         startActivity(aIntent);
                     } else {
                         Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
-                        Dashboard.putExtra("Mode", "CIN");
+                        int Type=CheckInDetails.getInt("CIType",0);
+                        if (Type==1)
+                            Dashboard.putExtra("Mode", "extended");
+                        else
+                            Dashboard.putExtra("Mode", "CIN");
                         startActivity(Dashboard);
                     }
                 }
@@ -617,12 +625,12 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
-               // eMail="1019100@hap.in";
+               // eMail="3643@hap.in";
 //                eMail="1027397@hap.in";
 
 //                eMail="ciadmin@hap.in";
 
-//                eMail="1014700@hap.in";
+                eMail="1014700@hap.in";
 //                 eMail="anandaraj.s@hap.in";
 
                 //eMail="1023176@hap.in";
@@ -844,6 +852,7 @@ public class Login extends AppCompatActivity {
                 Intent intent = null;
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 JsonArray CinData = response.getCInData();
+                int Type=2;
                 if (CinData.size() > 0) {
                     JsonObject CinObj = CinData.get(0).getAsJsonObject();
                     cInEditor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
@@ -857,14 +866,16 @@ public class Login extends AppCompatActivity {
                     cInEditor.putString("ShiftEnd", CinObj.getAsJsonObject("sft_ETime").get("date").getAsString());
                     cInEditor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
                     cInEditor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
-                     shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
+                    cInEditor.putInt("CIType", CinObj.get("Type").getAsInt());
+
+                    shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
 
                     String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
-                    int Type = CinObj.get("Type").getAsInt();
+                    Type = CinObj.get("Type").getAsInt();
                     if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                         cInEditor.putString("FTime", CTime);
                     cInEditor.putString("Logintime", CTime);
-                    if (Type == 0) CheckIn = true;
+                    if (Type <2) CheckIn = true;
                     cInEditor.putBoolean("CheckIn", CheckIn);
                     cInEditor.apply();
                 }
@@ -873,7 +884,10 @@ public class Login extends AppCompatActivity {
                 if (requestCode == RC_SIGN_IN) {
                     if (CheckIn == true) {
                         intent = new Intent(Login.this, Dashboard_Two.class);
-                        intent.putExtra("Mode", "CIN");
+                        if (Type==1)
+                            intent.putExtra("Mode", "extended");
+                        else
+                            intent.putExtra("Mode", "CIN");
                     } else {
                         intent = new Intent(Login.this, Dashboard.class);
                     }

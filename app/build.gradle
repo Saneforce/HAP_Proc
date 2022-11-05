@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
-//4.x.x//primary--distri
+//4.x.x//primary--distri 5.2
 //6.x.x//start hsfa--checkin
 android {
     compileSdkVersion 32
@@ -11,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 3316
-        versionName "5.1.5"
+        versionName "5.2.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

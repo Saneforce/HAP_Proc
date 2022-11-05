@@ -291,7 +291,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     btnCheckout.setVisibility(View.VISIBLE);
                     btnApprovals.setVisibility(View.VISIBLE);
                 } else {
-                    cardview3.setVisibility(View.GONE);
+                    //cardview3.setVisibility(View.GONE);
                     // cardview4.setVisibility(View.GONE);
                     cardView5.setVisibility(View.GONE);
                     //StActivity.setVisibility(View.GONE);
@@ -300,7 +300,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     //               btnApprovals.setVisibility(View.GONE);
                 }
             } else {
-                cardview3.setVisibility(View.GONE);
+                //cardview3.setVisibility(View.GONE);
                 //cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 //StActivity.setVisibility(View.GONE);

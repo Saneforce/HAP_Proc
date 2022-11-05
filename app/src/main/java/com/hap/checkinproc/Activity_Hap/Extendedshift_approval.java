@@ -149,7 +149,7 @@ public class Extendedshift_approval extends AppCompatActivity {
                         intent.putExtra("Applieddate", approvalList.get(Name).getEntrydate());
                         intent.putExtra("MobileNumber", approvalList.get(Name).getSFMobile());
                         intent.putExtra("workinghours", approvalList.get(Name).getNumberofH());
-                        intent.putExtra("shiftdate", approvalList.get(Name).getEntrydate());
+                        intent.putExtra("shiftdate", approvalList.get(Name).getShiftnames());
                         intent.putExtra("geoin", approvalList.get(Name).getCheckin());
                         intent.putExtra("geoout", approvalList.get(Name).getCheckout());
                         intent.putExtra("Sl_No", String.valueOf(approvalList.get(Name).getSlNo()));

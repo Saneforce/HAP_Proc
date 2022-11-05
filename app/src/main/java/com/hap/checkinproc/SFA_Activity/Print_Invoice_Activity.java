@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.location.Location;
@@ -803,11 +804,29 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Canvas canvas = page.getCanvas();
             Paint paint = new Paint();
 
-
+            int Margin=10;
             int x = 10;
             int y = 30;
-
+            float wdth=widthSize-10;
+            Rect bounds = new Rect();
+        String sMode=sharedCommonPref.getvalue(Constants.FLAG);
             paint.setColor(Color.BLACK);
+            String sHead = "";
+
+            if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
+            {
+                sHead = "TAX INVOICE";
+            }else if( sMode.equals("PROJECTION") ){
+                sHead = "PROJECTION";
+            }else if( sMode.equalsIgnoreCase("Order") ){
+                sHead = "ORDER";
+            }
+            if(sHead!=""){
+                paint.setTextSize(15);
+                paint.getTextBounds(sHead, 0, sHead.length(), bounds);
+                paint.setFakeBoldText(true);
+                canvas.drawText(sHead, widthSize - (bounds.width() + Margin), y, paint);
+            }
             paint.setTextSize(13);
 
             canvas.drawText(tvDistributorName.getText().toString(), x, y, paint);
@@ -818,11 +837,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             y = y + 20;
 
+            paint.setFakeBoldText(false);
             if (tvDistAdd.getVisibility() == View.VISIBLE) {
-                canvas.drawText("Address :", x, y, paint);
                 paint.setColor(Color.DKGRAY);
                 paint.setTextSize(12);
-                y = y + 20;
 
                 String[] lines = Split(tvDistAdd.getText().toString(), 90, tvDistAdd.getText().toString().length());
                 for (int i = 0; i < lines.length; i++) {
@@ -837,13 +855,20 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 y = y + 20;
             }
 
-            canvas.drawText("GST No: "+ tvDisGST.getText().toString(), x, y, paint);
-            y = y + 20;
+            if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+                canvas.drawText("GSTN : " + tvDisGST.getText().toString(), x, y, paint);
+                y = y + 20;
+            }
 
+            if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+                canvas.drawText("FSSAI : " + tvDisFSSAI.getText().toString(), x, y, paint);
+                y = y + 20;
+            }
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
 
+            paint.setFakeBoldText(true);
             y = y + 20;
             paint.setColor(Color.BLACK);
             paint.setTextSize(13);
@@ -858,11 +883,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             y = y + 20;
 
+            paint.setFakeBoldText(false);
             if (retaileAddress.getVisibility() == View.VISIBLE) {
-                canvas.drawText("Address :", x, y, paint);
                 paint.setColor(Color.DKGRAY);
                 paint.setTextSize(12);
-                y = y + 20;
 
                 String[] lines = Split(retaileAddress.getText().toString(), 90, retaileAddress.getText().toString().length());
                 for (int i = 0; i < lines.length; i++) {
@@ -876,6 +900,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 canvas.drawText("Mobile: "+ tvRetailorPhone.getText().toString(), x, y, paint);
                 y = y + 10;
             }
+
+            if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+                canvas.drawText("GSTN : " + tvRetGST.getText().toString(), x, y, paint);
+                y = y + 20;
+            }
+            if(!tvRetFSSAI.getText().toString().equalsIgnoreCase("")) {
+                canvas.drawText("FSSAI : " + tvRetFSSAI.getText().toString(), x, y, paint);
+                y = y + 20;
+            }
 //
 //            paint.setColor(Color.LTGRAY);
 //            paint.setStrokeWidth(30);
@@ -885,9 +918,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             y = y + 35;
             paint.setColor(Color.BLACK);
             paint.setTextSize(11);
+            paint.setFakeBoldText(true);
             canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
-            canvas.drawText("" + invoicedate.getText().toString(), (widthSize / 2) + 140, y, paint);
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText("" + invoicedate.getText().toString(), wdth, y, paint);
 
+            paint.setTextAlign(Paint.Align.LEFT);
             y = y + 25;
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
@@ -898,58 +934,90 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             y = y + 20;
             paint.setColor(Color.BLACK);
             paint.setTextSize(13);
-
+            String sText="Item";
             canvas.drawText("Item", x, y, paint);
-            canvas.drawText("Qty", (widthSize / 2) + 60, y, paint);
-            canvas.drawText("Price", (widthSize / 2) + 110, y, paint);
-            canvas.drawText("GST", (widthSize / 2) + 170, y, paint);
-            canvas.drawText("Total", (widthSize / 2) + 220, y, paint);
 
+            float xTot,xCGST,xSGST,xGST,xPr,xQt,xHSN;
+            paint.setTextAlign(Paint.Align.RIGHT);
+            sText="___Total";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xTot=wdth;
+            wdth=wdth-bounds.width();
+            wdth = wdth-10;
+
+            sText="___CGST";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xCGST=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-10;
+
+            sText="___SGST";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xSGST=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-10;
+
+            sText="_GST";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xGST=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-10;
+
+            sText="__Price";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xPr=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-10;
+
+            sText="_Qty";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xQt=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-10;
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            sText="HSN Code_";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            wdth = wdth-bounds.width();
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xHSN=wdth;
+            wdth = wdth-10;
 
             y = y + 10;
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
 
+            paint.setFakeBoldText(false);
+            y = y + 20;
             for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
 
-                y = y + 20;
+                paint.setTextAlign(Paint.Align.LEFT);
+                y = y + 5;
                 paint.setColor(Color.DKGRAY);
                 paint.setTextSize(12);
+                float cy=y;
+                String[] lines = Split(Order_Outlet_Filter.get(i).getName(), 30, Order_Outlet_Filter.get(i).getName().length());
+                for (int j = 0; j < lines.length; j++) {
+                    System.out.println("lines[" + j + "]: (len: " + lines[j].length() + ") : " + lines[j]);
+                    canvas.drawText(lines[j], x, y, paint);
+                    y = y + 20;
 
-
-                String name = Order_Outlet_Filter.get(i).getName() + "                               ";
-                name = name.substring(0, name.length() - String.valueOf(Order_Outlet_Filter.get(i).getName()).length());
-
-
-                String qtyValue = String.valueOf(Order_Outlet_Filter.get(i).getQty());
-                String qty = "     " + qtyValue;
-                qty = qty.substring(qtyValue.length(), qty.length());
-
-                String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
-                String rate = "               " + rateValue;
-                rate = (rate.substring(rateValue.length(), rate.length()));
-
-                String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
-                String amt = "             " + amtValue;
-                amt = (amt.substring(amtValue.length(), amt.length()));
-
-                Log.e("Values length: ", "item: " + name.length() + " qty: " + qty.length() + " rate: " + rate.length() + " amt : " + amt.length());
-
-                // canvas.drawText(name + qty + rate + amt, x, y, paint);
-
-
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getName(), x, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), (widthSize / 2) + 60, y, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), (widthSize / 2) + 100, y, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getTax()), (widthSize / 2) + 170, y, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), (widthSize / 2) + 230, y, paint);
+                }
+                canvas.drawText("" + Order_Outlet_Filter.get(i).getHSNCode(), xHSN, cy, paint);
+                paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), xQt, cy, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), xPr, cy, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getTaxPer()), xGST, cy, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getPSGST()), xSGST, cy, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getPCGST()), xCGST, cy, paint);
+                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), xTot, cy, paint);
 
 
             }
 
 
-            y = y + 20;
+            paint.setTextAlign(Paint.Align.LEFT);
+            y = y + 5;
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
@@ -967,21 +1035,29 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.DKGRAY);
 
             y = y + 30;
+            paint.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("SubTotal", x, y, paint);
-            canvas.drawText(subtotal.getText().toString(), (widthSize / 2) + 220, y, paint);
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(subtotal.getText().toString(), xTot, y, paint);
 
             y = y + 20;
+            paint.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("Total Item", x, y, paint);
-            canvas.drawText(totalitem.getText().toString(), (widthSize / 2) + 220, y, paint);
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(totalitem.getText().toString(), xTot, y, paint);
             y = y + 20;
+            paint.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("Total Qty", x, y, paint);
-            canvas.drawText(totalqty.getText().toString(), (widthSize / 2) + 220, y, paint);
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(totalqty.getText().toString(), xTot, y, paint);
 
             if (uomList != null) {
                 for (int i = 0; i < uomList.size(); i++) {
                     y = y + 20;
+                    paint.setTextAlign(Paint.Align.LEFT);
                     canvas.drawText(uomList.get(i).getUOM_Nm(), x, y, paint);
-                    canvas.drawText("" + (int) uomList.get(i).getCnvQty(), (widthSize / 2) + 220, y, paint);
+                    paint.setTextAlign(Paint.Align.RIGHT);
+                    canvas.drawText("" + (int) uomList.get(i).getCnvQty(), xTot, y, paint);
                 }
 
             }
@@ -992,8 +1068,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 //
             for (int i = 0; i < taxList.size(); i++) {
                 y = y + 20;
+                paint.setTextAlign(Paint.Align.LEFT);
                 canvas.drawText(taxList.get(i).getTax_Type(), x, y, paint);
-                canvas.drawText("₹" + formatter.format(taxList.get(i).getTax_Amt()), (widthSize / 2) + 220, y, paint);
+                paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText("₹" + formatter.format(taxList.get(i).getTax_Amt()), xTot, y, paint);
 
             }
 
@@ -1006,8 +1084,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 //            }
 
             if (cashDisc > 0) {
+                paint.setTextAlign(Paint.Align.LEFT);
                 canvas.drawText("Cash Discount", x, y, paint);
-                canvas.drawText(cashdiscount.getText().toString(), (widthSize / 2) + 220, y, paint);
+                paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText(cashdiscount.getText().toString(), xTot, y, paint);
                 y = y + 20;
             }
 
@@ -1018,9 +1098,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setTextSize(15);
             paint.setColor(Color.BLACK);
             y = y + 30;
+            paint.setFakeBoldText(true);
+            paint.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("Net Amount", x, y, paint);
-            canvas.drawText(netamount.getText().toString(), (widthSize / 2) + 210, y, paint);
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(netamount.getText().toString(), xTot, y, paint);
 
+            paint.setFakeBoldText(false);
             y = y + 20;
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
@@ -1169,7 +1253,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             {
                 billnumber.setText(Shared_Common_Pref.TransSlNo);
             } else {
-                billnumber.setText("Order" + Shared_Common_Pref.TransSlNo);
+                billnumber.setText("Bill No: " + Shared_Common_Pref.TransSlNo);
             }
 
             taxList = new ArrayList<>();
@@ -1183,7 +1267,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     total_qtytext += obj.getInt("Qty");
                     double amt = 0;
 
-                    double taxAmt = 0.00;
+                    double taxAmt = 0.00,sTaxV=0.0,SGSTAmt=0.00,CGSTAmt=0.00;
 
                     String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
                     if (!Common_Class.isNullOrEmpty(taxRes)) {
@@ -1205,6 +1289,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     String label = jsonObject1.getString("Tax_Type");
 
                                     taxAmt += taxCal;
+                                    sTaxV+=jsonObject1.getDouble("Tax_Val");
+                                    if(label.equalsIgnoreCase("SGST")){
+                                        SGSTAmt+=taxCal;
+                                    }
+                                    if(label.equalsIgnoreCase("CGST")){
+                                        CGSTAmt+=taxCal;
+                                    }
                                     if (taxList.size() == 0) {
                                         taxList.add(new Product_Details_Modal(label, taxCal));
                                     } else {
@@ -1232,9 +1323,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         subTotalVal += amt;
 
                     }
-                    Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), 1, "1",
+                    Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"),obj.getString("HSN_Code"), 1, "1",
                             "1", "5", "", 0, "0", obj.getDouble("Price"),
-                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt)));
+                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt),sTaxV,SGSTAmt,CGSTAmt));
 
 
                 }
@@ -1263,7 +1354,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         } catch (Exception e) {
                         }
 
-                        double taxAmt = 0.00;
+                        double taxAmt = 0.00,sTaxV=0.0,SGSTAmt=0.00,CGSTAmt=0.00;
                         try {
                             JSONArray taxArr = obj.getJSONArray("TAX_details");
                             for (int tax = 0; tax < taxArr.length(); tax++) {
@@ -1271,7 +1362,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                 String label = taxObj.getString("Tax_Name");
                                 Double amt = taxObj.getDouble("Tax_Amt");
 
-                                taxAmt += taxObj.getDouble("Tax_Amt");
+                                //TaxPer +=taxObj.getDouble("Tax_Val");
+                                taxAmt += amt;
+                                sTaxV+=taxObj.getDouble("Tax_Val");
+                                if(label.equalsIgnoreCase("SGST")){
+                                    SGSTAmt+=amt;
+                                }
+                                if(label.equalsIgnoreCase("CGST")){
+                                    CGSTAmt+=amt;
+                                }
                                 if (taxList.size() == 0) {
                                     if (tcsVal > 0)
                                         taxList.add(new Product_Details_Modal("TCS", tcsVal));
@@ -1297,9 +1396,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         } catch (Exception e) {
 
                         }
-                        Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
+                        Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"),obj.getString("HSN_Code"), 1, "1",
                                 "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"),
-                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt)));
+                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt),sTaxV,SGSTAmt,CGSTAmt));
 
 
                     }
@@ -1336,7 +1435,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         total_qtytext += obj.getInt("Quantity");
                         subTotalVal += (obj.getDouble("value"));
 
-                        double taxAmt = 0.00;
+                        double taxAmt = 0.00,sTaxV=0.0,SGSTAmt=0.00,CGSTAmt=0.00;;
                         try {
                             JSONArray taxArr = obj.getJSONArray("TAX_details");
                             for (int tax = 0; tax < taxArr.length(); tax++) {
@@ -1344,7 +1443,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                 String label = taxObj.getString("Tax_Name");
                                 Double amt = taxObj.getDouble("Tax_Amt");
 
-                                taxAmt += taxObj.getDouble("Tax_Amt");
+                                sTaxV += taxObj.getDouble("Tax_Val");
+                                taxAmt += amt;
+                                if(label.equalsIgnoreCase("SGST")){
+                                    SGSTAmt+=amt;
+                                }
+                                if(label.equalsIgnoreCase("CGST")){
+                                    CGSTAmt+=amt;
+                                }
                                 if (taxList.size() == 0) {
                                     if (tcsVal > 0)
                                         taxList.add(new Product_Details_Modal("TCS", tcsVal));
@@ -1376,9 +1482,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     "1", "5", obj.getString("UOM"), 0, "0", 0.0,
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
                         }else{
-                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
+                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"),obj.getString("HSN_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"),
-                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt),(sTaxV),(SGSTAmt),(CGSTAmt)));
 
                         }
 

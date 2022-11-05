@@ -28,6 +28,13 @@ public class Product_Details_Modal {
     @Expose
     private String name;
 
+    @SerializedName("HSNCode")
+    @Expose
+    private String HSNCode;
+    double TaxPer;
+    double PSGST;
+    double PCGST;
+
     private String sku;
     private double price;
     @SerializedName("Product_Cat_Code")
@@ -115,6 +122,29 @@ public class Product_Details_Modal {
         this.ERP_Code = ERP_Code;
     }
 
+    public double getTaxPer() {
+        return TaxPer;
+    }
+
+    public void setTaxPer(double mTaxPer) {
+        this.TaxPer = mTaxPer;
+    }
+
+    public double getPSGST() {
+        return PSGST;
+    }
+
+    public void setPSGST(double PSGST) {
+        this.PSGST = PSGST;
+    }
+
+    public double getPCGST() {
+        return PCGST;
+    }
+
+    public void setPCGST(double PCGST) {
+        this.PCGST = PCGST;
+    }
     @SerializedName("ERP_Code")
     @Expose
     private String ERP_Code;
@@ -325,6 +355,15 @@ public class Product_Details_Modal {
         this.IGST = IGST;
     }
 
+
+    public String getHSNCode() {
+        return HSNCode;
+    }
+
+    public void setHSNCode(String HSNCode) {
+        this.HSNCode = HSNCode;
+    }
+
     @SerializedName("IGST")
     @Expose
     private Double IGST;
@@ -513,6 +552,30 @@ public class Product_Details_Modal {
     private double CnvQty;
 
 
+    public Product_Details_Modal(String id, String name,String mHSNCode, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
+                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
+                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax,double mTaxPer,double mSGST,double mCGST) {
+        this.id = id;
+        this.name = name;
+        this.productCatCode = productCatCode;
+        this.rowNum = rowNum;
+        this.productSaleUnit = productSaleUnit;
+        this.productUnit = productUnit;
+        this.unitCode = unitCode;
+        this.defaultUOMQty = defaultUOMQty;
+        this.defaultUOM = defaultUOM;
+        this.Rate = Rate;
+        this.Qty = Qty;
+        this.RegularQty = RegularQty;
+        this.Amount = Amount;
+        this.productDetailsModal = productDetailsModal;
+        this.PaidAmount = PaidAmount;
+        this.tax = tax;
+        this.HSNCode=mHSNCode;
+        this.TaxPer=mTaxPer;
+        this.PSGST=mSGST;
+        this.PCGST=mCGST;
+    }
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
                                  Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax) {
