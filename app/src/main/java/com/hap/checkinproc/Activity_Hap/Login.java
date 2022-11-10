@@ -55,6 +55,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -640,7 +641,6 @@ public class Login extends AppCompatActivity {
 
 
 
-
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
                     @Override
@@ -798,6 +798,8 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, response.getData().get(0).getDistCode());
                 shared_common_pref.save(Constants.Distributor_name, response.getData().get(0).getStockist_Name());
                 shared_common_pref.save(Constants.Distributor_phone, response.getData().get(0).getStockist_Mobile());
+                shared_common_pref.save(Constants.Distributor_gst, response.getData().get(0).getDisGSTN());
+                shared_common_pref.save(Constants.Distributor_fssai, response.getData().get(0).getDisFSSAI());
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                 shared_common_pref.save(Constants.CUTOFF_TIME, response.getData().get(0).getCutoffTime());
 
@@ -809,6 +811,9 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Constants.DistributorAdd, response.getData().get(0).getStockist_Address());
                 shared_common_pref.save(Constants.CusSubGrpErp, response.getData().get(0).getCusSubGrpErp());
 
+                shared_common_pref.save(Constants.DistributorGst, response.getData().get(0).getDisGSTN());
+
+
                 Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                 userEditor.putString("Sfcode", response.getData().get(0).getDistCode());
                 userEditor.putString("Divcode", response.getData().get(0).getDivisionCode());
@@ -818,6 +823,8 @@ public class Login extends AppCompatActivity {
                 Shared_Common_Pref.Sf_Code = response.getData().get(0).getDistCode();
                 Shared_Common_Pref.Div_Code = response.getData().get(0).getDivisionCode();
                 Shared_Common_Pref.SFCutoff = response.getData().get(0).getRSMCutoffTime();
+
+
 
                 shared_common_pref.save(Shared_Common_Pref.Div_Code, response.getData().get(0).getDivisionCode());
                 shared_common_pref.save(Shared_Common_Pref.Sf_Code, response.getData().get(0).getDistCode());
@@ -931,6 +938,8 @@ public class Login extends AppCompatActivity {
                 shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
                 shared_common_pref.save(Shared_Common_Pref.Div_Code, div); //l
                 shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type); //l
+                shared_common_pref.save(Constants.Retailer_gst, response.getData().get(0).getRetGST());
+                shared_common_pref.save(Constants.Retailer_fssai, response.getData().get(0).getDisFSSAI());
                 shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.getData().get(0).getSfEmpId()); //l
                 shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.getData().get(0).getSfName()); //l
                 shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.getData().get(0).getDeptName()); //l
