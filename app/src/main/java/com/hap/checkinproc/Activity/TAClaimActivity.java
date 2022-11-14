@@ -1264,6 +1264,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 editText = (TextView) (tvchildView.findViewById(R.id.enter_mode));
                 enterFare = (EditText) tvchildView.findViewById(R.id.enter_fare);
+                tvGstLayout=(LinearLayout) (tvchildView.findViewById(R.id.trvAll_gstLayout));
                 taAttach = (ImageView) (tvchildView.findViewById(R.id.image_attach));
                 previewss = (ImageView) (tvchildView.findViewById(R.id.image_preview));
                 tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
@@ -2744,6 +2745,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     tvGstLayout.setVisibility(View.GONE);
                                 }
 
+                                tvGstLayout= tvchildView.findViewById(R.id.trvAll_gstLayout);
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
                                 previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
@@ -2881,6 +2883,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             enterTo = tvchildView.findViewById(R.id.enter_to);
                             enterFare = tvchildView.findViewById(R.id.enter_fare);
                             tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+                            tvGstLayout = tvchildView.findViewById(R.id.trvAll_gstLayout);
                             TextView txRwID = tvchildView.findViewById(R.id.TARwID);
                             ImageView imgAtt = tvchildView.findViewById(R.id.image_attach);
                             ImageView imgPrv = tvchildView.findViewById(R.id.image_preview);
@@ -2942,6 +2945,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             editMode = editText.getText().toString();
 
                             Log.v("Travel_Location", editMode);
+
+                            tvGstLayout = tvchildView.findViewById(R.id.trvAll_gstLayout);
 
                             deleteButton = tvchildView.findViewById(R.id.delete_button);
                             taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
@@ -3480,6 +3485,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             edtRwID = LcchildView.findViewById(R.id.lcRwID);
             editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
             editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+            lcGstLayout = (LinearLayout) (LcchildView.findViewById(R.id.lcConv_gstLayout));
             linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
             lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
             lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
@@ -3627,6 +3633,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
             oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oEGstLayout =(LinearLayout) (childView.findViewById(R.id.otherExp_gstLayout));
             oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
             oeTxtUKey = (TextView) (childView.findViewById(R.id.txt_oe_ukey));
@@ -5256,6 +5263,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
             edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
+            lcGstLayout=(LinearLayout)(view.findViewById(R.id.lcConv_gstLayout));
             lcPreview = (ImageView) (view.findViewById(R.id.img_prvw_lc));
 
             edtLcFare.setText("");
@@ -5306,6 +5314,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             edtRwID = view.findViewById(R.id.oeRwID);
             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
+            oEGstLayout =(LinearLayout) (view.findViewById(R.id.otherExp_gstLayout));
+
             oeAttach = (ImageView) (view.findViewById(R.id.oe_attach_img));
             oePreview = (ImageView) (view.findViewById(R.id.img_prvw_oe));
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
