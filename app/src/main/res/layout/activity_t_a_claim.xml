@@ -1494,7 +1494,7 @@
                                             android:layout_alignParentLeft="true"
                                             android:layout_alignParentEnd="true"
                                             android:layout_alignParentRight="true"
-                                            android:visibility="gone">
+                                            android:visibility="visible">
 
                                             <TextView
                                                 android:layout_width="wrap_content"
@@ -1910,7 +1910,7 @@
                                             android:layout_height="match_parent"
                                             android:layout_marginBottom="@dimen/C20dp"
                                             android:orientation="vertical"
-                                            android:visibility="gone">
+                                            android:visibility="visible">
 
                                             <LinearLayout
                                                 android:layout_width="match_parent"
@@ -2665,7 +2665,109 @@
                                                     </LinearLayout>
 
                                                 </LinearLayout>
+
+
                                             </LinearLayout>
+
+                                            <LinearLayout
+                                                android:id="@+id/ldg_gstLayout"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal"
+                                                    android:layout_marginStart="9dp">
+                                                    <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="GST Number: "
+                                                        android:textColor="#000000"
+                                                        android:textSize="10sp" />
+                                                    <EditText
+                                                        android:id="@+id/edt_ldg_gst"
+                                                        android:layout_width="119dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:maxLength="19"
+                                                        android:paddingStart="4dp"
+                                                        android:hint="Enter GST Number"
+                                                        android:textColorHint="#C1C0C0"
+                                                        android:textSize="11dp" />
+                                                </LinearLayout>
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal"
+                                                    android:layout_marginStart="29dp">
+                                                    <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="GST Amount: "
+                                                        android:textColor="#000000"
+                                                        android:textSize="10sp" />
+                                                    <EditText
+                                                        android:id="@+id/edt_ldg_gst_amt"
+                                                        android:layout_width="49dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:hint="0.00"
+                                                        android:paddingStart="@dimen/C4dp"
+                                                        android:textColorHint="#C1C0C0"
+                                                        android:textSize="11dp" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+
+                                            <!--                                            <LinearLayout-->
+                                            <!--                                                android:id="@+id/ldg_gstLayout"-->
+                                            <!--                                                android:layout_width="match_parent"-->
+                                            <!--                                                android:layout_height="wrap_content"-->
+                                            <!--                                                android:orientation="horizontal"-->
+                                            <!--                                                android:visibility="gone">-->
+                                            <!--                                                <LinearLayout-->
+                                            <!--                                                    android:layout_width="wrap_content"-->
+                                            <!--                                                    android:layout_height="wrap_content"-->
+                                            <!--                                                    android:orientation="horizontal"-->
+                                            <!--                                                    android:layout_marginStart="9dp">-->
+                                            <!--                                                    <TextView-->
+                                            <!--                                                        android:layout_width="match_parent"-->
+                                            <!--                                                        android:layout_height="wrap_content"-->
+                                            <!--                                                        android:text="GST Number: "-->
+                                            <!--                                                        android:textColor="#-001"-->
+                                            <!--                                                        android:textSize="10sp" />-->
+                                            <!--                                                    <EditText-->
+                                            <!--                                                        android:id="@+id/edt_ldg_gst"-->
+                                            <!--                                                        android:layout_width="119dp"-->
+                                            <!--                                                        android:layout_height="wrap_content"-->
+                                            <!--                                                        android:maxLength="19"-->
+                                            <!--                                                        android:paddingStart="4dp"-->
+                                            <!--                                                        android:hint="Enter GST Number"-->
+                                            <!--                                                        android:textColorHint="#C-1C0C0"-->
+                                            <!--                                                        android:textSize="11dp" />-->
+                                            <!--                                                </LinearLayout>-->
+                                            <!--                                                <LinearLayout-->
+                                            <!--                                                    android:layout_width="wrap_content"-->
+                                            <!--                                                    android:layout_height="wrap_content"-->
+                                            <!--                                                    android:orientation="horizontal"-->
+                                            <!--                                                    android:layout_marginStart="29dp">-->
+                                            <!--                                                    <TextView-->
+                                            <!--                                                        android:layout_width="match_parent"-->
+                                            <!--                                                        android:layout_height="wrap_content"-->
+                                            <!--                                                        android:text="GST Amount: "-->
+                                            <!--                                                        android:textColor="#-001"-->
+                                            <!--                                                        android:textSize="10sp" />-->
+                                            <!--                                                    <EditText-->
+                                            <!--                                                        android:id="@+id/edt_ldg_gst_amt"-->
+                                            <!--                                                        android:layout_width="49dp"-->
+                                            <!--                                                        android:layout_height="wrap_content"-->
+                                            <!--                                                        android:hint="0.00"-->
+                                            <!--                                                        android:paddingStart="@dimen/C4dp"-->
+                                            <!--                                                        android:textColorHint="#C-1C0C0"-->
+                                            <!--                                                        android:textSize="11dp" />-->
+                                            <!--                                                </LinearLayout>-->
+                                            <!--                                            </LinearLayout>-->
+
+
+
 
                                             <View
                                                 android:layout_width="match_parent"
@@ -2793,7 +2895,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:visibility="gone">
+                                    android:visibility="visible">
 
                                     <View
                                         android:layout_width="match_parent"

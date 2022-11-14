@@ -74,7 +74,6 @@ import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
-import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.CtrlsListModel;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Common_Class.Util;
@@ -107,7 +106,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import id.zelory.compressor.Compressor;
@@ -153,7 +151,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, travelPlaces, linDailyAllowance, linback, lin,
             linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView;
-    LinearLayout viewContinue, viewContinueTotal, ViewData, driverStayLocLayout;
+    LinearLayout viewContinue, viewContinueTotal, ViewData, driverStayLocLayout, ldgGstLayout, lcGstLayout, oEGstLayout, tvGstLayout;
     RelativeLayout lnChangePlace,lnRetVehicle;
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara, cardTrvPlcs;
     TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
@@ -167,7 +165,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             edtRwID;
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation, drvStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill, txDAOthName,
-            edtFAFrom,edtFAStartKm,edtFATo,edtFACloseKm,edtFAPersonalKm,FAtravelledkm;
+            edtFAFrom,edtFAStartKm,edtFATo,edtFACloseKm,edtFAPersonalKm,FAtravelledkm,
+            edtLdgGstNum,edtLdgGstAmt, edtTVGstNum, edtTVGstAmt, edtOEGstNum, edtOEGstAmt, edtLCGstNum, edtLCGstAmt;
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
             img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck, imgEdtPlace, btnDAclose,btnVRetclose;
     String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
@@ -177,7 +176,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", editModeId = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", lodEditcnt = "", tvEditcnt = "", OeUKey = "",
-            LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
+            LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "", gstNo="",
             DATE = "", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "",
             sLocId = "",sDrvLocId="", sLocName = "",sDrvLocName="", sDALocId = "", sDALocName = "", sDALType, CInDate = "", COutDate = "", Alw_Eligibilty = "";
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
@@ -197,9 +196,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     CircularProgressButton btn_sub, buttonSave;
     int countLoding = 0;
 
-/**/
+    /**/
     HashSet<String> hashSet = new HashSet<>();
-/**/
+    /**/
 
 
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -286,6 +285,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 clocation = location;
             }
         });
+
+        ldgGstLayout = findViewById(R.id.ldg_gstLayout);
+
+
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
         btn_sub = findViewById(R.id.btn_sub);
@@ -441,7 +444,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
 
-/*--- Fuel Allowance - Add Vehicle Returns ---*/
+        /*--- Fuel Allowance - Add Vehicle Returns ---*/
 
         edtFACloseKm=findViewById(R.id.edt_FAendkm);
         edtFAFrom=findViewById(R.id.edt_placeFAFrom);
@@ -451,6 +454,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         FAtravelledkm=findViewById(R.id.FATravelledkm);
         btnFASubmit=findViewById(R.id.btnFASubmit);
 
+        edtLdgGstNum = findViewById(R.id.edt_ldg_gst);
+        edtLdgGstAmt = findViewById(R.id.edt_ldg_gst_amt);
+
+
+
+
         TextWatcher textWatcher =new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -458,12 +467,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (!edtFACloseKm.getText().toString().equals("") && !edtFAStartKm.getText().toString().equals("")) {
-                        int temp1 = Integer.parseInt(edtFACloseKm.getText().toString());
-                        int temp2 = Integer.parseInt(edtFAStartKm.getText().toString());
-                        FAtravelledkm.setText(String.valueOf(temp1 - temp2));
-                        Log.v("FA-travelledKm",String.valueOf(temp1 - temp2));
-                    }
+                if (!edtFACloseKm.getText().toString().equals("") && !edtFAStartKm.getText().toString().equals("")) {
+                    int temp1 = Integer.parseInt(edtFACloseKm.getText().toString());
+                    int temp2 = Integer.parseInt(edtFAStartKm.getText().toString());
+                    FAtravelledkm.setText(String.valueOf(temp1 - temp2));
+                    Log.v("FA-travelledKm",String.valueOf(temp1 - temp2));
+                }
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -481,7 +490,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         edtFACloseKm.addTextChangedListener(textWatcher);
         edtFAStartKm.addTextChangedListener(textWatcher);
 
-/*---------*/
+        /*---------*/
 
         ldgLocations.clear();
         loadLocations();
@@ -984,6 +993,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(15, 15, 15, 15);
                 final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
+                oEGstLayout = findViewById(R.id.otherExp_gstLayout);
+                edtOEGstNum = findViewById(R.id.edt_otherExp_gst);
+                edtOEGstAmt = findViewById(R.id.edt_otherExp_gst_amt);
+
                 LinearOtherAllowance.addView(rowView, layoutParams);
                 oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
                 View views = LinearOtherAllowance.getChildAt(oePosCnt);
@@ -1093,6 +1106,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 layoutParams.setMargins(15, 15, 15, 15);
 
                 final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
+                lcGstLayout = findViewById(R.id.lcConv_gstLayout);
+
+                edtLCGstNum = findViewById(R.id.edt_lcConv_gst);
+                edtLCGstAmt = findViewById(R.id.edt_lcConv_gst_amt);
 
                 linlocalCon.addView(rowView, layoutParams);
                 localText.setVisibility(View.VISIBLE);
@@ -1209,6 +1226,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 layoutParams.setMargins(15, 15, 15, 15);
 
                 final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
+                tvGstLayout = findViewById(R.id.trvAll_gstLayout);
+
+                edtTVGstNum = findViewById(R.id.edt_trvAll_gst);
+                edtTVGstAmt = findViewById(R.id.edt_trvAll_gst_amt);
+
                 travelPlaces.addView(rowView, layoutParams);
 
                 cardTrvPlcs.setVisibility(View.VISIBLE);
@@ -1243,6 +1265,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 editText = (TextView) (tvchildView.findViewById(R.id.enter_mode));
                 enterFare = (EditText) tvchildView.findViewById(R.id.enter_fare);
+                tvGstLayout=(LinearLayout) (tvchildView.findViewById(R.id.trvAll_gstLayout));
                 taAttach = (ImageView) (tvchildView.findViewById(R.id.image_attach));
                 previewss = (ImageView) (tvchildView.findViewById(R.id.image_preview));
                 tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
@@ -1660,6 +1683,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         sLocName = "";
         sDrvLocId ="";
         sDrvLocName="";
+        gstNo="";
 
         sDALocId = "";
         sDALocName = "";
@@ -2719,14 +2743,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 if (StrDaName.equalsIgnoreCase("NONE")) {
                                     enterFare.setText("0");
                                     enterFare.setVisibility(View.GONE);
+                                    tvGstLayout.setVisibility(View.GONE);
                                 }
 
+                                tvGstLayout= tvchildView.findViewById(R.id.trvAll_gstLayout);
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
                                 previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
                                 enterFare.setVisibility(View.VISIBLE);
                                 taAttach.setVisibility(View.VISIBLE);
                                 previewss.setVisibility(View.VISIBLE);
+                                tvGstLayout.setVisibility(View.VISIBLE);
+
 
                                 String sRWID = StrDaName + "_" + System.nanoTime();
                                 txRwID.setText(sRWID);
@@ -2742,6 +2770,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     enterFare.setVisibility(View.GONE);
                                     taAttach.setVisibility(View.GONE);
                                     previewss.setVisibility(View.GONE);
+                                    tvGstLayout.setVisibility(View.GONE);
                                 }
                                 enterFare.addTextChangedListener(new TextWatcher() {
                                     @Override
@@ -2855,6 +2884,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             enterTo = tvchildView.findViewById(R.id.enter_to);
                             enterFare = tvchildView.findViewById(R.id.enter_fare);
                             tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+                            tvGstLayout = tvchildView.findViewById(R.id.trvAll_gstLayout);
                             TextView txRwID = tvchildView.findViewById(R.id.TARwID);
                             ImageView imgAtt = tvchildView.findViewById(R.id.image_attach);
                             ImageView imgPrv = tvchildView.findViewById(R.id.image_preview);
@@ -2874,6 +2904,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             if (editText.getText().toString().equalsIgnoreCase("NONE")) {
                                 enterFare.setText("0");
                                 enterFare.setVisibility(View.GONE);
+                                tvGstLayout.setVisibility(View.GONE);
                             }
 
 
@@ -2896,9 +2927,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             if (AttFlg.equals("1")) {
                                 imgAtt.setVisibility(View.VISIBLE);
                                 imgPrv.setVisibility(View.VISIBLE);
+                                tvGstLayout.setVisibility(View.VISIBLE);
+
                             } else {
                                 imgAtt.setVisibility(View.GONE);
                                 imgPrv.setVisibility(View.GONE);
+                                tvGstLayout.setVisibility(View.GONE);
+
                             }
 
 
@@ -2911,6 +2946,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             editMode = editText.getText().toString();
 
                             Log.v("Travel_Location", editMode);
+
+                            tvGstLayout = tvchildView.findViewById(R.id.trvAll_gstLayout);
 
                             deleteButton = tvchildView.findViewById(R.id.delete_button);
                             taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
@@ -3226,8 +3263,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                     SumOFLodging(0);
                     linContinueStay.setVisibility(View.VISIBLE);
-                 //   if (DT.Daybetween(COutDate + " 00:00:00", DateTime + " 00:00:00") < 1)
-                 //       linContinueStay.setVisibility(View.GONE);
+                    //   if (DT.Daybetween(COutDate + " 00:00:00", DateTime + " 00:00:00") < 1)
+                    //       linContinueStay.setVisibility(View.GONE);
 
                     /*
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -3449,6 +3486,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             edtRwID = LcchildView.findViewById(R.id.lcRwID);
             editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
             editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+            lcGstLayout = (LinearLayout) (LcchildView.findViewById(R.id.lcConv_gstLayout));
             linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
             lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
             lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
@@ -3468,9 +3506,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
                 lcAttach.setVisibility(View.VISIBLE);
                 lcPreview.setVisibility(View.VISIBLE);
+                lcGstLayout.setVisibility(View.VISIBLE);
             } else {
                 lcAttach.setVisibility(View.GONE);
                 lcPreview.setVisibility(View.GONE);
+                lcGstLayout.setVisibility(View.GONE);
+
             }
             int maxVal = lcdraftJson.get("Max_Allowance").getAsInt();
             editLaFare.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
@@ -3593,6 +3634,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
             oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oEGstLayout =(LinearLayout) (childView.findViewById(R.id.otherExp_gstLayout));
             oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
             oeTxtUKey = (TextView) (childView.findViewById(R.id.txt_oe_ukey));
@@ -3604,9 +3646,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (AttFlg.equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
                 oePreview.setVisibility(View.VISIBLE);
+                oEGstLayout.setVisibility(View.VISIBLE);
             } else {
                 oeAttach.setVisibility(View.GONE);
                 oePreview.setVisibility(View.GONE);
+                oEGstLayout.setVisibility(View.GONE);
+
             }
 
             oeEditext.setText(expCode);
@@ -4488,6 +4533,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 ldgSave.put("ldg_type_sty", lodgContvw.getVisibility() == View.VISIBLE ? sLocName : "");
             }
 
+            ldgSave.put("ldg_GstNo", edtLdgGstNum.getText().toString());
+            ldgSave.put("ldg_GstAmt", edtLdgGstAmt.getText().toString());
+            ldgSave.put("ldg_drv_Styid",sDrvLocId);
+            ldgSave.put("ldg_drv_StyNm",sDrvLocName);
+            ldgSave.put("ldg_drv_need",((chkDrvAlw.isChecked()==true)?1:0));
             ldgSave.put("ldg_drv_Styid",sDrvLocId);
             ldgSave.put("ldg_drv_StyNm",sDrvLocName);
             ldgSave.put("ldg_drv_need",((chkDrvAlw.isChecked()==true)?1:0));
@@ -4573,6 +4623,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 enterFrom = views.findViewById(R.id.enter_from);
                 enterTo = views.findViewById(R.id.enter_to);
                 enterFare = views.findViewById(R.id.enter_fare);
+                edtTVGstNum = views.findViewById(R.id.edt_trvAll_gst);
+                edtTVGstAmt = views.findViewById(R.id.edt_trvAll_gst_amt);
                 deleteButton = views.findViewById(R.id.delete_button);
                 tvTxtUKeys = views.findViewById(R.id.txt_tv_ukey);
                 editMode = editText.getText().toString();
@@ -4620,6 +4672,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 jsonTrLoc.put("from", enterFrom.getText().toString());
                 jsonTrLoc.put("to", enterTo.getText().toString());
                 jsonTrLoc.put("fare", enterFare.getText().toString());
+                jsonTrLoc.put("tv_gstNo",edtTVGstNum.getText().toString());
+                jsonTrLoc.put("tv_gstAmt",edtTVGstAmt.getText().toString());
                 jsonTrLoc.put("u_key", tvTxtUKeys.getText().toString());
                 jsonTrLoc.put("attach_count", AttachmentImg.get(editMode));
                 trvLoc.put(jsonTrLoc);
@@ -4649,6 +4703,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 edtRwID = view.findViewById(R.id.lcRwID);
                 editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
                 editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
+                lcGstLayout= (LinearLayout) (view.findViewById(R.id.lcConv_gstLayout));
+                edtLCGstNum = (EditText) (view.findViewById(R.id.edt_lcConv_gst));
+                edtLCGstAmt = (EditText) (view.findViewById(R.id.edt_lcConv_gst_amt));
                 Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
                 lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                 editMode = editTexts.getText().toString();
@@ -4665,6 +4722,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 if (ULCItem != null) {
                     lcMode.put("type", editMode);
                     lcMode.put("attach_count", ULCItem.getAttachNeed());
+                    lcMode.put("lc_gstNo",edtLCGstNum.getText().toString());
+                    lcMode.put("lc_gstAmt",edtLCGstAmt.getText().toString());
                     lcMode.put("total_amount", editLaFare.getText().toString());
                     lcMode.put("u_key", lcTxtUKeys.getText().toString());
                     lcMode.put("exp_type", "LC");
@@ -4711,6 +4770,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 edtRwID = view.findViewById(R.id.oeRwID);
                 oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                 edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
+                edtOEGstNum = (EditText) (view.findViewById(R.id.edt_otherExp_gst));
+                edtOEGstAmt = (EditText) (view.findViewById(R.id.edt_otherExp_gst_amt));
                 OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
                 editMode = oeEditext.getText().toString();
                 oeTxtUKey = (TextView) (view.findViewById(R.id.txt_oe_ukey));
@@ -4727,6 +4788,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 if (UOEItem != null) {
                     lcModes2.put("type", editMode);
                     lcModes2.put("attach_count", UOEItem.getAttachNeed());
+                    lcModes2.put("otherExp_gstNo",edtOEGstNum.getText().toString());
+                    lcModes2.put("otherExp_gstAmt",edtOEGstAmt.getText().toString());
                     lcModes2.put("total_amount", edtOE.getText().toString());
                     lcModes2.put("u_key", oeTxtUKey.getText().toString());
                     lcModes2.put("exp_type", "OE");
@@ -5174,9 +5237,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (AttFlg.equals("1")) {
                 imgAtt.setVisibility(View.VISIBLE);
                 imgPrv.setVisibility(View.VISIBLE);
+                tvGstLayout.setVisibility(View.VISIBLE);
+
             } else {
                 imgAtt.setVisibility(View.GONE);
                 imgPrv.setVisibility(View.GONE);
+                tvGstLayout.setVisibility(View.GONE);
             }
 
             if (Alw_Eligibilty.equalsIgnoreCase("0")) {
@@ -5200,6 +5266,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
             edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
+            lcGstLayout=(LinearLayout)(view.findViewById(R.id.lcConv_gstLayout));
             lcPreview = (ImageView) (view.findViewById(R.id.img_prvw_lc));
 
             edtLcFare.setText("");
@@ -5235,9 +5302,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (AttFlg.equals("1")) {
                 lcAttach.setVisibility(View.VISIBLE);
                 lcPreview.setVisibility(View.VISIBLE);
+                lcGstLayout.setVisibility(View.VISIBLE);
             } else {
                 lcAttach.setVisibility(View.GONE);
                 lcPreview.setVisibility(View.GONE);
+                lcGstLayout.setVisibility(View.GONE);
             }
 
         } else if (type == 90) {
@@ -5248,6 +5317,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             edtRwID = view.findViewById(R.id.oeRwID);
             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
+            oEGstLayout =(LinearLayout) (view.findViewById(R.id.otherExp_gstLayout));
+
             oeAttach = (ImageView) (view.findViewById(R.id.oe_attach_img));
             oePreview = (ImageView) (view.findViewById(R.id.img_prvw_oe));
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
@@ -5283,9 +5354,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (AttFlg.equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
                 oePreview.setVisibility(View.VISIBLE);
+                oEGstLayout.setVisibility(View.VISIBLE);
             } else {
                 oeAttach.setVisibility(View.GONE);
                 oePreview.setVisibility(View.GONE);
+                oEGstLayout.setVisibility(View.GONE);
             }
 
 
@@ -5946,9 +6019,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         });
 
-    } catch (Exception exception) {
+        } catch (Exception exception) {
+        }
+
     }
-}
+
     public void MaxMinDateTo(String strMinDate) {
         Log.e("MAX_DATE_TWO", " " + strMinDate);
 
