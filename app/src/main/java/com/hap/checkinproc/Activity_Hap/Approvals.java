@@ -48,7 +48,9 @@ import retrofit2.Response;
 public class Approvals extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest, AdvanceRequest,FlightAppr, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout linProjectionApprove, linQpsApprove, LeaveRequest, AdvanceRequest,FlightAppr, PermissionRequest,
+            OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry,
+            lin_newjoin, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, advanceStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
             lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus,llFlightApprHist;
     SharedPreferences CheckInDetails;
@@ -58,7 +60,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     public static final String UserInfo = "MyPrefs";
     public static final String SetupsInfo = "MySettings";
     TextView countLeaveRequest, extendedcount,countFlightAppr , countPermissionRequest, countOnDuty, countMissedPunch,
-            countTravelAllowance, countTourPlan, txt_holiday_count, txt_deviation_count, txt_leavecancel_count;
+            countTravelAllowance, countTourPlan, txt_holiday_count, txt_deviation_count, txt_leavecancel_count,txt_newjoin_count,txt_Advance_req_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linLeaveCancel = findViewById(R.id.lin_leave_cancel);
         linDaExceptionEntry = findViewById(R.id.lin_daExp_entry);
         llTrvlAllowStatus = findViewById(R.id.lin_travel_histry);
+
         DaExcptStaus = findViewById(R.id.lin_da_excep_status);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -146,6 +149,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         ExtendedShift = findViewById(R.id.lin_ext_shift_status);
         TravelAllowance = findViewById(R.id.lin_travel_allow);
         TourPlan = findViewById(R.id.lin_tour_plan);
+        lin_newjoin = findViewById(R.id.lin_newjoin);
+
         /*Status Linear*/
         LeaveStatus = findViewById(R.id.lin_leav_sta);
         advanceStatus = findViewById(R.id.lin_Advance_sta);
@@ -166,6 +171,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         txt_holiday_count = findViewById(R.id.txt_holiday_count);
         txt_deviation_count = findViewById(R.id.txt_deviation_count);
         txt_leavecancel_count = findViewById(R.id.txt_leave_cancel_req_count);
+        txt_newjoin_count = findViewById(R.id.txt_newjoin_count);
+        txt_Advance_req_count = findViewById(R.id.txt_Advance_req_count);
 
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
@@ -182,6 +189,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         FlightAppr.setOnClickListener(this);
         OnDuty.setOnClickListener(this);
         MissedPunch.setOnClickListener(this);
+        lin_newjoin.setOnClickListener(this);
         ExtendedShift.setOnClickListener(this);
         TravelAllowance.setOnClickListener(this);
         TourPlan.setOnClickListener(this);
@@ -245,11 +253,30 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     txt_holiday_count.setText(jsonObject.getString("HolidayCount"));
                     txt_deviation_count.setText(jsonObject.getString("DeviationC"));
                     txt_leavecancel_count.setText(jsonObject.getString("CancelLeave"));
+                    txt_newjoin_count.setText(jsonObject.getString("Newjoin"));
+                    txt_Advance_req_count.setText(jsonObject.getString("Advance"));
 
-
+                    if (Integer.parseInt(jsonObject.getString("leave")) < 1) {
+                        txt_newjoin_count.setVisibility(View.GONE);
+                        findViewById(R.id.ivNewjoinArw).setVisibility(View.GONE);
+//                        findViewById(R.id.llLeave).setVisibility(View.GONE);
+//                        LeaveRequest.setVisibility(View.GONE);
+                    }
                     if (Integer.parseInt(jsonObject.getString("leave")) < 1) {
                         countLeaveRequest.setVisibility(View.GONE);
                         findViewById(R.id.ivLvArw).setVisibility(View.GONE);
+//                        findViewById(R.id.llLeave).setVisibility(View.GONE);
+//                        LeaveRequest.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("Newjoin")) < 1) {
+                        txt_newjoin_count.setVisibility(View.GONE);
+                        findViewById(R.id.ivNewjoinArw).setVisibility(View.GONE);
+//                        findViewById(R.id.llLeave).setVisibility(View.GONE);
+//                        LeaveRequest.setVisibility(View.GONE);
+                    }
+                    if (Integer.parseInt(jsonObject.getString("Advance")) < 1) {
+                        txt_Advance_req_count.setVisibility(View.GONE);
+                        findViewById(R.id.ivAdvArw).setVisibility(View.GONE);
 //                        findViewById(R.id.llLeave).setVisibility(View.GONE);
 //                        LeaveRequest.setVisibility(View.GONE);
                     }
@@ -341,6 +368,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_leave_req:
                 startActivity(new Intent(Approvals.this, Leave_Approval.class));
+                finish();
+                break;
+            case R.id.lin_newjoin:
+                startActivity(new Intent(Approvals.this, NewJoineeApproval.class));
                 finish();
                 break;
             case R.id.lin_Advance_req:

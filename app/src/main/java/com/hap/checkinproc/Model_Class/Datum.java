@@ -90,6 +90,15 @@ public class Datum {
     @Expose
     private String CutoffTime;
 
+    @SerializedName("SFJoinDate")
+    @Expose
+    private String SFJoinDate;
+
+    @SerializedName("SFJoinMxDate")
+    @Expose
+    private String SFJoinMxDate;
+
+
     @SerializedName("SFCutoff")
     @Expose
     private String RSMCutOffTime;
@@ -224,6 +233,21 @@ public class Datum {
 
     public void setSfDesignationShortName(String sfDesignationShortName) {
         this.sfDesignationShortName = sfDesignationShortName;
+    }
+
+    public String getSFJoinDate() {
+        return SFJoinDate;
+    }
+
+    public void setSFJoinDate(String SFJoinDate) {
+        this.SFJoinDate = SFJoinDate;
+    }
+    public String getSFJoinMxDate() {
+        return SFJoinMxDate;
+    }
+
+    public void setSFJoinMxDate(String SFJoinMxDate) {
+        this.SFJoinMxDate = SFJoinMxDate;
     }
 
     public String getSfRptCode() {

@@ -294,7 +294,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     //cardview3.setVisibility(View.GONE);
                     // cardview4.setVisibility(View.GONE);
                     cardView5.setVisibility(View.GONE);
-                    //StActivity.setVisibility(View.GONE);
+                    StActivity.setVisibility(View.GONE);
                     btnCheckout.setVisibility(View.GONE);
                     btnExit.setVisibility(View.VISIBLE);
                     //               btnApprovals.setVisibility(View.GONE);
@@ -303,11 +303,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 //cardview3.setVisibility(View.GONE);
                 //cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
-                //StActivity.setVisibility(View.GONE);
+                StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
             }
             if (sSFType.equals("0")) StActivity.setVisibility(View.GONE);
-            StActivity.setVisibility(View.VISIBLE);
+            //StActivity.setVisibility(View.VISIBLE);
 
             Log.v("GATE:", CheckInDetails.getString("On_Duty_Flag", "0") + " :sfType:" + sSFType);
 
@@ -730,8 +730,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             JsonArray WKItems = itm.getAsJsonArray("CheckWK");
                             if (WKItems.size() > 0) {
                                 if (itm.get("WKFlg").getAsInt() == 1) {
-                                    Log.d("WEEKOFF", String.valueOf(itm.get("WKFlg").getAsInt()));
-
                                     LayoutInflater inflater = LayoutInflater.from(Dashboard_Two.this);
 
                                     final View view = inflater.inflate(R.layout.dashboard_deviation_dialog, null);
@@ -744,6 +742,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
                                     TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
 
+                                    TextView btnNwJoin = (TextView) view.findViewById(R.id.tvNwJoin);
+                                    btnNwJoin.setVisibility(View.GONE);
                                     btnOthers.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -811,7 +811,53 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                             }
                                         })
                                         .show();*/
-                                } else {
+                                }
+                                else if(itm.get("WKFlg").getAsInt() == 3){
+                                    LayoutInflater inflater = LayoutInflater.from(Dashboard_Two.this);
+
+                                    final View view = inflater.inflate(R.layout.dashboard_deviation_dialog, null);
+                                    android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Dashboard_Two.this).create();
+                                    alertDialog.setTitle("HAP Check-In");
+                                    alertDialog.setMessage(Html.fromHtml(mMessage));
+                                    alertDialog.setCancelable(false);
+
+                                    TextView btnOthers = (TextView) view.findViewById(R.id.tvOthers);
+                                    TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
+                                    TextView btnNwJoin = (TextView) view.findViewById(R.id.tvNwJoin);
+                                    TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
+
+                                    btnOthers.setVisibility(View.GONE);
+                                    btnDeviation.setVisibility(View.GONE);
+
+                                    btnNwJoin.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iLeave = new Intent(Dashboard_Two.this, NewJoinEntry.class);
+                                            iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iLeave);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    btnWeekOFF.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
+                                            iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iWeekOff);
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    alertDialog.setView(view);
+                                    alertDialog.show();
+                                }
+                                else {
                                     AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                             .setTitle("HAP Check-In")
                                             .setMessage(Html.fromHtml(mMessage))

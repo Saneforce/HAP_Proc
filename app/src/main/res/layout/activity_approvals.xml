@@ -106,7 +106,6 @@
                         </LinearLayout>
 
                         <include
-                            android:id="@+id/llLeave"
                             layout="@layout/part_view" />
 
                         <LinearLayout
@@ -372,6 +371,59 @@
 
                         <include
                             android:id="@+id/llOnDuty"
+                            layout="@layout/part_view" />
+
+                        <LinearLayout
+                            android:id="@+id/lin_newjoin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C10dp"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    style="@style/TextStyle"
+
+                                    android:text="New Joinee Entry"
+                                    android:textSize="16sp"></TextView>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="23dp"
+                                        android:layout_height="23dp">
+
+                                        <TextView
+                                            android:id="@+id/txt_newjoin_count"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/circle"
+                                            android:gravity="center"
+                                            android:maxEms="2"
+                                            android:text="0"
+                                            android:textColor="@android:color/white"></TextView>
+
+                                    </LinearLayout>
+
+                                    <include
+                                        android:id="@+id/ivNewjoinArw"
+                                        layout="@layout/image_arrow" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <include
+                            android:id="@+id/llNewJoin"
                             layout="@layout/part_view" />
 
                         <LinearLayout

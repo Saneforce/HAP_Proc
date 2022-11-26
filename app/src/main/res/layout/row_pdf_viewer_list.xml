@@ -61,5 +61,30 @@
             android:textColor="@android:color/black"></TextView>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lin_pdf3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/C10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/C30dp"
+            android:layout_weight="1"
+            android:padding="@dimen/C7dp"
+            android:src="@drawable/pdf">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/txt_pdf3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.2"
+            android:text="HAP GSTN Number List"
+            android:textColor="@android:color/black"></TextView>
+
+    </LinearLayout>
 
 </LinearLayout>

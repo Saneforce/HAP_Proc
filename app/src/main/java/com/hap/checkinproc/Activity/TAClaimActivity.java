@@ -504,6 +504,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 if (isChecked) {
                     //linCheckOut.setVisibility(View.INVISIBLE);
                     vwldgBillAmt.setVisibility(View.GONE);
+                    ldgGstLayout.setVisibility(View.GONE);
                     ldg_coutDt.setText(DT.AddDays(DateTime + " 00:00:00", 2, "yyyy-MM-dd"));
                     cnSty = 1;
                     // ldg_cout.setText("");
@@ -519,6 +520,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     countLoding = 0;
                     cnSty = 0;
                     vwldgBillAmt.setVisibility(View.VISIBLE);
+                    ldgGstLayout.setVisibility(View.VISIBLE);
                     linCheckOut.setVisibility(View.VISIBLE);
                 }
 
@@ -2725,12 +2727,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 enterTo = tvchildView.findViewById(R.id.enter_to);
                                 enterFare = tvchildView.findViewById(R.id.enter_fare);
                                 tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+
+                                tvGstLayout= tvchildView.findViewById(R.id.trvAll_gstLayout);
+
                                 TextView txRwID = tvchildView.findViewById(R.id.TARwID);
 
                                 editText.setText(StrDaName);
                                 enterFrom.setText(StrBus);
                                 enterTo.setText(StrTo);
-
 
                                 if (Alw_Eligibilty.equalsIgnoreCase("0")) {
                                     enterFare.setText("0");
@@ -2746,7 +2750,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     tvGstLayout.setVisibility(View.GONE);
                                 }
 
-                                tvGstLayout= tvchildView.findViewById(R.id.trvAll_gstLayout);
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
                                 previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
@@ -2885,6 +2888,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             enterFare = tvchildView.findViewById(R.id.enter_fare);
                             tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
                             tvGstLayout = tvchildView.findViewById(R.id.trvAll_gstLayout);
+                            edtTVGstNum = tvchildView.findViewById(R.id.edt_trvAll_gst);
+                            edtTVGstAmt = tvchildView.findViewById(R.id.edt_trvAll_gst_amt);
+
                             TextView txRwID = tvchildView.findViewById(R.id.TARwID);
                             ImageView imgAtt = tvchildView.findViewById(R.id.image_attach);
                             ImageView imgPrv = tvchildView.findViewById(R.id.image_preview);
@@ -2892,6 +2898,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             editText.setText("" + tldraftJson.get("Mode").getAsString());
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
                             enterTo.setText(tldraftJson.get("To_P").getAsString());
+
+                            edtTVGstNum.setText(tldraftJson.get("GSTNo").getAsString());
+                            edtTVGstAmt.setText(tldraftJson.get("GSTAmt").getAsString());
 
                             if (tldraftJson.get("Alw_Eligibilty").getAsString().equalsIgnoreCase("0")) {
                                 enterFare.setText("0");
@@ -3207,6 +3216,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             ldgWOBBal.setText("₹" + 0.00);
                             //  lbl_ldg_eligi.setText("₹" + 0.00);
                             edt_ldg_bill.setText("");
+                            edtLdgGstNum.setText("");
+                            edtLdgGstAmt.setText("");
                             txt_ldg_type.setText("");
                             TotalDays.setVisibility(View.GONE);
                             earCheckIn.setText("");
@@ -3243,7 +3254,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             lblHdBln.setVisibility(View.GONE);
                             ldgWOBBal.setVisibility(View.GONE);
                             drvldgEAra.setVisibility(View.GONE);
-
+                            ldgGstLayout.setVisibility(View.GONE);
 
                         }
 
@@ -3258,6 +3269,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         ldgWOBBal.setText("₹" + 0.00);
                         edt_ldg_bill.setText("");
                         txt_ldg_type.setText("");
+
+                        edtLdgGstNum.setText("");
+                        edtLdgGstAmt.setText("");
+
                         TotalDays.setVisibility(View.GONE);
                         lodgContvw.setVisibility(View.GONE);
                     }
@@ -3363,6 +3378,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (mChckCont.isChecked()) {
                 //linCheckOut.setVisibility(View.INVISIBLE);
                 vwldgBillAmt.setVisibility(View.GONE);
+                ldgGstLayout.setVisibility(View.GONE);
                 cnSty = 1;
                 countLoding = 1;
                 //ldg_cout.setText("");
@@ -3373,6 +3389,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 cnSty = 0;
                 countLoding = 0;
                 vwldgBillAmt.setVisibility(View.VISIBLE);
+                ldgGstLayout.setVisibility(View.VISIBLE);
                 linCheckOut.setVisibility(View.VISIBLE);
             }
 
@@ -3397,7 +3414,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
             txtStyDays.setText(ldraft.get("NO_Of_Days").getAsString());
-
+            ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
+            ldg_cout.setText(ldraft.get("To_Date").getAsString());
+            edtLdgGstNum.setText(ldraft.get("GSTNo").getAsString());
+            edtLdgGstAmt.setText(ldraft.get("GSTAmt").getAsString());
 
             JNLdgEAra.setVisibility(View.GONE);
             if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
@@ -3493,11 +3513,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
             lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
 
+            edtLCGstNum = (EditText) (LcchildView.findViewById(R.id.edt_lcConv_gst));
+            edtLCGstAmt = (EditText) (LcchildView.findViewById(R.id.edt_lcConv_gst_amt));
+
             String sRWID = expCode + "_" + System.nanoTime();
             edtRwID.setText(sRWID);
 
             editTexts.setText(expCode);
             editLaFare.setText(expFare);
+            edtLCGstNum.setText(lcdraftJson.get("GSTNo").getAsString());
+            edtLCGstAmt.setText(lcdraftJson.get("GSTAmt").getAsString());
             if (!lcUKey.equals("")) {
                 lcTxtUKey.setText(lcUKey);
             }
@@ -3639,6 +3664,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
             oeTxtUKey = (TextView) (childView.findViewById(R.id.txt_oe_ukey));
 
+            edtOEGstNum = (EditText) (childView.findViewById(R.id.edt_otherExp_gst));
+            edtOEGstAmt = (EditText) (childView.findViewById(R.id.edt_otherExp_gst_amt));
+
             String sRWID = expCode + "_" + System.nanoTime();
             edtRwID.setText(sRWID);
             String AttFlg = lcdraftJson.get("Attachments").getAsString();
@@ -3656,6 +3684,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             oeEditext.setText(expCode);
             edtOE.setText(expFare);
+
+            edtOEGstNum.setText(lcdraftJson.get("GSTNo").getAsString());
+            edtOEGstAmt.setText(lcdraftJson.get("GSTAmt").getAsString());
+
             if (!oeUKey.equals("") && oeUKey != "" && !oeUKey.isEmpty() && oeUKey != null) {
                 oeTxtUKey.setText(oeUKey);
             }
@@ -4286,6 +4318,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         dialog.show();
         LinearLayout pdf1 = dialog.findViewById(R.id.lin_pdf);
         LinearLayout pdf2 = dialog.findViewById(R.id.lin_pdf2);
+        LinearLayout pdf3 = dialog.findViewById(R.id.lin_pdf3);
         pdf1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -4302,6 +4335,17 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onClick(View view) {
                 Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
                 stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/HAP_ANNEXURE_C.pdf");
+                stat.putExtra("PDF_FILE", "Web");
+                startActivity(stat);
+
+                dialog.dismiss();
+            }
+        });
+        pdf3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/HAP_LODGE_POLICY_NOV_2022.pdf");
                 stat.putExtra("PDF_FILE", "Web");
                 startActivity(stat);
 
@@ -4677,8 +4721,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 jsonTrLoc.put("u_key", tvTxtUKeys.getText().toString());
                 jsonTrLoc.put("attach_count", AttachmentImg.get(editMode));
                 trvLoc.put(jsonTrLoc);
-
-
             }
             Log.v("TRAVEl_LOCATION", "0");
 
@@ -5032,6 +5074,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lodgJoin.setVisibility(View.GONE);
             JNLdgEAra.setVisibility(View.GONE);
             edt_ldg_bill.setVisibility(View.GONE);
+            ldgGstLayout.setVisibility(View.GONE);
             lblHdBill.setVisibility(View.GONE);
             linImgPrv.setVisibility(View.GONE);
             viewBilling.setVisibility(View.GONE);
@@ -5071,6 +5114,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 ldg_stayDt.setVisibility(View.VISIBLE);
                 lblHdBill.setVisibility(View.VISIBLE);
                 edt_ldg_bill.setVisibility(View.VISIBLE);
+                ldgGstLayout.setVisibility(View.VISIBLE);
                 lblHdBln.setVisibility(View.VISIBLE);
                 ldgWOBBal.setVisibility(View.VISIBLE);
                 linImgPrv.setVisibility(View.VISIBLE);
@@ -5093,7 +5137,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 if (DT.Daybetween(DateTime + " 00:00:00", COutDate + " 00:00:00") < 1)
                     linContinueStay.setVisibility(View.GONE);
             }
+
             edt_ldg_bill.setText("");
+            edtLdgGstNum.setText("");
+            edtLdgGstAmt.setText("");
 
             getStayAllow();
             SumOFJointLodging();

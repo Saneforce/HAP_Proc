@@ -625,12 +625,12 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
-               // eMail="3643@hap.in";
-//                eMail="1027397@hap.in";
+                eMail="sivakumar.s@hap.in";
+                //eMail="sajan@hap.in";
 
-//                eMail="ciadmin@hap.in";
+                //eMail="ciadmin@hap.in";
 
-                eMail="1014700@hap.in";
+                //eMail="1014700@hap.in";
 //                 eMail="anandaraj.s@hap.in";
 
                 //eMail="1023176@hap.in";
@@ -658,21 +658,9 @@ public class Login extends AppCompatActivity {
                                         model=response.body();
                                         List<Datum> datumList= new ArrayList<>();
                                         datumList=model.getData();
-                                        Log.d("kl","kdllfsd"+datumList);
+
                                         String sfcut=datumList.get(0).getRSMCutoffTime();
-                                        Log.d("kl","kdcut"+sfcut);
-//                                        shared_common_pref.save(Constants.RSM_CUTOFF_TIME,sfcut);
-                                        Log.d("kl","kdsave"+shared_common_pref.getvalue(Constants.RSM_CUTOFF_TIME));
-
-
-
-                                        Log.v("cutoff_response",response.toString());
-                                        Log.d("jmn","jj"+shared_common_pref.getvalue(Constants.LOGIN_DATA));
                                         String ss = shared_common_pref.getvalue(Constants.LOGIN_DATA);
-
-
-
-
 
                                         /*try {
                                            JsonObject jsonObject= new JsonObject(response.body());
@@ -690,7 +678,6 @@ public class Login extends AppCompatActivity {
                                         catch (Exception e){
                                             Log.d("exception","jhh"+e.toString());
                                         }*/
-
 //                                        try {
 //                                            PackageManager manager = getPackageManager();
 //
@@ -918,6 +905,8 @@ public class Login extends AppCompatActivity {
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
                 Integer checkRadius = response.getData().get(0).getCheckRadius();
+                String SFJoinDate = response.getData().get(0).getSFJoinDate();
+                String SFJoinMxDate = response.getData().get(0).getSFJoinMxDate();
 
                 if (Flight == null) Flight = 0;
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory() == null ? 0 : response.getData().get(0).getFreezer_Mandatory());
@@ -957,6 +946,8 @@ public class Login extends AppCompatActivity {
                 userEditor.putString("DeptCd", DeptCd);
                 userEditor.putString("DeptNm", DeptNm);
                 userEditor.putString("DeptType", DeptType);
+                userEditor.putString("NwJoinDate", SFJoinDate);
+                userEditor.putString("NwJoinMxDate", SFJoinMxDate);
                 userEditor.putInt("FlightAllowed", Flight);
                 userEditor.putInt("OTFlg", OTFlg);
                 Log.d("DeptType", String.valueOf(DeptType));

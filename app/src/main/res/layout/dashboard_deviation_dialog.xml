@@ -19,6 +19,20 @@
 
             <TextView
                 android:textAlignment="center"
+                android:id="@+id/tvNwJoin"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="@dimen/C5dp"
+                android:layout_marginTop="@dimen/C10dp"
+                android:padding="@dimen/C8dp"
+                android:text="New Join"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+
+            <TextView
+                android:textAlignment="center"
                 android:id="@+id/tvOthers"
                 android:layout_weight="1"
                 android:layout_width="0dp"

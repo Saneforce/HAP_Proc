@@ -9,14 +9,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#99ECEAEA"
         android:layout_alignParentBottom="true"
-        >
+        android:background="#99ECEAEA">
 
         <ImageView
+            android:id="@+id/imag_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/imag_back"
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"

@@ -227,7 +227,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                    intent.putExtra("ImageUrl1", imageSet);
+                    intent.putExtra("ImageUrl", imageSet);
                     startActivity(intent);
                 }
             });

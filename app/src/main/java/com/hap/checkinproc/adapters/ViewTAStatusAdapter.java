@@ -3,6 +3,7 @@ package com.hap.checkinproc.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
     Context context;
     JsonArray taJsonArray;
     AdapterOnClick adapterOnClick;
+    public static final String MyPREFERENCES = "MyPrefs";
+    SharedPreferences UserDetails;
 
 
     public ViewTAStatusAdapter(Context context, JsonArray taJsonArray, AdapterOnClick adapterOnClick) {
@@ -66,6 +69,15 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
                 Intent TAViewAct = new Intent(context, TAViewStatus.class);
 
                 TAViewAct.putExtra("sfCode", Shared_Common_Pref.Sf_Code);
+
+                UserDetails = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+                TAViewAct.putExtra("name", UserDetails.getString("SfName",""));
+                TAViewAct.putExtra("head_quaters", UserDetails.getString("SFHQ",""));
+                TAViewAct.putExtra("desig", UserDetails.getString("SFDesig",""));
+                TAViewAct.putExtra("dept", UserDetails.getString("DeptName",""));
+                TAViewAct.putExtra("sf_emp_id", UserDetails.getString("EmpId",""));
+
                 TAViewAct.putExtra("TA_Date", jsonObject.get("Expdt").getAsString());
                 TAViewAct.putExtra("TA_APPROVAL", "0");
                 TAViewAct.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());

@@ -33,7 +33,7 @@ import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry,lin_Advance_req;
+    LinearLayout linNewJoinReq,LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry,lin_Advance_req;
     LinearLayout LeaveStatus,AdvanceStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,flightBookStatus,
             ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus, LinearException, DaExcptStaus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
@@ -97,6 +97,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         common_class = new Common_Class(this);
         /*Request Linear*/
         LeaveRequest = findViewById(R.id.lin_leave_req);
+        linNewJoinReq = findViewById(R.id.lin_newjoin_req);
         PermissionRequest = findViewById(R.id.lin_per_req);
         FlightTick = findViewById(R.id.lin_fligh_mode);
         WeeklyOff = findViewById(R.id.lin_week_off);
@@ -131,6 +132,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         FlightTick.setOnClickListener(this);
         WeeklyOff.setOnClickListener(this);
         DeveiationEntry.setOnClickListener(this);
+
         /*Status Linear*/
         LeaveStatus.setOnClickListener(this);
         PermissionStatus.setOnClickListener(this);
@@ -145,12 +147,19 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         DaExcptStaus.setOnClickListener(this);
         MissedPunc.setOnClickListener(this);
         flightBookStatus.setOnClickListener(this);
+        linNewJoinReq.setOnClickListener(this);
+        linNewJoinReq.setVisibility(View.GONE);
+        if(UserDetails.getInt("NewJoin", 0)==1){
+            linNewJoinReq.setVisibility(View.VISIBLE);
+        }
+
         FlightTick.setVisibility(View.GONE);
         flightBookStatus.setVisibility(View.GONE);
         if(UserDetails.getInt("FlightAllowed", 0)!=0){
             FlightTick.setVisibility(View.VISIBLE);
             flightBookStatus.setVisibility(View.VISIBLE);
         }
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +182,9 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
 
             case R.id.lin_leave_req:
                 startActivity(new Intent(Leave_Dashboard.this, Leave_Request.class));
+                break;
+            case R.id.lin_newjoin_req:
+                startActivity(new Intent(Leave_Dashboard.this, NewJoinEntry.class));
                 break;
             case R.id.lin_per_req:
                 startActivity(new Intent(Leave_Dashboard.this, Permission_Request.class));

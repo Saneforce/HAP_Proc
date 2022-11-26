@@ -27,14 +27,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
-import com.hap.checkinproc.Activity_Hap.Check_in;
 import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Login;
-import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.LocationServices;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -44,8 +41,6 @@ import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.Timer;

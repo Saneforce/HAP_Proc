@@ -29,7 +29,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
     <application
@@ -46,11 +47,20 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".Activity_Hap.Invoice_Vansales_Select"
-            android:exported="false"/>
-        <activity
-            android:name=".SFA_Activity.POSViewEntryActivity"
+            android:name=".Activity_Hap.NewJoinEntry"
             android:exported="false" />
+        <activity
+            android:name=".Activity_Hap.NewJoineeApproval"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Hap.NewJoineeApproval_Reject"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Hap.Invoice_Vansales_Select"
+            android:exported="false" />
+        <!--<activity
+            android:name=".SFA_Activity.POSViewEntryActivity"
+            android:exported="false" />-->
         <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
             android:exported="false"
@@ -408,9 +418,6 @@
             android:name=".Activity_Hap.Leave_Dashboard"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity_Hap.Ocheck_in"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activity_Hap.Approvals"
             android:screenOrientation="portrait" />
         <activity
@@ -503,9 +510,6 @@
         <activity
             android:name=".Activity_Hap.UpdateTaskActivity"
             android:theme="@style/AppTheme.Dialog" />
-        <activity
-            android:name=".Activity_Hap.Check_in"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.Dashboard"
             android:screenOrientation="portrait" />

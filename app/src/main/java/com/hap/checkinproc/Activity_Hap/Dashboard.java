@@ -123,6 +123,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         btMyQR = findViewById(R.id.myQR);
         linMyday.setVisibility(View.GONE);
+
         if (sSFType.equals("1")) {
             linMyday.setVisibility(View.VISIBLE);
             linHolidayWorking.setVisibility(View.GONE);
@@ -134,10 +135,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linOnDuty = (findViewById(R.id.lin_onduty));
         linSFA = findViewById(R.id.lin_sfa);
 
-        linSFA.setVisibility(View.VISIBLE);
+        linSFA.setVisibility(View.GONE);
 
-        // linOnDuty.setVisibility(View.GONE);
-        if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
+        linOnDuty.setVisibility(View.GONE);
+        if (sSFType.equals("0"))
+            linOnDuty.setVisibility(View.VISIBLE);
         else {
             linSFA.setVisibility(View.VISIBLE);
             linReCheck.setVisibility(View.VISIBLE);

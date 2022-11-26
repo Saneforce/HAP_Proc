@@ -116,7 +116,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="@dimen/C2dp">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -403,6 +402,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal">
+
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -2673,11 +2673,16 @@
                                                 android:id="@+id/ldg_gstLayout"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:orientation="horizontal">
+                                                android:orientation="vertical">
                                                 <LinearLayout
-                                                    android:layout_width="wrap_content"
+                                                    android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
-                                                    android:orientation="horizontal"
+                                                    android:orientation="horizontal">
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical"
+                                                    android:layout_weight="1"
                                                     android:layout_marginStart="9dp">
                                                     <TextView
                                                         android:layout_width="match_parent"
@@ -2687,7 +2692,7 @@
                                                         android:textSize="10sp" />
                                                     <EditText
                                                         android:id="@+id/edt_ldg_gst"
-                                                        android:layout_width="119dp"
+                                                        android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:maxLength="19"
                                                         android:paddingStart="4dp"
@@ -2698,7 +2703,7 @@
                                                 <LinearLayout
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
-                                                    android:orientation="horizontal"
+                                                    android:orientation="vertical"
                                                     android:layout_marginStart="29dp">
                                                     <TextView
                                                         android:layout_width="match_parent"
@@ -2708,12 +2713,41 @@
                                                         android:textSize="10sp" />
                                                     <EditText
                                                         android:id="@+id/edt_ldg_gst_amt"
-                                                        android:layout_width="49dp"
+                                                        android:layout_width="89dp"
                                                         android:layout_height="wrap_content"
                                                         android:hint="0.00"
                                                         android:paddingStart="@dimen/C4dp"
                                                         android:textColorHint="#C1C0C0"
+                                                        android:inputType="numberDecimal"
+                                                        android:maxLength="7"
                                                         android:textSize="11dp" />
+                                                </LinearLayout>
+                                                </LinearLayout>
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal">
+                                                    <LinearLayout
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:orientation="vertical"
+                                                        android:layout_marginStart="29dp">
+                                                        <TextView
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="GST Bill Number"
+                                                            android:textColor="#000000"
+                                                            android:textSize="10sp" />
+                                                        <EditText
+                                                            android:id="@+id/edt_ldg_gst_bno"
+                                                            android:layout_width="89dp"
+                                                            android:layout_height="wrap_content"
+                                                            android:hint=""
+                                                            android:paddingStart="@dimen/C4dp"
+                                                            android:textColorHint="#C1C0C0"
+                                                            android:maxLength="30"
+                                                            android:textSize="11dp" />
+                                                    </LinearLayout>
                                                 </LinearLayout>
                                             </LinearLayout>
 
