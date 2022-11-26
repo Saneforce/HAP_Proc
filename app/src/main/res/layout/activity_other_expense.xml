@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/C5dp"
-        android:visibility="gone">
+        android:visibility="visible">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -144,7 +144,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/C5dp">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -163,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:maxLength="19"
                     android:paddingStart="4dp"
-                    android:hint=""
+                    android:hint="Enter GST Bill Number"
                     android:textColorHint="#C1C0C0"
                     android:textSize="12dp" />
             </LinearLayout>

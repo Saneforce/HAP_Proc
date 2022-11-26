@@ -2726,12 +2726,13 @@
                                                 <LinearLayout
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
-                                                    android:orientation="horizontal">
+                                                    android:orientation="horizontal"
+                                                    android:layout_marginTop="5dp">
                                                     <LinearLayout
-                                                        android:layout_width="wrap_content"
+                                                        android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:orientation="vertical"
-                                                        android:layout_marginStart="29dp">
+                                                        android:layout_marginStart="9dp">
                                                         <TextView
                                                             android:layout_width="match_parent"
                                                             android:layout_height="wrap_content"
@@ -2740,9 +2741,9 @@
                                                             android:textSize="10sp" />
                                                         <EditText
                                                             android:id="@+id/edt_ldg_gst_bno"
-                                                            android:layout_width="89dp"
+                                                            android:layout_width="match_parent"
                                                             android:layout_height="wrap_content"
-                                                            android:hint=""
+                                                            android:hint="Enter GST Bill Number"
                                                             android:paddingStart="@dimen/C4dp"
                                                             android:textColorHint="#C1C0C0"
                                                             android:maxLength="30"
