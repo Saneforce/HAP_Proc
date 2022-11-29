@@ -1762,7 +1762,7 @@
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:padding="1dp"
-                                                        android:orientation="horizontal">
+                                                        android:orientation="vertical">
 
                                                         <TextView
                                                             android:id="@+id/txt_hotel_date"
@@ -1775,14 +1775,13 @@
 
                                                         <EditText
                                                             android:id="@+id/from_picker"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginLeft="@dimen/C5dp"
+                                                            android:layout_width="@dimen/C60dp"
+                                                            android:layout_height="@dimen/C20dp"
                                                             android:layout_weight="1"
-                                                            android:layout_gravity="center"
                                                             android:background="@drawable/item_border"
                                                             android:focusable="false"
                                                             android:hint="Time"
+                                                            android:layout_marginTop="@dimen/C3dp"
                                                             android:paddingStart="3dp"
                                                             android:inputType="date"
                                                             android:text="00:00"
@@ -1836,7 +1835,7 @@
                                                         <LinearLayout
                                                             android:layout_width="match_parent"
                                                             android:layout_height="match_parent"
-                                                            android:orientation="horizontal"
+                                                            android:orientation="vertical"
                                                             android:padding="1dp">
 
                                                             <TextView
@@ -1852,14 +1851,13 @@
 
                                                             <EditText
                                                                 android:id="@+id/to_picker"
-                                                                android:layout_width="match_parent"
-                                                                android:layout_height="wrap_content"
-                                                                android:layout_marginLeft="@dimen/C5dp"
+                                                                android:layout_width="@dimen/C60dp"
+                                                                android:layout_height="@dimen/C20dp"
                                                                 android:layout_weight="1"
                                                                 android:background="@drawable/item_border"
                                                                 android:focusable="false"
                                                                 android:hint="Time"
-                                                                android:layout_gravity="center"
+                                                                android:layout_marginTop="@dimen/C3dp"
                                                                 android:inputType="date"
                                                                 android:text="00:00"
                                                                 android:paddingStart="3dp"

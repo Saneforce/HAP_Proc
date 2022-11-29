@@ -999,6 +999,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 oEGstLayout = findViewById(R.id.otherExp_gstLayout);
                 edtOEGstNum = findViewById(R.id.edt_otherExp_gst);
                 edtOEGstAmt = findViewById(R.id.edt_otherExp_gst_amt);
+                edtOEGstBillNo = findViewById(R.id.edt_otherExp_gst_bno);
 
                 LinearOtherAllowance.addView(rowView, layoutParams);
                 oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
@@ -2906,7 +2907,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                             edtTVGstNum.setText(tldraftJson.get("GSTNo").getAsString());
                             edtTVGstAmt.setText(tldraftJson.get("GSTAmt").getAsString());
-                            edtTVGstBillNo.setText(tldraftJson.get("GSTBillNo").getAsString());
+                            edtTVGstBillNo.setText(tldraftJson.get("GSTBNo").getAsString());
 
                             if (tldraftJson.get("Alw_Eligibilty").getAsString().equalsIgnoreCase("0")) {
                                 enterFare.setText("0");
@@ -3427,7 +3428,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldg_cout.setText(ldraft.get("To_Date").getAsString());
             edtLdgGstNum.setText(ldraft.get("GSTNo").getAsString());
             edtLdgGstAmt.setText(ldraft.get("GSTAmt").getAsString());
-            edtLdgGstBillNo.setText(ldraft.get("GSTBillNo").getAsString());
+            edtLdgGstBillNo.setText(ldraft.get("GSTBNo").getAsString());
 
 
             JNLdgEAra.setVisibility(View.GONE);
@@ -3535,7 +3536,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             editLaFare.setText(expFare);
             edtLCGstNum.setText(lcdraftJson.get("GSTNo").getAsString());
             edtLCGstAmt.setText(lcdraftJson.get("GSTAmt").getAsString());
-            edtLCGstBillNo.setText(lcdraftJson.get("GSTBillNo").getAsString());
+            edtLCGstBillNo.setText(lcdraftJson.get("GSTBNo").getAsString());
             if (!lcUKey.equals("")) {
                 lcTxtUKey.setText(lcUKey);
             }
@@ -3701,7 +3702,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             edtOEGstNum.setText(lcdraftJson.get("GSTNo").getAsString());
             edtOEGstAmt.setText(lcdraftJson.get("GSTAmt").getAsString());
-            edtOEGstBillNo.setText(lcdraftJson.get("GSTBillNo").getAsString());
+            edtOEGstBillNo.setText(lcdraftJson.get("GSTBNo").getAsString());
 
             if (!oeUKey.equals("") && oeUKey != "" && !oeUKey.isEmpty() && oeUKey != null) {
                 oeTxtUKey.setText(oeUKey);
