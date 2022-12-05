@@ -105,7 +105,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             ReachedOutlet.setOnClickListener(this);
 
             if (status.equalsIgnoreCase("GEO"))
-                ReachedOutlet.setVisibility(View.GONE);
+                ReachedOutlet.setText("Get Direction");
+//                ReachedOutlet.setVisibility(View.GONE);
 
 
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -406,7 +407,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                         } else {
                             common_class.showMsg(this, "Please Check-In your nearby HO Location");
                         }
-                    } else if (ReachedOutlet.getText().toString().contains("START")) {
+                    } else if (ReachedOutlet.getText().toString().toLowerCase(Locale.ROOT).contains("get direction")) {
                         try {
                             shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
                         } catch (Exception e) {
@@ -475,10 +476,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             ReachedOutlet.setText("Check-In ");
             drawCircle(new LatLng(endPoint.getLatitude(), endPoint.getLongitude()));
 
-        } else if (distance > 200 || (status != null && status.equalsIgnoreCase("new"))) {
-            ReachedOutlet.setText("START ");
+        } else if (distance > 200 || (status != null && status.equalsIgnoreCase("new") )|| status.toLowerCase(Locale.ROOT).contains("geo")) {
+            ReachedOutlet.setText("Get Direction");
         } else {
-            ReachedOutlet.setText("Create Outlet ");
+            ReachedOutlet.setText("Create Outlet");
         }
 
         return distance;

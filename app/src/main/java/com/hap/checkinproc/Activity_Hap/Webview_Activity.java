@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
 
@@ -28,6 +30,8 @@ public class Webview_Activity extends AppCompatActivity {
         wv1.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         Log.e("LOCATIONS", i.getExtras().getString("Locations"));
         wv1.loadUrl("https://www.google.com/maps?q=" + i.getExtras().getString("Locations"));
+
+
 
     }
 

@@ -101,10 +101,10 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         holder.txt_in_geo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // navigateMapDir(View_Status_ModelsList.get(position).getGeoin().toString(),"In Geo");
-                Intent intent = new Intent(context, Webview_Activity.class);
-                intent.putExtra("Locations", View_Status_Model.getGeoin());
-                context.startActivity(intent);
+                navigateMapDir(View_Status_ModelsList.get(position).getGeoin().toString(),"In Geo");
+//                Intent intent = new Intent(context, Webview_Activity.class);
+//                intent.putExtra("Locations", View_Status_Model.getGeoin());
+//                context.startActivity(intent);
 
             }
         });
@@ -112,10 +112,10 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         holder.txt_out_geo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //navigateMapDir(View_Status_ModelsList.get(position).getGeoout().toString(),"Out Geo");
-                Intent intent = new Intent(context, Webview_Activity.class);
-                intent.putExtra("Locations", View_Status_Model.getGeoout());
-                context.startActivity(intent);
+                navigateMapDir(View_Status_ModelsList.get(position).getGeoout().toString(),"Out Geo");
+//                Intent intent = new Intent(context, Webview_Activity.class);
+//                intent.putExtra("Locations", View_Status_Model.getGeoout());
+//                context.startActivity(intent);
 
             }
         });
@@ -123,22 +123,22 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
 
     }
 
-//    void navigateMapDir(String value,String tag) {
-//        try {
-//            if (!com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(value)) {
-//                String[] latlongs = value.split(",");
-//                Intent intent = new Intent(context, MapDirectionActivity.class);
-//                intent.putExtra(Constants.DEST_LAT, latlongs[0]);
-//                intent.putExtra(Constants.DEST_LNG, latlongs[1]);
-//                intent.putExtra(Constants.DEST_NAME, tag);
-//                intent.putExtra(Constants.NEW_OUTLET, "GEO");
-//                context.startActivity(intent);
-//
-//            }
-//        } catch (Exception e) {
-//            Log.v("ViewAllStatus:", e.getMessage());
-//        }
-//    }
+    void navigateMapDir(String value,String tag) {
+        try {
+            if (!com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(value)) {
+                String[] latlongs = value.split(",");
+                Intent intent = new Intent(context, MapDirectionActivity.class);
+                intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+                intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+                intent.putExtra(Constants.DEST_NAME, tag);
+                intent.putExtra(Constants.NEW_OUTLET, "GEO");
+                context.startActivity(intent);
+
+            }
+        } catch (Exception e) {
+            Log.v("ViewAllStatus:", e.getMessage());
+        }
+    }
 
     private void sendStatusUpdate(int flag, View_All_Model data) {
         JSONObject taReq = new JSONObject();

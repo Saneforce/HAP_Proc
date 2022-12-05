@@ -462,6 +462,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
 
+                        Log.v("Projec_Product_List_ex", t.getMessage());
+                        t.printStackTrace();
                     }
                 });
                 service.getDataArrayList("get/projectionprodtypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -475,6 +477,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
 
+                        Log.v("Projec_Product_List_ex", t.getMessage());
+                        t.printStackTrace();
                     }
                 });
                 service.getDataArrayList("get/projectionprodcate", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -488,6 +492,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
 
+                        Log.v("Projec_Product_List_ex", t.getMessage());
+                        t.printStackTrace();
                     }
                 });
                 service.getDataArrayList("get/projectionproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {

@@ -630,7 +630,7 @@ public class Login extends AppCompatActivity {
 //                eMail="sivakumar.s@hap.in";
                 //eMail="sajan@hap.in";
 
-//                eMail="ciadmin@hap.in";
+//                eMail="iplusadmin@hap.in";
 
                 //eMail="1014700@hap.in";
 //                 eMail="anandaraj.s@hap.in";

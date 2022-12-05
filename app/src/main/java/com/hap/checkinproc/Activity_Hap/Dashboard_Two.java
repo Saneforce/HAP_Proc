@@ -341,21 +341,22 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             String loginDate = mShared_common_pref.getvalue(Constants.LOGIN_DATE);
             if (!loginDate.equalsIgnoreCase(currentDate)) {
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()-1]);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()]);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()+1]);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
             }
 
-            getNotify();
-            getDyReports();
-            getMnthReports(0);
-            GetMissedPunch();
 
 
         } catch (Exception e) {
-
+            Log.d(TAG, "onCreate: "+e.getMessage());
         }
+
+        getNotify();
+        getDyReports();
+        getMnthReports(0);
+        GetMissedPunch();
     }
 
     private void hideShimmer() {

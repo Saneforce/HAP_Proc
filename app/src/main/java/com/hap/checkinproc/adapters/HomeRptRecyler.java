@@ -23,6 +23,7 @@ import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Webview_Activity;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 
 public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHolder> {
@@ -86,13 +87,27 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                         @Override
                         public void onClick(View view) {
 
+                            try {
+                                if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
+                                    navigateMapDir(itm.get("value").getAsString(), itm.get("name").getAsString());
+
+//                            Intent intent = new Intent(mContext, Webview_Activity.class);
+//                            intent.putExtra("Locations", itm.get("value").getAsString());
+//                            mContext.startActivity(intent);
+
+                                }
+                            } catch (Exception e) {
+
+                            }
 //                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps?q=" + latLong));
 //                            mContext.startActivity(browserIntent);
 //                            Log.v("Lat_Long", latLong);
 
-                            Intent intent = new Intent(mContext, Webview_Activity.class);
-                            intent.putExtra("Locations", latLong);
-                            mContext.startActivity(intent);
+//
+
+//                            Intent intent = new Intent(mContext, MapDirectionActivity.class);
+//                            intent.putExtra("Locations", latLong);
+//                            mContext.startActivity(intent);
 
                         }
                     });
@@ -106,11 +121,11 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                 public void onClick(View v) {
                     try {
                         if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
-                            //navigateMapDir(itm.get("value").getAsString(), itm.get("name").getAsString());
+                            navigateMapDir(itm.get("value").getAsString(), itm.get("name").getAsString());
 
-                            Intent intent = new Intent(mContext, Webview_Activity.class);
-                            intent.putExtra("Locations", itm.get("value").getAsString());
-                            mContext.startActivity(intent);
+//                            Intent intent = new Intent(mContext, Webview_Activity.class);
+//                            intent.putExtra("Locations", itm.get("value").getAsString());
+//                            mContext.startActivity(intent);
 
                         }
                     } catch (Exception e) {
@@ -127,19 +142,19 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
     }
 
 
-//    void navigateMapDir(String value, String tag) {
-//        if (!Common_Class.isNullOrEmpty(value)) {
-//            String[] latlongs = value.split(",");
-//            Intent intent = new Intent(mContext, MapDirectionActivity.class);
-//            intent.putExtra(Constants.DEST_LAT, latlongs[0]);
-//            intent.putExtra(Constants.DEST_LNG, latlongs[1]);
-//
-//            intent.putExtra(Constants.DEST_NAME, tag);
-//            intent.putExtra(Constants.NEW_OUTLET, "GEO");
-//            mContext.startActivity(intent);
-//
-//        }
-//    }
+    void navigateMapDir(String value, String tag) {
+        if (!Common_Class.isNullOrEmpty(value)) {
+            String[] latlongs = value.split(",");
+            Intent intent = new Intent(mContext, MapDirectionActivity.class);
+            intent.putExtra(Constants.DEST_LAT, latlongs[0]);
+            intent.putExtra(Constants.DEST_LNG, latlongs[1]);
+
+            intent.putExtra(Constants.DEST_NAME, tag);
+            intent.putExtra(Constants.NEW_OUTLET, "GEO");
+            mContext.startActivity(intent);
+
+        }
+    }
 
     @Override
     public int getItemCount() {

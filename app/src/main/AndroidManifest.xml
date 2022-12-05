@@ -46,6 +46,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
+
         <activity
             android:name=".Activity_Hap.NewJoinEntry"
             android:exported="false" />
@@ -58,9 +59,11 @@
         <activity
             android:name=".Activity_Hap.Invoice_Vansales_Select"
             android:exported="false" />
-        <!--<activity
+        <!--
+<activity
             android:name=".SFA_Activity.POSViewEntryActivity"
-            android:exported="false" />-->
+            android:exported="false" />
+        -->
         <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
             android:exported="false"
@@ -536,8 +539,6 @@
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
-
-
 
         <activity
             android:name=".Activity_Hap.MainActivity"
