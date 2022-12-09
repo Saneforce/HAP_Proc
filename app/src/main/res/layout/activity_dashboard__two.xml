@@ -379,14 +379,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
-
-                        <Button
-                            style="@style/DashboardButton"
-                            android:layout_weight="1"
-                            android:background="@color/background"
-                            android:text="Approvals"
-                            android:textColor="@color/background" />
-
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <Button
+                                style="@style/DashboardButton"
+                                android:layout_weight="1"
+                                android:background="@color/background"
+                                android:text="Approvals"
+                                android:textColor="@color/background" />
+                            <TextView
+                                android:layout_width="@dimen/C30dp"
+                                android:layout_height="@dimen/C30dp"
+                                android:background="@color/white"
+                                android:text="10"
+                                />
+                        </RelativeLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -858,13 +866,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <Button
-                        android:id="@+id/approvals"
-                        style="@style/DashboardButton"
-                        android:layout_weight="1"
-                        android:background="@drawable/button_dgreen"
-                        android:text="Approvals" />
+                        <Button
+                            android:id="@+id/approvals"
+                            style="@style/DashboardButton"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_dgreen"
+                            android:text="Approvals" />
+                        <TextView
+                            android:id="@+id/approvalcount"
+                            android:layout_width="@dimen/C20dp"
+                            android:layout_height="@dimen/C20dp"
+                            android:background="@drawable/circle"
+                            android:textColor="@color/white"
+                            android:text="10"
+                            android:textSize="11sp"
+                            android:gravity="center"
+                            android:layout_alignParentEnd="true"
+                            />
+                    </RelativeLayout>
 
                 </LinearLayout>
 

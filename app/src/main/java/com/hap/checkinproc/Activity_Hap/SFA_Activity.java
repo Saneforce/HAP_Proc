@@ -109,6 +109,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     Common_Class common_class;
     Shared_Common_Pref sharedCommonPref;
     SharedPreferences UserDetails;
+    SharedPreferences CheckInDetails;
+    public static final String CheckInDetail = "CheckInDetail";
     DatabaseHandler db;
 
     ImageView ivLogout, ivCalendar, ivProcureSync,btnCloseOffer;
@@ -142,6 +144,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_sfactivity);
         db = new DatabaseHandler(this);
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         common_class = new Common_Class(this);
         gson = new Gson();
@@ -785,9 +788,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         sharedCommonPref.save("ActivityStart", "false");
 
+                        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                         sharedCommonPref.clear_pref(Constants.Distributor_name);
                         sharedCommonPref.clear_pref(Constants.Distributor_Id);
-                        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)) {
+                        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE) && CheckIn) {
                             Intent intent = new Intent(SFA_Activity.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "CIN");
                             startActivity(intent);

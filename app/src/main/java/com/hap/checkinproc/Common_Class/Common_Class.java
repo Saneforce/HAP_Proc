@@ -921,6 +921,8 @@ public class Common_Class {
 //                        data.put("SF", UserDetails.getString("Sfcode", ""));
 //                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
 //                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("fromdate", VanStockViewActivity.stDate);
+                        data.put("todate", VanStockViewActivity.endDate);
                         break;
 
                 }

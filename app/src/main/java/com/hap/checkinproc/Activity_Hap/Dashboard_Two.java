@@ -51,10 +51,15 @@ import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -105,7 +110,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
-    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName;
+    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName,approvalcount;
 
     Common_Class DT = new Common_Class();
     private ShimmerFrameLayout mShimmerViewContainer;
@@ -158,6 +163,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             txDesgName = findViewById(R.id.txDesgName);
             txDeptName = findViewById(R.id.txDeptName);
             txRptName = findViewById(R.id.txRptName);
+            approvalcount = findViewById(R.id.approvalcount);
             txHQName.setText(UserDetails.getString("DesigNm", ""));
 
 //        txHQName.setText(UserDetails.getString("SFHQ",""));
@@ -254,9 +260,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             mRecyclerView.setLayoutManager(layoutManager);
             //mRecyclerView.stopScroll();
 
+            approvalcount.setVisibility(View.VISIBLE);
             if (UserDetails.getInt("CheckCount", 0) <= 0) {
                 btnApprovals.setVisibility(View.GONE);
-                //linApprovals.setVisibility(View.VISIBLE);
+                approvalcount.setVisibility(View.GONE);
             } else {
                 btnApprovals.setVisibility(View.VISIBLE);
             }
@@ -294,7 +301,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     //cardview3.setVisibility(View.GONE);
                     // cardview4.setVisibility(View.GONE);
                     cardView5.setVisibility(View.GONE);
-                    StActivity.setVisibility(View.GONE);
+                    //StActivity.setVisibility(View.GONE);
                     btnCheckout.setVisibility(View.GONE);
                     btnExit.setVisibility(View.VISIBLE);
                     //               btnApprovals.setVisibility(View.GONE);
@@ -307,6 +314,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 btnCheckout.setVisibility(View.GONE);
             }
             if (sSFType.equals("0")) StActivity.setVisibility(View.GONE);
+
+
+            if (UserDetails.getInt("CheckCount", 0) <= 0) {
+                btnApprovals.setVisibility(View.GONE);
+                approvalcount.setVisibility(View.GONE);
+            } else {
+                btnApprovals.setVisibility(View.VISIBLE);
+                approvalcount.setVisibility(View.VISIBLE);
+            }
             //StActivity.setVisibility(View.VISIBLE);
 
             Log.v("GATE:", CheckInDetails.getString("On_Duty_Flag", "0") + " :sfType:" + sSFType);
@@ -353,6 +369,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             Log.d(TAG, "onCreate: "+e.getMessage());
         }
 
+        getcountdetails();
         getNotify();
         getDyReports();
         getMnthReports(0);
@@ -402,6 +419,52 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    public void getcountdetails() {
+
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "ViewAllCount");
+        QueryString.put("sfCode", UserDetails.getString("Sfcode", ""));
+        QueryString.put("State_Code", UserDetails.getString("State_Code", ""));
+        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+        QueryString.put("rSF", UserDetails.getString("Sfcode", ""));
+        QueryString.put("desig", "MGR");
+        String commonworktype = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, commonworktype);
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSEcount", "response Tp_View: " + new Gson().toJson(response.body()));
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    // int TC=Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"));
+                    //jsonObject.getString("leave"))
+                    Log.e("TOTAl_COUNT", String.valueOf(Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"))));
+                    //count = count +
+
+                    Shared_Common_Pref.TotalCountApproval = jsonObject.getInt("leave") + jsonObject.getInt("Permission") +
+                            jsonObject.getInt("vwOnduty") + jsonObject.getInt("vwmissedpunch") +
+                            jsonObject.getInt("vwExtended") + jsonObject.getInt("TountPlanCount") +
+                            jsonObject.getInt("FlightAppr") +
+                            jsonObject.getInt("HolidayCount") + jsonObject.getInt("DeviationC") +
+                            jsonObject.getInt("CancelLeave") + jsonObject.getInt("ExpList");
+                    approvalcount.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
+
+    }
 
     void assignGetNotify(JsonArray res) {
         TextView txt = findViewById(R.id.MRQtxt);
