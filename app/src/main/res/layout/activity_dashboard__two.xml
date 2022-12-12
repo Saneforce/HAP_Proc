@@ -815,7 +815,7 @@
                         android:id="@+id/StActivity"
                         style="@style/DashboardButton"
                         android:background="@drawable/g_sign"
-                        android:text="Start Activity"
+                        android:text="SFA"
                         app:layout_flexBasisPercent="47%" />
 
                 </LinearLayout>
