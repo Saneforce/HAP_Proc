@@ -134,7 +134,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
     CheckBox cbReturnHQ;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -370,23 +370,23 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 CameraPermission cameraPermission = new CameraPermission(On_Duty_Activity.this, getApplicationContext());
-                if (!cameraPermission.checkPermission()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (!cameraPermission.checkPermission()) {
                         cameraPermission.requestPermission();
+                    } else {
+                        AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                            @Override
+                            public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                                //getMulipart(fullPath, 0);
+                                imageServer = FileName;
+                                imageURI = fullPath;
+                                attachedImage.setImageBitmap(image);
+                            }
+                        });
+                        Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
+                        intent.putExtra("allowance", "three");
+                        startActivity(intent);
                     }
-                } else {
-                    AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
-                        @Override
-                        public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
-                            //getMulipart(fullPath, 0);
-                            imageServer = FileName;
-                            imageURI = fullPath;
-                            attachedImage.setImageBitmap(image);
-                        }
-                    });
-                    Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
-                    intent.putExtra("allowance", "three");
-                    startActivity(intent);
                 }
 
             }
