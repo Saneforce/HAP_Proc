@@ -157,7 +157,7 @@ public class TP_Approval_Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    submitData(0,"");
+                    submitData(1,"");
                 } catch (Exception e) {
 
                 }
@@ -190,7 +190,7 @@ public class TP_Approval_Details extends AppCompatActivity {
 
                         } else {
                             dialog.dismiss();
-                            submitData(1,editText.getText().toString());
+                            submitData(2,editText.getText().toString());
                         }
 
                     }
@@ -243,7 +243,7 @@ public class TP_Approval_Details extends AppCompatActivity {
                             Log.e("JSON_VALUES", response.body().toString());
                             JSONObject jsonObjects = new JSONObject(response.body().toString());
                             TP_Approval_Details.tpDetails.finish();
-                            if (flag == 0) {
+                            if (flag == 1) {
                                 Toast.makeText(TP_Approval_Details.this, "PJP Approved Successfully", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(TP_Approval_Details.this, "PJP Rejected  Successfully", Toast.LENGTH_SHORT).show();
