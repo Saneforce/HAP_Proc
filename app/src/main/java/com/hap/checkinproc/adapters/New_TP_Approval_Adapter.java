@@ -22,13 +22,15 @@ public class New_TP_Approval_Adapter extends RecyclerView.Adapter<New_TP_Approva
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, open;
+        public TextView id, name, designation, hq, open;
 
         public MyViewHolder(View view) {
             super(view);
-            textviewname = (TextView) view.findViewById(R.id.textviewname);
-            textviewdate = (TextView) view.findViewById(R.id.textviewdate);
-            open = (TextView) view.findViewById(R.id.open);
+            id = (TextView) view.findViewById(R.id.tpEmpId);
+            name = (TextView) view.findViewById(R.id.tpName);
+            designation = (TextView) view.findViewById(R.id.tpDesignation);
+            hq = (TextView) view.findViewById(R.id.tpHQ);
+            open = (TextView) view.findViewById(R.id.openDetails);
         }
     }
 
@@ -55,8 +57,11 @@ public class New_TP_Approval_Adapter extends RecyclerView.Adapter<New_TP_Approva
     @Override
     public void onBindViewHolder(New_TP_Approval_Adapter.MyViewHolder holder, int position) {
         Tp_Approval_FF_Modal Tp_Approval_FF_Modal = Tp_Approval_FF_ModalsList.get(position);
-        holder.textviewname.setText(Tp_Approval_FF_Modal.getFieldForceName());
-        holder.textviewdate.setText(Tp_Approval_FF_Modal.getMonthnameexample()+"-"+Tp_Approval_FF_Modal.getTyear());
+        holder.name.setText(Tp_Approval_FF_Modal.getFieldForceName());
+        holder.designation.setText(Tp_Approval_FF_Modal.getDesignation());
+        holder.id.setText(Tp_Approval_FF_Modal.getEmpCode());
+        holder.hq.setText(Tp_Approval_FF_Modal.getHQName());
+//        holder.textviewdate.setText(Tp_Approval_FF_Modal.getMonthnameexample()+"-"+Tp_Approval_FF_Modal.getTyear());
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

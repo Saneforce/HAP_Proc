@@ -51,15 +51,10 @@ import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -110,7 +105,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
-    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName,approvalcount;
+    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName;
 
     Common_Class DT = new Common_Class();
     private ShimmerFrameLayout mShimmerViewContainer;
@@ -163,9 +158,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             txDesgName = findViewById(R.id.txDesgName);
             txDeptName = findViewById(R.id.txDeptName);
             txRptName = findViewById(R.id.txRptName);
-            approvalcount = findViewById(R.id.approvalcount);
             txHQName.setText(UserDetails.getString("DesigNm", ""));
-
 //        txHQName.setText(UserDetails.getString("SFHQ",""));
 //        txDesgName.setText(UserDetails.getString("SFDesig",""));
 //        txDeptName.setText(UserDetails.getString("DepteNm",""));
@@ -260,10 +253,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             mRecyclerView.setLayoutManager(layoutManager);
             //mRecyclerView.stopScroll();
 
-            approvalcount.setVisibility(View.VISIBLE);
             if (UserDetails.getInt("CheckCount", 0) <= 0) {
                 btnApprovals.setVisibility(View.GONE);
-                approvalcount.setVisibility(View.GONE);
+                //linApprovals.setVisibility(View.VISIBLE);
             } else {
                 btnApprovals.setVisibility(View.VISIBLE);
             }
@@ -298,7 +290,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     btnCheckout.setVisibility(View.VISIBLE);
                     btnApprovals.setVisibility(View.VISIBLE);
                 } else {
-                    //cardview3.setVisibility(View.GONE);
+                    cardview3.setVisibility(View.GONE);
                     // cardview4.setVisibility(View.GONE);
                     cardView5.setVisibility(View.GONE);
                     //StActivity.setVisibility(View.GONE);
@@ -307,23 +299,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     //               btnApprovals.setVisibility(View.GONE);
                 }
             } else {
-                //cardview3.setVisibility(View.GONE);
+                cardview3.setVisibility(View.GONE);
                 //cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
-                StActivity.setVisibility(View.GONE);
+                //StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
             }
-            if (sSFType.equals("0")) StActivity.setVisibility(View.GONE);
-
-
-            if (UserDetails.getInt("CheckCount", 0) <= 0) {
-                btnApprovals.setVisibility(View.GONE);
-                approvalcount.setVisibility(View.GONE);
-            } else {
-                btnApprovals.setVisibility(View.VISIBLE);
-                approvalcount.setVisibility(View.VISIBLE);
-            }
-            //StActivity.setVisibility(View.VISIBLE);
+            if (sSFType.equals("0"))
+                StActivity.setVisibility(View.GONE);
 
             Log.v("GATE:", CheckInDetails.getString("On_Duty_Flag", "0") + " :sfType:" + sSFType);
 
@@ -357,23 +340,21 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             String loginDate = mShared_common_pref.getvalue(Constants.LOGIN_DATE);
             if (!loginDate.equalsIgnoreCase(currentDate)) {
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()-1]);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()]);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()+1]);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
             }
 
+            getNotify();
+            getDyReports();
+            getMnthReports(0);
+            GetMissedPunch();
 
 
         } catch (Exception e) {
-            Log.d(TAG, "onCreate: "+e.getMessage());
-        }
 
-        getcountdetails();
-        getNotify();
-        getDyReports();
-        getMnthReports(0);
-        GetMissedPunch();
+        }
     }
 
     private void hideShimmer() {
@@ -419,52 +400,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void getcountdetails() {
-
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "ViewAllCount");
-        QueryString.put("sfCode", UserDetails.getString("Sfcode", ""));
-        QueryString.put("State_Code", UserDetails.getString("State_Code", ""));
-        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
-        QueryString.put("rSF", UserDetails.getString("Sfcode", ""));
-        QueryString.put("desig", "MGR");
-        String commonworktype = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, commonworktype);
-
-        mCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                // locationList=response.body();
-                Log.e("TAG_TP_RESPONSEcount", "response Tp_View: " + new Gson().toJson(response.body()));
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    // int TC=Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"));
-                    //jsonObject.getString("leave"))
-                    Log.e("TOTAl_COUNT", String.valueOf(Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"))));
-                    //count = count +
-
-                    Shared_Common_Pref.TotalCountApproval = jsonObject.getInt("leave") + jsonObject.getInt("Permission") +
-                            jsonObject.getInt("vwOnduty") + jsonObject.getInt("vwmissedpunch") +
-                            jsonObject.getInt("vwExtended") + jsonObject.getInt("TountPlanCount") +
-                            jsonObject.getInt("FlightAppr") +
-                            jsonObject.getInt("HolidayCount") + jsonObject.getInt("DeviationC") +
-                            jsonObject.getInt("CancelLeave") + jsonObject.getInt("ExpList");
-                    approvalcount.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-            }
-        });
-
-    }
 
     void assignGetNotify(JsonArray res) {
         TextView txt = findViewById(R.id.MRQtxt);
@@ -794,6 +729,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             JsonArray WKItems = itm.getAsJsonArray("CheckWK");
                             if (WKItems.size() > 0) {
                                 if (itm.get("WKFlg").getAsInt() == 1) {
+                                    Log.d("WEEKOFF", String.valueOf(itm.get("WKFlg").getAsInt()));
+
                                     LayoutInflater inflater = LayoutInflater.from(Dashboard_Two.this);
 
                                     final View view = inflater.inflate(R.layout.dashboard_deviation_dialog, null);
@@ -806,8 +743,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
                                     TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
 
-                                    TextView btnNwJoin = (TextView) view.findViewById(R.id.tvNwJoin);
-                                    btnNwJoin.setVisibility(View.GONE);
                                     btnOthers.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -875,53 +810,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                             }
                                         })
                                         .show();*/
-                                }
-                                else if(itm.get("WKFlg").getAsInt() == 3){
-                                    LayoutInflater inflater = LayoutInflater.from(Dashboard_Two.this);
-
-                                    final View view = inflater.inflate(R.layout.dashboard_deviation_dialog, null);
-                                    android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Dashboard_Two.this).create();
-                                    alertDialog.setTitle("HAP Check-In");
-                                    alertDialog.setMessage(Html.fromHtml(mMessage));
-                                    alertDialog.setCancelable(false);
-
-                                    TextView btnOthers = (TextView) view.findViewById(R.id.tvOthers);
-                                    TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
-                                    TextView btnNwJoin = (TextView) view.findViewById(R.id.tvNwJoin);
-                                    TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
-
-                                    btnOthers.setVisibility(View.GONE);
-                                    btnDeviation.setVisibility(View.GONE);
-
-                                    btnNwJoin.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            alertDialog.dismiss();
-                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                            Intent iLeave = new Intent(Dashboard_Two.this, NewJoinEntry.class);
-                                            iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
-                                            Dashboard_Two.this.startActivity(iLeave);
-
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();
-                                        }
-                                    });
-
-                                    btnWeekOFF.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            alertDialog.dismiss();
-                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                            Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
-                                            iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
-                                            Dashboard_Two.this.startActivity(iWeekOff);
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();
-                                        }
-                                    });
-
-                                    alertDialog.setView(view);
-                                    alertDialog.show();
-                                }
-                                else {
+                                } else {
                                     AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                             .setTitle("HAP Check-In")
                                             .setMessage(Html.fromHtml(mMessage))

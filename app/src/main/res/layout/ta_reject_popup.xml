@@ -15,13 +15,13 @@
         <EditText
             android:id="@+id/editText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_height="35dp"
             android:layout_marginLeft="@dimen/C15dp"
             android:layout_marginRight="@dimen/C15dp"
+            android:paddingStart="@dimen/C10dp"
+            android:paddingEnd="@dimen/C10dp"
             android:background="@drawable/cardbutton"
             android:hint="Enter the Reason"
-            android:padding="@dimen/C3dp"
             android:textSize="@dimen/C15dp" />
 
     </LinearLayout>

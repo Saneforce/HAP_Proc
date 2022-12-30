@@ -157,10 +157,10 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
             Log.d("savehjj","ghkj"+jObj.toString());
 
-            apiInterface.JsonSave("save/posCounterSalesEntry", jObj.toString()).enqueue(new Callback<JsonObject>() {
+            apiInterface.posCounterEntrySave("save/posCounterSalesEntry", jObj.toString()).enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
+                    Log.e("JSON_VALUES", response.body().toString());
                     Toast.makeText(POS_SalesEntryActivity.this,"POS Counter sales entry submitted Successfully",Toast.LENGTH_SHORT).show();
                 }
 

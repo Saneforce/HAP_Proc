@@ -89,6 +89,10 @@ public interface ApiInterface {
     @POST("Db_v300.php?")
     Call<JsonObject> JsonSave(@Query("axn") String axn, @Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<JsonObject> posCounterEntrySave(@Query("axn") String axn, @Field("data") String body);
+
     /*sending data*/
     @FormUrlEncoded
     @POST("Db_v300.php?")
@@ -626,6 +630,16 @@ public interface ApiInterface {
     @POST("Db_v310.php?")
     Call<ResponseBody> GetRouteObject310(@QueryMap Map<String, String> params,
                                          @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?")
+    Call<Object> GetPJPApproval(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sfCode,
+                                @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
+                                @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?axn=approve/pjpdetails")
+    Call<JsonObject> pjpApprove(@Query("sfCode") String sFCode, @Query("rSF") String rSF,@Query("Confirmed_Date") String ConfirmedDate,@Field("data") String body);
 
 
     @FormUrlEncoded

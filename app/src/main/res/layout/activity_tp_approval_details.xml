@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".Activity_Hap.TP_Approval_Details">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:textStyle="bold"
-                    android:text="PJP DETAILS"
+                    android:text="PJP APPROVALS"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_yellow"
@@ -41,10 +41,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/C10dp"
+            android:layout_marginTop="@dimen/C5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Name:"
+                android:layout_marginEnd="@dimen/C5dp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tpApprovalName"
+                android:layout_width="@dimen/C40dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="Kumar"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingStart="@dimen/C5dp"
             android:paddingEnd="@dimen/C5dp"
             android:layout_marginStart="@dimen/C10dp"
             android:layout_marginEnd="@dimen/C10dp"
+            android:layout_marginTop="@dimen/C10dp"
             android:orientation="vertical"
             android:background="@drawable/pjp_borderbg">
             <LinearLayout
@@ -56,48 +82,56 @@
                 android:layout_marginTop="@dimen/C5dp"
                 android:layout_marginBottom="@dimen/C5dp">
                 <TextView
-                    android:layout_width="@dimen/C10dp"
+                    android:layout_width="@dimen/C30dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:text="Emp ID"
+                    android:text="Plan Date"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
-                <TextView
+                <!--<TextView
                     android:layout_width="@dimen/C30dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="Name"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"/>-->
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="Work Type"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
                 <TextView
-                    android:layout_width="45dp"
+                    android:layout_width="@dimen/C50dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:text="Designation"
+                    android:text="Remarks"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
                 <TextView
-                    android:layout_width="@dimen/C60dp"
+                    android:layout_width="55dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:text="HQ"
+                    android:text="Month"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
                 <TextView
-                    android:layout_width="@dimen/C20dp"
+                    android:layout_width="95dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:text="PJP"
                     android:textStyle="bold"
+                    android:text="Status"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -108,11 +142,11 @@
                  />-->
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tprecyclerview"
+                android:id="@+id/tp_approval_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/tpapproval_layout"
-                android:layout_marginBottom="@dimen/C10dp"/>
+                android:layout_marginBottom="@dimen/C10dp"
+                tools:listitem="@layout/tp_details_layout" />
 
         </LinearLayout>
 
@@ -176,7 +210,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/back_arrow" />
-
+    <include layout="@layout/back_arrow_pjp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
