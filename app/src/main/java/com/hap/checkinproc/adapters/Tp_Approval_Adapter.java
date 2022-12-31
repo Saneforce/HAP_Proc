@@ -124,7 +124,7 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
             @Override
             public void onClick(View v) {
                 try {
-                    SendPjpApproval(1,"");
+                    SendPjpApproval(0,"");
 
                 } catch (Exception e) {
 
@@ -161,7 +161,7 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
 //                            Toast.makeText(context,"Enter the REason",Toast.LENGTH_SHORT).show();
                         } else {
                             dialog.dismiss();
-                            SendPjpApproval(2, editText.getText().toString());
+                            SendPjpApproval(1, editText.getText().toString());
                         }
 
                     }
@@ -218,9 +218,9 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
                         try {
                             Log.e("JSON_VALUES", response.body().toString());
                             JSONObject jsonObjects = new JSONObject(response.body().toString());
-                            TP_Approval_Details.tpDetails.finish();
+                           // TP_Approval_Details.tpDetails.finish();
 
-                            if (flag == 1) {
+                            if (flag == 0) {
                                 Toast.makeText(context, "PJP Approved Successfully", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context, "PJP Rejected  Successfully", Toast.LENGTH_SHORT).show();

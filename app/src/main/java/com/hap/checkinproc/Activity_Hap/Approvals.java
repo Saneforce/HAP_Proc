@@ -52,7 +52,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry,
             lin_newjoin, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, advanceStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel,
-            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus,llFlightApprHist;
+            lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry, llTrvlAllowStatus,llFlightApprHist, pjpHistory;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -179,6 +179,9 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linProjectionApprove = findViewById(R.id.lin_productProjectionApproval);
         llFlightApprHist=findViewById(R.id.lin_FlightApprHist);
         linQpsApprove = findViewById(R.id.lin_qps);
+        pjpHistory=findViewById(R.id.lin_pjp_histry);
+
+
         /*Status text*/
         /*SetOnClickListner*/
 
@@ -210,6 +213,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         DaExcptStaus.setOnClickListener(this);
         linProjectionApprove.setOnClickListener(this);
         llTrvlAllowStatus.setOnClickListener(this);
+        pjpHistory.setOnClickListener(this);
 
         FlightAppr.setVisibility(View.GONE);
         llFlightApprHist.setVisibility(View.GONE);
@@ -484,6 +488,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_da_excep_status:
                 common_class.CommonIntentwithoutFinishputextra(DaExceptionStatus.class, "AMod", "1");
+                finish();
+                break;
+            case R.id.lin_pjp_histry:
+                startActivity(new Intent(Approvals.this, TP_Approval_Status.class));
                 finish();
                 break;
             case R.id.lin_holidayentryApproval:

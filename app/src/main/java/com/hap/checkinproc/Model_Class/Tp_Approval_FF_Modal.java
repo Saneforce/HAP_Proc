@@ -7,9 +7,6 @@ public class Tp_Approval_FF_Modal {
     @SerializedName("date")
     @Expose
     private String date;
-
-
-
     @SerializedName("Tour_Date")
     @Expose
     private String tdate;
@@ -53,6 +50,18 @@ public class Tp_Approval_FF_Modal {
     @SerializedName("worktype_name")
     @Expose
     private String worktypeName;
+
+    @SerializedName("Rejection_Reason")
+    @Expose
+    private String rejectionReason;
+    @SerializedName("Confirmed")
+    @Expose
+    private String confirmed;
+
+    @SerializedName("Confirmed_Date")
+    @Expose
+    private String confirmedDate;
+
 
     public String getWorktypeName() {
         return worktypeName;
@@ -186,5 +195,27 @@ public class Tp_Approval_FF_Modal {
 
     public void setReportingSFCode(String reportingSFCode) {
         this.reportingSFCode = reportingSFCode;
+    }
+    public String getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(String confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+    public String getConfirmedDate() {
+        return confirmedDate;
+    }
+
+    public void setConfirmedDate(String confirmedDate) {
+        this.confirmedDate = confirmedDate;
     }
 }

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +30,17 @@ public class Tp_ApprovalStatus_Adapter extends RecyclerView.Adapter<Tp_ApprovalS
 
         public MyViewHolder(View view) {
             super(view);
-            month = (TextView) view.findViewById(R.id.tpApprovalMonth);
-            date = (TextView) view.findViewById(R.id.tpApprovalDate);
-            remarks = (TextView) view.findViewById(R.id.tpApprovalRemarks);
-            worktype = (TextView) view.findViewById(R.id.tpApprovalWorkType);
-            approve =(TextView) view.findViewById(R.id.approve);
-            reject =(TextView) view.findViewById(R.id.reject);
+           // month = (TextView) view.findViewById(R.id.tpApprovalMonth);
+            date = (TextView) view.findViewById(R.id.sdate);
+//            remarks = (TextView) view.findViewById(R.id.tpApprovalRemarks);
+//            worktype = (TextView) view.findViewById(R.id.tpApprovalWorkType);
+//            approve =(TextView) view.findViewById(R.id.approve);
+//            reject =(TextView) view.findViewById(R.id.reject);
         }
     }
 
 
-    public Tp_ApprovalStatus_Adapter(List<Tp_Approval_FF_Modal> Tp_Approval_ModelsList, int rowLayout, Context context) {
+    public Tp_ApprovalStatus_Adapter(List<Tp_Approval_FF_Modal> Tp_Approval_ModelsList, int rowLayout, Context context, AdapterOnClick adapterOnClick) {
         this.Tp_Approval_ModelsList = Tp_Approval_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
@@ -48,7 +49,7 @@ public class Tp_ApprovalStatus_Adapter extends RecyclerView.Adapter<Tp_ApprovalS
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tp_approval_status_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -67,10 +68,11 @@ public class Tp_ApprovalStatus_Adapter extends RecyclerView.Adapter<Tp_ApprovalS
 //        holder.remarks.setText(remarks);
 //        holder.worktype.setText(workType);
 
-        holder.month.setText(Tp_Approval_Model.getMonthnameexample());
+//        holder.month.setText(Tp_Approval_Model.getMonthnameexample());
         holder.date.setText(Tp_Approval_Model.getDate());
-        holder.remarks.setText(Tp_Approval_Model.getRemarks());
-        holder.worktype.setText(Tp_Approval_Model.getWorktypeName());
+        Log.v("datecfvg",holder.date.toString());
+//        holder.remarks.setText(Tp_Approval_Model.getRemarks());
+//        holder.worktype.setText(Tp_Approval_Model.getWorktypeName());
     }
 
     @Override

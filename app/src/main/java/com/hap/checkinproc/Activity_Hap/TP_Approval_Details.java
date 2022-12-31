@@ -220,12 +220,6 @@ public class TP_Approval_Details extends AppCompatActivity {
                 obj1.put("Date", filteredList.get(i).getDate());
                 obj1.put("Confirmed", flag);
                 obj1.put("sfcode", filteredList.get(i).getSF_Code());
-//                obj1.put("EmpCode", filteredList.get(i).getEmpCode());
-//                obj1.put("FieldForceName", filteredList.get(i).getFieldForceName());
-//                obj1.put("HQ_Name", filteredList.get(i).getHQName());
-//                obj1.put("Designation", filteredList.get(i).getDesignation());
-//                obj1.put("Remarks", filteredList.get(i).getRemarks());
-//                obj1.put("Work_Type", filteredList.get(i).getWorktypeName());
                 obj1.put("Rejection_Reason", reason);
                 jArr.put(obj1);
             }
@@ -241,7 +235,7 @@ public class TP_Approval_Details extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         try {
                             Log.e("JSON_VALUES", response.body().toString());
-                            JSONObject jsonObjects = new JSONObject(response.body().toString());
+
                             TP_Approval_Details.tpDetails.finish();
                             if (flag == 1) {
                                 Toast.makeText(TP_Approval_Details.this, "PJP Approved Successfully", Toast.LENGTH_SHORT).show();
@@ -293,9 +287,9 @@ public class TP_Approval_Details extends AppCompatActivity {
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                // locationList=response.body();
+
                 Log.e("GetTPDetailsList", String.valueOf(response.body().toString()));
-//                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+
                 userType = new TypeToken<ArrayList<Tp_Approval_FF_Modal>>() {
                 }.getType();
                 Tp_Approval_Model = gson.fromJson(new Gson().toJson(response.body()), userType);
@@ -324,36 +318,14 @@ public class TP_Approval_Details extends AppCompatActivity {
                         intent.putExtra("month",filteredList.get(Name).getMonthnameexample());
                         intent.putExtra("HQ",filteredList.get(Name).getHQName());
                         intent.putExtra("designation",filteredList.get(Name).getDesignation());
-//
-//
-//
-//                        intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
-//                        intent.putExtra("HQ", Tp_Approval_Model.get(Name).getHQ());
-//                        intent.putExtra("Designation", Tp_Approval_Model.get(Name).getDesignation());
-//                        intent.putExtra("MobileNumber", Tp_Approval_Model.get(Name).getSFMobile());
-//                        intent.putExtra("Plan_Date", Tp_Approval_Model.get(Name).getStartDate());
-//                        intent.putExtra("Work_Type", Tp_Approval_Model.get(Name).getWorktypeName());
-//                        intent.putExtra("Route", Tp_Approval_Model.get(Name).getRouteName());
-//                        intent.putExtra("Distributor", Tp_Approval_Model.get(Name).getWorkedWithName());
-//                        intent.putExtra("Sf_Code", Tp_Approval_Model.get(Name).getSFCode());
-//                        intent.putExtra("Remarks", Tp_Approval_Model.get(Name).getRemarks());
-//                        intent.putExtra("workedwithname", Tp_Approval_Model.get(Name).getJointWorkName());
-//                        intent.putExtra("TPHqname", Tp_Approval_Model.get(Name).getTourHQName());
-//                        intent.putExtra("ShiftType", Tp_Approval_Model.get(Name).getTypename());
-//                        intent.putExtra("ChillCentreName", Tp_Approval_Model.get(Name).getCCentreName());
-//                        intent.putExtra("FromDate", Tp_Approval_Model.get(Name).getFromdate());
-//                        intent.putExtra("Worktype_Flag", Tp_Approval_Model.get(Name).getWorktypeFlag());
-//                        intent.putExtra("ToDate", Tp_Approval_Model.get(Name).getTodate());
-//                        intent.putExtra("DeptType", Tp_Approval_Model.get(Name).getDeptType());
-//                        intent.putExtra("MOT", Tp_Approval_Model.get(Name).getMOT());
-//                        intent.putExtra("DA_Type", Tp_Approval_Model.get(Name).getDA_Type());
-//                        intent.putExtra("Da", Tp_Approval_Model.get(Name).getDriver_Allow());
-//                        intent.putExtra("From_Place", Tp_Approval_Model.get(Name).getFrom_Place());
-//                        intent.putExtra("To_Place", Tp_Approval_Model.get(Name).getTo_Place());
-//
+                        intent.putExtra("rejectionReason",filteredList.get(Name).getRejectionReason());
+                        intent.putExtra("confirmed",filteredList.get(Name).getConfirmed());
+                        intent.putExtra("confirmedDate",filteredList.get(Name).getConfirmedDate());
+
                         startActivity(intent);
                     }
                 }));
+
             }
 
             @Override
