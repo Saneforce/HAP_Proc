@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
@@ -80,13 +81,13 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
         tvView = findViewById(R.id.tvView);
 
-//        tvView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(POS_SalesEntryActivity.this, POSViewEntryActivity.class));
-//
-//            }
-//        });
+        tvView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(POS_SalesEntryActivity.this, POSViewEntryActivity.class));
+
+            }
+        });
 
 
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -130,13 +131,8 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
     }
 
     private void submitData() {
-
-
         JSONObject jObj = new JSONObject();
-
-
         try {
-
             jObj.put("eKey",common_class.GetEkey());
             jObj.put("SFCode",SF_code);
             jObj.put("currentDate",currDate.getText().toString());
@@ -154,19 +150,30 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
             }
             jObj.accumulate("POSEntryData" , jArr);
 
-
             Log.d("savehjj","ghkj"+jObj.toString());
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-            apiInterface.posCounterEntrySave("save/posCounterSalesEntry", jObj.toString()).enqueue(new Callback<JsonObject>() {
+            Call<JsonObject> responseBodyCall =apiInterface.posCounterEntrySave(Shared_Common_Pref.Div_Code, jObj.toString());
+            //Log.v("divcodepos",Shared_Common_Pref.Div_Code);
+            responseBodyCall.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.e("JSON_VALUES", response.body().toString());
-                    Toast.makeText(POS_SalesEntryActivity.this,"POS Counter sales entry submitted Successfully",Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful()) {
+                        try {
+                            Log.e("JSON_VALUES", response.body().toString());
+                            Toast.makeText(POS_SalesEntryActivity.this, "POS Counter sales entry submitted Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } catch (Exception e) {
+                            Log.v("error", e.toString());
+                        }
+                    } else {
+
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                    Log.v("errormsg", t.toString());
                 }
             });
 
@@ -208,7 +215,6 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
                 list.add(new Product_Details_Modal(id,name ));
             }
-
 
                 PosEntrySalesAdapter customAdapteravail = new PosEntrySalesAdapter(getApplicationContext(), list);
                 recyclerView.setAdapter(customAdapteravail);

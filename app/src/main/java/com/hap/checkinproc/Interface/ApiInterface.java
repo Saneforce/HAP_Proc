@@ -90,8 +90,8 @@ public interface ApiInterface {
     Call<JsonObject> JsonSave(@Query("axn") String axn, @Field("data") String body);
 
     @FormUrlEncoded
-    @POST("Db_v310.php?")
-    Call<JsonObject> posCounterEntrySave(@Query("axn") String axn, @Field("data") String body);
+    @POST("Db_v310.php?axn=save/poscountersalesentry")
+    Call<JsonObject> posCounterEntrySave(@Query("divisionCode") String divisionCode, @Field("data") String body);
 
     /*sending data*/
     @FormUrlEncoded

@@ -115,9 +115,13 @@ public class InshopCheckinActivity extends AppCompatActivity {
 
                 name = retailerName.getText().toString().trim();
                 checkinTime = checkedinTime.getText().toString().trim();
-                
-                checkinData();
-                
+
+                if (name.isEmpty()){
+                    Toast.makeText(InshopCheckinActivity.this,"Choose the Retailer to Check In",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    checkinData();
+                }
 
             }
         });

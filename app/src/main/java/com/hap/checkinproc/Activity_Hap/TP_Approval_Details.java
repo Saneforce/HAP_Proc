@@ -132,7 +132,6 @@ public class TP_Approval_Details extends AppCompatActivity {
         gettp_Details();
 
 
-
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
