@@ -49,69 +49,84 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".Activity_Hap.TP_Approval_Status"
-            android:exported="false">
+            android:name=".SFA_Activity.POSViewEntryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
-        </activity>
+        <activity
+            android:name=".Activity_Hap.TP_Approval_Status"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.TP_Approval_Details"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.NewJoinEntry"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.NewJoineeApproval"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.NewJoineeApproval_Reject"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.Invoice_Vansales_Select"
-            android:exported="false" />
-        <!--
-<activity
-            android:name=".SFA_Activity.POSViewEntryActivity"
-            android:exported="false" />
-        -->
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SFA_Activity.InshopRetailerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.InshopOutletActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.InshopCheckoutActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.InshopCheckinActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.InshopActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.AdvanceReq"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Status_Activity.Advance_Status_Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.Advance_Approval_Reject"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_Hap.Advance_Approval"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.VanSalPaymentActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.PaymentActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SFA_Activity.HistoryInfoActivity"
             android:screenOrientation="portrait" />
