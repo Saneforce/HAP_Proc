@@ -4,6 +4,7 @@ package com.hap.checkinproc.Common_Class;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class Shared_Common_Pref {
     public static String ORDER_TYPE = "orderType";
@@ -129,8 +130,11 @@ public class Shared_Common_Pref {
     }
 
     public void clear_pref(String key) {
-        Common_pref.edit().remove(key).apply();
-
+        try {
+            Common_pref.edit().remove(key).apply();
+        } catch (Exception e) {
+            Log.d("Error Loading:",e.getMessage().toString());
+        }
         //the good quality product by the end of the day worth od manual  developement in this quality regaurds minimum qu.
     }
 

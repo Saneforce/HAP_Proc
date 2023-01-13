@@ -32,7 +32,7 @@
 
                     <TextView
                         android:textStyle="bold"
-                        android:text="Weekof Entry"
+                        android:text="Weekoff Entry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_yellow"

@@ -169,6 +169,7 @@ public class CateenToken extends AppCompatActivity {
                 bitmap = BitmapFactory.decodeStream(input);
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
             return bitmap;
         }

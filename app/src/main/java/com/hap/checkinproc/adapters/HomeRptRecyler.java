@@ -88,7 +88,7 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
                         public void onClick(View view) {
 
                             try {
-                                if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out")) {
+                                if (itm.get("name").getAsString().equalsIgnoreCase("Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Geo Out") || itm.get("name").getAsString().equalsIgnoreCase("Ext.Geo In") || itm.get("name").getAsString().equalsIgnoreCase("Ext.Geo Out")) {
                                     navigateMapDir(itm.get("value").getAsString(), itm.get("name").getAsString());
 
 //                            Intent intent = new Intent(mContext, Webview_Activity.class);

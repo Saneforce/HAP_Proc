@@ -232,6 +232,11 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "username/password required", Toast.LENGTH_SHORT).show();
                 } else {
                     //proceed to login
+                    try {
+                        shared_common_pref.clear_pref(Constants.DB_SFWish_NOTIFY);
+                    }catch (Exception e){
+Log.d("Error","Can't Clear SFWish");
+                    }
                     mProgress.show();
                     login(0);
                 }
@@ -273,7 +278,11 @@ public class Login extends AppCompatActivity {
                 myReceiver = new LocationReceiver();
                 // Bind to the service. If the service is in foreground mode, this signals to the service
                 // that since this activity is in the foreground, the service can exit foreground mode.
-
+                try {
+                    shared_common_pref.clear_pref(Constants.DB_SFWish_NOTIFY);
+                }catch (Exception e){
+                    Log.d("Error","Can't Clear SFWish");
+                }
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if (DAMode == true) {
 
@@ -625,9 +634,10 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
-//                eMail= "haptest4@hap.in";
+                //eMail= "3033@hap.in";
+                //eMail= "1019100@hap.in";
 
-//                eMail="sivakumar.s@hap.in";
+//               eMail="sivakumar.s@hap.in";
 //                eMail="sajan@hap.in";
 
 //                eMail="iplusadmin@hap.in";
@@ -640,7 +650,7 @@ public class Login extends AppCompatActivity {
                 //eMail="1014604@hap.in";
 //                eMail="harishbabu.bh@hap.in";
 
-                eMail="ciadmin@hap.in";
+//                eMail="ciadmin@hap.in";
 
 
 
@@ -870,7 +880,6 @@ public class Login extends AppCompatActivity {
                     cInEditor.putBoolean("CheckIn", CheckIn);
                     cInEditor.apply();
                 }
-
 
                 if (requestCode == RC_SIGN_IN) {
                     if (CheckIn == true) {

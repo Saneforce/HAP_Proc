@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -18,16 +19,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -43,18 +48,26 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.GateEntryQREvents;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
+import com.hap.checkinproc.adapters.OffersAdapter;
 import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -78,8 +91,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals, btnExit;
     String AllowancePrefernce = "";
-    ImageView btMyQR;
-
+    ImageView btMyQR,btnCloseOffer;
+    LinearLayout linOffer;
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
@@ -97,7 +110,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
 
-    RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView,ryclOffers;
     /*String Mode = "Bus";*/
     Button btnGateIn, btnGateOut;
     ImageView mvPrvMn, mvNxtMn;
@@ -105,7 +118,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
-    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName;
+    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName,tvapprCnt,lblSlideNo;
 
     Common_Class DT = new Common_Class();
     private ShimmerFrameLayout mShimmerViewContainer;
@@ -159,6 +172,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             txDeptName = findViewById(R.id.txDeptName);
             txRptName = findViewById(R.id.txRptName);
             txHQName.setText(UserDetails.getString("DesigNm", ""));
+
+            gson = new Gson();
+
+            linOffer=findViewById(R.id.linOffer);
+            linOffer.setVisibility(View.GONE);
+            ryclOffers= findViewById(R.id.ryclOffers);
+            lblSlideNo =findViewById(R.id.lblSlideNo);
+            btnCloseOffer =findViewById(R.id.btnCloseOffer);
+
 //        txHQName.setText(UserDetails.getString("SFHQ",""));
 //        txDesgName.setText(UserDetails.getString("SFDesig",""));
 //        txDeptName.setText(UserDetails.getString("DepteNm",""));
@@ -222,6 +244,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             cardview4 = findViewById(R.id.btn_da_exp_entry);
             cardView5 = findViewById(R.id.cardview5);
             btnApprovals = findViewById(R.id.approvals);
+            tvapprCnt = findViewById(R.id.approvalcount);
             mPriod = "0";
             mvNxtMn = findViewById(R.id.nxtMn);
             mvPrvMn = findViewById(R.id.prvMn);
@@ -253,12 +276,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             mRecyclerView.setLayoutManager(layoutManager);
             //mRecyclerView.stopScroll();
 
-            if (UserDetails.getInt("CheckCount", 0) <= 0) {
-                btnApprovals.setVisibility(View.GONE);
-                //linApprovals.setVisibility(View.VISIBLE);
-            } else {
-                btnApprovals.setVisibility(View.VISIBLE);
-            }
 
             StActivity = findViewById(R.id.StActivity);
             btnCheckout = findViewById(R.id.btnCheckout);
@@ -278,6 +295,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             cardGateDet.setVisibility(View.GONE);
             StActivity.setVisibility(View.VISIBLE);
 
+            if (UserDetails.getInt("CheckCount", 0) <= 0) {
+                btnApprovals.setVisibility(View.GONE);
+                tvapprCnt.setVisibility(View.GONE);
+            } else {
+                btnApprovals.setVisibility(View.VISIBLE);
+                tvapprCnt.setVisibility(View.VISIBLE);
+            }
             btnExit.setVisibility(View.GONE);
             if (getIntent().getExtras() != null) {
                 Bundle params = getIntent().getExtras();
@@ -288,9 +312,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     cardview4.setVisibility(View.VISIBLE);
                     //cardView5.setVisibility(View.VISIBLE);
                     btnCheckout.setVisibility(View.VISIBLE);
-                    btnApprovals.setVisibility(View.VISIBLE);
+                    if(viewMode.equalsIgnoreCase("extended")){
+                        btnCheckout.setText("Checkout & Sent to Approval");
+                    }
                 } else {
-                    cardview3.setVisibility(View.GONE);
+                    //cardview3.setVisibility(View.GONE);
                     // cardview4.setVisibility(View.GONE);
                     cardView5.setVisibility(View.GONE);
                     //StActivity.setVisibility(View.GONE);
@@ -299,7 +325,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     //               btnApprovals.setVisibility(View.GONE);
                 }
             } else {
-                cardview3.setVisibility(View.GONE);
+                //cardview3.setVisibility(View.GONE);
                 //cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 //StActivity.setVisibility(View.GONE);
@@ -340,23 +366,115 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             String loginDate = mShared_common_pref.getvalue(Constants.LOGIN_DATE);
             if (!loginDate.equalsIgnoreCase(currentDate)) {
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_NOTIFY);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()-1]);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()]);
-                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[new Date().getMonth()+1]);
                 mShared_common_pref.clear_pref(Constants.DB_TWO_GET_DYREPORTS);
+                Common_Class Dt = new Common_Class();
+                String sDt = Dt.GetDateTime(getApplicationContext(), "yyyy-MM-dd HH:mm:ss");
+                if (Dt.getDay(sDt) < 23) {
+                    sDt = Dt.AddMonths(sDt, -1, "yyyy-MM-dd HH:mm:ss");
+                }
+                int fmn = Dt.getMonth(sDt);
+                mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[fmn - 1]);
             }
-
-            getNotify();
-            getDyReports();
-            getMnthReports(0);
-            GetMissedPunch();
-
-
         } catch (Exception e) {
-
+            Log.d("Error Loading:",e.getMessage().toString());
         }
+        getNotify();
+        getDyReports();
+        getMnthReports(0);
+        GetMissedPunch();
+        getcountdetails();
+        btnCloseOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linOffer.setVisibility(View.GONE);
+            }
+        });
     }
 
+    private void getOfferNotify() {
+        if (com.hap.checkinproc.Common_Class.Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_SFWish_NOTIFY))) {
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("axn", "get/sfwishnotify");
+            QueryString.put("SFCode", UserDetails.getString("Sfcode", ""));
+            QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptCall = apiInterface.getDataArrayList(QueryString, null);
+            rptCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    try {
+                        JsonArray res = response.body();
+                        Log.d("getOfferNotify", String.valueOf(response.body()));
+                        //  Log.d("NotifyMsg", response.body().toString());
+                        JSONArray sArr=new JSONArray(String.valueOf(response.body()));
+                        assignOffGetNotify(sArr);
+                        mShared_common_pref.save(Constants.DB_SFWish_NOTIFY, gson.toJson(response.body()));
+                    } catch (Exception e) {
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    Log.d("Tag", String.valueOf(t));
+                }
+            });
+
+        } else {
+//            try {
+//                JSONArray sArr=new JSONArray(String.valueOf(mShared_common_pref.getvalue(Constants.DB_SFWish_NOTIFY)));
+//                assignOffGetNotify(sArr);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+        }
+    }
+    void assignOffGetNotify(JSONArray res) {
+        JSONArray fRes= res;
+        if (fRes.length()>0){
+            LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
+            TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            ryclOffers.setLayoutManager(TypgridlayManager);
+            SnapHelper snapHelper = new PagerSnapHelper();
+            snapHelper.attachToRecyclerView(ryclOffers);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ryclOffers.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                        LinearLayoutManager layoutManager = ((LinearLayoutManager)ryclOffers.getLayoutManager());
+                        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+                        lblSlideNo.setText((firstVisiblePosition+1)+"/"+fRes.length());
+                    }
+                });
+            }else{
+                ryclOffers.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        LinearLayoutManager layoutManager = ((LinearLayoutManager)ryclOffers.getLayoutManager());
+                        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+                        lblSlideNo.setText((firstVisiblePosition+1)+"/"+fRes.length());
+                    }
+                });
+            }
+            OffersAdapter TyplistItems = new OffersAdapter(fRes, this, new onListItemClick() {
+                @Override
+                public void onItemClick(JSONObject item) {
+                    try {
+                        //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", item.getString("id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            ryclOffers.setAdapter(TyplistItems);
+            linOffer.setVisibility(View.VISIBLE);
+            mShared_common_pref.save(Constants.DB_OfferShownOn, com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+        }
+    }
     private void hideShimmer() {
         if (LoadingCnt >= 2) {
             mShimmerViewContainer.stopShimmerAnimation();
@@ -429,6 +547,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             sDt = Dt.AddMonths(sDt, -1, "yyyy-MM-dd HH:mm:ss");
         }
         int fmn = Dt.getMonth(sDt);
+        if (m == -1) {
+            mShared_common_pref.clear_pref(Constants.DB_TWO_GET_MREPORTS+"_"+mns[fmn - 1]);
+        }
         sDt = Dt.AddMonths(Dt.getYear(sDt) + "-" + Dt.getMonth(sDt) + "-22 00:00:00", 1, "yyyy-MM-dd HH:mm:ss");
         int tmn = Dt.getMonth(sDt);
         Log.d(Tag, sDt + "-" + String.valueOf(fmn) + "-" + String.valueOf(tmn));
@@ -642,15 +763,46 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             newItem.addProperty("name", "Geo In");
             newItem.addProperty("value", fItm.get("GeoIn").getAsString());
             newItem.addProperty("color", "#333333");
-            /*newItem.addProperty("type", "geo");*/
+            newItem.addProperty("type", "geo");
             dyRpt.add(newItem);
 
             newItem = new JsonObject();
             newItem.addProperty("name", "Geo Out");
             newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
             newItem.addProperty("color", "#333333");
-            /*newItem.addProperty("type", "geo");*/
+            newItem.addProperty("type", "geo");
             dyRpt.add(newItem);
+
+            Integer OTFlg = UserDetails.getInt("OTFlg", 0);
+            if (OTFlg==1 && viewMode.equalsIgnoreCase("extended")) {
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Extended Start");
+                newItem.addProperty("value", fItm.get("ExtStartTtime").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
+                newItem.addProperty("color", "#333333");
+                /*newItem.addProperty("type", "geo");*/
+                dyRpt.add(newItem);
+
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Extended End");
+                newItem.addProperty("value", fItm.get("ExtEndtime").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
+                newItem.addProperty("color", "#333333");
+                /*newItem.addProperty("type", "geo");*/
+                dyRpt.add(newItem);
+
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Ext.Geo In");
+                newItem.addProperty("value", fItm.get("Extin").getAsString());
+                newItem.addProperty("color", "#333333");
+                newItem.addProperty("type", "geo");
+                dyRpt.add(newItem);
+
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Ext.Geo Out");
+                newItem.addProperty("value", fItm.get("Extout").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
+                newItem.addProperty("color", "#333333");
+                newItem.addProperty("type", "geo");
+                dyRpt.add(newItem);
+            }
             recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
 
             Log.v("Lat_Long", fItm.get("lat_long").getAsString());
@@ -724,7 +876,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     })
                                     .show();
 
-                        } else {
+                        }
+                        else {
 
                             JsonArray WKItems = itm.getAsJsonArray("CheckWK");
                             if (WKItems.size() > 0) {
@@ -831,6 +984,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                             .show();
                                 }
                             }
+
+                            getOfferNotify();
                         }
                     } catch (Exception e) {
                         LoadingCnt++;
@@ -991,7 +1146,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     public void PositiveMethod(DialogInterface dialog, int id) {
 
                         Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                        takePhoto.putExtra("Mode", "COUT");
+
+                        if(viewMode.equalsIgnoreCase("extended")){
+                            takePhoto.putExtra("Mode", "EXOUT");
+                        }else
+                        {
+                            takePhoto.putExtra("Mode", "COUT");
+                        }
                         startActivity(takePhoto);
 
                         /*ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -1073,6 +1234,56 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         super.onResume();
         GetMissedPunch();
         Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    public void getcountdetails() {
+
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "ViewAllCount");
+        QueryString.put("sfCode", UserDetails.getString("Sfcode", ""));
+        QueryString.put("State_Code", UserDetails.getString("State_Code", ""));
+        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+        QueryString.put("rSF", UserDetails.getString("Sfcode", ""));
+        QueryString.put("desig", "MGR");
+        String commonworktype = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, commonworktype);
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSEcount", "response Tp_View: " + new Gson().toJson(response.body()));
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    // int TC=Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"));
+                    //jsonObject.getString("leave"))
+                    Log.e("TOTAl_COUNT", String.valueOf(Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"))));
+                    //count = count +
+
+                    Shared_Common_Pref.TotalCountApproval = jsonObject.getInt("leave") + jsonObject.getInt("Permission") +
+                            jsonObject.getInt("vwOnduty") + jsonObject.getInt("vwmissedpunch") +
+                            jsonObject.getInt("vwExtended") + jsonObject.getInt("TountPlanCount") +
+                            jsonObject.getInt("FlightAppr") +
+                            jsonObject.getInt("HolidayCount") + jsonObject.getInt("DeviationC") +
+                            jsonObject.getInt("CancelLeave") + jsonObject.getInt("ExpList");
+                    tvapprCnt.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));
+                    tvapprCnt.setVisibility(View.GONE);
+                    if(Shared_Common_Pref.TotalCountApproval>0) tvapprCnt.setVisibility(View.VISIBLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+               // common_class.ProgressdialogShow(2, "");
+            }
+        });
+
     }
 
     public void gatevalue(String Date) {

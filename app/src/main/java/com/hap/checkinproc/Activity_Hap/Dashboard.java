@@ -5,16 +5,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
@@ -31,8 +38,10 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
+import com.hap.checkinproc.adapters.OffersAdapter;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
@@ -51,10 +60,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     private static String Tag = "HAP_Check-In";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
+
     public static final String CheckInDetail = "CheckInDetail";
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String mypreference = "mypref";
-    TextView username;
+   // TextView username;
     TextView lblUserName, lblEmail;
     Button linMyday, linCheckin, linApprovals, linRequstStaus, linReport, linOnDuty, linSFA, linTaClaim, linExtShift,
             linTourPlan, linExit, lin_check_in, linHolidayWorking, linReCheck;
@@ -70,6 +80,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     RelativeLayout mRelApproval;
     Integer ClosingKm = 0;
 
+
+
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
     DatabaseHandler db;
 
@@ -79,11 +91,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_dashboard);
 
         db = new DatabaseHandler(this);
-        username = findViewById(R.id.username);
+        //username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
         profilePic = findViewById(R.id.profile_image);
         linReCheck = findViewById(R.id.lin_RecheckIn);
+
 
         linCheckin = findViewById(R.id.lin_check_in);
         linMyday = findViewById(R.id.lin_myday_plan);
@@ -165,7 +178,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         if (UserDetails.getInt("CheckCount", 0) <= 0) {
             mRelApproval.setVisibility(View.GONE);
-            //linApprovals.setVisibility(View.VISIBLE);
+            approvalcount.setVisibility(View.GONE);
         } else {
             mRelApproval.setVisibility(View.VISIBLE);
         }
@@ -639,6 +652,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                             jsonObject.getInt("HolidayCount") + jsonObject.getInt("DeviationC") +
                             jsonObject.getInt("CancelLeave") + jsonObject.getInt("ExpList");
                     approvalcount.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));
+                    approvalcount.setVisibility(View.GONE);
+                    if(Shared_Common_Pref.TotalCountApproval>0) approvalcount.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

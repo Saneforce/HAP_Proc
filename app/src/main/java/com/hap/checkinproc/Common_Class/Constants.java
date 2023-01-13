@@ -20,6 +20,7 @@ public class Constants {
 
     public static final String DB_TWO_GET_NOTIFY = "dashboardTwoNotify";
     public static final String DB_Offer_NOTIFY = "OfferNotify";
+    public static final String DB_SFWish_NOTIFY = "SFWishNotify";
     public static final String DB_OfferShownOn = "OfferShown";
 
     public static final String Retailer_OutletList = "retailerOutletList";

@@ -925,7 +925,8 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                         Log.d("HAP_receive", "");
                     }
                 });
-            } else if (mMode.equalsIgnoreCase("extended")) {
+            }
+            else if (mMode.equalsIgnoreCase("extended")) {
                 JSONArray jsonarray = new JSONArray();
                 JSONObject paramObject = new JSONObject();
                 paramObject.put("extended_entry", CheckInInf);
@@ -973,9 +974,14 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                         Log.d("HAP_receive", "");
                     }
                 });
-            } else {
+            }
+            else {
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                Call<JsonObject> modelCall = apiInterface.JsonSave("get/logouttime",
+                String lMode = "get/logouttime";
+                if(mMode.equalsIgnoreCase("EXOUT")) {
+                    lMode = "get/Extendlogout";
+                }
+                Call<JsonObject> modelCall = apiInterface.JsonSave(lMode,
                         UserDetails.getString("Divcode", ""),
                         UserDetails.getString("Sfcode", ""), "", "", CheckInInf.toString());
                 modelCall.enqueue(new Callback<JsonObject>() {
