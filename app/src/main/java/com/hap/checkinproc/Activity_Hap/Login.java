@@ -82,6 +82,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Login extends AppCompatActivity {
+    public static final String CheckInDetail = "CheckInDetail";
+    public static final String MyPREFERENCES = "MyPrefs";
+    private static final String TAG = "LoginActivity";
+    private final static int RC_SIGN_IN = 1;
+    private final static int RC_MYREPORTS = 2;
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
+    final Handler handler = new Handler();
     TextInputEditText name, password;
     Button btnLogin;
     ImageView profileImage;
@@ -89,34 +96,38 @@ public class Login extends AppCompatActivity {
     String idToken, eMail, UserLastName, UserLastName1;
     Button signInButton, ReportsButton, ExitButton;
     Shared_Common_Pref shared_common_pref;
-    private static final String TAG = "LoginActivity";
-    private GoogleApiClient googleApiClient;
-    private final static int RC_SIGN_IN = 1;
-    private final static int RC_MYREPORTS = 2;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
     SharedPreferences UserDetails;
     SharedPreferences CheckInDetails;
-    public static final String CheckInDetail = "CheckInDetail";
-    public static final String MyPREFERENCES = "MyPrefs";
-    private ProgressDialog mProgress;
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    final Handler handler = new Handler();
-    private LocationReceiver rcvMReceiver;
-    private SANGPSTracker mLUService;
-    private LocationReceiver myReceiver;
-    private TimerService mTimerService;
-
     String deviceToken = "";
     Uri profile;
-    // Tracks the bound state of the service.
-    private boolean mBound = false;
     ApiInterface apiInterface;
     CameraPermission cameraPermission;
     Common_Class DT = new Common_Class();
     DatabaseHandler db;
+    private GoogleApiClient googleApiClient;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private ProgressDialog mProgress;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private LocationReceiver rcvMReceiver;
+    private SANGPSTracker mLUService;
+    private LocationReceiver myReceiver;
+    private TimerService mTimerService;
+    // Tracks the bound state of the service.
+    private boolean mBound = false;
+    private final ServiceConnection mServiceConection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
+            mBound = true;
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mLUService = null;
+            mBound = false;
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -234,8 +245,8 @@ public class Login extends AppCompatActivity {
                     //proceed to login
                     try {
                         shared_common_pref.clear_pref(Constants.DB_SFWish_NOTIFY);
-                    }catch (Exception e){
-Log.d("Error","Can't Clear SFWish");
+                    } catch (Exception e) {
+                        Log.d("Error", "Can't Clear SFWish");
                     }
                     mProgress.show();
                     login(0);
@@ -280,8 +291,8 @@ Log.d("Error","Can't Clear SFWish");
                 // that since this activity is in the foreground, the service can exit foreground mode.
                 try {
                     shared_common_pref.clear_pref(Constants.DB_SFWish_NOTIFY);
-                }catch (Exception e){
-                    Log.d("Error","Can't Clear SFWish");
+                } catch (Exception e) {
+                    Log.d("Error", "Can't Clear SFWish");
                 }
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if (DAMode == true) {
@@ -377,7 +388,7 @@ Log.d("Error","Can't Clear SFWish");
                 Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
-                Shared_Common_Pref.SFCutoff = UserDetails.getString("SFCutoff","");
+                Shared_Common_Pref.SFCutoff = UserDetails.getString("SFCutoff", "");
 
                 String ActStarted = shared_common_pref.getvalue("ActivityStart");
 
@@ -399,8 +410,8 @@ Log.d("Error","Can't Clear SFWish");
                                 aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                             else {
                                 aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
-                                int Type=CheckInDetails.getInt("CIType",0);
-                                if (Type==1)
+                                int Type = CheckInDetails.getInt("CIType", 0);
+                                if (Type == 1)
                                     aIntent.putExtra("Mode", "extended");
                                 else
                                     aIntent.putExtra("Mode", "CIN");
@@ -409,8 +420,8 @@ Log.d("Error","Can't Clear SFWish");
                         startActivity(aIntent);
                     } else {
                         Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
-                        int Type=CheckInDetails.getInt("CIType",0);
-                        if (Type==1)
+                        int Type = CheckInDetails.getInt("CIType", 0);
+                        if (Type == 1)
                             Dashboard.putExtra("Mode", "extended");
                         else
                             Dashboard.putExtra("Mode", "CIN");
@@ -420,19 +431,6 @@ Log.d("Error","Can't Clear SFWish");
             }
         }
 
-    }
-
-    boolean checkValueStore() {
-        try {
-            //  JSONArray storeData = db.getMasterData(Constants.Distributor_List);
-            JSONArray storeData = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
-            if (storeData != null && storeData.length() > 0)
-                return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
     }
 
  /* private void displayFirebaseRegId() {
@@ -446,6 +444,19 @@ Log.d("Error","Can't Clear SFWish");
  else
  txtRegId.setText("Firebase Reg Id is not received yet!");*//*
  }*/
+
+    boolean checkValueStore() {
+        try {
+            //  JSONArray storeData = db.getMasterData(Constants.Distributor_List);
+            JSONArray storeData = new JSONArray(shared_common_pref.getvalue(Constants.Distributor_List));
+            if (storeData != null && storeData.length() > 0)
+                return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -510,7 +521,6 @@ Log.d("Error","Can't Clear SFWish");
                 });
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -563,6 +573,11 @@ Log.d("Error","Can't Clear SFWish");
         return false;
     }
 
+
+/*// LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
+ super.onPause();
+ }*/
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -570,12 +585,6 @@ Log.d("Error","Can't Clear SFWish");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
 
     }
-
-
-/*// LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
- super.onPause();
- }*/
-
 
     @Override
     protected void onStart() {
@@ -613,7 +622,6 @@ Log.d("Error","Can't Clear SFWish");
         }
     }
 
-
     public void login(int requestCode) {
         try {
             Gson gson = new Gson();
@@ -634,26 +642,18 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                //eMail= "3033@hap.in";
-                //eMail= "1019100@hap.in";
-
-//               eMail="sivakumar.s@hap.in";
+//                eMail= "3033@hap.in";
+//                eMail= "1019100@hap.in";
+//                eMail="sivakumar.s@hap.in";
 //                eMail="sajan@hap.in";
-
 //                eMail="iplusadmin@hap.in";
-
 //                eMail="1014700@hap.in";
-//                 eMail="anandaraj.s@hap.in";
-
+//                eMail="anandaraj.s@hap.in";
 //                eMail="1023176@hap.in";
-               // eMail="1025499@hap.in";
-                //eMail="1014604@hap.in";
+//                eMail="1025499@hap.in";
+//                eMail="1014604@hap.in";
 //                eMail="harishbabu.bh@hap.in";
-
-//                eMail="ciadmin@hap.in";
-
-
-
+                eMail = "ciadmin@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -668,12 +668,12 @@ Log.d("Error","Can't Clear SFWish");
                                         Gson gson = new Gson();
                                         assignLoginData(response.body(), requestCode);
                                         shared_common_pref.save(Constants.LOGIN_DATA, gson.toJson(response.body()));
-                                        Model model=new Model();
-                                        model=response.body();
-                                        List<Datum> datumList= new ArrayList<>();
-                                        datumList=model.getData();
+                                        Model model = new Model();
+                                        model = response.body();
+                                        List<Datum> datumList = new ArrayList<>();
+                                        datumList = model.getData();
 
-                                        String sfcut=datumList.get(0).getRSMCutoffTime();
+                                        String sfcut = datumList.get(0).getRSMCutoffTime();
                                         String ss = shared_common_pref.getvalue(Constants.LOGIN_DATA);
 
                                         /*try {
@@ -778,7 +778,6 @@ Log.d("Error","Can't Clear SFWish");
         }
     }
 
-
     @SuppressLint("NewApi")
     void assignLoginData(Model response, int requestCode) {
         try {
@@ -801,7 +800,6 @@ Log.d("Error","Can't Clear SFWish");
                 shared_common_pref.save(Constants.Distributor_phone, response.getData().get(0).getStockist_Mobile());
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                 shared_common_pref.save(Constants.CUTOFF_TIME, response.getData().get(0).getCutoffTime());
-
 
 
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
@@ -853,7 +851,7 @@ Log.d("Error","Can't Clear SFWish");
                 Intent intent = null;
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 JsonArray CinData = response.getCInData();
-                int Type=2;
+                int Type = 2;
                 if (CinData.size() > 0) {
                     JsonObject CinObj = CinData.get(0).getAsJsonObject();
                     cInEditor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
@@ -876,7 +874,7 @@ Log.d("Error","Can't Clear SFWish");
                     if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                         cInEditor.putString("FTime", CTime);
                     cInEditor.putString("Logintime", CTime);
-                    if (Type <2) CheckIn = true;
+                    if (Type < 2) CheckIn = true;
                     cInEditor.putBoolean("CheckIn", CheckIn);
                     cInEditor.apply();
                 }
@@ -884,7 +882,7 @@ Log.d("Error","Can't Clear SFWish");
                 if (requestCode == RC_SIGN_IN) {
                     if (CheckIn == true) {
                         intent = new Intent(Login.this, Dashboard_Two.class);
-                        if (Type==1)
+                        if (Type == 1)
                             intent.putExtra("Mode", "extended");
                         else
                             intent.putExtra("Mode", "CIN");
@@ -1079,19 +1077,5 @@ Log.d("Error","Can't Clear SFWish");
                 }
         }
     }
-
-    private final ServiceConnection mServiceConection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mLUService = null;
-            mBound = false;
-        }
-    };
 
 }
