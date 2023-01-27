@@ -49,10 +49,23 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".Activity_Hap.ApproveOutletsDetailedActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.ApproveOutletsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SFA_Activity.POSViewEntryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Activity_Hap.TP_Approval_Status"
             android:exported="false"
@@ -77,7 +90,6 @@
             android:name=".Activity_Hap.Invoice_Vansales_Select"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".SFA_Activity.POS_SalesEntryActivity"
             android:exported="false"
@@ -686,7 +698,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-<!--        android:authorities="com.mydomain.fileprovider"-->
     </application>
 
 </manifest>
