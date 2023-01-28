@@ -30,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Outlet Info"
+                    android:text="Approve / Reject Outlet"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
@@ -172,6 +172,7 @@
                             android:padding="5dp">
 
                             <TextView
+                                android:enabled="false"
                                 android:id="@+id/distributor_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -180,6 +181,7 @@
                                 android:textSize="13sp" />
 
                             <ImageView
+                                android:enabled="false"
                                 android:id="@+id/ivDistSpinner"
                                 android:layout_width="@dimen/C10dp"
                                 android:layout_height="@dimen/C10dp"
@@ -200,7 +202,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
-                                android:layout_marginBottom="3dp"></CheckBox>
+                                android:layout_marginBottom="3dp"
+                                android:enabled="false"
+                                tools:ignore="TouchTargetSizeCheck"></CheckBox>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -258,6 +262,7 @@
                                     android:gravity="start"
                                     android:hint="Enter Franchise Code"
                                     android:inputType="number"
+                                    android:enabled="false"
                                     android:maxLines="2"
                                     android:padding="10dp"
                                     android:textSize="13dp" />
@@ -272,7 +277,7 @@
                                     android:background="@drawable/bottom_button"
                                     android:padding="10dp"
                                     android:text="Check Validity"
-
+                                    android:enabled="false"
                                     android:textColor="@color/white"
                                     android:textSize="13dp"
                                     android:visibility="visible" />
@@ -305,11 +310,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
+                            android:enabled="false"
                             android:gravity="start"
                             android:hint="Enter the Outlet Name"
                             android:maxLines="2"
                             android:padding="10dp"
-                            android:textSize="13dp" />
+                            android:textSize="13dp"
+                            tools:ignore="TouchTargetSizeCheck" />
 
 
                         <LinearLayout
@@ -354,6 +361,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Outlet Type"
+                                    android:enabled="false"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 
@@ -410,6 +418,7 @@
                                     android:background="@android:color/transparent"
                                     android:gravity="start"
                                     android:hint="Enter the Reason for Close"
+                                    android:enabled="false"
                                     android:padding="10dp"
                                     android:textSize="13sp" />
 
@@ -481,6 +490,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:enabled="false"
                             android:hint="code"
                             android:padding="10dp"
                             android:textSize="13dp" />
@@ -548,6 +558,7 @@
                                             android:layout_height="wrap_content"
                                             android:hint="@string/select_route"
                                             android:padding="5dp"
+                                            android:enabled="false"
                                             android:textSize="13dp" />
 
                                         <ImageView
@@ -597,10 +608,12 @@
                                         android:layout_height="wrap_content"
                                         android:background="@drawable/text_bg_grey"
                                         android:gravity="start"
+                                        android:enabled="false"
                                         android:hint="Enter the owner Name"
                                         android:maxLines="2"
                                         android:padding="10dp"
-                                        android:textSize="13dp" />
+                                        android:textSize="13dp"
+                                        tools:ignore="TouchTargetSizeCheck" />
 
                                 </LinearLayout>
 
@@ -678,7 +691,7 @@
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:text="Address"
                                 android:textColor="@android:color/black"
@@ -706,6 +719,7 @@
                                 android:letterSpacing="0.09"
                                 android:paddingLeft="15dp"
                                 android:paddingRight="15dp"
+                                android:visibility="gone"
                                 android:text="Get Location"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
@@ -726,6 +740,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:enabled="false"
                             android:hint="Enter the Address"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -778,6 +793,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/select_state"
+                                android:enabled="false"
                                 android:padding="5dp"
                                 android:textSize="13dp" />
 
@@ -827,6 +843,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:enabled="false"
                             android:hint="Enter the Location"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -867,6 +884,7 @@
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
                             android:hint="Enter the District"
+                            android:enabled="false"
                             android:padding="10dp"
                             android:textSize="13sp" />
 
@@ -898,6 +916,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:enabled="false"
                             android:hint="Enter the Pin Code"
                             android:inputType="number"
                             android:padding="10dp"
@@ -934,6 +953,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:enabled="false"
                             android:hint="Enter the gst"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -976,6 +996,7 @@
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
                             android:hint="Enter the Phone No"
+                            android:enabled="false"
                             android:inputType="phone"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -1019,6 +1040,7 @@
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
                             android:hint="Enter the Second Phone No"
+                            android:enabled="false"
                             android:inputType="phone"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -1052,6 +1074,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:enabled="false"
                             android:hint="Enter the Email"
                             android:inputType="textEmailAddress"
                             android:padding="10dp"
@@ -1339,6 +1362,7 @@
                                 android:visibility="visible">
 
                                 <CheckBox
+                                    android:enabled="false"
                                     android:id="@+id/cbFreezerYes"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"></CheckBox>
@@ -1353,6 +1377,7 @@
                                     android:textColor="@color/black" />
 
                                 <CheckBox
+                                    android:enabled="false"
                                     android:id="@+id/cbFreezerNo"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -1483,6 +1508,7 @@
                                 </LinearLayout>
 
                                 <EditText
+                                    android:enabled="false"
                                     android:id="@+id/edt_expectSaleVal"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1516,6 +1542,7 @@
                                 </LinearLayout>
 
                                 <EditText
+                                    android:enabled="false"
                                     android:id="@+id/edt_depositAmt"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1560,6 +1587,7 @@
                                 </LinearLayout>
 
                                 <EditText
+                                    android:enabled="false"
                                     android:id="@+id/edt_retailer_freezerMake"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1601,6 +1629,7 @@
                                 </LinearLayout>
 
                                 <EditText
+                                    android:enabled="false"
                                     android:id="@+id/edt_retailer_freezerTagNo"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1749,6 +1778,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
+                                android:enabled="false"
                                 android:hint="Enter the FSSAI Number"
                                 android:padding="10dp"
                                 android:textSize="13sp" />
@@ -1782,6 +1812,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
+                                android:enabled="false"
                                 android:hint="Enter the PAN Number"
                                 android:padding="10dp"
                                 android:textSize="13sp" />
@@ -1815,6 +1846,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
+                                android:enabled="false"
                                 android:hint="@string/retailer_outstand_hint"
                                 android:inputType="numberDecimal"
                                 android:padding="10dp"
@@ -1896,11 +1928,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/approv_button"
+                android:id="@+id/approveBtn"
                 style="@style/BottomButton"
                 android:layout_weight="1"
                 android:background="@drawable/button_dgreen"
-                android:text="Approval"
+                android:text="Approve"
                 app:finalCornerAngle="50dp"
                 app:initialCornerAngle="0dp"
                 app:spinning_bar_color="#FFFFFFFF"
@@ -1908,7 +1940,7 @@
                 app:spinning_bar_width="5dp" />
 
             <Button
-                android:id="@+id/reject_button"
+                android:id="@+id/rejectBtn"
                 style="@style/BottomButton"
                 android:layout_weight="1"
                 android:background="@drawable/button_amber"

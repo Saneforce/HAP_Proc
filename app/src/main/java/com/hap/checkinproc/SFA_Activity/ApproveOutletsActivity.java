@@ -48,7 +48,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
+// Created by RAGU on 27/01/2023
 public class ApproveOutletsActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
     Gson gson;
     private RecyclerView recyclerView;
@@ -76,10 +76,14 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_approve_outlets);
+
             outlet_info_activity = this;
             db = new DatabaseHandler(this);
             common_class = new Common_Class(this);
+
+            // API Call
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
+
             sharedCommonPref = new Shared_Common_Pref(outlet_info_activity);
             recyclerView = findViewById(R.id.outletrecyclerview);
             route_text = findViewById(R.id.route_text);
@@ -480,7 +484,10 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
                 sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
                 findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
+
+                // API Call
                 common_class.getDataFromApi(Retailer_OutletList, this, false);
+
                 common_class.getDb_310Data(Rout_List, this);
                 sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
 
@@ -539,6 +546,8 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
                         JSONObject obj = new JSONObject(apiDataResponse);
                         common_class.showMsg(this, obj.getString("Msg"));
                         if (obj.getBoolean("success"))
+
+                            // API Call
                             common_class.getDataFromApi(Retailer_OutletList, this, false);
                         break;
                     case Retailer_OutletList:

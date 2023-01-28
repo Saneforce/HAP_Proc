@@ -24,7 +24,7 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import java.util.List;
-
+// Created by RAGU on 27/01/2023
 public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlets_Adapter.MyViewHolder> {
 
     private List<Retailer_Modal_List> Retailer_Modal_Listitem;
@@ -43,6 +43,9 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
 
         public TextView textviewname, txRetNo, outletAddress, textId, txCustStatus, tvPhone;
         public LinearLayout retStaBdg, icAC, icFreezer, layparent,llCallMob;
+        TextView statusTV;
+
+        Button viewBtn, approveBtn, rejectBtn;
 
 
         public MyViewHolder(View view) {
@@ -67,6 +70,14 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
             //rlSeqParent = view.findViewById(R.id.rlSequence);
             llCallMob=view.findViewById(R.id.btnCallMob);
             tvPhone=view.findViewById(R.id.retailePhoneNum);
+
+            statusTV=view.findViewById(R.id.statusTV);
+
+            // Buttons
+            viewBtn = view.findViewById(R.id.viewBtn);
+            approveBtn = view.findViewById(R.id.approveBtn);
+            rejectBtn = view.findViewById(R.id.rejectBtn);
+
         }
     }
 
@@ -95,6 +106,9 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
         if (activityName.equalsIgnoreCase("Outlets")) {
             //holder.rlSeqParent.setVisibility(View.VISIBLE);
         }
+
+        holder.statusTV.setText("Status: " + Retailer_Modal_List.getStatusname().toUpperCase());
+
 
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
         // holder.textId.setText("" + Retailer_Modal_List.getId());
@@ -128,6 +142,18 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
             }
+        });
+
+        holder.viewBtn.setOnClickListener(v1 -> {
+            mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+        });
+
+        holder.approveBtn.setOnClickListener(v2 -> {
+            Toast.makeText(context, "Not Assigned", Toast.LENGTH_SHORT).show();
+        });
+
+        holder.rejectBtn.setOnClickListener(v3 -> {
+            Toast.makeText(context, "Not Assigned", Toast.LENGTH_SHORT).show();
         });
 
         /*holder.btnSend.setOnClickListener(new View.OnClickListener() {

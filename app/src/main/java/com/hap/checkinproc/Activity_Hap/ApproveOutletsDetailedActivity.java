@@ -93,7 +93,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+// Created by RAGU on 27/01/2023
 public class ApproveOutletsDetailedActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
     TextView toolHeader;
     ImageView imgBack;
@@ -167,6 +167,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     private ApproveOutletsDetailedActivity.Category_Adapter categoryAdapter;
 
     String customer_code = "";
+
+    Button approveBtn, rejectBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +252,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             linReatilerClass = findViewById(R.id.linear_retailer_class);
             txtRetailerClass = findViewById(R.id.txt_retailer_class);
 
-
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
             ivFreezerCapture.setOnClickListener(this);
@@ -262,6 +263,16 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             rlSubCategory.setOnClickListener(this);
             ivProfilePreview.setOnClickListener(this);
 
+            approveBtn = findViewById(R.id.approveBtn);
+            rejectBtn = findViewById(R.id.rejectBtn);
+
+            approveBtn.setOnClickListener(v -> {
+                Toast.makeText(this, "Not Assigned", Toast.LENGTH_SHORT).show();
+            });
+
+            rejectBtn.setOnClickListener(v -> {
+                Toast.makeText(this, "Not Assigned", Toast.LENGTH_SHORT).show();
+            });
 
             findViewById(R.id.ivFreezReqMandatory).setVisibility(View.INVISIBLE);
 
@@ -287,7 +298,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             rlDelvryType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    common_class.showCommonDialog(deliveryTypeList, 11, ApproveOutletsDetailedActivity.this);
+                    //common_class.showCommonDialog(deliveryTypeList, 11, ApproveOutletsDetailedActivity.this);
                 }
             });
 
@@ -315,7 +326,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    common_class.showCommonDialog(outletTypeList, 13, ApproveOutletsDetailedActivity.this);
+                    //common_class.showCommonDialog(outletTypeList, 13, ApproveOutletsDetailedActivity.this);
                 }
             });
             copypaste.setOnClickListener(this);
@@ -325,7 +336,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 @Override
                 public void onClick(View v) {
 
-                    handler.postDelayed(new Runnable() {
+                    /*handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -349,7 +360,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                                 Log.v(TAG, "LOC3:" + e.getMessage());
                             }
                         }
-                    }, 100);
+                    }, 100);*/
 
                 }
 
@@ -417,7 +428,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             }
             if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
                 //mSubmit.setVisibility(View.GONE);
-                headtext.setText("Outlet Info");
+                headtext.setText("Approve/Reject Outlet");
             }
             //  getRouteDetails();
 //            getRetailerClass();
@@ -540,6 +551,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     isValidCode = true;
                     customer_code = Retailer_Modal_List.get(getOutletPosition()).getCustomerCode();
                     findViewById(R.id.llFranchiseCode).setVisibility(View.VISIBLE);
+                    findViewById(R.id.llFranchiseCode).setEnabled(false);
                 }
                 ArrayList<Retailer_Modal_List.CateSpecList> CatSubList = Retailer_Modal_List.get(getOutletPosition()).getCategoryList();
                 for (int ik = 0; ik < serviceTypeList.size(); ik++) {
@@ -1591,7 +1603,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             //  serviceTypeList.add(new Common_Model("B&C", "4", false, "", "", "", ""));
 
 
-            categoryAdapter = new ApproveOutletsDetailedActivity.Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types, ApproveOutletsDetailedActivity.this);
+            categoryAdapter = new ApproveOutletsDetailedActivity.Category_Adapter(serviceTypeList, R.layout.adapter_retailer_category_types_two, ApproveOutletsDetailedActivity.this);
             rvCategoryTypes.setAdapter(categoryAdapter);
 
 
@@ -1702,16 +1714,16 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     }
                     break;
                 case R.id.linear_retailer_class:
-                    common_class.showCommonDialog(modelRetailClass, 9, ApproveOutletsDetailedActivity.this);
+                    //common_class.showCommonDialog(modelRetailClass, 9, ApproveOutletsDetailedActivity.this);
                     break;
                 case R.id.linear_retailer_channel:
-                    common_class.showCommonDialog(categoryList, 8, ApproveOutletsDetailedActivity.this);
+                    //common_class.showCommonDialog(categoryList, 8, ApproveOutletsDetailedActivity.this);
                     break;
                 case R.id.linear_retailer_subCategory:
-                    common_class.showCommonDialog(modelRetailChannel, 10, ApproveOutletsDetailedActivity.this);
+                    //common_class.showCommonDialog(modelRetailChannel, 10, ApproveOutletsDetailedActivity.this);
                     break;
                 case R.id.btn_dist_enter:
-                    if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                    /*if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1")) {
 
                         AlertDialogBox.showDialog(ApproveOutletsDetailedActivity.this, "HAP SFA", "Are You Sure Want to Update the Franchise Code?", "OK", "Cancel", false, new AlertBox() {
                             @Override
@@ -1727,43 +1739,43 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         });
                     } else {
                         checkValidity();
-                    }
+                    }*/
                     break;
                 case R.id.ivRetailCapture:
-                    captureImg(mData, rvFiles);
+                    //captureImg(mData, rvFiles);
                     break;
                 case R.id.ivFreezerCapture:
-                    captureImg(mFreezerData, rvFreezerFiles);
+                    //captureImg(mFreezerData, rvFreezerFiles);
                     break;
                 case R.id.linear_service_type:
-                    common_class.showCommonDialog(serviceTypeList, 4, this);
+                    //common_class.showCommonDialog(serviceTypeList, 4, this);
 
                     break;
                 case R.id.rlFreezerCapacity:
-                    common_class.showCommonDialog(freezerCapcityList, 14, this);
+                    //common_class.showCommonDialog(freezerCapcityList, 14, this);
                     break;
                 case R.id.rlFreezerStatus:
-                    common_class.showCommonDialog(freezerStaList, 15, this);
+                    //common_class.showCommonDialog(freezerStaList, 15, this);
 
                     break;
                 case R.id.rl_state:
-                    common_class.showCommonDialog(stateList, 1, this);
+                    //common_class.showCommonDialog(stateList, 1, this);
                     break;
 
                 case R.id.rl_route:
-                    if (FRoute_Master != null && FRoute_Master.size() > 1) {
+                    /*if (FRoute_Master != null && FRoute_Master.size() > 1) {
                         common_class.showCommonDialog(FRoute_Master, 3, this);
-                    }
+                    }*/
                     break;
                 case R.id.rl_Distributor:
-                    common_class.showCommonDialog(common_class.getDistList(), 2, this);
+                    //common_class.showCommonDialog(common_class.getDistList(), 2, this);
                     break;
                 case R.id.copypaste:
-                    addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
+                    //addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
                     break;
 
                 case R.id.ivShopPhoto:
-                    try {
+                    /*try {
                         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                             @Override
                             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
@@ -1777,7 +1789,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         startActivity(intent);
                     } catch (Exception e) {
                         Log.v(TAG, ":imageClk:" + e.getMessage());
-                    }
+                    }*/
                     break;
             }
         } catch (Exception e) {
@@ -2031,7 +2043,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     private void updateView(String name, boolean isChecked) {
         for (int i = 0; i < serviceTypeList.size(); i++) {
             if (serviceTypeList.get(i).getName().equalsIgnoreCase("-18") && serviceTypeList.get(i).isSelected()) {
-                cbFreezerYes.setEnabled(true);
+                cbFreezerYes.setEnabled(false);
                 cbFreezerYes.setChecked(true);
                 cbFreezerNo.setChecked(false);
                 cbFreezerNo.setEnabled(false);
@@ -2039,12 +2051,12 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
                 break;
             } else if (serviceTypeList.get(i).getName().equalsIgnoreCase("+4") && serviceTypeList.get(i).isSelected()) {
-                cbFreezerYes.setEnabled(true);
-                cbFreezerNo.setEnabled(true);
+                cbFreezerYes.setEnabled(false);
+                cbFreezerNo.setEnabled(false);
                 break;
             } else if ((serviceTypeList.get(i).getName().equalsIgnoreCase("Ambient") && serviceTypeList.get(i).isSelected()) || (serviceTypeList.get(i).getName().equalsIgnoreCase("B&C") && serviceTypeList.get(i).isSelected())) {
                 cbFreezerNo.setChecked(true);
-                cbFreezerNo.setEnabled(true);
+                cbFreezerNo.setEnabled(false);
                 cbFreezerYes.setChecked(false);
                 cbFreezerYes.setEnabled(false);
                 break;
@@ -2104,6 +2116,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 holder.type.setText(list.get(position).getName());
                 holder.category.setText(list.get(position).getCatName());
                 holder.subCategory.setText(list.get(position).getSubCatName());
+                holder.cbType.setEnabled(false);
                 if (list.get(position).isSelected() == false) holder.cbType.setChecked(false);
                 if (list.get(position).isSelected() == true) holder.cbType.setChecked(true);
                 holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
