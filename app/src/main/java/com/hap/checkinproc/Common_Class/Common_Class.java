@@ -492,12 +492,10 @@ public class Common_Class {
                     try {
                         Gson gson = new Gson();
 
-                        if (shared_common_pref == null)
-                            shared_common_pref = new Shared_Common_Pref(activity);
+                        if (shared_common_pref == null) shared_common_pref = new Shared_Common_Pref(activity);
 
                         if (key.equals(Retailer_OutletList)) {
                             shared_common_pref.save(key, gson.toJson(response.body()));
-
                         } else {
                             db.deleteMasterData(key);
                             db.addMasterData(key, gson.toJson(response.body()));

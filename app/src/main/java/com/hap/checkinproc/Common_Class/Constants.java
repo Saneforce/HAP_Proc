@@ -24,6 +24,7 @@ public class Constants {
     public static final String DB_OfferShownOn = "OfferShown";
 
     public static final String Retailer_OutletList = "retailerOutletList";
+    public static final String Retailer_OutletList_Pending = "retailerOutletListPending";
     public static final String Distributor_List = "distributorList";
     public static final String Product_List = "productList";
     public static final String Primary_Product_List = "primaryproList";
