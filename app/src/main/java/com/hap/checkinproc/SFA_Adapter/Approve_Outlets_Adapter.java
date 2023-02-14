@@ -1,5 +1,9 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -17,13 +21,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 // Created by RAGU on 27/01/2023
 public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlets_Adapter.MyViewHolder> {
 
@@ -107,8 +123,8 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
             //holder.rlSeqParent.setVisibility(View.VISIBLE);
         }
 
-        holder.statusTV.setText("Status: " + Retailer_Modal_List.getStatusname().toUpperCase());
-
+//        holder.statusTV.setText("Status: " + Retailer_Modal_List.getStatusname().toUpperCase());
+        holder.statusTV.setVisibility(View.GONE);
 
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
         // holder.textId.setText("" + Retailer_Modal_List.getId());
@@ -116,7 +132,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
         holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
         //holder.clsdRmks.setText("" + Retailer_Modal_List.getClosedRemarks());
         //holder.lupdDt.setText((Retailer_Modal_List.getLastUpdt_Date().equalsIgnoreCase("")) ? "" : "Last Updated On " + Retailer_Modal_List.getLastUpdt_Date());
-        holder.icAC.setVisibility(View.INVISIBLE);
+        holder.icAC.setVisibility(View.GONE);
         if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
             holder.icAC.setVisibility(View.VISIBLE);
         }
@@ -149,11 +165,79 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
         });
 
         holder.approveBtn.setOnClickListener(v2 -> {
-            Toast.makeText(context, "Not Assigned", Toast.LENGTH_SHORT).show();
+            ProgressDialog progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Approving...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            String listedDrCode = Retailer_Modal_List.getId();
+            Log.e("status", listedDrCode);
+            Call<ResponseBody> call = apiInterface.setOutletStatus("set_outlet_status", "0", listedDrCode);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject js = new JSONObject(response.body().string());
+                            if (js.getBoolean("success")) {
+                                Retailer_Modal_Listitem.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(holder.getAdapterPosition());
+                                notifyItemRangeChanged(0, holder.getAdapterPosition());
+//                                common_class.getDataFromApi(Retailer_OutletList, (Activity) context, false);
+                                Toast.makeText(context, "Outlet Approved Successfully", Toast.LENGTH_SHORT).show();
+                            };
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(context, "Error: Response not successfull", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            progressDialog.dismiss();
         });
 
         holder.rejectBtn.setOnClickListener(v3 -> {
-            Toast.makeText(context, "Not Assigned", Toast.LENGTH_SHORT).show();
+            ProgressDialog progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Rejecting...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            String listedDrCode = Retailer_Modal_List.getId();
+            Log.e("status", listedDrCode);
+            Call<ResponseBody> call = apiInterface.setOutletStatus("set_outlet_status", "1", listedDrCode);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject js = new JSONObject(response.body().string());
+                            if (js.getBoolean("success")) {
+                                Retailer_Modal_Listitem.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(holder.getAdapterPosition());
+                                notifyItemRangeChanged(0, holder.getAdapterPosition());
+//                                common_class.getDataFromApi(Retailer_OutletList, (Activity) context, false);
+                                Toast.makeText(context, "Outlet Rejected Successfully", Toast.LENGTH_SHORT).show();
+                            };
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(context, "Error: Response not successfull", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            progressDialog.dismiss();
         });
 
         /*holder.btnSend.setOnClickListener(new View.OnClickListener() {

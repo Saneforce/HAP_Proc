@@ -42,6 +42,9 @@ public interface ApiInterface {
     @POST("db_new_activity.php?")
     Call<Object> GettpWorktypeFields(@QueryMap Map<String, String> params);
 
+    @POST("Db_v300.php?")
+    Call<ResponseBody> setOutletStatus(@Query("axn") String axn, @Query("type") String outletType, @Query("listedDrCode") String sfCode);
+
     /*
         shift time*
         @GET("Db_Native.php?")
@@ -657,5 +660,4 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonObject> submit(@Query("axn") String axn, @Field("data") String toString);
-
 }

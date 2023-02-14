@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.hap.checkinproc.Activity_Hap.ApproveOutletsDetailedActivity;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -24,14 +25,20 @@ import java.util.List;
 
 public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder> {
     List<String> AryDta = new ArrayList<>();
-    private Context context;
     int salRowDetailLayout;
+    Context context;
     String itm = "";
 
-    public FilesAdapter(List<String> jAryDta, int rowLayout, Context mContext) {
+    /*public FilesAdapter(List<String> jAryDta, int rowLayout, Context mContext) {
         AryDta = jAryDta;
-        context = mContext;
+        this.context = mContext;
         salRowDetailLayout = rowLayout;
+    }*/
+
+    public FilesAdapter(List<String> aryDta, int rowLayout, Context context) {
+        this.AryDta = aryDta;
+        this.salRowDetailLayout = rowLayout;
+        this.context = context;
     }
 
     @NonNull
@@ -42,12 +49,11 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int positions) {
         try {
 
-
             if (AryDta != null && AryDta.size() > 0) {
-                itm = AryDta.get(position);
+                itm = AryDta.get(positions);
                 Glide.with(context)
                         .load(itm)
                         .error(R.drawable.profile_img)
@@ -56,6 +62,11 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
                 holder.ivFile.setVisibility(View.GONE);
             }
 
+            try {
+                if (ApproveOutletsDetailedActivity.context.equals(context)) {
+                    holder.ivDel.setVisibility(View.GONE);
+                }
+            } catch (Exception ignored) {}
 
             holder.ivFile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,7 +75,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
 
 
                         Intent intent = new Intent(context, ProductImageView.class);
-                        intent.putExtra("ImageUrl", AryDta.get(position));
+                        intent.putExtra("ImageUrl", AryDta.get(holder.getAdapterPosition()));
                         context.startActivity(intent);
                     } catch (Exception e) {
                         Log.e("FileAdapter: ", e.getMessage());
@@ -79,7 +90,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            AryDta.remove(position);
+                            AryDta.remove(holder.getAdapterPosition());
                             notifyDataSetChanged();
 
                         }

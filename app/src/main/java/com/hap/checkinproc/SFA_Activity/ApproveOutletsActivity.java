@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
@@ -47,29 +50,40 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 // Created by RAGU on 27/01/2023
 public class ApproveOutletsActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
+    RecyclerView recyclerView;
+    TextView route_text, todayoutlets, TotalOutlets, reachedoutlets, distributor_text;
+    TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta;
+    EditText txSearchRet;
+
     Gson gson;
-    private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    TextView route_text, todayoutlets, TotalOutlets, reachedoutlets;
-    List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
-    List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
     Shared_Common_Pref sharedCommonPref;
     Common_Model Model_Pojo;
-    EditText txSearchRet;
-    List<Common_Model> FRoute_Master = new ArrayList<>();
     DatabaseHandler db;
+
+    List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
+    List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
+    List<Common_Model> FRoute_Master = new ArrayList<>();
+
     String TAG = "OUTLET_INFO_Activity:", viewType = "-1";
-    private TextView distributor_text;
-    Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet, swFreezerOutlet, swNoFreezerOutlet;
     int CountUR = 0, CountSR = 0, CountCls = 0;
-    TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta;
+    public static int retailerSize;
+
+    Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet, swFreezerOutlet, swNoFreezerOutlet;
     LinearLayout btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
     public static ApproveOutletsActivity outlet_info_activity;
-    public static int retailerSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +99,7 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
 
             sharedCommonPref = new Shared_Common_Pref(outlet_info_activity);
+
             recyclerView = findViewById(R.id.outletrecyclerview);
             route_text = findViewById(R.id.route_text);
             reachedoutlets = findViewById(R.id.reachedoutlets);
@@ -419,6 +434,10 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
                     else if (outletType.equalsIgnoreCase(viewType))
                         FiltrType = true;
 
+                    // Check the status...
+                    // Add only when its status is pending...
+                    // Code modified by RAGU M
+
                     if (UpdTrue && ACTrue && FiltrType && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
                         Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
                     }
@@ -486,7 +505,7 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
                 findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
 
                 // API Call
-                common_class.getDataFromApi(Retailer_OutletList, this, false);
+                common_class.getDataFromApi(Constants.Retailer_OutletList_Pending, this, false);
 
                 common_class.getDb_310Data(Rout_List, this);
                 sharedCommonPref.save(Constants.DivERP, myDataset.get(position).getDivERP());
@@ -499,6 +518,122 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    private void LoadList(String toJson) {
+        try {
+            Retailer_Modal_ListFilter.clear();
+            if (sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
+                Toast.makeText(this, "Select Franchise", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            String routeId = sharedCommonPref.getvalue(Route_Id);
+
+
+            CountUR = 0;
+            CountSR = 0;
+            CountCls = 0;
+            if (Retailer_Modal_List != null) {
+                retailerSize = Retailer_Modal_List.size();
+
+                for (int sr = 0; sr < Retailer_Modal_List.size(); sr++) {
+                    String itmname = Retailer_Modal_List.get(sr).getName().toUpperCase();
+                    String sSchText = txSearchRet.getText().toString().toUpperCase();
+                    boolean UpdTrue = false;
+                    if (swUpdOutlet.isChecked()) {
+                        if (Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase(""))
+                            UpdTrue = true;
+                    } else if (swUpdNoOutlet.isChecked()) {
+                        if (!(Retailer_Modal_List.get(sr).getLastUpdt_Date() != null && !Retailer_Modal_List.get(sr).getLastUpdt_Date().equalsIgnoreCase("")))
+                            UpdTrue = true;
+                    } else {
+                        UpdTrue = true;
+                    }
+                    boolean ACTrue = false;
+                    if (swACOutlet.isChecked()) {
+                        if (Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC"))
+                            ACTrue = true;
+                    } else if (swOTHOutlet.isChecked()) {
+                        if (!(Retailer_Modal_List.get(sr).getDelivType() != null && Retailer_Modal_List.get(sr).getDelivType().equalsIgnoreCase("AC")))
+                            ACTrue = true;
+                    } else {
+                        ACTrue = true;
+                    }
+
+                    boolean FreezerTrue = false;
+
+                    Log.v("freezer:", "" + swFreezerOutlet.isChecked() + " :nofree:" + swNoFreezerOutlet.isChecked());
+                    if (swFreezerOutlet.isChecked()) {
+                        if (Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("Yes"))
+                            FreezerTrue = true;
+                    } else if (swNoFreezerOutlet.isChecked()) {
+                        if ((Retailer_Modal_List.get(sr).getFreezer_required() != null && Retailer_Modal_List.get(sr).getFreezer_required().equalsIgnoreCase("No")))
+                            FreezerTrue = true;
+                    } else {
+                        FreezerTrue = true;
+                    }
+
+
+                    boolean FiltrType = false;
+                    String outletType = Retailer_Modal_List.get(sr).getType() == null ? "0" : Retailer_Modal_List.get(sr).getType();
+                    if (viewType.equalsIgnoreCase("-1"))
+                        FiltrType = true;
+                    else if (outletType.equalsIgnoreCase(viewType))
+                        FiltrType = true;
+
+                    // Check the status...
+                    // Add only when its status is pending...
+                    // Code modified by RAGU M
+
+                    if (UpdTrue && ACTrue && FiltrType && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
+                    }
+                    if (UpdTrue && ACTrue && FreezerTrue && ((";" + itmname).indexOf(";" + sSchText) > -1 && (routeId.equals("") || (Retailer_Modal_List.get(sr).getTownCode().equals(routeId))))) {
+                        if (Retailer_Modal_List.get(sr).getType() == null)
+                            Retailer_Modal_List.get(sr).setType("0");
+                        if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("0")) CountUR++;
+                        if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("1")) CountSR++;
+                        if (Retailer_Modal_List.get(sr).getType().equalsIgnoreCase("2")) CountCls++;
+                    }
+                }
+            }
+            TotalOutlets.setText(String.valueOf(Retailer_Modal_ListFilter.size()));
+            txUniOtltCnt.setText(String.valueOf(CountUR));
+            txSrvOtltCnt.setText(String.valueOf(CountSR));
+            txClsOtltCnt.setText(String.valueOf(CountCls));
+
+            if (Retailer_Modal_ListFilter != null) {
+
+                recyclerView.setAdapter(new Approve_Outlets_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview_two, this, "Outlets", new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(int position) {
+                        try {
+                            Intent intent = new Intent(getApplicationContext(), ApproveOutletsDetailedActivity.class);
+                            Shared_Common_Pref.Outlet_Info_Flag = "1";
+                            Shared_Common_Pref.Editoutletflag = "1";
+                            Shared_Common_Pref.Outler_AddFlag = "0";
+                            Shared_Common_Pref.FromActivity = "Outlets";
+                            Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
+                            intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
+                            intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
+                            intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                            intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getPrimary_No());
+                            intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
+
+                            startActivity(intent);
+                            // finish();
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                }));
+
+            }
+        } catch (Exception e) {
         }
     }
 
@@ -568,10 +703,9 @@ public class ApproveOutletsActivity extends AppCompatActivity implements View.On
                         }
                         loadroute();
                         break;
-
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }

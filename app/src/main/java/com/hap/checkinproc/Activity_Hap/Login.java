@@ -1056,10 +1056,7 @@ public class Login extends AppCompatActivity {
                 } else {
                     // Permission denied.
                     //Snackbar snackbar =
-                    Snackbar.make(
-                                    findViewById(R.id.activity_main),
-                                    R.string.permission_denied_explanation,
-                                    Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(findViewById(R.id.activity_main), R.string.permission_denied_explanation, Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.settings, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -1067,8 +1064,7 @@ public class Login extends AppCompatActivity {
                                     Intent intent = new Intent();
                                     intent.setAction(
                                             Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package",
-                                            BuildConfig.APPLICATION_ID, null);
+                                    Uri uri = Uri.fromParts("package", com.hap.checkinproc.BuildConfig.APPLICATION_ID, null);
                                     intent.setData(uri);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
@@ -1079,5 +1075,4 @@ public class Login extends AppCompatActivity {
                 }
         }
     }
-
 }
