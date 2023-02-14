@@ -888,6 +888,33 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif"
+                                android:text="PO Number"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C14dp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/txPONum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:hint="PO Number"
+                                android:inputType="textCapCharacters"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
                                 android:text="Invoice Amount"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C13dp" />
@@ -928,6 +955,55 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Discount"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:layout_marginEnd="@dimen/C5dp"
+                                android:textSize="@dimen/C13dp" />
+                            <EditText
+                                android:id="@+id/etdiscountPer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:hint="Disc"
+                                android:inputType="numberDecimal"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="%"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/C13dp" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"/>
+
+                            <EditText
+                                android:id="@+id/etdiscountAmt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:hint="Disc.Amt"
+                                android:inputType="numberDecimal"
+                                android:text="0.00"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1011,7 +1087,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C5dp"
                             android:fontFamily="sans-serif"
-                            android:text="Zero Invoices"
+                            android:text="Free items details"
                             android:textColor="@color/black"
                             android:textSize="@dimen/C13dp"
                             android:textStyle="bold" />

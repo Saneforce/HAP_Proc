@@ -1,5 +1,11 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static android.Manifest.permission.READ_PHONE_NUMBERS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+
+import static androidx.core.app.ActivityCompat.requestPermissions;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -9,12 +15,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.JsonObject;
@@ -38,6 +47,7 @@ public class HAPApp extends Application {
     private BroadcastReceiver mNetworkReceiver;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
+    public static String CurrencySymbol = "B$";
     SharedPreferences CommUserDetails;
     public static final String UserDetail = "MyPrefs";
     @Override
@@ -116,6 +126,7 @@ public class HAPApp extends Application {
     public static Activity getActiveActivity() {
         return activeActivity;
     }
+
     public static void sendOFFlineLocations(){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         DatabaseHandler db = new DatabaseHandler(activeActivity);

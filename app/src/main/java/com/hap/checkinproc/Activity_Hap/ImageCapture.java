@@ -887,6 +887,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                                     else
                                         editor.putString("On_Duty_Flag", "0");
 
+                                    editor.putInt("Type", 0);
                                     editor.putBoolean("CheckIn", true);
                                     editor.apply();
                                 } catch (JSONException e) {
@@ -904,6 +905,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     if (sStatus.equalsIgnoreCase("true")) {
                                         Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
+
                                         Dashboard.putExtra("Mode", "CIN");
                                         ImageCapture.this.startActivity(Dashboard);
                                     }
@@ -944,6 +946,12 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                         Log.e("RESPONSE_FROM_SERVER", String.valueOf(response.body().getAsJsonObject()));
                         if (response.isSuccessful()) {
                             JsonObject itm = response.body().getAsJsonObject();
+                            SharedPreferences.Editor editor = CheckInDetails.edit();
+
+                            editor.putInt("Type", 1);
+                            editor.putBoolean("CheckIn", true);
+                            editor.apply();
+
                             String mMessage = "Your Extended Submitted Successfully";
                             try {
                                 mMessage = itm.get("Msg").getAsString();

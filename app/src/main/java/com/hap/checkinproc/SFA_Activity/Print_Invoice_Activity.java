@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -83,7 +85,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     private ArrayList<Product_Details_Modal> taxList;
     private ArrayList<Product_Details_Modal> uomList;
 
-    double cashDisc, subTotalVal, outstandAmt;
+    double cashDisc, subTotalVal,NetTotAmt, outstandAmt;
     LinearLayout llDistCal, llRetailCal;
     String[] strLoc;
     final Handler handler = new Handler();
@@ -91,7 +93,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     ImageView ivStockCapture;
     RecyclerView rvStockCapture;
     List<QPS_Modal> stockFileList = new ArrayList<>();
-    String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="";
+    String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -144,8 +146,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ivStockCapture = findViewById(R.id.ivStockCapture);
             rvStockCapture = findViewById(R.id.rvStockFiles);
 
+            ///For Brunei
+            tvDisGST.setVisibility(View.GONE);
+            tvDisFSSAI.setVisibility(View.GONE);
+            tvRetGST.setVisibility(View.GONE);
+            tvRetFSSAI.setVisibility(View.GONE);
 
 
+            RetailCode=sharedCommonPref.getvalue(Constants.Retailor_ERP_Code);
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             ivPrint = findViewById(R.id.ivPrint);
@@ -213,6 +221,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvDistId.setText(sharedCommonPref.getvalue(Constants.DistributorERP));
             tvDistAdd.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
+            PONo=getIntent().getStringExtra("PONumber");
 
             tvDisGST.setText(dis_gstn);
             tvDisFSSAI.setText(dis_fssai);
@@ -444,7 +453,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
                         OutletItem.put("orderValue", formatter.format(subTotalVal));
                         OutletItem.put("CashDiscount", cashDisc);
-                        OutletItem.put("NetAmount", formatter.format(subTotalVal));
+                        OutletItem.put("NetAmount", formatter.format(NetTotAmt));
                         OutletItem.put("No_Of_items", returntotalitem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
                         OutletItem.put("TransSlNo", "");
@@ -613,90 +622,154 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     }
 
+    public static String repeat(String val, int count){
+
+        if(count<1) return "";
+        StringBuilder buf = new StringBuilder(val.length() * count);
+        while (count-- > 0) {
+            buf.append(val);
+        }
+        return buf.toString();
+    }
     public void printBill() {
         try {
-            Bitmap logo = Printama.getBitmapFromVector(this, R.drawable.hap_logo);
-            Printama.with(this).connect(printama -> {
+                Bitmap logo = Printama.getBitmapFromVector(this, R.drawable.hap_logo);
+                Printama.with(this).connect(printama -> {
 
-                printama.printImage(Printama.RIGHT, logo, 140);
-                printama.addNewLine();
-
-
+                   // printama.printImage(Printama.CENTER, logo, 140);
+                   // printama.addNewLine();
+                String sMode=sharedCommonPref.getvalue(Constants.FLAG);
+                String sHead = "";
+                    printama.setWideTallBold();
+                if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
+                {
+                    sHead = "INVOICE";
+                }else if( sMode.equals("PROJECTION") ){
+                    sHead = "PROJECTION";
+                }else if( sMode.equalsIgnoreCase("Order") ){
+                    sHead = "ORDER";
+                }
+                if(sHead!=""){
+                    printama.setBold();
+                    printama.printTextln(Printama.CENTER, sHead);
+                    printama.addNewLine();
+                }
+                printama.setNormalText();
+                printama.printTextln(" ");
                 printama.setWideTallBold();
                 printama.setTallBold();
                 printama.printTextln(Printama.CENTER, tvDistributorName.getText().toString());
                 printama.addNewLine();
+                printama.setNormalText();
                 printama.setBold();
+                printama.printTextln(Printama.CENTER, "( RC00006194 )");
                 if (tvDistAdd.getVisibility() == View.VISIBLE) {
-                    printama.printTextln(Printama.LEFT, "Address: ");
-                    printama.setNormalText();
 
+                    printama.setNormalText();
                     printama.printTextln(Printama.LEFT, tvDistAdd.getText().toString());
+                    printama.addNewLine(1);
                 }
-
-                printama.addNewLine(1);
-
                 if (tvDistributorPh.getVisibility() == View.VISIBLE){
-                    printama.printTextln(Printama.LEFT, "Mobile: ");
                     printama.setNormalText();
 
-                    printama.printTextln(Printama.LEFT, tvDistributorPh.getText().toString() + "                  " + invoicedate.getText().toString());
+                    printama.printTextln(Printama.LEFT, tvDistributorPh.getText().toString() + "               " + invoicedate.getText().toString());
+                    printama.addNewLine(1);
                 }
 
                 printama.addNewLine(1);
 
-                if (tvDisGST.getVisibility() == View.VISIBLE){
+                if (tvDisGST.getVisibility() == View.VISIBLE && ! tvDisGST.getText().toString().equalsIgnoreCase("")){
                     printama.setNormalText();
-
                     printama.printTextln(Printama.LEFT, "GST NO: " + tvDisGST.getText().toString());
                 }
 
+
+                printama.addNewLine(1);
+                printama.printDashedLine();
                 printama.addNewLine(1);
                 printama.setBold();
-                printama.printText(billnumber.getText().toString());
+                printama.printTextln(Printama.LEFT, "BILL TO :");
+                printama.printTextln(Printama.LEFT,retailername.getText().toString());
+                printama.setNormalText();
+                printama.printTextln(Printama.LEFT,"Customer Code :" + RetailCode);
+                if (retaileAddress.getVisibility() == View.VISIBLE) {
+                    String[] lines = Split(retaileAddress.getText().toString(), 90, retaileAddress.getText().toString().length());
+                    for (int i = 0; i < lines.length; i++) {
+                        System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
+                        printama.printTextln(Printama.LEFT, lines[i]);
+                    }
+                }
+                if (tvRetailorPhone.getVisibility() == View.VISIBLE) {
+                    printama.printTextln(Printama.LEFT, "Mobile: "+ tvRetailorPhone.getText().toString());
+                }
+
+                if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+                    printama.printTextln(Printama.LEFT, "GSTN : " + tvRetGST.getText().toString());
+                }
+                if(!tvRetFSSAI.getText().toString().equalsIgnoreCase("")) {
+                    printama.printTextln(Printama.LEFT, "FSSAI : " + tvRetFSSAI.getText().toString());
+                }
+
+
+                printama.setSmallText();
+                printama.printTextln(" ");
+                printama.setNormalText();
+                printama.setBold();
+                printama.printTextln(Printama.LEFT,billnumber.getText().toString());
+
+                printama.printTextln(Printama.LEFT,"PO No : "+PONo);
 //                printama.addNewLine();
 
                 printama.addNewLine();
-                printama.printLine();
-                printama.addNewLine(2);
+                printama.printDashedLine();
+                printama.setNormalText();
                 printama.setBold();
-                printama.printTextln(" Item       " + "     Qty" + "      Price" + "     Total");
-                printama.printLine();
-                printama.addNewLine(2);
 
+                String sCode="Item";
+                String sqtyValue = "Qty";
+                String sPCS = "PCS";
+                String srateValue = "Price";
+                String samtValue = "Amount";
 
+                String sRowTx= sCode + repeat(" ",19-sCode.length()) +repeat(" ",5-sqtyValue.length()) + sqtyValue
+                        +repeat(" ",5-sPCS.length())+ sPCS +repeat(" ",8-srateValue.length()) + srateValue +repeat(" ",10-samtValue.length()) + samtValue;
+                printama.printTextln(sRowTx);
+                //printama.printTextln("Item"+repeat(" ",15) + repeat(" ",7) + "Qty" +repeat(" ",8) + "Price" "" + "Total");
+                printama.printDashedLine();
+                printama.setNormalText();
 
                 for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
-                    printama.setBold();
-                    printama.printTextln(Order_Outlet_Filter.get(i).getName().toString().trim());
-                    printama.addNewLine(1);
 
+                    String[] lines = Split(Order_Outlet_Filter.get(i).getName().toString().trim(), 19, Order_Outlet_Filter.get(i).getName().toString().trim().length());
+
+                    for (int j = 0; j < lines.length; j++) {
+                        printama.setBold();
+                        String qtyValue = "";
+                        String PCS = "";
+                        String rateValue = "";
+                        String amtValue = "";
+                        String Code=lines[j];
+                        if (j==0){
+                            qtyValue = String.valueOf(Order_Outlet_Filter.get(i).getQty());
+                            Integer sDp=Integer.parseInt(new DecimalFormat("##0").format(Double.parseDouble(Order_Outlet_Filter.get(i).getConversionFactor())));
+                            PCS = String.valueOf((Order_Outlet_Filter.get(i).getQty() * sDp));
+                            rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
+                            amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
+                        }
+                        String RowTx= Code + repeat(" ",19-Code.length()) +repeat(" ",5-qtyValue.length()) + qtyValue
+                                +repeat(" ",5-PCS.length())+ PCS +repeat(" ",8-rateValue.length()) + rateValue +repeat(" ",10-amtValue.length()) + amtValue;
+                        printama.printTextln(RowTx);
+                    }
                     printama.setNormalText();
-
-                    String name = Order_Outlet_Filter.get(i).getId() + "           ";
-                    name = name.substring(0, name.length() - String.valueOf(Order_Outlet_Filter.get(i).getId()).length());
-
-
-                    String qtyValue = String.valueOf(Order_Outlet_Filter.get(i).getQty());
-                    String qty = "        " + qtyValue;
-                    qty = qty.substring(qtyValue.length(), qty.length());
-
-                    String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
-                    String rate = "            " + rateValue;
-                    rate = (rate.substring(rateValue.length(), rate.length()));
-
-                    String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
-                    String amt = "           " + amtValue;
-                    amt = (amt.substring(amtValue.length(), amt.length()));
-
-                    printama.printTextln(name + qty +
-                            rate + amt);
-
-                    printama.addNewLine();
+                    printama.printTextln(Order_Outlet_Filter.get(i).getHSNCode().toString());
+                    printama.setSmallText();
+                    printama.printTextln(" ");
+                    printama.setNormalText();
 
                 }
 
-                printama.printLine();
+                printama.setNormalText();
+                printama.printDashedLine();
                 printama.addNewLine(2);
 
                 String subTotal = "           " + formatter.format(subTotalVal);
@@ -705,11 +778,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 String discount = "           " + cashDisc;
                 String outstand = "           " + outstandAmt;
 
-                printama.printText("SubTotal" + "                       " + subTotal.substring(String.valueOf(formatter.format(subTotalVal)).length(), subTotal.length()));
+                printama.printText("SubTotal" + "                            " + subTotal.substring(String.valueOf(formatter.format(subTotalVal)).length(), subTotal.length()));
                 printama.addNewLine();
-                printama.printText("Total Item" + "                     " + totItem.substring(totalitem.getText().toString().length(), totItem.length()));
-                printama.addNewLine();
-                printama.printText("Total Qty" + "                      " + totqty.substring(totalqty.getText().toString().length(), totqty.length()));
+                printama.printText("Total Qty" + "                           " + totqty.substring(totalqty.getText().toString().length(), totqty.length()));
                 printama.addNewLine();
 
                 if (uomList != null) {
@@ -739,26 +810,51 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 //                }
 
                 if (cashDisc > 0) {
-                    printama.printText("Cash Discount" + "                  " + discount.substring(String.valueOf(cashDisc).length(), discount.length()));
+                    printama.printText("Cash Discount" + "                       " + discount.substring(String.valueOf(cashDisc).length(), discount.length()));
                     printama.addNewLine();
-                    printama.printLine();
                 }
 
                 printama.addNewLine(1.5);
                 printama.setTallBold();
-                String strAmount = "           " + formatter.format(subTotalVal);
-
-                printama.printText("Net amount" + "                     " + strAmount.substring(String.valueOf(subTotalVal).length(), strAmount.length()));
-                printama.addNewLine(1);
+                String strAmount = "       " +CurrencySymbol+" "+ formatter.format(NetTotAmt);
+                printama.printDashedLine();
+//
+                printama.printTextln("Net amount" + "                          " + strAmount.substring(String.valueOf(NetTotAmt).length(), strAmount.length()));
+                printama.printDashedLine();
 //                printama.printLine();
                 printama.addNewLine(2);
+                if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")   || sMode.equals("INVOICE"))
+                {
+                    printama.setBold();
+                    printama.printTextln(" ");
+                    printama.printTextln(Printama.LEFT, "For " + tvDistributorName.getText().toString());
+                    printama.printTextln(" ");
+                    printama.printTextln(" ");
+                    printama.printDashedLine();
+                    printama.printTextln(Printama.LEFT, "Authorized signature" );
 
-                printama.setBold();
-                printama.printTextln(Printama.CENTER, "Thank You! Visit Again");
-                printama.addNewLine();
-
+                    printama.printTextln(" ");
+                    printama.printTextln(" ");
+                    printama.setBold();
+                    printama.printTextln(Printama.LEFT, "For " + retailername.getText().toString());
+                    printama.printTextln(" ");
+                    printama.printTextln(" ");
+                    printama.printDashedLine();
+                    printama.printTextln(Printama.LEFT, "Receiver's Signature & Stamp" );
+                    printama.printTextln(" ");
+                    printama.printTextln(" ");
+                    printama.printTextln(" ");
+                    printama.addNewLine();
+                }else
+                {
+                    printama.setBold();
+                    printama.printTextln(Printama.CENTER, "Thank You! Visit Again");
+                    printama.addNewLine();
+                }
 
                 printama.setLineSpacing(3);
+                printama.printTextln(" ");
+                printama.printTextln(" ");
                 printama.feedPaper();
                 printama.close();
             });
@@ -796,7 +892,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             // create a new document
             PdfDocument document = new PdfDocument();
-            int widthSize = 600;
+            int widthSize = 650;
             // crate a page description
             PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, hgt, 1).create();
             // start a page
@@ -809,13 +905,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             int y = 30;
             float wdth=widthSize-10;
             Rect bounds = new Rect();
-        String sMode=sharedCommonPref.getvalue(Constants.FLAG);
+            String sMode=sharedCommonPref.getvalue(Constants.FLAG);
             paint.setColor(Color.BLACK);
             String sHead = "";
 
             if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
             {
-                sHead = "TAX INVOICE";
+                sHead = "INVOICE";
             }else if( sMode.equals("PROJECTION") ){
                 sHead = "PROJECTION";
             }else if( sMode.equalsIgnoreCase("Order") ){
@@ -855,12 +951,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 y = y + 20;
             }
 
-            if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+            if(!tvDisGST.getText().toString().equalsIgnoreCase("")) {
                 canvas.drawText("GSTN : " + tvDisGST.getText().toString(), x, y, paint);
                 y = y + 20;
             }
 
-            if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+            if(!tvDisFSSAI.getText().toString().equalsIgnoreCase("")) {
                 canvas.drawText("FSSAI : " + tvDisFSSAI.getText().toString(), x, y, paint);
                 y = y + 20;
             }
@@ -881,6 +977,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setTextSize(12);
             paint.setTextAlign(Paint.Align.LEFT);
 
+            y = y + 18;
+            canvas.drawText("Customer Code :" + RetailCode.toString(), x, y, paint);
             y = y + 20;
 
             paint.setFakeBoldText(false);
@@ -922,8 +1020,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
             paint.setTextAlign(Paint.Align.RIGHT);
             canvas.drawText("" + invoicedate.getText().toString(), wdth, y, paint);
-
+            y = y + 20;
             paint.setTextAlign(Paint.Align.LEFT);
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(11);
+            paint.setFakeBoldText(true);
+            canvas.drawText("PO No : " + PONo, x, y, paint);
+
+
             y = y + 25;
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
@@ -937,7 +1041,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             String sText="Item";
             canvas.drawText("Item", x, y, paint);
 
-            float xTot,xCGST,xSGST,xGST,xPr,xQt,xHSN;
+            float xTot,xCGST,xSGST,xGST,xPr,xQt,xHSN,xMRP,xPCS;
             paint.setTextAlign(Paint.Align.RIGHT);
             sText="___Total";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
@@ -945,23 +1049,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             wdth=wdth-bounds.width();
             wdth = wdth-10;
 
-            sText="___CGST";
-            paint.getTextBounds(sText, 0, sText.length(), bounds);
-            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xCGST=wdth;
-            wdth = wdth-bounds.width();
-            wdth = wdth-10;
-
-            sText="___SGST";
-            paint.getTextBounds(sText, 0, sText.length(), bounds);
-            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xSGST=wdth;
-            wdth = wdth-bounds.width();
-            wdth = wdth-10;
-
-            sText="_GST";
-            paint.getTextBounds(sText, 0, sText.length(), bounds);
-            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xGST=wdth;
-            wdth = wdth-bounds.width();
-            wdth = wdth-10;
 
             sText="__Price";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
@@ -969,18 +1056,30 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             wdth = wdth-bounds.width();
             wdth = wdth-10;
 
+            sText="_PCS";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xPCS=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-3;
+
             sText="_Qty";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
             canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xQt=wdth;
             wdth = wdth-bounds.width();
-            wdth = wdth-10;
+            wdth = wdth-3;
+
+            sText="_MRP";
+            paint.getTextBounds(sText, 0, sText.length(), bounds);
+            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xMRP=wdth;
+            wdth = wdth-bounds.width();
+            wdth = wdth-2;
             paint.setTextAlign(Paint.Align.LEFT);
 
-            sText="HSN Code_";
+            sText="Code______________________";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
             wdth = wdth-bounds.width();
             canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xHSN=wdth;
-            wdth = wdth-10;
+            wdth = wdth-2;
 
             y = y + 10;
             paint.setColor(Color.LTGRAY);
@@ -1005,11 +1104,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 }
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getHSNCode(), xHSN, cy, paint);
                 paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText("" + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(i).getMRP())), xMRP, cy, paint);
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), xQt, cy, paint);
+                Integer sDp=Integer.parseInt(new DecimalFormat("##0").format(Double.parseDouble(Order_Outlet_Filter.get(i).getConversionFactor())));
+                canvas.drawText(String.valueOf(Order_Outlet_Filter.get(i).getQty() * sDp), xPCS, cy, paint);
                 canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), xPr, cy, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getTaxPer()), xGST, cy, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getPSGST()), xSGST, cy, paint);
-                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getPCGST()), xCGST, cy, paint);
+
                 canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), xTot, cy, paint);
 
 
@@ -1071,7 +1171,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 paint.setTextAlign(Paint.Align.LEFT);
                 canvas.drawText(taxList.get(i).getTax_Type(), x, y, paint);
                 paint.setTextAlign(Paint.Align.RIGHT);
-                canvas.drawText("₹" + formatter.format(taxList.get(i).getTax_Amt()), xTot, y, paint);
+                canvas.drawText(CurrencySymbol+" " + formatter.format(taxList.get(i).getTax_Amt()), xTot, y, paint);
 
             }
 
@@ -1088,6 +1188,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 canvas.drawText("Cash Discount", x, y, paint);
                 paint.setTextAlign(Paint.Align.RIGHT);
                 canvas.drawText(cashdiscount.getText().toString(), xTot, y, paint);
+                //netamount=netamount - Double.parseDouble(cashdiscount.getText().toString());
                 y = y + 20;
             }
 
@@ -1111,12 +1212,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             canvas.drawLine(0, y, widthSize, y, paint);
 
             y = y + 30;
-            paint.setColor(Color.parseColor("#008000"));
-            paint.setTextSize(15);
+            //paint.setColor(Color.parseColor("#008000"));
+            //paint.setTextSize(15);
 
-
-            paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("Thank You! Visit Again", widthSize/2, y, paint);
+            //paint.setTextAlign(Paint.Align.CENTER);
+            //canvas.drawText("Thank You! Visit Again", widthSize/2, y, paint);
 
 
 
@@ -1174,6 +1274,406 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         }
 
     }
+//    private void createPdf() {
+//        try {
+//            int hgt = 1000 + (Order_Outlet_Filter.size() * 40);
+//
+//            // create a new document
+//            PdfDocument document = new PdfDocument();
+//            int widthSize = 650;
+//            // crate a page description
+//            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, hgt, 1).create();
+//            // start a page
+//            PdfDocument.Page page = document.startPage(pageInfo);
+//            Canvas canvas = page.getCanvas();
+//            Paint paint = new Paint();
+//
+//            int Margin=10;
+//            int x = 10;
+//            int y = 30;
+//            float wdth=widthSize-10;
+//            Rect bounds = new Rect();
+//        String sMode=sharedCommonPref.getvalue(Constants.FLAG);
+//            paint.setColor(Color.BLACK);
+//            String sHead = "";
+//
+//            if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
+//            {
+//                sHead = "INVOICE";
+//            }else if( sMode.equals("PROJECTION") ){
+//                sHead = "PROJECTION";
+//            }else if( sMode.equalsIgnoreCase("Order") ){
+//                sHead = "ORDER";
+//            }
+//            if(sHead!=""){
+//                paint.setTextSize(15);
+//                paint.getTextBounds(sHead, 0, sHead.length(), bounds);
+//                paint.setFakeBoldText(true);
+//                canvas.drawText(sHead, widthSize - (bounds.width() + Margin), y, paint);
+//            }
+//            paint.setTextSize(13);
+//
+//            canvas.drawText(tvDistributorName.getText().toString(), x, y, paint);
+//
+//            paint.setColor(Color.BLACK);
+//            paint.setTextSize(12);
+//            paint.setTextAlign(Paint.Align.LEFT);
+//
+//            y = y + 20;
+//
+//            paint.setFakeBoldText(false);
+//            if (tvDistAdd.getVisibility() == View.VISIBLE) {
+//                paint.setColor(Color.DKGRAY);
+//                paint.setTextSize(12);
+//
+//                String[] lines = Split(tvDistAdd.getText().toString(), 90, tvDistAdd.getText().toString().length());
+//                for (int i = 0; i < lines.length; i++) {
+//                    System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
+//                    canvas.drawText(lines[i], x, y, paint);
+//                    y = y + 20;
+//
+//                }
+//            }
+//            if (tvDistributorPh.getVisibility() == View.VISIBLE) {
+//                canvas.drawText("Mobile: "+ tvDistributorPh.getText().toString(), x, y, paint);
+//                y = y + 20;
+//            }
+//
+//            if(!tvDisGST.getText().toString().equalsIgnoreCase("")) {
+//                canvas.drawText("GSTN : " + tvDisGST.getText().toString(), x, y, paint);
+//                y = y + 20;
+//            }
+//
+//            if(!tvDisFSSAI.getText().toString().equalsIgnoreCase("")) {
+//                canvas.drawText("FSSAI : " + tvDisFSSAI.getText().toString(), x, y, paint);
+//                y = y + 20;
+//            }
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//            paint.setFakeBoldText(true);
+//            y = y + 20;
+//            paint.setColor(Color.BLACK);
+//            paint.setTextSize(13);
+//            canvas.drawText("BILL TO", x, y, paint);
+//
+//            y = y + 18;
+//            canvas.drawText(retailername.getText().toString(), x, y, paint);
+//
+//            paint.setColor(Color.BLACK);
+//            paint.setTextSize(12);
+//            paint.setTextAlign(Paint.Align.LEFT);
+//
+//            y = y + 20;
+//
+//            paint.setFakeBoldText(false);
+//            if (retaileAddress.getVisibility() == View.VISIBLE) {
+//                paint.setColor(Color.DKGRAY);
+//                paint.setTextSize(12);
+//
+//                String[] lines = Split(retaileAddress.getText().toString(), 90, retaileAddress.getText().toString().length());
+//                for (int i = 0; i < lines.length; i++) {
+//                    System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
+//                    canvas.drawText(lines[i], x, y, paint);
+//                    y = y + 20;
+//
+//                }
+//            }
+//            if (tvRetailorPhone.getVisibility() == View.VISIBLE) {
+//                canvas.drawText("Mobile: "+ tvRetailorPhone.getText().toString(), x, y, paint);
+//                y = y + 10;
+//            }
+//
+//            if(!tvRetGST.getText().toString().equalsIgnoreCase("")) {
+//                canvas.drawText("GSTN : " + tvRetGST.getText().toString(), x, y, paint);
+//                y = y + 20;
+//            }
+//            if(!tvRetFSSAI.getText().toString().equalsIgnoreCase("")) {
+//                canvas.drawText("FSSAI : " + tvRetFSSAI.getText().toString(), x, y, paint);
+//                y = y + 20;
+//            }
+////
+////            paint.setColor(Color.LTGRAY);
+////            paint.setStrokeWidth(30);
+////            canvas.drawLine(0, y + 30, widthSize, y + 30, paint);
+//
+//
+//            y = y + 35;
+//            paint.setColor(Color.BLACK);
+//            paint.setTextSize(11);
+//            paint.setFakeBoldText(true);
+//            canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
+//            paint.setTextAlign(Paint.Align.RIGHT);
+//            canvas.drawText("" + invoicedate.getText().toString(), wdth, y, paint);
+//
+//            paint.setTextAlign(Paint.Align.LEFT);
+//            y = y + 25;
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//
+//            String space = "    ";
+//            y = y + 20;
+//            paint.setColor(Color.BLACK);
+//            paint.setTextSize(13);
+//            String sText="Item";
+//            canvas.drawText("Item", x, y, paint);
+//
+//            float xTot,xCGST,xSGST,xGST,xPr,xQt,xHSN,xMRP,xPCS;
+//            paint.setTextAlign(Paint.Align.RIGHT);
+//            sText="___Total";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xTot=wdth;
+//            wdth=wdth-bounds.width();
+//            wdth = wdth-10;
+//
+//            sText="___CGST";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xCGST=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-10;
+//
+//            sText="___SGST";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xSGST=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-10;
+//
+//            sText="_GST";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xGST=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-10;
+//
+//            sText="__Price";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xPr=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-10;
+//
+//            sText="_PCS";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xPCS=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-3;
+//
+//            sText="_Qty";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xQt=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-3;
+//
+//            sText="_MRP";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xMRP=wdth;
+//            wdth = wdth-bounds.width();
+//            wdth = wdth-2;
+//            paint.setTextAlign(Paint.Align.LEFT);
+//
+//            sText="HSN Code_";
+//            paint.getTextBounds(sText, 0, sText.length(), bounds);
+//            wdth = wdth-bounds.width();
+//            canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xHSN=wdth;
+//            wdth = wdth-2;
+//
+//            y = y + 10;
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//            paint.setFakeBoldText(false);
+//            y = y + 20;
+//            for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
+//
+//                paint.setTextAlign(Paint.Align.LEFT);
+//                y = y + 5;
+//                paint.setColor(Color.DKGRAY);
+//                paint.setTextSize(12);
+//                float cy=y;
+//                String[] lines = Split(Order_Outlet_Filter.get(i).getName(), 30, Order_Outlet_Filter.get(i).getName().length());
+//                for (int j = 0; j < lines.length; j++) {
+//                    System.out.println("lines[" + j + "]: (len: " + lines[j].length() + ") : " + lines[j]);
+//                    canvas.drawText(lines[j], x, y, paint);
+//                    y = y + 20;
+//
+//                }
+//                canvas.drawText("" + Order_Outlet_Filter.get(i).getHSNCode(), xHSN, cy, paint);
+//                paint.setTextAlign(Paint.Align.RIGHT);
+//                canvas.drawText("" + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(i).getMRP())), xMRP, cy, paint);
+//                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), xQt, cy, paint);
+//                Integer sDp=Integer.parseInt(new DecimalFormat("##0").format(Double.parseDouble(Order_Outlet_Filter.get(i).getConversionFactor())));
+//                canvas.drawText(String.valueOf(Order_Outlet_Filter.get(i).getQty() * sDp), xPCS, cy, paint);
+//                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), xPr, cy, paint);
+//
+//                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getTaxPer()), xGST, cy, paint);
+//                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getPSGST()), xSGST, cy, paint);
+//                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getPCGST()), xCGST, cy, paint);
+//                canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), xTot, cy, paint);
+//
+//
+//            }
+//
+//
+//            paint.setTextAlign(Paint.Align.LEFT);
+//            y = y + 5;
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//            y = y + 20;
+//            paint.setColor(Color.GRAY);
+//            paint.setTextSize(12);
+//            canvas.drawText("PRICE DETAILS", x, y, paint);
+//
+//            y = y +10;
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//            paint.setColor(Color.DKGRAY);
+//
+//            y = y + 30;
+//            paint.setTextAlign(Paint.Align.LEFT);
+//            canvas.drawText("SubTotal", x, y, paint);
+//            paint.setTextAlign(Paint.Align.RIGHT);
+//            canvas.drawText(subtotal.getText().toString(), xTot, y, paint);
+//
+//            y = y + 20;
+//            paint.setTextAlign(Paint.Align.LEFT);
+//            canvas.drawText("Total Item", x, y, paint);
+//            paint.setTextAlign(Paint.Align.RIGHT);
+//            canvas.drawText(totalitem.getText().toString(), xTot, y, paint);
+//            y = y + 20;
+//            paint.setTextAlign(Paint.Align.LEFT);
+//            canvas.drawText("Total Qty", x, y, paint);
+//            paint.setTextAlign(Paint.Align.RIGHT);
+//            canvas.drawText(totalqty.getText().toString(), xTot, y, paint);
+//
+//            if (uomList != null) {
+//                for (int i = 0; i < uomList.size(); i++) {
+//                    y = y + 20;
+//                    paint.setTextAlign(Paint.Align.LEFT);
+//                    canvas.drawText(uomList.get(i).getUOM_Nm(), x, y, paint);
+//                    paint.setTextAlign(Paint.Align.RIGHT);
+//                    canvas.drawText("" + (int) uomList.get(i).getCnvQty(), xTot, y, paint);
+//                }
+//
+//            }
+//
+////            y = y + 30;
+////            canvas.drawText("Gst Rate", x, y, paint);
+////            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
+////
+//            for (int i = 0; i < taxList.size(); i++) {
+//                y = y + 20;
+//                paint.setTextAlign(Paint.Align.LEFT);
+//                canvas.drawText(taxList.get(i).getTax_Type(), x, y, paint);
+//                paint.setTextAlign(Paint.Align.RIGHT);
+//                canvas.drawText(CurrencySymbol+" " + formatter.format(taxList.get(i).getTax_Amt()), xTot, y, paint);
+//
+//            }
+//
+//            y = y + 20;
+//
+////            if (tvOutstanding.getVisibility() == View.VISIBLE) {
+////                canvas.drawText("Outstanding", x, y, paint);
+////                canvas.drawText(tvOutstanding.getText().toString(), (widthSize / 2) + 150, y, paint);
+////                y = y + 30;
+////            }
+//
+//            if (cashDisc > 0) {
+//                paint.setTextAlign(Paint.Align.LEFT);
+//                canvas.drawText("Cash Discount", x, y, paint);
+//                paint.setTextAlign(Paint.Align.RIGHT);
+//                canvas.drawText(cashdiscount.getText().toString(), xTot, y, paint);
+//                y = y + 20;
+//            }
+//
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//            paint.setTextSize(15);
+//            paint.setColor(Color.BLACK);
+//            y = y + 30;
+//            paint.setFakeBoldText(true);
+//            paint.setTextAlign(Paint.Align.LEFT);
+//            canvas.drawText("Net Amount", x, y, paint);
+//            paint.setTextAlign(Paint.Align.RIGHT);
+//            canvas.drawText(netamount.getText().toString(), xTot, y, paint);
+//
+//            paint.setFakeBoldText(false);
+//            y = y + 20;
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(1);
+//            canvas.drawLine(0, y, widthSize, y, paint);
+//
+//            y = y + 30;
+//            paint.setColor(Color.parseColor("#008000"));
+//            paint.setTextSize(15);
+//
+//
+//            paint.setTextAlign(Paint.Align.CENTER);
+//            canvas.drawText("Thank You! Visit Again", widthSize/2, y, paint);
+//
+//
+//
+//            //canvas.drawt
+//            // finish the page
+//            document.finishPage(page);
+//
+//
+//
+//// draw text on the graphics object of the page
+//            // Create Page 2
+////        pageInfo = new PdfDocument.PageInfo.Builder(300, 600, 2).create();
+////        page = document.startPage(pageInfo);
+////        canvas = page.getCanvas();
+////        paint = new Paint();
+////        paint.setColor(Color.BLUE);
+////        canvas.drawCircle(100, 100, 100, paint);
+////        document.finishPage(page);
+//
+//
+//            // write the document content
+//            String directory_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/hap/";
+//            File file = new File(directory_path);
+//
+//            deleteRecursive(file);
+//
+//            if (!file.exists()) {
+//                file.mkdirs();
+//            }
+//            String targetPdf = directory_path + System.currentTimeMillis() + "bill.pdf";
+//            File filePath = new File(targetPdf);
+//
+//
+//            document.writeTo(new FileOutputStream(filePath));
+//            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+//
+//            // close the document
+//            document.close();
+//
+//
+//            Uri fileUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", filePath);
+//
+//
+//            Intent intent = ShareCompat.IntentBuilder.from(this)
+//                    .setType("*/*")
+//                    .setStream(fileUri)
+//                    .setChooserTitle("Choose bar")
+//                    .createChooserIntent()
+//                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//            startActivity(intent);
+//        } catch (Exception e) {
+//            Log.e("main", "error " + e.toString());
+//            Toast.makeText(this, "Something wrong: " + e.toString(), Toast.LENGTH_LONG).show();
+//        }
+//
+//    }
 
     public static String[] Split(String text, int chunkSize, int maxLength) {
         char[] data = text.toCharArray();
@@ -1227,7 +1727,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         }
 
-                        tvOutstanding.setText("₹" + formatter.format(outstandAmt));
+                        tvOutstanding.setText(CurrencySymbol+" " + formatter.format(outstandAmt));
                         break;
                 }
             }
@@ -1323,9 +1823,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         subTotalVal += amt;
 
                     }
-                    Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"),obj.getString("HSN_Code"), 1, "1",
+                    Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), obj.getString("MRP"),obj.getString("HSN_Code"), 1, "1",
                             "1", "5", "", 0, "0", obj.getDouble("Price"),
-                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt),sTaxV,SGSTAmt,CGSTAmt));
+                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt),sTaxV,SGSTAmt,CGSTAmt,obj.getString("ConversionFactor")));
 
 
                 }
@@ -1396,9 +1896,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         } catch (Exception e) {
 
                         }
-                        Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"),obj.getString("HSN_Code"), 1, "1",
+                        Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"),obj.getString("HSN_Code"), 1, "1",
                                 "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"),
-                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt),sTaxV,SGSTAmt,CGSTAmt));
+                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt),sTaxV,SGSTAmt,CGSTAmt,obj.getString("ConversionFactor")));
 
 
                     }
@@ -1482,9 +1982,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     "1", "5", obj.getString("UOM"), 0, "0", 0.0,
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
                         }else{
-                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"),obj.getString("HSN_Code"), 1, "1",
+                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"),obj.getString("Bar_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"),
-                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt),(sTaxV),(SGSTAmt),(CGSTAmt)));
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt),(sTaxV),(SGSTAmt),(CGSTAmt),obj.getString("ConversionFactor")));
 
                         }
 
@@ -1512,28 +2012,29 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             totalqty.setText("" + String.valueOf(total_qtytext));
             totalitem.setText("" + Order_Outlet_Filter.size());
-            subtotal.setText("₹" + formatter.format(subTotalVal));
-            netamount.setText("₹ " + formatter.format(subTotalVal));
+            subtotal.setText(CurrencySymbol+" " + formatter.format(subTotalVal));
+            NetTotAmt=subTotalVal-cashDisc;
+            netamount.setText(CurrencySymbol+" "+ formatter.format(NetTotAmt));
 
 
             returntotalqty.setText("" + String.valueOf(total_qtytext));
             returntotalitem.setText("" + Order_Outlet_Filter.size());
-            returnsubtotal.setText("₹" + formatter.format(subTotalVal));
-            returnNetAmt.setText("₹ " + formatter.format(subTotalVal));
+            returnsubtotal.setText(CurrencySymbol+" " + formatter.format(subTotalVal));
+            returnNetAmt.setText(CurrencySymbol+" " + formatter.format(NetTotAmt));
 
-            tvPaidAmt.setText("₹ " + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(0).getPaidAmount())));
+            tvPaidAmt.setText(CurrencySymbol+" " + formatter.format(Double.parseDouble(Order_Outlet_Filter.get(0).getPaidAmount())));
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 
 
-            cashdiscount.setText("₹" + formatter.format(cashDisc));
-            gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
+            cashdiscount.setText(CurrencySymbol+" " + formatter.format(cashDisc));
+            gstrate.setText(CurrencySymbol+" " + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
 
             label = "";
             amt = "";
             for (int i = 0; i < taxList.size(); i++) {
                 label = label + taxList.get(i).getTax_Type() + "\n";
-                amt = amt + "₹" + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";
+                amt = amt + CurrencySymbol+" " + String.valueOf(formatter.format(taxList.get(i).getTax_Amt())) + "\n";
             }
 
             gstLabel.setText(label);

@@ -110,7 +110,7 @@ public class OrderInvoiceInfoFragment extends Fragment {
                         JSONObject jsonObject1 = jsonInvArray.getJSONObject(pm);
 
 
-                        if (FilterOrderList.get(i).getOrderNo().equals(jsonObject1.getString("OrderID"))) {
+                        if (FilterOrderList.get(i).getTransSlNo().equals(jsonObject1.getString("OrderID"))) {
                             isHave = true;
                             FilterOrderList.get(i).setInvoiceID(jsonObject1.getString("InvoiceID"));
                             FilterOrderList.get(i).setInvoiceDate(jsonObject1.getString("Date"));

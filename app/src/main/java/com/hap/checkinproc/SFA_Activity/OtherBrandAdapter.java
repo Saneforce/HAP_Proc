@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -96,7 +98,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
 
             holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-            holder.Amount.setText("₹ " + Product_Details_Modal.getAmount());
+            holder.Amount.setText(CurrencySymbol+" " + Product_Details_Modal.getAmount());
             holder.etPrice.setText("" + Product_Details_Modal.getPrice());
             holder.Free.setText("" + Product_Details_Modal.getScheme());
             holder.sku.setText("" + Product_Details_Modal.getSku());
@@ -111,7 +113,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     try {
                         double price = holder.etPrice.getText().toString().equals("") ? 0 : Double.parseDouble(holder.etPrice.getText().toString());
                         int qty = charSequence.toString().equals("") ? 0 : Integer.parseInt(charSequence.toString());
-                        holder.Amount.setText("₹ " + new DecimalFormat("##0.00").format(qty *
+                        holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(qty *
                                 price));
 
                         mData.get(holder.getAdapterPosition()).setQty(qty);
@@ -160,7 +162,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                         int qty = holder.Qty.getText().toString().equals("") ? 0 : Integer.parseInt(holder.Qty.getText().toString());
                         double price = charSequence.toString().equals("") ? 0 : Double.parseDouble(charSequence.toString());
 
-                        holder.Amount.setText("₹ " + new DecimalFormat("##0.00").format(qty * price));
+                        holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(qty * price));
 
                         mData.get(holder.getAdapterPosition()).setAmount(qty * price);
                         mData.get(holder.getAdapterPosition()).setPrice(price);

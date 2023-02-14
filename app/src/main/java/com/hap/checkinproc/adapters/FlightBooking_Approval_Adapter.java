@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,12 +45,14 @@ public class FlightBooking_Approval_Adapter extends RecyclerView.Adapter<FlightB
         Button btnApproval,btnReject,btnCancel,btnSvReject,btncancelRej;
         EditText RejectRmk;
         public View vwReject;
+        LinearLayout tvVwPassg;
 
         public MyViewHolder(View view) {
             super(view);
             tvDate = view.findViewById(R.id.tvDate);
             tvStatus = view.findViewById(R.id.tvFBStatus);
             tvNoOfTraveler = view.findViewById(R.id.tvTravelerCount);
+            tvVwPassg = view.findViewById(R.id.tvVwPassg);
             tvbookedBy = view.findViewById(R.id.tvBookedBy);
             tvViewSta = view.findViewById(R.id.tvViewSta);
             txFrmPlc = view.findViewById(R.id.tvFrom);
@@ -137,7 +140,7 @@ public class FlightBooking_Approval_Adapter extends RecyclerView.Adapter<FlightB
                     }
                 }
             });
-            holder.tvNoOfTraveler.setOnClickListener(new View.OnClickListener() {
+            holder.tvVwPassg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {

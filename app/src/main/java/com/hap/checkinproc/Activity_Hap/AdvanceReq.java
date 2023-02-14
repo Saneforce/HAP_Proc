@@ -278,7 +278,7 @@ public class AdvanceReq extends AppCompatActivity implements Master_Interface {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Approvals.class);
+                common_class.CommonIntentwithFinish(Leave_Dashboard.class);
             }
         });
         Submit.setOnClickListener(new View.OnClickListener() {

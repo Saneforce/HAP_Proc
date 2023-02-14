@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -164,6 +166,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linSalesReturn.setOnClickListener(this);
             linStockRot.setOnClickListener(this);
 
+            txPrvBal.setText(CurrencySymbol+" 0.00");
+            txSalesAmt.setText(CurrencySymbol+" 0.00");
+            txPayment.setText(CurrencySymbol+" 0.00");
+            tvOutstanding.setText(CurrencySymbol+" 0.00");
+
             loadNoOrdRemarks();
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -284,10 +291,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                             try {
                                 JsonArray res = response.body();
                                 JsonObject jItem = res.get(0).getAsJsonObject();
-                                txPrvBal.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("pBal").getAsDouble()));
-                                txSalesAmt.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Debit").getAsDouble()));
-                                txPayment.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Credit").getAsDouble()));
-                                tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(jItem.get("Balance").getAsDouble()));
+                                txPrvBal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.get("pBal").getAsDouble()));
+                                txSalesAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.get("Debit").getAsDouble()));
+                                txPayment.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.get("Credit").getAsDouble()));
+                                tvOutstanding.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.get("Balance").getAsDouble()));
 
                             } catch (Exception e) {
 
@@ -691,14 +698,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                             JSONArray jsonArray = jsonObjectOutStd.getJSONArray("Data");
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(
+                                tvOutstanding.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(
                                         jsonArray.getJSONObject(i).getDouble("Outstanding")));
 
                             }
 
                         } else {
 
-                            tvOutstanding.setText("₹" + 0.00);
+                            tvOutstanding.setText(CurrencySymbol+" " + 0.00);
                         }
                         break;
                     case Constants.FreeSchemeDiscList:
@@ -814,6 +821,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
         intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
         intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+        intent.putExtra("PONumber", FilterOrderList.get(position).getOrderNo());
         intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
         intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
         startActivity(intent);

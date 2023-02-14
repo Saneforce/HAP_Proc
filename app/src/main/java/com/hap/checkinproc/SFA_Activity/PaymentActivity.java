@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.app.DatePickerDialog;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -95,7 +97,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     if (!s.toString().equals(""))
                         enterAmt = Double.parseDouble(s.toString());
 
-                    tvRemainAmt.setText("₹" + formatter.format(outstandAmt - enterAmt));
+                    tvRemainAmt.setText(CurrencySymbol+" " + formatter.format(outstandAmt - enterAmt));
 
 
                 } catch (Exception e) {
@@ -295,13 +297,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             outstandAmt = jsonArray.getJSONObject(i).getDouble("Outstanding");
                             if (outstandAmt < 0) outstandAmt = Math.abs(outstandAmt);
                             else outstandAmt = 0 - outstandAmt;
-                            tvOutStandAmt.setText("₹" + formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
+                            tvOutStandAmt.setText(CurrencySymbol+" " + formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
 
                         }
 
                     } else {
                         outstandAmt = 0.00;
-                        tvOutStandAmt.setText("₹" + 0.00);
+                        tvOutStandAmt.setText(CurrencySymbol+" " + 0.00);
                     }
                     break;
                 case Constants.PAYMODES:

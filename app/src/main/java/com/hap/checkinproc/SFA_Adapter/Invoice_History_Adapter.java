@@ -67,7 +67,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
             //  holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
         }
         holder.txtOrderDate.setText("" + mDate.get(position).getOrderDate());
-        holder.txtOrderID.setText(mDate.get(position).getOrderNo());
+        holder.txtOrderID.setText(mDate.get(position).getTransSlNo());
         holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
         holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
         holder.txtType.setText("" + mDate.get(position).getStatus());

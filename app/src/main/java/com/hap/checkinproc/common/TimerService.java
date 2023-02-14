@@ -41,6 +41,8 @@ import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.Timer;
@@ -496,6 +498,20 @@ public class TimerService extends Service {
                     if (context != null) {
                         if (isTimeAutomatic(context) != true ) {
                             if(HAPApp.activeActivity.getClass()!= Block_Information.class){
+
+                                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                                JSONObject param=new JSONObject();
+                                try {
+                                    param.put("SF",UserDetails.getString("Sfcode", ""));
+                                    param.put("Device",android.os.Build.DEVICE);
+                                    param.put("BRAND",android.os.Build.BRAND);
+                                    param.put("Model", android.os.Build.ID);
+                                    param.put("Display",android.os.Build.DISPLAY);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                apiInterface.blockAppData(param.toString());
+
                                 Intent nwScr = new Intent(context, Block_Information.class);
                                 nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(nwScr);

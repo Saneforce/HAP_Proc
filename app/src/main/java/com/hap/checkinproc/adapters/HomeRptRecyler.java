@@ -95,6 +95,12 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
 //                            intent.putExtra("Locations", itm.get("value").getAsString());
 //                            mContext.startActivity(intent);
 
+                                }else
+                                {
+                                    navigateMapDir(latLong,"ON Duty - Locations");
+                                  /*  Intent intent = new Intent(mContext, MapDirectionActivity.class);
+                                    intent.putExtra(latLong,"ON Duty - Locations");
+                                    mContext.startActivity(intent);*/
                                 }
                             } catch (Exception e) {
 
@@ -127,6 +133,11 @@ public class HomeRptRecyler extends RecyclerView.Adapter<HomeRptRecyler.ViewHold
 //                            intent.putExtra("Locations", itm.get("value").getAsString());
 //                            mContext.startActivity(intent);
 
+                        }else if (itm.get("type").getAsString().equalsIgnoreCase("geo")) {
+                            navigateMapDir(latLong,"ON Duty - Locations");
+                            /*Intent intent = new Intent(mContext, MapDirectionActivity.class);
+                            intent.putExtra(latLong,"ON Duty - Locations" );
+                            mContext.startActivity(intent);*/
                         }
                     } catch (Exception e) {
 

@@ -251,7 +251,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/round_white_backround"
                                     android:hint="Ended km"
-                                    android:maxLength="8"
+                                    android:maxLength="10"
                                     android:inputType="number"
                                     android:padding="10dp"
                                     android:textSize="13dp" />

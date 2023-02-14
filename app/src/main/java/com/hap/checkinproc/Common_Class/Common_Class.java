@@ -228,6 +228,7 @@ public class Common_Class {
         final int REQUEST_PHONE_CALL = 1;
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + mobilenumber));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
         } else {
@@ -544,7 +545,6 @@ public class Common_Class {
 
 
                 switch (key) {
-
                     case Constants.PRIMARY_DASHBOARD:
                         axnname = "get/primarydashboardvalues";
                         data.put("login_sfCode", UserDetails.getString("Sfcode", ""));
@@ -842,6 +842,7 @@ public class Common_Class {
                         break;
                     case Constants.STATE_LIST:
                         axnname = "get/states";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         break;
                     case Constants.Category_List:
                         axnname = "get/prodCate";
@@ -1202,6 +1203,7 @@ public class Common_Class {
                 } else {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(callIntent);
                 }
             }
@@ -1224,6 +1226,7 @@ public class Common_Class {
                 } else {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + num));//change the number
+                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(callIntent);
                 }
             }

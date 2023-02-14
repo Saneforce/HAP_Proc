@@ -573,7 +573,8 @@
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -668,13 +669,14 @@
                             <RelativeLayout
                                 android:id="@+id/rlTax"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/gstLabel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TAX\n"
+                                    android:text="TAX"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"></TextView>
@@ -693,8 +695,7 @@
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone">
+                                android:layout_height="wrap_content">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -718,7 +719,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginTop="-15dp"
+
                                 android:background="@color/background"></View>
 
                             <RelativeLayout
@@ -763,7 +764,7 @@
                                 android:textColor="@color/green"
                                 android:textSize="@dimen/C13dp"
                                 android:textStyle="bold"
-                                android:visibility="visible"></TextView>
+                                android:visibility="gone"></TextView>
 
                         </LinearLayout>
 

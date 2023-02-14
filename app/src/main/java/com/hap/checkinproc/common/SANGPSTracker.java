@@ -382,6 +382,22 @@ public class SANGPSTracker extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         if (location.isFromMockProvider() == true) {
             if(HAPApp.activeActivity.getClass()!=Block_Information.class) {
+
+                SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject param=new JSONObject();
+                try {
+                    param.put("SF",UserDetails.getString("Sfcode", ""));
+                    param.put("Device",android.os.Build.DEVICE);
+                    param.put("BRAND",android.os.Build.BRAND);
+                    param.put("Model", android.os.Build.ID);
+                    param.put("Display",android.os.Build.DISPLAY);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                apiInterface.blockAppData(param.toString());
+                // "save/track", "3", UserDetails.getString("Sfcode", ""), "", "", jsonarray.toString());
+
                 Intent nwScr = new Intent(mContext, Block_Information.class);
                 nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 nwScr.putExtra("Mode","FGPS");

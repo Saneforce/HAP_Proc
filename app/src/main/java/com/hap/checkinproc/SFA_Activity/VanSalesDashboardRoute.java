@@ -5,6 +5,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
 import static com.hap.checkinproc.Common_Class.Constants.STOCK_LEDGER;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
 import android.content.Context;
 import android.content.Intent;
@@ -533,13 +534,13 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                             smryNOrd.setText(jItm.get("NOrders").getAsString());
                             smryNOOrd.setText(jItm.get("NoOrder").getAsString());
                             smryInv.setText(jItm.get("InvCnt").getAsString());
-                            smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
+                            smryInvVal.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(invVal));
                         } else {
                             smryOrd.setText("0");
                             smryNOrd.setText("0");
                             smryNOOrd.setText("0");
                             smryInv.setText("0");
-                            smryInvVal.setText("₹0.00");
+                            smryInvVal.setText(CurrencySymbol+" 0.00");
                         }
 
                         updSale = false;
@@ -1028,6 +1029,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                     } else {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
+                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(callIntent);
                     }
                 }

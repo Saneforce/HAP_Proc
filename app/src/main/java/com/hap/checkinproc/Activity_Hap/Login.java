@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -223,7 +224,6 @@ public class Login extends AppCompatActivity {
         } else {
             Log.v("PERMISSION", "PERMISSION");
         }
-
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -625,7 +625,6 @@ Log.d("Error","Can't Clear SFWish");
                 Model response = gson.fromJson(loginData, userType);
                 assignLoginData(response, requestCode);
             } else {
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                     if (eMail.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Invalid Email ID", LENGTH_LONG).show();
@@ -634,26 +633,20 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                //eMail= "3033@hap.in";
-                //eMail= "1019100@hap.in";
-
-//               eMail="sivakumar.s@hap.in";
-//                eMail="sajan@hap.in";
-
-//                eMail="iplusadmin@hap.in";
-
-//                eMail="1014700@hap.in";
-//                 eMail="anandaraj.s@hap.in";
-
-//                eMail="1023176@hap.in";
-               // eMail="1025499@hap.in";
+                //eMail="1019100@hap.in";
+                //eMail="1014057@hap.in";
+                //eMail="1028757@hap.in";
+                eMail="boopathy.s@hap.in";
+                //eMail="sivakumar.s@hap.in";
+                //eMail="sajan@hap.in";
+                //eMail="iplusadmin@hap.in";
+                //eMail="1014700@hap.in";
+                //eMail="anandaraj.s@hap.in";
+                //eMail="1027526@hap.in";
+                //eMail="1025499@hap.in";
                 //eMail="1014604@hap.in";
-//                eMail="harishbabu.bh@hap.in";
-
-//                eMail="ciadmin@hap.in";
-
-
-
+                //eMail="harishbabu.bh@hap.in";
+                //eMail="ciadmin@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -792,7 +785,7 @@ Log.d("Error","Can't Clear SFWish");
 
 
             if (response.getData().get(0).getLoginType() != null &&
-                    response.getData().get(0).getLoginType().equals("Distributor")) {
+                    response.getData().get(0).getLoginType().equalsIgnoreCase("Distributor")) {
                 shared_common_pref.save(Constants.SALES_RETURN_FILECOUNT, response.getData().get(0).getSalesReturnImg());
 
                 shared_common_pref.save(Constants.Distributor_Id, response.getData().get(0).getDistCode());
@@ -809,6 +802,9 @@ Log.d("Error","Can't Clear SFWish");
                 shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
                 shared_common_pref.save(Constants.DistributorAdd, response.getData().get(0).getStockist_Address());
                 shared_common_pref.save(Constants.CusSubGrpErp, response.getData().get(0).getCusSubGrpErp());
+                shared_common_pref.save(Constants.Distributor_gst, response.getData().get(0).getDisGSTN());
+                shared_common_pref.save(Constants.Distributor_fssai, response.getData().get(0).getDisFSSAI());
+
 
                 Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                 userEditor.putString("Sfcode", response.getData().get(0).getDistCode());
@@ -858,6 +854,17 @@ Log.d("Error","Can't Clear SFWish");
                     JsonObject CinObj = CinData.get(0).getAsJsonObject();
                     cInEditor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
                     cInEditor.putString("Shift_Name", CinObj.get("Sft_Name").getAsString());
+                    int sStatus = response.getData().get(0).getSFStatus();
+                    if(sStatus==3){
+
+                        Intent nwScr = new Intent(this, Block_Information.class);
+                        nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        nwScr.putExtra("Mode","FGPS");
+                        nwScr.putExtra("Head","APP Locked");
+                        nwScr.putExtra("Msg","Your App Login is blocked.<br /><br /><b>Contact Administrator.</b>");
+                        startActivity(nwScr);
+                        return;
+                    }
                     ///if(CinObj.getAsJsonObject("End_Time").isJsonNull()!= true)
                     if (CinObj.get("End_Time").isJsonNull() != true)
                         cInEditor.putString("CINEnd", CinObj.getAsJsonObject("End_Time").get("date").getAsString());
@@ -873,6 +880,7 @@ Log.d("Error","Can't Clear SFWish");
 
                     String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
                     Type = CinObj.get("Type").getAsInt();
+                    if(CheckInDetails.getInt("Type",0)==1) Type=1;
                     if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                         cInEditor.putString("FTime", CTime);
                     cInEditor.putString("Logintime", CTime);
@@ -1093,5 +1101,4 @@ Log.d("Error","Can't Clear SFWish");
             mBound = false;
         }
     };
-
 }

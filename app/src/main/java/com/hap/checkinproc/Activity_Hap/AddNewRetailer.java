@@ -712,23 +712,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    } else if (!divERP.equalsIgnoreCase("21") && tvSubCategory.getText().toString().equalsIgnoreCase("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Sub Category", Toast.LENGTH_SHORT).show();
 //                    }
-
+/*
 
                     else if (txDelvryType.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Select the Delivery Type", Toast.LENGTH_SHORT).show();
                     } else if (iOutletTyp == 2 && edtClsRetRmk.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(getApplicationContext(), "Enter the reason for close outlet", Toast.LENGTH_SHORT).show();
                         linClsRmks.requestFocus();
-                    } else if (imageConvert.equals("") && name.equals("")) {
-                        Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
+                    } */
+                    //else if (imageConvert.equals("") && name.equals("")) {
+                    //    Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
+                    //}
+                    else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
-                    } else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
+                    }
+                    /*else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
                         common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
 
-                    } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
-                        if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
+                    }
+                    //else if (/*divERP.equalsIgnoreCase("21") && */ //cbFreezerYes.isChecked()) {
+                     /*   if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(AddNewRetailer.this, "Selet the Freezer/Cooler Status");
                         } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler make");
@@ -737,8 +741,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler Tag Number");
                         } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(AddNewRetailer.this, "Select the Freezer/Cooler Capacity");
-                        } else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
-                            common_class.showMsg(AddNewRetailer.this, "Please take Freezer/Cooler Photo");
+                        }
+                        //else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
+                        //    common_class.showMsg(AddNewRetailer.this, "Please take Freezer/Cooler Photo");
                         else {
                             if (mSubmit.isAnimating()) return;
                             mSubmit.startAnimation();
@@ -749,7 +754,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 }
                             }, 500);
                         }
-                    } else {
+                    } */
+                    else {
                         if (mSubmit.isAnimating()) return;
                         mSubmit.startAnimation();
                         handler.postDelayed(new Runnable() {
@@ -2001,14 +2007,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject obj = array.getJSONObject(i);
-                                stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
-
+                                if(obj.getString("State_Code").equalsIgnoreCase("38")) {
+                                    stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
+                                }
                                 try {
                                     if (!Shared_Common_Pref.Outler_AddFlag.equals("1") && getOutletPosition() >= 0 && (Retailer_Modal_List.get(getOutletPosition()).getStateCode() != null && obj.getString("State_Code").equals
                                             (Retailer_Modal_List.get(getOutletPosition()).getStateCode()))) {
-
-                                        tvStateName.setText("" + obj.getString("StateName"));
-                                        stateCode = Integer.valueOf(obj.getString("State_Code"));
+                                        if(obj.getString("State_Code").equalsIgnoreCase("38"))
+                                        {
+                                            tvStateName.setText("" + obj.getString("StateName"));
+                                            stateCode = Integer.valueOf(obj.getString("State_Code"));
+                                        }
                                     }
                                 } catch (Exception e) {
 

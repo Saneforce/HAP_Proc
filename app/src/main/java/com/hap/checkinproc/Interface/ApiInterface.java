@@ -548,6 +548,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=save/exception")
     Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
+    /*Save Devaition Entry*/
+    @FormUrlEncoded
+    @POST("Db_v300.php?axn=Save/DivInf")
+    Call<JsonObject> blockAppData(@Field("data") String data);
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=save/allowance")

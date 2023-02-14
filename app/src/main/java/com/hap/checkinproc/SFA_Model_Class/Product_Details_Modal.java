@@ -164,6 +164,12 @@ public class Product_Details_Modal {
     @Expose
     private Double Rate;
 
+
+
+    @SerializedName("Margin")
+    @Expose
+    private Double Margin;
+
     public Double getBillRate() {
         return BillRate;
     }
@@ -194,7 +200,13 @@ public class Product_Details_Modal {
     @SerializedName("counterValue")
     @Expose
     private String value;
+    public Double getMargin() {
+        return Margin;
+    }
 
+    public void setMargin(Double margin) {
+        Margin = margin;
+    }
     public int getOnHand() {
         return onHand;
     }
@@ -552,9 +564,9 @@ public class Product_Details_Modal {
     private double CnvQty;
 
 
-    public Product_Details_Modal(String id, String name,String mHSNCode, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
+    public Product_Details_Modal(String id, String name,String mMRP,String mHSNCode, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
-                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax,double mTaxPer,double mSGST,double mCGST) {
+                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax,double mTaxPer,double mSGST,double mCGST,String mConv) {
         this.id = id;
         this.name = name;
         this.productCatCode = productCatCode;
@@ -575,6 +587,8 @@ public class Product_Details_Modal {
         this.TaxPer=mTaxPer;
         this.PSGST=mSGST;
         this.PCGST=mCGST;
+        this.MRP=mMRP;
+        this.ConversionFactor=mConv;
     }
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,

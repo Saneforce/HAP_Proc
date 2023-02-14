@@ -3447,7 +3447,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Start km"
                         android:inputType="number"
-                        android:maxLength="8"
+                        android:maxLength="10"
                         android:textSize="@dimen/C13dp" />
 
 
@@ -3471,7 +3471,7 @@
                         android:layout_height="wrap_content"
                         android:hint="End km"
                         android:inputType="number"
-                        android:maxLength="8"
+                        android:maxLength="10"
                         android:textSize="@dimen/C13dp" />
 
                     <TextView
@@ -3486,7 +3486,7 @@
                         android:padding="@dimen/C10dp"
                         android:background="#0D000000"
                         android:inputType="number"
-                        android:maxLength="8"
+                        android:maxLength="10"
                         android:textSize="@dimen/C13dp" />
 
                     <TextView
@@ -3499,7 +3499,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Personal km"
                         android:inputType="number"
-                        android:maxLength="8"
+                        android:maxLength="10"
                         android:textSize="@dimen/C13dp" />
 
                     <LinearLayout

@@ -105,12 +105,12 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
             }
         });
         name = findViewById(R.id.name);
-        applieddate = findViewById(R.id.name);
         Oapprovebutton = findViewById(R.id.Oapprovebutton);
         empcode = findViewById(R.id.empcode);
         reason = findViewById(R.id.reason);
         hq = findViewById(R.id.hq);
         mobilenumber = findViewById(R.id.mobilenumber);
+        applieddate = findViewById(R.id.applieddate);
         Approvereject = findViewById(R.id.Approvereject);
         rejectonly = findViewById(R.id.rejectonly);
         OD_rejectsave = findViewById(R.id.OD_rejectsave);

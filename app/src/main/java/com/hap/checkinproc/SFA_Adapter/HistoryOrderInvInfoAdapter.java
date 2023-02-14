@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +51,7 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
     @Override
     public void onBindViewHolder(HistoryOrderInvInfoAdapter.MyViewHolder holder, int position) {
         try {
-            holder.tvId.setText("" + mDate.get(position).getOrderNo());
+            holder.tvId.setText("" + mDate.get(position).getTransSlNo());
             holder.tvDate.setText("" + mDate.get(position).getOrderDate());
             holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
             holder.tvStatus.setText(mDate.get(position).getStatus());
@@ -62,7 +64,7 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
             } else {
                 holder.ivStatus.setImageResource(R.drawable.ic_round_pending_24);
             }
-            holder.tvAmount.setText("₹ " + formatter.format(mDate.get(position).getOrderValue()));
+            holder.tvAmount.setText(CurrencySymbol+" " + formatter.format(mDate.get(position).getOrderValue()));
 
             holder.tvName.setText("" + mDate.get(position).getName());
 
@@ -72,7 +74,7 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
             holder.tvInvId.setText("" + mDate.get(position).getInvoiceID());
 
             if (!Common_Class.isNullOrEmpty(mDate.get(position).getInvoiceAmount()))
-                holder.tvInvAmt.setText("₹ " + formatter.format(Double.parseDouble(mDate.get(position).getInvoiceAmount())));
+                holder.tvInvAmt.setText(CurrencySymbol+" " + formatter.format(Double.parseDouble(mDate.get(position).getInvoiceAmount())));
             holder.tvInvProducts.setText("" + mDate.get(position).getInvoiceItems());
 
             if (mDate.get(position).getInvoiceStatus().equals("Completed")) {

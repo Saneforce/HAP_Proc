@@ -1241,7 +1241,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/C2dp"
                                 android:layout_marginTop="@dimen/C3dp"
-                                android:src="@drawable/mandatory" />
+                                android:src="@drawable/mandatory"
+                                android:visibility="gone"/>
 
                         </LinearLayout>
 
@@ -1328,7 +1329,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/C2dp"
                                     android:layout_marginTop="@dimen/C3dp"
-                                    android:src="@drawable/mandatory" />
+                                    android:src="@drawable/mandatory"
+                                    android:visibility="gone" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -1424,7 +1426,7 @@
                                     android:layout_marginStart="@dimen/C2dp"
                                     android:layout_marginTop="@dimen/C3dp"
                                     android:src="@drawable/mandatory"
-                                    android:visibility="visible" />
+                                    android:visibility="gone" />
 
                             </LinearLayout>
 
@@ -1479,7 +1481,7 @@
                                         android:layout_marginStart="@dimen/C2dp"
                                         android:layout_marginTop="@dimen/C3dp"
                                         android:src="@drawable/mandatory"
-                                        android:visibility="visible" />
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
                                 <EditText
@@ -1512,7 +1514,7 @@
                                         android:layout_marginStart="@dimen/C2dp"
                                         android:layout_marginTop="@dimen/C3dp"
                                         android:src="@drawable/mandatory"
-                                        android:visibility="visible" />
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
                                 <EditText
@@ -1556,7 +1558,7 @@
                                         android:layout_marginStart="@dimen/C2dp"
                                         android:layout_marginTop="@dimen/C3dp"
                                         android:src="@drawable/mandatory"
-                                        android:visibility="visible" />
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
                                 <EditText
@@ -1597,7 +1599,7 @@
                                         android:layout_marginStart="@dimen/C2dp"
                                         android:layout_marginTop="@dimen/C3dp"
                                         android:src="@drawable/mandatory"
-                                        android:visibility="visible" />
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
                                 <EditText
@@ -1632,7 +1634,7 @@
                                     android:layout_marginStart="@dimen/C2dp"
                                     android:layout_marginTop="@dimen/C3dp"
                                     android:src="@drawable/mandatory"
-                                    android:visibility="visible" />
+                                    android:visibility="gone" />
 
                             </LinearLayout>
 
@@ -1686,7 +1688,7 @@
                                         android:layout_marginStart="@dimen/C2dp"
                                         android:layout_marginTop="@dimen/C3dp"
                                         android:src="@drawable/mandatory"
-                                        android:visibility="visible" />
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
 

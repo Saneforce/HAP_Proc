@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -692,7 +694,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
             }
         }
 
-        tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
+        tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
@@ -700,18 +702,18 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         else
             tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
 
-        tvBillSubTotal.setText("₹ " + formatter.format(totalvalues));
+        tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvBillTotItem.setText("" + Getorder_Array_List.size());
         tvBillTotQty.setText("" + totalQty);
-        tvBillToPay.setText("₹ " + formatter.format(totalvalues));
-        tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
-        //  tvTax.setText("₹ " + formatter.format(taxVal));
+        tvBillToPay.setText(CurrencySymbol+" " + formatter.format(totalvalues));
+        tvCashDiscount.setText(CurrencySymbol+" " + formatter.format(cashDiscount));
+        //  tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
         //  tvPayAmount.setText("" + (int) totalvalues);
 
 
         if (cashDiscount > 0) {
             tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save ₹ " + formatter.format(cashDiscount) + " on this order");
+            tvSaveAmt.setText("You will save "+CurrencySymbol+" " + formatter.format(cashDiscount) + " on this order");
         } else
             tvSaveAmt.setVisibility(View.GONE);
 
@@ -749,7 +751,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         String label = "", amt = "";
         for (int i = 0; i < orderTotTax.size(); i++) {
             label = label + orderTotTax.get(i).getTax_Type() + "\n";
-            amt = amt + "₹" + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
+            amt = amt + CurrencySymbol+" " + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
 
         }
 
@@ -1174,7 +1176,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
+                holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
@@ -1189,7 +1191,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 }
 
                 Log.v("uomName:", Product_Details_Modal.getUOM_Nm());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
+                holder.Rate.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
 
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
                 holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
@@ -1300,10 +1302,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     }
 
 
-                    holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
+                    holder.regularAmt.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
 
-                    holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
+                    holder.QtyAmt.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
 
 
                 } else {
@@ -1316,7 +1318,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     }
                 }
 
-                holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
+                holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getTax()));
 
                 if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
@@ -1326,7 +1328,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                 else
                     holder.Free.setText("" + Product_Details_Modal.getFree());
 
-                holder.Disc.setText("₹" + formatter.format(Product_Details_Modal.getDiscount()));
+                holder.Disc.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getDiscount()));
 
 
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
@@ -1388,11 +1390,11 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
-                            holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                            holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
+                                holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
                             }
 
@@ -1477,7 +1479,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
 
                                                 } else {
-                                                    holder.Disc.setText("₹0.00");
+                                                    holder.Disc.setText(CurrencySymbol+" 0.00");
                                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(0.00);
 
                                                 }
@@ -1489,7 +1491,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                             holder.Free.setText("0");
                                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree("0");
 
-                                            holder.Disc.setText("₹0.00");
+                                            holder.Disc.setText(CurrencySymbol+" 0.00");
                                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(0.00);
 
 
@@ -1507,7 +1509,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                 holder.Free.setText("0");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree("0");
 
-                                holder.Disc.setText("₹0.00");
+                                holder.Disc.setText(CurrencySymbol+" 0.00");
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(0.00);
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code("");
@@ -1524,9 +1526,9 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                         (Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
 
                                 holder.Free.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getFree());
-                                holder.Disc.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
+                                holder.Disc.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
 
-                                holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
+                                holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
 
 
                             }
@@ -1567,10 +1569,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                         + wholeTax)));
 
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setTax(Double.parseDouble(formatter.format(wholeTax)));
-                                holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
+                                holder.Amount.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
 
 
-                                holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modal.getTax()));
+                                holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getTax()));
 
 
                             }
@@ -1580,7 +1582,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
 //                            if (CategoryType == -1) {
 //                                String amt = holder.Amount.getText().toString();
-//                                if (amt.equals("₹0.00")) {
+//                                if (amt.equals(CurrencySymbol+" 0.00")) {
 //                                    Product_Details_Modalitem.remove(position);
 //                                    notifyDataSetChanged();
 //                                }

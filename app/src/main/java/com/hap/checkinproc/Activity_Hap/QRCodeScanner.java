@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -51,7 +52,7 @@ import retrofit2.Response;
 
 public class QRCodeScanner extends AppCompatActivity {
     SurfaceView surfaceView;
-    TextView txtBarcodeValue;
+    TextView txtBarcodeValue,txScanMod;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
@@ -66,10 +67,11 @@ public class QRCodeScanner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_code_scanner);
+        NameValue = String.valueOf(getIntent().getSerializableExtra("Name"));
         initViews();
 
-        NameValue = String.valueOf(getIntent().getSerializableExtra("Name"));
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -101,8 +103,16 @@ public class QRCodeScanner extends AppCompatActivity {
     private void initViews() {
 
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
+        txScanMod = findViewById(R.id.txtBarHead);
         surfaceView = findViewById(R.id.surfaceView);
         btnAction = findViewById(R.id.btnAction);
+        txScanMod.setVisibility(View.VISIBLE);
+        if(NameValue.equalsIgnoreCase("GateIn"))
+            txScanMod.setText("Gate - IN");
+        else if(NameValue.equalsIgnoreCase("GateOut"))
+            txScanMod.setText("Gate - OUT");
+        else
+            txScanMod.setVisibility(View.GONE);
         btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,13 +188,13 @@ public class QRCodeScanner extends AppCompatActivity {
                                 } else if (!intentData.equals("")) {
                                     arrSplit = intentData.split(",");
                                     if (String.valueOf(arrSplit.length).equals("5")) {
-                                        if ((NameValue.equalsIgnoreCase("gatein") && arrSplit[3].equals("IN")) || (NameValue.equalsIgnoreCase("gateout") && arrSplit[3].equals("Out"))) {
+                                        if ((NameValue.equalsIgnoreCase("gatein") && arrSplit[3].equalsIgnoreCase("IN")) || (NameValue.equalsIgnoreCase("gateout") && arrSplit[3].equalsIgnoreCase("Out"))) {
 
                                             Log.d("BarCodeDetact", "Called 2 " + intentData);
                                             GateIn(NameValue, arrSplit, 1);
                                             // Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
+                                            AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", String.valueOf(Html.fromHtml("Provide a Valid QR Code<br>Scan Detail<br>Mode:"+arrSplit[3]+"<br>Data : <br> "+intentData)), "OK", "", false, new AlertBox() {
                                                 @Override
                                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                                     dialog.dismiss();
@@ -198,7 +208,7 @@ public class QRCodeScanner extends AppCompatActivity {
                                             });
                                         }
                                     } else {
-                                        AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
+                                        AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", String.valueOf(Html.fromHtml("Provide a Valid QR Code<br>Need Update QR Data<br>Scan Detail<br>Mode:"+arrSplit[3]+"<br>Data : <br> "+intentData)), "OK", "", false, new AlertBox() {
                                             @Override
                                             public void PositiveMethod(DialogInterface dialog, int id) {
                                                 dialog.dismiss();

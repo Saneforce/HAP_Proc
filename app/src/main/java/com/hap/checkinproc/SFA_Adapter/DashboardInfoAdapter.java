@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,7 +95,7 @@ public class DashboardInfoAdapter extends RecyclerView.Adapter<DashboardInfoAdap
                 holder.tvId.setVisibility(View.GONE);
             } else {
                 holder.tvStatus.setVisibility(View.GONE);
-                holder.tvAmount.setText("₹ " + new DecimalFormat("##0.00").format(mObj.getDouble("TransactionAmt")));
+                holder.tvAmount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(mObj.getDouble("TransactionAmt")));
                 holder.tvId.setText(mObj.getString("TransactionNo"));
             }
 

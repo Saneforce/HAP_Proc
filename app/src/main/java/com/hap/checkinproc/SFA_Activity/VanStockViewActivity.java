@@ -173,7 +173,7 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
 //            tvTotStkQty.setText("" + totStk);
 
 
-          //  tvUnLoadAmt.setText("₹" + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0) - salAmt));
+          //  tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0) - salAmt));
 
             rvVanStockDets.setAdapter(new rvVanStockview(arr, R.layout.layvanstockadb, this));
 

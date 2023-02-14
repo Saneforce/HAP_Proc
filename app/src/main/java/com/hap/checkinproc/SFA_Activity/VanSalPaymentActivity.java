@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,7 +53,7 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
         if (totStkAmt == -1) {
             common_class.getDb_310Data(Constants.VAN_STOCK, this);
         } else {
-            tvLoadAmt.setText("₹" + formatter.format(totStkAmt));
+            tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt));
 
         }
 
@@ -84,8 +86,8 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                         }
                     }
 
-                    tvLoadAmt.setText("₹" + formatter.format(totStkAmt));
-                    tvUnLoadAmt.setText("₹" + formatter.format(totStkAmt - salAmt));
+                    tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt));
+                    tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
 
                     break;
 
@@ -113,9 +115,9 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                         filterArr.put(obj);
                     }
                 }
-                tvTotVanSal.setText("₹" + formatter.format(salAmt));
+                tvTotVanSal.setText(CurrencySymbol+" "+ formatter.format(salAmt));
 
-                tvUnLoadAmt.setText("₹" + formatter.format(totStkAmt - salAmt));
+                tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
                 rvVanSales.setAdapter(new Pay_Adapter(filterArr, R.layout.adapter_vansales_pay, VanSalPaymentActivity.this));
             }
         } catch (Exception e) {
@@ -165,7 +167,7 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
 
                 holder.tvInvNo.setText("" + obj.getString("OrderNo"));
 
-                holder.tvAmt.setText("₹" + formatter.format(obj.getDouble("Order_Value")));
+                holder.tvAmt.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Order_Value")));
 
 
             } catch (Exception e) {

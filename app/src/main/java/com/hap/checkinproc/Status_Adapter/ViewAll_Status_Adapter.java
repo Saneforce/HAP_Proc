@@ -81,7 +81,6 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         try {
             if (View_Status_Model.getDayStatus().equalsIgnoreCase("On-Duty") && View_Status_Model.getFlag() != 2) {
                 holder.llOnDuty.setVisibility(View.VISIBLE);
-
                 if (View_Status_Model.getFlag() == 1)
                     holder.cbOnDuty.setChecked(true);
                 else

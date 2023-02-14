@@ -155,6 +155,13 @@
 
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/btnFilter"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/C5dp"
+                android:src="@drawable/ic_btnfilter_off"
+                app:tint="@color/white" />
         </LinearLayout>
 
 
@@ -166,6 +173,13 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/C8dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/fltrView"
+            android:visibility="visible"
+            >
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -197,10 +211,9 @@
                         android:letterSpacing="0.09"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_date"
                 android:layout_width="match_parent"
@@ -540,7 +553,6 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -827,7 +839,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -893,7 +904,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvCatTypeParent"
                 android:layout_width="match_parent"
@@ -1007,7 +1017,6 @@
 
 
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1073,8 +1082,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1092,8 +1099,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 
             </androidx.cardview.widget.CardView>
-
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1111,7 +1116,7 @@
 
             </androidx.cardview.widget.CardView>
 
-
+        </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -4,7 +4,9 @@ import static android.Manifest.permission.CALL_PHONE;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -110,8 +112,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     DatabaseHandler db;
-    ImageView ivToolbarHome, ivBtnRpt;
-    LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder;
+    ImageView ivToolbarHome, ivBtnRpt,btnFilter;
+    LinearLayout llDistributor, llOrder, llNewOrder, llInvoice, llNoOrder,fltrView;
     TabAdapter adapter;
     Switch swACOutlet, swOTHOutlet, swPlus4, swMinus18, swAmbient, swBandC, swFreezerOutlet, swNoFreezerOutlet;
     int CountUR = 0, CountSR = 0, CountCls = 0, CountTotUni = 0;
@@ -267,7 +269,21 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
             txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txtOrdDate.setText(DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
-
+            btnFilter=findViewById(R.id.btnFilter);
+            fltrView=findViewById(R.id.fltrView);
+            btnFilter.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onClick(View v) {
+                    if(fltrView.getVisibility()==View.GONE) {
+                        fltrView.setVisibility(View.VISIBLE);
+                        btnFilter.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter_off));
+                    }else{
+                        fltrView.setVisibility(View.GONE);
+                        btnFilter.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter));
+                    }
+                }
+            });
             swACOutlet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -720,13 +736,13 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                             smryNOrd.setText(jItm.get("NOrders").getAsString());
                             smryNOOrd.setText(jItm.get("NoOrder").getAsString());
                             smryInv.setText(jItm.get("InvCnt").getAsString());
-                            smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
+                            smryInvVal.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(invVal));
                         } else {
                             smryOrd.setText("0");
                             smryNOrd.setText("0");
                             smryNOOrd.setText("0");
                             smryInv.setText("0");
-                            smryInvVal.setText("₹0.00");
+                            smryInvVal.setText(CurrencySymbol+" 0.00");
                         }
 
                         updSale = false;
@@ -1269,6 +1285,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     } else {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
+                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(callIntent);
                     }
                 }

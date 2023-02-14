@@ -54,6 +54,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
         holder.intime.setText(extendedShift_status_models.get(position).getSTime());
         holder.outtime.setText(extendedShift_status_models.get(position).getETime());
         holder.geoin.setText(extendedShift_status_models.get(position).getCheckin());
+        holder.txNoH.setText(extendedShift_status_models.get(position).getNumberofH());
         holder.geoout.setText(extendedShift_status_models.get(position).getCheckout());
         holder.applieddate.setText("Applied : " + extendedShift_status_models.get(position).getSubmissionDate());
         holder.OStatus.setText(Onduty_Status_Model.getEStatus());
@@ -144,7 +145,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView ondutydate, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved, SfName;
+        TextView ondutydate, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved, SfName,txNoH;
         RelativeLayout sf_namelayout;
 
         public MyViewHolder(View view) {
@@ -158,6 +159,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             intime = (TextView) view.findViewById(R.id.txt_in_time);
             outtime = (TextView) view.findViewById(R.id.txt_out_time);
             geoin = (TextView) view.findViewById(R.id.txt_geo_in_time);
+            txNoH = (TextView) view.findViewById(R.id.leavedays);
             OStatus = (TextView) view.findViewById(R.id.os_status);
             geoout = (TextView) view.findViewById(R.id.txt_geo_out_time);
             applieddate = (TextView) view.findViewById(R.id.applieddate);

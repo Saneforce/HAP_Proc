@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -346,7 +347,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
 
             if (totAmt > 0) {
                 findViewById(R.id.cvTotParent).setVisibility(View.VISIBLE);
-                tvGrandTot.setText("₹" + new DecimalFormat("##0.00").format(totAmt));
+                tvGrandTot.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totAmt));
             } else
                 findViewById(R.id.cvTotParent).setVisibility(View.GONE);
         } catch (Exception e) {

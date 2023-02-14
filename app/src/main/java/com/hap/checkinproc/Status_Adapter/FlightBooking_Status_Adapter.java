@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -48,12 +49,14 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
         Button btnApproval,btnReject,btnSvReject,btncancelRej;
         EditText RejectRmk;
         public View vwReject;
+        LinearLayout tvVwPassg;
 
         public MyViewHolder(View view) {
             super(view);
             tvDate = view.findViewById(R.id.tvDate);
             tvStatus = view.findViewById(R.id.tvFBStatus);
             tvNoOfTraveler = view.findViewById(R.id.tvTravelerCount);
+            tvVwPassg = view.findViewById(R.id.tvVwPassg);
             tvbookedBy = view.findViewById(R.id.tvBookedBy);
             tvViewSta = view.findViewById(R.id.tvViewSta);
             txFrmPlc = view.findViewById(R.id.tvFrom);
@@ -127,7 +130,7 @@ public class FlightBooking_Status_Adapter extends RecyclerView.Adapter<FlightBoo
 
             holder.tvStatus.setPadding(20, 5, 20, 5);
 
-            holder.tvNoOfTraveler.setOnClickListener(new View.OnClickListener() {
+            holder.tvVwPassg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {

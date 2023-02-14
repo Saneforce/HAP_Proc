@@ -234,6 +234,7 @@ public class FilterDemoAdapter extends BaseAdapter {
                         else{
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
                             callIntent.setData(Uri.parse("tel:"+val));
+                            callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(callIntent);
                         }
                     }

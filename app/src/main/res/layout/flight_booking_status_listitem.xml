@@ -110,7 +110,8 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:id="@+id/tvVwPassg"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
                             <TextView
@@ -130,6 +131,12 @@
                                 style="@style/TextStyleOne"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/eye"
+                                app:tint="@color/colorPrimary"
+                                android:layout_margin="4dp"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -156,7 +163,7 @@
                             <TextView
                                 android:id="@+id/tvFrom"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -178,7 +185,7 @@
                             <TextView
                                 android:id="@+id/tvTo"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -206,7 +213,7 @@
                             <TextView
                                 android:id="@+id/tvBookedBy"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -228,7 +235,7 @@
                             <TextView
                                 android:id="@+id/tvTrvDate"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -256,7 +263,7 @@
                             <TextView
                                 android:id="@+id/tvReturn"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -278,7 +285,7 @@
                             <TextView
                                 android:id="@+id/tvRetTrvDate"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -306,7 +313,7 @@
                             <TextView
                                 android:id="@+id/tvRetFrom"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -328,7 +335,7 @@
                             <TextView
                                 android:id="@+id/tvRetTo"
                                 style="@style/TextStyleOne"
-                                android:text="dfdfgdfg"
+                                android:text="-"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>

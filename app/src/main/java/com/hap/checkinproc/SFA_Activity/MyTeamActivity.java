@@ -301,6 +301,7 @@ public class MyTeamActivity extends AppCompatActivity implements View.OnClickLis
                         } else {
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
                             callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
+                            callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(callIntent);
                         }
                     }

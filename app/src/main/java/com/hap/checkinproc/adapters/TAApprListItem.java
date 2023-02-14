@@ -1,5 +1,7 @@
 package com.hap.checkinproc.adapters;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -76,14 +78,14 @@ public class TAApprListItem extends RecyclerView.Adapter<TAApprListItem.ViewHold
             itm = mlist.getJSONObject(position);
             holder.txEMPNm.setText(itm.getString("EmployeeName"));
             holder.txEMPDesig.setText(itm.getString("Designation"));
-            holder.tvTotAmt.setText("₹ " + formatter.format(itm.getDouble("Total")));
+            holder.tvTotAmt.setText(CurrencySymbol+" " + formatter.format(itm.getDouble("Total")));
             holder.tvPeriod.setText(itm.getString("FromDate") + " - " + itm.getString("ToDate"));
-            holder.tvDailyAlow.setText("₹ " + formatter.format(itm.getDouble("DailyAllowance")));
-            holder.tvfuelAlow.setText("₹ " + formatter.format(itm.getDouble("FuelAllowance")));
-            holder.tvTrvlExp.setText("₹ " + formatter.format(itm.getDouble("TravelExpense")));
-            holder.tvOtherExp.setText("₹ " + formatter.format(itm.getDouble("OtherExpense")));
-            holder.tvLocConv.setText("₹ " + formatter.format(itm.getDouble("LocalConveyance")));
-            holder.tvLodgingAlow.setText("₹ " + formatter.format(itm.getDouble("LodgingAllowance")));
+            holder.tvDailyAlow.setText(CurrencySymbol+" " + formatter.format(itm.getDouble("DailyAllowance")));
+            holder.tvfuelAlow.setText(CurrencySymbol+" " + formatter.format(itm.getDouble("FuelAllowance")));
+            holder.tvTrvlExp.setText(CurrencySymbol+" "+ formatter.format(itm.getDouble("TravelExpense")));
+            holder.tvOtherExp.setText(CurrencySymbol+" " + formatter.format(itm.getDouble("OtherExpense")));
+            holder.tvLocConv.setText(CurrencySymbol+" " + formatter.format(itm.getDouble("LocalConveyance")));
+            holder.tvLodgingAlow.setText(CurrencySymbol+" " + formatter.format(itm.getDouble("LodgingAllowance")));
 
 
             holder.btnView.setOnClickListener(new View.OnClickListener() {

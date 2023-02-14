@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +45,7 @@ public class CatewiseSalesaAdapter extends RecyclerView.Adapter<CatewiseSalesaAd
 
             if(itm.has("Qty")) {
                 holder.txQty.setText(itm.getString("Qty"));
-                holder.txVal.setText("₹" + new DecimalFormat("##0.00").format(itm.getDouble("Val")));
+                holder.txVal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(itm.getDouble("Val")));
             }else if(itm.has("Vals")){
                 JSONArray itmv=itm.getJSONArray("Vals");
                 if(itmv.length()>0) {
@@ -54,14 +56,14 @@ public class CatewiseSalesaAdapter extends RecyclerView.Adapter<CatewiseSalesaAd
                         holder.txNQty.setText(itmv.getJSONObject(0).getString("NQty"));
                     }
                     holder.txQty.setText(itmv.getJSONObject(0).getString("Qty"));
-                    holder.txVal.setText("₹" + new DecimalFormat("##0.00").format(itmv.getJSONObject(0).getDouble("Val")));
+                    holder.txVal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(itmv.getJSONObject(0).getDouble("Val")));
                 }else{
                     holder.txQty.setText("0");
-                    holder.txVal.setText("₹0.00");
+                    holder.txVal.setText(CurrencySymbol+" 0.00");
                 }
             } else{
                 holder.txQty.setText("0");
-                holder.txVal.setText("₹0.00");
+                holder.txVal.setText(CurrencySymbol+" 0.00");
             }
         } catch (JSONException e) {
             e.printStackTrace();

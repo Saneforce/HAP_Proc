@@ -51,7 +51,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
                 int totSal = 0;
 
                 holder.tvDt.setText("Date : " + jItem.getString("Dt"));
-                //holder.tvLoadAmt.setText("₹" + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0)));
+                //holder.tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0)));
                 JSONArray arr = jItem.getJSONArray("Details");
 
                 for (int i = 0; i < arr.length(); i++) {
@@ -65,16 +65,16 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
                 holder.tvTotStkQty.setText("" + totStk);
 
 
-                //  tvUnLoadAmt.setText("₹" + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0) - salAmt));
+                //  tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0) - salAmt));
                 holder.rvVanSales.setAdapter(new Pay_Adapter(arr, R.layout.adapter_vansales_stockview, context));
 
             } catch (Exception e) {
                 Log.v("adap:", e.getMessage());
             }
 //            holder.tvDate.setText(jItem.getString("LedgDate"));
-//            holder.tvDebit.setText("₹" + new DecimalFormat("##0.00").format(jItem.getDouble("Debit")));
-//            holder.tvCredit.setText("₹" + new DecimalFormat("##0.00").format(jItem.getDouble("Credit")));
-//            holder.tvBal.setText("₹" + new DecimalFormat("##0.00").format(jItem.getDouble("Balance")));
+//            holder.tvDebit.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.getDouble("Debit")));
+//            holder.tvCredit.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(jItem.getDouble("Credit")));
+//            holder.tvBal.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(jItem.getDouble("Balance")));
 //            if(jItem.getDouble("Balance")>=0){
 //                holder.tvBal.setTextColor(context.getResources().getColor(R.color.greentext));
 //            }else{

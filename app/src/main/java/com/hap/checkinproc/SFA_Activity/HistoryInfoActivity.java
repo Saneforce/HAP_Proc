@@ -1,6 +1,8 @@
 package com.hap.checkinproc.SFA_Activity;
 
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.app.DatePickerDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -337,14 +339,14 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
 
                         JSONArray jsonArray = jsonObject.getJSONArray("Data");
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            tvOutstanding.setText("₹" + new DecimalFormat("##0.00").format(
+                            tvOutstanding.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(
                                     jsonArray.getJSONObject(i).getDouble("Outstanding")));
 
                         }
 
                     } else {
 
-                        tvOutstanding.setText("₹" + 0.00);
+                        tvOutstanding.setText(CurrencySymbol + " " + 0.00);
                     }
                     break;
             }

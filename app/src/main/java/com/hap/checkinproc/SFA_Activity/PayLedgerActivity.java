@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -145,7 +147,7 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                             JSONObject obj = legList.getJSONObject(i);
                             totAmt += obj.getDouble("ClAmt");
                         }
-                        tvGrandTot.setText("₹" + new DecimalFormat("##0.00").format(totAmt));
+                        tvGrandTot.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totAmt));
                         break;
                 }
             }

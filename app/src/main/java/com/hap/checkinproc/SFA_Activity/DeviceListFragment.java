@@ -1,6 +1,18 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import android.Manifest;
 import android.bluetooth.BluetoothDevice;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +21,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +34,7 @@ import java.util.Set;
 
 public class DeviceListFragment extends DialogFragment {
 
+    private static final int REQUEST_CODE = 1002;
     private Printama.OnConnectPrinter onConnectPrinter;
     private Set<BluetoothDevice> bondedDevices;
     private String mPrinterName;
@@ -95,7 +109,16 @@ public class DeviceListFragment extends DialogFragment {
     }
 
     private void testPrinter() {
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    getContext(), BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_CODE);
+                return;
+            }
+        }
         Print_Invoice_Activity.mPrint_invoice_activity.printBill();
+
         dismiss();
         //  Printama.with(getActivity(), mPrinterName).printTest();
     }

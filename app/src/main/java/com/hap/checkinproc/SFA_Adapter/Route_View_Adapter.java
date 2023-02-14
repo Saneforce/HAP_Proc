@@ -1,6 +1,8 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -251,9 +253,9 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             });
 
             holder.txTodayTotQty.setText("0");
-            holder.txTodayTotVal.setText("₹0.00");
+            holder.txTodayTotVal.setText(CurrencySymbol+" 0.00");
             holder.txPreTotQty.setText("0");
-            holder.txPreTotVal.setText("₹0.00");
+            holder.txPreTotVal.setText(CurrencySymbol+" 0.00");
             //PreSales
             JSONArray TodaySales = PreSales.getJSONArray("todaydata");
             Boolean DtaBnd = false;
@@ -278,7 +280,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                             }
                         }
                         holder.txTodayTotQty.setText(String.valueOf(iQty));
-                        holder.txTodayTotVal.setText("₹" + new DecimalFormat("##0.00").format(iVal));
+                        holder.txTodayTotVal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(iVal));
                     }
                 }
             }
@@ -397,7 +399,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 }
             }
             holder.txPreTotQty.setText(String.valueOf(iQty));
-            holder.txPreTotVal.setText("₹" + new DecimalFormat("##0.00").format(iVal));
+            holder.txPreTotVal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(iVal));
 
         } catch (JSONException e) {
             e.printStackTrace();

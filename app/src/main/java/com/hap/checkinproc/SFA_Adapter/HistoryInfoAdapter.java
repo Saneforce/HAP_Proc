@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,7 +73,7 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
     @Override
     public void onBindViewHolder(HistoryInfoAdapter.MyViewHolder holder, int position) {
         try {
-            holder.tvId.setText("" + mDate.get(position).getOrderNo());
+            holder.tvId.setText("" + mDate.get(position).getTransSlNo());
             holder.tvDate.setText("" + mDate.get(position).getOrderDate());
             holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
             holder.tvStatus.setText(mDate.get(position).getStatus());
@@ -82,7 +84,7 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
             } else {
                 holder.ivStatus.setImageResource(R.drawable.ic_round_pending_24);
             }
-            holder.tvAmount.setText("₹ " + formatter.format(mDate.get(position).getOrderValue()));
+            holder.tvAmount.setText(CurrencySymbol+" " + formatter.format(mDate.get(position).getOrderValue()));
 
             StringBuilder value = new StringBuilder();
             //  holder.tvName.setText("" + mDate.get(position).getNo_Of_items());

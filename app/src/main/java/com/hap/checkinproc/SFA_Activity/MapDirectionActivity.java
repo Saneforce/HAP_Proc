@@ -381,7 +381,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
 
                         Log.v("distance", ":" + distance() + ":Radius:" + radius);
 
-                        if ((radius > 0 && distance() <= radius) || distance() < 20010) {
+                        if ((radius > 0 && distance() <= radius) || distance() < 200) {
                             String ETime = CheckInDetails.getString("CINEnd", "");
                             if (!ETime.equalsIgnoreCase("")) {
                                 String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");

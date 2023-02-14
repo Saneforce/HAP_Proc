@@ -497,7 +497,7 @@
                                             android:fontFamily="@font/basic"
                                             android:hint="Starting Km"
                                             android:inputType="number"
-                                            android:maxLength="8"
+                                            android:maxLength="10"
                                             android:padding="@dimen/C10dp"
                                             android:text=""
                                             android:textAllCaps="false"

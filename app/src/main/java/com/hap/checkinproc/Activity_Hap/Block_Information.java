@@ -1,10 +1,19 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static android.Manifest.permission.READ_PHONE_NUMBERS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+import static androidx.core.app.ActivityCompat.requestPermissions;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -42,7 +52,6 @@ public class Block_Information extends AppCompatActivity {
         if(!sMsg.equalsIgnoreCase("")) lblMsg.setText(Html.fromHtml(sMsg));
         if(!sHead.equalsIgnoreCase("")) lblInfo.setText(Html.fromHtml(sHead));
         if(mMode.equalsIgnoreCase("FGPS")){
-
             openDateSetting.setText("Exit Application");
         }
         openDateSetting.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +71,4 @@ public class Block_Information extends AppCompatActivity {
             }
         });
     }
-
-
 }

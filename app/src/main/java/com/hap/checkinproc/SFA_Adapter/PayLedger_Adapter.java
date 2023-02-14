@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +43,8 @@ public class PayLedger_Adapter extends RecyclerView.Adapter<PayLedger_Adapter.My
         try {
             JSONObject item=mArr.getJSONObject(position);
             holder.txCustNm.setText(item.getString("CustName"));
-            holder.txtOBAmt.setText("₹" + new DecimalFormat("##0.00").format(item.getDouble("OBAmt")));
-            holder.txtCBAmt.setText("₹" + new DecimalFormat("##0.00").format(item.getDouble("ClAmt")));
+            holder.txtOBAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(item.getDouble("OBAmt")));
+            holder.txtCBAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(item.getDouble("ClAmt")));
             holder.txtRecNo.setVisibility(View.VISIBLE);
             if (item.getJSONArray("Details").length()>0){
                 holder.txtRecNo.setVisibility(View.GONE);

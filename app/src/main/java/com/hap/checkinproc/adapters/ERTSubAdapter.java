@@ -1,25 +1,31 @@
 package com.hap.checkinproc.adapters;
 
+import static android.Manifest.permission.CALL_PHONE;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Model_Class.ERTChild;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -36,6 +42,8 @@ public class ERTSubAdapter extends RecyclerView.Adapter<ERTSubAdapter.SubMenuVie
     private Date date;
     private DateFormat dateFormat;
     private int orderid;
+
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
     public class SubMenuViewHolder extends RecyclerView.ViewHolder {
         private TextView name, price, count;
@@ -80,14 +88,27 @@ public class ERTSubAdapter extends RecyclerView.Adapter<ERTSubAdapter.SubMenuVie
         holder.count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                int readReq = ContextCompat.checkSelfPermission(context, CALL_PHONE);
+                if (readReq != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                } else {
+                    if (TextUtils.isEmpty(menu.getSFMobile()) || menu.getSFMobile().length() < 10) {
+                        Toast.makeText(context, " Invalid phone number ", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + menu.getSFMobile()));//change the number
+                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(callIntent);
+                    }
+                }
+                /*Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse(menu.getSFMobile()));
 
                 if (ActivityCompat.checkSelfPermission(context,
                         Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                context.startActivity(callIntent);
+                context.startActivity(callIntent);*/
             }
 
         });

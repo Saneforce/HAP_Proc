@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -50,9 +52,9 @@ public class rcylPayledgerAda  extends RecyclerView.Adapter<rcylPayledgerAda.MyV
             JSONObject jItem=jLists.getJSONObject(position);
 
             holder.tvDate.setText(jItem.getString("LedgDate"));
-            holder.tvDebit.setText("₹" + new DecimalFormat("##0.00").format(jItem.getDouble("Debit")));
-            holder.tvCredit.setText("₹" + new DecimalFormat("##0.00").format(jItem.getDouble("Credit")));
-            holder.tvBal.setText("₹" + new DecimalFormat("##0.00").format(jItem.getDouble("Balance")));
+            holder.tvDebit.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.getDouble("Debit")));
+            holder.tvCredit.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(jItem.getDouble("Credit")));
+            holder.tvBal.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(jItem.getDouble("Balance")));
             if(jItem.getDouble("Balance")>=0){
                 holder.tvBal.setTextColor(context.getResources().getColor(R.color.greentext));
             }else{

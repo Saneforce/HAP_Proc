@@ -50,13 +50,13 @@ public class Outlet_Report_View_Adapter  extends RecyclerView.Adapter<Outlet_Rep
 
         holder.txtsNo.setText(mDate.get(position).getSlno());
         holder.txtOrderDate.setText(mDate.get(position).getOrderDate());
-        holder.txtOrderID.setText(mDate.get(position).getOrderNo());
+        holder.txtOrderID.setText(mDate.get(position).getTransSlNo());
         holder.txtValue.setText(""+mDate.get(position).getOrderValue());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mViewReport.reportCliick(mDate.get(position).getOrderNo(), mDate.get(position).getOrderDate());
+                mViewReport.reportCliick(mDate.get(position).getTransSlNo(), mDate.get(position).getOrderDate());
             }
         });
     }
