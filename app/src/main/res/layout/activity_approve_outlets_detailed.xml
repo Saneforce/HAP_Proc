@@ -178,6 +178,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/select_distributor"
                                 android:padding="5dp"
+                                android:textColor="#B6B6B6"
                                 android:textSize="13sp" />
 
                             <ImageView
@@ -280,7 +281,7 @@
                                     android:enabled="false"
                                     android:textColor="@color/white"
                                     android:textSize="13dp"
-                                    android:visibility="visible" />
+                                    android:visibility="gone" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -361,6 +362,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Outlet Type"
+                                    android:textColor="#B6B6B6"
                                     android:enabled="false"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
@@ -491,6 +493,7 @@
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
                             android:enabled="false"
+                            android:textColor="#B6B6B6"
                             android:hint="code"
                             android:padding="10dp"
                             android:textSize="13dp" />
@@ -558,6 +561,7 @@
                                             android:layout_height="wrap_content"
                                             android:hint="@string/select_route"
                                             android:padding="5dp"
+                                            android:textColor="#B6B6B6"
                                             android:enabled="false"
                                             android:textSize="13dp" />
 
@@ -794,6 +798,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/select_state"
                                 android:enabled="false"
+                                android:textColor="#B6B6B6"
                                 android:padding="5dp"
                                 android:textSize="13dp" />
 
@@ -1170,6 +1175,7 @@
                                     android:id="@+id/txt_retailer_channel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textColor="#B6B6B6"
                                     android:hint="Outlet Category"
                                     android:padding="5dp"
                                     android:textSize="13dp" />
@@ -1230,6 +1236,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Sub Category"
+                                    android:textColor="#B6B6B6"
                                     android:padding="5dp"
                                     android:textSize="13dp" />
 
@@ -1281,6 +1288,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Delivery Type"
+                                android:textColor="#B6B6B6"
                                 android:padding="5dp"
                                 android:textSize="13sp" />
 
@@ -1408,6 +1416,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Service Type"
+                                android:textColor="#B6B6B6"
                                 android:padding="5dp"
                                 android:textSize="13dp" />
 
@@ -1466,6 +1475,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Freezer/Cooler status"
+                                    android:textColor="#B6B6B6"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 
@@ -1678,6 +1688,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Freezer/Cooler Capacity"
+                                    android:textColor="#B6B6B6"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 

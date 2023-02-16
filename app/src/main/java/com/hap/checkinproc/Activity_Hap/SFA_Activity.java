@@ -64,6 +64,7 @@ import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
+import com.hap.checkinproc.SFA_Activity.PendingOutletsCategory;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.ReportsListActivity;
@@ -304,7 +305,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
                         break;
                     case "Approve Outlets":
-                        common_class.CommonIntentwithNEwTask(ApproveOutletsActivity.class);
+                        common_class.CommonIntentwithNEwTask(PendingOutletsCategory.class);
                         break;
                     case "Franchise":
                         common_class.CommonIntentwithNEwTask(Reports_Distributor_Name.class);

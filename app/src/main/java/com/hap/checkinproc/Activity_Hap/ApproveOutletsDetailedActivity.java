@@ -170,12 +170,15 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
     Button approveBtn, rejectBtn;
 
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_approve_outlets_detailed);
             mAddNewRetailer = this;
+            context = this;
 
             CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -2138,7 +2141,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 holder.category.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        typeUpdatePos = position;
+                        /*typeUpdatePos = position;
                         if (list.get(position).isSelected()) {
                             ArrayList<Common_Model> typeCatList = new ArrayList<>();
 
@@ -2154,14 +2157,14 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                                     typeCatList.add(categoryList.get(i));
                             }
                             common_class.showCommonDialog(typeCatList, 5, ApproveOutletsDetailedActivity.this);
-                        }
+                        }*/
                     }
                 });
 
                 holder.subCategory.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
+                        /*try {
                             typeUpdatePos = position;
                             if (list.get(position).isSelected() && !Common_Class.isNullOrEmpty(list.get(position).getCatId())) {
                                 ArrayList<Common_Model> typeSubCatList = new ArrayList<>();
@@ -2192,7 +2195,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         } catch (Exception e) {
                             Log.v(TAG, "subCate: " + e.getMessage());
 
-                        }
+                        }*/
                     }
                 });
 
@@ -2200,8 +2203,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
-
-
         }
 
         @Override
@@ -2223,6 +2224,4 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             }
         }
     }
-
-
 }
