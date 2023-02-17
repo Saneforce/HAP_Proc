@@ -73,7 +73,8 @@
 
             <TextView
                 android:id="@+id/headtext"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/basic"
                 android:text="Pending Outlets"
@@ -84,12 +85,25 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/count"
-                android:layout_width="0dp"
+                android:id="@+id/view_history"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:fontFamily="@font/basic"
-                android:text="No. of. Outlets\n56"
+                android:text="Approval History"
+                android:layout_marginHorizontal="10dp"
+                android:paddingHorizontal="8dp"
+                android:background="@drawable/button_blue"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:paddingVertical="3dp"
+                android:textColor="#FFF"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/basic"
                 android:textAlignment="textEnd"
                 android:textAllCaps="true"
                 android:textColor="#FFF"

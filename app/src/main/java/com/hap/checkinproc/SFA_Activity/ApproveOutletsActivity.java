@@ -84,23 +84,28 @@ public class ApproveOutletsActivity extends AppCompatActivity {
                     try {
                         String result = response.body().string();
                         JSONObject object = new JSONObject(result);
-                        JSONArray array = object.getJSONArray("response");
-                        for (int i = 0; i < array.length(); i++) {
-                            String customerName = array.getJSONObject(i).getString("OutletName");
-                            String customerID = array.getJSONObject(i).getString("OutletCode");
-                            String customerMobile = array.getJSONObject(i).getString("OutletMobile");
-                            String customerAddress = array.getJSONObject(i).getString("OutletAddress");
-                            String listedDrCode = array.getJSONObject(i).getString("ListedDrCode");
-                            list.add(new ModelApproveOutlets(customerName, customerID, customerMobile, customerAddress, listedDrCode));
-                        }
-                        String c = "No. of Outlets\n" + list.size();
-                        runOnUiThread(() -> {
-                            outletsCount.setText(c);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                            adapter = new Approve_Outlets_Adapter(list, context);
-                            recyclerView.setAdapter(adapter);
+                        if (object.getBoolean("success")) {
+                            JSONArray array = object.getJSONArray("response");
+                            for (int i = 0; i < array.length(); i++) {
+                                String customerName = array.getJSONObject(i).getString("OutletName");
+                                String customerID = array.getJSONObject(i).getString("OutletCode");
+                                String customerMobile = array.getJSONObject(i).getString("OutletMobile");
+                                String customerAddress = array.getJSONObject(i).getString("OutletAddress");
+                                String listedDrCode = array.getJSONObject(i).getString("ListedDrCode");
+                                list.add(new ModelApproveOutlets(customerName, customerID, customerMobile, customerAddress, listedDrCode));
+                            }
+                            String c = "No. of Outlets\n" + list.size();
+                            runOnUiThread(() -> {
+                                outletsCount.setText(c);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                adapter = new Approve_Outlets_Adapter(list, context);
+                                recyclerView.setAdapter(adapter);
+                                progressBar.setVisibility(View.GONE);
+                            });
+                        } else {
+                            Toast.makeText(context, "List is empty", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
-                        });
+                        }
                     } catch (Exception e) {
                         runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);

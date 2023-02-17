@@ -1,7 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,8 +16,8 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.AdapterPendingOutletsCategory;
-import com.hap.checkinproc.SFA_Model_Class.ModelPendingOutletsCategory;
+import com.hap.checkinproc.SFA_Adapter.AdapterOutletsApprovalHistory;
+import com.hap.checkinproc.SFA_Model_Class.ModelOutletsApprovalHistory;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,36 +31,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PendingOutletsCategory extends AppCompatActivity {
+public class ApprovalHistoryActivity extends AppCompatActivity {
     ImageView home;
-    TextView outletsCount, history;
+    TextView outletsCount;
     RecyclerView recyclerView;
     ProgressBar progressBar;
 
-    ArrayList<ModelPendingOutletsCategory> list = new ArrayList<>();
-    AdapterPendingOutletsCategory adapter;
+    ArrayList<ModelOutletsApprovalHistory> list = new ArrayList<>();
+    AdapterOutletsApprovalHistory adapter;
     Context context = this;
     Common_Class common_class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_outlets_category);
+        setContentView(R.layout.activity_approval_history);
 
         home = findViewById(R.id.toolbar_home);
         outletsCount = findViewById(R.id.count);
-        history = findViewById(R.id.view_history);
-        recyclerView = findViewById(R.id.recyclerview_PendingOutletsCategory);
-        progressBar = findViewById(R.id.progressbar_PendingOutletsCategory);
+        recyclerView = findViewById(R.id.recyclerview__ApprovalHistoryActivity);
+        progressBar = findViewById(R.id.progressbar_ApprovalHistoryActivity);
 
         common_class = new Common_Class(context);
-        home.setOnClickListener(v -> {
-            common_class.gotoHomeScreen(context, v);
-        });
-
-        history.setOnClickListener(v -> {
-            startActivity(new Intent(this, ApprovalHistoryActivity.class));
-        });
+        home.setOnClickListener(v -> common_class.gotoHomeScreen(context, v));
 
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(this::StartLoading);
@@ -70,7 +62,7 @@ public class PendingOutletsCategory extends AppCompatActivity {
     private void StartLoading() {
         list.clear();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getPendingOutletsCategory("get_pending_outlets_category");
+        Call<ResponseBody> call = apiInterface.getOutletsApprovalHistory("get_outlets_approval_history");
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -81,19 +73,21 @@ public class PendingOutletsCategory extends AppCompatActivity {
                         if (object.getBoolean("success")) {
                             JSONArray array = object.getJSONArray("response");
                             for (int i = 0; i < array.length(); i++) {
-                                String SF_Code = array.getJSONObject(i).getString("SF_Code");
-                                String Sf_Name = array.getJSONObject(i).getString("Sf_Name");
-                                String Stockist_Code = array.getJSONObject(i).getString("Stockist_Code");
-                                String Stockist_Name = array.getJSONObject(i).getString("Stockist_Name");
-                                String ListedDrCount = array.getJSONObject(i).getString("ListedDrCount");
-                                String sf_Designation_Short_Name = array.getJSONObject(i).getString("sf_Designation_Short_Name");
-                                list.add(new ModelPendingOutletsCategory(SF_Code, Sf_Name, Stockist_Code, Stockist_Name, ListedDrCount, sf_Designation_Short_Name));
+                                String Status = array.getJSONObject(i).getString("Status");
+                                String Name = array.getJSONObject(i).getString("Name");
+                                String Code = array.getJSONObject(i).getString("Code");
+                                String Mobile = array.getJSONObject(i).getString("Mobile");
+                                String Address = array.getJSONObject(i).getString("Address");
+                                String ApprovedBy = array.getJSONObject(i).getString("ApprovedBy");
+                                String ModifiedOn = array.getJSONObject(i).getString("ModifiedOn");
+                                String Remarks = array.getJSONObject(i).getString("Remarks");
+                                list.add(new ModelOutletsApprovalHistory(Status, Name, Code, Mobile, Address, ApprovedBy, ModifiedOn, Remarks));
                             }
                             String c = "Results Count\n" + list.size();
                             runOnUiThread(() -> {
                                 outletsCount.setText(c);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                                adapter = new AdapterPendingOutletsCategory(list, context);
+                                adapter = new AdapterOutletsApprovalHistory(list, context);
                                 recyclerView.setAdapter(adapter);
                                 progressBar.setVisibility(View.GONE);
                             });
