@@ -668,5 +668,8 @@ public interface ApiInterface {
     Call<ResponseBody> getOutletsApprovalHistory(@Query("axn") String axn);
 
     @POST("Db_v300.php?")
+    Call<ResponseBody> getDataPendingOutlets(@Query("axn") String axn, @Query("ListedDrCode") String ListedDrCode);
+
+    @POST("Db_v300.php?")
     Call<ResponseBody> getPendingOutlets(@Query("axn") String axn, @QueryMap Map<String, String> params);
 }

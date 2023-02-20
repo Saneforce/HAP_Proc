@@ -43,6 +43,8 @@ public class PendingOutletsCategory extends AppCompatActivity {
     Context context = this;
     Common_Class common_class;
 
+    public static boolean refresh = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +69,18 @@ public class PendingOutletsCategory extends AppCompatActivity {
         executor.execute(this::StartLoading);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (refresh) {
+            StartLoading();
+            refresh = false;
+        }
+    }
+
     private void StartLoading() {
         list.clear();
+        progressBar.setVisibility(View.VISIBLE);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiInterface.getPendingOutletsCategory("get_pending_outlets_category");
         call.enqueue(new Callback<>() {
@@ -100,16 +112,19 @@ public class PendingOutletsCategory extends AppCompatActivity {
                         } else {
                             Toast.makeText(context, "List is empty", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
                         runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.GONE);
                             Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
                     }
                 } else {
                     runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         Toast.makeText(context, "Error: Response Failed", Toast.LENGTH_SHORT).show();
                     });
                 }
@@ -119,6 +134,7 @@ public class PendingOutletsCategory extends AppCompatActivity {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
                     Toast.makeText(context, "Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
