@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 public class PendingOutletsCategory extends AppCompatActivity {
     ImageView home;
-    TextView outletsCount, history;
+    TextView history;
     RecyclerView recyclerView;
     ProgressBar progressBar;
 
@@ -51,7 +51,6 @@ public class PendingOutletsCategory extends AppCompatActivity {
         setContentView(R.layout.activity_pending_outlets_category);
 
         home = findViewById(R.id.toolbar_home);
-        outletsCount = findViewById(R.id.count);
         history = findViewById(R.id.view_history);
         recyclerView = findViewById(R.id.recyclerview_PendingOutletsCategory);
         progressBar = findViewById(R.id.progressbar_PendingOutletsCategory);
@@ -101,9 +100,7 @@ public class PendingOutletsCategory extends AppCompatActivity {
                                 String sf_Designation_Short_Name = array.getJSONObject(i).getString("sf_Designation_Short_Name");
                                 list.add(new ModelPendingOutletsCategory(SF_Code, Sf_Name, Stockist_Code, Stockist_Name, ListedDrCount, sf_Designation_Short_Name));
                             }
-                            String c = "Results Count\n" + list.size();
                             runOnUiThread(() -> {
-                                outletsCount.setText(c);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                                 adapter = new AdapterPendingOutletsCategory(list, context);
                                 recyclerView.setAdapter(adapter);

@@ -64,7 +64,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
 
             try {
                 if (ApproveOutletsDetailedActivity.context.equals(context)) {
-                    holder.ivDel.setVisibility(View.GONE);
+                    //holder.ivDel.setVisibility(View.GONE);
                 }
             } catch (Exception ignored) {}
 

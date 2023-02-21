@@ -46,6 +46,13 @@ public class AdapterPendingOutletsCategory extends RecyclerView.Adapter<AdapterP
             intent.putExtra("sfCode", model.getSfCode());
             context.startActivity(intent);
         });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ApproveOutletsActivity.class);
+            intent.putExtra("stockistCode", model.getStockistCode());
+            intent.putExtra("sfCode", model.getSfCode());
+            context.startActivity(intent);
+        });
     }
 
     @Override

@@ -192,6 +192,7 @@ public class ApproveOutletsActivity extends AppCompatActivity {
                     try {
                         JSONObject js = new JSONObject(response.body().string());
                         if (js.getBoolean("success")) {
+                            PendingOutletsCategory.refresh = true;
                             list.remove(position);
                             adapter.notifyItemRemoved(position);
                             adapter.notifyItemRangeChanged(0, list.size());
