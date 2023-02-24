@@ -40,11 +40,11 @@
         android:name=".SFA_Activity.HAPApp"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_so_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_so_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
@@ -54,6 +54,20 @@
             android:exported="false"
             android:label="@string/title_activity_posstock_loading"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.ApprovalHistoryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.PendingOutletsCategory"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

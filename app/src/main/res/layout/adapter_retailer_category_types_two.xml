@@ -24,7 +24,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:enabled="false"
             android:layout_weight="0.5"
             android:gravity="center_vertical"
             android:text="Demo"
@@ -34,14 +33,13 @@
             android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/text_bg_grey"
             android:gravity="center_vertical"
+            android:textColor="#B6B6B6"
             android:hint="Category"
-            android:padding="@dimen/C5dp"
-            android:textColor="@color/black" />
+            android:padding="@dimen/C5dp" />
 
         <TextView
             android:id="@+id/tvSubCategory"
@@ -52,10 +50,10 @@
             android:layout_marginLeft="@dimen/C5dp"
             android:layout_weight="1"
             android:background="@drawable/text_bg_grey"
+            android:textColor="#B6B6B6"
             android:gravity="center_vertical"
             android:hint="Sub Category"
-            android:padding="@dimen/C5dp"
-            android:textColor="@color/black" />
+            android:padding="@dimen/C5dp" />
 
 
     </LinearLayout>

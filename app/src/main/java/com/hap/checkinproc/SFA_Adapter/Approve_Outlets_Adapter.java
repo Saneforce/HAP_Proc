@@ -1,323 +1,143 @@
 package com.hap.checkinproc.SFA_Adapter;
 
-import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
-
-import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Activity_Hap.ApproveOutletsDetailedActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
-import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.SFA_Model_Class.ModelApproveOutlets;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.ArrayList;
 
 // Created by RAGU on 27/01/2023
-public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlets_Adapter.MyViewHolder> {
+public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlets_Adapter.ViewHolder> {
 
-    private List<Retailer_Modal_List> Retailer_Modal_Listitem;
-    private int rowLayout;
-    private Context context;
-    AdapterOnClick mAdapterOnClick;
-    String activityName;
-    Common_Class common_class;
+    ArrayList<ModelApproveOutlets> list;
+    Context context;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        //public TextView textviewname, textviewdate, txRetNo, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt,tvPhone;
-        //public LinearLayout retStaBdg, icAC, icFreezer, layparent, linDirection,llCallMob;
-        //Button btnSend;
-        //EditText etSNo;
-        //RelativeLayout rlSeqParent;
+    OnApproveClicked approveClicked;
+    OnRejectClicked rejectClicked;
 
-        public TextView textviewname, txRetNo, outletAddress, textId, txCustStatus, tvPhone;
-        public LinearLayout retStaBdg, icAC, icFreezer, layparent,llCallMob;
-        TextView statusTV;
-
-        Button viewBtn, approveBtn, rejectBtn;
-
-
-        public MyViewHolder(View view) {
-            super(view);
-//            linDirection = view.findViewById(R.id.linDirection);
-            icFreezer = view.findViewById(R.id.icFreezer);
-
-            layparent = view.findViewById(R.id.layparent);
-            textviewname = view.findViewById(R.id.retailername);
-            textId = view.findViewById(R.id.txCustID);
-//            clsdRmks = view.findViewById(R.id.txClsdRmks);
-            outletAddress = view.findViewById(R.id.ShopAddr);
-            txCustStatus = view.findViewById(R.id.txCustStatus);
-            retStaBdg = view.findViewById(R.id.retStaBdg);
-//            status = view.findViewById(R.id.status);
-//            invoice = view.findViewById(R.id.invoice);
-            icAC = view.findViewById(R.id.icAC);
-//            lupdDt = view.findViewById(R.id.lupdDt);
-            //btnSend = view.findViewById(R.id.btnSend);
-            //etSNo = view.findViewById(R.id.etSNo);
-            txRetNo = view.findViewById(R.id.txRetNo);
-            //rlSeqParent = view.findViewById(R.id.rlSequence);
-            llCallMob=view.findViewById(R.id.btnCallMob);
-            tvPhone=view.findViewById(R.id.retailePhoneNum);
-
-            statusTV=view.findViewById(R.id.statusTV);
-
-            // Buttons
-            viewBtn = view.findViewById(R.id.viewBtn);
-            approveBtn = view.findViewById(R.id.approveBtn);
-            rejectBtn = view.findViewById(R.id.rejectBtn);
-
-        }
-    }
-
-
-    public Approve_Outlets_Adapter(List<Retailer_Modal_List> Retailer_Modal_Listitem, int rowLayout, Context context,
-                                   String activityName, AdapterOnClick mAdapterOnClick) {
-        this.Retailer_Modal_Listitem = Retailer_Modal_Listitem;
-        this.rowLayout = rowLayout;
+    public Approve_Outlets_Adapter(ArrayList<ModelApproveOutlets> list, Context context) {
+        this.list = list;
         this.context = context;
-        this.activityName = activityName;
-        this.mAdapterOnClick = mAdapterOnClick;
-        common_class=new Common_Class(context);
+    }
+
+    public void setApproveClicked(OnApproveClicked approveClicked) {
+        this.approveClicked = approveClicked;
+    }
+
+    public void setRejectClicked(OnRejectClicked rejectClicked) {
+        this.rejectClicked = rejectClicked;
+    }
+
+    @NonNull
+    @Override
+    public Approve_Outlets_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new Approve_Outlets_Adapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.outlet_info_recyclerview_two, parent, false));
     }
 
     @Override
-    public Approve_Outlets_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        return new Approve_Outlets_Adapter.MyViewHolder(view);
-    }
+    public void onBindViewHolder(@NonNull Approve_Outlets_Adapter.ViewHolder holder, int position) {
+        ModelApproveOutlets model = list.get(position);
+        holder.name.setText(model.getCustomerName());
+        holder.id.setText(model.getCustomerID());
+        holder.mobile.setText(model.getCustomerMobile());
+        holder.address.setText(model.getCustomerAddress());
 
-    @Override
-    public void onBindViewHolder(Approve_Outlets_Adapter.MyViewHolder holder, int position) {
-        Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
-        String typ = Retailer_Modal_List.getType() == null ? "0" : Retailer_Modal_List.getType();
-
-        if (activityName.equalsIgnoreCase("Outlets")) {
-            //holder.rlSeqParent.setVisibility(View.VISIBLE);
-        }
-
-//        holder.statusTV.setText("Status: " + Retailer_Modal_List.getStatusname().toUpperCase());
-        holder.statusTV.setVisibility(View.GONE);
-
-        holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
-        // holder.textId.setText("" + Retailer_Modal_List.getId());
-        holder.textId.setText("" + Retailer_Modal_List.getERP_Code());
-        holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
-        //holder.clsdRmks.setText("" + Retailer_Modal_List.getClosedRemarks());
-        //holder.lupdDt.setText((Retailer_Modal_List.getLastUpdt_Date().equalsIgnoreCase("")) ? "" : "Last Updated On " + Retailer_Modal_List.getLastUpdt_Date());
-        holder.icAC.setVisibility(View.GONE);
-        if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {
-            holder.icAC.setVisibility(View.VISIBLE);
-        }
-        holder.txCustStatus.setText((typ.equalsIgnoreCase("3") ? "Duplicate" : typ.equalsIgnoreCase("2") ? "Closed" : (typ.equalsIgnoreCase("1") ? "Service" : "Non Service")));
-
-        switch (typ) {
-            case "1":
-                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_green));
-                break;
-            case "2":
-                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.round_status_blue));
-                break;
-            case "3":
-                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_yellows));
-                break;
-            default:
-                holder.retStaBdg.setBackground(context.getDrawable(R.drawable.button_blueg));
-                break;
-        }
-
-        holder.layparent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
-            }
-        });
-
-        holder.viewBtn.setOnClickListener(v1 -> {
-            mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
-        });
-
-        holder.approveBtn.setOnClickListener(v2 -> {
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Approving...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            String listedDrCode = Retailer_Modal_List.getId();
-            Log.e("status", listedDrCode);
-            Call<ResponseBody> call = apiInterface.setOutletStatus("set_outlet_status", "0", listedDrCode);
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject js = new JSONObject(response.body().string());
-                            if (js.getBoolean("success")) {
-                                Retailer_Modal_Listitem.remove(holder.getAdapterPosition());
-                                notifyItemRemoved(holder.getAdapterPosition());
-                                notifyItemRangeChanged(0, holder.getAdapterPosition());
-//                                common_class.getDataFromApi(Retailer_OutletList, (Activity) context, false);
-                                Toast.makeText(context, "Outlet Approved Successfully", Toast.LENGTH_SHORT).show();
-                            };
-                        } catch (Exception e) {
-                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(context, "Error: Response not successfull", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            progressDialog.dismiss();
-        });
-
-        holder.rejectBtn.setOnClickListener(v3 -> {
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Rejecting...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            String listedDrCode = Retailer_Modal_List.getId();
-            Log.e("status", listedDrCode);
-            Call<ResponseBody> call = apiInterface.setOutletStatus("set_outlet_status", "1", listedDrCode);
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject js = new JSONObject(response.body().string());
-                            if (js.getBoolean("success")) {
-                                Retailer_Modal_Listitem.remove(holder.getAdapterPosition());
-                                notifyItemRemoved(holder.getAdapterPosition());
-                                notifyItemRangeChanged(0, holder.getAdapterPosition());
-//                                common_class.getDataFromApi(Retailer_OutletList, (Activity) context, false);
-                                Toast.makeText(context, "Outlet Rejected Successfully", Toast.LENGTH_SHORT).show();
-                            };
-                        } catch (Exception e) {
-                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(context, "Error: Response not successfull", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            progressDialog.dismiss();
-        });
-
-        /*holder.btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.etSNo.getText().toString().equalsIgnoreCase("")) {
-
-                    Toast.makeText(context, "Enter Delivery Sequence", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    int val = Integer.parseInt(holder.etSNo.getText().toString());
-                    if (val <= Outlet_Info_Activity.retailerSize)
-                        Outlet_Info_Activity.outlet_info_activity.submitSeqNo(val, Retailer_Modal_List.getId());
-                    else
-                        Toast.makeText(context, "Invalid Delivery Sequence", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });*/
-
-        holder.txRetNo.setText("" + Retailer_Modal_List.getListedDrSlNo().toString());
-
-
-        /*holder.linDirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Common_Class.isNullOrEmpty(Retailer_Modal_List.getLat()) || Common_Class.isNullOrEmpty(Retailer_Modal_List.getLong())) {
-                    Toast.makeText(context, "No route is found", Toast.LENGTH_SHORT).show();
-                } else {
-                    drawRoute(Retailer_Modal_List.getName(), Retailer_Modal_List.getLat(), Retailer_Modal_List.getLong());
-                }
-            }
-        });*/
-
-        if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.getFreezer_required()) && Retailer_Modal_List.getFreezer_required().equalsIgnoreCase("yes")) {
-            holder.icFreezer.setVisibility(View.VISIBLE);
-        } else {
-            holder.icFreezer.setVisibility(View.GONE);
-        }
-
-        holder.llCallMob.setVisibility(View.GONE);
-
-        if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.getPrimary_No())) {
-            holder.llCallMob.setVisibility(View.VISIBLE);
-            holder.tvPhone.setText(""+Retailer_Modal_List.getPrimary_No());
-        }
-        holder.llCallMob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    common_class.showCalDialog(context, "Do you want to Call this Outlet?", holder.tvPhone.getText().toString().replaceAll(",", ""));
-                }
-                catch (Exception e){
-                    Log.v("Call:Outlet:",e.getMessage());
-                }
-            }
-        });
-    }
-
-    private void drawRoute(String OutletName, String sLat, String sLng) {
-        try {
-            Intent intent = new Intent(context, MapDirectionActivity.class);
-            intent.putExtra(Constants.DEST_LAT, sLat);
-            intent.putExtra(Constants.DEST_LNG, sLng);
-            intent.putExtra(Constants.DEST_NAME, OutletName);
-            intent.putExtra(Constants.NEW_OUTLET, "");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        holder.mobile.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("tel:91" + model.getCustomerMobile()));
             context.startActivity(intent);
-        } catch (Exception e) {
-            Log.v("OutletInfoDrawRoute:", e.getMessage());
-        }
+        });
 
+        holder.view.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ApproveOutletsDetailedActivity.class);
+            Shared_Common_Pref.Outlet_Info_Flag = "1";
+            Shared_Common_Pref.Editoutletflag = "1";
+            Shared_Common_Pref.Outler_AddFlag = "0";
+            Shared_Common_Pref.FromActivity = "Outlets";
+            Shared_Common_Pref.OutletCode = String.valueOf(model.getListedDrCode());
+            intent.putExtra("OutletCode", String.valueOf(model.getListedDrCode()));
+            intent.putExtra("ListedDrCode", String.valueOf(model.getListedDrCode()));
+            intent.putExtra("OutletName", model.getCustomerName());
+            intent.putExtra("OutletAddress", model.getCustomerAddress());
+            intent.putExtra("OutletMobile", model.getCustomerMobile());
+            context.startActivity(intent);
+        });
+
+        holder.approve.setOnClickListener(v -> {
+            if (approveClicked != null) {
+                approveClicked.OnClick(model, "", "0", holder.getAdapterPosition()); // 0 means approve, 1 means reject, 2 means pending
+            }
+        });
+
+        holder.reject.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            View view = LayoutInflater.from(context).inflate(R.layout.layout_get_reason, null);
+            builder.setView(view);
+            AlertDialog dialog = builder.create();
+            EditText editText = view.findViewById(R.id.inputMessage);
+            TextView cancel = view.findViewById(R.id.cancel);
+            TextView submit = view.findViewById(R.id.submit);
+            cancel.setOnClickListener(v1 -> {
+                dialog.dismiss();
+            });
+            submit.setOnClickListener(v2 -> {
+                String message = editText.getText().toString().trim();
+                if (TextUtils.isEmpty(message)) {
+                    Toast.makeText(context, "Reason for Rejection Required", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (rejectClicked != null) {
+                        rejectClicked.OnClick(model, message, "1", holder.getAdapterPosition()); // 0 means approve, 1 means reject, 2 means pending
+                        dialog.dismiss();
+                    }
+                }
+            });
+            builder.setCancelable(true);
+            dialog.show();
+        });
     }
+
 
     @Override
     public int getItemCount() {
-        if (Retailer_Modal_Listitem != null) {
-            return Retailer_Modal_Listitem.size();
-        } else {
-            return 0;
+        return list.size();
+    }
+
+    public interface OnApproveClicked {
+        void OnClick(ModelApproveOutlets model, String message, String flagType, int position);
+    }
+
+    public interface OnRejectClicked {
+        void OnClick(ModelApproveOutlets model, String message, String flagType, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView name, id, mobile, address, view, approve, reject;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.customerName_outletInfo);
+            id = itemView.findViewById(R.id.customerId_outletInfo);
+            mobile = itemView.findViewById(R.id.mobile_outletInfo);
+            address = itemView.findViewById(R.id.address_outletInfo);
+            view = itemView.findViewById(R.id.viewBtn);
+            approve = itemView.findViewById(R.id.approveBtn);
+            reject = itemView.findViewById(R.id.rejectBtn);
         }
     }
 }

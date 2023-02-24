@@ -22,12 +22,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/blue_bg">
+                android:background="@drawable/blue_bg"
+                android:orientation="horizontal">
 
                 <TextView
 
                     android:id="@+id/headtext"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Approve / Reject Outlet"
@@ -35,6 +37,19 @@
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/edit_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/basic"
+                    android:layout_gravity="center_vertical"
+                    android:text="Edit"
+                    android:paddingEnd="10dp"
+                    android:textAllCaps="false"
+                    android:textColor="#FFF"
+                    android:textSize="13dp" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -178,6 +193,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/select_distributor"
                                 android:padding="5dp"
+                                android:textColor="#B6B6B6"
                                 android:textSize="13sp" />
 
                             <ImageView
@@ -277,10 +293,8 @@
                                     android:background="@drawable/bottom_button"
                                     android:padding="10dp"
                                     android:text="Check Validity"
-                                    android:enabled="false"
                                     android:textColor="@color/white"
-                                    android:textSize="13dp"
-                                    android:visibility="visible" />
+                                    android:textSize="13dp" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -361,6 +375,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Outlet Type"
+                                    android:textColor="#B6B6B6"
                                     android:enabled="false"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
@@ -491,6 +506,7 @@
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
                             android:enabled="false"
+                            android:textColor="#B6B6B6"
                             android:hint="code"
                             android:padding="10dp"
                             android:textSize="13dp" />
@@ -558,7 +574,7 @@
                                             android:layout_height="wrap_content"
                                             android:hint="@string/select_route"
                                             android:padding="5dp"
-                                            android:enabled="false"
+                                            android:textColor="#B6B6B6"
                                             android:textSize="13dp" />
 
                                         <ImageView
@@ -660,7 +676,7 @@
                                                 android:id="@+id/ivShopPhoto"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:scaleType="fitXY"
+                                                android:scaleType="centerCrop"
                                                 android:src="@drawable/profile_img" />
 
 
@@ -719,7 +735,6 @@
                                 android:letterSpacing="0.09"
                                 android:paddingLeft="15dp"
                                 android:paddingRight="15dp"
-                                android:visibility="gone"
                                 android:text="Get Location"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
@@ -794,6 +809,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/select_state"
                                 android:enabled="false"
+                                android:textColor="#B6B6B6"
                                 android:padding="5dp"
                                 android:textSize="13dp" />
 
@@ -1170,6 +1186,7 @@
                                     android:id="@+id/txt_retailer_channel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textColor="#B6B6B6"
                                     android:hint="Outlet Category"
                                     android:padding="5dp"
                                     android:textSize="13dp" />
@@ -1230,6 +1247,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Sub Category"
+                                    android:textColor="#B6B6B6"
                                     android:padding="5dp"
                                     android:textSize="13dp" />
 
@@ -1281,6 +1299,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Delivery Type"
+                                android:textColor="#B6B6B6"
                                 android:padding="5dp"
                                 android:textSize="13sp" />
 
@@ -1408,6 +1427,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Service Type"
+                                android:textColor="#B6B6B6"
                                 android:padding="5dp"
                                 android:textSize="13dp" />
 
@@ -1466,6 +1486,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Freezer/Cooler status"
+                                    android:textColor="#B6B6B6"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 
@@ -1678,6 +1699,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Freezer/Cooler Capacity"
+                                    android:textColor="#B6B6B6"
                                     android:padding="5dp"
                                     android:textSize="13sp" />
 
@@ -1945,6 +1967,26 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_amber"
                 android:text="Reject"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="0dp"
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llUpdateParent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/updateBtn"
+                style="@style/BottomButton"
+                android:layout_weight="1"
+                android:background="@drawable/button_dgreen"
+                android:text="Update"
                 app:finalCornerAngle="50dp"
                 app:initialCornerAngle="0dp"
                 app:spinning_bar_color="#FFFFFFFF"

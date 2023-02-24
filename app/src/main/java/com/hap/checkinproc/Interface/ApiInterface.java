@@ -43,7 +43,7 @@ public interface ApiInterface {
     Call<Object> GettpWorktypeFields(@QueryMap Map<String, String> params);
 
     @POST("Db_v300.php?")
-    Call<ResponseBody> setOutletStatus(@Query("axn") String axn, @Query("type") String outletType, @Query("listedDrCode") String sfCode);
+    Call<ResponseBody> setOutletStatus(@Query("axn") String axn, @QueryMap Map<String, String> params);
 
     /*
         shift time*
@@ -668,4 +668,16 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonObject> submit(@Query("axn") String axn, @Field("data") String toString);
+
+    @POST("Db_v300.php?")
+    Call<ResponseBody> getPendingOutletsCategory(@Query("axn") String axn);
+
+    @POST("Db_v300.php?")
+    Call<ResponseBody> getOutletsApprovalHistory(@Query("axn") String axn);
+
+    @POST("Db_v300.php?")
+    Call<ResponseBody> getDataPendingOutlets(@Query("axn") String axn, @Query("ListedDrCode") String ListedDrCode);
+
+    @POST("Db_v300.php?")
+    Call<ResponseBody> getPendingOutlets(@Query("axn") String axn, @QueryMap Map<String, String> params);
 }

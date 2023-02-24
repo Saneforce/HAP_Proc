@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SFA_Activity.ApproveOutletsActivity">
+    tools:context=".SFA_Activity.PendingOutletsCategory">
 
     <ProgressBar
-        android:id="@+id/progressbar_ApproveOutletsActivity"
+        android:id="@+id/progressbar_PendingOutletsCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
@@ -31,7 +31,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/AppTitle_ApproveOutletsActivity"
+                    android:id="@+id/AppTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="HAP DAILY"
@@ -42,6 +42,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/AppTitle"
                     android:text="@string/tool_app_ver"
                     android:textColor="@color/white"
                     android:textSize="8sp" />
@@ -53,7 +54,7 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/toolbar_home_ApproveOutletsActivity"
+                android:id="@+id/toolbar_home"
                 android:layout_width="@dimen/C30dp"
                 android:layout_height="@dimen/C30dp"
                 android:layout_gravity="center_vertical|center_horizontal"
@@ -66,13 +67,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
-            android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/headtext_ApproveOutletsActivity"
-                android:layout_width="wrap_content"
+                android:id="@+id/headtext"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/basic"
                 android:text="Pending Outlets"
@@ -83,21 +85,21 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/count_ApproveOutletsActivity"
-                android:layout_width="0dp"
+                android:id="@+id/view_history"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:fontFamily="@font/basic"
-                android:textAlignment="textEnd"
-                android:textAllCaps="true"
+                android:text="Approval History"
+                android:paddingEnd="3dp"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
                 android:textColor="#FFF"
-                android:textSize="10sp"
-                android:textStyle="bold" />
+                android:textSize="13dp" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_ApproveOutletsActivity"
+            android:id="@+id/recyclerview_PendingOutletsCategory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"

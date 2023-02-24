@@ -18,7 +18,6 @@
         android:layout_alignRight="@+id/ivFile"
         android:layout_gravity="end"
         android:padding="@dimen/C3dp"
-
         android:src="@drawable/delete_cart"></ImageView>
 
 

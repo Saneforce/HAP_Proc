@@ -7,14 +7,12 @@ import static com.hap.checkinproc.Common_Class.Constants.Freezer_capacity;
 import static com.hap.checkinproc.Common_Class.Constants.OUTLET_CATEGORY;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +42,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -68,6 +71,8 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.ApproveOutletsActivity;
+import com.hap.checkinproc.SFA_Activity.OutletApprovListActivity;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -90,12 +95,18 @@ import java.util.Locale;
 import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 // Created by RAGU on 27/01/2023
 public class ApproveOutletsDetailedActivity extends AppCompatActivity implements Master_Interface, View.OnClickListener, OnMapReadyCallback, UpdateResponseUI {
-    TextView toolHeader;
+    public static ApproveOutletsDetailedActivity mAddNewRetailer;
+    public static Context context;
+    final Handler handler = new Handler();
+    public String categoryType = "";
+    TextView toolHeader, editDetails;
     ImageView imgBack;
     EditText toolSearch;
     GoogleMap mGoogleMap;
@@ -108,7 +119,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> categoryList = new ArrayList<>();
-
     Common_Model mCommon_model_spinner;
     Gson gson;
     EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, etDistrict, addRetailerPhone, addRetailerEmail, edt_sub_category, edtDepositAmt, edtExpcSalVal,
@@ -127,15 +137,9 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     ImageView copypaste, ivCapture, ivFreezerCapture;
     String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
-
     ImageView ivPhotoShop, ivProfilePreview;
-
     String filePath;
-
     File file;
-    private Uri outputFileUri;
-    private String finalPath = "";
-    private String place_id = "";
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> freezerCapcityList = new ArrayList<>();
@@ -143,32 +147,28 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     CircularProgressButton btnRefLoc;
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
-    final Handler handler = new Handler();
-    private ArrayList<Common_Model> stateList = new ArrayList<>();
-    private ArrayList<Common_Model> serviceTypeList;
-
-    private String name = "";
     RecyclerView rvFiles, rvFreezerFiles, rvCategoryTypes;
     List<QPS_Modal> mData = new ArrayList<>();
     List<QPS_Modal> mFreezerData = new ArrayList<>();
-
-    private FilesAdapter filesAdapter;
-    public String categoryType = "";
-
     String divERP = "", freezerStaId = "", freezerCapId = "", distributorERP = "";
     Button btnDistCode;
     Boolean isValidCode = false;
-    public static ApproveOutletsDetailedActivity mAddNewRetailer;
     CheckBox cbFranchise, cbFreezerYes, cbFreezerNo;
-    private String categoryId = "", approval = "", distGrpERP = "";
-
     boolean isFlag = false;
+    String customer_code = "";
+    Button approveBtn, rejectBtn, updateButton;
+    LinearLayout llUpdate, llApprove;
+    boolean editMode = false;
+    private Uri outputFileUri;
+    private String finalPath = "";
+    private String place_id = "";
+    private ArrayList<Common_Model> stateList = new ArrayList<>();
+    private ArrayList<Common_Model> serviceTypeList;
+    private String name = "";
+    private FilesAdapter filesAdapter;
+    private String categoryId = "", approval = "", distGrpERP = "";
     private int typeUpdatePos = -1, freezerStaApproval;
     private ApproveOutletsDetailedActivity.Category_Adapter categoryAdapter;
-
-    String customer_code = "";
-
-    Button approveBtn, rejectBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +176,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_approve_outlets_detailed);
             mAddNewRetailer = this;
+            context = this;
 
             CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -210,9 +211,17 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             addRetailerEmail = findViewById(R.id.edt_new_email);
             etDistrict = findViewById(R.id.edt_district);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
-            edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edtDistCode = findViewById(R.id.edt_dist_code);
             edtDepositAmt = findViewById(R.id.edt_depositAmt);
+
+            editDetails = findViewById(R.id.edit_details);
+
+            llUpdate = findViewById(R.id.llUpdateParent);
+            llUpdate.setVisibility(View.GONE);
+
+            llApprove = findViewById(R.id.llApprovParent);
+
+            updateButton = findViewById(R.id.updateBtn);
 
             linClsRmks = findViewById(R.id.linClsRmks);
             edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
@@ -266,13 +275,73 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             approveBtn = findViewById(R.id.approveBtn);
             rejectBtn = findViewById(R.id.rejectBtn);
 
+            MakeEditable();
+
+            editDetails.setOnClickListener(v -> {
+                if (editMode) {
+                    editMode = false;
+                    editDetails.setText("Edit");
+                    llApprove.setVisibility(View.VISIBLE);
+                    llUpdate.setVisibility(View.GONE);
+                    MakeEditable();
+
+                    distributor_text.setTextColor(getResources().getColor(R.color.disabled));
+                    txOutletType.setTextColor(getResources().getColor(R.color.disabled));
+                    retailercode.setTextColor(getResources().getColor(R.color.disabled));
+                    txtRetailerRoute.setTextColor(getResources().getColor(R.color.disabled));
+                    tvStateName.setTextColor(getResources().getColor(R.color.disabled));
+                    txDelvryType.setTextColor(getResources().getColor(R.color.disabled));
+                    tvFreezerSta.setTextColor(getResources().getColor(R.color.disabled));
+                    tvFreezerCapacity.setTextColor(getResources().getColor(R.color.disabled));
+
+                } else {
+                    editMode = true;
+                    editDetails.setText("Cancel");
+                    llApprove.setVisibility(View.GONE);
+                    llUpdate.setVisibility(View.VISIBLE);
+                    MakeEditable();
+
+                    distributor_text.setTextColor(getResources().getColor(R.color.black));
+                    txOutletType.setTextColor(getResources().getColor(R.color.black));
+                    retailercode.setTextColor(getResources().getColor(R.color.black));
+                    txtRetailerRoute.setTextColor(getResources().getColor(R.color.black));
+                    tvStateName.setTextColor(getResources().getColor(R.color.black));
+                    txDelvryType.setTextColor(getResources().getColor(R.color.black));
+                    tvFreezerSta.setTextColor(getResources().getColor(R.color.black));
+                    tvFreezerCapacity.setTextColor(getResources().getColor(R.color.black));
+                }
+            });
+
             approveBtn.setOnClickListener(v -> {
-                Toast.makeText(this, "Not Assigned", Toast.LENGTH_SHORT).show();
+                UpdateData("", "0");
             });
 
             rejectBtn.setOnClickListener(v -> {
-                Toast.makeText(this, "Not Assigned", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ApproveOutletsDetailedActivity.this);
+                View view = LayoutInflater.from(ApproveOutletsDetailedActivity.this).inflate(R.layout.layout_get_reason, null);
+                builder.setView(view);
+                AlertDialog dialog = builder.create();
+                EditText editText = view.findViewById(R.id.inputMessage);
+                TextView cancel = view.findViewById(R.id.cancel);
+                TextView submit = view.findViewById(R.id.submit);
+                cancel.setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                });
+                submit.setOnClickListener(v2 -> {
+                    String message = editText.getText().toString().trim();
+                    if (TextUtils.isEmpty(message)) {
+                        Toast.makeText(context, "Reason for Rejection Required", Toast.LENGTH_SHORT).show();
+                    } else {
+                        UpdateData(message, "1");
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(true);
+                dialog.show();
+
             });
+
+            getDataFromDatabase();
 
             findViewById(R.id.ivFreezReqMandatory).setVisibility(View.INVISIBLE);
 
@@ -298,7 +367,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             rlDelvryType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //common_class.showCommonDialog(deliveryTypeList, 11, ApproveOutletsDetailedActivity.this);
+                    common_class.showCommonDialog(deliveryTypeList, 11, ApproveOutletsDetailedActivity.this);
                 }
             });
 
@@ -326,7 +395,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             rlOutletType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //common_class.showCommonDialog(outletTypeList, 13, ApproveOutletsDetailedActivity.this);
+                    common_class.showCommonDialog(outletTypeList, 13, ApproveOutletsDetailedActivity.this);
                 }
             });
             copypaste.setOnClickListener(this);
@@ -336,7 +405,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 @Override
                 public void onClick(View v) {
 
-                    /*handler.postDelayed(new Runnable() {
+                    handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -360,7 +429,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                                 Log.v(TAG, "LOC3:" + e.getMessage());
                             }
                         }
-                    }, 100);*/
+                    }, 100);
 
                 }
 
@@ -375,301 +444,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
             service = ApiClient.getClient().create(ApiInterface.class);
 
-            userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-            }.getType();
 
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
-            txtRetailerRoute.setText(shared_common_pref.getvalue(Constants.Route_name));
-            routeId = shared_common_pref.getvalue(Constants.Route_Id);
 
-            if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-                //mSubmit.setVisibility(View.VISIBLE);
-                CurrentLocLin.setVisibility(View.GONE);
-                retailercodevisible.setVisibility(View.GONE);
-                CurrentLocationsAddress.setVisibility(View.GONE);
-                //   routeId = shared_common_pref.getvalue("RouteSelect");
-                CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
-                // getCompleteAddressString(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
-
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            new LocationFinder(getApplication(), new LocationEvents() {
-                                @Override
-                                public void OnLocationRecived(Location location) {
-                                    try {
-                                        if (location == null) {
-                                            Toast.makeText(ApproveOutletsDetailedActivity.this, "Location Can't Getting Location. Try Again.", Toast.LENGTH_LONG).show();
-                                            //btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
-                                            return;
-                                        } else {
-                                            refreshLocation(location);
-                                        }
-                                    } catch (Exception e) {
-                                        Log.v(TAG, "LOC1:" + e.getMessage());
-                                    }
-                                }
-                            });
-                        } catch (Exception e) {
-                            Log.v(TAG, "LOC3:" + e.getMessage());
-                        }
-                    }
-                }, 100);
-
-                headtext.setText("Create Outlet");
-            } else {
-                retailercodevisible.setVisibility(View.VISIBLE);
-                CurrentLocLin.setVisibility(View.GONE);
-                CurrentLocationsAddress.setVisibility(View.GONE);
-                Shared_Common_Pref.Outler_AddFlag = "0";
-            }
-            if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
-                //mSubmit.setVisibility(View.GONE);
-                headtext.setText("Approve/Reject Outlet");
-            }
-            //  getRouteDetails();
-//            getRetailerClass();
-//            getRetailerChannel();
-            // getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
-
-            if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
-
-                iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
-                switch (iOutletTyp) {
-                    case 0:
-                        txOutletType.setText("Non Service");
-                        break;
-                    case 2:
-                        txOutletType.setText("Closed");
-                        break;
-                    case 3:
-                        txOutletType.setText("Duplicate");
-                        break;
-                    default:
-                        txOutletType.setText("Service");
-                        break;
-                }
-
-                txDelvryType.setText(Retailer_Modal_List.get(getOutletPosition()).getDelivType());
-            }
-
-            TextView txtHelp = findViewById(R.id.toolbar_help);
-            ImageView imgHome = findViewById(R.id.toolbar_home);
-            txtHelp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-                }
-            });
-            TextView txtErt = findViewById(R.id.toolbar_ert);
-            TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-            txtErt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), ERT.class));
-                }
-            });
-            txtPlaySlip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-            ObjectAnimator textColorAnim;
-            textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-            textColorAnim.setDuration(500);
-            textColorAnim.setEvaluator(new ArgbEvaluator());
-            textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-            textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-            textColorAnim.start();
-            imgHome.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                    if (CheckIn == true) {
-                        common_class.CommonIntentwithoutFinish(SFA_Activity.class);
-                    } else
-                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                }
-            });
-
-            addRetailerName.clearFocus();
-            Type commonType = new TypeToken<ArrayList<Common_Model>>() {
-            }.getType();
-
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.STATE_LIST)))
-                common_class.getDb_310Data(Constants.STATE_LIST, this);
-            else {
-                stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
-            }
-
-            Intent i = getIntent();
-            Log.e(TAG + "1:", Shared_Common_Pref.Outler_AddFlag);
-            if (i != null && i.getExtras() != null) {
-
-                if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-                    Compititor_Id = i.getExtras().getString("Compititor_Id");
-                    Compititor_Name = i.getExtras().getString("Compititor_Name");
-                    CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-                    AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-                    reason_category_remarks = i.getExtras().getString("reason_category");
-                    HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
-                    categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
-                    Log.e("HatsunAvailswitch", "" + HatsunAvailswitch);
-                    Log.e("categoryuniverseswitch", "" + categoryuniverseswitch);
-                    Log.e("reason_category", "" + reason_category_remarks);
-                    Log.e("CatUniverSelectId", "" + CatUniverSelectId);
-                    Log.e("AvailUniverSelectId", "" + AvailUniverSelectId);
-                    Log.e("Compititor_Name", "" + Compititor_Name);
-                    //The key argument here must match that used in the other activity
-                } else {
-
-                    if (getOutletPosition() >= 0)
-                        assignData();
-                }
-
-            }
-            Log.e(TAG + "1:1", Shared_Common_Pref.Outler_AddFlag);
-
-            getFreezerData(divERP);
-            if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
-                //mSubmit.setVisibility(View.VISIBLE);
-                addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
-                addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
-                txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
-                retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
-                routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
-
-                if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getCustomerCode())) {
-                    cbFranchise.setChecked(true);
-                    edtDistCode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCustomerCode());
-                    btnDistCode.setText("Valid Code");
-                    isValidCode = true;
-                    customer_code = Retailer_Modal_List.get(getOutletPosition()).getCustomerCode();
-                    findViewById(R.id.llFranchiseCode).setVisibility(View.VISIBLE);
-                    findViewById(R.id.llFranchiseCode).setEnabled(false);
-                }
-                ArrayList<Retailer_Modal_List.CateSpecList> CatSubList = Retailer_Modal_List.get(getOutletPosition()).getCategoryList();
-                for (int ik = 0; ik < serviceTypeList.size(); ik++) {
-                    for (int ij = 0; ij < CatSubList.size(); ij++) {
-                        if (CatSubList.get(ij).OutletCat_Type.equalsIgnoreCase(serviceTypeList.get(ik).getName())) {
-                            serviceTypeList.get(ik).setSelected(true);
-                            serviceTypeList.get(ik).setCatId(CatSubList.get(ij).Category_Code);
-                            serviceTypeList.get(ik).setSubCatId(CatSubList.get(ij).Sub_Category_Code);
-                            serviceTypeList.get(ik).setCatName(CatSubList.get(ij).Category_Name);
-                            serviceTypeList.get(ik).setSubCatName(CatSubList.get(ij).Sub_Category_Name);
-
-                        }
-                    }
-                }
-
-                shared_common_pref.save(Constants.SERVICETYPE_LIST, gson.toJson(serviceTypeList));
-                categoryAdapter.notifyData(serviceTypeList, this);
-                edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
-                edtDepositAmt.setText(Retailer_Modal_List.get(getOutletPosition()).getDeposit_amount());
-                edtFSSAI.setText(Retailer_Modal_List.get(getOutletPosition()).getFssiNo());
-                edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
-                edtPAN.setText(Retailer_Modal_List.get(getOutletPosition()).getPan_No());
-
-                edtFreezerMake.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_make());
-                edtFreezerTag.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_Tag_no());
-                tvFreezerSta.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
-                tvFreezerCapacity.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
-                //freezerStaId
-                String FreReq = Retailer_Modal_List.get(getOutletPosition()).getFreezer_required();
-                cbFreezerYes.setChecked(false);
-                if (FreReq.equalsIgnoreCase("yes")) {
-                    cbFreezerNo.setChecked(false);
-                    cbFreezerYes.setChecked(true);
-                    findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
-                }
-                updateView("", false);
-                if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLat()))
-                    RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
-                if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLong()))
-                    RetLng = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
-
-                Shared_Common_Pref.Outletlat = RetLat;
-                Shared_Common_Pref.Outletlong = RetLng;
-                String[] filelst = Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",");
-
-                mFreezerData.clear();
-                mFreezerData = new ArrayList<>();
-                mFreezerData.add(new QPS_Modal("", "", ""));
-                List<String> jAryDta = new ArrayList<>();
-                for (int il = 0; il < filelst.length; il++) {
-                    if (!filelst[il].equalsIgnoreCase("")) {
-                        String sname = ApiClient.BASE_URL + "FreezerImages/" + filelst[il];
-                        sname = sname.replaceAll("server/", "");
-                        jAryDta.add(sname);
-
-                    }
-
-                }
-
-                mFreezerData.get(0).setFileUrls(jAryDta);
-
-                if (Retailer_Modal_List.get(getOutletPosition()).getFreezer_status().equalsIgnoreCase("Company Provided"))
-                    findViewById(R.id.llExpecSalVal).setVisibility(View.VISIBLE);
-                else
-                    findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
-                filesAdapter = new FilesAdapter(jAryDta, R.layout.adapter_local_files_layout, ApproveOutletsDetailedActivity.this);
-                rvFreezerFiles.setAdapter(filesAdapter);
-                if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
-                    addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
-                if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
-                    addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
-                if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
-                    owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
-                if (Retailer_Modal_List.get(getOutletPosition()).getDistrictname() != null)
-                    etDistrict.setText("" + Retailer_Modal_List.get(getOutletPosition()).getDistrictname());
-                edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
-                edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
-                //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
-
-                if (i != null && i.getExtras() != null) {
-                    if (i.getExtras().getString("Compititor_Id") != null)
-                        Compititor_Id = i.getExtras().getString("Compititor_Id");
-                    if (i.getExtras().getString("Compititor_Name") != null)
-                        Compititor_Name = i.getExtras().getString("Compititor_Name");
-                    if (i.getExtras().getString("CatUniverSelectId") != null)
-                        CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-                    if (i.getExtras().getString("AvailUniverSelectId") != null)
-                        AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-                    if (i.getExtras().getString("reason_category") != null)
-                        reason_category_remarks = i.getExtras().getString("reason_category");
-                    if (i.getExtras().getString("HatsunAvailswitch") != null)
-                        HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
-                    if (i.getExtras().getString("categoryuniverseswitch") != null)
-                        categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
-                }
-
-
-                if (Retailer_Modal_List.get(getOutletPosition()).getSpeciality() != null) {
-                    tvSubCategory.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
-                    categoryId = "" + Retailer_Modal_List.get(getOutletPosition()).getDocSpecialCode();
-                    Log.v("categoryId:", categoryId + ":" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
-                }
-
-
-                if (Retailer_Modal_List.get(getOutletPosition()).getOutletClass() != null && !Retailer_Modal_List.get(getOutletPosition()).getOutletClass().equalsIgnoreCase("B")) {
-                    txtRetailerChannel.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
-                    if (Retailer_Modal_List.get(getOutletPosition()).getDocCatCode() != null)
-                        channelID = Retailer_Modal_List.get(getOutletPosition()).getDocCatCode();
-
-                    Log.v("categorySubId:", "" + channelID + ": " + Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
-
-                }
-
-
-            }
-            Log.e(TAG + "2:", Shared_Common_Pref.Outler_AddFlag);
-
-            /*mSubmit.setOnClickListener(new View.OnClickListener() {
+            updateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     categoryType = "";
@@ -685,8 +463,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     } else if (Common_Class.isNullOrEmpty(txOutletType.getText().toString())) {
                         common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select Outlet Type");
                     } else if (iOutletTyp == 2) {
-                        if (mSubmit.isAnimating()) return;
-                        mSubmit.startAnimation();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -732,12 +508,12 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     } else if (imageConvert.equals("") && name.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
-                    } else if (*//*divERP.equalsIgnoreCase("21") &&*//* categoryType.equals("")) {
+                    } else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
                         common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select the Category Type");
                     } else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
                         common_class.showMsg(ApproveOutletsDetailedActivity.this, "Check the Freezer/Cooler Required");
 
-                    } else if (*//*divERP.equalsIgnoreCase("21") && *//*cbFreezerYes.isChecked()) {
+                    } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
                         if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(ApproveOutletsDetailedActivity.this, "Selet the Freezer/Cooler Status");
                         } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
@@ -750,8 +526,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         } else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
                             common_class.showMsg(ApproveOutletsDetailedActivity.this, "Please take Freezer/Cooler Photo");
                         else {
-                            if (mSubmit.isAnimating()) return;
-                            mSubmit.startAnimation();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -760,8 +534,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                             }, 500);
                         }
                     } else {
-                        if (mSubmit.isAnimating()) return;
-                        mSubmit.startAnimation();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -771,56 +543,473 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     }
 
                 }
-            });*/
-            Log.e(TAG + "3:", Shared_Common_Pref.Outler_AddFlag);
+            });
 
-            String placeIdData = getIntent().getStringExtra(Constants.PLACE_ID);
-            if (placeIdData != null) {
-                //  Nearby_Outlets.
+        } catch (Exception e) {
+            Log.e(TAG + "catch:", e.getMessage());
 
-                JSONObject jsonObject = new JSONObject(placeIdData);
+        }
 
-                JSONObject jsonResult = jsonObject.getJSONObject("result");
-                addRetailerPhone.setText("" + jsonResult.optString("formatted_phone_number"));
-                addRetailerAddress.setText("" + jsonResult.optString("vicinity"));
-                addRetailerName.setText("" + jsonResult.getString("name"));
 
-                place_id = jsonResult.getString("place_id");
+    }
 
-                Log.e(TAG, "Address:" + jsonObject.optString("formatted_address"));
+    private void MakeEditable() {
+        distributor_text.setEnabled(editMode);
+        cbFranchise.setEnabled(editMode);
+        edtDistCode.setEnabled(editMode);
+        addRetailerName.setEnabled(editMode);
+        txOutletType.setEnabled(editMode);
+        retailercode.setEnabled(editMode);
+        txtRetailerRoute.setEnabled(editMode);
+        owner_name.setEnabled(editMode);
+        btnRefLoc.setEnabled(editMode);
+        addRetailerAddress.setEnabled(editMode);
+        tvStateName.setEnabled(editMode);
+        addRetailerCity.setEnabled(editMode);
+        etDistrict.setEnabled(editMode);
+        edt_pin_codeedit.setEnabled(editMode);
+        edt_gst.setEnabled(editMode);
+        addRetailerPhone.setEnabled(editMode);
+        etPhoneNo2.setEnabled(editMode);
+        addRetailerEmail.setEnabled(editMode);
+        txDelvryType.setEnabled(editMode);
+        cbFreezerYes.setEnabled(editMode);
+        cbFreezerNo.setEnabled(editMode);
+        tvFreezerSta.setEnabled(editMode);
+        edtExpcSalVal.setEnabled(editMode);
+        edtDepositAmt.setEnabled(editMode);
+        edtFreezerMake.setEnabled(editMode);
+        edtFreezerTag.setEnabled(editMode);
+        tvFreezerCapacity.setEnabled(editMode);
+        edtFSSAI.setEnabled(editMode);
+        edtPAN.setEnabled(editMode);
+        edt_outstanding.setEnabled(editMode);
+        edtClsRetRmk.setEnabled(editMode);
+        btnDistCode.setEnabled(editMode);
 
-                JSONArray addressJsonArray = jsonResult.getJSONArray("address_components");
-                for (int addressIdex = 0; addressIdex < addressJsonArray.length(); addressIdex++) {
+        rlDelvryType.setEnabled(editMode);
+        linReatilerClass.setEnabled(editMode);
+        linReatilerChannel.setEnabled(editMode);
+        rlSubCategory.setEnabled(editMode);
+        linServiceType.setEnabled(editMode);
+        rlFreezerCapacity.setEnabled(editMode);
+        rlFreezerSta.setEnabled(editMode);
+        rlState.setEnabled(editMode);
+        linReatilerRoute.setEnabled(editMode);// Todo
+        rlDistributor.setEnabled(editMode);
+        rlOutletType.setEnabled(editMode);
 
-                    JSONObject jsonAddressObj = addressJsonArray.getJSONObject(addressIdex);
+        ivPhotoShop.setEnabled(editMode);
+        ivFreezerCapture.setEnabled(editMode);
 
-                    JSONArray typesArray = addressJsonArray.getJSONObject(addressIdex).getJSONArray("types");
+    }
 
-                    for (int typesIndex = 0; typesIndex < typesArray.length(); typesIndex++) {
+    private void UpdateData(String message, String type) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
-                        if (typesArray.get(typesIndex).equals("postal_code")) {
-                            edt_pin_codeedit.setText("" + jsonAddressObj.optString("long_name"));
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        String listedDrCode = getIntent().getStringExtra("ListedDrCode");
+        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
+        String sfCode = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code, "");
+        Map<String, String> params = new HashMap<>();
+        params.put("type", type); // 0 means approve, 1 means reject, 2 means pending
+        params.put("listedDrCode", listedDrCode);
+        params.put("ModifiedBy", sfCode);
+        params.put("remarks", message);
+        params.put("ModifiedOn", new Common_Class(context).GetDatemonthyearTimeformat());
+        Log.e("status", params.toString());
+        Call<ResponseBody> call = apiInterface.setOutletStatus("set_outlet_status", params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject js = new JSONObject(response.body().string());
+                        if (js.getBoolean("success")) {
+                            if (type.equals("0")) {
+                                Toast.makeText(context, "Outlet Approved Successfully", Toast.LENGTH_SHORT).show();
+                            } else if (type.equals("1")) {
+                                Toast.makeText(context, "Outlet Rejected Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            finish();
+                            ApproveOutletsActivity.refresh = true;
                         }
-
-                        if (typesArray.get(typesIndex).equals("locality")) {
-
-                            addRetailerCity.setText("" + jsonAddressObj.optString("long_name"));
-                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(context, "Error: Response not successfull", Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
-            Log.e(TAG + "4:", Shared_Common_Pref.Outler_AddFlag);
 
-            shared_common_pref.save(Constants.Retailor_FilePath, "");
-
-            linReatilerRoute.setOnClickListener(this);
-            rlDistributor.setOnClickListener(this);
-
-            if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-                btnDistCode.setVisibility(View.VISIBLE);
-                common_class.getDb_310Data(Rout_List, this);
-
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
+        });
+    }
+
+    private void getDataFromDatabase() {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getDataPendingOutlets("get_data_of_pending_outlet", getIntent().getStringExtra("ListedDrCode"));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String result = response.body().string();
+
+                        Log.e("status", result);
+
+                        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+                        }.getType();
+                        Retailer_Modal_List = gson.fromJson(result, userType);
+
+                        distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+                        txtRetailerRoute.setText(shared_common_pref.getvalue(Constants.Route_name));
+                        routeId = shared_common_pref.getvalue(Constants.Route_Id);
+
+                        if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                            //mSubmit.setVisibility(View.VISIBLE);
+                            CurrentLocLin.setVisibility(View.GONE);
+                            retailercodevisible.setVisibility(View.GONE);
+                            CurrentLocationsAddress.setVisibility(View.GONE);
+                            //   routeId = shared_common_pref.getvalue("RouteSelect");
+                            CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
+                            // getCompleteAddressString(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        new LocationFinder(getApplication(), new LocationEvents() {
+                                            @Override
+                                            public void OnLocationRecived(Location location) {
+                                                try {
+                                                    if (location == null) {
+                                                        Toast.makeText(ApproveOutletsDetailedActivity.this, "Location Can't Getting Location. Try Again.", Toast.LENGTH_LONG).show();
+                                                        //btnRefLoc.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+                                                        return;
+                                                    } else {
+                                                        refreshLocation(location);
+                                                    }
+                                                } catch (Exception e) {
+                                                    Log.v(TAG, "LOC1:" + e.getMessage());
+                                                }
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        Log.v(TAG, "LOC3:" + e.getMessage());
+                                    }
+                                }
+                            }, 100);
+
+                            headtext.setText("Create Outlet");
+                        } else {
+                            retailercodevisible.setVisibility(View.VISIBLE);
+                            CurrentLocLin.setVisibility(View.GONE);
+                            CurrentLocationsAddress.setVisibility(View.GONE);
+                            Shared_Common_Pref.Outler_AddFlag = "0";
+                        }
+                        if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
+                            //mSubmit.setVisibility(View.GONE);
+                            headtext.setText("Approve/Reject Outlet");
+                        }
+                        //  getRouteDetails();
+//            getRetailerClass();
+//            getRetailerChannel();
+                        // getServiceTypes(shared_common_pref.getvalue(Constants.Distributor_Id));
+
+                        if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
+
+                            iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
+                            switch (iOutletTyp) {
+                                case 0:
+                                    txOutletType.setText("Non Service");
+                                    break;
+                                case 2:
+                                    txOutletType.setText("Closed");
+                                    break;
+                                case 3:
+                                    txOutletType.setText("Duplicate");
+                                    break;
+                                default:
+                                    txOutletType.setText("Service");
+                                    break;
+                            }
+
+                            txDelvryType.setText(Retailer_Modal_List.get(getOutletPosition()).getDelivType());
+                        }
+
+                        TextView txtHelp = findViewById(R.id.toolbar_help);
+                        ImageView imgHome = findViewById(R.id.toolbar_home);
+                        txtHelp.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+                            }
+                        });
+                        TextView txtErt = findViewById(R.id.toolbar_ert);
+                        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+                        txtErt.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(getApplicationContext(), ERT.class));
+                            }
+                        });
+                        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                        ObjectAnimator textColorAnim;
+                        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+                        textColorAnim.setDuration(500);
+                        textColorAnim.setEvaluator(new ArgbEvaluator());
+                        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+                        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+                        textColorAnim.start();
+                        imgHome.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                                if (CheckIn == true) {
+                                    common_class.CommonIntentwithoutFinish(SFA_Activity.class);
+                                } else
+                                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                            }
+                        });
+
+                        addRetailerName.clearFocus();
+                        Type commonType = new TypeToken<ArrayList<Common_Model>>() {
+                        }.getType();
+
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.STATE_LIST)))
+                            common_class.getDb_310Data(Constants.STATE_LIST, ApproveOutletsDetailedActivity.this);
+                        else {
+                            stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
+                        }
+
+                        Intent i = getIntent();
+                        Log.e(TAG + "1:", Shared_Common_Pref.Outler_AddFlag);
+                        if (i != null && i.getExtras() != null) {
+
+                            if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                                Compititor_Id = i.getExtras().getString("Compititor_Id");
+                                Compititor_Name = i.getExtras().getString("Compititor_Name");
+                                CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                                AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                                reason_category_remarks = i.getExtras().getString("reason_category");
+                                HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
+                                categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
+                                Log.e("HatsunAvailswitch", "" + HatsunAvailswitch);
+                                Log.e("categoryuniverseswitch", "" + categoryuniverseswitch);
+                                Log.e("reason_category", "" + reason_category_remarks);
+                                Log.e("CatUniverSelectId", "" + CatUniverSelectId);
+                                Log.e("AvailUniverSelectId", "" + AvailUniverSelectId);
+                                Log.e("Compititor_Name", "" + Compititor_Name);
+                                //The key argument here must match that used in the other activity
+                            } else {
+
+                                if (getOutletPosition() >= 0)
+                                    assignData();
+                            }
+
+                        }
+                        Log.e(TAG + "1:1", Shared_Common_Pref.Outler_AddFlag);
+
+                        getFreezerData(divERP);
+                        if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
+                            //mSubmit.setVisibility(View.VISIBLE);
+                            addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
+                            addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
+                            txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
+                            addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPrimary_No());
+                            retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getERP_Code());
+                            routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
+
+                            if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getCustomerCode())) {
+                                cbFranchise.setChecked(true);
+                                edtDistCode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCustomerCode());
+                                btnDistCode.setText("Valid Code");
+                                isValidCode = true;
+                                customer_code = Retailer_Modal_List.get(getOutletPosition()).getCustomerCode();
+                                findViewById(R.id.llFranchiseCode).setVisibility(View.VISIBLE);
+                                findViewById(R.id.llFranchiseCode).setEnabled(false);
+                            }
+                            ArrayList<Retailer_Modal_List.CateSpecList> CatSubList = Retailer_Modal_List.get(getOutletPosition()).getCategoryList();
+                            for (int ik = 0; ik < serviceTypeList.size(); ik++) {
+                                for (int ij = 0; ij < CatSubList.size(); ij++) {
+                                    if (CatSubList.get(ij).OutletCat_Type.equalsIgnoreCase(serviceTypeList.get(ik).getName())) {
+                                        serviceTypeList.get(ik).setSelected(true);
+                                        serviceTypeList.get(ik).setCatId(CatSubList.get(ij).Category_Code);
+                                        serviceTypeList.get(ik).setSubCatId(CatSubList.get(ij).Sub_Category_Code);
+                                        serviceTypeList.get(ik).setCatName(CatSubList.get(ij).Category_Name);
+                                        serviceTypeList.get(ik).setSubCatName(CatSubList.get(ij).Sub_Category_Name);
+
+                                    }
+                                }
+                            }
+
+                            shared_common_pref.save(Constants.SERVICETYPE_LIST, gson.toJson(serviceTypeList));
+                            categoryAdapter.notifyData(serviceTypeList, ApproveOutletsDetailedActivity.this);
+                            edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
+                            edtDepositAmt.setText(Retailer_Modal_List.get(getOutletPosition()).getDeposit_amount());
+                            edtFSSAI.setText(Retailer_Modal_List.get(getOutletPosition()).getFssiNo());
+                            edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
+                            edtPAN.setText(Retailer_Modal_List.get(getOutletPosition()).getPan_No());
+
+                            edtFreezerMake.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_make());
+                            edtFreezerTag.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_Tag_no());
+                            tvFreezerSta.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
+                            tvFreezerCapacity.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
+                            //freezerStaId
+                            String FreReq = Retailer_Modal_List.get(getOutletPosition()).getFreezer_required();
+                            cbFreezerYes.setChecked(false);
+                            if (FreReq.equalsIgnoreCase("yes")) {
+                                cbFreezerNo.setChecked(false);
+                                cbFreezerYes.setChecked(true);
+                                findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+                            }
+                            updateView("", false);
+                            if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLat()))
+                                RetLat = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLat());
+                            if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLong()))
+                                RetLng = Double.parseDouble(Retailer_Modal_List.get(getOutletPosition()).getLong());
+
+                            Shared_Common_Pref.Outletlat = RetLat;
+                            Shared_Common_Pref.Outletlong = RetLng;
+                            centreMapOnLocation("Your Location");
+                            String[] filelst = Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",");
+
+                            mFreezerData.clear();
+                            mFreezerData = new ArrayList<>();
+                            mFreezerData.add(new QPS_Modal("", "", ""));
+                            List<String> jAryDta = new ArrayList<>();
+                            for (int il = 0; il < filelst.length; il++) {
+                                if (!filelst[il].equalsIgnoreCase("")) {
+                                    String sname = ApiClient.BASE_URL + "FreezerImages/" + filelst[il];
+                                    sname = sname.replaceAll("server/", "");
+                                    jAryDta.add(sname);
+
+                                }
+
+                            }
+
+                            mFreezerData.get(0).setFileUrls(jAryDta);
+
+                            if (Retailer_Modal_List.get(getOutletPosition()).getFreezer_status().equalsIgnoreCase("Company Provided"))
+                                findViewById(R.id.llExpecSalVal).setVisibility(View.VISIBLE);
+                            else
+                                findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
+                            filesAdapter = new FilesAdapter(jAryDta, R.layout.adapter_local_files_layout, ApproveOutletsDetailedActivity.this);
+                            rvFreezerFiles.setAdapter(filesAdapter);
+                            if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
+                                addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
+                            if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
+                                addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+                            if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
+                                owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                            if (Retailer_Modal_List.get(getOutletPosition()).getDistrictname() != null)
+                                etDistrict.setText("" + Retailer_Modal_List.get(getOutletPosition()).getDistrictname());
+                            edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
+                            edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
+                            //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
+
+                            if (i != null && i.getExtras() != null) {
+                                if (i.getExtras().getString("Compititor_Id") != null)
+                                    Compititor_Id = i.getExtras().getString("Compititor_Id");
+                                if (i.getExtras().getString("Compititor_Name") != null)
+                                    Compititor_Name = i.getExtras().getString("Compititor_Name");
+                                if (i.getExtras().getString("CatUniverSelectId") != null)
+                                    CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                                if (i.getExtras().getString("AvailUniverSelectId") != null)
+                                    AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                                if (i.getExtras().getString("reason_category") != null)
+                                    reason_category_remarks = i.getExtras().getString("reason_category");
+                                if (i.getExtras().getString("HatsunAvailswitch") != null)
+                                    HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
+                                if (i.getExtras().getString("categoryuniverseswitch") != null)
+                                    categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
+                            }
+
+
+                            if (Retailer_Modal_List.get(getOutletPosition()).getSpeciality() != null) {
+                                tvSubCategory.setText("" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
+                                categoryId = "" + Retailer_Modal_List.get(getOutletPosition()).getDocSpecialCode();
+                                Log.v("categoryId:", categoryId + ":" + Retailer_Modal_List.get(getOutletPosition()).getSpeciality());
+                            }
+
+
+                            if (Retailer_Modal_List.get(getOutletPosition()).getOutletClass() != null && !Retailer_Modal_List.get(getOutletPosition()).getOutletClass().equalsIgnoreCase("B")) {
+                                txtRetailerChannel.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
+                                if (Retailer_Modal_List.get(getOutletPosition()).getDocCatCode() != null)
+                                    channelID = Retailer_Modal_List.get(getOutletPosition()).getDocCatCode();
+
+                                Log.v("categorySubId:", "" + channelID + ": " + Retailer_Modal_List.get(getOutletPosition()).getOutletClass());
+
+                            }
+
+
+                        }
+                        Log.e(TAG + "2:", Shared_Common_Pref.Outler_AddFlag);
+
+                        /**/
+                        Log.e(TAG + "3:", Shared_Common_Pref.Outler_AddFlag);
+
+                        String placeIdData = getIntent().getStringExtra(Constants.PLACE_ID);
+                        if (placeIdData != null) {
+                            //  Nearby_Outlets.
+
+                            JSONObject jsonObject = new JSONObject(placeIdData);
+
+                            JSONObject jsonResult = jsonObject.getJSONObject("result");
+                            addRetailerPhone.setText("" + jsonResult.optString("formatted_phone_number"));
+                            addRetailerAddress.setText("" + jsonResult.optString("vicinity"));
+                            addRetailerName.setText("" + jsonResult.getString("name"));
+
+                            place_id = jsonResult.getString("place_id");
+
+                            Log.e(TAG, "Address:" + jsonObject.optString("formatted_address"));
+
+                            JSONArray addressJsonArray = jsonResult.getJSONArray("address_components");
+                            for (int addressIdex = 0; addressIdex < addressJsonArray.length(); addressIdex++) {
+
+                                JSONObject jsonAddressObj = addressJsonArray.getJSONObject(addressIdex);
+
+                                JSONArray typesArray = addressJsonArray.getJSONObject(addressIdex).getJSONArray("types");
+
+                                for (int typesIndex = 0; typesIndex < typesArray.length(); typesIndex++) {
+
+                                    if (typesArray.get(typesIndex).equals("postal_code")) {
+                                        edt_pin_codeedit.setText("" + jsonAddressObj.optString("long_name"));
+                                    }
+
+                                    if (typesArray.get(typesIndex).equals("locality")) {
+
+                                        addRetailerCity.setText("" + jsonAddressObj.optString("long_name"));
+                                    }
+                                }
+                            }
+                        }
+                        Log.e(TAG + "4:", Shared_Common_Pref.Outler_AddFlag);
+
+                        shared_common_pref.save(Constants.Retailor_FilePath, "");
+
+                        linReatilerRoute.setOnClickListener(ApproveOutletsDetailedActivity.this);
+                        rlDistributor.setOnClickListener(ApproveOutletsDetailedActivity.this);
+
+                        if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                            btnDistCode.setVisibility(View.VISIBLE);
+                            common_class.getDb_310Data(Rout_List, ApproveOutletsDetailedActivity.this);
+
+                        }
 
 //            if (Shared_Common_Pref.Outler_AddFlag.equals("1") || divERP.equalsIgnoreCase("21") || divERP.equalsIgnoreCase("62")) {
 //                linReatilerRoute.setEnabled(true);
@@ -829,7 +1018,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 //            }
 
 
-            // if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
+                        // if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
 //                if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1"))
 //                    mSubmit.setVisibility(View.GONE);
 
@@ -838,159 +1027,166 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 //            }
 
 
-            mData.add(new QPS_Modal("", "", ""));
-            mFreezerData.add(new QPS_Modal("", "", ""));
+                        mData.add(new QPS_Modal("", "", ""));
+                        mFreezerData.add(new QPS_Modal("", "", ""));
 
-            Log.e(TAG + "5:", Shared_Common_Pref.Outler_AddFlag);
+                        Log.e(TAG + "5:", Shared_Common_Pref.Outler_AddFlag);
 
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_capacity)))
-                common_class.getDb_310Data(Freezer_capacity, this);
-            else {
-                JSONObject capObj = new JSONObject(shared_common_pref.getvalue(Freezer_capacity));
-                if (capObj.getBoolean("success")) {
-                    JSONArray arr = capObj.getJSONArray("Data");
-                    for (int c = 0; c < arr.length(); c++) {
-                        JSONObject obj = arr.getJSONObject(c);
-                        freezerCapcityList.add(new Common_Model(obj.getString("FCapacity"), obj.getString("ID")));
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_capacity)))
+                            common_class.getDb_310Data(Freezer_capacity, ApproveOutletsDetailedActivity.this);
+                        else {
+                            JSONObject capObj = new JSONObject(shared_common_pref.getvalue(Freezer_capacity));
+                            if (capObj.getBoolean("success")) {
+                                JSONArray arr = capObj.getJSONArray("Data");
+                                for (int c = 0; c < arr.length(); c++) {
+                                    JSONObject obj = arr.getJSONObject(c);
+                                    freezerCapcityList.add(new Common_Model(obj.getString("FCapacity"), obj.getString("ID")));
+                                }
+                            }
+                        }
+                        Log.e(TAG + "6:", Shared_Common_Pref.Outler_AddFlag);
+
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_Status)))
+                            common_class.getDb_310Data(Freezer_Status, ApproveOutletsDetailedActivity.this);
+                        else {
+                            JSONObject staObj = new JSONObject(shared_common_pref.getvalue(Freezer_Status));
+                            if (staObj.getBoolean("success")) {
+                                JSONArray arr = staObj.getJSONArray("Data");
+                                for (int s = 0; s < arr.length(); s++) {
+                                    JSONObject obj = arr.getJSONObject(s);
+                                    freezerStaList.add(new Common_Model(obj.getString("FStatus"), obj.getString("ID"),
+                                            obj.getInt("ApprovalNeed")));
+                                }
+                            }
+                        }
+                        Log.e(TAG + "7:", Shared_Common_Pref.Outler_AddFlag);
+
+
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CLASS)))
+                            getRetailerClass();
+                        else {
+                            modelRetailClass = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CLASS), commonType);
+
+                        }
+                        Log.e(TAG + "8:", Shared_Common_Pref.Outler_AddFlag);
+
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
+                        {
+                            getRetailerChannel();
+
+                        } else {
+                            modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
+                            String val = shared_common_pref.getvalue(Constants.RETAIL_CHANNEL);
+                            Log.v("subcat:", val);
+                        }
+
+
+                        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.OUTLET_CATEGORY)))
+                            common_class.getDb_310Data(Constants.OUTLET_CATEGORY, ApproveOutletsDetailedActivity.this);
+                        else {
+                            getCategoryList(shared_common_pref.getvalue(OUTLET_CATEGORY));
+                        }
+
+
+                        Log.e(TAG + "9:", Shared_Common_Pref.Outler_AddFlag);
+
+
+                        Log.e(TAG + "10:", Shared_Common_Pref.Outler_AddFlag);
+
+                        distributorERP = shared_common_pref.getvalue(Constants.DistributorERP);
+
+                        edtDistCode.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                // if (btnDistCode.getText().toString().equalsIgnoreCase("Valid Code")) {
+                                btnDistCode.setText("Check Validity");
+                                isValidCode = false;
+                                // }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+
+
+                        cbFreezerYes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked) {
+                                    cbFreezerNo.setChecked(false);
+                                    findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+
+
+                                } else {
+                                    // cbFreezerNo.setChecked(true);
+                                    getFreezerData("");
+
+                                    findViewById(R.id.llFreezer).setVisibility(View.GONE);
+                                }
+
+                            }
+                        });
+
+                        cbFreezerNo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked) {
+                                    cbFreezerYes.setChecked(false);
+                                    findViewById(R.id.llFreezer).setVisibility(View.GONE);
+
+                                    getFreezerData("");
+                                } else {
+                                    // cbFreezerYes.setChecked(true);
+                                    findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+                                }
+
+
+                            }
+                        });
+                        cbFranchise.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked)
+                                    findViewById(R.id.llFranchiseCode).setVisibility(View.VISIBLE);
+                                else
+                                    findViewById(R.id.llFranchiseCode).setVisibility(View.GONE);
+
+
+                            }
+                        });
+
+                        String val = getIntent().getStringExtra("approval");
+                        Log.v(TAG, "screenname:" + val);
+                        if (val != null && val.equalsIgnoreCase("status")) {
+                            findViewById(R.id.llApprovParent).setVisibility(View.VISIBLE);
+                            //mSubmit.setVisibility(View.GONE);
+                            headtext.setText("Outlet Approval");
+
+                        }
+                        common_class.getDb_310Data(Constants.Rout_List, ApproveOutletsDetailedActivity.this);
+                        shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
+
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(context, "Error: Response Failed", Toast.LENGTH_SHORT).show();
                 }
             }
-            Log.e(TAG + "6:", Shared_Common_Pref.Outler_AddFlag);
 
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Freezer_Status)))
-                common_class.getDb_310Data(Freezer_Status, this);
-            else {
-                JSONObject staObj = new JSONObject(shared_common_pref.getvalue(Freezer_Status));
-                if (staObj.getBoolean("success")) {
-                    JSONArray arr = staObj.getJSONArray("Data");
-                    for (int s = 0; s < arr.length(); s++) {
-                        JSONObject obj = arr.getJSONObject(s);
-                        freezerStaList.add(new Common_Model(obj.getString("FStatus"), obj.getString("ID"),
-                                obj.getInt("ApprovalNeed")));
-                    }
-                }
-            }
-            Log.e(TAG + "7:", Shared_Common_Pref.Outler_AddFlag);
-
-
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CLASS)))
-                getRetailerClass();
-            else {
-                modelRetailClass = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CLASS), commonType);
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
-            Log.e(TAG + "8:", Shared_Common_Pref.Outler_AddFlag);
-
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL)))//subCategory
-            {
-                getRetailerChannel();
-
-            } else {
-                modelRetailChannel = gson.fromJson(shared_common_pref.getvalue(Constants.RETAIL_CHANNEL), commonType);
-                String val = shared_common_pref.getvalue(Constants.RETAIL_CHANNEL);
-                Log.v("subcat:", val);
-            }
-
-
-            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.OUTLET_CATEGORY)))
-                common_class.getDb_310Data(Constants.OUTLET_CATEGORY, this);
-            else {
-                getCategoryList(shared_common_pref.getvalue(OUTLET_CATEGORY));
-            }
-
-
-            Log.e(TAG + "9:", Shared_Common_Pref.Outler_AddFlag);
-
-
-            Log.e(TAG + "10:", Shared_Common_Pref.Outler_AddFlag);
-
-            distributorERP = shared_common_pref.getvalue(Constants.DistributorERP);
-
-            edtDistCode.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    // if (btnDistCode.getText().toString().equalsIgnoreCase("Valid Code")) {
-                    btnDistCode.setText("Check Validity");
-                    isValidCode = false;
-                    // }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-
-            cbFreezerYes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        cbFreezerNo.setChecked(false);
-                        findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
-
-
-                    } else {
-                        // cbFreezerNo.setChecked(true);
-                        getFreezerData("");
-
-                        findViewById(R.id.llFreezer).setVisibility(View.GONE);
-                    }
-
-                }
-            });
-
-            cbFreezerNo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        cbFreezerYes.setChecked(false);
-                        findViewById(R.id.llFreezer).setVisibility(View.GONE);
-
-                        getFreezerData("");
-                    } else {
-                        // cbFreezerYes.setChecked(true);
-                        findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
-                    }
-
-
-                }
-            });
-            cbFranchise.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        findViewById(R.id.llFranchiseCode).setVisibility(View.VISIBLE);
-                    else
-                        findViewById(R.id.llFranchiseCode).setVisibility(View.GONE);
-
-
-                }
-            });
-
-            String val = getIntent().getStringExtra("approval");
-            Log.v(TAG, "screenname:" + val);
-            if (val != null && val.equalsIgnoreCase("status")) {
-                findViewById(R.id.llApprovParent).setVisibility(View.VISIBLE);
-                //mSubmit.setVisibility(View.GONE);
-                headtext.setText("Outlet Approval");
-
-            }
-            common_class.getDb_310Data(Constants.Rout_List, this);
-            shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
-
-
-        } catch (Exception e) {
-            Log.e(TAG + "catch:", e.getMessage());
-
-        }
-
+        });
 
     }
 
@@ -1406,18 +1602,19 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 QueryString.put("axn", "dcr/save");
                 totalValueString = mainArray.toString();
             } else {
-                QueryString.put("axn", "upd/newretailer");
+                QueryString.put("axn", "upd/newretailer2");
                 totalValueString = reportObject.toString();
             }
             QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
             QueryString.put("State_Code", Shared_Common_Pref.StateCode);
             QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+            QueryString.put("activeFlag", "2");
             QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
             QueryString.put(Constants.Distributor_Id, shared_common_pref.getvalue(Constants.Distributor_Id));
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             // addNewRetailer
             Log.e("QueryString", totalValueString);
-
+            Log.e("QueryString", QueryString.toString());
 
             Call<JsonObject> call = apiInterface.addNewRetailer(QueryString, totalValueString);
             call.enqueue(new Callback<JsonObject>() {
@@ -1436,10 +1633,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     }
 
                     ResetSubmitBtn(1);
-                   /* if (cbFreezerYes.isChecked() || approval.equalsIgnoreCase("1")) {
+                    /*
+                    if (cbFreezerYes.isChecked() || approval.equalsIgnoreCase("1")) {
                         common_class.CommonIntentwithFinish(OutletApprovListActivity.class);
                         overridePendingTransition(R.anim.in, R.anim.out);
-                    } else*/
+                    } else
 //                    if (Shared_Common_Pref.FromActivity == "Outlets") {
 //                        Shared_Common_Pref.FromActivity = "";
 //                        common_class.CommonIntentwithFinish(Outlet_Info_Activity.class);
@@ -1449,12 +1647,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 //                        //startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
 //                        common_class.CommonIntentwithFinish(Dashboard_Route.class);
 //                        // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-//                    }
+//                    }*/
 
 
                     shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
-
-                    finish();
                 }
 
                 @Override
@@ -1714,16 +1910,16 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     }
                     break;
                 case R.id.linear_retailer_class:
-                    //common_class.showCommonDialog(modelRetailClass, 9, ApproveOutletsDetailedActivity.this);
+                    common_class.showCommonDialog(modelRetailClass, 9, ApproveOutletsDetailedActivity.this);
                     break;
                 case R.id.linear_retailer_channel:
-                    //common_class.showCommonDialog(categoryList, 8, ApproveOutletsDetailedActivity.this);
+                    common_class.showCommonDialog(categoryList, 8, ApproveOutletsDetailedActivity.this);
                     break;
                 case R.id.linear_retailer_subCategory:
-                    //common_class.showCommonDialog(modelRetailChannel, 10, ApproveOutletsDetailedActivity.this);
+                    common_class.showCommonDialog(modelRetailChannel, 10, ApproveOutletsDetailedActivity.this);
                     break;
                 case R.id.btn_dist_enter:
-                    /*if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                    if (Shared_Common_Pref.Outler_AddFlag != null && !Shared_Common_Pref.Outler_AddFlag.equals("1")) {
 
                         AlertDialogBox.showDialog(ApproveOutletsDetailedActivity.this, "HAP SFA", "Are You Sure Want to Update the Franchise Code?", "OK", "Cancel", false, new AlertBox() {
                             @Override
@@ -1739,43 +1935,43 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         });
                     } else {
                         checkValidity();
-                    }*/
+                    }
                     break;
                 case R.id.ivRetailCapture:
-                    //captureImg(mData, rvFiles);
+                    captureImg(mData, rvFiles);
                     break;
                 case R.id.ivFreezerCapture:
-                    //captureImg(mFreezerData, rvFreezerFiles);
+                    captureImg(mFreezerData, rvFreezerFiles);
                     break;
                 case R.id.linear_service_type:
-                    //common_class.showCommonDialog(serviceTypeList, 4, this);
+                    common_class.showCommonDialog(serviceTypeList, 4, this);
 
                     break;
                 case R.id.rlFreezerCapacity:
-                    //common_class.showCommonDialog(freezerCapcityList, 14, this);
+                    common_class.showCommonDialog(freezerCapcityList, 14, this);
                     break;
                 case R.id.rlFreezerStatus:
-                    //common_class.showCommonDialog(freezerStaList, 15, this);
+                    common_class.showCommonDialog(freezerStaList, 15, this);
 
                     break;
                 case R.id.rl_state:
-                    //common_class.showCommonDialog(stateList, 1, this);
+                    common_class.showCommonDialog(stateList, 1, this);
                     break;
 
                 case R.id.rl_route:
-                    /*if (FRoute_Master != null && FRoute_Master.size() > 1) {
+                    if (FRoute_Master != null && FRoute_Master.size() > 1) {
                         common_class.showCommonDialog(FRoute_Master, 3, this);
-                    }*/
+                    }
                     break;
                 case R.id.rl_Distributor:
-                    //common_class.showCommonDialog(common_class.getDistList(), 2, this);
+                    common_class.showCommonDialog(common_class.getDistList(), 2, this);
                     break;
                 case R.id.copypaste:
-                    //addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
+                    addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
                     break;
 
                 case R.id.ivShopPhoto:
-                    /*try {
+                    try {
                         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                             @Override
                             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
@@ -1789,7 +1985,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         startActivity(intent);
                     } catch (Exception e) {
                         Log.v(TAG, ":imageClk:" + e.getMessage());
-                    }*/
+                    }
                     break;
             }
         } catch (Exception e) {
@@ -1998,7 +2194,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                             FRoute_Master.add(Model_Pojo);
 
                         }
-                        loadroute(shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
+                        //loadroute(shared_common_pref.getvalue(Constants.TEMP_DISTRIBUTOR_ID));
                         break;
                     case Constants.STATE_LIST:
                         Log.v(TAG, "state:" + apiDataResponse);
@@ -2064,11 +2260,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
         }
 
-        if(cbFreezerYes.isChecked())
+        if (cbFreezerYes.isChecked())
             findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
 
 
-        if(cbFreezerNo.isChecked())
+        if (cbFreezerNo.isChecked())
             findViewById(R.id.llFreezer).setVisibility(View.GONE);
 
         // cbFreezerYes.setChecked(isChecked);
@@ -2116,7 +2312,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 holder.type.setText(list.get(position).getName());
                 holder.category.setText(list.get(position).getCatName());
                 holder.subCategory.setText(list.get(position).getSubCatName());
-                holder.cbType.setEnabled(false);
                 if (list.get(position).isSelected() == false) holder.cbType.setChecked(false);
                 if (list.get(position).isSelected() == true) holder.cbType.setChecked(true);
                 holder.cbType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -2200,8 +2395,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
-
-
         }
 
         @Override
@@ -2223,6 +2416,4 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             }
         }
     }
-
-
 }
