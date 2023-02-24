@@ -96,7 +96,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode, tvCounterEntrySales;
+    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode,btnPosStockLoad, tvCounterEntrySales;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -151,11 +151,19 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
             tvCounterEntrySales = findViewById(R.id.btnPosEntrySales);
+            btnPosStockLoad = findViewById(R.id.btnPosStockLoad);
 
             tvCounterEntrySales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(POSActivity.this, POS_SalesEntryActivity.class));
+
+                }
+            });
+            btnPosStockLoad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(POSActivity.this, POSStockLoadingActivity.class));
 
                 }
             });
@@ -306,6 +314,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             common_class.getDb_310Data(Constants.POS_TAXList, this);
             common_class.getDb_310Data(Constants.POS_SCHEME, this);
 
+            //common_class.getPOSProduct(this);
    /*    String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
 
             if (!Common_Class.isNullOrEmpty(preOrderList)) {
@@ -436,7 +445,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
-            common_class.getDb_310Data(Constants.STOCK_DATA, this);
+           // common_class.getDb_310Data(Constants.STOCK_DATA, this);
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX)))
                 common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
 
@@ -1112,7 +1121,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         Category_Nametext.setVisibility(View.VISIBLE);
-        Category_Nametext.setText(listt.get(categoryPos).getName());
+        Category_Nametext.setText(listt.get(categoryPos).getName() +" ( "+Product_ModalSetAdapter.size()+" )");
 
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), categoryPos);
         recyclerView.setAdapter(mProdct_Adapter);
@@ -1582,6 +1591,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                holder.erpCode.setText("" + Product_Details_Modal.getERP_Code().toUpperCase());
                 holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
@@ -1604,10 +1614,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getBar_Code()))
                     Log.v(TAG, "name:" + Product_Details_Modal.getName() + " :code:" + Product_Details_Modal.getBar_Code());
+                holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
 
                 if (CategoryType >= 0) {
 
-                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                         holder.tvStock.setTextColor(getResources().getColor(R.color.green));
@@ -2024,8 +2035,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock;
+            public TextView productname,erpCode, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvBatchNo;
             ImageView ImgVwProd, QtyPls, QtyMns,ivDel;
             EditText Qty;
 
@@ -2035,6 +2046,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
+                erpCode = view.findViewById(R.id.erpCode);
                 QtyPls = view.findViewById(R.id.ivQtyPls);
                 QtyMns = view.findViewById(R.id.ivQtyMns);
                 Rate = view.findViewById(R.id.Rate);
@@ -2047,6 +2059,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 llRegular = view.findViewById(R.id.llRegular);
                 tvUOM = view.findViewById(R.id.tvUOM);
                 tvStock = view.findViewById(R.id.tvStockBal);
+                tvBatchNo= view.findViewById(R.id.tvBatchNo);
 
 
                 if (CategoryType >= 0) {

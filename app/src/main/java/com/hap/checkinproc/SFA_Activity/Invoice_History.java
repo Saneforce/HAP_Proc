@@ -38,6 +38,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
@@ -110,7 +111,16 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
             CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-            common_class.getProductDetails(this);
+
+            common_class.ProgressdialogShow(1, "Updating Matrial Details");
+            common_class.getProductDetails(this, new OnLiveUpdateListener() {
+                @Override
+                public void onUpdate(String mode) {
+
+                    common_class.ProgressdialogShow(0, "");
+                }
+            });
+
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
             outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));

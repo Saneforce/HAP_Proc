@@ -492,6 +492,10 @@ public interface ApiInterface {
     @POST("db_v310.php?")
     Call<JsonObject> saveVanSales(@Query("axn") String axn, @Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
+    @FormUrlEncoded
+    @POST("db_v310.php?")
+    Call<JsonObject> savePOSStock(@Query("axn") String axn, @Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
 
     @FormUrlEncoded
     @POST("db_v310.php?")

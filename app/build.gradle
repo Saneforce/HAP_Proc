@@ -41,6 +41,9 @@ android {
             excludes += ['LICENSE.txt', 'META-INF/DEPENDENCIES']
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 
     allprojects {
         repositories {

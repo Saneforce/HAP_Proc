@@ -53,6 +53,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.Model_Class.Datum;
@@ -221,7 +222,14 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
-            common_class.getProductDetails(this);
+            common_class.ProgressdialogShow(1, "Updating Matrial Details");
+            common_class.getProductDetails(this, new OnLiveUpdateListener() {
+                @Override
+                public void onUpdate(String mode) {
+
+                    common_class.ProgressdialogShow(0, "");
+                }
+            });
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
 
             getACBalance(0);

@@ -141,10 +141,6 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     String axn = "",ImageUKey = "",keyEk = "EK",modeId = "",imageSet = "", imageServer = "",imageConvert = "";
     private String van_id = "", vehNo="";
 
-//    private static String vehNo;
-//    public static String getVehNo() {
-//        return vehNo;
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +213,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
             Log.v(TAG, " order oncreate:h ");
 
-            // showOrderItemList(0, "");
+            //showOrderItemList(0, "");
 
             Log.v(TAG, " order oncreate:i ");
             tvOtherBrand.setOnClickListener(this);

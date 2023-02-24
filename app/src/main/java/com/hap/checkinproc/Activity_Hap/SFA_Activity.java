@@ -64,6 +64,7 @@ import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
+import com.hap.checkinproc.SFA_Activity.POSStockLoadingActivity;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
 import com.hap.checkinproc.SFA_Activity.ReportsListActivity;
@@ -236,6 +237,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Outlets", "", "", "", R.drawable.ic_baseline_storefront_24));
                     menuList.add(new ListModel("", "Nearby Outlets", "", "", "", R.drawable.ic_outline_near_me_24));
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
+                   // menuList.add(new ListModel("", "POS Stock Load", "", "", "", R.drawable.ic_outline_assignment_48));
                     menuList.add(new ListModel("", "POS", "", "", "", R.drawable.ic_outline_assignment_48));
                     menuList.add(new ListModel("", "GRN", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
 //                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
@@ -276,6 +278,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case "GRN":
                         common_class.CommonIntentwithNEwTask(GrnListActivity.class);
+                        break;
+                    case "POS Stock Load":
+                        common_class.CommonIntentwithNEwTask(POSStockLoadingActivity.class);
                         break;
                     case "POS":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);

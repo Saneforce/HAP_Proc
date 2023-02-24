@@ -27,6 +27,7 @@ public class Constants {
     public static final String Retailer_OutletList_Pending = "retailerOutletListPending";
     public static final String Distributor_List = "distributorList";
     public static final String Product_List = "productList";
+    public static final String ProductStock_List = "productStockList";
     public static final String Primary_Product_List = "primaryproList";
     public static final String Primary_Shortage_List = "PrimaryShortageList";
     public static final String Category_List = "categoryList";
@@ -105,6 +106,7 @@ public class Constants {
 
     public static final String POS_SCHEME = "posScheme";
     public static final String UOM = "uom";
+    public static final String POS_STOCK_LOADING = "POS_Stock";
     public static final String VAN_STOCK_LOADING = "Stock Loading";
     public static final String VAN_STOCK_UNLOADING = "Stock UnLoading";
     public static final String VAN_SALES_ORDER = "Van Sales Order";

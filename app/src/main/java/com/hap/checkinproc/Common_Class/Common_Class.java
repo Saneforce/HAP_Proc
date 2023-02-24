@@ -7,6 +7,7 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 import static com.hap.checkinproc.Activity_Hap.SFA_Activity.sfa_date;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.ProductsLoaded;
 
 import android.Manifest;
 import android.app.Activity;
@@ -46,6 +47,7 @@ import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
@@ -105,7 +107,6 @@ public class Common_Class {
     SharedPreferences UserDetails;
     public static final String UserDetail = "MyPrefs";
     public int brandPos = 0, grpPos = 0, categoryPos = 0;
-
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -1010,6 +1011,9 @@ public class Common_Class {
 
 
     public void getProductDetails(Activity activity) {
+        getProductDetails(activity,null);
+    }
+    public void getProductDetails(Activity activity, OnLiveUpdateListener liveUpdateListener) {
 
         if (isNetworkAvailable(activity)) {
             UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
@@ -1060,24 +1064,70 @@ public class Common_Class {
                     }
                 });
                 if (!Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
-
+                    ProductsLoaded=false;
                     service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                         @Override
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 //                            Log.v("SEC_Product_List", response.body().toString());
                             db.deleteMasterData(Constants.Product_List);
                             db.addMasterData(Constants.Product_List, response.body());
+                            ProductsLoaded=true;
+                            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
                         }
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
-
+                            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
                         }
                     });
+                }else{
+                    if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
             }
+        }else{
+            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+        }
+
+    }
+    public void getPOSStockProduct(Activity activity, OnLiveUpdateListener liveUpdateListener) {
+
+        if (isNetworkAvailable(activity)) {
+            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(activity);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                jParam.put("outletId", Shared_Common_Pref.OutletCode);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                ProductsLoaded=false;
+                service.getDataArrayList("get/prodstockdets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+//                            Log.v("SEC_Product_List", response.body().toString());
+                            db.deleteMasterData(Constants.ProductStock_List);
+                            db.addMasterData(Constants.ProductStock_List, response.body());
+                            ProductsLoaded=true;
+                            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+                        }
+                    });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+            }
+        }else{
+            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
         }
 
     }

@@ -42,4 +42,5 @@
     <dimen name="sno1">4dp</dimen>
     <dimen name="product_image">350dp</dimen>
     <dimen name="travel_allowance">300dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

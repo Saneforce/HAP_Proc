@@ -134,7 +134,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__route);
-
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         dashboard_route = this;
@@ -1007,6 +1006,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             btnCmbRoute.setVisibility(View.VISIBLE);
             distributor_text.setText(myDataset.get(position).getName());
             tvDistributor.setText(myDataset.get(position).getName());
+
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             shared_common_pref.save(Constants.DistributorERP, myDataset.get(position).getCont());
@@ -1213,9 +1213,10 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
                         if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
-                        } else if (dashboard_route.route_text.getText().toString().equals("")) {
-                            Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-                        } else if (Common_Class.isNullOrEmpty(dashboard_route.categoryType) && shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
+                        } //else if (dashboard_route.route_text.getText().toString().equals("")) {
+                        //    Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                       // }
+                        else if (Common_Class.isNullOrEmpty(dashboard_route.categoryType) && shared_common_pref.getvalue(Constants.DivERP).equalsIgnoreCase("21")) {
                             common_class.showMsg(getActivity(), "Select the Category Type");
                         } else {
 
