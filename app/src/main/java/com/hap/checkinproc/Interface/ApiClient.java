@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     //public static String BASE_URL = "http://ff.hap.in/server/";
    // public static String BASE_URL = "http://Checkin.hap.in/server/";//Non field  6.0.11
-    //public static String BASE_URL = "http://hsfa.sanfmcg.com/server/";//field
+//    public static String BASE_URL = "http://hsfa.sanfmcg.com/server/";//field
     public static String BASE_URL = "http://primary.hap.in/server/";//distri 8.1.1
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {

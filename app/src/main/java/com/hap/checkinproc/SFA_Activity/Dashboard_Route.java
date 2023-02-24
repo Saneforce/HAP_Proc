@@ -103,9 +103,9 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     TextView headtext, textViewname, ReachedOutlet, route_text, txtOrdDate, OvrAll,
             txSrvOtlt, txTotUniOtlt, txUniOtlt, txClsOtlt, txSrvOtltCnt, txTotUniOtltCnt,
             txUniOtltCnt, txClsOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal,
-            tvDistributor;
+            tvDistributor, PendingCount, PendingText;
     EditText txSearchRet;
-    LinearLayout btnCmbRoute, btTotUniOtlt, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni;
+    LinearLayout btnCmbRoute, btTotUniOtlt, btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ, underTotUni, llPen;
     Common_Model Model_Pojo;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     String sDeptType, RetType = "";
@@ -179,6 +179,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
+        
+        getPendingCounts();
 
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
         try {
@@ -196,6 +198,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             llNewOrder = findViewById(R.id.llNewOrder);
             llNoOrder = findViewById(R.id.llNoOrder);
             llInvoice = findViewById(R.id.llInv);
+            llPen = findViewById(R.id.llPen);
+            PendingCount = findViewById(R.id.smryPen);
             txSearchRet = findViewById(R.id.txSearchRet);
             txSrvOtlt = findViewById(R.id.txSrvOtlt);
             txTotUniOtlt = findViewById(R.id.txTotUnivOtlt);
@@ -253,6 +257,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             btTotUniOtlt.setOnClickListener(this);
             btUniOtlt.setOnClickListener(this);
             btClsOtlt.setOnClickListener(this);
+            llPen.setOnClickListener(this);
 
             txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             txTotUniOtlt.setTypeface(null, Typeface.BOLD);
@@ -544,6 +549,44 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    private void getPendingCounts() { // Todo: RAGU M
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        String StockistCode = shared_common_pref.getvalue(Constants.Distributor_Id);
+        Map<String, String> params = new HashMap<>();
+        params.put("axn", "get_pending_orders_count");
+        params.put("distCode", StockistCode);
+        Log.e("status", "GET REQUEST: " + params.toString());
+        Call<ResponseBody> call = apiInterface.getPendingOrdersCount(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String result = response.body().string();
+                        Log.e("status", "API Result: " + result);
+                        JSONObject object = new JSONObject(result);
+                        if (object.getBoolean("success")) {
+                            JSONArray array = object.getJSONArray("response");
+                            for (int i = 0; i < array.length(); i++) {
+                                String count = array.getJSONObject(i).getString("PendingCount");
+                                PendingCount.setText(count);
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("error", "Failed1: " + e.getMessage());
+                    }
+                } else {
+                    Log.e("error", "Error: Response Failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("error", "Failed2: " + t.getMessage());
+            }
+        });
+    }
+
     private void getFilterType(boolean isFreezerOutlet, boolean isNoFreezerOutlet) {
         freezerFilter = isFreezerOutlet ? "Yes" : isNoFreezerOutlet ? "No" : "";
         setPagerAdapter(true);
@@ -714,6 +757,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     }
 
     public void getSalesCounts() {
+        getPendingCounts();
         updSale = true;
         JSONObject jParam = new JSONObject();
         try {
@@ -721,6 +765,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             jParam.put("Stk", ViewDist);
             jParam.put("div", UserDetails.getString("Divcode", ""));
             jParam.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+
+            Log.e("status", jParam.toString());
 
             apiInterface.getDataArrayList("get/salessumry", jParam.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
@@ -972,6 +1018,15 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     startActivity(intentInv);
                 }
                 break;
+            case R.id.llPen://  Todo
+                if (PendingCount.getText().toString().equals("0"))
+                    common_class.showMsg(this, "No Records Found");
+                else {
+                    Shared_Common_Pref.SALES_MODE = "pending";
+                    Intent intentInv = new Intent(getApplicationContext(), PendingOrdersActivity.class);
+                    startActivity(intentInv);
+                }
+                break;
 
             case R.id.ReachedOutlet:
                 common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
@@ -1025,6 +1080,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
             getLastInvoiceData();
+            getPendingCounts();
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);
             shared_common_pref.save(Constants.DivERP, myDataset.get(position).getDivERP());

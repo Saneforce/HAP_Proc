@@ -680,4 +680,7 @@ public interface ApiInterface {
 
     @POST("Db_v300.php?")
     Call<ResponseBody> getPendingOutlets(@Query("axn") String axn, @QueryMap Map<String, String> params);
+
+    @POST("copy.php?")
+    Call<ResponseBody> getPendingOrdersCount(@QueryMap Map<String, String> params);
 }

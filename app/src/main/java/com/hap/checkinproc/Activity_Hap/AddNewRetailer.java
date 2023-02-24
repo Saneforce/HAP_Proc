@@ -2173,7 +2173,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                                        typeSubCatList.add(modelRetailChannel.get(i));
 //                                }
 
-
                                 for (int i = 0; i < modelRetailChannel.size(); i++) {
 
                                     // String code = modelRetailChannel.get(i).getCheckouttime();
