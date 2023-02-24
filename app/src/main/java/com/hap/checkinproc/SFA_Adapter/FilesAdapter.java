@@ -62,11 +62,11 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
                 holder.ivFile.setVisibility(View.GONE);
             }
 
-            try {
-                if (ApproveOutletsDetailedActivity.class.equals(context.getClass())) {
-                    holder.ivDel.setVisibility(View.GONE);
-                }
-            } catch (Exception ignored) {}
+//            try {
+//                if (ApproveOutletsDetailedActivity.class.equals(context.getClass())) {
+//                    holder.ivDel.setVisibility(View.GONE);
+//                }
+//            } catch (Exception ignored) {}
 
             holder.ivFile.setOnClickListener(new View.OnClickListener() {
                 @Override
