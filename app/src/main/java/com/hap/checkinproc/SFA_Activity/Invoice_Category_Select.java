@@ -2138,9 +2138,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                 moveProductScreen();
+            } else if (PendingOrdersActivity.CometoPending){
+                finish();
             } else {
                 common_class.commonDialog(this, Invoice_History.class, "Invoice?");
-
             }
             return true;
         }

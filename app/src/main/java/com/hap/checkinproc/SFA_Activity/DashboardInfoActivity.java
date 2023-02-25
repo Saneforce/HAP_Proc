@@ -98,6 +98,9 @@ public class DashboardInfoActivity extends AppCompatActivity implements View.OnC
 
             if (jsonObject.getBoolean("success")) {
                 JSONArray jsonArr = jsonObject.getJSONArray("data");
+
+                Log.e("status", "SQL: " + jsonObject.getString("sql"));
+
                 tvDistributor.setText(jsonArr.getJSONObject(0).getString("Sf_Name"));
                 rvDashboard.setAdapter(new DashboardInfoAdapter(this, jsonArr, R.layout.db_type_info_adapter_layout));
             }

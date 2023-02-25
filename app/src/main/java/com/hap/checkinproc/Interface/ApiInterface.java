@@ -683,4 +683,7 @@ public interface ApiInterface {
 
     @POST("copy.php?")
     Call<ResponseBody> getPendingOrdersCount(@QueryMap Map<String, String> params);
+
+    @POST("copy.php?")
+    Call<ResponseBody> loadData(@QueryMap Map<String, String> params);
 }

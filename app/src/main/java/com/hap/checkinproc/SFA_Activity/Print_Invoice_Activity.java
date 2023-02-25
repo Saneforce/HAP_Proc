@@ -94,6 +94,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     RecyclerView rvStockCapture;
     List<QPS_Modal> stockFileList = new ArrayList<>();
     String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {

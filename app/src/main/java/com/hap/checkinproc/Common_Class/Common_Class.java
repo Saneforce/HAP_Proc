@@ -239,6 +239,20 @@ public class Common_Class {
 
     }
 
+    public void makeCall(String mobilenumber) {
+        final int REQUEST_PHONE_CALL = 1;
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + mobilenumber));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+        } else {
+            context.startActivity(callIntent);
+        }
+
+
+    }
+
     public static double ParseDouble(String strNumber) {
         if (strNumber != null && strNumber.length() > 0) {
             try {
@@ -663,6 +677,10 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("mode", Shared_Common_Pref.SALES_MODE);
                         data.put(Constants.LOGIN_TYPE, shared_common_pref.getvalue(Constants.LOGIN_TYPE));
+                        Log.e("status", "SF" + UserDetails.getString("Sfcode", ""));
+                        Log.e("status", "Stk" + shared_common_pref.getvalue(Constants.Distributor_Id));
+                        Log.e("status", "mode" + Shared_Common_Pref.SALES_MODE);
+                        Log.e("status", Constants.LOGIN_TYPE + shared_common_pref.getvalue(Constants.LOGIN_TYPE));
                         break;
                     case Constants.Distributor_List:
                         axnname = "get/distributor";
