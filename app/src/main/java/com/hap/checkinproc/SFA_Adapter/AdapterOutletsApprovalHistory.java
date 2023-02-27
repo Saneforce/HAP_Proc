@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.ModelOutletsApprovalHistory;
 
@@ -36,13 +37,18 @@ public class AdapterOutletsApprovalHistory extends RecyclerView.Adapter<AdapterO
         holder.Code.setText(model.getCode());
         holder.Mobile.setText(model.getMobile());
         holder.Address.setText(model.getAddress());
+
+        holder.Mobile.setOnClickListener(v -> {
+            Common_Class common_class = new Common_Class(context);
+            common_class.makeCall(model.getMobile());
+        });
+
         if (model.getStatus().equals("0")) {
             holder.Approve.setVisibility(View.VISIBLE);
             holder.Reject.setVisibility(View.GONE);
             holder.Remarks.setVisibility(View.GONE);
             holder.ApprovedBy.setText("Approved By: " + model.getApprovedBy());
             holder.ModifiedOn.setText("Approved On: " + model.getModifiedOn());
-
         } else if (model.getStatus().equals("1")) {
             holder.Approve.setVisibility(View.GONE);
             holder.Reject.setVisibility(View.VISIBLE);

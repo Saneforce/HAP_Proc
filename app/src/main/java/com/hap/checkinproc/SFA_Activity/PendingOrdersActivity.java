@@ -61,12 +61,10 @@ public class PendingOrdersActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar_pending_orders);
         headText = findViewById(R.id.headtext);
 
-        common_class = new Common_Class(context);
         shared_common_pref = new Shared_Common_Pref(context);
+        common_class = new Common_Class(context);
         common_class.gotoHomeScreen(context, home);
 
-        String distributorName = shared_common_pref.getvalue(Constants.Distributor_name);
-        headText.setText(distributorName + " - Pending Orders");
         loadData();
     }
 
@@ -118,6 +116,8 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                 CometoPending = true;
                                 Shared_Common_Pref.TransSlNo = model.getOrderID();
                                 Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
+                                Shared_Common_Pref.Invoicetoorder = "1";
+                                shared_common_pref.save(Constants.FLAG, "ORDER");
                                 shared_common_pref.save(Constants.Retailor_Name_ERP_Code, model.getTitle2());
                                 shared_common_pref.save(Constants.Retailor_PHNo, model.getMobile());
                                 shared_common_pref.save(Constants.Retailor_Address, model.getAddress());

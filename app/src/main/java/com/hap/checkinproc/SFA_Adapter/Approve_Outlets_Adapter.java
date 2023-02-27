@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity_Hap.ApproveOutletsDetailedActivity;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.ModelApproveOutlets;
@@ -59,9 +60,8 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
         holder.address.setText(model.getCustomerAddress());
 
         holder.mobile.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("tel:91" + model.getCustomerMobile()));
-            context.startActivity(intent);
+            Common_Class common_class = new Common_Class(context);
+            common_class.makeCall(model.getCustomerMobile());
         });
 
         holder.view.setOnClickListener(v -> {
