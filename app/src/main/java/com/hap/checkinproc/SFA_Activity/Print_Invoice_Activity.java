@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
@@ -60,10 +62,13 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,6 +99,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     RecyclerView rvStockCapture;
     List<QPS_Modal> stockFileList = new ArrayList<>();
     String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
+
+    String status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +178,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
+            status = sharedCommonPref.getvalue(Constants.FLAG);
+
             if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Sales return"))
                 tvHeader.setText(sharedCommonPref.getvalue(Constants.FLAG));
             else
@@ -233,9 +242,17 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Log.v("gst_dist",sharedCommonPref.getvalue(Constants.DistributorGst));
 
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
-                findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
                 common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
                 common_class.getDb_310Data(Constants.OUTSTANDING, this);
+                storeName = retailername.getText().toString();
+                address = retaileAddress.getText().toString();
+                phone = "Mobile:" + tvRetailorPhone.getText().toString();
+
+            }else if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INDENT")) {
+                findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
+
+                prepareIndentDetails();
+
                 storeName = retailername.getText().toString();
                 address = retaileAddress.getText().toString();
                 phone = "Mobile:" + tvRetailorPhone.getText().toString();
@@ -305,6 +322,46 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         } catch (Exception e) {
             Log.v(TAG, e.getMessage());
         }
+    }
+
+    private void prepareIndentDetails() {
+        Context context = this;
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Map<String, String> params = new HashMap<>();
+        params.put("axn", "prepareIndentDetails");
+        params.put("order_id", Shared_Common_Pref.TransSlNo);
+        Call<ResponseBody> call = apiInterface.getUniversalData(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body() == null) {
+                            Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        String result = response.body().string();
+                        JSONObject jsonObject = new JSONObject(result);
+                        if (jsonObject.getBoolean("success")) {
+                            String jsonArray = jsonObject.getJSONArray("response").toString();
+                            orderInvoiceDetailData(jsonArray); // Todo
+                            Log.e("status", "Response: " + jsonArray);
+                        } else {
+                            Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Response Not Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -1699,7 +1756,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) { // Todo
         try {
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
                 switch (key) {
