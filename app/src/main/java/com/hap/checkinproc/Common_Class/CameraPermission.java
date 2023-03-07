@@ -36,8 +36,8 @@ public class CameraPermission extends Activity {
         int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);
         int coarseReq = ContextCompat.checkSelfPermission(_context, ACCESS_COARSE_LOCATION);
         int cameraReq = ContextCompat.checkSelfPermission(_context, CAMERA);
-        int BTReq = ContextCompat.checkSelfPermission(_context, BLUETOOTH_CONNECT);
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU) {
+            int BTReq = ContextCompat.checkSelfPermission(_context, BLUETOOTH_CONNECT);
             int postNotiReq = ContextCompat.checkSelfPermission(_context, POST_NOTIFICATIONS);
             int readmediaImages = ContextCompat.checkSelfPermission(_context, READ_MEDIA_IMAGES);
             return locationReq == PackageManager.PERMISSION_GRANTED && cameraReq == PackageManager.PERMISSION_GRANTED &&
@@ -47,7 +47,7 @@ public class CameraPermission extends Activity {
             int readStReq = ContextCompat.checkSelfPermission(_context, READ_EXTERNAL_STORAGE);
             return locationReq == PackageManager.PERMISSION_GRANTED && cameraReq == PackageManager.PERMISSION_GRANTED &&
                     coarseReq == PackageManager.PERMISSION_GRANTED && wrteStReq == PackageManager.PERMISSION_GRANTED &&
-                    readStReq == PackageManager.PERMISSION_GRANTED && BTReq==PackageManager.PERMISSION_GRANTED;
+                    readStReq == PackageManager.PERMISSION_GRANTED;
         }
         //int readPhone = ContextCompat.checkSelfPermission(_context, READ_PHONE_STATE);
 

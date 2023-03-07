@@ -169,6 +169,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     String customer_code = "";
 
+    boolean isServiceType = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -429,6 +431,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
 
                 iOutletTyp = Retailer_Modal_List.get(getOutletPosition()).getType() == null ? 0 : Integer.valueOf(Retailer_Modal_List.get(getOutletPosition()).getType());
+                isServiceType = false;
                 switch (iOutletTyp) {
                     case 0:
                         txOutletType.setText("Non Service");
@@ -441,8 +444,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         break;
                     default:
                         txOutletType.setText("Service");
+                        isServiceType = true;
                         break;
                 }
+
+                // Update Mandatory fields
+                hideMandatories();
 
                 txDelvryType.setText(Retailer_Modal_List.get(getOutletPosition()).getDelivType());
             }
@@ -659,7 +666,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             Log.e(TAG + "2:", Shared_Common_Pref.Outler_AddFlag);
 
-            mSubmit.setOnClickListener(new View.OnClickListener() {
+            mSubmit.setOnClickListener(new View.OnClickListener() { // Todo
                 @Override
                 public void onClick(View v) {
                     categoryType = "";
@@ -671,9 +678,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         if (btnDistCode.getText().toString().equalsIgnoreCase("Check Validity"))
                             common_class.showMsg(AddNewRetailer.this, "Please Check validity for the Franchise Code");
                         else
-                            common_class.showMsg(AddNewRetailer.this, "Please given valid Franchise Code or Uncheck the HAP Franchise");
+                            common_class.showMsg(AddNewRetailer.this, "Please give valid Franchise Code or uncheck \"HAP Franchise\"");
                     } else if (Common_Class.isNullOrEmpty(txOutletType.getText().toString())) {
                         common_class.showMsg(AddNewRetailer.this, "Select Outlet Type");
+                    } else if (iOutletTyp == 2 && edtClsRetRmk.getText().toString().equalsIgnoreCase("")) {
+                        Toast.makeText(getApplicationContext(), "Enter the reason for close outlet", Toast.LENGTH_SHORT).show();
+                        linClsRmks.requestFocus();
                     } else if (iOutletTyp == 2) {
                         if (mSubmit.isAnimating()) return;
                         mSubmit.startAnimation();
@@ -691,17 +701,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
                     } else if (String.valueOf(Shared_Common_Pref.Outletlat).matches("")
                             || String.valueOf(Shared_Common_Pref.Outletlat).matches("0")
-                            || String.valueOf(Shared_Common_Pref.Outletlat).matches("0.0")) {
+                            || String.valueOf(Shared_Common_Pref.Outletlat).matches("0.0") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Refresh the Location Lat & Lng", Toast.LENGTH_SHORT).show();
-                    } else if (addRetailerAddress.getText().toString().matches("")) {
+                    } else if (addRetailerAddress.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
-                    } else if (tvStateName.getText().toString().matches("")) {
+                    } else if (tvStateName.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Select the State", Toast.LENGTH_SHORT).show();
-                    } else if (addRetailerCity.getText().toString().matches("")) {
+                    } else if (addRetailerCity.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter Location", Toast.LENGTH_SHORT).show();
-                    } else if (etDistrict.getText().toString().matches("")) {
+                    } else if (etDistrict.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter District", Toast.LENGTH_SHORT).show();
-                    } else if (addRetailerPhone.getText().toString().matches("")) {
+                    } else if (addRetailerPhone.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
                     }
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
@@ -724,7 +734,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     //    Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     //}
-                    else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("")) {
+                    else if (/*divERP.equalsIgnoreCase("21") &&*/ categoryType.equals("") && isServiceType) {
                         common_class.showMsg(AddNewRetailer.this, "Select the Category Type");
                     }
                     /*else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
@@ -988,6 +998,28 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
 
 
+    }
+
+    private void hideMandatories() {
+        if (isServiceType) {
+            // If the selected outlet type is "Service" the following fields are mandatory
+            findViewById(R.id.address_mandatory_icon).setVisibility(View.VISIBLE);
+            findViewById(R.id.state_mandatory_icon).setVisibility(View.VISIBLE);
+            findViewById(R.id.location_mandatory_icon).setVisibility(View.VISIBLE);
+            findViewById(R.id.district_mandatory_icon).setVisibility(View.VISIBLE);
+            findViewById(R.id.category_type_mandatory_icon).setVisibility(View.VISIBLE);
+            findViewById(R.id.ivFreezReqMandatory).setVisibility(View.VISIBLE);
+            findViewById(R.id.phone_mandatory_icon).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.address_mandatory_icon).setVisibility(View.GONE);
+            findViewById(R.id.state_mandatory_icon).setVisibility(View.GONE);
+            findViewById(R.id.location_mandatory_icon).setVisibility(View.GONE);
+            findViewById(R.id.district_mandatory_icon).setVisibility(View.GONE);
+            findViewById(R.id.category_type_mandatory_icon).setVisibility(View.GONE);
+            findViewById(R.id.ivFreezReqMandatory).setVisibility(View.GONE);
+            findViewById(R.id.phone_mandatory_icon).setVisibility(View.GONE);
+            findViewById(R.id.reason_for_close_mandatory_icon).setVisibility(View.VISIBLE);
+        }
     }
 
     void refreshLocation(Location location) {
@@ -1557,7 +1589,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 txDelvryType.setText(myDataset.get(position).getName());
                 break;
             case 13:
-                txOutletType.setText(myDataset.get(position).getName());
+                String OutletType = myDataset.get(position).getName();
+                txOutletType.setText(OutletType);
+
+                if (OutletType.equalsIgnoreCase("service")) {
+                    isServiceType = true;
+                } else {
+                    isServiceType = false;
+                }
+
+                // Update Mandatory fields
+                hideMandatories();
+
                 iOutletTyp = Integer.valueOf(myDataset.get(position).getId());
                 linClsRmks.setVisibility(View.GONE);
                 if (iOutletTyp == 2) {
