@@ -5,6 +5,7 @@ import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
@@ -96,7 +97,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
     CircularProgressButton takeorder;
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     TextView Out_Let_Name, Category_Nametext,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader, tvDistName;
     EditText etCategoryItemSearch;
     ImageView ivClose,img_lodg_atta,attachedImage;
 
@@ -142,6 +143,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
+            tvDistName = findViewById(R.id.tvDistName);
 
             etCategoryItemSearch = findViewById(R.id.searchView);
 
@@ -169,6 +171,10 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
 
 
             Category_Nametext.setOnClickListener(this);
+
+            tvDistName.setOnClickListener(v -> {
+                startActivity(new Intent(this, LedgerHistoryActivity.class)); // Todo: RAGU M
+            });
 
 
             //findViewById(R.id.tvOrder).setVisibility(View.GONE);
