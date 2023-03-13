@@ -458,6 +458,14 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
 
     }
     private void SaveOrder(String axn) {
+        for (int z = 0; z < Getorder_Array_List.size(); z++) {
+            double totQty = (Getorder_Array_List.get(z).getQty() * Getorder_Array_List.get(z).getCnvQty());
+            if(Getorder_Array_List.get(z).getBalance()<totQty) {
+                Toast.makeText(getApplicationContext(), "Stock Not Available!", Toast.LENGTH_SHORT).show();
+                ResetSubmitBtn(0);
+                return;
+            }
+        }
         AlertDialogBox.showDialog(this, "HAP SFA", "Are You Sure Want to Tranfert Stock for POS?", "OK", "Cancel", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
@@ -482,11 +490,19 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                     JSONArray Order_Details = new JSONArray();
                     for (int z = 0; z < Getorder_Array_List.size(); z++) {
                         JSONObject ProdItem = new JSONObject();
+
+                        double totQty = (Getorder_Array_List.get(z).getQty() * Getorder_Array_List.get(z).getCnvQty());
+
+                        if(Getorder_Array_List.get(z).getBalance()<totQty) {
+                            Toast.makeText(getApplicationContext(), "Stock Not Available!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                         ProdItem.put("ERPCode", Getorder_Array_List.get(z).getERP_Code());
                         ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                         ProdItem.put("Batch", Getorder_Array_List.get(z).getBatchNo());
                         ProdItem.put("Stock_Qty", Getorder_Array_List.get(z).getQty());
+                        ProdItem.put("EAQty", totQty);
                         ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
                         ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
                         ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
@@ -510,18 +526,19 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                         if (response.isSuccessful()) {
                             try {
                                 common_class.ProgressdialogShow(0, "");
+                                common_class.ProgressdialogShow(1, "Updating Matrial Details");
+                                common_class.getPOSProduct(POSStockLoadingActivity.this, new OnLiveUpdateListener() {
+                                    @Override
+                                    public void onUpdate(String mode) {
+                                        finish();
+                                        common_class.ProgressdialogShow(0, "");
+                                    }
+                                });
                                 Log.e("JSON_VALUES", response.body().toString());
                                 JSONObject jsonObjects = new JSONObject(response.body().toString());
                                 String san = jsonObjects.getString("success");
 
-                                Log.e("Success_Message", san);
                                 ResetSubmitBtn(1);
-                                if (san.equals("true")) {
-                                    String data = gson.toJson(Product_Modal);
-                                    sharedCommonPref.save(Constants.LOC_VANSALES_DATA, data);
-                                    updateStockBal();
-                                    finish();
-                                }
                                 common_class.showMsg(POSStockLoadingActivity.this, jsonObjects.getString("Msg"));
 
                             } catch (Exception e) {
@@ -949,8 +966,18 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                 }
 
 
+
+                double totQty = (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
+
                 holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
-                holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
+                holder.tvTknStock.setText("" + (int)totQty);
+                holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
+                if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty){
+
+                    holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+
+                }
+               // holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
 
 //
 //                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
@@ -1020,6 +1047,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                         //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                         //holder.tvStock.setText("" + (int) (balance - order));
                         holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
 //                        } else {
 //                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
 //                        }
@@ -1058,6 +1086,8 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
+                            if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty)
+                                return;
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
@@ -1065,12 +1095,15 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
-
-
                             }
 
+                            holder.tvTknStock.setText("" + (int)totQty);
+                            holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
+                            if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty){
 
+                                holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
 
+                            }
 
                             sumofTax(Product_Details_Modalitem, holder.getAdapterPosition());
                             holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
@@ -1197,7 +1230,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,tvBatchNo;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,tvBatchNo,tvTknStock;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1220,6 +1253,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                 tvUOM = view.findViewById(R.id.tvUOM);
                 ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                 tvStock = view.findViewById(R.id.tvStockBal);
+                tvTknStock = view.findViewById(R.id.tvTknStock);
                 tvBatchNo= view.findViewById(R.id.tvBatchNo);
 
                 if (CategoryType >= 0) {

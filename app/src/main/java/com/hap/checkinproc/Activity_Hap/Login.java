@@ -633,9 +633,10 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                //eMail="arulraj.pe@hap.in";
+                eMail="1019151@hap.in";
+                //eMail="1029024@hap.in";
                // eMail="venketesan.r@hap.in";
-               /// eMail="1026915@hap.in";
+                //eMail="1025257@hap.in";
                 //eMail="1021174@hap.in";
                 //eMail="1028757@hap.in";
                 //eMail="boopathy.s@hap.in";
@@ -648,17 +649,15 @@ Log.d("Error","Can't Clear SFWish");
                 //eMail="1025499@hap.in";
                 //eMail="1014604@hap.in";
                 //eMail="iplusadmin@hap.in";
-                    eMail="ciadmin@hap.in";
+                //eMail="ciadmin@hap.in";
 
-                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, BuildConfig.VERSION_NAME, deviceToken);
+                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
                     @Override
                     public void onResponse(Call<Model> call, Response<Model> response) {
                         try {
                             if (response.isSuccessful()) {
-
                                 if (response.body().getSuccess()) {
-
                                     try {
                                         Gson gson = new Gson();
                                         assignLoginData(response.body(), requestCode);

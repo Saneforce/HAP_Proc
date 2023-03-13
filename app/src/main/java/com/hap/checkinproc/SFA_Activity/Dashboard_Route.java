@@ -259,6 +259,9 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             btClsOtlt.setOnClickListener(this);
             llPen.setOnClickListener(this);
 
+            llNewOrder.setVisibility(View.GONE);
+            llNoOrder.setVisibility(View.GONE);
+
             txTotUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             txTotUniOtlt.setTypeface(null, Typeface.BOLD);
             underTotUni.setVisibility(View.VISIBLE);

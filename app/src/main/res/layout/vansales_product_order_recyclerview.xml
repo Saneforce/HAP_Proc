@@ -302,6 +302,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:layout_marginRight="@dimen/C5dp"
+                            android:layout_marginTop="@dimen/C3dp"
                             android:orientation="horizontal"
                             android:visibility="visible">
                         <TextView
@@ -326,12 +327,33 @@
                             android:textStyle="bold"
                             android:visibility="visible" />
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:gravity="end"
+                                android:layout_marginStart="@dimen/C20dp"
+                                android:text="Taken.Stock"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"/>
+                            <TextView
+                                android:id="@+id/tvTknStock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:gravity="end"
+                                android:layout_marginLeft="15dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
 
                         <TextView
                             android:id="@+id/tvBatchNo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Batch"
+                            android:layout_weight="1"
+                            android:text=""
                             android:layout_marginStart="15dp" />
                         </LinearLayout>
                     </RelativeLayout>

@@ -299,7 +299,7 @@
                                 android:text="0"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -323,7 +323,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/smryNOrd"
@@ -349,14 +350,16 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200" />
+                            android:background="@color/grey_200"
+                            android:visibility="gone"/>
 
                         <LinearLayout
                             android:id="@+id/llNoOrder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/smryNOOrd"
@@ -382,7 +385,8 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="6dp"
-                            android:background="@color/grey_200" />
+                            android:background="@color/grey_200"
+                            android:visibility="gone"/>
 
                         <LinearLayout
                             android:id="@+id/llInv"
@@ -398,8 +402,8 @@
                                 android:fontFamily="sans-serif"
                                 android:text="0"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16sp"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -410,6 +414,14 @@
                                 android:textSize="9sp" />
                         </LinearLayout>
 
+
+                        <LinearLayout
+                            android:layout_width="@dimen/C2dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@color/grey_200"
+                            />
                         <LinearLayout
                             android:id="@+id/llPen"
                             android:layout_width="match_parent"
@@ -424,14 +436,14 @@
                                 android:fontFamily="sans-serif"
                                 android:text="0"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16sp"
+                                android:textColor="@color/Extended"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="Pending Invoice"
                                 android:textAlignment="center"
                                 android:textSize="9sp" />
                         </LinearLayout>
@@ -491,17 +503,12 @@
                             android:layout_gravity="center_vertical"
                             android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="1dp"
-                                android:text="0000"
-                                android:visibility="invisible" />
 
                             <ImageView
                                 android:id="@+id/ivBtnRpt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:padding="@dimen/C5dp"
+                                android:padding="@dimen/C2dp"
                                 android:src="@drawable/report"
                                 app:tint="@color/colorAccent" />
                         </LinearLayout>

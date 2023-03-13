@@ -641,10 +641,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                    // printama.addNewLine();
                 String sMode=sharedCommonPref.getvalue(Constants.FLAG);
                 String sHead = "";
-                    printama.setWideTallBold();
+                printama.setWideTallBold();
                 if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
                 {
-                    sHead = "INVOICE";
+                    sHead = "TEMPORARY INVOICE";
                 }else if( sMode.equals("PROJECTION") ){
                     sHead = "PROJECTION";
                 }else if( sMode.equalsIgnoreCase("Order") ){
@@ -843,6 +843,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     printama.printDashedLine();
                     printama.printTextln(Printama.LEFT, "Receiver's Signature & Stamp" );
                     printama.printTextln(" ");
+                    printama.printDashedLine();
+                    printama.setNormalText();
+                    printama.printTextln(Printama.LEFT, "Note :" );
+                    printama.printTextln(Printama.LEFT, "1.Cheques should be crossed and made payable" );
+                    printama.printTextln(Printama.LEFT, "  to \"" + tvDistributorName.getText().toString()+"\"" );
+                    printama.printTextln(Printama.LEFT, "2.All goods must be carefully checked before signing." );
+                    printama.printTextln(Printama.LEFT, "3.Goods are not returnable, refundable or exchangeable upon acceptance." );
+                    printama.printTextln(" ");
+                    printama.printTextln(" ");
                     printama.printTextln(" ");
                     printama.printTextln(" ");
                     printama.addNewLine();
@@ -912,7 +921,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
             {
-                sHead = "INVOICE";
+                sHead = "TEMPORARY INVOICE";
             }else if( sMode.equals("PROJECTION") ){
                 sHead = "PROJECTION";
             }else if( sMode.equalsIgnoreCase("Order") ){
@@ -1069,7 +1078,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             wdth = wdth-bounds.width();
             wdth = wdth-3;
 
-            sText="_MRP";
+            sText="_RRP";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
             canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xMRP=wdth;
             wdth = wdth-bounds.width();
@@ -1211,6 +1220,52 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
+
+            paint.setColor(Color.BLACK);
+            y = y + 30;
+            paint.setFakeBoldText(true);
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("For " + tvDistributorName.getText().toString(), x, y, paint);
+
+            y = y + 60;
+            paint.setFakeBoldText(true);
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("Authorized signature", x, y, paint);
+            paint.setFakeBoldText(false);
+            y = y + 20;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+            y = y + 30;
+            paint.setColor(Color.BLACK);
+            paint.setFakeBoldText(true);
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("For " + retailername.getText().toString(), x, y, paint);
+
+            y = y + 60;
+            paint.setFakeBoldText(true);
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("Receiver's Signature & Stamp", x, y, paint);
+
+            paint.setFakeBoldText(false);
+            y = y + 20;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+            paint.setColor(Color.BLACK);
+            y = y + 30;
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("Note :" , x, y, paint);
+            y = y + 30;
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("1.Cheques should be crossed and made payable to \"" + tvDistributorName.getText().toString()+"\"" , x, y, paint);
+            y = y + 30;
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("2.All goods must be carefully checked before signing." , x, y, paint);
+            y = y + 30;
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("3.Goods are not returnable, refundable or exchangeable upon acceptance." , x, y, paint);
 
             y = y + 30;
             //paint.setColor(Color.parseColor("#008000"));

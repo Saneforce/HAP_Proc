@@ -1152,6 +1152,9 @@ public class Common_Class {
 
 
     public void getPOSProduct(Activity activity) {
+        getPOSProduct(activity, null);
+    }
+    public void getPOSProduct(Activity activity, OnLiveUpdateListener liveUpdateListener) {
 
         if (isNetworkAvailable(activity)) {
 
@@ -1203,13 +1206,15 @@ public class Common_Class {
                     }
                 });
 
-
+                ProductsLoaded=false;
                 service.getDataArrayList("get/posproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                         Log.v("POS:", response.body().toString());
                         db.deleteMasterData(Constants.POS_Product_List);
                         db.addMasterData(Constants.POS_Product_List, response.body());
+                        ProductsLoaded=true;
+                        if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
                     }
 
                     @Override

@@ -1688,7 +1688,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                     holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
-                    holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
+                    //holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
 
                     if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                         holder.tvStock.setTextColor(getResources().getColor(R.color.green));

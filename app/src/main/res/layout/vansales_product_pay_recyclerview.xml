@@ -46,17 +46,29 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-
-                    <TextView
-                        android:id="@+id/productname"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="thirumalai"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/productname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="thirumalai"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold" />
 
-
+                        <TextView
+                            android:id="@+id/erpCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -88,8 +100,6 @@
 
 
                     </RelativeLayout>
-
-
                     <LinearLayout
                         android:id="@+id/llRegular"
                         android:layout_width="match_parent"
@@ -134,7 +144,6 @@
                             android:layout_marginRight="@dimen/C5dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
-                            android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"
@@ -145,7 +154,6 @@
 
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/C30dp"
@@ -265,6 +273,69 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginStart="@dimen/C5dp"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="end"
+                                android:text="Curr.Stock"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"/>
+                            <TextView
+                                android:id="@+id/tvStockBal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="end"
+                                android:layout_marginLeft="15dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="end"
+                                android:layout_marginStart="@dimen/C20dp"
+                                android:text="Taken.Stock"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"/>
+                            <TextView
+                                android:id="@+id/tvTknStock"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="sans-serif"
+                                android:gravity="end"
+                                android:layout_marginLeft="15dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvBatchNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/C13dp"/>
+                    </LinearLayout>
 
                     <RelativeLayout
 
@@ -275,40 +346,13 @@
                         android:visibility="gone">
 
 
-                        <TextView
-
-                            android:id="@+id/tvStockLabel"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="In Stock : "
-                            android:textColor="@color/grey_800"
-                            android:visibility="visible" />
-
-
-                        <TextView
-
-                            android:id="@+id/tvStockBal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvStockLabel"
-                            android:gravity="center_vertical"
-
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="0"
-                            android:textColor="@color/green"
-                            android:textStyle="bold"
-                            android:visibility="visible" />
-
 
                         <TextView
                             android:id="@+id/tvFreeLabel"
                             android:layout_width="wrap_content"
 
                             android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvStockBal"
+                            android:layout_toRightOf="@+id/Free"
                             android:gravity="center_vertical"
                             android:text="Free : "
                             android:textColor="@color/grey_800"
@@ -360,8 +404,6 @@
 
 
                     </RelativeLayout>
-
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
@@ -412,8 +454,6 @@
 
 
                     </RelativeLayout>
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="2dp"

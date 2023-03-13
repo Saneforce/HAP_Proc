@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.ProductsLoaded;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -96,7 +97,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     Type userType;
     Gson gson;
     CircularProgressButton takeorder;
-    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode,btnPosStockLoad, tvCounterEntrySales;
+    TextView Category_Nametext, tvName, tvMRP, lblName, lblPhone, lblAddress, tvPosOrders, tvPayMode, btnPosStockLoad, tvCounterEntrySales;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, rlQtyParent;
     Common_Class common_class;
     String Ukey;
@@ -137,6 +138,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             sharedCommonPref = new Shared_Common_Pref(this);
             common_class = new Common_Class(this);
 
+            selectedPos = 0;
             rvCurrentStk = findViewById(R.id.rvCurntStk);
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
@@ -217,17 +219,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
-
-            //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.POS_Product_List));
-            userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-            }.getType();
-
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_POS_DATA)))
-                Product_Modal = gson.fromJson(OrdersTable, userType);
-            else
-                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_POS_DATA), userType);
-
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -445,7 +436,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
-           // common_class.getDb_310Data(Constants.STOCK_DATA, this);
+            initData();
+            // common_class.getDb_310Data(Constants.STOCK_DATA, this);
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX)))
                 common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
 
@@ -458,7 +450,21 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    public void initData()
+    {
+        ProductsLoaded=false;
+        //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
+        String OrdersTable = String.valueOf(db.getMasterData(Constants.POS_Product_List));
+        userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+        }.getType();
 
+       // if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_POS_DATA)))
+            Product_Modal = gson.fromJson(OrdersTable, userType);
+        //else
+          //  Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_POS_DATA), userType);
+        showOrderItemList(selectedPos,"");
+
+    }
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -619,7 +625,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
             if (type.equals("1")) {
 
-                selectedPos = 0;
 
                 POSActivity.CategoryAdapter customAdapteravail = new POSActivity.CategoryAdapter(getApplicationContext(),
                         Category_Modal);
@@ -1272,6 +1277,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.SCAN_DATA))) {
             loadScanData();
         }
+        if(ProductsLoaded==true){
+            initData();
+        }
+
     }
 
     private void loadScanData() {
@@ -1600,8 +1609,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
-
-
                 }
 
                 if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
@@ -1614,16 +1621,28 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getBar_Code()))
                     Log.v(TAG, "name:" + Product_Details_Modal.getName() + " :code:" + Product_Details_Modal.getBar_Code());
-                holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
-                holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
+                double totQty= Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
+                //holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
+
+                holder.tvTknStock.setText("" + ((int) totQty) + " EA");
+                holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty) + " EA");
+
+                holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
+                holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
+                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                    holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+                    holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
+                }
+                //holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
+
+                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                else
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 if (CategoryType >= 0) {
 
-
-                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
-                        holder.tvStock.setTextColor(getResources().getColor(R.color.green));
-                    else
-                        holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                     holder.totalQty.setText("Total Qty : " + ((int)
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()/*
@@ -1731,22 +1750,35 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
-                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty &&
-                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0) {
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty //&&  Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0
+                            ) {
 //                                totQty = 0;
 //                                enterQty = 0;
 //                                holder.Qty.setText("0");
                                 // common_class.showMsg(POSActivity.this, "No stock");
-                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+                                //totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
+                                //enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
 
                                 common_class.showMsg(POSActivity.this, "Can't exceed stock");
+                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
 
                             }
-                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
-                                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty));
+                            //if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
+                            //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()) + " EA");
+                            holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
 
+                            holder.tvTknStock.setText("" + ((int) totQty) + " EA");
+                            holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty) + " EA");
+                            holder.tvTknStock.setVisibility(View.GONE);
+                            holder.tvCLStock.setVisibility(View.GONE);
+                                // holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
+                            //holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
+                            holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
+                            if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                            holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
+                             //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+                                // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
+                            }
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(totQty * Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getMRP())));
@@ -2036,7 +2068,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname,erpCode, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvBatchNo;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo;
             ImageView ImgVwProd, QtyPls, QtyMns,ivDel;
             EditText Qty;
 
@@ -2059,6 +2091,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 llRegular = view.findViewById(R.id.llRegular);
                 tvUOM = view.findViewById(R.id.tvUOM);
                 tvStock = view.findViewById(R.id.tvStockBal);
+                tvTknStock = view.findViewById(R.id.tvTknStock);
+                tvCLStock = view.findViewById(R.id.tvCLStock);
                 tvBatchNo= view.findViewById(R.id.tvBatchNo);
 
 
