@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,15 +74,17 @@ public class ReportsListActivity extends AppCompatActivity {
                 @Override
                 public void onIntentClick(JSONObject obj, int position) {
                     try {
-                        if (obj.getString("des").equalsIgnoreCase("App")) {
+                        if (obj.getString("name").equalsIgnoreCase("Outlet Reports")) {
                             Intent intent = new Intent(getApplicationContext(), Reports_Outler_Name.class);
                             startActivity(intent);
+                        } else if (obj.getString("name").equalsIgnoreCase("Primary Order")) { // Todo: Primary Reports Activity
+                            Intent intent = new Intent(ReportsListActivity.this, PrimaryOrderReportActivity.class);
+                            startActivity(intent);
                         } else {
-//                            Intent intent = new Intent(getApplicationContext(), WebReportsActivity.class);
-//                            startActivity(intent);
+                            Toast.makeText(ReportsListActivity.this, obj.getString("name") + ": Not assigned", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-
+                        Toast.makeText(ReportsListActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 }

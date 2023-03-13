@@ -28,6 +28,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:text="Sekar Store"
                     android:textColor="#333333"
@@ -57,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-6dp"
                         android:layout_weight="1"
-                        android:text="Opening Outstanding"
+                        android:text="Opening Stock"
                         android:textColor="#333333"
                         android:textSize="8sp"
                         android:textStyle="bold" />
@@ -101,7 +103,7 @@
                     android:layout_weight="1"
                     android:paddingTop="@dimen/C5dp"
                     android:paddingBottom="@dimen/C5dp"
-                    android:text="Total Outstanding"
+                    android:text="Closing Stock"
                     android:textColor="#333333"
                     android:textSize="11sp"
                     android:textStyle="bold" />

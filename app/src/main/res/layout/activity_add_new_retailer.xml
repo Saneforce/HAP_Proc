@@ -388,6 +388,7 @@
                                     android:textSize="13sp" />
 
                                 <ImageView
+                                    android:id="@+id/reason_for_close_mandatory_icon"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/C2dp"
@@ -685,6 +686,7 @@
                                 android:textSize="13sp" />
 
                             <ImageView
+                                android:id="@+id/address_mandatory_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -756,6 +758,7 @@
                                 android:textColor="@android:color/black"></TextView>
 
                             <ImageView
+                                android:id="@+id/state_mandatory_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -812,6 +815,7 @@
                                 android:textColor="@android:color/black"></TextView>
 
                             <ImageView
+                                android:id="@+id/location_mandatory_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -851,6 +855,7 @@
                                 android:textColor="@android:color/black"></TextView>
 
                             <ImageView
+                                android:id="@+id/district_mandatory_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -960,6 +965,7 @@
                                 android:textSize="13sp" />
 
                             <ImageView
+                                android:id="@+id/phone_mandatory_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C2dp"
@@ -1294,6 +1300,7 @@
                                     android:textSize="13sp" />
 
                                 <ImageView
+                                    android:id="@+id/category_type_mandatory_icon"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/C2dp"
