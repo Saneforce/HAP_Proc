@@ -42,13 +42,13 @@
             android:layout_marginHorizontal="@dimen/C10dp"
             android:layout_marginTop="@dimen/C10dp"
             android:layout_marginBottom="@dimen/C5dp"
-            android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:text="7 Hills milk Centre"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/llCustomDate"
@@ -106,24 +106,24 @@
                 android:textSize="@dimen/C14dp" />
 
             <TextView
-                android:id="@+id/tvDebit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:text="Debit"
-                android:textColor="@color/white"
-                android:textSize="@dimen/C14dp" />
-
-            <TextView
                 android:id="@+id/tvCredit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="Credit"
+                android:text="In"
+                android:textColor="@color/white"
+                android:textSize="@dimen/C14dp" />
+
+            <TextView
+                android:id="@+id/tvDebit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="Out"
                 android:textColor="@color/white"
                 android:textSize="@dimen/C14dp" />
 
@@ -147,6 +147,22 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/llParent">
 
+        <ProgressBar
+            android:elevation="8dp"
+            android:id="@+id/progressbar"
+            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/info_text"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="No Records Found" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLedger"
             android:layout_width="match_parent"
@@ -166,7 +182,8 @@
                 android:id="@+id/rlTakeOrder"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/C45dp"
-                android:paddingHorizontal="10dp">
+                android:paddingHorizontal="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

@@ -2,45 +2,59 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.PayLedger_Adapter;
+import com.hap.checkinproc.SFA_Adapter.POSStockHistoryAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 // Todo: RAGU M
-public class LedgerHistoryActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class LedgerHistoryActivity extends AppCompatActivity implements View.OnClickListener {
+    public static String ledgerFDT = "", ledgerTDT = "";
     public TextView tvOutletName, tvStartDate, tvEndDate;
     DatePickerDialog fromDatePickerDialog;
     RecyclerView rvLedger;
-    PayLedger_Adapter plAdapter;
+    POSStockHistoryAdapter plAdapter;
+    Shared_Common_Pref sharedCommonPref;
+    TextView tvGrandTot;
+    Context context = this;
     private Common_Class common_class;
     private String date;
-    Shared_Common_Pref sharedCommonPref;
-    public static String ledgerFDT = "", ledgerTDT = "";
-    TextView tvGrandTot;
 
-    Context context = this;
+    TextView info;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +65,7 @@ public class LedgerHistoryActivity extends AppCompatActivity implements View.OnC
         JsonObject jParam = new JsonObject();
         jParam.addProperty("FDate", ledgerFDT);
         jParam.addProperty("TDate", ledgerTDT);
-        common_class.getDb_310Data(Constants.LEDGER, this, jParam);
+        getData(jParam);
 
         // tvOutletName.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
         tvOutletName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -67,6 +81,9 @@ public class LedgerHistoryActivity extends AppCompatActivity implements View.OnC
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
         tvGrandTot = findViewById(R.id.txtTotCBAmt);
+
+        info = findViewById(R.id.info_text);
+        progressBar = findViewById(R.id.progressbar);
 
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
@@ -110,7 +127,7 @@ public class LedgerHistoryActivity extends AppCompatActivity implements View.OnC
                         JsonObject jParam = new JsonObject();
                         jParam.addProperty("FDate", ledgerFDT);
                         jParam.addProperty("TDate", ledgerTDT);
-                        common_class.getDb_310Data(Constants.LEDGER, (Activity) context, jParam);
+                        getData(jParam);
                     } else
                         common_class.showMsg((Activity) context, "Please select valid date");
                 } else {
@@ -122,7 +139,8 @@ public class LedgerHistoryActivity extends AppCompatActivity implements View.OnC
                         JsonObject jParam = new JsonObject();
                         jParam.addProperty("FDate", ledgerFDT);
                         jParam.addProperty("TDate", ledgerTDT);
-                        common_class.getDb_310Data(Constants.LEDGER, (Activity) context, jParam);
+                        getData(jParam);
+//                        common_class.getDb_310Data(Constants.LEDGER, (Activity) context, jParam);
 
                     } else
                         common_class.showMsg((Activity) context, "Please select valid date");
@@ -137,28 +155,72 @@ public class LedgerHistoryActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    @Override
-    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
-        try {
-            if (apiDataResponse != null) {
-                switch (key) {
-                    case Constants.LEDGER:
-                        JSONArray legList = new JSONArray(apiDataResponse);
-                        plAdapter = new PayLedger_Adapter(this, legList);
-                        rvLedger.setAdapter(plAdapter);
+    private void getData(JsonObject jParam) {
+        progressBar.setVisibility(View.VISIBLE);
+        info.setVisibility(View.GONE);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Map<String, String> params = new HashMap<>();
+        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
+        params.put("axn", "get_dist_pos_stock_ledger");
+        params.put("SF", Shared_Common_Pref.Sf_Code);
+        params.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+        params.put("FDT", jParam.get("FDate").getAsString());
+        params.put("TDT", jParam.get("TDate").getAsString());
 
-                        double totAmt = 0;
-                        for (int i = 0; i < legList.length(); i++) {
-                            JSONObject obj = legList.getJSONObject(i);
-                            totAmt += obj.getDouble("ClAmt");
+        Call<ResponseBody> call = apiInterface.getUniversalData(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body() == null) {
+                            Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        tvGrandTot.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totAmt));
-                        break;
+                        String result = response.body().string();
+                        JSONObject jsonObject = new JSONObject(result);
+                        if (jsonObject.getBoolean("success")) {
+                            JSONArray jsonArray = jsonObject.getJSONArray("response");
+                            LoadUI(jsonArray.toString());
+                        } else {
+                            Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Response Not Success", Toast.LENGTH_SHORT).show();
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(context, "Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void LoadUI(String apiDataResponse) {
+        try {
+            JSONArray legList = new JSONArray(apiDataResponse);
+            plAdapter = new POSStockHistoryAdapter(this, legList);
+            rvLedger.setAdapter(plAdapter);
+            double totAmt = 0;
+            for (int i = 0; i < legList.length(); i++) {
+                JSONObject obj = legList.getJSONObject(i);
+                totAmt += obj.getDouble("ClAmt");
+            }
+            tvGrandTot.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(totAmt));
+            progressBar.setVisibility(View.GONE);
+            if (legList.length() == 0) {
+                info.setVisibility(View.VISIBLE);
+            } else {
+                info.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
-            Log.v("LEDGER:",e.getMessage());
+            Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
