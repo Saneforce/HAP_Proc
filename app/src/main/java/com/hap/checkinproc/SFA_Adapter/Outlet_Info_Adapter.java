@@ -36,7 +36,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, txRetNo, status, invoice, outletAddress, textId, clsdRmks, txCustStatus, lupdDt,tvPhone;
-        public LinearLayout retStaBdg, icAC, icFreezer, layparent, linDirection,llCallMob;
+        public LinearLayout retStaBdg, icAC, icFreezer, layparent, linDirection,llCallMob, pending;
         Button btnSend;
         EditText etSNo;
         RelativeLayout rlSeqParent;
@@ -64,6 +64,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
             rlSeqParent = view.findViewById(R.id.rlSequence);
             llCallMob=view.findViewById(R.id.btnCallMob);
             tvPhone=view.findViewById(R.id.retailePhoneNum);
+            pending=view.findViewById(R.id.PendingStatus);
         }
     }
 
@@ -98,6 +99,13 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         holder.textId.setText("" + Retailer_Modal_List.getERP_Code());
         holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
         holder.clsdRmks.setText("" + Retailer_Modal_List.getClosedRemarks());
+
+        String data = Retailer_Modal_List.getDoctor_Active_flag();
+        if (data.equalsIgnoreCase("2")) {
+            holder.rlSeqParent.setVisibility(View.GONE);
+            holder.pending.setVisibility(View.VISIBLE);
+        }
+
         holder.lupdDt.setText((Retailer_Modal_List.getLastUpdt_Date().equalsIgnoreCase("")) ? "" : "Last Updated On " + Retailer_Modal_List.getLastUpdt_Date());
         holder.icAC.setVisibility(View.INVISIBLE);
         if (Retailer_Modal_List.getDelivType() != null && Retailer_Modal_List.getDelivType().equalsIgnoreCase("AC")) {

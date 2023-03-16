@@ -141,6 +141,14 @@ public class Retailer_Modal_List {
     @Expose
     private double OthersVal;
 
+    public String getDoctor_Active_flag() {
+        return Doctor_Active_flag;
+    }
+
+    @SerializedName("Doctor_Active_flag")
+    @Expose
+    private String Doctor_Active_flag;
+
     @SerializedName("Curd")
     @Expose
     private double Curd;

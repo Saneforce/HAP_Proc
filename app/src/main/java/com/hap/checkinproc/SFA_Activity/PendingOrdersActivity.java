@@ -95,6 +95,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                 String orderID = array.getJSONObject(i).getString("TransactionNo");
                                 String date = array.getJSONObject(i).getString("Date_Time");
                                 String total = array.getJSONObject(i).getString("TransactionAmt");
+                                String OutletId = array.getJSONObject(i).getString("OutletId");
                                 JSONArray jsonArray = array.getJSONObject(i).getJSONArray("Products");
                                 StringBuilder builder = new StringBuilder();
                                 for (int j = 0; j < jsonArray.length(); j++) {
@@ -106,7 +107,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                     }
                                 }
                                 String products = builder.toString();
-                                list.add(new ModelPendingOrder(title, address, mobile, title2, orderID, date, products, total));
+                                list.add(new ModelPendingOrder(title, address, mobile, title2, orderID, date, products, total, OutletId));
                             }
                             adapter = new AdapterPendingOrder(context, list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -117,6 +118,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                 Shared_Common_Pref.TransSlNo = model.getOrderID();
                                 Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
                                 Shared_Common_Pref.Invoicetoorder = "1";
+                                Shared_Common_Pref.OutletCode = model.getOutletId();
                                 shared_common_pref.save(Constants.FLAG, "ORDER");
                                 shared_common_pref.save(Constants.Retailor_Name_ERP_Code, model.getTitle2());
                                 shared_common_pref.save(Constants.Retailor_PHNo, model.getMobile());
