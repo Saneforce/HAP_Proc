@@ -251,6 +251,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 storeName = retailername.getText().toString();
                 address = retaileAddress.getText().toString();
                 phone = "Mobile:" + tvRetailorPhone.getText().toString();
+                common_class.getProductDetails(this);
 
             }else if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INDENT")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);

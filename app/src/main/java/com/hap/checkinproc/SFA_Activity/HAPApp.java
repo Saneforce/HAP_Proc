@@ -72,6 +72,7 @@ public class HAPApp extends Application {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 activeActivity = activity;
+                Log.e("ActivityName", activeActivity.getClass().getSimpleName());
                 CommUserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
                 try
                 {
