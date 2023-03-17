@@ -1,7 +1,15 @@
 package com.hap.checkinproc.SFA_Model_Class;
 
 public class ModelPendingOrder {
-    String title, address, mobile, title2, orderID, date, products, total;
+    String title;
+    String address;
+    String mobile;
+    String title2;
+    String orderID;
+    String date;
+    String products;
+    String total;
+    String OutletCode;
 
     public ModelPendingOrder(String title, String address, String mobile, String title2, String orderID, String date, String products, String total) {
         this.title = title;
@@ -12,6 +20,17 @@ public class ModelPendingOrder {
         this.date = date;
         this.products = products;
         this.total = total;
+    }
+    public ModelPendingOrder(String ouletcode,String title, String address, String mobile, String title2, String orderID, String date, String products, String total) {
+        this.title = title;
+        this.address = address;
+        this.mobile = mobile;
+        this.title2 = title2;
+        this.orderID = orderID;
+        this.date = date;
+        this.products = products;
+        this.total = total;
+        this.OutletCode=ouletcode;
     }
 
     public String getTitle() {
@@ -45,4 +64,8 @@ public class ModelPendingOrder {
     public String getTotal() {
         return total;
     }
+
+    public String getOutletCode() { return OutletCode; }
+
+    public void setOutletCode(String outletCode) { OutletCode = outletCode;}
 }

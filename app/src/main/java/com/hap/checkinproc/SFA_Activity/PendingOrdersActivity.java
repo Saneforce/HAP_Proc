@@ -92,6 +92,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                 String address = array.getJSONObject(i).getString("Address");
                                 String mobile = array.getJSONObject(i).getString("Mobile");
                                 String title2 = array.getJSONObject(i).getString("OutletName").toUpperCase();
+                                String OutletCd = array.getJSONObject(i).getString("OutletId").toUpperCase();
                                 String orderID = array.getJSONObject(i).getString("TransactionNo");
                                 String date = array.getJSONObject(i).getString("Date_Time");
                                 String total = array.getJSONObject(i).getString("TransactionAmt");
@@ -106,7 +107,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                     }
                                 }
                                 String products = builder.toString();
-                                list.add(new ModelPendingOrder(title, address, mobile, title2, orderID, date, products, total));
+                                list.add(new ModelPendingOrder(OutletCd,title, address, mobile, title2, orderID, date, products, total));
                             }
                             adapter = new AdapterPendingOrder(context, list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -118,9 +119,11 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                 Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
                                 Shared_Common_Pref.Invoicetoorder = "1";
                                 shared_common_pref.save(Constants.FLAG, "ORDER");
+                                shared_common_pref.OutletCode = model.getOutletCode();
                                 shared_common_pref.save(Constants.Retailor_Name_ERP_Code, model.getTitle2());
                                 shared_common_pref.save(Constants.Retailor_PHNo, model.getMobile());
                                 shared_common_pref.save(Constants.Retailor_Address, model.getAddress());
+
                                 Intent intent = new Intent(context, Print_Invoice_Activity.class);
                                 startActivity(intent);
                             });

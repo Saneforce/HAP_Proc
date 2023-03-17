@@ -54,6 +54,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -656,7 +657,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             common_class.showMsg(this, "Please Enter the Address");
         else*/
         if (Getorder_Array_List.size() == 0)
-            Toast.makeText(getApplicationContext(), "POS is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Cart is empty", Toast.LENGTH_SHORT).show();
         else
             FilterProduct(Getorder_Array_List);
 
@@ -812,6 +813,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             JSONObject ProdItem = new JSONObject();
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
+                            ProdItem.put("ERPCode", Getorder_Array_List.get(z).getERP_Code());
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
                             double cf = (Getorder_Array_List.get(z).getCnvQty());
@@ -885,12 +887,23 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     Log.e("JSON_VALUES", response.body().toString());
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     ResetSubmitBtn(1);
+                                    String succ=jsonObjects.getString("success");
+
 
                                     if (jsonObjects.getString("success").equals("true")) {
                                         sharedCommonPref.clear_pref(Constants.LOC_POS_DATA);
                                         Shared_Common_Pref.TransSlNo = jsonObjects.getString("OrderID");
-                                        sharedCommonPref.save(Constants.FLAG, "POS INVOICE");
-                                        common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
+                                        sharedCommonPref.save(Constants.FLAG, "POS INVOICE");ProductsLoaded=true;
+                                        common_class.ProgressdialogShow(1, "Updating Matrial Details");
+                                        common_class.getPOSProduct(POSActivity.this, new OnLiveUpdateListener() {
+                                            @Override
+                                            public void onUpdate(String mode) {
+                                                common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
+                                                common_class.ProgressdialogShow(0, "");
+                                            }
+                                        });
+                                        //common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
+
                                     }
                                     common_class.showMsg(POSActivity.this, jsonObjects.getString("Msg"));
 

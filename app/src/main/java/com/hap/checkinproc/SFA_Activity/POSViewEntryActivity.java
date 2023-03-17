@@ -64,7 +64,7 @@ public class POSViewEntryActivity extends AppCompatActivity implements View.OnCl
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
 
-    public static String TAG = "POSView_History";
+    public static String TAG = "View_History";
     private DatePickerDialog fromDatePickerDialog;
 
     public static String stDate = "", endDate = "";

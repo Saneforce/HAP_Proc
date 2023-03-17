@@ -18,6 +18,10 @@ public class Product_Details_Modal {
     @SerializedName("MRP")
     @Expose
     private String MRP;
+
+    @SerializedName("PTR")
+    @Expose
+    private String PTR;
     @SerializedName("POP_UOM")
     @Expose
     private String UOM;
@@ -341,6 +345,13 @@ public class Product_Details_Modal {
         this.MRP = MRP;
     }
 
+    public String getPTR() {
+        return PTR;
+    }
+
+    public void setPTR(String PTR) {
+        this.PTR = PTR;
+    }
 
     public Double getCGST() {
         return CGST;
@@ -565,7 +576,7 @@ public class Product_Details_Modal {
 
 
     public Product_Details_Modal(String id, String name,String mMRP,String mHSNCode, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
-                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
+                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, String mPTR, Integer Qty,
                                  Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax,double mTaxPer,double mSGST,double mCGST,String mConv) {
         this.id = id;
         this.name = name;
@@ -588,6 +599,7 @@ public class Product_Details_Modal {
         this.PSGST=mSGST;
         this.PCGST=mCGST;
         this.MRP=mMRP;
+        this.PTR=mPTR;
         this.ConversionFactor=mConv;
     }
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,

@@ -161,7 +161,7 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
                     if (response.isSuccessful()) {
                         try {
                             Log.e("JSON_VALUES", response.body().toString());
-                            Toast.makeText(POS_SalesEntryActivity.this, "POS Counter sales entry submitted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(POS_SalesEntryActivity.this, "Counter sales entry submitted Successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         } catch (Exception e) {
                             Log.v("error", e.toString());

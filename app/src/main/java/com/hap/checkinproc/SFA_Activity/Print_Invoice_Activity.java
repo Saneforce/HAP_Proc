@@ -45,6 +45,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
@@ -101,7 +102,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
 
     String status;
-
+    Boolean Addinf=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -185,7 +186,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             else
                 tvHeader.setText("Sales " + sharedCommonPref.getvalue(Constants.FLAG));
 
-
+            Log.d("Distributor_Id",sharedCommonPref.getvalue(Constants.Distributor_Id));
+            if(sharedCommonPref.getvalue(Constants.Distributor_Id).equalsIgnoreCase("7951")){
+                Addinf=true;
+            }
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE) == Constants.CHECKIN_TYPE){
                 JSONArray stkListData = new JSONArray(sharedCommonPref.getvalue(Constants.Distributor_List));
                 for(int i=0;i<stkListData.length();i++){
@@ -467,7 +471,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     }, 500);
                 } else {
                     Shared_Common_Pref.Invoicetoorder = "4";
-                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
+                    common_class.ProgressdialogShow(1, "Updating Matrial Details");
+                    common_class.getProductDetails(this, new OnLiveUpdateListener() {
+                        @Override
+                        public void onUpdate(String mode) {
+
+                            common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                            common_class.ProgressdialogShow(0, "");
+                        }
+                    });
                 }
                 break;
 
@@ -701,7 +714,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.setWideTallBold();
                 if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
                 {
-                    sHead = "TEMPORARY INVOICE";
+                    sHead =(Addinf)?"TEMPORARY INVOICE":"TAX INVOICE";
                 }else if( sMode.equals("PROJECTION") ){
                     sHead = "PROJECTION";
                 }else if( sMode.equalsIgnoreCase("Order") ){
@@ -717,10 +730,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.setWideTallBold();
                 printama.setTallBold();
                 printama.printTextln(Printama.CENTER, tvDistributorName.getText().toString());
+                if(Addinf) {
+                    printama.setNormalText();
+                    printama.setBold();
+                    printama.printTextln(Printama.CENTER, "( RC00006194 )");
+                }
                 printama.addNewLine();
-                printama.setNormalText();
-                printama.setBold();
-                printama.printTextln(Printama.CENTER, "( RC00006194 )");
                 if (tvDistAdd.getVisibility() == View.VISIBLE) {
 
                     printama.setNormalText();
@@ -883,37 +898,38 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.addNewLine(2);
                 if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")   || sMode.equals("INVOICE"))
                 {
-                    printama.setBold();
-                    printama.printTextln(" ");
-                    printama.printTextln(Printama.LEFT, "For " + tvDistributorName.getText().toString());
-                    printama.printTextln(" ");
-                    printama.printTextln(" ");
-                    printama.printDashedLine();
-                    printama.printTextln(Printama.LEFT, "Authorized signature" );
+                    if(Addinf) {
+                        printama.setBold();
+                        printama.printTextln(" ");
+                        printama.printTextln(Printama.LEFT, "For " + tvDistributorName.getText().toString());
+                        printama.printTextln(" ");
+                        printama.printTextln(" ");
+                        printama.printDashedLine();
+                        printama.printTextln(Printama.LEFT, "Authorized signature");
 
-                    printama.printTextln(" ");
-                    printama.printTextln(" ");
-                    printama.setBold();
-                    printama.printTextln(Printama.LEFT, "For " + retailername.getText().toString());
-                    printama.printTextln(" ");
-                    printama.printTextln(" ");
-                    printama.printDashedLine();
-                    printama.printTextln(Printama.LEFT, "Receiver's Signature & Stamp" );
-                    printama.printTextln(" ");
-                    printama.printDashedLine();
-                    printama.setNormalText();
-                    printama.printTextln(Printama.LEFT, "Note :" );
-                    printama.printTextln(Printama.LEFT, "1.Cheques should be crossed and made payable" );
-                    printama.printTextln(Printama.LEFT, "  to \"" + tvDistributorName.getText().toString()+"\"" );
-                    printama.printTextln(Printama.LEFT, "2.All goods must be carefully checked before signing." );
-                    printama.printTextln(Printama.LEFT, "3.Goods are not returnable, refundable or exchangeable upon acceptance." );
-                    printama.printTextln(" ");
-                    printama.printTextln(" ");
-                    printama.printTextln(" ");
-                    printama.printTextln(" ");
-                    printama.addNewLine();
-                }else
-                {
+                        printama.printTextln(" ");
+                        printama.printTextln(" ");
+                        printama.setBold();
+                        printama.printTextln(Printama.LEFT, "For " + retailername.getText().toString());
+                        printama.printTextln(" ");
+                        printama.printTextln(" ");
+                        printama.printDashedLine();
+                        printama.printTextln(Printama.LEFT, "Receiver's Signature & Stamp");
+                        printama.printTextln(" ");
+                        printama.printDashedLine();
+                        printama.setNormalText();
+                        printama.printTextln(Printama.LEFT, "Note :");
+                        printama.printTextln(Printama.LEFT, "1.Cheques should be crossed and made payable");
+                        printama.printTextln(Printama.LEFT, "  to \"" + tvDistributorName.getText().toString() + "\"");
+                        printama.printTextln(Printama.LEFT, "2.All goods must be carefully checked before signing.");
+                        printama.printTextln(Printama.LEFT, "3.Goods are not returnable, refundable or exchangeable upon acceptance.");
+                        printama.printTextln(" ");
+                        printama.printTextln(" ");
+                        printama.printTextln(" ");
+                        printama.printTextln(" ");
+                        printama.addNewLine();
+                    }
+                }else{
                     printama.setBold();
                     printama.printTextln(Printama.CENTER, "Thank You! Visit Again");
                     printama.addNewLine();
@@ -978,7 +994,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
             {
-                sHead = "TEMPORARY INVOICE";
+                sHead = ((Addinf)?"TEMPORARY":"TAX")+" INVOICE";
             }else if( sMode.equals("PROJECTION") ){
                 sHead = "PROJECTION";
             }else if( sMode.equalsIgnoreCase("Order") ){
@@ -1277,53 +1293,53 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
+            if(Addinf) {
+                paint.setColor(Color.BLACK);
+                y = y + 30;
+                paint.setFakeBoldText(true);
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("For " + tvDistributorName.getText().toString(), x, y, paint);
 
-            paint.setColor(Color.BLACK);
-            y = y + 30;
-            paint.setFakeBoldText(true);
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("For " + tvDistributorName.getText().toString(), x, y, paint);
+                y = y + 60;
+                paint.setFakeBoldText(true);
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("Authorized signature", x, y, paint);
+                paint.setFakeBoldText(false);
+                y = y + 20;
+                paint.setColor(Color.LTGRAY);
+                paint.setStrokeWidth(1);
+                canvas.drawLine(0, y, widthSize, y, paint);
+                y = y + 30;
+                paint.setColor(Color.BLACK);
+                paint.setFakeBoldText(true);
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("For " + retailername.getText().toString(), x, y, paint);
 
-            y = y + 60;
-            paint.setFakeBoldText(true);
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("Authorized signature", x, y, paint);
-            paint.setFakeBoldText(false);
-            y = y + 20;
-            paint.setColor(Color.LTGRAY);
-            paint.setStrokeWidth(1);
-            canvas.drawLine(0, y, widthSize, y, paint);
-            y = y + 30;
-            paint.setColor(Color.BLACK);
-            paint.setFakeBoldText(true);
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("For " + retailername.getText().toString(), x, y, paint);
+                y = y + 60;
+                paint.setFakeBoldText(true);
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("Receiver's Signature & Stamp", x, y, paint);
 
-            y = y + 60;
-            paint.setFakeBoldText(true);
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("Receiver's Signature & Stamp", x, y, paint);
+                paint.setFakeBoldText(false);
+                y = y + 20;
+                paint.setColor(Color.LTGRAY);
+                paint.setStrokeWidth(1);
+                canvas.drawLine(0, y, widthSize, y, paint);
 
-            paint.setFakeBoldText(false);
-            y = y + 20;
-            paint.setColor(Color.LTGRAY);
-            paint.setStrokeWidth(1);
-            canvas.drawLine(0, y, widthSize, y, paint);
-
-            paint.setColor(Color.BLACK);
-            y = y + 30;
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("Note :" , x, y, paint);
-            y = y + 30;
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("1.Cheques should be crossed and made payable to \"" + tvDistributorName.getText().toString()+"\"" , x, y, paint);
-            y = y + 30;
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("2.All goods must be carefully checked before signing." , x, y, paint);
-            y = y + 30;
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("3.Goods are not returnable, refundable or exchangeable upon acceptance." , x, y, paint);
-
+                paint.setColor(Color.BLACK);
+                y = y + 30;
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("Note :", x, y, paint);
+                y = y + 30;
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("1.Cheques should be crossed and made payable to \"" + tvDistributorName.getText().toString() + "\"", x, y, paint);
+                y = y + 30;
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("2.All goods must be carefully checked before signing.", x, y, paint);
+                y = y + 30;
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("3.Goods are not returnable, refundable or exchangeable upon acceptance.", x, y, paint);
+            }
             y = y + 30;
             //paint.setColor(Color.parseColor("#008000"));
             //paint.setTextSize(15);
@@ -1937,7 +1953,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), obj.getString("MRP"),obj.getString("HSN_Code"), 1, "1",
-                            "1", "5", "", 0, "0", obj.getDouble("Price"),
+                            "1", "5", "", 0, "0", obj.getDouble("Price"), obj.getString("PTR"),
                             obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt),sTaxV,SGSTAmt,CGSTAmt,obj.getString("ConversionFactor")));
 
 
@@ -2010,7 +2026,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         }
                         Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"),obj.getString("HSN_Code"), 1, "1",
-                                "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"),
+                                "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"), obj.getString("PTR"),
                                 obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt),sTaxV,SGSTAmt,CGSTAmt,obj.getString("ConversionFactor")));
 
 
@@ -2096,7 +2112,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
                         }else{
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"),obj.getString("Bar_Code"), 1, "1",
-                                    "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"),
+                                    "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt),(sTaxV),(SGSTAmt),(CGSTAmt),obj.getString("ConversionFactor")));
 
                         }

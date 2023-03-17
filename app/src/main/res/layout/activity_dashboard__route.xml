@@ -436,7 +436,7 @@
                                 android:fontFamily="sans-serif"
                                 android:text="0"
                                 android:textAlignment="center"
-                                android:textColor="@color/Extended"
+                                android:textColor="@color/color_red"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -445,6 +445,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="Pending Invoice"
                                 android:textAlignment="center"
+                                android:textColor="@color/color_red"
+                                android:textStyle="bold"
                                 android:textSize="9sp" />
                         </LinearLayout>
 

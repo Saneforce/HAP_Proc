@@ -238,7 +238,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Outlets", "", "", "", R.drawable.ic_baseline_storefront_24));
                     menuList.add(new ListModel("", "Nearby Outlets", "", "", "", R.drawable.ic_outline_near_me_24));
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
-                    menuList.add(new ListModel("", "POS", "", "", "", R.drawable.ic_outline_assignment_48));
+                    menuList.add(new ListModel("", "Counter Sales", "", "", "", R.drawable.ic_outline_assignment_48));
                     menuList.add(new ListModel("", "GRN", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
 //                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
 
@@ -279,7 +279,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     case "GRN":
                         common_class.CommonIntentwithNEwTask(GrnListActivity.class);
                         break;
-                    case "POS":
+                    case "Counter Sales":
                         common_class.CommonIntentwithNEwTask(POSActivity.class);
                         break;
                     case "Primary Order":

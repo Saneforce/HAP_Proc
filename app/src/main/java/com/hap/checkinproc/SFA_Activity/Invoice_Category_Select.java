@@ -395,11 +395,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                 Product_Modal.get(pm).setUOM_Id("" + jsonObject1.getString("umo_unit"));
                                 Product_Modal.get(pm).setCnvQty(jsonObject1.getDouble("Conf_Fac"));
 
-                                double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
-                                        Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
-                                double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
-                                double sellAmt=dMRPAmt-dMrgn;
+                                //double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
+                                // Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
+                                //double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
+                                //double sellAmt=dMRPAmt-dMrgn;
 
+                                double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
+        Double.parseDouble(Product_Modal.get(pm).getPTR())));
                                 Product_Modal.get(pm).setAmount(sellAmt);
                                 //Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
                                 Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
@@ -1086,11 +1088,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                            // Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() *
                            //         Product_Modal.get(pm).getRate())));
 
-                            double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
-                                    Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
-                            double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
-                            double sellAmt=dMRPAmt-dMrgn;
+//                            double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
+//                                    Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
+//                            double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
+//                            double sellAmt=dMRPAmt-dMrgn;
 
+                            double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
+                                    Double.parseDouble(Product_Modal.get(pm).getPTR())));
                             Product_Modal.get(pm).setAmount(sellAmt);
 
                             double enterQty = Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getCnvQty();
@@ -1780,11 +1784,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             //Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                             //        Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             Integer intdx=holder.getAdapterPosition();
-                            double dMRPAmt =Double.valueOf(formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
-                                    Double.parseDouble(Product_Details_Modalitem.get(intdx).getMRP().toString())));
-                            double dMrgn=dMRPAmt * (Product_Modal.get(intdx).getMargin()/100);
-                            double sellAmt=dMRPAmt-dMrgn;
+//                            double dMRPAmt =Double.valueOf(formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
+//                                    Double.parseDouble(Product_Details_Modalitem.get(intdx).getMRP().toString())));
+//                            double dMrgn=dMRPAmt * (Product_Modal.get(intdx).getMargin()/100);
+//                            double sellAmt=dMRPAmt-dMrgn;
 
+                            double sellAmt=Double.valueOf(formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
+                                    Double.parseDouble(Product_Details_Modalitem.get(intdx).getPTR())));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(sellAmt);
                             double TotalTax=getTotTax(Product_Details_Modalitem,intdx);
                             sellAmt=sellAmt/((100+(TotalTax))/100);

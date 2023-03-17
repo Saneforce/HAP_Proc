@@ -19,11 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/C5dp"
+            android:padding="@dimen/C5dp"
             app:cardCornerRadius="@dimen/C5dp">
 
             <LinearLayout
                 android:layout_marginTop="@dimen/C5dp"
                 android:layout_marginBottom="@dimen/C5dp"
+                android:padding="@dimen/C5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
