@@ -698,6 +698,15 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
+            for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                double enterQty = Getorder_Array_List.get(z).getQty() * Getorder_Array_List.get(z).getCnvQty();
+                double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
+                if ((Getorder_Array_List.get(z).getBalance() - (int) totQty)<0){
+                    Toast.makeText(this,"Low Stock",Toast.LENGTH_SHORT).show();
+                    ResetSubmitBtn(0);
+                    return;
+                }
+            }
             AlertDialogBox.showDialog(Invoice_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
@@ -1541,7 +1550,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvBatchNo, tvMRP;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1562,6 +1571,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 tvUOM = view.findViewById(R.id.tvUOM);
                 tvStock = view.findViewById(R.id.tvStockBal);
+                tvTknStock = view.findViewById(R.id.tvTknStock);
+                tvCLStock = view.findViewById(R.id.tvCLStock);
                 tvBatchNo= view.findViewById(R.id.tvBatchNo);
 
                 if (CategoryType >= 0) {
@@ -1626,8 +1637,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
-
-
                 }
                 holder.Rate.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
@@ -1644,6 +1653,30 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() == null)
                     Product_Details_Modalitem.get(holder.getAdapterPosition()).setBalance(0);
 
+                double totQty= Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
+                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
+
+                holder.tvTknStock.setText("" + ((int) totQty) + " EA");
+                holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty) + " EA");
+
+                holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
+                holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
+                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                    holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+                    holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
+                }
+
+                if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                else
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
+
+                holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
+                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                    holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
+                    //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+                    // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
+                }
 
                 if (CategoryType >= 0) {
                     holder.tvMRP.setText(CurrencySymbol+" " + Product_Details_Modal.getMRP());
@@ -1691,13 +1724,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     });
 
 
-                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
+                    //holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
                     //holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
 
-                    if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
-                        holder.tvStock.setTextColor(getResources().getColor(R.color.green));
-                    else
-                        holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
 
                 }
@@ -1764,6 +1793,42 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
+
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
+
+
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty //&&  Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0
+                            ) {
+//                                totQty = 0;
+//                                enterQty = 0;
+//                                holder.Qty.setText("0");
+                                // common_class.showMsg(POSActivity.this, "No stock");
+                                //totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
+                                //enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
+
+                                common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
+                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+
+                            }
+                            //if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
+                            //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()) + " EA");
+                            holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
+
+                            holder.tvTknStock.setText("" + ((int) totQty) + " EA");
+                            holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty) + " EA");
+                            holder.tvTknStock.setVisibility(View.GONE);
+                            holder.tvCLStock.setVisibility(View.GONE);
+                            // holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
+                            //holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
+                            holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
+                            if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                                holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
+                                //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+                                // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
+                            }
+
+                            /*
+
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
@@ -1778,7 +1843,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
                                 holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty));
 
-
+*/
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                             //Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *

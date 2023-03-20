@@ -764,6 +764,17 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
+            for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                double enterQty = Getorder_Array_List.get(z).getQty() * Getorder_Array_List.get(z).getCnvQty();
+                double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
+                if ((Getorder_Array_List.get(z).getBalance() - (int) totQty)<0){
+                    Toast.makeText(this,"Low Stock",Toast.LENGTH_LONG).show();
+                    ResetSubmitBtn(0);
+                    return;
+                }
+            }
+
+
             AlertDialogBox.showDialog(POSActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
@@ -1648,6 +1659,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
                 //holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getAdapterPosition()).getBatchNo());
+                holder.tvTknStock.setVisibility(View.GONE);
+                holder.tvCLStock.setVisibility(View.GONE);
 
                 if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() > 0)
                     holder.tvStock.setTextColor(getResources().getColor(R.color.green));

@@ -634,9 +634,9 @@ Log.d("Error","Can't Clear SFWish");
                 }
 
                 //eMail="1014700@hap.in";
-                //eMail="iplusadmin@hap.in";
+                eMail="manikandan.ck@hap.in";
 
-                eMail="1019100@hap.in";
+                //eMail="1019100@hap.in";
                // eMail="venketesan.r@hap.in";
                /// eMail="1026915@hap.in";
                 //eMail="1021174@hap.in";
@@ -853,6 +853,8 @@ Log.d("Error","Can't Clear SFWish");
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 JsonArray CinData = response.getCInData();
                 int Type=2;
+                shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
+
                 if (CinData.size() > 0) {
                     JsonObject CinObj = CinData.get(0).getAsJsonObject();
                     cInEditor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
@@ -878,8 +880,6 @@ Log.d("Error","Can't Clear SFWish");
                     cInEditor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
                     cInEditor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
                     cInEditor.putInt("CIType", CinObj.get("Type").getAsInt());
-
-                    shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
 
                     String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
                     Type = CinObj.get("Type").getAsInt();

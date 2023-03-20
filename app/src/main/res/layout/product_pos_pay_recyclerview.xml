@@ -278,7 +278,8 @@
                         android:gravity="end"
                         android:text="Sale Qty"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"/>
+                        android:textSize="@dimen/C13dp"
+                        android:visibility="gone"/>
                     <TextView
                         android:id="@+id/tvTknStock"
                         android:layout_width="match_parent"
@@ -289,7 +290,8 @@
                         android:text="0"
                         android:textColor="@color/black"
                         android:textSize="13sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -298,7 +300,8 @@
                         android:gravity="end"
                         android:text="Balance"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"/>
+                        android:textSize="@dimen/C13dp"
+                        android:visibility="gone"/>
                     <TextView
                         android:id="@+id/tvCLStock"
                         android:layout_width="match_parent"
@@ -309,7 +312,8 @@
                         android:text="0"
                         android:textColor="@color/black"
                         android:textSize="13sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tvBatchNo"
