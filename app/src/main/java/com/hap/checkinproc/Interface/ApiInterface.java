@@ -686,4 +686,7 @@ public interface ApiInterface {
 
     @POST("copy.php?")
     Call<ResponseBody> loadData(@QueryMap Map<String, String> params);
+
+    @POST("MyPHP.php?")
+    Call<ResponseBody> getUniversalData(@QueryMap Map<String, String> params);
 }
