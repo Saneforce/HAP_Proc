@@ -245,7 +245,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
             route_text.setOnClickListener(this);
-            ivToolbarHome.setOnClickListener(this);
             btnCmbRoute.setOnClickListener(this);
             llDistributor.setOnClickListener(this);
             llOrder.setOnClickListener(this);
@@ -275,6 +274,9 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             txtOrdDate.setText(DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
             btnFilter=findViewById(R.id.btnFilter);
             fltrView=findViewById(R.id.fltrView);
+
+            common_class.gotoHomeScreen(this, ivToolbarHome);
+
             btnFilter.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 @Override
@@ -1040,9 +1042,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {
                     common_class.showCommonDialog(FRoute_Master, 3, this);
                 }
-                break;
-            case R.id.toolbar_home:
-                common_class.CommonIntentwithoutFinish(SFA_Activity.class);
                 break;
         }
     }
