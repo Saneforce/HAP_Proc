@@ -1960,7 +1960,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
                 case R.id.rl_route:
                     if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                        common_class.showCommonDialog(FRoute_Master, 3, this);
+                        common_class.showCommonDialog(FRoute_Master, 3, this); // Todo: Onclick Master Type
                     }
                     break;
                 case R.id.rl_Distributor:

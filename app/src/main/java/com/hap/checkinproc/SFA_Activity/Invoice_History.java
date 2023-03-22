@@ -70,7 +70,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public static TextView tvStartDate, tvEndDate;
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn,
             txRmksNoOrd, tvOutstanding, txPrvBal, txSalesAmt, txPayment, tvSalesReturn;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_complementary, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment, linRpt,
             linVanSales, linintent, linSalesReturn, linStockRot;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
@@ -112,7 +112,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
-            common_class.ProgressdialogShow(1, "Updating Matrial Details");
+            common_class.ProgressdialogShow(1, "Updating Material Details");
             common_class.getProductDetails(this, new OnLiveUpdateListener() {
                 @Override
                 public void onUpdate(String mode) {
@@ -126,6 +126,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             lin_repeat_order = findViewById(R.id.lin_repeat_order);
             lin_invoice = findViewById(R.id.lin_invoice);
+            lin_complementary = findViewById(R.id.lin_complementary);
             lin_repeat_invoice = findViewById(R.id.lin_repeat_invoice);
             lastinvoice = findViewById(R.id.lastinvoice);
             lin_noOrder = findViewById(R.id.lin_noOrder);
@@ -208,6 +209,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
 
             lin_invoice.setOnClickListener(this);
+            lin_complementary.setOnClickListener(this);
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
 
@@ -230,6 +232,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
                 linVanSales.setVisibility(View.VISIBLE);
                 lin_invoice.setVisibility(View.GONE);
+                lin_complementary.setVisibility(View.GONE);
             }
             if (!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)) {
                 //  common_class.getDentDatas(this);
@@ -394,6 +397,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 Shared_Common_Pref.Invoicetoorder = "2";
                 //getInvoiceOrderQty();
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
+
+                break;
+            case R.id.lin_complementary:
+                Shared_Common_Pref.Invoicetoorder = "2";
+                common_class.CommonIntentwithFinish(CompementaryInvoiceActivity.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
