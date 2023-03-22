@@ -912,7 +912,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.BLACK);
             String sHead = "";
 
-            if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("INVOICE"))
+            if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")  || sMode.equals("POS INVOICE") || sMode.equals("COMPLEMENTARY INVOICE") || sMode.equals("INVOICE"))
             {
                 sHead = "INVOICE";
             }else if( sMode.equals("PROJECTION") ){
