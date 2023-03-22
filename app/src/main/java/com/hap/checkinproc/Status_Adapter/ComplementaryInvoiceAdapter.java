@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Status_Adapter;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,12 +16,17 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.ComplementaryInvoiceModel;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class ComplementaryInvoiceAdapter extends RecyclerView.Adapter<ComplementaryInvoiceAdapter.ViewHolder> {
     Context context;
     ArrayList<ComplementaryInvoiceModel> list;
+
+    ItemChecked itemChecked;
+
+    public void setItemChecked(ItemChecked itemChecked) {
+        this.itemChecked = itemChecked;
+    }
 
     public ComplementaryInvoiceAdapter(Context context, ArrayList<ComplementaryInvoiceModel> list) {
         this.context = context;
@@ -40,15 +46,11 @@ public class ComplementaryInvoiceAdapter extends RecyclerView.Adapter<Complement
         holder.date.setText(model.getDate());
         String amount = "Total: " + CurrencySymbol + " " + new DecimalFormat("0.00").format(Double.parseDouble(model.getValue()));
         holder.value.setText(amount);
-        holder.checkBox.setSelected(model.isChecked());
-
-        holder.checkBox.setOnClickListener(v -> {
-            if (model.isChecked()) {
-//                holder.checkBox.setChecked(false);
-                model.setChecked(false);
-            } else {
-//                holder.checkBox.setChecked(true);
-                model.setChecked(true);
+        boolean statuss = model.getStatus();
+        holder.checkBox.setChecked(statuss);
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (itemChecked != null) {
+                itemChecked.onItemChecked(isChecked, position, model);
             }
         });
     }
@@ -71,5 +73,9 @@ public class ComplementaryInvoiceAdapter extends RecyclerView.Adapter<Complement
             value = itemView.findViewById(R.id.value);
 
         }
+    }
+
+    public interface ItemChecked {
+        void onItemChecked (boolean status, int position, ComplementaryInvoiceModel model);
     }
 }

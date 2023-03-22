@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -100,8 +101,10 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
     public ArrayList<ComplementaryInvoiceModel> invoiceList;
     ComplementaryInvoiceAdapter complementaryInvoiceAdapter;
 
-    TextView invoice_status;
+    TextView invoice_status, history;
     RelativeLayout showInvoiceList;
+
+    String referenceInvoices;
 
     Type userType;
     Gson gson;
@@ -163,7 +166,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
             categorygrid.setLayoutManager(layoutManager);
 
             invoiceList = new ArrayList<>();
-
+            referenceInvoices = "";
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             cashdiscount = findViewById(R.id.cashdiscount);
@@ -190,6 +193,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
             tvInvAmt = findViewById(R.id.tvInvAMt);
             tvPayAmt = findViewById(R.id.tvPayAmt);
             txPONo = findViewById(R.id.txPONum);
+            history = findViewById(R.id.history);
 
             invoice_status = findViewById(R.id.invoice_status);
             showInvoiceList = findViewById(R.id.rl_reference_invoice_number);
@@ -496,13 +500,42 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                 recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
                 complementaryInvoiceAdapter = new ComplementaryInvoiceAdapter(context, invoiceList);
                 recyclerView1.setAdapter(complementaryInvoiceAdapter);
+                complementaryInvoiceAdapter.setItemChecked((status, position, model) -> {
+                    invoiceList.get(position).setStatus(status);
+                });
                 TextView close = view.findViewById(R.id.close);
                 AlertDialog dialog = builder.create();
                 close.setOnClickListener(v1 -> {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (ComplementaryInvoiceModel model : invoiceList) {
+                        boolean status = model.getStatus();
+                        if (status) {
+                            String title = model.getInvoice();
+                            stringBuilder.append(title);
+                            stringBuilder.append(", ");
+                        }
+                    }
+                    String invoice = stringBuilder.toString();
+                    if (invoice.length() > 1) {
+                        invoice_status.setText(invoice.substring(0, stringBuilder.toString().length() - 2));
+                        invoice_status.setSelected(true);
+                        referenceInvoices = invoice.substring(0, stringBuilder.toString().length() - 2);
+                    } else {
+                        invoice_status.setText("");
+                        referenceInvoices = "";
+                    }
                     dialog.dismiss();
                 });
-                dialog.show();
+                if (invoiceList.size() > 0) {
+                    dialog.show();
+                } else {
+                    Toast.makeText(context, "No Invoices made in last 30 days", Toast.LENGTH_SHORT).show();
+                }
 
+            });
+
+            history.setOnClickListener(v -> {
+                startActivity(new Intent(getApplicationContext(), ComplementaryInvoiceHistory.class));
             });
 
         } catch (Exception e) {
@@ -654,9 +687,11 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
         if (Getorder_Array_List.size() == 0)
             Toast.makeText(getApplicationContext(), "Invoice is empty", Toast.LENGTH_SHORT).show();
-        else
+        else if (referenceInvoices.equals("")) {
+            Toast.makeText(context, "Reference Invoice Required!", Toast.LENGTH_SHORT).show();
+        } else {
             FilterProduct();
-
+        }
     }
 
 
@@ -771,6 +806,12 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
+            
+            if (referenceInvoices.equals("")) {
+                ResetSubmitBtn(2);
+                Toast.makeText(context, "Reference Invoice Required!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             AlertDialogBox.showDialog(CompementaryInvoiceActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
@@ -795,6 +836,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                         OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
                         OutletItem.put("modified_time", Common_Class.GetDate());
                         OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                        OutletItem.put("reference_invoice", referenceInvoices);
                         OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
                         OutletItem.put("orderValue", formatter.format(totalvalues));
 
@@ -813,7 +855,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                         OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                        OutletItem.put("ordertype", "invoice");
+                        OutletItem.put("ordertype", "Complementary_Invoice");
                         OutletItem.put("category_type", Shared_Common_Pref.SecOrdOutletType);
 
                         // OutletItem.put("outstandAmt", outstandAmt);
@@ -902,17 +944,17 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                        Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code,
+                        Call<ResponseBody> responseBodyCall = apiInterface.saveComplementaryInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code,
                                 sharedCommonPref.getvalue(Constants.LOGIN_TYPE), data.toString());
-                        responseBodyCall.enqueue(new Callback<JsonObject>() {
+                        responseBodyCall.enqueue(new Callback<ResponseBody>() {
                             @Override
-                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.isSuccessful()) {
                                     try {
                                         common_class.ProgressdialogShow(0, "");
                                         Log.e("JSON_VALUES", response.body().toString());
-                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
-
+                                        String result = response.body().string();
+                                        JSONObject jsonObjects = new JSONObject(result);
                                         ResetSubmitBtn(1);
                                         if (jsonObjects.getString("success").equals("true")) {
                                             sharedCommonPref.clear_pref(Constants.LOC_INVOICE_DATA);
@@ -929,7 +971,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                             }
 
                             @Override
-                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 Log.e("SUBMIT_VALUE", "ERROR");
                                 ResetSubmitBtn(2);
                             }
@@ -1030,8 +1072,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                 }
             }
         }
-
-        tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(totalvalues));
+        tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(0.0));
         tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
@@ -1497,7 +1538,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
             } else if (PendingOrdersActivity.CometoPending) {
                 finish();
             } else {
-                common_class.commonDialog(this, Invoice_History.class, "Invoice?");
+                common_class.commonDialog(this, Invoice_History.class, "Complementary Invoice?");
             }
             return true;
         }

@@ -456,8 +456,16 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
+
                 case Constants.PosOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalposorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
+                case Constants.ComplementaryOrderDetails_List:
+                    QuerySTring1 = "{\"tableName\":\"gettotalcomplementaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -1329,8 +1337,12 @@ public class Common_Class {
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         if (name.equalsIgnoreCase("GRN?"))
                             activity.finish();
-                        else
+                        else if (name.equalsIgnoreCase("Complementary Invoice?")) {
+                            shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
+                            activity.finish();
+                        } else {
                             CommonIntentwithFinish(moveActivity);
+                        }
 
 
                         switch (name) {

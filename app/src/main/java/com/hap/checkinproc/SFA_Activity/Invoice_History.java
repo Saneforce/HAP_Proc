@@ -112,7 +112,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
-            common_class.ProgressdialogShow(1, "Updating Matrial Details");
+            common_class.ProgressdialogShow(1, "Updating Material Details");
             common_class.getProductDetails(this, new OnLiveUpdateListener() {
                 @Override
                 public void onUpdate(String mode) {
@@ -402,7 +402,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
             case R.id.lin_complementary:
                 Shared_Common_Pref.Invoicetoorder = "2";
-                startActivity(new Intent(this, CompementaryInvoiceActivity.class));
+                common_class.CommonIntentwithFinish(CompementaryInvoiceActivity.class);
                 overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;

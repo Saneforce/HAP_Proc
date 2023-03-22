@@ -523,6 +523,10 @@ public interface ApiInterface {
     Call<JsonObject> saveInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Query("loginType") String loginType, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("MyPHP.php?axn=save_complementary_invoice")
+    Call<ResponseBody> saveComplementaryInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Query("loginType") String loginType, @Field("data") String toString);
+
+    @FormUrlEncoded
     @POST("db_v310.php?axn=save/grnentry")
     Call<JsonObject> saveGrn(@Query("divisionCode") String div_code, @Field("data") String toString);
 

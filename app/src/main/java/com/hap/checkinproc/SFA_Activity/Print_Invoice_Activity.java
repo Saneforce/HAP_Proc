@@ -262,8 +262,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     tvDistributorPh.setVisibility(View.GONE);
                     findViewById(R.id.llDistCall).setVisibility(View.GONE);
 
-                }
-                else {
+                } else {
                     findViewById(R.id.tvWelcomeLabel).setVisibility(View.VISIBLE);
                     common_class.getDataFromApi(Constants.PosOrderDetails_List, this, false);
                 }
@@ -286,6 +285,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     btnInvoice.setText("CONFIRM");
                     orderInvoiceDetailData(sharedCommonPref.getvalue(Constants.SALES_RETURN));
 
+                } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("COMPLEMENTARY INVOICE")){
+                    findViewById(R.id.tvWelcomeLabel).setVisibility(View.GONE);
+                    common_class.getDataFromApi(Constants.ComplementaryOrderDetails_List, this, false);
                 } else {
                     common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
                     if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")) {
@@ -1716,6 +1718,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     case Constants.PosOrderDetails_List:
                         orderInvoiceDetailData(apiDataResponse);
                         break;
+                    case Constants.ComplementaryOrderDetails_List:
+                        orderInvoiceDetailData(apiDataResponse);
+                        break;
                     case Constants.OUTSTANDING:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
                         if (jsonObject.getBoolean("success")) {
@@ -1936,7 +1941,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         total_qtytext += obj.getInt("Quantity");
                         subTotalVal += (obj.getDouble("value"));
 
-                        double taxAmt = 0.00,sTaxV=0.0,SGSTAmt=0.00,CGSTAmt=0.00;;
+                        double taxAmt = 0.00,sTaxV=0.0,SGSTAmt=0.00,CGSTAmt=0.00;
                         try {
                             JSONArray taxArr = obj.getJSONArray("TAX_details");
                             for (int tax = 0; tax < taxArr.length(); tax++) {

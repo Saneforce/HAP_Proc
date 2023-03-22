@@ -2,13 +2,13 @@ package com.hap.checkinproc.SFA_Model_Class;
 
 public class ComplementaryInvoiceModel {
     String invoice, date, value;
-    boolean isChecked;
+    boolean status;
 
-    public ComplementaryInvoiceModel(String invoice, String date, String value, boolean isChecked) {
+    public ComplementaryInvoiceModel(String invoice, String date, String value, boolean status) {
         this.invoice = invoice;
         this.date = date;
         this.value = value;
-        this.isChecked = isChecked;
+        this.status = status;
     }
 
     public String getInvoice() {
@@ -35,11 +35,11 @@ public class ComplementaryInvoiceModel {
         this.value = value;
     }
 
-    public boolean isChecked() {
-        return isChecked;
+    public boolean getStatus() {
+        return status;
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

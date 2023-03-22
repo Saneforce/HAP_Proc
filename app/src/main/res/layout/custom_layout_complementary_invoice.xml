@@ -28,7 +28,7 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:text="Close"
-        android:paddingVertical="@dimen/C5dp"
+        android:paddingVertical="@dimen/C8dp"
         android:layout_marginVertical="@dimen/C10dp"
         android:background="@drawable/button_blueg"
         android:layout_marginHorizontal="10dp"
