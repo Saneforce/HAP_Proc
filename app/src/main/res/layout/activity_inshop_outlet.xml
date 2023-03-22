@@ -154,6 +154,18 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
                 android:textSize="14dp"
+                android:visibility="gone"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvViewInshops"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="@dimen/C10dp"
+                android:text="View History"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="14dp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
@@ -361,7 +373,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -1288,240 +1299,240 @@
 
 
     <!--    <LinearLayout-->
-<!--        android:id="@+id/cout_toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="@dimen/C40dp"-->
-<!--        android:background="@drawable/blue_bg"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:padding="@dimen/C3dp">-->
+    <!--        android:id="@+id/cout_toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/C40dp"-->
+    <!--        android:background="@drawable/blue_bg"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        android:padding="@dimen/C3dp">-->
 
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:src="@drawable/ic_baseline_arrow_back_24"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:fontFamily="@font/basic"-->
-<!--            android:paddingLeft="@dimen/C10dp"-->
-<!--            android:text="Inshop Activity"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="#FFF"-->
-<!--            android:textSize="18dp"-->
-<!--            android:layout_marginStart="@dimen/C10dp" />-->
-<!--    </LinearLayout>-->
-<!--    <LinearLayout-->
-<!--        android:id="@+id/isRetailerNameLay"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/cout_toolbar"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginStart="@dimen/C10dp">-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Retailer Name: "-->
-<!--            android:textSize="16dp"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="JOSE STORES"-->
-<!--            android:textSize="16dp"/>-->
-<!--    </LinearLayout>-->
-<!--    <TextView-->
-<!--        android:id="@+id/inshop_search"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="35dp"-->
-<!--        android:text="Search..."-->
-<!--        android:textSize="16dp"-->
-<!--        android:paddingLeft="@dimen/C10dp"-->
-<!--        android:paddingRight="@dimen/C10dp"-->
-<!--        android:paddingTop="@dimen/C5dp"-->
-<!--        android:layout_marginTop="@dimen/C10dp"-->
-<!--        android:layout_marginLeft="@dimen/C10dp"-->
-<!--        android:layout_marginRight="@dimen/C10dp"-->
-<!--        android:background="@drawable/inshop_search_backround"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/isRetailerNameLay"/>-->
-<!--    <HorizontalScrollView-->
-<!--        android:id="@+id/hs"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/C15dp"-->
-<!--        android:scrollbars="none"-->
-<!--        android:layout_marginStart="@dimen/C10dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/inshop_search">-->
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/inshopBrandRecyclerView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="@dimen/C40dp"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:scrollbars="none"-->
-<!--            tools:listitem="@layout/inshop_brand_items"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/inshop_search"/>-->
-<!--    </HorizontalScrollView>-->
-<!--    <TextView-->
-<!--        android:id="@+id/tvInshopBrandname"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="MTR items"-->
-<!--        android:textSize="@dimen/C15dp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_marginTop="@dimen/C15dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/hs"-->
-<!--        app:layout_constraintStart_toStartOf="@id/hs"/>-->
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/inshopCategoryRecyclerview"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="@dimen/C10dp"-->
-<!--        android:layout_marginEnd="@dimen/C10dp"-->
-<!--        android:layout_marginTop="@dimen/C10dp"-->
-<!--        android:scrollbars="none"-->
-<!--        tools:listitem="@layout/inshop_category_items"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tvInshopBrandname"/>-->
-<!--    <RelativeLayout-->
+    <!--        <ImageView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:src="@drawable/ic_baseline_arrow_back_24"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:fontFamily="@font/basic"-->
+    <!--            android:paddingLeft="@dimen/C10dp"-->
+    <!--            android:text="Inshop Activity"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:textAllCaps="false"-->
+    <!--            android:textColor="#FFF"-->
+    <!--            android:textSize="18dp"-->
+    <!--            android:layout_marginStart="@dimen/C10dp" />-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/isRetailerNameLay"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/cout_toolbar"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        android:layout_marginStart="@dimen/C10dp">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="Retailer Name: "-->
+    <!--            android:textSize="16dp"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="JOSE STORES"-->
+    <!--            android:textSize="16dp"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/inshop_search"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="35dp"-->
+    <!--        android:text="Search..."-->
+    <!--        android:textSize="16dp"-->
+    <!--        android:paddingLeft="@dimen/C10dp"-->
+    <!--        android:paddingRight="@dimen/C10dp"-->
+    <!--        android:paddingTop="@dimen/C5dp"-->
+    <!--        android:layout_marginTop="@dimen/C10dp"-->
+    <!--        android:layout_marginLeft="@dimen/C10dp"-->
+    <!--        android:layout_marginRight="@dimen/C10dp"-->
+    <!--        android:background="@drawable/inshop_search_backround"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/isRetailerNameLay"/>-->
+    <!--    <HorizontalScrollView-->
+    <!--        android:id="@+id/hs"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="@dimen/C15dp"-->
+    <!--        android:scrollbars="none"-->
+    <!--        android:layout_marginStart="@dimen/C10dp"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/inshop_search">-->
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
+    <!--            android:id="@+id/inshopBrandRecyclerView"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="@dimen/C40dp"-->
+    <!--            android:orientation="horizontal"-->
+    <!--            android:scrollbars="none"-->
+    <!--            tools:listitem="@layout/inshop_brand_items"-->
+    <!--            app:layout_constraintTop_toBottomOf="@id/inshop_search"/>-->
+    <!--    </HorizontalScrollView>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/tvInshopBrandname"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="MTR items"-->
+    <!--        android:textSize="@dimen/C15dp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        android:layout_marginTop="@dimen/C15dp"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/hs"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/hs"/>-->
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/inshopCategoryRecyclerview"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/C10dp"-->
+    <!--        android:layout_marginEnd="@dimen/C10dp"-->
+    <!--        android:layout_marginTop="@dimen/C10dp"-->
+    <!--        android:scrollbars="none"-->
+    <!--        tools:listitem="@layout/inshop_category_items"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/tvInshopBrandname"/>-->
+    <!--    <RelativeLayout-->
 
-<!--        android:id="@+id/rlTakeOrder"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/C5dp"-->
-<!--        android:background="@drawable/bottom_button"-->
-<!--        android:padding="@dimen/C5dp"-->
-<!--        android:visibility="visible"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+    <!--        android:id="@+id/rlTakeOrder"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="@dimen/C5dp"-->
+    <!--        android:background="@drawable/bottom_button"-->
+    <!--        android:padding="@dimen/C5dp"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent">-->
 
-<!--        <ImageView-->
-<!--            android:id="@+id/ivCart"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_marginLeft="@dimen/C5dp"-->
-<!--            android:src="@drawable/cart"-->
-<!--            app:tint="@color/white" />-->
+    <!--        <ImageView-->
+    <!--            android:id="@+id/ivCart"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_centerVertical="true"-->
+    <!--            android:layout_marginLeft="@dimen/C5dp"-->
+    <!--            android:src="@drawable/cart"-->
+    <!--            app:tint="@color/white" />-->
 
-<!--        <View-->
-<!--            android:id="@+id/view"-->
-<!--            android:layout_width="@dimen/C1dp"-->
-<!--            android:layout_height="@dimen/C20dp"-->
-<!--            android:layout_toRightOf="@id/ivCart"-->
-<!--            android:background="@color/white"-->
-<!--            android:layout_marginLeft="@dimen/C10dp"-->
-<!--            android:layout_marginTop="@dimen/C7dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/view"-->
+    <!--            android:layout_width="@dimen/C1dp"-->
+    <!--            android:layout_height="@dimen/C20dp"-->
+    <!--            android:layout_toRightOf="@id/ivCart"-->
+    <!--            android:background="@color/white"-->
+    <!--            android:layout_marginLeft="@dimen/C10dp"-->
+    <!--            android:layout_marginTop="@dimen/C7dp"/>-->
 
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/C10dp"-->
-<!--            android:layout_marginTop="@dimen/C3dp"-->
-<!--            android:layout_marginEnd="@dimen/C3dp"-->
-<!--            android:layout_marginBottom="@dimen/C3dp"-->
-<!--            android:layout_toRightOf="@+id/view"-->
-<!--            android:orientation="vertical">-->
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/C10dp"-->
+    <!--            android:layout_marginTop="@dimen/C3dp"-->
+    <!--            android:layout_marginEnd="@dimen/C3dp"-->
+    <!--            android:layout_marginBottom="@dimen/C3dp"-->
+    <!--            android:layout_toRightOf="@+id/view"-->
+    <!--            android:orientation="vertical">-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginRight="@dimen/C100dp"-->
-<!--                android:layout_toRightOf="@+id/tvCart"-->
-<!--                android:orientation="horizontal">-->
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginRight="@dimen/C100dp"-->
+    <!--                android:layout_toRightOf="@+id/tvCart"-->
+    <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/C5dp"-->
-<!--                    android:fontFamily="sans-serif"-->
-<!--                    android:text="Items : "-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="11sp"-->
-<!--                    android:textStyle="bold" />-->
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginLeft="@dimen/C5dp"-->
+    <!--                    android:fontFamily="sans-serif"-->
+    <!--                    android:text="Items : "-->
+    <!--                    android:textColor="@color/white"-->
+    <!--                    android:textSize="11sp"-->
+    <!--                    android:textStyle="bold" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvTotalItems"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/C5dp"-->
-<!--                    android:fontFamily="sans-serif"-->
-<!--                    android:text="0"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="11sp" />-->
-<!--            </LinearLayout>-->
+    <!--                <TextView-->
+    <!--                    android:id="@+id/tvTotalItems"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginLeft="@dimen/C5dp"-->
+    <!--                    android:fontFamily="sans-serif"-->
+    <!--                    android:text="0"-->
+    <!--                    android:textColor="@color/white"-->
+    <!--                    android:textSize="11sp" />-->
+    <!--            </LinearLayout>-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginRight="@dimen/C100dp"-->
-<!--                android:layout_toRightOf="@+id/tvCart"-->
-<!--                android:orientation="horizontal">-->
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginRight="@dimen/C100dp"-->
+    <!--                android:layout_toRightOf="@+id/tvCart"-->
+    <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/C5dp"-->
-<!--                    android:fontFamily="sans-serif"-->
-<!--                    android:text="Rs : "-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="11sp"-->
-<!--                    android:textStyle="bold" />-->
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginLeft="@dimen/C5dp"-->
+    <!--                    android:fontFamily="sans-serif"-->
+    <!--                    android:text="Rs : "-->
+    <!--                    android:textColor="@color/white"-->
+    <!--                    android:textSize="11sp"-->
+    <!--                    android:textStyle="bold" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvTotalAmount"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/C5dp"-->
-<!--                    android:fontFamily="sans-serif"-->
-<!--                    android:text="0"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="11sp" />-->
-<!--            </LinearLayout>-->
-<!--        </LinearLayout>-->
-<!--        <LinearLayout-->
-<!--            android:id="@+id/inshopSubmitLay"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_alignParentEnd="true">-->
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Submit"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textSize="@dimen/C14dp"/>-->
-<!--            <ImageView-->
-<!--                android:layout_width="@dimen/C30dp"-->
-<!--                android:layout_height="@dimen/C20dp"-->
-<!--                android:src="@drawable/white_arrow_right"/>-->
+    <!--                <TextView-->
+    <!--                    android:id="@+id/tvTotalAmount"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginLeft="@dimen/C5dp"-->
+    <!--                    android:fontFamily="sans-serif"-->
+    <!--                    android:text="0"-->
+    <!--                    android:textColor="@color/white"-->
+    <!--                    android:textSize="11sp" />-->
+    <!--            </LinearLayout>-->
+    <!--        </LinearLayout>-->
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/inshopSubmitLay"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="horizontal"-->
+    <!--            android:layout_centerVertical="true"-->
+    <!--            android:layout_alignParentEnd="true">-->
+    <!--            <TextView-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="Submit"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textStyle="bold"-->
+    <!--                android:textSize="@dimen/C14dp"/>-->
+    <!--            <ImageView-->
+    <!--                android:layout_width="@dimen/C30dp"-->
+    <!--                android:layout_height="@dimen/C20dp"-->
+    <!--                android:src="@drawable/white_arrow_right"/>-->
 
-<!--        </LinearLayout>-->
+    <!--        </LinearLayout>-->
 
-<!--       &lt;!&ndash; <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton-->
-<!--            android:id="@+id/btnInshopSubmit"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="@dimen/C15dp"-->
-<!--            android:background="#00000000"-->
-<!--            android:drawableTint="@color/white"-->
-<!--            android:gravity="center_vertical"-->
-<!--            android:padding="@dimen/C5dp"-->
-<!--            android:text="PROCEED"-->
-<!--            android:textAlignment="textEnd"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="15sp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:finalCornerAngle="50dp"-->
-<!--            app:initialCornerAngle="10dp"-->
-<!--            app:spinning_bar_color="#FFFFFFFF"-->
-<!--            app:spinning_bar_padding="5dp"-->
-<!--            app:spinning_bar_width="5dp"-->
-<!--            tools:ignore="RtlCompat" />&ndash;&gt;-->
-<!--    </RelativeLayout>-->
+    <!--       &lt;!&ndash; <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton-->
+    <!--            android:id="@+id/btnInshopSubmit"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginEnd="@dimen/C15dp"-->
+    <!--            android:background="#00000000"-->
+    <!--            android:drawableTint="@color/white"-->
+    <!--            android:gravity="center_vertical"-->
+    <!--            android:padding="@dimen/C5dp"-->
+    <!--            android:text="PROCEED"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="15sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:finalCornerAngle="50dp"-->
+    <!--            app:initialCornerAngle="10dp"-->
+    <!--            app:spinning_bar_color="#FFFFFFFF"-->
+    <!--            app:spinning_bar_padding="5dp"-->
+    <!--            app:spinning_bar_width="5dp"-->
+    <!--            tools:ignore="RtlCompat" />&ndash;&gt;-->
+    <!--    </RelativeLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

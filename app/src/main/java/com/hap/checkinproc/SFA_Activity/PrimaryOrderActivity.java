@@ -1509,6 +1509,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             sharedCommonPref.save(Constants.Route_Id, "");
             // btnCmbRoute.setVisibility(View.VISIBLE);
             sharedCommonPref.save(Constants.Distributor_name, myDataset.get(position).getName());
+            sharedCommonPref.save(Constants.DistributorGst, myDataset.get(position).getDisGst());
+            sharedCommonPref.save(Constants.DistributorFSSAI, myDataset.get(position).getDisFssai());
             sharedCommonPref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());

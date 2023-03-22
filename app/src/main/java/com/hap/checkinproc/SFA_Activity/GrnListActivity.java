@@ -23,6 +23,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.GrnAdapter;
 import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -32,21 +33,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class GrnListActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+public class GrnListActivity extends AppCompatActivity
+        implements View.OnClickListener, UpdateResponseUI {
 
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
     public static TextView tvStartDate, tvEndDate;
-    TextView outlet_name;
+    TextView outlet_name, history;
 
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal = new ArrayList<>();
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
     Type userType;
     Gson gson;
-    Invoice_History_Adapter mReportViewAdapter;
+    GrnAdapter mReportViewAdapter;
     RecyclerView invoicerecyclerview;
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
@@ -55,13 +57,21 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
     public static String TAG = "Invoice_History";
     private DatePickerDialog fromDatePickerDialog;
 
-
-    //Updateed
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_grn_list);
+
+            /*history = findViewById(R.id.txtGrnHistory);
+
+            history.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(GrnListActivity.this,GrnHistory.class));
+                }
+            });*/
+
             db = new DatabaseHandler(this);
             gson = new Gson();
             sharedCommonPref = new Shared_Common_Pref(GrnListActivity.this);
@@ -74,15 +84,25 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
             outlet_name = findViewById(R.id.outlet_name);
             outlet_name.setText("Hi! " + sharedCommonPref.getvalue(Constants.Distributor_name));
 
-            tvStartDate = findViewById(R.id.tvStartDate);
-            tvEndDate = findViewById(R.id.tvEndDate);
+            Log.v("qswq", outlet_name.toString());
+
+            tvStartDate = findViewById(R.id.tvSDate);
+            tvEndDate = findViewById(R.id.tvEDate);
+            history = findViewById(R.id.txtGrnHistory);
+
+            history.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(GrnListActivity.this, GrnHistory.class));
+                }
+            });
 
 
             tvStartDate.setOnClickListener(this);
             tvEndDate.setOnClickListener(this);
 
 
-            invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
+            invoicerecyclerview = (RecyclerView) findViewById(R.id.grnListRecyclerview);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -93,12 +113,18 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
 
             common_class.getDataFromApi(Constants.GetGrn_List, this, false);
 
+            Log.v("qwertq", sharedCommonPref.getvalue(Constants.DistributorERP));
+            Log.v("qwertq1", Shared_Common_Pref.Div_Code);
+            Log.v("qwertq2",Shared_Common_Pref.Sf_Code);
+
 
         } catch (Exception e) {
             Log.v(TAG, e.getMessage());
         }
 
     }
+
+
 
     void showDatePickerDialog(int pos, TextView tv) {
         Calendar newCalendar = Calendar.getInstance();
@@ -127,10 +153,10 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvStartDate:
+            case R.id.tvSDate:
                 showDatePickerDialog(0, tvStartDate);
                 break;
-            case R.id.tvEndDate:
+            case R.id.tvEDate:
                 showDatePickerDialog(1, tvEndDate);
                 break;
 
@@ -159,50 +185,53 @@ public class GrnListActivity extends AppCompatActivity implements View.OnClickLi
                         }
 
 
-                        mReportViewAdapter = new Invoice_History_Adapter(GrnListActivity.this, FilterOrderList, new AdapterOnClick() {
-                            @Override
-                            public void onIntentClick(int position) {
-                                if (FilterOrderList.get(position).getStatus().equalsIgnoreCase("INVOICE")) {
-                                    if (common_class.isNetworkAvailable(GrnListActivity.this)) {
-                                        Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                                        Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                                        Shared_Common_Pref.Invoicetoorder = "1";
-                                        Intent intent = new Intent(getBaseContext(), Grn_Category_Select.class);
-                                        //  sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-                                        sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-                                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                                        startActivity(intent);
-                                        overridePendingTransition(R.anim.in, R.anim.out);
-                                    } else {
-                                        common_class.showMsg(GrnListActivity.this, "Please chcek your internet connection");
-                                    }
-                                } else {
-                                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                                    Shared_Common_Pref.Invoicetoorder = "1";
-                                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    //   sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
-                                    sharedCommonPref.save(Constants.FLAG, "GRN");
-                                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.in, R.anim.out);
-                                }
+                        mReportViewAdapter = new GrnAdapter(GrnListActivity.this, FilterOrderList);
+//                                , new AdapterOnClick() {
+//                            @Override
+//                            public void onIntentClick(int position) {
+//                                if (FilterOrderList.get(position).getStatus().equalsIgnoreCase("INVOICE")) {
+//                                    if (common_class.isNetworkAvailable(GrnListActivity.this)) {
+//                                        Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+//                                        Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+//                                        Shared_Common_Pref.Invoicetoorder = "1";
+//                                        Intent intent = new Intent(getBaseContext(), Grn_Category_Select.class);
+//                                        //  sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
+//                                        sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
+//                                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+//                                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+//                                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+//                                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+//                                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+//                                        intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
+//                                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+//                                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+//                                        startActivity(intent);
+//                                        overridePendingTransition(R.anim.in, R.anim.out);
+//                                    } else {
+//                                        common_class.showMsg(GrnListActivity.this, "Please chcek your internet connection");
+//                                    }
+//                                } else {
+//                                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+//                                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+//                                    Shared_Common_Pref.Invoicetoorder = "1";
+//                                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+//                                    //   sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
+//                                    sharedCommonPref.save(Constants.FLAG, "GRN");
+//                                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+//                                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+//                                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+//                                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+//                                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+//                                    intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
+//                                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+//                                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+//                                    startActivity(intent);
+//                                    overridePendingTransition(R.anim.in, R.anim.out);
+//                                }
 
 
-                            }
-                        });
+//                            }
+//                        });
                         invoicerecyclerview.setAdapter(mReportViewAdapter);
 
                         break;

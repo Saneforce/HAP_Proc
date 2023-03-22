@@ -56,11 +56,18 @@ public class InshopRetailerAdapter extends RecyclerView.Adapter<InshopRetailerAd
 
                 Intent intent = new Intent(context, InshopCheckinActivity.class);
                 intent.putExtra("idData",Retailer_Modal_List.getName());
+                intent.putExtra("rcode",Retailer_Modal_List.getId());
+                intent.putExtra("rmobile",Retailer_Modal_List.getPrimary_No());
+                intent.putExtra("rroute",Retailer_Modal_List.getTownName());
+                intent.putExtra("type", Retailer_Modal_List.getType());
+                intent.putExtra("id", Retailer_Modal_List.getId());
+                intent.putExtra("position", position);
 
 //                Toast.makeText(context,"posdsfdghfghfgg ppp   " + position,Toast.LENGTH_SHORT).show();
                 Log.v("position", String.valueOf(position));
                 Log.v("position", Retailer_Modal_List.getName());
                 context.startActivity(intent);
+
 
 
 
@@ -133,20 +140,20 @@ public class InshopRetailerAdapter extends RecyclerView.Adapter<InshopRetailerAd
         }
     }
 
-        private void drawRoute(String OutletName, String sLat, String sLng) {
-            try {
-                Intent intent = new Intent(context, MapDirectionActivity.class);
-                intent.putExtra(Constants.DEST_LAT, sLat);
-                intent.putExtra(Constants.DEST_LNG, sLng);
-                intent.putExtra(Constants.DEST_NAME, OutletName);
-                intent.putExtra(Constants.NEW_OUTLET, "");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            } catch (Exception e) {
-                Log.v("OutletInfoDrawRoute:", e.getMessage());
-            }
-
+    private void drawRoute(String OutletName, String sLat, String sLng) {
+        try {
+            Intent intent = new Intent(context, MapDirectionActivity.class);
+            intent.putExtra(Constants.DEST_LAT, sLat);
+            intent.putExtra(Constants.DEST_LNG, sLng);
+            intent.putExtra(Constants.DEST_NAME, OutletName);
+            intent.putExtra(Constants.NEW_OUTLET, "");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Log.v("OutletInfoDrawRoute:", e.getMessage());
         }
+
+    }
 
 
     @Override
@@ -188,7 +195,7 @@ public class InshopRetailerAdapter extends RecyclerView.Adapter<InshopRetailerAd
     }
 
     public InshopRetailerAdapter(List<Retailer_Modal_List> Retailer_Modal_Listitem, int rowLayout, Context context,
-                               String activityName, AdapterOnClick mAdapterOnClick) {
+                                 String activityName, AdapterOnClick mAdapterOnClick) {
         this.Retailer_Modal_Listitem = Retailer_Modal_Listitem;
         this.rowLayout = rowLayout;
         this.context = context;

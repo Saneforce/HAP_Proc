@@ -13,7 +13,9 @@ public class ApiClient {
     //public static String BASE_URL = "http://ff.hap.in/server/";
     public static String BASE_URL = "http://hsfa.sanfmcg.com/server/";//field
     //public static String BASE_URL = "http://primary.hap.in/server/";//distri
+
     private static Retrofit retrofit = null;
+//    private static Retrofit retrofit1 = null;
     public static Retrofit getClient() {
         // if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
         //    BASE_URL = "http://primary.hap.in/server/";
@@ -34,4 +36,6 @@ public class ApiClient {
         }
         return retrofit;
     }
+
+
 }

@@ -1018,9 +1018,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 //
 //            }
 
-           // totalvalues = totalvalues + totTax;
+            // totalvalues = totalvalues + totTax;
 
-          //  tvNetAmtTax.setText("₹ " + totTax);
+            //  tvNetAmtTax.setText("₹ " + totTax);
 
             tvTotalAmount.setText("₹ " + formatter.format(totalvalues));
             tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);

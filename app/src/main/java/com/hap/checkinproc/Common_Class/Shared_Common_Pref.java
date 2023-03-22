@@ -22,6 +22,8 @@ public class Shared_Common_Pref {
     Context _context;
     public static final String spName = "SP_LOGIN_DETAILS";
     public static String Sf_Code = "Sf_Code";
+    public static String Reporting_Sf_Code = "Reporting_To_SF";
+
     public static String Profile = "Profile";
     public static String Div_Code = "Div_Code";
     public static String StateCode = "StateCode";
@@ -55,6 +57,11 @@ public class Shared_Common_Pref {
     public static String Status = "status";
     public static int TotalCountApproval = 0;
     public static String TransSlNo;
+
+    public static String BillingID;
+    public static String SalesID;
+
+
     public static String Outlet_Info_Flag;
     public static String Invoicetoorder;
     public static String OutletAvail = "OutletAvail";

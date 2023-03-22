@@ -4,6 +4,9 @@ public class Constants {
 
     public static  final String RSM_CUTOFF_TIME="SFCutoff";
     public static final String Vansales_VehNo="Vansales_VehNo";
+    public static final String rSFCode="Reporting_To_SF";
+    public static final String BillingID = "Billing_Document";
+    public static final String SalesID = "Sales_Document";
 
     public static final String MAP_KEYLIST = "mapKeyList";
     public static final String MAP_KEY = "mapKey";
@@ -11,16 +14,12 @@ public class Constants {
     public static final String Distributor_name = "distributorName";
     public static final String Distributor_Id = "distributorId";
     public static final String DistributorERP = "distributorERP";
-    public static final String Distributor_gst = "distributorGST";
-    public static final String Distributor_fssai = "distributorFSSAI";
-    public static final String Retailer_gst = "retailerGST";
-    public static final String Retailer_fssai = "retailerFSSAI";
-
-
-
+    public static final String DistributorGst = "GSTN";
+    public static final String DistributorFSSAI = "FSSAI";
     public static final String DB_TWO_GET_NOTIFY = "dashboardTwoNotify";
     public static final String DB_Offer_NOTIFY = "OfferNotify";
     public static final String DB_OfferShownOn = "OfferShown";
+
 
     public static final String Retailer_OutletList = "retailerOutletList";
     public static final String Distributor_List = "distributorList";
@@ -33,6 +32,7 @@ public class Constants {
     public static final String ProdTypes_List = "ProdTypeList";
     public static final String ProdGroups_List = "ProdGroupList";
     public static final String Rout_List = "routList";
+    public static final String SF_Code = "Sf_Code";
 
     public static final String GetTodayOrder_List = "getTodayOrderList";
     public static final String Outlet_Total_Orders = "outletTotalOrders";
@@ -66,6 +66,8 @@ public class Constants {
 
     public static final String TAXList = "taxList";
     public static final String PrimaryTAXList = "primaryTaxList";
+
+    public static final String dataArray="ctrl";
 
     public static final String INVOICE_ORDERLIST = "invoiceOrderList";
     public static final String ORDER_ID = "orderId";
@@ -160,8 +162,7 @@ public class Constants {
     public static final String NEW_OUTLET = "newOutlet";
     public static final String PrePrimaryOrderQty = "prePrimaryOrderQty";
     public static final String DistributorAdd = "distAddress";
-    public static final String DistributorGst = "GSTN";
-    public static final String DistributorFSSAI = "gst";
+
     public static final String SlotTime = "slotTime";
     public static final String POS_Product_List = "posProductList";
     public static final String POS_TAXList = "posTaxList";
@@ -182,7 +183,11 @@ public class Constants {
     public static final String INDENT_Category_List = "indentCategoryList";
     public static final String INDENT_ProdTypes_List = "inentProductTypes";
     public static final String INDENT_ProdGroups_List = "indentProductGroups";
+    public static final String GetGrn_History = "getGRNHistory";
     public static final String GetGrn_List = "getGRNList";
+    public static final String GetGrn_OrderDetails = "getGRNOrderDetails";
+    public static final String GetGrn_Pending_List = "getGRNPendingList";
+
     public static final String SR_GetTodayOrder_List="srGetOrderDetailList";
     public static final String PreInvOrderQty="preInvoiceOrderQty";
     public static final String GetProjectionOrderHistory="getProjectionHistory";

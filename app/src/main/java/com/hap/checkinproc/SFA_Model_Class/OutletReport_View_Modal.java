@@ -3,9 +3,35 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OutletReport_View_Modal {
+
+    public String getGrnDate() {
+        return grnDate;
+    }
+
+    public void setGrnDate(String grnDate) {
+        this.grnDate = grnDate;
+    }
+
+    @SerializedName("GRN_Date1")
+    @Expose
+    private String grnDate = "";
+
+//    public String getgD() {
+//        return gD;
+//    }
+//
+//    public void setgD(String gD) {
+//        this.gD = gD;
+//    }
+//
+//    @SerializedName("GRN_Date")
+//    @Expose
+//    private String gD = "";
+
     private  String name;
     @SerializedName("No_Of_items")
     @Expose
@@ -17,6 +43,411 @@ public class OutletReport_View_Modal {
     @Expose
     private String orderNo = "";
 
+    public String getBatch_No() {
+        return batch_No;
+    }
+
+    public void setBatch_No(String batch_No) {
+        this.batch_No = batch_No;
+    }
+
+    @SerializedName("batch_no")
+    @Expose
+    private String batch_No = "";
+
+    public String getProdDetails() {
+        return prodDetails;
+    }
+
+    public void setProdDetails(String prodDetails) {
+        this.prodDetails = prodDetails;
+    }
+
+    public String getProdUom() {
+        return prodUom;
+    }
+
+    public void setProdUom(String prodUom) {
+        this.prodUom = prodUom;
+    }
+
+    public String getPunit() {
+        return punit;
+    }
+
+    public void setPunit(String punit) {
+        this.punit = punit;
+    }
+
+    @SerializedName("product_unit")
+    @Expose
+    private String punit = "";
+
+
+    @SerializedName("uom_name")
+    @Expose
+    private String prodUom = "";
+
+    public String getProdTotal() {
+        return prodTotal;
+    }
+
+    public void setProdTotal(String prodTotal) {
+        this.prodTotal = prodTotal;
+    }
+
+    @SerializedName("Gross_Value")
+    @Expose
+    private String prodTotal = "";
+
+    @SerializedName("PDetails")
+    @Expose
+    private String prodDetails = "";
+
+    public String getProdPrice() {
+        return prodPrice;
+    }
+
+    public void setProdPrice(String prodPrice) {
+        this.prodPrice = prodPrice;
+    }
+
+    @SerializedName("Price")
+    @Expose
+    private String prodPrice = "";
+
+    public String getProdQnty() {
+        return prodQnty;
+    }
+
+    public void setProdQnty(String prodQnty) {
+        this.prodQnty = prodQnty;
+    }
+
+    @SerializedName("POQTY")
+    @Expose
+    private String prodQnty = "";
+
+    public String getDamaged() {
+        return damaged;
+    }
+
+    public void setDamaged(String damaged) {
+        this.damaged = damaged;
+    }
+
+    @SerializedName("Damaged")
+    @Expose
+    private String damaged = "";
+
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    @SerializedName("Product_Name")
+    @Expose
+    private String productName = "";
+    @SerializedName("Product_code")
+    @Expose
+    private String productCode = "";
+    @SerializedName("manufactor_date")
+    @Expose
+    private String manufDate = "";
+    @SerializedName("exp_date")
+    @Expose
+    private String expDate = "";
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getManufDate() {
+        return manufDate;
+    }
+
+    public void setManufDate(String manufDate) {
+        this.manufDate = manufDate;
+    }
+
+    public String getExpDate() {
+        return expDate;
+    }
+
+    public void setExpDate(String expDate) {
+        this.expDate = expDate;
+    }
+
+    public String getMrp() {
+        return mrp;
+    }
+
+    public void setMrp(String mrp) {
+        this.mrp = mrp;
+    }
+
+    @SerializedName("MRP")
+    @Expose
+    private String mrp = "";
+
+    public String getBilledQty() {
+        return billedQty;
+    }
+
+    public void setBilledQty(String billedQty) {
+        this.billedQty = billedQty;
+    }
+
+    @SerializedName("billed_qty")
+    @Expose
+    private String billedQty = "";
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    @SerializedName("Rate")
+    @Expose
+    private Double rate = 0.0;
+
+    public void setProductDetailsModal(List<OutletReport_View_Modal> productDetailsModal) {
+        this.productDetailsModal = productDetailsModal;
+    }
+
+    public String gettValue() {
+        return tValue;
+    }
+
+    public void settValue(String tValue) {
+        this.tValue = tValue;
+    }
+
+    @SerializedName("Net_value")
+    @Expose
+    private String tValue = "";
+
+    public int getDeliveredQty() {
+        return deliveredQty;
+    }
+
+    public void setDeliveredQty(int deliveredQty) {
+        this.deliveredQty = deliveredQty;
+    }
+
+    @SerializedName("deliver_qty")
+    @Expose
+    private int deliveredQty;
+
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
+
+    @SerializedName("Product_Image")
+    @Expose
+    private String productImage ;
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
+    }
+
+    @SerializedName("sap_batch_no")
+    @Expose
+    private String batchNo = "";
+
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    @SerializedName("flg")
+    @Expose
+    private String flag = "";
+
+    public String getNetValue() {
+        return netValue;
+    }
+
+    public void setNetValue(String netValue) {
+        this.netValue = netValue;
+    }
+
+    @SerializedName("Net_Value")
+    @Expose
+    private String netValue ="" ;
+
+    public String getGrnNo() {
+        return grnNo;
+    }
+
+    public void setGrnNo(String grnNo) {
+        this.grnNo = grnNo;
+    }
+
+    @SerializedName("GRN_No")
+    @Expose
+    private String grnNo = "";
+
+    public Double getGrnTotal() {
+        return grnTotal;
+    }
+
+    public void setGrnTotal(Double grnTotal) {
+        this.grnTotal = grnTotal;
+    }
+
+    @SerializedName("Net_Tot_Value")
+    @Expose
+    private Double grnTotal = 0.0;
+
+    public Double getGrnTax() {
+        return grnTax;
+    }
+
+    public void setGrnTax(Double grnTax) {
+        this.grnTax = grnTax;
+    }
+
+    @SerializedName("Net_Tot_Tax")
+    @Expose
+    private Double grnTax = 0.0;
+
+    public String getSuppName() {
+        return suppName;
+    }
+
+    public void setSuppName(String suppName) {
+        this.suppName = suppName;
+    }
+
+    @SerializedName("Supp_Name")
+    @Expose
+    private String suppName = "";
+
+
+
+    public String getPono() {
+        return pono;
+    }
+
+    public void setPono(String pono) {
+        this.pono = pono;
+    }
+
+    @SerializedName("Po_No")
+    @Expose
+    private String pono = "";
+
+    public String getBillingDate() {
+        return billingDate;
+    }
+
+    public void setBillingDate(String billingDate) {
+        this.billingDate = billingDate;
+    }
+
+    @SerializedName("Billing_Date")
+    @Expose
+    private String billingDate = "";
+
+
+    public String getBillingId() {
+        return billingId;
+    }
+
+    public void setBillingId(String billingId) {
+        this.billingId = billingId;
+    }
+
+    @SerializedName("Billing_Document")
+    @Expose
+    private String billingId = "";
+
+    public String getSalesId() {
+        return salesId;
+    }
+
+    public void setSalesId(String salesId) {
+        this.salesId = salesId;
+    }
+
+    @SerializedName("Sales_Document")
+    @Expose
+    private String salesId = "";
+
+    @SerializedName("Qty_deleivered")
+    @Expose
+    private Double qnty = 0.0;
+
+
+    public Double getQnty() {
+        return qnty;
+    }
+
+    public void setQnty(Double qnty) {
+        this.qnty = qnty;
+    }
+
+
+    public int getTot_qty() {
+        return tot_qty;
+    }
+
+    public void setTot_qty(int tot_qty) {
+        this.tot_qty = tot_qty;
+    }
+
+    @SerializedName("Total_Qty")
+    @Expose
+    private int tot_qty ;
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    @SerializedName("Amount")
+    @Expose
+    private Double amount = 0.0;
+
+    public Double getTax_amount() {
+        return tax_amount;
+    }
+
+    public void setTax_amount(Double tax_amount) {
+        this.tax_amount = tax_amount;
+    }
+
+    @SerializedName("Tax_Amount")
+    @Expose
+    private Double tax_amount = 0.0;
 
     @SerializedName("Stockist_Code")
     @Expose
@@ -64,6 +495,14 @@ public class OutletReport_View_Modal {
     @SerializedName("Quantity")
     @Expose
     private int Quantity;
+
+
+
+
+    @SerializedName("InvoiceDate")
+    @Expose
+    private String InvoiceDate = "";
+
     public String getInvoiceDate() {
         return InvoiceDate;
     }
@@ -88,9 +527,7 @@ public class OutletReport_View_Modal {
         InvoiceAmount = invoiceAmount;
     }
 
-    @SerializedName("InvoiceDate")
-    @Expose
-    private String InvoiceDate = "";
+    private List<OutletReport_View_Modal> productDetailsModal = new ArrayList<>();
 
     @SerializedName("InvoiceStatus")
     @Expose
@@ -333,6 +770,70 @@ public class OutletReport_View_Modal {
 
     public void setQuantity(int quantity) {
         Quantity = quantity;
+    }
+
+    public List<OutletReport_View_Modal> getProductDetailsModal() {
+        return productDetailsModal;
+    }
+    public OutletReport_View_Modal(String Tax_Id, String Tax_Type, double Tax_Val, double Tax_Amt) {
+//        this.Tax_Val = Tax_Val;
+//        this.Tax_Type = Tax_Type;
+//        this.Tax_Id = Tax_Id;
+//        this.Tax_Amt = Tax_Amt;
+
+    }
+
+    public OutletReport_View_Modal(String Tax_Type, double Tax_Amt) {
+
+//        this.Tax_Type = Tax_Type;
+//
+//        this.Tax_Amt = Tax_Amt;
+
+    }
+
+    public OutletReport_View_Modal(String id, String name, String bookingDate, int Qty, String UOM) {
+//        this.id = id;
+        this.name = name;
+//        this.bookingDate = bookingDate;
+//        this.Qty = Qty;
+//        this.UOM = UOM;
+
+    }
+
+    public OutletReport_View_Modal(String id, String scheme, String free, double discount, String discount_type, String Package
+            , double tax, String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
+//        this.id = id;
+//        this.scheme = scheme;
+//        this.free = free;
+//        this.discount = discount;
+//        this.discount_type = discount_type;
+//        this.Package = Package;
+//        this.tax = tax;
+//        this.Off_Pro_code = off_Pro_code;
+//        this.Off_Pro_name = off_Pro_name;
+//        this.Off_Pro_Unit = off_Pro_Unit;
+
+    }
+
+    public OutletReport_View_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
+                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
+                                 Integer RegularQty, Double Amount, List<OutletReport_View_Modal> productDetailsModal, String PaidAmount, double tax) {
+//        this.id = id;
+        this.name = name;
+//        this.productCatCode = productCatCode;
+//        this.rowNum = rowNum;
+//        this.productSaleUnit = productSaleUnit;
+//        this.productUnit = productUnit;
+//        this.unitCode = unitCode;
+//        this.defaultUOMQty = defaultUOMQty;
+//        this.defaultUOM = defaultUOM;
+//        this.Rate = Rate;
+//        this.Qty = Qty;
+//        this.RegularQty = RegularQty;
+//        this.Amount = Amount;
+        this.productDetailsModal = productDetailsModal;
+//        this.PaidAmount = PaidAmount;
+//        this.tax = tax;
     }
 }
 

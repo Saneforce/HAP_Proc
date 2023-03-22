@@ -136,6 +136,8 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
                 sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
+                sharedCommonPref.save(Constants.DistributorGst, myDataset.get(position).getDisGst());
+                sharedCommonPref.save(Constants.DistributorFSSAI, myDataset.get(position).getDisFssai());
 
                 common_class.getDb_310Data(Constants.GroupFilter, this);
 
@@ -328,6 +330,7 @@ public class TodayPrimOrdActivity extends AppCompatActivity implements Master_In
                         intent.putExtra("Invoice_Date", obj.getString("Order_Date"));
                         intent.putExtra("NetAmount", obj.getString("NetAmount"));
                         intent.putExtra("Discount_Amount", obj.getString("Discount_Amount"));
+                        intent.putExtra("gstn",sharedCommonPref.getvalue(Constants.DistributorGst));
                         startActivity(intent);
                         overridePendingTransition(R.anim.in, R.anim.out);
                     } catch (Exception e) {

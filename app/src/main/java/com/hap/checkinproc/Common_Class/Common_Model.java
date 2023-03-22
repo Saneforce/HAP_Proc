@@ -18,6 +18,33 @@ public class Common_Model {
     private int CnvQty;
 
     private String Days_Period;
+    private String retGst;
+    private String disFssai;
+    private String disGst;
+
+    public String getDisGst() {
+        return disGst;
+    }
+
+    public void setDisGst(String disGst) {
+        this.disGst = disGst;
+    }
+
+    public String getRetGst() {
+        return retGst;
+    }
+
+    public void setRetGst(String retGst) {
+        this.retGst = retGst;
+    }
+
+    public String getDisFssai() {
+        return disFssai;
+    }
+
+    public void setDisFssai(String disFssai) {
+        this.disFssai = disFssai;
+    }
 
     public int getTotal_Ltrs() {
         return Total_Ltrs;
@@ -96,7 +123,7 @@ public class Common_Model {
         Latlong = latlong;
     }
 
-    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP, String Latlong, String CusSubGrpErp) {
+    public Common_Model(String name, String id, String flag, String address, String phone, String cont, String DivERP,String disGst,String disFssai, String Latlong, String CusSubGrpErp) {
         this.name = name;
         this.id = id;
         this.flag = flag;
@@ -106,6 +133,8 @@ public class Common_Model {
         this.DivERP = DivERP;
         this.Latlong = Latlong;
         this.CusSubGrpErp = CusSubGrpErp;
+        this.disGst=disGst;
+        this.disFssai=disFssai;
     }
 
     public Common_Model(String id, String name, String flag, String checkouttime, Boolean ExpNeed) {

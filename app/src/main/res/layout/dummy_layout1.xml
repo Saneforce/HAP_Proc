@@ -178,14 +178,14 @@
                 android:id="@+id/dyn_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"></RelativeLayout>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/dyn_l_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"></LinearLayout>
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rlay_upload"
@@ -227,7 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:divider="#fff"
-                    android:nestedScrollingEnabled="true"></ListView>
+                    android:nestedScrollingEnabled="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -235,7 +235,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:id="@+id/rlay_spin_fdt"
