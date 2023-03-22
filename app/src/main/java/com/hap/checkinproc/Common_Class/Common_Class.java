@@ -1677,7 +1677,7 @@ public class Common_Class {
                 SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 if (CheckIn == true) {
-                    CommonIntentwithoutFinish(SFA_Activity.class);
+                    context.startActivity(new Intent(context, SFA_Activity.class)); // To Avoid App Crash
                 } else
                     context.startActivity(new Intent(context, Dashboard.class));
 
