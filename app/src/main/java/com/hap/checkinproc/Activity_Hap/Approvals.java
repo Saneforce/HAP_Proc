@@ -260,12 +260,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     txt_newjoin_count.setText(jsonObject.getString("Newjoin"));
                     txt_Advance_req_count.setText(jsonObject.getString("Advance"));
 
-                    if (Integer.parseInt(jsonObject.getString("leave")) < 1) {
-                        txt_newjoin_count.setVisibility(View.GONE);
-                        findViewById(R.id.ivNewjoinArw).setVisibility(View.GONE);
-//                        findViewById(R.id.llLeave).setVisibility(View.GONE);
-//                        LeaveRequest.setVisibility(View.GONE);
-                    }
+//                    if (Integer.parseInt(jsonObject.getString("leave")) < 1) {
+//                        txt_newjoin_count.setVisibility(View.GONE);
+//                        findViewById(R.id.ivNewjoinArw).setVisibility(View.GONE);
+////                        findViewById(R.id.llLeave).setVisibility(View.GONE);
+////                        LeaveRequest.setVisibility(View.GONE);
+//                    }
                     if (Integer.parseInt(jsonObject.getString("leave")) < 1) {
                         countLeaveRequest.setVisibility(View.GONE);
                         findViewById(R.id.ivLvArw).setVisibility(View.GONE);

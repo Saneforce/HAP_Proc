@@ -703,6 +703,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     cf : Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
+                            ProdItem.put("Margin", String.format("%.2f", Getorder_Array_List.get(z).getMargin()));
+                            ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
 
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());

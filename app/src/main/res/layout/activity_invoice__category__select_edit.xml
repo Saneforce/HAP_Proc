@@ -999,7 +999,6 @@
                                 android:fontFamily="sans-serif"
                                 android:hint="Disc.Amt"
                                 android:inputType="numberDecimal"
-                                android:text="0.00"
                                 android:textAlignment="viewEnd"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C13dp" />
