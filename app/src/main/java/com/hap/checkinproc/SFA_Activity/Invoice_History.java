@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,9 +10,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -91,6 +98,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     private DatePickerDialog fromDatePickerDialog;
     String type = "";
 
+    ImageView swipe_left_image;
+
     //Updateed
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +159,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             linStockRot = findViewById(R.id.lin_stockRotation);
             tvOutstanding = findViewById(R.id.txOutstanding);
 
+            swipe_left_image = findViewById(R.id.swipe_left_image);
 
             txPrvBal = findViewById(R.id.PrvOutAmt);
             txSalesAmt = findViewById(R.id.SalesAmt);
@@ -223,6 +233,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
             //common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
+            SharedPreferences sessionCount = PreferenceManager.getDefaultSharedPreferences(this);
+            int count = sessionCount.getInt("count", 0);
+            if (count < 1) {
+                ShowSwipeAnimation(sessionCount, count);
+            }
+
             getOutstanding();
 
 //            if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE))
@@ -261,6 +277,40 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             Log.v(TAG, e.getMessage());
         }
 
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void ShowSwipeAnimation(SharedPreferences sessionCount, int count) {
+        swipe_left_image.setVisibility(View.VISIBLE);
+        Animation slideLeftAnimation = new TranslateAnimation(150, -150, 0, 0);
+        slideLeftAnimation.setDuration(1000);
+        slideLeftAnimation.setRepeatCount(Animation.INFINITE);
+        slideLeftAnimation.setRepeatMode(Animation.RESTART);
+        sessionCount.edit().putInt("count", (count + 1)).apply();
+        swipe_left_image.startAnimation(slideLeftAnimation);
+        new Handler().postDelayed(() -> {
+            swipe_left_image.clearAnimation();
+            swipe_left_image.setVisibility(View.GONE);
+        }, 10000);
+
+        View rootView = getWindow().getDecorView().getRootView();
+        rootView.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    swipe_left_image.clearAnimation();
+                    swipe_left_image.setVisibility(View.GONE);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    // User is moving their finger on the screen
+                    break;
+                case MotionEvent.ACTION_UP:
+                    // User lifted their finger off the screen
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        });
     }
 
     void showDatePickerDialog(int pos, TextView tv) {
@@ -402,7 +452,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
             case R.id.lin_complementary:
                 Shared_Common_Pref.Invoicetoorder = "2";
-                common_class.CommonIntentwithFinish(CompementaryInvoiceActivity.class);
+                startActivity(new Intent(this, CompementaryInvoiceActivity.class));
                 overridePendingTransition(R.anim.in, R.anim.out);
 
                 break;
