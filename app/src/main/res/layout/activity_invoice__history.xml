@@ -667,248 +667,286 @@
 
             </LinearLayout>
 
-            <HorizontalScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:scrollbars="none"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/llSecParent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        app:tint="@color/black"
+                        android:src="@drawable/arrow_left"
+                        android:layout_gravity="center_vertical"/>
 
-                    <LinearLayout
-                        android:id="@+id/lin_order"
-                        style="@style/OrderTypesButton"
-                        android:layout_width="100dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_order_24"
-                            app:tint="#fff" />
-
-                        <TextView
-
-                            android:id="@+id/Alltextclick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="ORDER"
-                            android:textColor="#fff"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lin_vanSales"
-                        style="@style/OrderTypesButton"
-                        android:visibility="gone"
-                        android:layout_width="100dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_invoice_24"
-                            app:tint="@color/white">
-
-                        </ImageView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="INVOICE"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/lin_repeat_order"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="1dp"
-                        android:background="@drawable/button_blueg"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/C3dp"
-                        android:paddingRight="@dimen/C5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:id="@+id/Completeclick"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="REPEAT   ORDER"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/lin_invoice"
-                        style="@style/OrderTypesButton"
-                        android:layout_width="100dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_invoice_24"
-                            app:tint="@color/white">
-
-                        </ImageView>
-
-                        <TextView
-                            android:id="@+id/Pendingclick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="INVOICE"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lin_complementary"
-                        style="@style/OrderTypesButton"
-                        android:layout_width="180dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_invoice_24"
-                            app:tint="@color/white" />
-
-                        <TextView
-                            android:id="@+id/tvComplementary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="Complementary Invoice"
-                            android:textAllCaps="true"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lin_indent"
-                        style="@style/OrderTypesButton"
-                        android:visibility="gone"
-                        android:layout_width="100dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_invoice_24"
-                            app:tint="@color/white">
-
-                        </ImageView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="INDENT"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/lin_noOrder"
-                        style="@style/OrderTypesButton"
-                        android:layout_width="100dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_noorder_24"
-                            app:tint="@color/white" />
-
-                        <TextView
-                            android:id="@+id/tvNoorder"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="No Order"
-                            android:textAllCaps="true"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lin_payment"
-                        style="@style/OrderTypesButton"
-                        android:layout_width="100dp">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_payment_24"
-                            app:tint="@color/white" />
-
-                        <TextView
-                            android:id="@+id/tvPayment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/C3dp"
-                            android:text="PAYMENT"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lin_repeat_invoice"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/C7dp"
+                    <HorizontalScrollView
+                        android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:background="@drawable/button_blueg"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:scrollbars="none"
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/Repeatinvoice"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:id="@+id/llSecParent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="REPEAT INVOICE"
-                            android:textColor="@color/white"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                            android:orientation="horizontal">
+
+
+                            <LinearLayout
+                                android:id="@+id/lin_order"
+                                style="@style/OrderTypesButton"
+                                android:layout_width="100dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:src="@drawable/ic_order_24"
+                                    app:tint="#fff" />
+
+                                <TextView
+
+                                    android:id="@+id/Alltextclick"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="ORDER"
+                                    android:textColor="#fff"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_vanSales"
+                                style="@style/OrderTypesButton"
+                                android:visibility="gone"
+                                android:layout_width="100dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_invoice_24"
+                                    app:tint="@color/white">
+
+                                </ImageView>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="INVOICE"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/lin_repeat_order"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="1dp"
+                                android:background="@drawable/button_blueg"
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/C3dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/Completeclick"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="REPEAT   ORDER"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/lin_invoice"
+                                style="@style/OrderTypesButton"
+                                android:layout_width="100dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_invoice_24"
+                                    app:tint="@color/white">
+
+                                </ImageView>
+
+                                <TextView
+                                    android:id="@+id/Pendingclick"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="INVOICE"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_indent"
+                                style="@style/OrderTypesButton"
+                                android:visibility="gone"
+                                android:layout_width="100dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_invoice_24"
+                                    app:tint="@color/white">
+
+                                </ImageView>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="INDENT"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/lin_noOrder"
+                                style="@style/OrderTypesButton"
+                                android:layout_width="100dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_noorder_24"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/tvNoorder"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="No Order"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_payment"
+                                style="@style/OrderTypesButton"
+                                android:layout_width="100dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_payment_24"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/tvPayment"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="PAYMENT"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_repeat_invoice"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/C7dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/button_blueg"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/Repeatinvoice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="REPEAT INVOICE"
+                                    android:textColor="@color/white"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_complementary"
+                                style="@style/OrderTypesButton"
+                                android:layout_width="180dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_invoice_24"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/tvComplementary"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/C3dp"
+                                    android:text="Complementary Invoice"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        app:tint="@color/black"
+                        android:src="@drawable/arrow_right"
+                        android:layout_gravity="center_vertical"/>
+
                 </LinearLayout>
 
-            </HorizontalScrollView>
+                <ImageView
+                    android:id="@+id/swipe_left_image"
+                    android:layout_width="@dimen/C30dp"
+                    android:layout_height="@dimen/C30dp"
+                    app:tint="@color/white"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/swipe_left"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 
