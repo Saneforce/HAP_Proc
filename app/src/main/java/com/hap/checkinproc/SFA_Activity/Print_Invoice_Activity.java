@@ -1154,7 +1154,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             wdth = wdth-bounds.width();
             wdth = wdth-3;
 
-            sText="_RRP";
+            sText="_MRP"; // Todo: RRP -> MRP
             paint.getTextBounds(sText, 0, sText.length(), bounds);
             canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xMRP=wdth;
             wdth = wdth-bounds.width();

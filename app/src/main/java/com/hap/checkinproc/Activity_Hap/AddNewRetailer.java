@@ -573,7 +573,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 edtPAN.setText(Retailer_Modal_List.get(getOutletPosition()).getPan_No());
 
                 edtFreezerMake.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_make());
-                edtFreezerTag.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_Tag_no());
+                String freezerNumber = Retailer_Modal_List.get(getOutletPosition()).getFreezer_Tag_no();
+                edtFreezerTag.setText(freezerNumber);
                 tvFreezerSta.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
                 tvFreezerCapacity.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
                 //freezerStaId
@@ -711,8 +712,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Enter Location", Toast.LENGTH_SHORT).show();
                     } else if (etDistrict.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter District", Toast.LENGTH_SHORT).show();
-                    } else if (addRetailerPhone.getText().toString().matches("") && isServiceType) {
-                        Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
+                    } else if ((addRetailerPhone.getText().toString().length() != 10) && isServiceType) {
+                        Toast.makeText(getApplicationContext(), "Enter 10 digit phone number", Toast.LENGTH_SHORT).show();
                     }
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
@@ -749,8 +750,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Boolean coolTyp=(!coolstatus.toLowerCase().contains("own"));
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase("") && coolTyp)
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler make");
-                        else if (edtFreezerTag.getText().toString().equalsIgnoreCase("") && coolTyp) {
-                            common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler Tag Number");
+                        else if ((edtFreezerTag.getText().toString().length() != 13) && coolTyp) {
+                            common_class.showMsg(AddNewRetailer.this, "Enter the 13 digits Freezer/Cooler Tag Number"); // Todo: 13 digits Freezer/Cooler Tag Number
                         } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("") && coolTyp) {
                             common_class.showMsg(AddNewRetailer.this, "Select the Freezer/Cooler Capacity");
                         }
@@ -2052,9 +2053,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject obj = array.getJSONObject(i);
-                                if(obj.getString("State_Code").equalsIgnoreCase("38")) {
-                                    stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
-                                }
+
+                                stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
+
+//                                if(obj.getString("State_Code").equalsIgnoreCase("38")) {
+//                                    stateList.add(new Common_Model(obj.getString("StateName"), obj.getString("State_Code")));
+//                                }
                                 try {
                                     if (!Shared_Common_Pref.Outler_AddFlag.equals("1") && getOutletPosition() >= 0 && (Retailer_Modal_List.get(getOutletPosition()).getStateCode() != null && obj.getString("State_Code").equals
                                             (Retailer_Modal_List.get(getOutletPosition()).getStateCode()))) {

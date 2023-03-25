@@ -356,11 +356,43 @@
                                     android:layout_weight="1">
 
                                     <TextView
-                                        android:id="@+id/Rate"
+                                        android:id="@+id/ERP"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="ERP"
+                                        android:textAlignment="textStart"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/ERP_Code"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="MRP"
+                                        android:textAlignment="textStart"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/MRP"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:text="Rate"
-                                        android:textAlignment="center"
+                                        android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
@@ -385,6 +417,12 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -395,7 +433,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
-                                        android:gravity="end"
+                                        android:gravity="center"
                                         android:text="UOM"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
@@ -479,6 +517,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+
                             </LinearLayout>
                         </LinearLayout>
 

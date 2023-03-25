@@ -200,7 +200,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
-                                android:layout_marginBottom="3dp"></CheckBox>
+                                android:layout_marginBottom="3dp"
+                                tools:ignore="TouchTargetSizeCheck"></CheckBox>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -309,7 +310,8 @@
                             android:hint="Enter the Outlet Name"
                             android:maxLines="2"
                             android:padding="10dp"
-                            android:textSize="13dp" />
+                            android:textSize="13dp"
+                            tools:ignore="TouchTargetSizeCheck" />
 
 
                         <LinearLayout
@@ -601,7 +603,8 @@
                                         android:hint="Enter the owner Name"
                                         android:maxLines="2"
                                         android:padding="10dp"
-                                        android:textSize="13dp" />
+                                        android:textSize="13dp"
+                                        tools:ignore="TouchTargetSizeCheck" />
 
                                 </LinearLayout>
 
@@ -693,7 +696,7 @@
                                 android:layout_marginTop="@dimen/C5dp"
                                 android:src="@drawable/mandatory" />
 
-                            <Space
+                            <View
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1" />
@@ -981,6 +984,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:maxLength="10"
                             android:hint="Enter the Phone No"
                             android:inputType="phone"
                             android:padding="10dp"
@@ -1894,7 +1898,8 @@
             app:initialCornerAngle="0dp"
             app:spinning_bar_color="#FFFFFFFF"
             app:spinning_bar_padding="5dp"
-            app:spinning_bar_width="5dp" />
+            app:spinning_bar_width="5dp"
+            tools:ignore="TouchTargetSizeCheck" />
 
 
         <LinearLayout

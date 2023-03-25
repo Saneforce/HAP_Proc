@@ -1023,11 +1023,11 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     startActivity(intentInv);
                 }
                 break;
-            case R.id.llPen://  Todo
+            case R.id.llPen:
                 if (PendingCount.getText().toString().equals("0"))
                     common_class.showMsg(this, "No Records Found");
                 else {
-                    Shared_Common_Pref.SALES_MODE = "pending";
+                    Shared_Common_Pref.SALES_MODE = "pending"; //  Todo: Pending Order
                     Intent intentInv = new Intent(getApplicationContext(), PendingOrdersActivity.class);
                     startActivity(intentInv);
                 }

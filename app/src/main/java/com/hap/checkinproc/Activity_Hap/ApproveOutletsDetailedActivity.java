@@ -487,8 +487,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         Toast.makeText(getApplicationContext(), "Enter Location", Toast.LENGTH_SHORT).show();
                     } else if (etDistrict.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter District", Toast.LENGTH_SHORT).show();
-                    } else if (addRetailerPhone.getText().toString().matches("")) {
-                        Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
+                    } else if (addRetailerPhone.getText().toString().length() != 10) {
+                        Toast.makeText(getApplicationContext(), "Enter 10 digit phone number", Toast.LENGTH_SHORT).show();
                     }
 //                    else if (txtRetailerClass.getText().toString().matches("")) {
 //                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
@@ -519,8 +519,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
                             common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the Freezer/Cooler make");
 
-                        else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the Freezer/Cooler Tag Number");
+                        else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && edtFreezerTag.getText().toString().length() != 13) {
+                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the 13 digits Freezer/Cooler Tag Number"); // Todo: 13 digits Freezer/Cooler Tag Number
                         } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select the Freezer/Cooler Capacity");
                         } else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))

@@ -219,7 +219,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Secondary Order", "", "", "", R.drawable.ic_outline_assignment_48));
                     // menuList.add(new ListModel("", "Van Sales", "", "", "", R.drawable.ic_outline_local_shipping_24));
                     menuList.add(new ListModel("", "Outlets", "", "", "", R.drawable.ic_baseline_storefront_24));
-                    menuList.add(new ListModel("", "Approve Outlets", "", "", "", R.drawable.ic_approve_outlets));
+                    if (UserDetails.getString("Sfcode", "").equals("MGR8171")) { // Todo: Approve Outlets Enable
+                        menuList.add(new ListModel("", "Approve Outlets", "", "", "", R.drawable.ic_approve_outlets));
+                    }
+
                     menuList.add(new ListModel("", "Nearby Outlets", "", "", "", R.drawable.ic_outline_near_me_24));
                     menuList.add(new ListModel("", "Reports", "", "", "", R.drawable.ic_reports));
                     menuList.add(new ListModel("", "Franchise", "", "", "", R.drawable.ic_franchise));

@@ -244,7 +244,12 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                     InvAmt = Double.parseDouble(tvInvAmt.getText().toString().replace(CurrencySymbol + " ", ""));
                     rDiscAmt = InvAmt * (rDiscPer / 100);
                     totalvalues = InvAmt - rDiscAmt;
-                    etDiscAmt.setText(new DecimalFormat("##0.00").format(rDiscAmt));
+
+                    if (rDiscAmt == 0) {
+                        etDiscAmt.setText("");
+                    } else {
+                        etDiscAmt.setText(new DecimalFormat("##0.00").format(rDiscAmt));
+                    }
 
                     tvPayAmt.setText(CurrencySymbol + " " + formatter.format(totalvalues));
                     tvTotOutstanding.setText(CurrencySymbol + " " + formatter.format(outstandAmt + (totalvalues - payAmt)));
@@ -1093,7 +1098,12 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
         InvAmt = Double.parseDouble(tvInvAmt.getText().toString().replace(CurrencySymbol + " ", ""));
         rDiscAmt = InvAmt * (rDiscPer / 100);
         totalvalues = InvAmt - rDiscAmt;
-        etDiscAmt.setText(new DecimalFormat("##0.00").format(rDiscAmt));
+
+        if (rDiscAmt == 0) {
+            etDiscAmt.setText("");
+        } else {
+            etDiscAmt.setText(new DecimalFormat("##0.00").format(rDiscAmt));
+        }
 
         tvPayAmt.setText(CurrencySymbol + " " + formatter.format(totalvalues));
 

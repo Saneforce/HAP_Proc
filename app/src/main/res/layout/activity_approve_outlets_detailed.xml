@@ -1011,6 +1011,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:maxLength="10"
                             android:hint="Enter the Phone No"
                             android:enabled="false"
                             android:inputType="phone"
