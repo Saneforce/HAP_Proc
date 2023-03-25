@@ -74,6 +74,7 @@ public class Product_Details_Modal {
     private String saveMode = "";
     private int cr;
     private int Dr;
+    private int RateEdited=0;
 
     public int getCr() {
         return cr;
@@ -351,6 +352,14 @@ public class Product_Details_Modal {
 
     public void setPTR(String PTR) {
         this.PTR = PTR;
+    }
+
+    public int getRateEdited() {
+        return RateEdited;
+    }
+
+    public void setRateEdited(int rateEdited) {
+        RateEdited = rateEdited;
     }
 
     public Double getCGST() {

@@ -61,6 +61,7 @@
 
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/btnRepeat"
+
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/C30dp"
                 android:layout_gravity="center_vertical"
@@ -74,7 +75,7 @@
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 android:theme="@style/BluePrimaryButton"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:finalCornerAngle="50dp"
                 app:initialCornerAngle="10dp"
                 app:spinning_bar_color="#FFFFFFFF"

@@ -78,9 +78,9 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String title = (position == 0) ? "BTG - " : position == 1 ? "Invoice - " : position == 2 ? "Order - " : "No Order - ";
+        String title = (position == 0) ? "BTG" : position == 1 ? "Invoice" : position == 2 ? "Order" : "No Order";
         OutletFilter(position);
-        title = title + Retailer_Modal_ListFilter.size();
+        title = title + "\n"+Retailer_Modal_ListFilter.size();
         return title;
     }
 

@@ -232,6 +232,7 @@
                         android:background="@drawable/round_status_blue"
                         android:paddingLeft="10dp"
                         android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
                         android:paddingRight="10dp"
                         android:text="DCO"
                         android:textColor="@color/white"

@@ -786,7 +786,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("MRP", String.valueOf(Getorder_Array_List.get(z).getMRP()));
+                            ProdItem.put("Margin", String.format("%.2f", Getorder_Array_List.get(z).getMargin()));
+                            ProdItem.put("RTEd", Getorder_Array_List.get(z).getRateEdited());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
+
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
                             ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());

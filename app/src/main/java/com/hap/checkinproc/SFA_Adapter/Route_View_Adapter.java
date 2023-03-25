@@ -160,7 +160,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             holder.txMobile.setText(mRetailer_Modal_List.getPrimary_No());
             holder.txAdd.setText(mRetailer_Modal_List.getListedDrAddress1());
             holder.txRetNo.setText(mRetailer_Modal_List.getListedDrSlNo().toString());
-            holder.txChannel.setText(mRetailer_Modal_List.getSpeciality());
+            holder.txChannel.setText(mRetailer_Modal_List.getOutletClass()+" - "+mRetailer_Modal_List.getSpeciality());
             holder.icMob.setVisibility(View.VISIBLE);
             if (mRetailer_Modal_List.getPrimary_No().equalsIgnoreCase("")) {
                 holder.icMob.setVisibility(View.GONE);

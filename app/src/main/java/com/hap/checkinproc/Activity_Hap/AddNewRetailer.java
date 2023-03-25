@@ -693,15 +693,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 addNewRetailers();
                             }
                         }, 500);
-                    } else if (txtRetailerRoute.getText().toString().matches("")) {
+                    } else if (txtRetailerRoute.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
-                    } else if (addRetailerName.getText().toString().matches("")) {
+                    } else if (addRetailerName.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter Outlet Name", Toast.LENGTH_SHORT).show();
-                    } else if (owner_name.getText().toString().equals("")) {
+                    } else if (owner_name.getText().toString().equals("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
-                    } else if (String.valueOf(Shared_Common_Pref.Outletlat).matches("")
+                    } else if((String.valueOf(Shared_Common_Pref.Outletlat).matches("")
                             || String.valueOf(Shared_Common_Pref.Outletlat).matches("0")
-                            || String.valueOf(Shared_Common_Pref.Outletlat).matches("0.0") && isServiceType) {
+                            || String.valueOf(Shared_Common_Pref.Outletlat).matches("0.0") )&& isServiceType) {
                         Toast.makeText(getApplicationContext(), "Refresh the Location Lat & Lng", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerAddress.getText().toString().matches("") && isServiceType) {
                         Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
@@ -740,20 +740,22 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     /*else if (shared_common_pref.getIntValue(Constants.Freezer_Mandatory) == 1 && !cbFreezerYes.isChecked() && !cbFreezerNo.isChecked()) {
                         common_class.showMsg(AddNewRetailer.this, "Check the Freezer/Cooler Required");
 
-                    }
-                    //else if (/*divERP.equalsIgnoreCase("21") && */ //cbFreezerYes.isChecked()) {
-                     /*   if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
+                    }*/
+                    else if (cbFreezerYes.isChecked() && isServiceType) {
+                        if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(AddNewRetailer.this, "Selet the Freezer/Cooler Status");
-                        } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
+                        }
+                        String coolstatus=tvFreezerSta.getText().toString();
+                        Boolean coolTyp=(!coolstatus.toLowerCase().contains("own"));
+                        if (edtFreezerMake.getText().toString().equalsIgnoreCase("") && coolTyp)
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler make");
-
-                        else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && edtFreezerTag.getText().toString().equalsIgnoreCase("")) {
+                        else if (edtFreezerTag.getText().toString().equalsIgnoreCase("") && coolTyp) {
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler Tag Number");
-                        } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
+                        } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("") && coolTyp) {
                             common_class.showMsg(AddNewRetailer.this, "Select the Freezer/Cooler Capacity");
                         }
-                        //else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
-                        //    common_class.showMsg(AddNewRetailer.this, "Please take Freezer/Cooler Photo");
+                        else if ((mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0) && coolTyp)
+                            common_class.showMsg(AddNewRetailer.this, "Please take Freezer/Cooler Photo");
                         else {
                             if (mSubmit.isAnimating()) return;
                             mSubmit.startAnimation();
@@ -764,7 +766,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 }
                             }, 500);
                         }
-                    } */
+                    }
                     else {
                         if (mSubmit.isAnimating()) return;
                         mSubmit.startAnimation();

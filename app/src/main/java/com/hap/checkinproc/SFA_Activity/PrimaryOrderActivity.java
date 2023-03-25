@@ -1415,7 +1415,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             }
             lin_orderrecyclerview.setVisibility(View.VISIBLE);
             Category_Nametext.setVisibility(View.VISIBLE);
-            Category_Nametext.setText(listt.get(categoryPos).getName());
+            Category_Nametext.setText(listt.get(categoryPos).getName()+" ( " + String.valueOf(listt.size()) + " )");
 
             mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
             recyclerView.setAdapter(mProdct_Adapter);

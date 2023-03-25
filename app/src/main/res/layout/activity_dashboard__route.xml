@@ -307,6 +307,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="Order"
                                 android:textAlignment="center"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
                                 android:textSize="9sp" />
 
                         </LinearLayout>
@@ -411,6 +413,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="Invoice"
                                 android:textAlignment="center"
+                                android:textColor="@color/colorAccent"
+                                android:textStyle="bold"
                                 android:textSize="9sp" />
                         </LinearLayout>
 
@@ -1207,14 +1211,17 @@
                             android:id="@+id/tabs"
                             style="@style/TabTextStyle"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
+                            android:layout_height="wrap_content"
                             android:background="@color/white"
                             app:tabGravity="fill"
                             app:tabIndicatorColor="@color/colorPrimaryDark"
                             app:tabIndicatorHeight="2dp"
                             app:tabRippleColor="@color/Hap_location"
                             app:tabSelectedTextColor="@color/colorPrimaryDark"
-                            app:tabTextColor="@color/grey_600" />
+                            app:tabTextColor="@color/black"
+                            app:tabPaddingTop="@dimen/C4dp"
+                            app:tabPaddingBottom="@dimen/C4dp"
+                            />
                     </RelativeLayout>
                 </com.google.android.material.appbar.AppBarLayout>
 

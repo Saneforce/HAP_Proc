@@ -427,8 +427,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
 
                 Product_Details_Modalitem.get(pos).setProductDetailsModal(taxList);
-                Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()
-                        + wholeTax)));
+               // Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()+ wholeTax)));
                 Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
             }
         } catch (Exception e) {
@@ -705,6 +704,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
                             ProdItem.put("Margin", String.format("%.2f", Getorder_Array_List.get(z).getMargin()));
                             ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
+                            ProdItem.put("RTEd", Getorder_Array_List.get(z).getRateEdited());
 
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
@@ -1257,11 +1257,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     }
 
 
-                    holder.regularAmt.setText(CurrencySymbol+" "  + new DecimalFormat("##0.00").format(Product_Details_Modal.getCnvQty() * Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                    holder.regularAmt.setText(CurrencySymbol+" "  + new DecimalFormat("##0.00").format((Product_Details_Modal.getCnvQty() * Product_Details_Modal.getRegularQty() )* Double.parseDouble( Product_Details_Modal.getPTR())));
 
-                    holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
+                    holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
-
+Log.d("PRICE_PTR", Product_Details_Modal.getPTR());
+Log.d("PRICE_Qty", String.valueOf(Product_Details_Modal.getQty()));
+Log.d("PRICE_Conv", String.valueOf(Product_Details_Modal.getCnvQty()));
+Log.d("PRICE_Amount", CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
                     holder.rlUOM.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -1331,11 +1334,17 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
-                            holder.Amount.setText(CurrencySymbol + " "  + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
+                            holder.Amount.setText(CurrencySymbol + " "  + new DecimalFormat("##0.00").format(totQty * Double.parseDouble( Product_Details_Modalitem.get(holder.getAdapterPosition()).getPTR())));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
-                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
+                                    Double.parseDouble( Product_Details_Modalitem.get(holder.getAdapterPosition()).getPTR()))));
+                            Log.d("PRICE_PTR", Product_Details_Modalitem.get(holder.getAdapterPosition()).getPTR());
+                            Log.d("PRICE_Qty", String.valueOf(Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty()));
+                            Log.d("PRICE_Conv", String.valueOf(Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
+                            Log.d("PRICE_Conv", String.valueOf(totQty));
+                            Log.d("PRICE_Amount", CurrencySymbol+" "  + formatter.format( (totQty)*Double.parseDouble( Product_Details_Modal.getPTR())));
+
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
+                                //holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
 
                             }
@@ -1587,6 +1596,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         } else {
                             alertDialog.dismiss();
                             product_details_modal.setRate(Double.valueOf(etComments.getText().toString()));
+                            product_details_modal.setPTR(etComments.getText().toString());
+                            product_details_modal.setRateEdited(1);
+
                             etComments.setText("");
                             notifyDataSetChanged();
 
