@@ -35,6 +35,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -94,6 +95,8 @@ public class Common_Class {
     ProgressDialog nDialog;
 
     Gson gson;
+
+    JSONArray array;
 
     // Gson gson;
     String Result = "false";
@@ -1694,6 +1697,39 @@ public class Common_Class {
 
     }
 
+    public JSONArray getDataFromMyPHP(Map<String, String> params) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getUniversalData(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body() == null) {
+                            Toast.makeText(context, "Error: Null Response", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        String result = response.body().string();
+                        JSONObject jsonObject = new JSONObject(result);
+                        if (jsonObject.getBoolean("success")) {
+                            array = jsonObject.getJSONArray("response");
+                        } else {
+                            Toast.makeText(context, "Error: Can't reach the endpoint", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Error: Response Not Success", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        return array;
+    }
 }
 
