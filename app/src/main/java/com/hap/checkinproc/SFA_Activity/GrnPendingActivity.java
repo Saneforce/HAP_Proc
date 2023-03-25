@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.GrnAdapter;
 import com.hap.checkinproc.SFA_Adapter.GrnPendingAdapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +66,7 @@ public class GrnPendingActivity extends AppCompatActivity implements UpdateRespo
     CircularProgressButton btnSave,btnCancel;
     public static TextView tvDispatchDate,challanNo,poNo;
     EditText receivedLoc,receivedBy,authorizedBy,remarks;
+    TextView total;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -84,6 +87,8 @@ public class GrnPendingActivity extends AppCompatActivity implements UpdateRespo
         recyclerView = findViewById(R.id.rvGrnList);
         common_class = new Common_Class(this);
 
+        total = findViewById(R.id.totalNetValue);
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -97,46 +102,61 @@ public class GrnPendingActivity extends AppCompatActivity implements UpdateRespo
         });
     }
 
-
-
-    @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
+            switch (key) {
+                case Constants.GetGrn_Pending_List:
+                    Log.v("grnPendingList", apiDataResponse);
 
-            if (apiDataResponse != null && !apiDataResponse.equals("")) {
+                    GetJsonData(apiDataResponse);
 
-                switch (key) {
-
-                    case Constants.GetGrn_Pending_List:
-                        FilterOrderList.clear();
-                        userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-                        }.getType();
-                        OutletReport_View_Modal = gson.fromJson(apiDataResponse, userType);
-                        if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-                            for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-
-                                FilterOrderList.add(filterlist);
-                            }
-                        }
-
-                        mReportViewAdapter = new GrnPendingAdapter(GrnPendingActivity.this, FilterOrderList);
-                        recyclerView.setAdapter(mReportViewAdapter);
-
-                        break;
-
-                }
+                    break;
 
             }
         } catch (Exception e) {
-            Log.v("Grn Pending list: ", e.getMessage());
 
         }
     }
 
 
+    private void GetJsonData(String jsonResponse) {
+
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String pname = jsonObject1.optString("Product_Name");
+                String pcode = jsonObject1.optString("Product_code");
+                String pmrp = jsonObject1.optString("MRP");
+                String pmanfdate = jsonObject1.optString("manufactor_date");
+                String pexpdate = jsonObject1.optString("exp_date");
+                String pbilledqty = jsonObject1.optString("billed_qty");
+                String pbatchno = jsonObject1.optString("sap_batch_no");
+                String pbillingdate = jsonObject1.optString("Billing_Date");
+                String pImage = jsonObject1.optString("Product_Image");
+                String pUom = jsonObject1.optString("Unit_code");
+                String pUomName = jsonObject1.optString("product_unit");
+                Double pTax = Double.valueOf(jsonObject1.optString("total_tax_val"));
+
+                Log.v("jsonarray123",jsonArray.toString());
+
+                FilterOrderList.add(new OutletReport_View_Modal(pname,pcode,pmrp,pmanfdate,pexpdate,pbilledqty,pbatchno,pbillingdate,pImage,pUom,pUomName,pTax ));
+            }
+
+            mReportViewAdapter = new GrnPendingAdapter(GrnPendingActivity.this, FilterOrderList);
+            recyclerView.setAdapter(mReportViewAdapter);
+            mReportViewAdapter.notifyDataSetChanged();
+
+        } catch (Exception e) {
+        }
+
+    }
 
     private void submitData() {
         JSONObject jObj = new JSONObject();
+
+
         try {
             jObj.put("SFCode",SF_code);
             jObj.put("divCode",div);
@@ -152,52 +172,50 @@ public class GrnPendingActivity extends AppCompatActivity implements UpdateRespo
             jObj.put("subDivCode","0");
             jObj.put("remarks",remarks.getText().toString());
 
+
             JSONArray jArr=new JSONArray();
-            for (int i = 0; i < OutletReport_View_Modal.size(); i++) {
+            for (int i = 0; i < FilterOrderList.size(); i++) {
                 JSONObject obj1 = new JSONObject();
-                obj1.put("prodCode",OutletReport_View_Modal.get(i).getProductCode());
-                obj1.put("prodName",OutletReport_View_Modal.get(i).getProductName());
-                obj1.put("batchNo",OutletReport_View_Modal.get(i).getBatchNo());
-                obj1.put("Ordered_qnty",OutletReport_View_Modal.get(i).getBilledQty());
-                obj1.put("price",OutletReport_View_Modal.get(i).getMrp());
-                obj1.put("Damaged_Qnty",OutletReport_View_Modal.get(i).getDamaged());
-                obj1.put("manufDate",OutletReport_View_Modal.get(i).getManufDate());
+                obj1.put("prodCode",FilterOrderList.get(i).getProductCode());
+                obj1.put("prodName",FilterOrderList.get(i).getProductName());
+                obj1.put("prodUnit",FilterOrderList.get(i).getPunit());
+                obj1.put("prodUnitName",FilterOrderList.get(i).getuName());
+                obj1.put("batchNo",FilterOrderList.get(i).getBatchNo());
+                obj1.put("Ordered_qnty",FilterOrderList.get(i).getBilledQty());
+                obj1.put("price",FilterOrderList.get(i).getMrp());
+                obj1.put("Damaged_Qnty",FilterOrderList.get(i).getDamaged());
+                obj1.put("manufDate",FilterOrderList.get(i).getManufDate());
+                obj1.put("tax",FilterOrderList.get(i).getTaxVal());
 
                 jArr.put(obj1);
             }
             jObj.accumulate("GRNEntryData" , jArr);
 
+
             Log.d("savehjj","ghkj"+jObj.toString());
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
             Log.v("api",apiInterface.toString());
-            Call<ResponseBody> responseBodyCall =apiInterface.GRNSave(SF_code,div, jObj.toString());
+            Call<JsonObject> responseBodyCall =apiInterface.GRNSave(SF_code,div, jObj.toString());
             Log.v("divcodepos",SF_code+"   "+div );
-            responseBodyCall.enqueue(new Callback<ResponseBody>() {
+
+            responseBodyCall.enqueue(new Callback<JsonObject>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     if (response.isSuccessful()) {
                         try {
                             Log.e("JSON_VALUES", response.body().toString());
-                           String a = response.body().toString();
-                            Log.e("json",a.toString());
-
-                            Toast.makeText(GrnPendingActivity.this, "GRN submitted Successfully", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
+                            Toast.makeText(GrnPendingActivity.this, "GRN submitted successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         } catch (Exception e) {
                             Log.v("error", e.toString());
                         }
                     } else {
-                        dialog.dismiss();
-                        Log.v("error_response", response.toString());
-                        Toast.makeText(GrnPendingActivity.this, "GRN submitted Unsuccessfully", Toast.LENGTH_SHORT).show();
-
+                        Log.v("error_text", "Failed");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    dialog.dismiss();
+                public void onFailure(Call<JsonObject> call, Throwable t) {
                     Log.v("errormsg", t.toString());
                 }
             });

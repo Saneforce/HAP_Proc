@@ -40,7 +40,7 @@ public class GRN_History_Print_Invoice_Adapter extends RecyclerView.Adapter<GRN_
             holder.productname.setText(mDate.get(position).getProdDetails());
             holder.productqty.setText(mDate.get(position).getProdQnty());
             holder.productrate.setText(mDate.get(position).getProdPrice());
-            holder.productUOM.setText(mDate.get(position).getProdUom());
+            holder.productUOM.setText(mDate.get(position).getUnitCode());
             holder.producttotal.setText(mDate.get(position).getProdTotal());
 
     }

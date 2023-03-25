@@ -20,18 +20,6 @@ public class OutletReport_View_Modal {
     @Expose
     private String grnDate = "";
 
-//    public String getgD() {
-//        return gD;
-//    }
-//
-//    public void setgD(String gD) {
-//        this.gD = gD;
-//    }
-//
-//    @SerializedName("GRN_Date")
-//    @Expose
-//    private String gD = "";
-
     private  String name;
     @SerializedName("No_Of_items")
     @Expose
@@ -83,10 +71,34 @@ public class OutletReport_View_Modal {
     @Expose
     private String punit = "";
 
+    public String getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
+    }
+
+    @SerializedName("UOM")
+    @Expose
+    private String unitCode = "";
+
 
     @SerializedName("uom_name")
     @Expose
     private String prodUom = "";
+
+    public String getuName() {
+        return uName;
+    }
+
+    public void setuName(String uName) {
+        this.uName = uName;
+    }
+
+    @SerializedName("Unit_code")
+    @Expose
+    private String uName = "";
 
     public String getProdTotal() {
         return prodTotal;
@@ -222,6 +234,18 @@ public class OutletReport_View_Modal {
     @Expose
     private Double rate = 0.0;
 
+    public Double getTaxVal() {
+        return taxVal;
+    }
+
+    public void setTaxVal(Double taxVal) {
+        this.taxVal = taxVal;
+    }
+
+    @SerializedName("total_tax_val")
+    @Expose
+    private Double taxVal = 0.0;
+
     public void setProductDetailsModal(List<OutletReport_View_Modal> productDetailsModal) {
         this.productDetailsModal = productDetailsModal;
     }
@@ -324,6 +348,18 @@ public class OutletReport_View_Modal {
     @Expose
     private Double grnTotal = 0.0;
 
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    @SerializedName("Net_Tot_Goods")
+    @Expose
+    private Double total = 0.0;
+
     public Double getGrnTax() {
         return grnTax;
     }
@@ -403,6 +439,17 @@ public class OutletReport_View_Modal {
     @Expose
     private Double qnty = 0.0;
 
+    public String getSubdiv() {
+        return subdiv;
+    }
+
+    public void setSubdiv(String subdiv) {
+        this.subdiv = subdiv;
+    }
+
+    @SerializedName("subdivision_code")
+    @Expose
+    private String subdiv = "";
 
     public Double getQnty() {
         return qnty;
@@ -655,6 +702,21 @@ public class OutletReport_View_Modal {
 
     }
 
+    public OutletReport_View_Modal(String pname,String pcode,String pmrp,String pmanfdate,String pexpdate,String pbilledqty,String pbatchno,String pbillingdate,String pImage,String pUom,String pUomName,Double pTax ){
+        this.productName = pname;
+        this.productCode = pcode;
+        this.mrp = pmrp;
+        this.manufDate = pmanfdate;
+        this.expDate = pexpdate;
+        this.billedQty = pbilledqty;
+        this.batchNo = pbatchno;
+        this.billingDate = pbillingdate;
+        this.productImage = pImage;
+        this.punit = pUom;
+        this.uName = pUomName;
+        this.taxVal = pTax;
+
+    }
 
     public OutletReport_View_Modal(String slno, String orderNo, String stockistCode, String transSlNo, String outletCode, String sfCode, String orderDate, Double orderValue, String status) {
         this.slno = slno;

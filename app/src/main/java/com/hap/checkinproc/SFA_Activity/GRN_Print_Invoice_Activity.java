@@ -170,7 +170,7 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            billnumber.setText("Order" + getIntent().getStringExtra("Invoice_No"));
+            billnumber.setText("Order-" + getIntent().getStringExtra("Invoice_No"));
             tvOrderType.setText(sharedCommonPref.getvalue(Constants.FLAG));
             tvHeader.setText("Sales " + sharedCommonPref.getvalue(Constants.FLAG));
 
@@ -187,9 +187,10 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
             tvDistId.setText(sharedCommonPref.getvalue(Constants.DistributorERP));
             tvDistAdd.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
-            subtotal.setText("₹" + getIntent().getStringExtra("NetAmount"));
+            subtotal.setText("₹" + getIntent().getStringExtra("Net_Tot_Amount"));
             netamount.setText("₹" + getIntent().getStringExtra("NetAmount"));
         gstrate.setText("₹" + getIntent().getStringExtra("NetTax"));
+
 
 
         tvDisGST.setText(sharedCommonPref.getvalue(Constants.DistributorGst));
@@ -278,11 +279,19 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
                             }
                         }
                         int total_qtytext = 0;
+                        Double gross=0.0;
+                        int tax=0;
                         JSONArray arr = new JSONArray(apiDataResponse);
                         for (int a = 0; a < arr.length(); a++) {
                             JSONObject obj = arr.getJSONObject(a);
                             total_qtytext += obj.getInt("POQTY");
+//                            gross += obj.getDouble("Gross_Value");
+//                            tax += obj.getInt("Tax");
                             totalqty.setText("" + String.valueOf(total_qtytext));
+//                            subtotal.setText("₹" + String.valueOf(gross));
+//                            gstrate.setText("₹" + String.valueOf(tax));
+//                            netamount.setText("₹" + (gross + tax));
+                            Log.e("totalQTY",totalqty.toString());
 
                         }
 

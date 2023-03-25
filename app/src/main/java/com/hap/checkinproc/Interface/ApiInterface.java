@@ -705,5 +705,9 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v300_i.php?axn=save/pendinggrn")
-    Call<ResponseBody> GRNSave(@Query("SFCode") String sFCode, @Query("divCode") String divisionCode, @Field("data") String body);
+    Call<JsonObject> GRNSave(@Query("SFCode") String sFCode, @Query("divCode") String divisionCode, @Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?axn=grnSync")
+    Call<JsonObject> GRNSync(@Field("data") String body);
 }

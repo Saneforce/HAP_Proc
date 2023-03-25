@@ -286,6 +286,17 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/NetTotalValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/C3dp"/>
         </LinearLayout>
 
 

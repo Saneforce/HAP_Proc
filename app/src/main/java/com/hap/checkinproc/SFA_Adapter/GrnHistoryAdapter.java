@@ -56,7 +56,12 @@ public class GrnHistoryAdapter extends RecyclerView.Adapter<GrnHistoryAdapter.My
         holder.date.setText("" + mDate.get(position).getGrnDate());
         holder.pono.setText("" + mDate.get(position).getPono());
         holder.name.setText("" + mDate.get(position).getSuppName());
-        holder.amount.setText("" +new DecimalFormat("##0.00").format ( mDate.get(position).getGrnTotal()));
+        holder.amount.setText(""+mDate.get(position).getGrnTotal());
+
+        mDate.get(position).setGrnNo( mDate.get(position).getGrnNo());
+
+
+        //holder.amount.setText("" +new DecimalFormat("##0.00").format ( mDate.get(position).getGrnTotal()));
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +77,7 @@ public class GrnHistoryAdapter extends RecyclerView.Adapter<GrnHistoryAdapter.My
                 intent.putExtra("Invoice_Date", mDate.get(position).getGrnDate()+ "");
                 intent.putExtra("Invoice_No", mDate.get(position).getGrnNo()+ "");
                 intent.putExtra("NetAmount", mDate.get(position).getGrnTotal()+ "");
-//                intent.putExtra("Net_Tot_Tax",mDate.get(position).getTax());
+                intent.putExtra("Net_Tot_Amount",mDate.get(position).getTotal()+"");
                 intent.putExtra("NetTax",mDate.get(position).getGrnTax()+ "");
 //                intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
                 context.startActivity(intent);
@@ -80,87 +85,6 @@ public class GrnHistoryAdapter extends RecyclerView.Adapter<GrnHistoryAdapter.My
         });
 
     }
-
- /* @Override
-     public void onBindViewHolder(GrnAdapter.MyViewHolder holder, int position) {
-         //   holder.llReturnInv.setVisibility(View.GONE);
-
-      */
-    /*   holder.billingDate.setText("" + mDate.get(position).getBillingDate());
-        holder.billingDoc.setText(mDate.get(position).getBillingId());
-        holder.salesDoc.setText(mDate.get(position).getSalesId());
-        holder.amount.setText("" +new DecimalFormat("##0.00").format ( mDate.get(position).getAmount()));
-
-        if (Objects.equals(mDate.get(position).getFlag(), "1.0")){
-            holder.complete.setVisibility(View.VISIBLE);
-            holder.pending.setVisibility(View.GONE);
-
-            holder.row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG, mDate.get(position).getStatus());
-                    Log.e("Sub_Total", String.valueOf(mDate.get(position).getOrderValue() + ""));
-                    intent.putExtra("Order_Values", mDate.get(position).getOrderValue() + "");
-                    intent.putExtra("Invoice_Values", mDate.get(position).getInvoicevalues());
-                    intent.putExtra("No_Of_Items", mDate.get(position).getNo_Of_items());
-                    intent.putExtra("Invoice_Date", mDate.get(position).getOrderDate());
-                    intent.putExtra("Invoice_No", mDate.get(position).getOrderNo());
-                    intent.putExtra("NetAmount", mDate.get(position).getNetAmount());
-                    intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
-                    context.startActivity(intent);
-                }
-            });
-        }
-        else{
-            holder.complete.setVisibility(View.GONE);
-            holder.pending.setVisibility(View.VISIBLE);
-
-            holder.row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, GrnHistory.class);
-                    //  sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-//                    sharedCommonPref.save(Constants.FLAG, mDate.get(position).getStatus());
-//                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-//                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-//                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-//                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-//                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-//                    intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
-//                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-//                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                    context.startActivity(intent);
-                }
-            });
-        }
-
-        Log.v("wertyuio",mDate.get(position).getFlag());*/
-    /*
-
-
-        holder.no.setText("" + mDate.get(position).getGrnNo());
-        holder.date.setText("" + mDate.get(position).getGrnDate());
-        holder.pono.setText("" + mDate.get(position).getPono());
-        holder.name.setText("" + mDate.get(position).getSuppName());
-        holder.amount.setText("" +new DecimalFormat("##0.00").format ( mDate.get(position).getGrnTotal()));
-        holder.row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, Print_Invoice_Activity.class);
-                sharedCommonPref.save(Constants.FLAG, mDate.get(position).getStatus());
-                Log.e("Sub_Total", String.valueOf(mDate.get(position).getOrderValue() + ""));
-                intent.putExtra("Order_Values", mDate.get(position).getOrderValue() + "");
-                intent.putExtra("Invoice_Values", mDate.get(position).getInvoicevalues());
-                intent.putExtra("No_Of_Items", mDate.get(position).getNo_Of_items());
-                intent.putExtra("Invoice_Date", mDate.get(position).getOrderDate());
-                intent.putExtra("Invoice_No", mDate.get(position).getOrderNo());
-                intent.putExtra("NetAmount", mDate.get(position).getGrnTotal());
-                intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
-                context.startActivity(intent);
-            }
-        });
-    }*/
 
     @Override
     public int getItemCount() {

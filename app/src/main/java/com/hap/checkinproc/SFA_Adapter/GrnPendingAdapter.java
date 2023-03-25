@@ -103,13 +103,14 @@ public class GrnPendingAdapter extends RecyclerView.Adapter<GrnPendingAdapter.My
 
     }
 
+
     @Override
     public int getItemCount() {
         return listt.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView invNo,invDate,prodName,prodCode,prodPrice,batchNo,manufDate,expDate,invItems,damageQnty;
+        public TextView invNo,invDate,prodName,prodCode,prodPrice,batchNo,manufDate,expDate,invItems,damageQnty,total;
         public EditText receivedQnty,orderQnty;
         public ImageView prodImage;
 
@@ -127,6 +128,7 @@ public class GrnPendingAdapter extends RecyclerView.Adapter<GrnPendingAdapter.My
             receivedQnty= view.findViewById(R.id.receivedQnty);
             damageQnty= view.findViewById(R.id.damageQnty);
             prodImage=view.findViewById(R.id.productImage);
+            total=view.findViewById(R.id.NetTotalValue);
 
         }
     }

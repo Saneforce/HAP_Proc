@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -78,13 +79,20 @@ public class GrnAdapter extends RecyclerView.Adapter<GrnAdapter.MyViewHolder> {
 //                intent.putExtra("Invoice_Values", mDate.get(position).getInvoicevalues());
                     intent.putExtra("TotQnty", mDate.get(position).getTot_qty()+ "");
                     intent.putExtra("Invoice_Date", mDate.get(position).getBillingDate()+ "");
-                    intent.putExtra("Invoice_No", mDate.get(position).getInvoiceID()+ "");
+                    intent.putExtra("Invoice_No", mDate.get(position).getGrnNo()+"");
                     intent.putExtra("NetAmount", new DecimalFormat("##0.00").format ( mDate.get(position).getAmount())+"");
                     intent.putExtra("TaxAmount", new DecimalFormat("##0.00").format ( mDate.get(position).getTax_amount())+"");
-//                intent.putExtra("Net_Tot_Tax",mDate.get(position).getTax());
+
+                    double x= Double.parseDouble(new DecimalFormat("##0.00").format ( mDate.get(position).getTax_amount()));
+                    double y= Double.parseDouble(new DecimalFormat("##0.00").format ( mDate.get(position).getAmount()));
+
+                    double z=x+y;
+                intent.putExtra("NetTotal",new DecimalFormat("##0.00").format (z)+"");
 //                    intent.putExtra("NetTax",mDate.get(position).getGrnTax()+ "");
 //                intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
                     context.startActivity(intent);
+//                    ((Activity)context).finish();
+
 //                    Log.e("12345678",mDate.get(position).getNetValue().toString());
 
                 }
@@ -146,7 +154,6 @@ public class GrnAdapter extends RecyclerView.Adapter<GrnAdapter.MyViewHolder> {
 
         TextView billingDoc, salesDoc, billingDate, amount,no,date,name,pono;
         LinearLayout complete,pending,row;
-
 
 
         public MyViewHolder(@NonNull View itemView) {

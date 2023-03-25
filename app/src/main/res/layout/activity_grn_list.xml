@@ -74,7 +74,16 @@
                     android:textSize="15sp"
                     android:textStyle="bold"/>
             </RelativeLayout>
-
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                android:id="@+id/btngrnSync"
+                android:layout_width="@dimen/C50dp"
+                android:layout_height="@dimen/C30dp"
+                android:text="Sync"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/C15dp"
+                android:background="@drawable/bottom_button"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -29,6 +29,9 @@ import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -166,105 +169,8 @@ public class GrnHistory extends AppCompatActivity implements View.OnClickListene
                         }
 
 
+
                         mReportViewAdapter = new GrnHistoryAdapter(GrnHistory.this, FilterOrderList);
-                                                                /*, new AdapterOnClick() {
-                            @Override
-                            public void onIntentClick(int position) {
-                                if (FilterOrderList.get(position).getStatus().equalsIgnoreCase("INVOICE")) {
-                                    if (common_class.isNetworkAvailable(GrnHistory.this)) {
-                                        Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                                        Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                                        Shared_Common_Pref.Invoicetoorder = "1";
-                                        Intent intent = new Intent(getBaseContext(), Grn_Category_Select.class);
-                                        //  sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-                                        sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-                                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                                        intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
-                                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                                        startActivity(intent);
-                                        overridePendingTransition(R.anim.in, R.anim.out);
-                                    } else {
-                                        common_class.showMsg(GrnHistory.this, "Please chcek your internet connection");
-                                    }
-                                } else {
-                                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                                    Shared_Common_Pref.Invoicetoorder = "1";
-                                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                                    //   sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
-                                    sharedCommonPref.save(Constants.FLAG, "GRN");
-                                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                                    intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
-                                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.in, R.anim.out);
-                                }
-
-
-                            }
-
-*/
-
-
-
-
-
-                               /* , new AdapterOnClick() {
-                            @Override
-                            public void onIntentClick(int position) {
-//                                if (FilterOrderList.get(position).getStatus().equalsIgnoreCase("INVOICE")) {
-//                                    if (common_class.isNetworkAvailable(GrnListActivity.this)) {
-//                                        Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-//                                        Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-//                                        Shared_Common_Pref.Invoicetoorder = "1";
-//                                        Intent intent = new Intent(getBaseContext(), Grn_Category_Select.class);
-//                                        //  sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-//                                        sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-//                                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-//                                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-//                                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-//                                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-//                                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-//                                        intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
-//                                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-//                                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-//                                        startActivity(intent);
-//                                        overridePendingTransition(R.anim.in, R.anim.out);
-//                                    } else {
-//                                        common_class.showMsg(GrnListActivity.this, "Please chcek your internet connection");
-//                                    }
-//                                } else {
-                                Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                                Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                                Shared_Common_Pref.Invoicetoorder = "1";
-                                Intent intent = new Intent(getBaseContext(), GRN_Print_Invoice_Activity.class);
-                                //   sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getIndent());
-                                sharedCommonPref.save(Constants.FLAG, "GRN");
-                                Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                                intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                                intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                                intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                                intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                                intent.putExtra("Invoice_No", FilterOrderList.get(position).getOrderNo());
-                                intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                                intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.in, R.anim.out);
-                            }
-
-*/
-//                            }
-
                         invoicerecyclerview.setAdapter(mReportViewAdapter);
 
                         break;

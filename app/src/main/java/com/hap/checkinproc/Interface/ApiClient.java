@@ -37,5 +37,16 @@ public class ApiClient {
         return retrofit;
     }
 
+    public static Retrofit getRetrofit(){
+
+        if(retrofit == null){
+            retrofit= new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
+    }
+
 
 }

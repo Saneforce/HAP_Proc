@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:inputType="text"
-            android:maxLength="5"
+            android:maxLength="50"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>

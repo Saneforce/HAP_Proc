@@ -78,7 +78,6 @@ public class GRN_Invoice extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        try {
         super.onCreate(savedInstanceState);
         mPrint_invoice_activity = this;
         setContentView(R.layout.activity_grn_invoice);
@@ -158,7 +157,7 @@ public class GRN_Invoice extends AppCompatActivity implements View.OnClickListen
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
 
-        billnumber.setText("Order" + getIntent().getStringExtra("Invoice_No"));
+        billnumber.setText("Order-" + getIntent().getStringExtra("Invoice_No"));
         tvOrderType.setText(sharedCommonPref.getvalue(Constants.FLAG));
         tvHeader.setText("Sales " + sharedCommonPref.getvalue(Constants.FLAG));
 
@@ -176,9 +175,9 @@ public class GRN_Invoice extends AppCompatActivity implements View.OnClickListen
         tvDistAdd.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
 
         subtotal.setText("₹" + getIntent().getStringExtra("NetAmount"));
-        netamount.setText("₹" + getIntent().getStringExtra("NetAmount"));
+        netamount.setText("₹" + getIntent().getStringExtra("NetTotal"));
         gstrate.setText("₹" + getIntent().getStringExtra("TaxAmount"));
-        totalqty.setText(getIntent().getStringExtra("TotQnty"));
+//        totalqty.setText(getIntent().getStringExtra("TotQnty"));
 
         tvDisGST.setText(sharedCommonPref.getvalue(Constants.DistributorGst));
         tvDisFSSAI.setText(sharedCommonPref.getvalue(Constants.DistributorFSSAI));
@@ -191,9 +190,7 @@ public class GRN_Invoice extends AppCompatActivity implements View.OnClickListen
         Log.v("gst_dist", sharedCommonPref.getvalue(Constants.DistributorGst));
 
 
-//        } catch (Exception e) {
-//            Log.v(TAG, e.getMessage());
-//        }
+
     }
 
     @Override
@@ -263,6 +260,17 @@ public class GRN_Invoice extends AppCompatActivity implements View.OnClickListen
                             for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
                                 FilterOrderList.add(filterlist);
                             }
+                        }
+
+                        int total_qtytext = 0;
+                        JSONArray arr = new JSONArray(apiDataResponse);
+                        for (int a = 0; a < arr.length(); a++) {
+                            JSONObject obj = arr.getJSONObject(a);
+                            total_qtytext += obj.getInt("billed_qty");
+                            totalqty.setText("" + String.valueOf(total_qtytext));
+
+                            Log.e("totalQTY",totalqty.toString());
+
                         }
 
                         totalitem.setText("" + OutletReport_View_Modal.size());
