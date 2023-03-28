@@ -253,8 +253,7 @@ public class SANGPSTracker extends Service {
         if (!mChangingConfiguration) {
             Log.i(TAG, "Starting foreground service");
 
-           /* // TODO(developer). If targeting O, use the following code.
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+           /* if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
                 mNotificationManager.startServiceInForeground(new Intent(this,
                         SANGPSTracker.class), NOTIFICATION_ID, getNotification());
             } else {

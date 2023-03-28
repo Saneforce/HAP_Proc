@@ -667,7 +667,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             Log.e(TAG + "2:", Shared_Common_Pref.Outler_AddFlag);
 
-            mSubmit.setOnClickListener(new View.OnClickListener() { // Todo
+            mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     categoryType = "";
@@ -751,7 +751,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         if (edtFreezerMake.getText().toString().equalsIgnoreCase("") && coolTyp)
                             common_class.showMsg(AddNewRetailer.this, "Enter the Freezer/Cooler make");
                         else if ((edtFreezerTag.getText().toString().length() != 13) && coolTyp) {
-                            common_class.showMsg(AddNewRetailer.this, "Enter the 13 digits Freezer/Cooler Tag Number"); // Todo: 13 digits Freezer/Cooler Tag Number
+                            common_class.showMsg(AddNewRetailer.this, "Enter the 13 digits Freezer/Cooler Tag Number");
                         } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("") && coolTyp) {
                             common_class.showMsg(AddNewRetailer.this, "Select the Freezer/Cooler Capacity");
                         }

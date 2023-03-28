@@ -84,7 +84,6 @@
                                 android:textColor="@color/grey_800"
                                 android:textSize="12sp"
                                 android:visibility="visible" />
-                            <!--Todo: 2-->
 
                             <TextView
                                 android:id="@+id/MrpRate"

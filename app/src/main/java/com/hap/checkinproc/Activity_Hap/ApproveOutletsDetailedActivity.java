@@ -520,7 +520,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                             common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the Freezer/Cooler make");
 
                         else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && edtFreezerTag.getText().toString().length() != 13) {
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the 13 digits Freezer/Cooler Tag Number"); // Todo: 13 digits Freezer/Cooler Tag Number
+                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the 13 digits Freezer/Cooler Tag Number");
                         } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
                             common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select the Freezer/Cooler Capacity");
                         } else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
@@ -595,7 +595,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
         rlFreezerCapacity.setEnabled(editMode);
         rlFreezerSta.setEnabled(editMode);
         rlState.setEnabled(editMode);
-        linReatilerRoute.setEnabled(editMode);// Todo
+        linReatilerRoute.setEnabled(editMode);
         rlDistributor.setEnabled(editMode);
         rlOutletType.setEnabled(editMode);
 
@@ -1960,7 +1960,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
                 case R.id.rl_route:
                     if (FRoute_Master != null && FRoute_Master.size() > 1) {
-                        common_class.showCommonDialog(FRoute_Master, 3, this); // Todo: Onclick Master Type
+                        common_class.showCommonDialog(FRoute_Master, 3, this);
                     }
                     break;
                 case R.id.rl_Distributor:

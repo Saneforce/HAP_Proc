@@ -351,7 +351,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         JSONObject jsonObject = new JSONObject(result);
                         if (jsonObject.getBoolean("success")) {
                             String jsonArray = jsonObject.getJSONArray("response").toString();
-                            orderInvoiceDetailData(jsonArray); // Todo
+                            orderInvoiceDetailData(jsonArray);
                             Log.e("status", "Response: " + jsonArray);
                         } else {
                             Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
@@ -1154,7 +1154,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             wdth = wdth-bounds.width();
             wdth = wdth-3;
 
-            sText="_MRP"; // Todo: RRP -> MRP
+            sText="_MRP";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
             canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xMRP=wdth;
             wdth = wdth-bounds.width();
@@ -1830,7 +1830,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse, String key) { // Todo
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
             if (apiDataResponse != null && !apiDataResponse.equals("")) {
                 switch (key) {

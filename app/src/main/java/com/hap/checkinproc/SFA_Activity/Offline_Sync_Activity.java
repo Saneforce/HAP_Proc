@@ -101,7 +101,6 @@ public class Offline_Sync_Activity extends Activity implements View.OnClickListe
                             jumpTime += 5;
                             progress.setProgress(jumpTime);
                         } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                     }

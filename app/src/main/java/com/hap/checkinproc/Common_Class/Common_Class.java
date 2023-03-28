@@ -1266,7 +1266,6 @@ public class Common_Class {
                 return false;
             }
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return b;

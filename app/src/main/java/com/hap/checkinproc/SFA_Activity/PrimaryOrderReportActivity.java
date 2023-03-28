@@ -55,12 +55,8 @@ public class PrimaryOrderReportActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(result);
                         if (jsonObject.getBoolean("success")) {
                             Toast.makeText(context, "Request Result: " + jsonObject, Toast.LENGTH_SHORT).show();
-
                             Log.e("status", "Request Result: \n" + jsonObject);
-
                             // JSONArray jsonArray = jsonObject.getJSONArray("response");
-                            // Todo: Do Something...
-
                         } else {
                             Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
                         }

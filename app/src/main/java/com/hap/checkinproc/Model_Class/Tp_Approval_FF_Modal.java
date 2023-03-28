@@ -172,7 +172,6 @@ public class Tp_Approval_FF_Modal {
     }
     @Override
     public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
         if(obj instanceof Tp_Approval_FF_Modal)
         {
             Tp_Approval_FF_Modal temp = (Tp_Approval_FF_Modal) obj;
@@ -184,8 +183,6 @@ public class Tp_Approval_FF_Modal {
 
     @Override
     public int hashCode() {
-        // TODO Auto-generated method stub
-
         return (this.fieldForceName.hashCode());
     }
 
