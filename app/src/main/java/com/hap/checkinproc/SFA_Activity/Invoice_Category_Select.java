@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -127,7 +128,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     private List<Common_Model> payList = new ArrayList<>();
 
-    String orderId = "";
+    String orderId = "",OrderTypId="",OrderTypNm="";
     private LinearLayout rlAddProduct, rlCredit, rlCash;
     private double outstandAmt;
     private double payAmt;
@@ -468,6 +469,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     try {
                         FilterTypes(item.getString("id"));
+                        OrderTypId=item.getString("id");
+                        OrderTypNm=item.getString("name");
                         common_class.brandPos = 0;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -478,6 +481,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
+            OrderTypId=filterArr.getJSONObject(0).getString("id");
+            OrderTypNm=filterArr.getJSONObject(0).getString("name");
 
             //common_class.getDb_310Data(Constants.STOCK_DATA, this);
 
@@ -753,6 +758,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "invoice");
+                        OutletItem.put("ordertypeid", OrderTypId);
+                        OutletItem.put("ordertypenm", OrderTypNm);
                         OutletItem.put("category_type", Shared_Common_Pref.SecOrdOutletType);
 
                         // OutletItem.put("outstandAmt", outstandAmt);
@@ -1586,9 +1593,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 tvTknStock = view.findViewById(R.id.tvTknStock);
                 tvCLStock = view.findViewById(R.id.tvCLStock);
                 tvBatchNo= view.findViewById(R.id.tvBatchNo);
+                tvMRP = view.findViewById(R.id.MrpRate);
 
                 if (CategoryType >= 0) {
-                    tvMRP = view.findViewById(R.id.MrpRate);
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);
                     regularAmt = view.findViewById(R.id.RegularAmt);
@@ -1690,8 +1697,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
 
+                //holder.tvMRP.setText(CurrencySymbol+" " + Product_Details_Modal.getMRP());
+                holder.tvMRP.setText(CurrencySymbol+" "  + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
+
                 if (CategoryType >= 0) {
-                    holder.tvMRP.setText(CurrencySymbol+" " + Product_Details_Modal.getMRP());
 
                     holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /**
                      Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
@@ -2113,7 +2122,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(Invoice_Category_Select.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(Invoice_Category_Select.this, "Enter Rate is greater than RRP");
+                            common_class.showMsg(Invoice_Category_Select.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
                             alertDialog.dismiss();

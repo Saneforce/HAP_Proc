@@ -48,6 +48,7 @@ public class HAPApp extends Application {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     public static String CurrencySymbol = "₹";//₹ B$
+    public static String MRPCap = "MRP";//₹ B$
     public static Boolean ProductsLoaded = false;
     SharedPreferences CommUserDetails;
     public static final String UserDetail = "MyPrefs";

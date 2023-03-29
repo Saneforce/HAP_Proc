@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -1684,7 +1685,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(VanSalesOrderActivity.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getRate())) {
-                            common_class.showMsg(VanSalesOrderActivity.this, "Enter Rate is greater than MRP");
+                            common_class.showMsg(VanSalesOrderActivity.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
                             alertDialog.dismiss();

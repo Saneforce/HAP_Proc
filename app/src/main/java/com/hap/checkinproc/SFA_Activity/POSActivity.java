@@ -120,7 +120,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     private TextView tvBillTotItem;
     private DatePickerDialog fromDatePickerDialog;
     private List<Product_Details_Modal> orderTotTax;
-    private String scanProId = "";
+    private String scanProId = "",OrderTypId="",OrderTypNm="";
     private ArrayList<Common_Model> uomList;
 
     private final List<Common_Model> payList = new ArrayList<>();
@@ -294,6 +294,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                     try {
                         FilterTypes(item.getString("id"));
+                        OrderTypId=item.getString("id");
+                        OrderTypNm=item.getString("name");
                         common_class.brandPos = 0;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -302,6 +304,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             });
             Grpgrid.setAdapter(grplistItems);
 
+            OrderTypNm=ProdGroups.getJSONObject(0).getString("name");
+            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
             common_class.getDb_310Data(Constants.POS_TAXList, this);
             common_class.getDb_310Data(Constants.POS_SCHEME, this);
@@ -802,6 +806,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         OutletItem.put("NetAmount", formatter.format(totalvalues));
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("ordertype", "pos");
+                        OutletItem.put("ordertypeid", OrderTypId);
+                        OutletItem.put("ordertypenm", OrderTypNm);
                         OutletItem.put("payMode", tvPayMode.getText().toString());
                         OutletItem.put("totAmtTax", totTax);
 
