@@ -118,6 +118,9 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                 sharedCommonPref.save(Constants.DistributorERP, myDataset.get(position).getCont());
                 sharedCommonPref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
                 sharedCommonPref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+                sharedCommonPref.save(Constants.DistributorGst,myDataset.get(position).getDisGst());
+                sharedCommonPref.save(Constants.DistributorFSSAI,myDataset.get(position).getDisFssai());
+
                 sharedCommonPref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
                 common_class.getDataFromApi(Constants.GetPosOrderHistory, PosHistoryActivity.this, false);
@@ -236,6 +239,7 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                         mReportViewAdapter = new PosOrder_History_Adapter(PosHistoryActivity.this, arr, apiDataResponse, new AdapterOnClick() {
                             @Override
                             public void onIntentClick(int position) {
+                                Log.v("POSorder: ", arr.toString());
                                 try {
                                     JSONObject obj = arr.getJSONObject(position);
                                     Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");

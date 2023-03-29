@@ -52,6 +52,8 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
                 holder.llPrice.setVisibility(View.GONE);
                 holder.llTot.setVisibility(View.GONE);
             }
+
+
 //            holder.productname.setText("" + mDate.getJSONObject(position).getString("Product_Name"));
 //            holder.productqty.setText("" + mDate.getJSONObject(position).getInt("Quantity"));
 //            holder.productUOM.setText("" + mDate.getJSONObject(position).getString("UOM"));
@@ -79,7 +81,6 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
             productUOM = itemView.findViewById(R.id.productUom);
 
             llUom=itemView.findViewById(R.id.llUOM);
-
             llPrice=itemView.findViewById(R.id.llPrice);
             llTot=itemView.findViewById(R.id.llTot);
 

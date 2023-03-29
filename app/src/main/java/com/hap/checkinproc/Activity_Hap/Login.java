@@ -56,6 +56,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -378,6 +379,7 @@ Log.d("Error","Can't Clear SFWish");
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
                 Shared_Common_Pref.SFCutoff = UserDetails.getString("SFCutoff","");
+                Shared_Common_Pref.Reporting_Sf_Code = UserDetails.getString("Reporting_To_Sf","");
 
                 String ActStarted = shared_common_pref.getvalue("ActivityStart");
 
@@ -798,6 +800,9 @@ Log.d("Error","Can't Clear SFWish");
                 shared_common_pref.save(Constants.Distributor_phone, response.getData().get(0).getStockist_Mobile());
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.DISTRIBUTER_TYPE);
                 shared_common_pref.save(Constants.CUTOFF_TIME, response.getData().get(0).getCutoffTime());
+                shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
+                shared_common_pref.save(Constants.DistributorGst, response.getData().get(0).getDisGSTN());
+                shared_common_pref.save(Constants.DistributorFSSAI, response.getData().get(0).getDisFSSAI());
 
 
 
@@ -818,11 +823,11 @@ Log.d("Error","Can't Clear SFWish");
 
                 Shared_Common_Pref.Sf_Code = response.getData().get(0).getDistCode();
                 Shared_Common_Pref.Div_Code = response.getData().get(0).getDivisionCode();
-                Shared_Common_Pref.SFCutoff = response.getData().get(0).getRSMCutoffTime();
+//                Shared_Common_Pref.SFCutoff = response.getData().get(0).getRSMCutoffTime();
 
                 shared_common_pref.save(Shared_Common_Pref.Div_Code, response.getData().get(0).getDivisionCode());
                 shared_common_pref.save(Shared_Common_Pref.Sf_Code, response.getData().get(0).getDistCode());
-                shared_common_pref.save(Shared_Common_Pref.SFCutoff, response.getData().get(0).getDistCode());
+//                shared_common_pref.save(Shared_Common_Pref.SFCutoff, response.getData().get(0).getDistCode());
 
 
                 userEditor.putString("email", eMail);
@@ -831,6 +836,7 @@ Log.d("Error","Can't Clear SFWish");
                     userEditor.putString("DepteNm", UserLastName1);
                 }
                 userEditor.putString("SfName", response.getData().get(0).getStockist_Name());
+                userEditor.putString("GSTN", response.getData().get(0).getDisGSTN());
 
                 userEditor.putString("url", String.valueOf(profile));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -845,8 +851,8 @@ Log.d("Error","Can't Clear SFWish");
                 cInEditor.putBoolean("CheckIn", true);
                 cInEditor.apply();
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory());
+//                startActivity(new Intent(Login.this, ProcurementDashboardActivity.class));
                 startActivity(new Intent(Login.this, SFA_Activity.class));
-
             } else {
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.CHECKIN_TYPE);
                 Shared_Common_Pref.LOGINTYPE = Constants.CHECKIN_TYPE;
@@ -1105,4 +1111,5 @@ Log.d("Error","Can't Clear SFWish");
             mBound = false;
         }
     };
+
 }

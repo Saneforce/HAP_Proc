@@ -4,14 +4,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.Model_Class.DateReport;
+import com.hap.checkinproc.Model_Class.GrnDataList;
 import com.hap.checkinproc.Model_Class.HeaderCat;
 import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Model;
+import com.hap.checkinproc.Model_Class.POSDataList;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
+import com.hap.checkinproc.Model_Class.Tp_Approval_FF_Modal;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +151,6 @@ public interface ApiInterface {
     Call<ResponseBody> saveView(@Field("data") String userData);
 
 
-
     /*LEAVE APPROVAL*/
 
     @GET("Db_v300.php?")
@@ -177,6 +180,12 @@ public interface ApiInterface {
     Call<Object> GetTPObject(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                              @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
                              @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?")
+    Call<Object> GetPJPApproval(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sfCode,
+                                                         @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
+                                                         @Field("data") String data);
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=table/list")
@@ -515,6 +524,10 @@ public interface ApiInterface {
     Call<JsonObject> savePrimaryOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("db_v310.php?axn=save/posCounterSalesEntry")
+    Call<JsonObject> savePOSEntrysales(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
     @POST("db_v310.php?axn=save/inshopsorder")
     Call<JsonObject>  saveInshopsOrder(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
@@ -592,6 +605,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=save/tacumulativeapprove")
     Call<JsonObject> taCumulativeApprove(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?axn=approve/pjpdetails")
+    Call<JsonObject> pjpApprove(@Query("sfCode") String sFCode, @Query("rSF") String rSF,@Query("Confirmed_Date") String ConfirmedDate,@Field("data") String body);
 
 
     @FormUrlEncoded
@@ -701,4 +718,53 @@ public interface ApiInterface {
     // Todo: API Call only with QueryMap
     @POST("MyPHP.php?")
     Call<ResponseBody> getUniversalData(@QueryMap Map<String, String> params);
+
+    //    @FormUrlEncoded
+    @GET("Db_v300_i.php?")
+    Call<ResponseBody> getInshopRetailer(@Query("axn") String axn,
+                                         @Query("divisionCode") String divisionCode,
+                                         @Query("rSF") String rSF,
+                                         @Query("sfCode") String sfCode,
+                                         @Query("State_Code") String stateCode,
+                                         @Query("c_date") String body);
+
+    @GET("Db_v300_i.php?")
+    Call<ResponseBody> getInshopRetailer1(@Query("axn") String axn,
+                                          @Query("divisionCode") String divisionCode,
+                                          @Query("rSF") String rSF,
+                                          @Query("sfCode") String sfCode,
+                                          @Query("State_Code") String stateCode,
+                                          @Query("c_date") String body);
+//                                          @Query("Entry_Type")String type);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?")
+    Call<ResponseBody> savJSONArray(@Field("data") String data,
+                                    @Query("axn") String ax,
+                                    @Query("divisionCode") String divisionCode,
+                                    @Query("sfCode") String sfCode);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?")
+    Call<ResponseBody> inshopSave(@Query("divisionCode") String divisionCode,@Query("Sf_code") String Sf_code,@Query("axn") String axn, @Field("data") String body);
+
+    @GET("Db_v300_i.php?axn=get/poscountersales")
+    Call<POSDataList> getpos1(@Query("sfCode") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
+
+    @GET("Db_v300_i.php?axn=get/grn")
+    Call<ResponseBody> getgrn(@Query("distributorERP") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/poscountersalesentry")
+    Call<JsonObject> posCounterEntrySave(@Query("divisionCode") String divisionCode, @Field("data") String body);
+
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?axn=save/pendinggrn")
+    Call<JsonObject> GRNSave(@Query("SFCode") String sFCode, @Query("divCode") String divisionCode, @Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v300_i.php?axn=grnSync")
+    Call<JsonObject> GRNSync(@Field("data") String body);
 }

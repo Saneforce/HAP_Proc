@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -98,7 +99,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
     String Ukey;
     String[] strLoc;
-    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "", mDCRMode;
+    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "", mDCRMode, id="",in="";
     Shared_Common_Pref sharedCommonPref;
     EditText cashdiscount, etOrderNo;
     Prodct_Adapter mProdct_Adapter;
@@ -623,8 +624,8 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
     private void FilterProduct(List<Product_Details_Modal> orderList) {
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
-        findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
-        findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
+        findViewById(R.id.llBillHeader).setVisibility(View.GONE);
+        findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         //rlAddProduct.setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
@@ -1069,45 +1070,56 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty, tvOrderQty;
+                    QtyAmt, totalQty, tvTaxLabel, tvMFG, tvEXP, tvUOM, tvInvQty, tvOrderQty,tvDamageQty,prodCode,etBatchNo,invoiceNo,invoiceDate;
 
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
-            EditText Qty, etBatchNo, etRemarks;
+            EditText Qty,tvReceivedQty,  etRemarks;
             RelativeLayout rlUOM;
 
 
             public MyViewHolder(View view) {
                 super(view);
+
+                invoiceNo = view.findViewById(R.id.invoiceNo);
+                invoiceDate=view.findViewById(R.id.invoiceDate);
                 productname = view.findViewById(R.id.productname);
-                QtyPls = view.findViewById(R.id.ivQtyPls);
-                QtyMns = view.findViewById(R.id.ivQtyMns);
-                Rate = view.findViewById(R.id.Rate);
+                prodCode=view.findViewById(R.id.prodCode);
+//                QtyPls = view.findViewById(R.id.ivQtyPls);
+//                QtyMns = view.findViewById(R.id.ivQtyMns);
+//                Rate = view.findViewById(R.id.mrp);
                 Qty = view.findViewById(R.id.Qty);
                 RegularQty = view.findViewById(R.id.RegularQty);
-                Amount = view.findViewById(R.id.Amount);
-                Free = view.findViewById(R.id.Free);
-                Disc = view.findViewById(R.id.Disc);
-                tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
+                Amount = view.findViewById(R.id.mrp);
+//                Free = view.findViewById(R.id.Free);
+//                Disc = view.findViewById(R.id.Disc);
+//                tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 tvUOM = view.findViewById(R.id.tvUOM);
-                tvInvQty = view.findViewById(R.id.tvInvQty);
+//                tvInvQty = view.findViewById(R.id.tvInvQty);
+                tvMFG = view.findViewById(R.id.manufactureDate);
+                tvEXP = view.findViewById(R.id.expiryDate);
+                etBatchNo = view.findViewById(R.id.batchNo);
+                tvOrderQty = view.findViewById(R.id.tvOrderQty);
+                tvReceivedQty = view.findViewById(R.id.receivedQnty);
+                tvDamageQty = view.findViewById(R.id.damageQnty);
+                ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
 
 
-                if (CategoryType >= 0) {
-                    rlUOM = view.findViewById(R.id.rlUOM);
-                    tvMFG = view.findViewById(R.id.tvMFG);
-                    tvEXP = view.findViewById(R.id.tvEXP);
-                    etBatchNo = view.findViewById(R.id.etBatchNo);
-                    etRemarks = view.findViewById(R.id.etRemarks);
-                    ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
-                    lblRQty = view.findViewById(R.id.status);
-                    regularAmt = view.findViewById(R.id.RegularAmt);
-                    QtyAmt = view.findViewById(R.id.qtyAmt);
-                    totalQty = view.findViewById(R.id.totalqty);
-                } else {
-                    tvOrderQty = view.findViewById(R.id.tvOrderQty);
-                    ivDel = view.findViewById(R.id.ivDel);
-
-                }
+//                if (CategoryType >= 0) {
+//                    rlUOM = view.findViewById(R.id.rlUOM);
+//                    tvMFG = view.findViewById(R.id.tvMFG);
+//                    tvEXP = view.findViewById(R.id.tvEXP);
+//                    etBatchNo = view.findViewById(R.id.batchNo);
+//                    etRemarks = view.findViewById(R.id.etRemarks);
+//                    ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
+//                    lblRQty = view.findViewById(R.id.status);
+//                    regularAmt = view.findViewById(R.id.RegularAmt);
+//                    QtyAmt = view.findViewById(R.id.qtyAmt);
+//                    totalQty = view.findViewById(R.id.totalqty);
+//                } else {
+//                    tvOrderQty = view.findViewById(R.id.tvOrderQty);
+//                    ivDel = view.findViewById(R.id.ivDel);
+//
+//                }
 
 
             }
@@ -1176,9 +1188,73 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
         public void onBindViewHolder(MyViewHolder holder, int position) {
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getAdapterPosition());
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
 
+                in=getIntent().getStringExtra("Invoice_No");
+                id=getIntent().getStringExtra("Invoice_Date");
+
+                holder.invoiceNo.setText(in);
+                holder.invoiceDate.setText(id);
+                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                holder.prodCode.setText("" + Product_Details_Modal.getERP_Code());
+                holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
+                holder.tvEXP.setText(Product_Details_Modal.getExp());
+                holder.tvMFG.setText(Product_Details_Modal.getMfg());
+                holder.etBatchNo.setText(Product_Details_Modal.getBatchNo());
+                holder.tvOrderQty.setText("" + Product_Details_Modal.getQty());
+                holder.tvUOM.setText(""+Product_Details_Modal.getUOMList().get(position).getCnvQty());
+//                holder.tvInvQty.setText("" + Product_Details_Modal.getRegularQty());
+
+//                if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
+//                    holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
+//                else {
+//                    holder.tvUOM.setText((int) Product_Details_Modal.getCnvQty());
+//                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
+//                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
+//                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
+//
+//
+//                }
+
+                TextWatcher textWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        try {
+                            if (!holder.tvOrderQty.getText().toString().equals("") && !holder.tvReceivedQty.getText().toString().equals("")) {
+                                int temp1 = Integer.parseInt(holder.tvOrderQty.getText().toString());
+                                int temp2 = Integer.parseInt(holder.tvReceivedQty.getText().toString());
+                                holder.tvDamageQty.setText(String.valueOf(temp1 - temp2));
+                            }
+                        }catch (Exception ignored){
+                        }
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                };
+
+                holder.tvOrderQty.addTextChangedListener(textWatcher);
+                holder.tvReceivedQty.addTextChangedListener(textWatcher);
+
+                if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
+                    holder.ImgVwProd.clearColorFilter();
+                    Glide.with(this.context)
+                            .load(Product_Details_Modal.getPImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(holder.ImgVwProd);
+                } else {
+                    holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
+                    holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
+
+/*
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
@@ -1214,7 +1290,8 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                     holder.etBatchNo.setText("" + Product_Details_Modal.getBatchNo());
                     holder.etRemarks.setText("" + Product_Details_Modal.getRemarks());
 
-                    holder.etBatchNo.addTextChangedListener(new TextWatcher() {
+                   */
+/* holder.etBatchNo.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -1287,7 +1364,9 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                         public void onClick(View v) {
                             showDatePickerDialog(0, holder.tvMFG, Product_Details_Modalitem.get(holder.getAdapterPosition()));
                         }
-                    });
+                    });*/
+                /*
+
 
                     holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
 
@@ -1396,7 +1475,10 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
+                                holder.totalQty.setText("Total Qty : " + (int) */
+/*totQty*/
+                /*
+enterQty);
                             }
 
 
@@ -1642,6 +1724,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 //                        showDialog(Product_Details_Modal);
 //                    }
 //                });
+*/
 
                 updateToTALITEMUI();
             } catch (Exception e) {

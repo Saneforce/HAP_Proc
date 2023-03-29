@@ -67,7 +67,7 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
     private DatePickerDialog fromDatePickerDialog;
 
     public static TextView tvStartDate, tvEndDate, currDate, totalExpense, tvView;
-    public static String stDate = "", endDate = "";
+    public static String stDate = "", endDate = "", entryDate="";
     String date = "", SF_code = "";
 
     @Override
@@ -98,7 +98,8 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
 
         currDate=findViewById(R.id.tvDate);
-        currDate.setText("" + DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
+        currDate.setText(""+DT.getDateWithFormat(new Date(), "dd-MMM-yyyy"));
+        entryDate= DT.getDateWithFormat(new Date(), "dd-MMM-yyyy HH:mm:ss");
 
         totalExpense = findViewById(R.id.totalExpense);
         btnSubmit = findViewById(R.id.btn_posentry_submit);
@@ -135,7 +136,7 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
         try {
             jObj.put("eKey",common_class.GetEkey());
             jObj.put("SFCode",SF_code);
-            jObj.put("currentDate",currDate.getText().toString());
+            jObj.put("currentDate",entryDate);
             jObj.put("fromDate",stDate);
             jObj.put("toDate",endDate);
             jObj.put("totalExpense", totalExpense.getText().toString());
@@ -207,11 +208,11 @@ public class POS_SalesEntryActivity extends AppCompatActivity implements View.On
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                    String name = jsonObject1.optString("name");
+                String name = jsonObject1.optString("name");
 //                    String value = jsonObject1.optString("pvalue");
-                    String id = jsonObject1.optString("id");
+                String id = jsonObject1.optString("id");
 
-                    Log.v("jsonarray123",jsonArray.toString());
+                Log.v("jsonarray123",jsonArray.toString());
 
                 list.add(new Product_Details_Modal(id,name ));
             }

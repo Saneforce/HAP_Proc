@@ -12,6 +12,67 @@ public class Product_Details_Modal {
     @Expose
     private String Package;
 
+    public String getTransSlNo() {
+        return transSlNo;
+    }
+
+    public void setTransSlNo(String transSlNo) {
+        this.transSlNo = transSlNo;
+    }
+
+
+    public String getProdDetails() {
+        return prodDetails;
+    }
+
+    public void setProdDetails(String prodDetails) {
+        this.prodDetails = prodDetails;
+    }
+
+    @SerializedName("PDetails")
+    @Expose
+    private String prodDetails = "";
+
+    @SerializedName("Trans_Sl_No")
+    @Expose
+    private String transSlNo;
+
+    @SerializedName("slno")
+    @Expose
+    private String slno;
+
+    public String getSlno() {
+        return slno;
+    }
+
+    public void setSlno(String slno) {
+        this.slno = slno;
+    }
+
+    @SerializedName("Order_Date")
+    @Expose
+    private String EntryDate;
+
+    public String getEntryDate() {
+        return EntryDate;
+    }
+
+    public void setEntryDate(String entryDate) {
+        EntryDate = entryDate;
+    }
+
+    public String getOrderno() {
+        return orderno;
+    }
+
+    public void setOrderno(String orderno) {
+        this.orderno = orderno;
+    }
+
+    @SerializedName("OrderNo")
+    @Expose
+    private String orderno;
+
     @SerializedName("Bar_Code")
     @Expose
     private String Bar_Code;
@@ -44,6 +105,18 @@ public class Product_Details_Modal {
     @SerializedName("Product_Cat_Code")
     @Expose
     private Integer productCatCode;
+
+    public String getPcode() {
+        return pcode;
+    }
+
+    public void setPcode(String pcode) {
+        this.pcode = pcode;
+    }
+
+    @SerializedName("PCode")
+    @Expose
+    private String pcode;
 
     @SerializedName("Product_Grp_Code")
     @Expose
@@ -190,6 +263,7 @@ public class Product_Details_Modal {
     @SerializedName("Amount")
     @Expose
     private Double Amount;
+
     @SerializedName("Qty")
     @Expose
     private Integer Qty;
@@ -309,6 +383,12 @@ public class Product_Details_Modal {
         this.name = name;
         this.id = id;
     }
+
+    public Product_Details_Modal( Float total){
+        this.total = total;
+//        this.EntryDate=entryDate;
+    }
+
 
     private String mfg = "";
     private String exp = "";
@@ -508,6 +588,18 @@ public class Product_Details_Modal {
     private double Tax_Val;
 
 
+
+    @SerializedName("TotalVal")
+    @Expose
+    private Float total;
+
+    public Float getTotal() {
+        return total;
+    }
+
+    public void setTotal(Float total) {
+        this.total = total;
+    }
     public String getTax_Id() {
         return Tax_Id;
     }
@@ -1122,5 +1214,69 @@ public class Product_Details_Modal {
         public void setValue(float value) {
             this.value = value;
         }
+
+
     }
+
+    public String getGrnNo() {
+        return grnNo;
+    }
+
+    public void setGrnNo(String grnNo) {
+        this.grnNo = grnNo;
+    }
+
+    @SerializedName("GRN_No")
+    @Expose
+    private String grnNo = "";
+
+    public String getGrnDate() {
+        return grnDate;
+    }
+
+    public void setGrnDate(String grnDate) {
+        this.grnDate = grnDate;
+    }
+
+    @SerializedName("GRN_Date")
+    @Expose
+    private String grnDate = "";
+
+    public String getPono() {
+        return pono;
+    }
+
+    public void setPono(String pono) {
+        this.pono = pono;
+    }
+
+    @SerializedName("Po_No")
+    @Expose
+    private String pono = "";
+
+    public String getSuppName() {
+        return suppName;
+    }
+
+    public void setSuppName(String suppName) {
+        this.suppName = suppName;
+    }
+
+    @SerializedName("Supp_Name")
+    @Expose
+    private String suppName = "";
+
+    public Double getGrnTotal() {
+        return grnTotal;
+    }
+
+    public void setGrnTotal(Double grnTotal) {
+        this.grnTotal = grnTotal;
+    }
+
+    @SerializedName("Net_Tot_Value")
+    @Expose
+    private Double grnTotal = 0.0;
+
+
 }
