@@ -14,8 +14,15 @@ public class Constants {
     public static final String Distributor_name = "distributorName";
     public static final String Distributor_Id = "distributorId";
     public static final String DistributorERP = "distributorERP";
+    public static final String Distributor_gst = "distributorGST";
+    public static final String Distributor_fssai = "distributorFSSAI";
+    public static final String Retailer_gst = "retailerGST";
+    public static final String Retailer_fssai = "retailerFSSAI";
     public static final String DistributorGst = "GSTN";
     public static final String DistributorFSSAI = "FSSAI";
+
+
+
     public static final String DB_TWO_GET_NOTIFY = "dashboardTwoNotify";
     public static final String DB_Offer_NOTIFY = "OfferNotify";
     public static final String DB_SFWish_NOTIFY = "SFWishNotify";

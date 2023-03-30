@@ -5,11 +5,11 @@ apply plugin: 'com.google.firebase.crashlytics'
 //4.x.x//primary--distri
 //6.x.x//start hsfa--checkin
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.hap.checkinproc"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 3316
         versionName "8.1.2"
         multiDexEnabled true

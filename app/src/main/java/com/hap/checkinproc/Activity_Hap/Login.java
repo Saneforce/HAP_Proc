@@ -811,8 +811,6 @@ Log.d("Error","Can't Clear SFWish");
                 shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
                 shared_common_pref.save(Constants.DistributorAdd, response.getData().get(0).getStockist_Address());
                 shared_common_pref.save(Constants.CusSubGrpErp, response.getData().get(0).getCusSubGrpErp());
-                shared_common_pref.save(Constants.Distributor_gst, response.getData().get(0).getDisGSTN());
-                shared_common_pref.save(Constants.Distributor_fssai, response.getData().get(0).getDisFSSAI());
 
 
                 Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;

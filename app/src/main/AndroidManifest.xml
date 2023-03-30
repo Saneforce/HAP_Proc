@@ -172,14 +172,14 @@
             android:name=".SFA_Activity.POSViewEntryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity_Hap.TP_Approval_Status"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity_Hap.TP_Approval_Details"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+<!--        <activity-->
+<!--            android:name=".Activity_Hap.TP_Approval_Status"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait" />-->
+<!--        <activity-->
+<!--            android:name=".Activity_Hap.TP_Approval_Details"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activity_Hap.NewJoinEntry"
             android:exported="false"

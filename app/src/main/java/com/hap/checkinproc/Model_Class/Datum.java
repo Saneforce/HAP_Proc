@@ -202,14 +202,14 @@ public class Datum {
     @SerializedName("checkRadius")
     @Expose
     private Integer checkRadius;
-
-    @SerializedName("SFJoinDate")
-    @Expose
-    private String SFJoinDate;
-
-    @SerializedName("SFJoinMxDate")
-    @Expose
-    private String SFJoinMxDate;
+//
+//    @SerializedName("SFJoinDate")
+//    @Expose
+//    private String SFJoinDate;
+//
+//    @SerializedName("SFJoinMxDate")
+//    @Expose
+//    private String SFJoinMxDate;
 
     public String getSfUserName() {
         return sfUserName;
@@ -538,20 +538,6 @@ public class Datum {
         return checkRadius;
     }
 
-    public String getSFJoinDate() {
-        return SFJoinDate;
-    }
-
-    public void setSFJoinDate(String SFJoinDate) {
-        this.SFJoinDate = SFJoinDate;
-    }
-    public String getSFJoinMxDate() {
-        return SFJoinMxDate;
-    }
-
-    public void setSFJoinMxDate(String SFJoinMxDate) {
-        this.SFJoinMxDate = SFJoinMxDate;
-    }
 
     public void setCheckRadius(Integer checkRadius) {
         this.checkRadius = checkRadius;

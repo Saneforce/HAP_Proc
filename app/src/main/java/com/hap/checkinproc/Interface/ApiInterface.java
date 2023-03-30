@@ -664,17 +664,6 @@ public interface ApiInterface {
                                          @Field("data") String data);
 
     @FormUrlEncoded
-    @POST("Db_v300_i.php?")
-    Call<Object> GetPJPApproval(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sfCode,
-                                @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
-                                @Field("data") String data);
-
-    @FormUrlEncoded
-    @POST("Db_v300_i.php?axn=approve/pjpdetails")
-    Call<JsonObject> pjpApprove(@Query("sfCode") String sFCode, @Query("rSF") String rSF,@Query("Confirmed_Date") String ConfirmedDate,@Field("data") String body);
-
-
-    @FormUrlEncoded
     @POST("Db_v310.php?axn=save/coolerinfo")
     Call<JsonObject> approveCIEntry(@Field("data") String toString);
 
@@ -753,12 +742,6 @@ public interface ApiInterface {
 
     @GET("Db_v300_i.php?axn=get/grn")
     Call<ResponseBody> getgrn(@Query("distributorERP") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
-
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=save/poscountersalesentry")
-    Call<JsonObject> posCounterEntrySave(@Query("divisionCode") String divisionCode, @Field("data") String body);
-
 
     @FormUrlEncoded
     @POST("Db_v300_i.php?axn=save/pendinggrn")

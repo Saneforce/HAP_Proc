@@ -968,11 +968,8 @@ public class Common_Class {
 
                     case Constants.POS_Category_EntryList:
                         axnname = "get/poscat";
-                        data.put("SF", UserDetails.getString("Sfcode", ""));
-                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
-                        data.put("div", UserDetails.getString("Divcode", ""));
-                        data.put("fromdate", POSViewEntryActivity.stDate);
-                        data.put("todate", POSViewEntryActivity.endDate);
+                        data.put("fromdate", VanStockViewActivity.stDate);
+                        data.put("todate", VanStockViewActivity.endDate);
                         break;
 
                 }
