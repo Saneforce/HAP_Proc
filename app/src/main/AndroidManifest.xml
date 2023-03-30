@@ -51,6 +51,13 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".SFA_Activity.SalesReturnActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SFA_Activity.GRN_Invoice"
             android:exported="false">
             <meta-data
@@ -171,15 +178,14 @@
         <activity
             android:name=".SFA_Activity.POSViewEntryActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
-<!--        <activity-->
-<!--            android:name=".Activity_Hap.TP_Approval_Status"-->
-<!--            android:exported="false"-->
-<!--            android:screenOrientation="portrait" />-->
-<!--        <activity-->
-<!--            android:name=".Activity_Hap.TP_Approval_Details"-->
-<!--            android:exported="false"-->
-<!--            android:screenOrientation="portrait" />-->
+            android:screenOrientation="portrait" /> <!-- <activity -->
+        <!-- android:name=".Activity_Hap.TP_Approval_Status" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".Activity_Hap.TP_Approval_Details" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".Activity_Hap.NewJoinEntry"
             android:exported="false"
