@@ -1796,7 +1796,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                                     uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
                                 }
-                                common_class.showCommonDialog(uomList, 1, CompementaryInvoiceActivity.this);
+                                common_class.showCommonDialog(uomList, 1, CompementaryInvoiceActivity.this); // tODO: uom List
                             } else {
                                 common_class.showMsg(CompementaryInvoiceActivity.this, "No Records Found.");
                             }
