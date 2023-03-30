@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingStart="@dimen/C8dp"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/productname"
@@ -51,6 +52,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingStart="@dimen/C8dp"
+                android:orientation="horizontal">
+            </LinearLayout>
+            <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/C8dp"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/erpCode"
@@ -63,6 +79,69 @@
                     android:text=""
                     android:textStyle="bold"/>
             </LinearLayout>
+                <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
+                            android:gravity="end"
+                            android:text="@string/mrp"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/C13dp"/>
+                        <TextView
+                    android:id="@+id/MrpRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end"
+                    android:text="0.00"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C13dp"/>
+                    </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif"
+                        android:gravity="end"
+                        android:text="Rate:"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"/>
+                    <TextView
+                        android:id="@+id/Rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif"
+                        android:gravity="end"
+                        android:text="0.00"
+                        android:textColor="@color/black"
+                        android:paddingRight="@dimen/C2dp"
+                        android:textSize="@dimen/C13dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -86,29 +165,6 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"></TextView>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-
-                        android:id="@+id/Rate"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:enabled="false"
-                        android:fontFamily="sans-serif"
-                        android:gravity="end"
-                        android:text="Value"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
-
-
-                </LinearLayout>
-
-
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -122,7 +178,7 @@
                         android:layout_height="match_parent"
                         android:enabled="false"
                         android:fontFamily="sans-serif"
-                        android:gravity="end"
+                        android:gravity="start"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"/>
 
@@ -230,7 +286,7 @@
                         android:gravity="end"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="@dimen/C13dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -263,8 +319,10 @@
                         android:fontFamily="sans-serif"
                         android:gravity="end"
                         android:text="Value"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textStyle="bold"
+                        android:paddingEnd="@dimen/C2dp"
+                        android:textColor="@color/ApproveGreen"
+                        android:textSize="@dimen/C13dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -342,6 +400,14 @@
                     android:textSize="13sp"
                     android:textStyle="bold"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/C2dp"
+                android:layout_marginLeft="@dimen/C2dp"
+                android:layout_marginRight="@dimen/C2dp"
+                android:background="@color/grey_200" />
         </LinearLayout>
 
 

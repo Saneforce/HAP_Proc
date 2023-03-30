@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -94,7 +95,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
-    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
+    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "",OrderTypId="",OrderTypNm="";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
     String TAG = "Order_Category_Select";
@@ -378,6 +379,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     try {
                         FilterTypes(item.getString("id"));
+                        OrderTypId=item.getString("id");
+                        OrderTypNm=item.getString("name");
                         common_class.brandPos = 0;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -386,6 +389,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             });
             Grpgrid.setAdapter(grplistItems);
 
+            OrderTypId=filterArr.getJSONObject(0).getString("id");
+            OrderTypNm=filterArr.getJSONObject(0).getString("name");
             FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
             tvCoolerInfo.setVisibility(View.GONE);
@@ -678,6 +683,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "order");
+                        OutletItem.put("ordertypeid", OrderTypId);
+                        OutletItem.put("ordertypenm", OrderTypNm);
                         OutletItem.put("deliveryDate", tvDeliveryDate.getText().toString());
                         OutletItem.put("category_type", Shared_Common_Pref.SecOrdOutletType);
 
@@ -1238,9 +1245,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
+                holder.tvMRP.setText(CurrencySymbol+" "  + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
 
                 if (CategoryType >= 0) {
-                    holder.tvMRP.setText(CurrencySymbol+" "  + Product_Details_Modal.getMRP());
 
                     holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /*+
                             (Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty())) * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
@@ -1591,7 +1598,7 @@ Log.d("PRICE_Amount", CurrencySymbol+" "  + formatter.format( (Product_Details_M
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(Order_Category_Select.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getRate())) {
-                            common_class.showMsg(Order_Category_Select.this, "Enter Rate is greater than RRP");
+                            common_class.showMsg(Order_Category_Select.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
                             alertDialog.dismiss();
@@ -1645,11 +1652,11 @@ Log.d("PRICE_Amount", CurrencySymbol+" "  + formatter.format( (Product_Details_M
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 llRegular = view.findViewById(R.id.llRegular);
                 tvUOM = view.findViewById(R.id.tvUOM);
+                tvMRP = view.findViewById(R.id.MrpRate);
 
 
                 if (CategoryType >= 0) {
                     rlUOM = view.findViewById(R.id.rlUOM);
-                    tvMRP = view.findViewById(R.id.MrpRate);
 
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                     lblRQty = view.findViewById(R.id.status);

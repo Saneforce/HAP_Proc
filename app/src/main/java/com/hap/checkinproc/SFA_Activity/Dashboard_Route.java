@@ -1069,6 +1069,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             shared_common_pref.save(Constants.DistributorERP, myDataset.get(position).getCont());
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, myDataset.get(position).getId());
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
+            shared_common_pref.save(Constants.DistributorGst, myDataset.get(position).getDisGst());
+            shared_common_pref.save(Constants.DistributorFSSAI, myDataset.get(position).getDisFssai());
             shared_common_pref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
 
             if (myDataset.get(position).getDivERP().equalsIgnoreCase("21")) {

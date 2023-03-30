@@ -47,8 +47,55 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
+        <activity
+            android:name=".SFA_Activity.GRN_Invoice"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.GRN_Print_Invoice_Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.GrnPendingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.GrnHistory"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SFA_Activity.InshopViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.TP_Approval_Status"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Activity_Hap.TP_Approval_Details"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.LedgerHistoryActivity"
             android:exported="false">
@@ -125,14 +172,14 @@
             android:name=".SFA_Activity.POSViewEntryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity_Hap.TP_Approval_Status"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity_Hap.TP_Approval_Details"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+<!--        <activity-->
+<!--            android:name=".Activity_Hap.TP_Approval_Status"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait" />-->
+<!--        <activity-->
+<!--            android:name=".Activity_Hap.TP_Approval_Details"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activity_Hap.NewJoinEntry"
             android:exported="false"
@@ -245,6 +292,7 @@
         <activity android:name=".Activity.LodgingCliamActivity" />
         <activity
             android:name=".Activity.PDFActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialogs" />
         <activity
             android:name=".Activity.PdfViewerActivity"

@@ -13,6 +13,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,6 +42,7 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
@@ -50,6 +52,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.GrnHistory;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
@@ -369,12 +372,37 @@ public class Common_Class {
                     QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
                     QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
                     break;
-                case Constants.GetGrn_List:
+                case Constants.GetGrn_History:
                     QuerySTring1 = "{\"tableName\":\"getindentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put(Constants.SF_Code, Shared_Common_Pref.Sf_Code);
+                    QueryString.put("divCode", Shared_Common_Pref.Div_Code);
+                    QueryString.put("fromdate", GrnHistory.tvStartDate.getText().toString());
+                    QueryString.put("todate", GrnHistory.tvEndDate.getText().toString());
+                    break;
+
+                case Constants.GetGrn_Pending_List:
+                    QuerySTring1 = "{\"tableName\":\"getgrnindentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put(Constants.SF_Code, Shared_Common_Pref.Sf_Code);
+                    QueryString.put("billing_doc", Shared_Common_Pref.BillingID);
+                    QueryString.put("sales_doc", Shared_Common_Pref.SalesID);
+                    break;
+
+                case Constants.GetGrn_List:
+                    QuerySTring1 = "{\"tableName\":\"getgrndetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+//                    QueryString.put(Constants.SF_Code, Shared_Common_Pref.Sf_Code);
+//                    QueryString.put("divCode", Shared_Common_Pref.Div_Code);
                     QueryString.put("fromdate", GrnListActivity.tvStartDate.getText().toString());
                     QueryString.put("todate", GrnListActivity.tvEndDate.getText().toString());
-                    QueryString.put(Constants.DistributorERP, shared_common_pref.getvalue(Constants.DistributorERP));
+                    QueryString.put("distributorERP",shared_common_pref.getvalue(Constants.DistributorERP));
                     break;
+
+                case Constants.GetGrn_OrderDetails:
+                    QuerySTring1 = "{\"tableName\":\"getgrnorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("orderID",Shared_Common_Pref.TransSlNo);
+                    QueryString.put(Constants.SF_Code, Shared_Common_Pref.Sf_Code);
+                    QueryString.put("divCode", Shared_Common_Pref.Div_Code);
+                    break;
+
                 case Constants.GetTodayPrimaryOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalprimaryorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 //                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
@@ -391,15 +419,12 @@ public class Common_Class {
 //                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
                     QueryString.put("fromdate", PosHistoryActivity.stDate);
                     QueryString.put("todate", PosHistoryActivity.endDate);
-
                     break;
 
                 case Constants.GetProjectionOrderHistory:
                     QuerySTring1 = "{\"tableName\":\"getprojectionhistory\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-
                     QueryString.put("fromdate", ProjectionHistoryActivity.stDate);
                     QueryString.put("todate", ProjectionHistoryActivity.endDate);
-
                     break;
 
 
@@ -456,7 +481,6 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
-
                 case Constants.PosOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalposorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
@@ -531,10 +555,10 @@ public class Common_Class {
                         Log.v("Res>>", "" + res);
 
                     } catch (Exception e) {
-
+                        Log.e("Common class:", key + " response: " + e.getMessage());
                         updateUi = ((UpdateResponseUI) activity);
                         updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
-                        Log.e("Common class:", key + " response: " + e.getMessage());
+
                     }
                 }
 
@@ -938,8 +962,8 @@ public class Common_Class {
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("div", UserDetails.getString("Divcode", ""));
                         data.put("dt", Common_Class.GetDatewothouttime());
-                       // data.put("fromdate", POSViewEntryActivity.stDate);
-                        //data.put("todate", POSViewEntryActivity.endDate);
+                      /*  data.put("fromdate", POSViewEntryActivity.stDate);
+                        data.put("todate", POSViewEntryActivity.endDate);*/
                         break;
 
                     case Constants.POS_Category_EntryList:
@@ -1023,6 +1047,9 @@ public class Common_Class {
                     shared_common_pref.save(Constants.Distributor_phone, jsonObject1.optString("Mobile"));
                     shared_common_pref.save(Constants.DivERP, jsonObject1.optString("DivERP"));
                     shared_common_pref.save(Constants.CusSubGrpErp, jsonObject1.getString("CusSubGrpErp"));
+                    shared_common_pref.save(Constants.DistributorGst, jsonObject1.optString("GSTN"));
+                    shared_common_pref.save(Constants.DistributorFSSAI, jsonObject1.optString("FSSAI"));
+                    shared_common_pref.save(Constants.RSM_CUTOFF_TIME,jsonObject1.optString("SFCutoff"));
                     getDataFromApi(Retailer_OutletList, activity, false);
                     break;
                 }
@@ -1502,7 +1529,9 @@ public class Common_Class {
                 String Mob = jsonObject1.optString("Mobile");
                 String ERP_Code = jsonObject1.optString("ERP_Code");
                 String DivERP = jsonObject1.optString("DivERP");
-                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP, jsonObject1.optString("Latlong"), jsonObject1.getString("CusSubGrpErp"));
+                String DisGst = jsonObject1.optString("GSTN");
+                String DisFssai = jsonObject1.optString("FSSAI");
+                Model_Pojo = new Common_Model(name, id, flag, Add2, Mob, ERP_Code, DivERP,DisGst,DisFssai, jsonObject1.optString("Latlong"), jsonObject1.getString("CusSubGrpErp"));
                 distributor_master.add(Model_Pojo);
 
             }
@@ -1689,6 +1718,23 @@ public class Common_Class {
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 if (CheckIn == true) {
                     context.startActivity(new Intent(context, SFA_Activity.class)); // To Avoid App Crash
+                } else
+                    context.startActivity(new Intent(context, Dashboard.class));
+
+            }
+        });
+
+
+    }
+
+    public void gotoProcurementDashboardScreen(Context context, View ivToolbarHome) {
+        ivToolbarHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    CommonIntentwithoutFinish(ProcurementDashboardActivity.class);
                 } else
                     context.startActivity(new Intent(context, Dashboard.class));
 

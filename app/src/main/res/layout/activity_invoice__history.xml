@@ -102,7 +102,7 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="11sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/toolbar_home"

@@ -80,7 +80,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:inputType="number"
-                                android:text="MRP: "
+                                android:text="@string/mrp"
                                 android:textColor="@color/grey_800"
                                 android:textSize="12sp"
                                 android:visibility="visible" />

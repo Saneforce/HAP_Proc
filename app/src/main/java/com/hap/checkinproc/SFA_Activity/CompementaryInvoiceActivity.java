@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -2136,7 +2137,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(CompementaryInvoiceActivity.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(CompementaryInvoiceActivity.this, "Enter Rate is greater than RRP");
+                            common_class.showMsg(CompementaryInvoiceActivity.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
                             alertDialog.dismiss();

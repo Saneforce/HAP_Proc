@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/basic"
-                android:text="POS Stock History"
+                android:text="Counter Sales Stock History"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="#FFF"

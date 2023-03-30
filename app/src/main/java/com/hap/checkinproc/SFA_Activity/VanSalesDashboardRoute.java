@@ -794,7 +794,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
             shared_common_pref.save(Constants.DistributorAdd, myDataset.get(position).getAddress());
             shared_common_pref.save(Constants.CusSubGrpErp, myDataset.get(position).getCusSubGrpErp());
-
+            shared_common_pref.save(Constants.DistributorGst,myDataset.get(position).getDisGst());
+            shared_common_pref.save(Constants.DistributorFSSAI,myDataset.get(position).getDisFssai());
 
             common_class.getDb_310Data(Constants.RETAILER_STATUS, this);
             getLastInvoiceData();

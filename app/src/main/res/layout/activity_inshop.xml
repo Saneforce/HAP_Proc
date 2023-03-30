@@ -17,6 +17,7 @@
         android:padding="@dimen/C3dp">
 
         <ImageView
+            android:id="@+id/inshop_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/basic"
             android:paddingLeft="@dimen/C10dp"
-            android:text="Inshop"
+            android:text="Inshops"
             android:layout_gravity="center"
             android:textAllCaps="false"
             android:textColor="#FFF"
@@ -53,24 +54,24 @@
             android:elevation="5dp"
             app:cardCornerRadius="@dimen/C12dp"
             android:layout_margin="@dimen/C10dp">
-             <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="150dp"
-                   android:gravity="center"
-                   android:orientation="vertical">
-                   <ImageView
-                       android:layout_width="@dimen/C50dp"
-                       android:layout_height="@dimen/C50dp"
-                       android:src="@drawable/ic_outlet_checkin"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="@dimen/C50dp"
+                    android:layout_height="@dimen/C50dp"
+                    android:src="@drawable/ic_outlet_checkin"/>
 
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:layout_gravity="center"
-                       android:layout_marginTop="@dimen/C12dp"
-                       android:text="Check-In"
-                       android:textAlignment="center" />
-               </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/C12dp"
+                    android:text="Check-In"
+                    android:textAlignment="center" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView

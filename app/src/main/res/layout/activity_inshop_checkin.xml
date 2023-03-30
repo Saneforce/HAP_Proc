@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:padding="@dimen/C3dp">
         <ImageView
+            android:id="@+id/cin_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -51,9 +52,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:visibility="visible"
         android:paddingBottom="@dimen/C5dp"
         app:layout_constraintTop_toBottomOf="@id/cin_toolbar">
         <TextView
+            android:id="@+id/tvR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Retailer"
@@ -106,6 +109,8 @@
 
     </LinearLayout>
 
+
+
     <LinearLayout
         android:id="@+id/inshopCheckedInLay"
         android:layout_width="match_parent"
@@ -130,7 +135,7 @@
                 android:id="@+id/inshopRetName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="JOSE STORES"
+                android:text=""
                 android:textSize="20dp"/>
         </LinearLayout>
         <TextView

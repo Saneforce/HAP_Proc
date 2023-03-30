@@ -70,11 +70,11 @@ public class Datum {
     @Expose
     private String sfCode;
 
-    @SerializedName("GSTN")
+    @SerializedName("gstn")
     @Expose
     private String disGSTN;
 
-    @SerializedName("FSSAI")
+    @SerializedName("Fssai_No")
     @Expose
     private String disFSSAI;
 
@@ -202,6 +202,14 @@ public class Datum {
     @SerializedName("checkRadius")
     @Expose
     private Integer checkRadius;
+//
+//    @SerializedName("SFJoinDate")
+//    @Expose
+//    private String SFJoinDate;
+//
+//    @SerializedName("SFJoinMxDate")
+//    @Expose
+//    private String SFJoinMxDate;
 
     public String getSfUserName() {
         return sfUserName;
@@ -529,6 +537,7 @@ public class Datum {
     public int getCheckRadius() {
         return checkRadius;
     }
+
 
     public void setCheckRadius(Integer checkRadius) {
         this.checkRadius = checkRadius;
