@@ -447,6 +447,9 @@
             android:name=".Activity.ViewActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Activity.ViewActivityI"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activity.ProcPrimaryOrderActivity"
             android:screenOrientation="portrait" />
         <activity

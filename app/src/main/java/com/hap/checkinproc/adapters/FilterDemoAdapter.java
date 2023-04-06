@@ -45,11 +45,20 @@ public class FilterDemoAdapter extends BaseAdapter {
     View header_view;
 
     JSONArray ja;
-    String value,target;
+    String value,target,type;
     int x;
     SharedPreferences share;
     boolean forHeader=false;
     CardView card_count;
+    public FilterDemoAdapter(Context context, JSONArray ja,String value,int x,String target,String type) {
+        this.context = context;
+        this.ja=ja;
+        this.value=value;
+        this.target=target;
+        this.x=x;
+        this.type=type;
+    }
+
     public FilterDemoAdapter(Context context, JSONArray ja,String value,int x,String target) {
         this.context = context;
         this.ja=ja;

@@ -245,12 +245,12 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
 
         switch (v.getId()) {
 
-            case R.id.ok:
-                createPdf();
-                break;
-            case R.id.ivPrint:
-                showPrinterList();
-                break;
+//            case R.id.ok:
+//                createPdf();
+//                break;
+//            case R.id.ivPrint:
+//                showPrinterList();
+//                break;
 
             case R.id.llDistCall:
                 common_class.showCalDialog(this, "Do you want to Call this Distributor?", sharedCommonPref.getvalue(Constants.Distributor_phone));
@@ -313,7 +313,7 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
 
     private void createPdf() {
         try {
-            int hgt = 1000 + (OutletReport_View_Modal.size() * 40);
+            int hgt = 1000 + (FilterOrderList.size() * 40);
 
             // create a new document
             PdfDocument document = new PdfDocument();
@@ -433,39 +433,39 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
 
-            for (int i = 0; i < OutletReport_View_Modal.size(); i++) {
+            for (int i = 0; i < FilterOrderList.size(); i++) {
 
                 y = y + 20;
                 paint.setColor(Color.DKGRAY);
                 paint.setTextSize(12);
 
 
-                String name = OutletReport_View_Modal.get(i).getProductName() + "                               ";
-                name = name.substring(0, name.length() - String.valueOf(OutletReport_View_Modal.get(i).getProdDetails()).length());
+                String name = FilterOrderList.get(i).getProdDetails() + "                               ";
+                name = name.substring(0, name.length() - String.valueOf(FilterOrderList.get(i).getProdDetails()).length());
 
 
-                String qtyValue = String.valueOf(OutletReport_View_Modal.get(i).getProdQnty());
-                String qty = "     " + qtyValue;
-                qty = qty.substring(qtyValue.length(), qty.length());
+//               String qtyValue = String.valueOf(FilterOrderList.get(i).getProdQnty());
+//                String qty = "     " + qtyValue;
+//                qty = qty.substring(qtyValue.length(), qty.length());
 
-                String rateValue = String.valueOf(formatter.format(OutletReport_View_Modal.get(i).getProdPrice()));
+                /* String rateValue = String.valueOf(formatter.format(FilterOrderList.get(i).getProdPrice()));
                 String rate = "               " + rateValue;
                 rate = (rate.substring(rateValue.length(), rate.length()));
 
-                String amtValue = String.valueOf(formatter.format(OutletReport_View_Modal.get(i).getProdTotal()));
+                String amtValue = String.valueOf(formatter.format(FilterOrderList.get(i).getProdTotal()));
                 String amt = "             " + amtValue;
                 amt = (amt.substring(amtValue.length(), amt.length()));
 
                 Log.e("Values length: ", "item: " + name.length() + " qty: " + qty.length() + " rate: " + rate.length() + " amt : " + amt.length());
-
+*/
                 // canvas.drawText(name + qty + rate + amt, x, y, paint);
 
 
-                canvas.drawText("" + OutletReport_View_Modal.get(i).getProdDetails(), x, y, paint);
-                canvas.drawText("" + OutletReport_View_Modal.get(i).getProdQnty(), (widthSize / 2) + 60, y, paint);
-                canvas.drawText("" + formatter.format(OutletReport_View_Modal.get(i).getProdPrice()), (widthSize / 2) + 100, y, paint);
-                canvas.drawText("" + formatter.format(OutletReport_View_Modal.get(i).getTax_amount()), (widthSize / 2) + 170, y, paint);
-                canvas.drawText("" + formatter.format(OutletReport_View_Modal.get(i).getProdTotal()), (widthSize / 2) + 230, y, paint);
+                canvas.drawText("" + FilterOrderList.get(i).getProdDetails(), x, y, paint);
+//                canvas.drawText("" + FilterOrderList.get(i).getProdQnty(), (widthSize / 2) + 60, y, paint);
+//                canvas.drawText("" + formatter.format(FilterOrderList.get(i).getProdPrice()), (widthSize / 2) + 100, y, paint);
+//                canvas.drawText("" + formatter.format(FilterOrderList.get(i).getTax_amount()), (widthSize / 2) + 170, y, paint);
+//                canvas.drawText("" + formatter.format(FilterOrderList.get(i).getProdTotal()), (widthSize / 2) + 230, y, paint);
 
 
             }
@@ -499,25 +499,25 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
             canvas.drawText("Total Qty", x, y, paint);
             canvas.drawText(totalqty.getText().toString(), (widthSize / 2) + 220, y, paint);
 
-            if (uomList != null) {
+            /*if (uomList != null) {
                 for (int i = 0; i < uomList.size(); i++) {
                     y = y + 20;
                     canvas.drawText(uomList.get(i).getUOM_Nm(), x, y, paint);
                     canvas.drawText("" + (int) uomList.get(i).getCnvQty(), (widthSize / 2) + 220, y, paint);
                 }
 
-            }
+            }*/
 
 //            y = y + 30;
 //            canvas.drawText("Gst Rate", x, y, paint);
 //            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
 //
-            for (int i = 0; i < taxList.size(); i++) {
+           /* for (int i = 0; i < taxList.size(); i++) {
                 y = y + 20;
                 canvas.drawText(taxList.get(i).getTax_Type(), x, y, paint);
                 canvas.drawText("₹" + formatter.format(taxList.get(i).getTax_Amt()), (widthSize / 2) + 220, y, paint);
 
-            }
+            }*/
 
             y = y + 20;
 
@@ -527,11 +527,11 @@ public class GRN_Print_Invoice_Activity extends AppCompatActivity implements Vie
 //                y = y + 30;
 //            }
 
-            if (cashDisc > 0) {
+            /*if (cashDisc > 0) {
                 canvas.drawText("Cash Discount", x, y, paint);
                 canvas.drawText(cashdiscount.getText().toString(), (widthSize / 2) + 220, y, paint);
                 y = y + 20;
-            }
+            }*/
 
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);

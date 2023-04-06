@@ -376,28 +376,28 @@ public class Login extends AppCompatActivity {
 
                 if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                     Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
-                    startActivity(new Intent(this, SFA_Activity.class));
+                    startActivity(new Intent(this, ProcurementDashboardActivity.class));
                 } else {
                     if (ActStarted.equalsIgnoreCase("true")) {
                         Intent aIntent;
                         String sDeptType = UserDetails.getString("DeptType", "");
                         if (sDeptType.equalsIgnoreCase("1")) {
                             //bommu
-                            // aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
-                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+                             aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+//                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
 
                         } else {
                             Shared_Common_Pref.Sync_Flag = "0";
                             if (checkValueStore())
                                 aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                             else {
-                                aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
+                                aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 aIntent.putExtra("Mode", "CIN");
                             }
                         }
                         startActivity(aIntent);
                     } else {
-                        Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
+                        Intent Dashboard = new Intent(Login.this, ProcurementDashboardActivity.class);
                         Dashboard.putExtra("Mode", "CIN");
                         startActivity(Dashboard);
                     }
@@ -844,8 +844,8 @@ public class Login extends AppCompatActivity {
                 cInEditor.putBoolean("CheckIn", true);
                 cInEditor.apply();
                 shared_common_pref.save(Constants.Freezer_Mandatory, response.getData().get(0).getFreezer_Mandatory());
-//                startActivity(new Intent(Login.this, ProcurementDashboardActivity.class));
-                startActivity(new Intent(Login.this, SFA_Activity.class));
+                startActivity(new Intent(Login.this, ProcurementDashboardActivity.class));
+//                startActivity(new Intent(Login.this, SFA_Activity.class));
             } else {
                 shared_common_pref.save(Constants.LOGIN_TYPE, Constants.CHECKIN_TYPE);
                 Shared_Common_Pref.LOGINTYPE = Constants.CHECKIN_TYPE;
@@ -880,13 +880,13 @@ public class Login extends AppCompatActivity {
 
                 if (requestCode == RC_SIGN_IN) {
                     if (CheckIn == true) {
-                        intent = new Intent(Login.this, Dashboard_Two.class);
+                        intent = new Intent(Login.this, ProcurementDashboardActivity.class);
                         intent.putExtra("Mode", "CIN");
                     } else {
                         intent = new Intent(Login.this, Dashboard.class);
                     }
                 } else {
-                    intent = new Intent(Login.this, Dashboard_Two.class);
+                    intent = new Intent(Login.this, ProcurementDashboardActivity.class);
                     intent.putExtra("Mode", "RPT");
                 }
 

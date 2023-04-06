@@ -1,5 +1,6 @@
 package com.hap.checkinproc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
@@ -51,7 +53,8 @@ public class AdapterForDynamicView extends BaseAdapter {
     LinearLayout dyn_l_lay;
     SharedPreferences share;
     private String strFarmerType = "";
-
+    RadioGroup rg;
+    RadioButton rb, rb1, rb2, rb3, rb4;
     public AdapterForDynamicView(Context context, ArrayList<ModelDynamicView> array) {
         this.context = context;
         this.array = array;
@@ -154,6 +157,7 @@ public class AdapterForDynamicView extends BaseAdapter {
 
         } else if (mm.getViewid().equalsIgnoreCase("3") || mm.getViewid().equalsIgnoreCase("18") || mm.getViewid().equalsIgnoreCase("24")) {
             edt_field_numeric.setVisibility(View.VISIBLE);
+            edt_field_numeric.setText(mm.getValue());
             if (mm.getViewid().equalsIgnoreCase("24")) {
                 edt_field_numeric.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             } else {
@@ -197,6 +201,7 @@ public class AdapterForDynamicView extends BaseAdapter {
                 spin_txt_tdt.setText(mm.getTvalue());
         } else if (mm.getViewid().equalsIgnoreCase("20")) {
             dyn_lay.setVisibility(View.VISIBLE);
+//          mm.getA_list().get(i).getValue();
             createDynamicView(mm.getA_list());
         } else if (mm.getViewid().equalsIgnoreCase("22")) {
             txt_label.setTextColor(Color.BLACK);
@@ -314,6 +319,8 @@ public class AdapterForDynamicView extends BaseAdapter {
             }
         });
 
+
+
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -384,40 +391,106 @@ public class AdapterForDynamicView extends BaseAdapter {
     }
 
     public void createDynamicView(final ArrayList<SelectionModel> arr) {
-        RadioGroup rg;
-        RadioButton rb1, rb2, rb3, rb4;
+        RadioGroup rg ;
+        final RadioButton[] starRadioBtn = new RadioButton[arr.size()];
         rg = new RadioGroup(context);
-        for (int i = 0; i < arr.size(); i++) {
-            rb1 = new RadioButton(context);
-            rb1.setId(i);
-
-            if (arr.get(i).isClick())
-                rb1.setChecked(true);
-
-            rb1.setText(arr.get(i).getTxt());
-            rg.addView(rb1);
-        }
-
-        rg.setOrientation(RadioGroup.VERTICAL);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.WRAP_CONTENT, (int) RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = 5;//150
+        rg.setOrientation(RadioGroup.HORIZONTAL);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) LinearLayout.LayoutParams.WRAP_CONTENT, (int) LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.rightMargin =150;
         params.topMargin = 5;
         rg.setLayoutParams(params);
-        dyn_lay.addView(rg);
+;
+
+//        for (int i = 0; i < arr.size(); i++) {
+//            starRadioBtn[i] = new RadioButton[i];
+//            starRadioBtn[i].setId(i);
+//
+//            if (arr.get(i).isClick())
+//                starRadioBtn[i].setChecked(true);
+//
+//            starRadioBtn[i].setText(arr.get(i).getTxt());
+//            rg.addView(starRadioBtn[i]);
+//        }
+
+        for (int i = 0;i<arr.size(); i++){
+            starRadioBtn[i] = new RadioButton(context);
+            SelectionModel object = arr.get(i);
+            starRadioBtn[i].setText(object.getTxt());
+            starRadioBtn[i].setId(i);
+
+
+            starRadioBtn[i].setText(arr.get(i).getTxt());
+            rg.addView(starRadioBtn[i]);
+        }
+dyn_lay.addView(rg);
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.v("radio_button_id", checkedId + "and value" + arr.get(checkedId).getTxt());
-                for (int i = 0; i < arr.size(); i++) {
-                    if (checkedId == i)
-                        arr.get(i).setClick(true);
-                    else
-                        arr.get(i).setClick(false);
-                }
+            public void onCheckedChanged(RadioGroup rg, int checkedId) {
+                for(int i=0; i<rg.getChildCount(); i++) {
+                    RadioButton btn = (RadioButton) rg.getChildAt(i);
+                    if(btn.getId() == checkedId) {
+                        String text = btn.getText().toString();
 
+                        Toast.makeText(context,text,Toast.LENGTH_SHORT).show();
+
+                        arr.get(i).setValue(text);
+                        Log.v("radio_button_text",  arr.get(i).getValue());
+                        return;
+                    }
+                }
             }
         });
+
+
+//        RadioGroup rg;
+//        RadioButton rb1, rb2, rb3, rb4;
+//        for (int i = 0; i < arr.size(); i++) {
+//            starRadioBtn[i] = new RadioButton[i];
+//            starRadioBtn[i].setId(i);
+//
+//            if (arr.get(i).isClick())
+//                starRadioBtn[i].setChecked(true);
+//
+//            starRadioBtn[i].setText(arr.get(i).getTxt());
+//            rg.addView(starRadioBtn[i]);
+//        }
+
+
+
+
+//       rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                Log.v("radio_button_id", checkedId + "and value" + arr.get(checkedId).getTxt());
+//                for (int i = 0; i < arr.size(); i++) {
+//                    starRadioBtn[i] = new RadioButton[i];
+////                    starRadioBtn[i].se(arr.get(checkedId).getTxt());
+//                }
+////                RadioButton radioButton;
+//
+//               /* int selectedId = rg.getCheckedRadioButtonId();
+//
+//                // find the radiobutton by returned id
+//                rb1 = (RadioButton) dyn_lay.findViewById(selectedId);
+//
+//                Toast.makeText(context,
+//                        rb1.getText(), Toast.LENGTH_SHORT).show();*/
+//
+//
+////                for (int i = 0; i < arr.size(); i++) {
+////                    if (checkedId == i) {
+////                        arr.get(i).setClick(true);
+//////                        String selectedId = arr.get(checkedId).getValue().toString();
+////                    }
+////                    else
+////                        arr.get(i).setClick(false);
+////                }
+//
+//            }
+//        });
+
+//        dyn_lay.addView(rg);
+
     }
 
     public void createDynamicRowITem(String name, int id, int x) {
@@ -487,7 +560,7 @@ public class AdapterForDynamicView extends BaseAdapter {
                     i.putExtra("frmname", "General Activities");
 
                 i.putExtra("btn_need", "0");
-                i.putExtra("fab", "1");
+                i.putExtra("fab", "0");
                 context.startActivity(i);
             }
         });

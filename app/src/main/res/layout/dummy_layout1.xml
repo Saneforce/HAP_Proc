@@ -178,7 +178,7 @@
                 android:id="@+id/dyn_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/dyn_l_lay"
@@ -241,7 +241,7 @@
                     android:id="@+id/rlay_spin_fdt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/round_rect_grey"
                     android:padding="8dp"
                     android:visibility="visible">
@@ -279,7 +279,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:layout_toRightOf="@+id/rlay_spin_fdt"
                     android:background="@drawable/round_rect_grey"
                     android:padding="8dp"

@@ -1,13 +1,22 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ShareCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +24,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +43,8 @@ import com.hap.checkinproc.common.DatabaseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -242,6 +254,329 @@ public class GRN_Invoice extends AppCompatActivity implements View.OnClickListen
                 common_class.showCalDialog(this, "Do you want to Call this Outlet?", sharedCommonPref.getvalue(Constants.Retailor_PHNo));
                 break;
         }
+    }
+
+    private void createPdf() {
+        try {
+            int hgt = 1000 + (OutletReport_View_Modal.size() * 40);
+
+            // create a new document
+            PdfDocument document = new PdfDocument();
+            int widthSize = 600;
+            // crate a page description
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, hgt, 1).create();
+            // start a page
+            PdfDocument.Page page = document.startPage(pageInfo);
+            Canvas canvas = page.getCanvas();
+            Paint paint = new Paint();
+
+
+            int x = 10;
+            int y = 30;
+
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(13);
+
+            canvas.drawText(tvDistributorName.getText().toString(), x, y, paint);
+
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(12);
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            y = y + 20;
+
+           if (tvDistAdd.getVisibility() == View.VISIBLE) {
+                canvas.drawText("Address :", x, y, paint);
+                paint.setColor(Color.DKGRAY);
+                paint.setTextSize(12);
+                y = y + 20;
+
+                String[] lines = Split(tvDistAdd.getText().toString(), 90, tvDistAdd.getText().toString().length());
+                for (int i = 0; i < lines.length; i++) {
+                    System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
+                    canvas.drawText(lines[i], x, y, paint);
+                    y = y + 20;
+
+                }
+            }
+            if (tvDistributorPh.getVisibility() == View.VISIBLE) {
+                canvas.drawText("Mobile: "+ tvDistributorPh.getText().toString(), x, y, paint);
+                y = y + 20;
+            }
+
+             canvas.drawText("GST No: "+ tvDisGST.getText().toString(), x, y, paint);
+            y = y + 20;
+
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+            y = y + 20;
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(13);
+            canvas.drawText("BILL TO", x, y, paint);
+
+            y = y + 18;
+            canvas.drawText(retailername.getText().toString(), x, y, paint);
+
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(12);
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            y = y + 20;
+
+            if (retaileAddress.getVisibility() == View.VISIBLE) {
+                canvas.drawText("Address :", x, y, paint);
+                paint.setColor(Color.DKGRAY);
+                paint.setTextSize(12);
+                y = y + 20;
+
+                String[] lines = Split(retaileAddress.getText().toString(), 90, retaileAddress.getText().toString().length());
+                for (int i = 0; i < lines.length; i++) {
+                    System.out.println("lines[" + i + "]: (len: " + lines[i].length() + ") : " + lines[i]);
+                    canvas.drawText(lines[i], x, y, paint);
+                    y = y + 20;
+
+                }
+            }
+            if (tvRetailorPhone.getVisibility() == View.VISIBLE) {
+                canvas.drawText("Mobile: "+ tvRetailorPhone.getText().toString(), x, y, paint);
+                y = y + 10;
+            }
+//
+//            paint.setColor(Color.LTGRAY);
+//            paint.setStrokeWidth(30);
+//            canvas.drawLine(0, y + 30, widthSize, y + 30, paint);
+
+
+            y = y + 35;
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(11);
+            canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
+            canvas.drawText("" + invoicedate.getText().toString(), (widthSize / 2) + 140, y, paint);
+
+            y = y + 25;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+
+            String space = "    ";
+            y = y + 20;
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(13);
+
+            canvas.drawText("Item", x, y, paint);
+            canvas.drawText("Qty", (widthSize / 2) + 60, y, paint);
+            canvas.drawText("Price", (widthSize / 2) + 110, y, paint);
+            canvas.drawText("GST", (widthSize / 2) + 170, y, paint);
+            canvas.drawText("Total", (widthSize / 2) + 220, y, paint);
+
+
+            y = y + 10;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+           for (int i = 0; i < FilterOrderList.size(); i++) {
+
+                y = y + 20;
+                paint.setColor(Color.DKGRAY);
+                paint.setTextSize(12);
+
+
+                String name = FilterOrderList.get(i).getProductName() + "                               ";
+                name = name.substring(0, name.length() - String.valueOf(FilterOrderList.get(i).getProductName()).length());
+
+
+               String qtyValue = String.valueOf(FilterOrderList.get(i).getBilledQty());
+                String qty = "     " + qtyValue;
+                qty = qty.substring(qtyValue.length(), qty.length());
+
+                String rateValue = String.valueOf(FilterOrderList.get(i).getRate());
+                String rate = "               " + rateValue;
+                rate = (rate.substring(rateValue.length(), rate.length()));
+
+                String amtValue = String.valueOf(formatter.format(FilterOrderList.get(i).getProdTotal()));
+                String amt = "             " + amtValue;
+                amt = (amt.substring(amtValue.length(), amt.length()));
+
+//                Log.e("Values length: ", "item: " + name.length() + " qty: " + qty.length() + " rate: " + rate.length() + " amt : " + amt.length());
+
+                // canvas.drawText(name + qty + rate + amt, x, y, paint);
+
+
+                canvas.drawText("" + FilterOrderList.get(i).getProductName(), x, y, paint);
+                canvas.drawText("" + FilterOrderList.get(i).getBilledQty(), (widthSize / 2) + 60, y, paint);
+                canvas.drawText("" + FilterOrderList.get(i).getRate(), (widthSize / 2) + 100, y, paint);
+//                canvas.drawText("" + FilterOrderList.get(i).getTaxVal(), (widthSize / 2) + 170, y, paint);
+                canvas.drawText("" + FilterOrderList.get(i).getProdTotal(), (widthSize / 2) + 230, y, paint);
+
+
+            }
+
+
+            y = y + 20;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+            y = y + 20;
+            paint.setColor(Color.GRAY);
+            paint.setTextSize(12);
+            canvas.drawText("PRICE DETAILS", x, y, paint);
+
+            y = y +10;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+            paint.setColor(Color.DKGRAY);
+
+            y = y + 30;
+            canvas.drawText("SubTotal", x, y, paint);
+            canvas.drawText(subtotal.getText().toString(), (widthSize / 2) + 220, y, paint);
+
+            y = y + 20;
+            canvas.drawText("Total Item", x, y, paint);
+            canvas.drawText(totalitem.getText().toString(), (widthSize / 2) + 220, y, paint);
+            y = y + 20;
+            canvas.drawText("Total Qty", x, y, paint);
+//            canvas.drawText(totalqty.getText().toString(), (widthSize / 2) + 220, y, paint);
+
+         /*   if (uomList != null) {
+                for (int i = 0; i < uomList.size(); i++) {
+                    y = y + 20;
+                    canvas.drawText(uomList.get(i).getUOM_Nm(), x, y, paint);
+                    canvas.drawText("" + (int) uomList.get(i).getCnvQty(), (widthSize / 2) + 220, y, paint);
+                }
+
+            }
+
+//            y = y + 30;
+//            canvas.drawText("Gst Rate", x, y, paint);
+//            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
+//
+            for (int i = 0; i < taxList.size(); i++) {
+                y = y + 20;
+                canvas.drawText(taxList.get(i).getTax_Type(), x, y, paint);
+                canvas.drawText("₹" + formatter.format(taxList.get(i).getTax_Amt()), (widthSize / 2) + 220, y, paint);
+
+            }
+
+            y = y + 20;
+
+//            if (tvOutstanding.getVisibility() == View.VISIBLE) {
+//                canvas.drawText("Outstanding", x, y, paint);
+//                canvas.drawText(tvOutstanding.getText().toString(), (widthSize / 2) + 150, y, paint);
+//                y = y + 30;
+//            }
+
+            if (cashDisc > 0) {
+                canvas.drawText("Cash Discount", x, y, paint);
+                canvas.drawText(cashdiscount.getText().toString(), (widthSize / 2) + 220, y, paint);
+                y = y + 20;
+            }
+*/
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+            paint.setTextSize(15);
+            paint.setColor(Color.BLACK);
+            y = y + 30;
+            canvas.drawText("Net Amount", x, y, paint);
+            canvas.drawText(netamount.getText().toString(), (widthSize / 2) + 210, y, paint);
+
+            y = y + 20;
+            paint.setColor(Color.LTGRAY);
+            paint.setStrokeWidth(1);
+            canvas.drawLine(0, y, widthSize, y, paint);
+
+            y = y + 30;
+            paint.setColor(Color.parseColor("#008000"));
+            paint.setTextSize(15);
+
+
+            paint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("Thank You! Visit Again", widthSize/2, y, paint);
+
+
+
+            //canvas.drawt
+            // finish the page
+            document.finishPage(page);
+
+
+
+// draw text on the graphics object of the page
+            // Create Page 2
+//        pageInfo = new PdfDocument.PageInfo.Builder(300, 600, 2).create();
+//        page = document.startPage(pageInfo);
+//        canvas = page.getCanvas();
+//        paint = new Paint();
+//        paint.setColor(Color.BLUE);
+//        canvas.drawCircle(100, 100, 100, paint);
+//        document.finishPage(page);
+
+
+            // write the document content
+            String directory_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/hap/";
+            File file = new File(directory_path);
+
+            deleteRecursive(file);
+
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            String targetPdf = directory_path + System.currentTimeMillis() + "bill.pdf";
+            File filePath = new File(targetPdf);
+
+
+            document.writeTo(new FileOutputStream(filePath));
+            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+
+            // close the document
+            document.close();
+
+
+            Uri fileUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", filePath);
+
+
+            Intent intent = ShareCompat.IntentBuilder.from(this)
+                    .setType("*/*")
+                    .setStream(fileUri)
+                    .setChooserTitle("Choose bar")
+                    .createChooserIntent()
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.e("main", "error " + e.toString());
+            Toast.makeText(this, "Something wrong: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static String[] Split(String text, int chunkSize, int maxLength) {
+        char[] data = text.toCharArray();
+        int len = Math.min(data.length, maxLength);
+        String[] result = new String[(len + chunkSize - 1) / chunkSize];
+        int linha = 0;
+        for (int i = 0; i < len; i += chunkSize) {
+            result[linha] = new String(data, i, Math.min(chunkSize, len - i));
+            linha++;
+        }
+        return result;
+    }
+
+    void deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+
     }
 
     @Override

@@ -192,7 +192,9 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                     //if(arr.get(i).getFormType().equalsIgnoreCase("V")){
                     Intent ii = new Intent(ProcurementDashboardActivity.this, ViewActivity.class);
                     ii.putExtra("btn_need", arr.get(i).getTargetForm());
+                    ii.putExtra("frmname", arr.get(i).getFormName());
                     ii.putExtra("frmid", arr.get(i).getFormid());
+                    ii.putExtra("frmtype",arr.get(i).getFormType());
                     startActivity(ii);
                     //}
                 }

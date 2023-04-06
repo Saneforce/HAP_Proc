@@ -357,7 +357,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
             for (int i = 0; i < menuList.size(); i++) {
                 if (!menuList.get(i).getFormid().equalsIgnoreCase(""))
-                    formList.add(new Common_Model(menuList.get(i).getFormName(), menuList.get(i).getFormid()));
+                    formList.add(new Common_Model(menuList.get(i).getFormName(), menuList.get(i).getFormid(),menuList.get(i).getFormType()));
             }
 
             formList.add(new Common_Model("New Farmer", "2"));
