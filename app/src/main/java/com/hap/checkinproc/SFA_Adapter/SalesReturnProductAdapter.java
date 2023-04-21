@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Model_Class.SalesReturnProductModel;
+import com.hap.checkinproc.SFA_Model_Class.TaxModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -28,9 +29,12 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
 
     CalculateTotal calculateTotal;
 
+    boolean isUpdating;
+
     public SalesReturnProductAdapter(Context context, ArrayList<SalesReturnProductModel> list) {
         this.context = context;
         this.list = list;
+        this.isUpdating = false;
     }
 
     public void setCalculateTotal(CalculateTotal calculateTotal) {
@@ -93,29 +97,43 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String Qty = "0";
-                if (!s.toString().equals("")) {
-                    Qty = s.toString();
-                }
-                int newQty = Integer.parseInt(Qty);
-                if (newQty != list.get(holder.getAdapterPosition()).getRetQty()) {
-                    int invItemQty = (int) (list.get(holder.getAdapterPosition()).getInvQty() * list.get(holder.getAdapterPosition()).getInvConvFac());
-                    int retItemQty = (int) (newQty * list.get(holder.getAdapterPosition()).getRetConvFac());
-                    if (invItemQty >= retItemQty) {
-                        list.get(holder.getAdapterPosition()).setRetQty(newQty);
-                        double totalAmt = newQty * list.get(holder.getAdapterPosition()).getRetConvFac() * list.get(holder.getAdapterPosition()).getRate();
-                        list.get(holder.getAdapterPosition()).setRetTotal(totalAmt);
-                        String currency = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(totalAmt);
-                        holder.retAmount.setText(currency);
-                        if (calculateTotal != null) {
-                            calculateTotal.onClick();
-                        }
-                        holder.retQty.setText(String.valueOf(newQty));
-                    } else {
-                        holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
+                if (!isUpdating) {
+                    isUpdating = true;
+                    String Qty = "0";
+                    if (!s.toString().equals("")) {
+                        Qty = s.toString();
                     }
+                    int newQty = Integer.parseInt(Qty);
+                    if (newQty != list.get(holder.getAdapterPosition()).getRetQty()) {
+                        int invItemQty = (int) (list.get(holder.getAdapterPosition()).getInvQty() * list.get(holder.getAdapterPosition()).getInvConvFac());
+                        int retItemQty = (int) (newQty * list.get(holder.getAdapterPosition()).getRetConvFac());
+                        if (invItemQty >= retItemQty) {
+                            list.get(holder.getAdapterPosition()).setRetQty(newQty);
+                            double taxPercent = 0;
+                            for (TaxModel taxModel : list.get(holder.getAdapterPosition()).getTaxList()) {
+                                taxPercent += taxModel.getTaxVal();
+                            }
+                            double totalRate = newQty * list.get(holder.getAdapterPosition()).getRetConvFac() * list.get(holder.getAdapterPosition()).getRate();
+                            double totalTax = (taxPercent / 100 * totalRate);
+                            double totalAmt = (totalRate + totalTax);
+                            list.get(holder.getAdapterPosition()).setRetTotal(totalAmt);
+                            list.get(holder.getAdapterPosition()).setRetTax(totalTax);
+                            String currency = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(totalAmt);
+                            holder.retAmount.setText(currency);
+                            if (calculateTotal != null) {
+                                calculateTotal.onClick();
+                            }
+                            holder.retQty.setText(String.valueOf(newQty));
+                            isUpdating = false;
+                        } else {
+                            holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
+                            isUpdating = false;
+                        }
+                    } else {
+                        isUpdating = false;
+                    }
+                    holder.retQty.setSelection(holder.retQty.getText().toString().length());
                 }
-                holder.retQty.setSelection(holder.retQty.getText().toString().length());
             }
 
             @Override

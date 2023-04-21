@@ -306,6 +306,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("COMPLEMENTARY INVOICE")){
                     findViewById(R.id.tvWelcomeLabel).setVisibility(View.GONE);
                     common_class.getDataFromApi(Constants.ComplementaryOrderDetails_List, this, false);
+
+                } else if (sharedCommonPref.getvalue(Constants.FLAG).equals("SALES RETURN")){
+                    findViewById(R.id.tvWelcomeLabel).setVisibility(View.GONE);
+                    common_class.getDataFromApi(Constants.SalesReturnDetailsList, this, false);
+
                 } else {
                     common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
                     if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")) {
@@ -1836,6 +1841,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         orderInvoiceDetailData(apiDataResponse);
                         break;
                     case Constants.ComplementaryOrderDetails_List:
+                        orderInvoiceDetailData(apiDataResponse);
+                        break;
+                    case Constants.SalesReturnDetailsList:
                         orderInvoiceDetailData(apiDataResponse);
                         break;
                     case Constants.OUTSTANDING:

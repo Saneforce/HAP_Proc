@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class SalesReturnProductModel {
     String Product_Code, productName, materialCode, invUOM, retUOM, retType;
-    double MRP, rate, invConvFac, retConvFac, retTotal;
+    double MRP, rate, invConvFac, retConvFac, retTotal, retTax;
     int invQty, retQty;
-    ArrayList<UOMModel> list;
+    ArrayList<UOMModel> uomList;
+    ArrayList<TaxModel> taxList;
 
-    public SalesReturnProductModel(String Product_Code, String productName, String materialCode, String invUOM, String retUOM, String retType, double MRP, double rate, double invConvFac, double retConvFac, double retTotal, int invQty, int retQty, ArrayList<UOMModel> list) {
-        this.Product_Code = Product_Code;
+    public SalesReturnProductModel(String product_Code, String productName, String materialCode, String invUOM, String retUOM, String retType, double MRP, double rate, double invConvFac, double retConvFac, double retTotal, double retTax, int invQty, int retQty, ArrayList<UOMModel> uomList, ArrayList<TaxModel> taxList) {
+        this.Product_Code = product_Code;
         this.productName = productName;
         this.materialCode = materialCode;
         this.invUOM = invUOM;
@@ -20,9 +21,11 @@ public class SalesReturnProductModel {
         this.invConvFac = invConvFac;
         this.retConvFac = retConvFac;
         this.retTotal = retTotal;
+        this.retTax = retTax;
         this.invQty = invQty;
         this.retQty = retQty;
-        this.list = list;
+        this.uomList = uomList;
+        this.taxList = taxList;
     }
 
     public String getProduct_Code() {
@@ -30,7 +33,7 @@ public class SalesReturnProductModel {
     }
 
     public void setProduct_Code(String product_Code) {
-        Product_Code = product_Code;
+        this.Product_Code = product_Code;
     }
 
     public String getProductName() {
@@ -113,6 +116,14 @@ public class SalesReturnProductModel {
         this.retTotal = retTotal;
     }
 
+    public double getRetTax() {
+        return retTax;
+    }
+
+    public void setRetTax(double retTax) {
+        this.retTax = retTax;
+    }
+
     public int getInvQty() {
         return invQty;
     }
@@ -129,11 +140,19 @@ public class SalesReturnProductModel {
         this.retQty = retQty;
     }
 
-    public ArrayList<UOMModel> getList() {
-        return list;
+    public ArrayList<UOMModel> getUomList() {
+        return uomList;
     }
 
-    public void setList(ArrayList<UOMModel> list) {
-        this.list = list;
+    public void setUomList(ArrayList<UOMModel> uomList) {
+        this.uomList = uomList;
+    }
+
+    public ArrayList<TaxModel> getTaxList() {
+        return taxList;
+    }
+
+    public void setTaxList(ArrayList<TaxModel> taxList) {
+        this.taxList = taxList;
     }
 }

@@ -26,7 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -36,6 +38,7 @@ import com.hap.checkinproc.SFA_Adapter.SalesReturnProductAdapter;
 import com.hap.checkinproc.SFA_Adapter.SalesReturnProductAdapterSubmit;
 import com.hap.checkinproc.SFA_Model_Class.SalesReturnInvoiceModel;
 import com.hap.checkinproc.SFA_Model_Class.SalesReturnProductModel;
+import com.hap.checkinproc.SFA_Model_Class.TaxModel;
 import com.hap.checkinproc.SFA_Model_Class.UOMModel;
 
 import org.json.JSONArray;
@@ -46,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -72,9 +76,12 @@ public class SalesReturnActivity extends AppCompatActivity {
     SalesReturnProductAdapter salesReturnProductAdapter;
 
     String selectedInvoiceNumber = "";
+    String submissionResult;
     boolean isOnSubmitScreen = false;
     int itemsCount, qtyCount;
     double retInvTotal;
+
+    Shared_Common_Pref sharedCommonPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,8 @@ public class SalesReturnActivity extends AppCompatActivity {
         common_class = new Common_Class(context);
         invoiceList = new ArrayList<>();
         productList = new ArrayList<>();
+
+        sharedCommonPref = new Shared_Common_Pref(context);
 
         common_class.gotoHomeScreen(context, home);
         todayDate.setText("Date: " + new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
@@ -170,6 +179,18 @@ public class SalesReturnActivity extends AppCompatActivity {
         });
 
         full.setOnClickListener(v -> {
+            for (SalesReturnProductModel model : productList) {
+                model.setRetQty(model.getInvQty());
+                double taxPercent = 0;
+                for (TaxModel taxModel : model.getTaxList()) {
+                    taxPercent += taxModel.getTaxVal();
+                }
+                double totalRate = model.getRetQty() * model.getRetConvFac() * model.getRate();
+                double totalTax = (taxPercent / 100 * totalRate);
+                double totalAmt = (totalRate + totalTax);
+                model.setRetTotal(totalAmt);
+                model.setRetTax(totalTax);
+            }
             submit.setText("Submit");
             recyclerView.setAdapter(null);
             recyclerView.setVisibility(View.INVISIBLE);
@@ -178,12 +199,17 @@ public class SalesReturnActivity extends AppCompatActivity {
         });
 
         partial.setOnClickListener(v -> {
+            for (SalesReturnProductModel model : productList) {
+                model.setRetQty(0);
+                model.setRetTotal(0);
+                model.setRetTax(0);
+            }
             submit.setText("Proceed");
-            recyclerView.setVisibility(View.VISIBLE);
             submitLayout.setVisibility(View.VISIBLE);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             salesReturnProductAdapter = new SalesReturnProductAdapter(context, productList);
             recyclerView.setAdapter(salesReturnProductAdapter);
+            recyclerView.setVisibility(View.VISIBLE);
             salesReturnProductAdapter.setCalculateTotal(this::CalculateTotal);
             CalculateTotal();
         });
@@ -201,16 +227,15 @@ public class SalesReturnActivity extends AppCompatActivity {
         if (full.isChecked()) {
             for (SalesReturnProductModel model : productList) {
                 itemsCount += 1;
-                qtyCount += model.getInvQty();
-                retInvTotal += model.getInvQty() * model.getInvConvFac() * model.getRate();
-                mrp += model.getInvQty() * model.getInvConvFac() * model.getMRP();
+                qtyCount += model.getRetQty();
+                retInvTotal += model.getRetTotal();
             }
         } else if (partial.isChecked()) {
             for (SalesReturnProductModel model : productList) {
                 if (model.getRetQty() > 0) {
                     itemsCount += 1;
                     qtyCount += model.getRetQty();
-                    retInvTotal += model.getRetQty() * model.getInvConvFac() * model.getRate();
+                    retInvTotal += model.getRetTotal();
                 }
             }
         }
@@ -276,30 +301,133 @@ public class SalesReturnActivity extends AppCompatActivity {
     }
 
     private void SubmitToServer(String type) {
-        String result;
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Submitting Sales Return...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         try {
-            JSONArray array = new JSONArray();
-            JSONObject object = new JSONObject();
-            object.put("", "");
-            array.put(object);
-            progressDialog.dismiss();
-            result = "Sales return submitted successfully...";
-            ShowFinalResult(result);
+            // Preparing Activity_Report_Head
+            JSONObject Activity_Report_Head = new JSONObject();
+            Activity_Report_Head.put("SF", Shared_Common_Pref.Sf_Code);
+            Activity_Report_Head.put("dcr_activity_date", Common_Class.GetDate());
+
+            // Preparing Activity_Doctor_Report
+            JSONObject Activity_Doctor_Report = new JSONObject();
+            Activity_Doctor_Report.put("NetAmount", retInvTotal); // Total
+            Activity_Doctor_Report.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+            Activity_Doctor_Report.put("doctor_code", Shared_Common_Pref.OutletCode);
+            Activity_Doctor_Report.put("ref_invoice", selectedInvoiceNumber);
+            Activity_Doctor_Report.put("orderValue", retInvTotal); // Subtotal
+            Activity_Doctor_Report.put("No_Of_items", itemsCount);
+            JSONArray TOT_TAX_details = new JSONArray();
+            for (SalesReturnProductModel model : productList) {
+                if (model.getRetQty() > 0) {
+                    JSONObject tax_details_object = new JSONObject();
+                    tax_details_object.put("Tax_Amt", model.getRetTax());
+                    TOT_TAX_details.put(tax_details_object);
+                }
+            }
+            Activity_Doctor_Report.put("TOT_TAX_details", TOT_TAX_details);
+
+            // Preparing Order_Details Array
+            JSONArray Order_Details = new JSONArray();
+            for (SalesReturnProductModel model : productList) {
+                if (model.getRetQty() > 0) {
+                    String product_code = model.getProduct_Code();
+                    int Product_Total_Qty = model.getRetQty();
+                    double Rate = model.getRate();
+                    JSONArray taxDetails = new JSONArray();
+                    for (TaxModel taxModel : model.getTaxList()) {
+                        JSONObject object = new JSONObject();
+                        object.put("Tax_Amt", taxModel.getTaxAmt());
+                        object.put("Tax_Id", taxModel.getTaxCode());
+                        object.put("Tax_Type", taxModel.getTaxName());
+                        object.put("Tax_Val", taxModel.getTaxVal());
+                        taxDetails.put(object);
+                    }
+                    JSONObject Order_Details_Object = new JSONObject();
+                    Order_Details_Object.put("product_code", product_code);
+                    Order_Details_Object.put("Product_Total_Qty", Product_Total_Qty);
+                    Order_Details_Object.put("Rate", Rate);
+                    Order_Details_Object.put("MRP", model.getMRP());
+                    Order_Details_Object.put("UOM", model.getInvUOM());
+                    Order_Details_Object.put("conv_fac", model.getInvConvFac());
+                    Order_Details_Object.put("Product_Amount", model.getRetTotal());
+                    Order_Details_Object.put("tax_Amount", model.getRetTax());
+                    Order_Details_Object.put("TAX_details", taxDetails);
+                    Order_Details.put(Order_Details_Object);
+                }
+            }
+
+            // Preparing file_Details Array
+            JSONArray file_Details = new JSONArray();
+            JSONObject file_Details_Object = new JSONObject();
+            file_Details_Object.put("SalesReturnImg", "");
+            file_Details.put(file_Details_Object);
+
+            // Preparing Master Object
+            JSONObject masterObject = new JSONObject();
+            masterObject.put("Activity_Report_Head", Activity_Report_Head);
+            masterObject.put("Activity_Doctor_Report", Activity_Doctor_Report);
+            masterObject.put("Order_Details", Order_Details);
+            masterObject.put("file_Details", file_Details);
+
+            // Preparing Data Array
+            JSONArray data = new JSONArray();
+            data.put(masterObject);
+
+            submissionResult = "Sales return submission failed...";
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Map<String, String> params = new HashMap<>();
+            params.put("axn", "save/sales_return");
+            params.put("divisionCode", Shared_Common_Pref.Div_Code);
+            params.put("Sf_code", Shared_Common_Pref.Sf_Code);
+            Call<ResponseBody> call = apiInterface.getUniversalData(params , data.toString());
+            call.enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            if (response.body() == null) {
+                                Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            String results = response.body().string();
+                            JSONObject jsonObject = new JSONObject(results);
+                            if (jsonObject.getBoolean("success")) {
+                                submissionResult = "Sales return submitted successfully...";
+                                progressDialog.dismiss();
+                                ShowFinalResult(submissionResult);
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            ShowFinalResult(submissionResult);
+                        }
+                    } else {
+                        Toast.makeText(context, "Response Not Success", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        ShowFinalResult(submissionResult);
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    Toast.makeText(context, "Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    ShowFinalResult(submissionResult);
+                }
+            });
         } catch (Exception e) {
             progressDialog.dismiss();
-            result = "Sales return submission failed...";
-            ShowFinalResult(result);
+            ShowFinalResult(submissionResult);
             Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void ShowFinalResult(String result) {
+    private void ShowFinalResult(String submissionResult) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(result);
+        builder.setMessage(submissionResult);
         builder.setCancelable(false);
         builder.setPositiveButton("Dismiss", (dialog, which) -> {
             dialog.dismiss();
@@ -335,26 +463,36 @@ public class SalesReturnActivity extends AppCompatActivity {
                             Log.e("status", "Request Result: \n" + jsonArray);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 String Product_Code = jsonArray.getJSONObject(i).getString("Product_Code");
-                                String Product_Name = jsonArray.getJSONObject(i).getString("Product_Name");
+                                String productName = jsonArray.getJSONObject(i).getString("Product_Name");
                                 String materialCode = jsonArray.getJSONObject(i).getString("Sale_Erp_Code");
+                                String invUOM = jsonArray.getJSONObject(i).getString("Unit");
+                                String retUOM = invUOM;
+                                String retType = "";
                                 double MRP = jsonArray.getJSONObject(i).getDouble("MRP");
                                 double rate = jsonArray.getJSONObject(i).getDouble("Price");
-                                int invQty = jsonArray.getJSONObject(i).getInt("qty");
-                                String invUOM = jsonArray.getJSONObject(i).getString("Unit");
                                 double invConvFac = jsonArray.getJSONObject(i).getDouble("Con_Fac");
                                 double retConvFac = invConvFac;
-                                String retUOM = invUOM;
-                                int retQty = 0;
-                                String retType = "";
                                 double retTotal = 0;
+                                int invQty = jsonArray.getJSONObject(i).getInt("qty");
+                                int retQty = 0;
                                 JSONArray array = jsonArray.getJSONObject(i).getJSONArray("UOMList");
-                                ArrayList<UOMModel> list = new ArrayList<>();
+                                ArrayList<UOMModel> uomList = new ArrayList<>();
                                 for (int j = 0; j < array.length(); j++) {
                                     String UOM_Nm = array.getJSONObject(j).getString("UOM_Nm");
                                     double CnvQty = array.getJSONObject(j).getDouble("CnvQty");
-                                    list.add(new UOMModel(UOM_Nm, CnvQty));
+                                    uomList.add(new UOMModel(UOM_Nm, CnvQty));
                                 }
-                                productList.add(new SalesReturnProductModel(Product_Code, Product_Name, materialCode, invUOM, retUOM, retType, MRP, rate, invConvFac, retConvFac, retTotal, invQty, retQty, list));
+                                JSONArray taxArray = jsonArray.getJSONObject(i).getJSONArray("taxList");
+                                ArrayList<TaxModel> taxList = new ArrayList<>();
+                                double retTax = 0;
+                                for (int j = 0; j < taxArray.length(); j++) {
+                                    String taxName = taxArray.getJSONObject(j).getString("Tax_Name");
+                                    String taxCode = taxArray.getJSONObject(j).getString("Tax_Code");
+                                    double taxAmt = taxArray.getJSONObject(j).getDouble("Tax_Amt");
+                                    double taxVal = taxArray.getJSONObject(j).getDouble("Tax_Val");
+                                    taxList.add(new TaxModel(taxName, taxCode, taxAmt, taxVal));
+                                }
+                                productList.add(new SalesReturnProductModel(Product_Code, productName, materialCode, invUOM, retUOM, retType, MRP, rate, invConvFac, retConvFac, retTotal, retTax, invQty, retQty, uomList, taxList));
                             }
                         } else {
                             Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();

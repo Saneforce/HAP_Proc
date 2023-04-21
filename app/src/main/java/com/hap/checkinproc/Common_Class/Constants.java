@@ -190,6 +190,7 @@ public class Constants {
     public static final String GetPosOrderHistory = "getPosOrderHistory";
     public static final String PosOrderDetails_List = "posOrderDetailList";
     public static final String ComplementaryOrderDetails_List = "complementaryOrderDetailList";
+    public static final String SalesReturnDetailsList = "SalesReturnDetailsList";
     public static final String RETAIL_CHANNEL = "retailChannel";
     public static final String INDENT_Product_List = "indentProductList";
     public static final String INDENT_Category_List = "indentCategoryList";

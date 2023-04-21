@@ -8,8 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C5dp"
-        app:cardCornerRadius="@dimen/C10dp">
+        android:layout_marginTop="@dimen/C5dp"
+        android:layout_marginHorizontal="@dimen/C5dp"
+        app:cardCornerRadius="@dimen/C8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,8 +48,9 @@
                             android:layout_weight="1"
                             android:gravity="left"
                             android:text="OrderID"
+                            android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/C13dp"></TextView>
+                            android:textSize="@dimen/C14dp"></TextView>
 
                         <TextView
                             android:id="@+id/Itemcountinvoice"
