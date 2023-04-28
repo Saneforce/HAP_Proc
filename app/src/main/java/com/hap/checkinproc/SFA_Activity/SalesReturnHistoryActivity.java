@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,11 +20,14 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.SalesReturnHistoryAdapter;
 import com.hap.checkinproc.SFA_Model_Class.SalesReturnHistoryModel;
@@ -51,6 +57,7 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
     ArrayList<SalesReturnHistoryModel> list;
     SalesReturnHistoryAdapter adapter;
     String date, stDate, endDate;
+    ImageView home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +69,30 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.invoicerecyclerview);
         rowLayout = findViewById(R.id.row_report);
         totalLayout = findViewById(R.id.cvTotParent);
+        home = findViewById(R.id.toolbar_home);
         common_class = new Common_Class(context);
         shared_common_pref = new Shared_Common_Pref(context);
         list = new ArrayList<>();
+//        common_class.gotoHomeScreen(context, home);
+
+        home.setOnClickListener(v -> {
+            try {
+                AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                    @Override
+                    public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                        String imageServer = FileName;
+                        String imageConvert = fullPath;
+                        Log.e("OnImageURIPick", imageServer + imageConvert);
+                        Toast.makeText(context, imageServer + ": " + imageConvert, Toast.LENGTH_LONG).show();
+                        home.setImageBitmap(image);
+                    }
+                });
+                Intent intent = new Intent(context, AllowancCapture.class);
+                intent.putExtra("allowance", "One");
+                startActivity(intent);
+            } catch (Exception ignored) {}
+        });
+
         fromDateTV.setOnClickListener(v -> selectDate(1));
         toDateTV.setOnClickListener(v -> selectDate(2));
     }

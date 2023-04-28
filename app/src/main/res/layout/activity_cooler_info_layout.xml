@@ -85,6 +85,7 @@
 
                             <TextView
                                 style="@style/TextStyle"
+                                android:layout_height="wrap_content"
                                 android:paddingTop="@dimen/C10dp"
                                 android:text="Tag No" />
 
@@ -118,7 +119,6 @@
                                 android:elevation="5dp"
                                 android:hint="Enter value here"
                                 android:padding="@dimen/C8dp" />
-
 
                         </LinearLayout>
 
@@ -373,9 +373,117 @@
 
                         </LinearLayout>
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:layout_marginTop="5dp"
+                            android:textStyle="bold"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Freezer position"/>
+
+                        <TextView
+                            android:id="@+id/freezer_position"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="5dp"
+                            android:hint="Select freezer position"
+                            android:drawableEnd="@drawable/ic_arrow_drop_down"
+                            android:padding="@dimen/C8dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:text="Customer Access"/>
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switch_customer_access_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:layout_marginTop="10dp"
+                                android:textColor="@android:color/black"
+                                android:text="Freezer LED"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="5dp"
+                                    android:textSize="13sp"
+                                    android:textColor="@android:color/black"
+                                    android:text="Available"/>
+
+                                <androidx.appcompat.widget.SwitchCompat
+                                    android:id="@+id/switch_available_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="5dp"
+                                    android:textSize="13sp"
+                                    android:textColor="@android:color/black"
+                                    android:text="Working"/>
+
+                                <androidx.appcompat.widget.SwitchCompat
+                                    android:id="@+id/switch_working_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:orientation="vertical">
 
                             <TextView
