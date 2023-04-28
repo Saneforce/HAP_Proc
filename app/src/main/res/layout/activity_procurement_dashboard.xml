@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:id="@+id/lay_tool"
-            android:padding="8dp">
+            >
             <ImageView
                 android:id="@+id/iv_nav"
                 android:layout_width="wrap_content"
@@ -29,13 +29,11 @@
                 android:text="Welcome Back"
                 android:textSize="18sp"
                 android:textColor="#fff"
-                android:padding="8dp"
                 android:textAllCaps="true"
                 android:id="@+id/head"
-                app:fontFamily="@font/roboto_bold"
-                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/C15dp"
                 android:layout_centerHorizontal="true"
-                />
+                app:fontFamily="@font/roboto_bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,12 +42,12 @@
                 android:layout_below="@+id/head"
                 android:textSize="18sp"
                 android:textColor="#fff"
-                android:padding="8dp"
                 app:fontFamily="@font/lato"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:id="@+id/txt_head_name"
-                />
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="14dp"
+                android:id="@+id/txt_head_name" />
+
             <ImageView
                 android:id="@+id/iv_checkout"
                 android:layout_width="wrap_content"
@@ -57,18 +55,16 @@
                 android:src="@drawable/ic_logout"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginRight="5dp"
-                android:visibility="gone"
-                />
+                android:layout_marginRight="20dp"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/ibtLogout"
-                android:layout_width="@dimen/C50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="@dimen/C20dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="@dimen/C8dp"
                 android:src="@drawable/check_out" />
 
 

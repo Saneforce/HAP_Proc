@@ -710,4 +710,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v300_i.php?axn=grnSync")
     Call<JsonObject> GRNSync(@Field("data") String body);
+
+    @POST("MyPHP.php?")
+    Call<ResponseBody> getUniversalData1(@QueryMap Map<String, String> params);
 }

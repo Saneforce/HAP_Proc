@@ -3,7 +3,7 @@ package com.hap.checkinproc.Activity.Util;
 import java.util.ArrayList;
 
 public class ModelDynamicView {
-    String viewid,value,fieldname,tvalue,ctrl_para,creation_id,slno,upload_sv,mandatory,Field_Col;
+    String viewid,value,value1,fieldname,tvalue,ctrl_para,creation_id,slno,upload_sv,mandatory,Field_Col;
     ArrayList<SelectionModel> a_list=new ArrayList<>();
 
     public ModelDynamicView(String viewid, String value, String fieldname, String tvalue, ArrayList<SelectionModel> a_list,
@@ -81,8 +81,17 @@ public class ModelDynamicView {
         return value;
     }
 
-    public void setValue(String value) {
+    public String setValue(String value) {
         this.value = value;
+        return value;
+    }
+
+    public String getValue1() {
+        return value1;
+    }
+
+    public void setValue1(String value1) {
+        this.value1 = value1;
     }
 
     public String getFieldname() {

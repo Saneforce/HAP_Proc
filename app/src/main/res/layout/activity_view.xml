@@ -40,16 +40,15 @@
 
 
     <include
-
         android:id="@+id/llHeader"
         layout="@layout/sfatoolbar"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"></include>
+        android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:id="@+id/lay_tool"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/C30dp"
         android:layout_below="@+id/llHeader"
         android:background="@color/colorPrimaryDark"
         android:paddingLeft="@dimen/C5dp"
@@ -69,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/C5dp"
-            android:text="Activity"
+            android:text=""
             android:textAlignment="textStart"
             android:textAllCaps="true"
             android:textColor="@color/white"
@@ -92,12 +91,15 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/form_list_Cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_save"
         android:layout_below="@+id/lay_tool"
-        android:layout_margin="@dimen/C5dp"
-        android:layout_marginBottom="@dimen/C10dp"
+        android:layout_marginStart="@dimen/C5dp"
+        android:layout_marginTop="@dimen/C5dp"
+        android:layout_marginEnd="@dimen/C5dp"
+        android:layout_marginBottom="@dimen/C5dp"
         android:layout_weight="0.9"
         app:cardCornerRadius="@dimen/C5dp">
 
@@ -146,7 +148,7 @@
         style="@style/BottomButton"
         android:layout_alignParentBottom="true"
         android:text="Save"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 
 </RelativeLayout>

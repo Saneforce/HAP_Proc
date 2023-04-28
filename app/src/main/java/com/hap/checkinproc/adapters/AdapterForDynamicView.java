@@ -41,6 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AdapterForDynamicView extends BaseAdapter {
     Context context;
@@ -54,6 +55,7 @@ public class AdapterForDynamicView extends BaseAdapter {
     SharedPreferences share;
     private String strFarmerType = "";
     RadioGroup rg;
+    TextView button_txt;
     RadioButton rb, rb1, rb2, rb3, rb4;
     public AdapterForDynamicView(Context context, ArrayList<ModelDynamicView> array) {
         this.context = context;
@@ -85,6 +87,7 @@ public class AdapterForDynamicView extends BaseAdapter {
         RelativeLayout rlay_currency = (RelativeLayout) view.findViewById(R.id.rlay_currency);
         RelativeLayout rlay_spin_fdt = (RelativeLayout) view.findViewById(R.id.rlay_spin_fdt);
         RelativeLayout rlay_spin_tdt = (RelativeLayout) view.findViewById(R.id.rlay_spin_tdt);
+        button_txt = view.findViewById(R.id.button_txt);
         rlay_list = (RelativeLayout) view.findViewById(R.id.rlay_list);
         dyn_lay = (RelativeLayout) view.findViewById(R.id.dyn_lay);
         dyn_l_lay = (LinearLayout) view.findViewById(R.id.dyn_l_lay);
@@ -117,6 +120,7 @@ public class AdapterForDynamicView extends BaseAdapter {
         rlay_currency.setVisibility(View.GONE);
         rlay_upload.setVisibility(View.GONE);
         dyn_lay.setVisibility(View.GONE);
+        button_txt.setVisibility(View.GONE);
         txt_upload.setVisibility(View.GONE);
         rlay_list.setVisibility(View.GONE);
         dyn_list.setVisibility(View.GONE);
@@ -131,6 +135,7 @@ public class AdapterForDynamicView extends BaseAdapter {
             txt_label.setText(mm.getFieldname());
         else
             txt_label.setVisibility(View.GONE);
+
 
         Log.v("getting_view_id", mm.getViewid() + "");
         if (mm.getViewid().equalsIgnoreCase("1")) {
@@ -195,10 +200,11 @@ public class AdapterForDynamicView extends BaseAdapter {
             }
         } else if (mm.getViewid().equalsIgnoreCase("9") || mm.getViewid().equalsIgnoreCase("12")) {
             rlay_date.setVisibility(View.VISIBLE);
+            Log.v("rftyuuy",mm.getTvalue());
             if (!TextUtils.isEmpty(mm.getValue()))
                 spin_txt_fdt.setText(mm.getValue());
-            if (!TextUtils.isEmpty(mm.getTvalue()))
-                spin_txt_tdt.setText(mm.getTvalue());
+            if (!TextUtils.isEmpty(mm.getValue1()))
+                spin_txt_tdt.setText(mm.getValue1());
         } else if (mm.getViewid().equalsIgnoreCase("20")) {
             dyn_lay.setVisibility(View.VISIBLE);
 //          mm.getA_list().get(i).getValue();
@@ -209,7 +215,14 @@ public class AdapterForDynamicView extends BaseAdapter {
         } else if (mm.getViewid().equalsIgnoreCase("13")) {
             dyn_lay.setVisibility(View.VISIBLE);
             createDynamicViewCheckbox(mm.getA_list());
-        } else if (mm.getViewid().equalsIgnoreCase("23")) {
+        }
+     else if (mm.getViewid().equalsIgnoreCase("19") && mm.getFieldname().equalsIgnoreCase("Feed and AH")) {
+
+
+         //        createDynamicViewCheckbox(mm.getA_list());
+    }
+
+        else if (mm.getViewid().equalsIgnoreCase("23")) {
             txt_label.setTextColor(Color.BLACK);
             r_lay_sec.setBackgroundResource(0);
             dyn_l_lay.setVisibility(View.VISIBLE);
@@ -260,7 +273,6 @@ public class AdapterForDynamicView extends BaseAdapter {
                 FilterDemoAdapter adpt = new FilterDemoAdapter(context, strFarmerType.equalsIgnoreCase("") ? jj : filterArr, mm.getTvalue(), 0, mm.getSlno());
                 // FilterAdapter ff = new FilterAdapter(context, jj, mm.getTvalue(), 0,"0");
                 dyn_list.setAdapter(adpt);
-
             } catch (Exception e) {
             }
         }
@@ -340,8 +352,8 @@ public class AdapterForDynamicView extends BaseAdapter {
             public void onClick(View v) {
                 if (mm.getViewid().equalsIgnoreCase("9"))
                     updateUi.update(8, i);
-                else
-                    updateUi.update(12, i);
+//                else
+//                    updateUi.update(12, i);
             }
         });
 
@@ -367,6 +379,9 @@ public class AdapterForDynamicView extends BaseAdapter {
                     case "8":
                         updateUi.update(8, i);
                         break;
+                    case "9":
+                        updateUi.update(9, i);
+                        break;
                 }
 //                if (mm.getViewid().equalsIgnoreCase("11"))
 //                    updateUi.update(11, i);
@@ -378,8 +393,8 @@ public class AdapterForDynamicView extends BaseAdapter {
             public void onClick(View v) {
                 if (mm.getViewid().equalsIgnoreCase("9"))
                     updateUi.update(9, i);
-                else
-                    updateUi.update(13, i);
+//                else
+//                    updateUi.update(12, i);
             }
         });
 
@@ -431,7 +446,7 @@ dyn_lay.addView(rg);
                     if(btn.getId() == checkedId) {
                         String text = btn.getText().toString();
 
-                        Toast.makeText(context,text,Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context,text,Toast.LENGTH_SHORT).show();
 
                         arr.get(i).setValue(text);
                         Log.v("radio_button_text",  arr.get(i).getValue());

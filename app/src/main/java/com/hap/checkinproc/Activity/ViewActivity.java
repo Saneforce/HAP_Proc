@@ -9,6 +9,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -28,8 +29,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,21 +42,17 @@ import com.hap.checkinproc.Activity.Util.ListModel;
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
-import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
 import com.hap.checkinproc.adapters.AdapterForDynamicView;
 import com.hap.checkinproc.adapters.AdapterForSelectionList;
 import com.hap.checkinproc.adapters.FilterDemoAdapter;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -65,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -76,7 +76,7 @@ import retrofit2.Response;
 
 public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSelectionList.OnSelectItemClick */ {
 
-    String filePathing = "", btnShow = "V", MyPREFERENCES = "MyPrefs", SF_code = "", fab_value = "0", frm_id, mCreationId = "",frm_name="";
+    String filePathing = "", btnShow = "V", MyPREFERENCES = "MyPrefs", SF_code = "", fab_value = "0", frm_id, mCreationId = "", frm_name = "", btnSave;
     public static String key = "", header = "";
     SimpleDateFormat sdf, sdf_or;
     boolean isEmpty = false;
@@ -94,16 +94,19 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     int pos_upload_file = 0, CAMERA_REQUEST = 12, value, arrayViewPos;
     Uri outputFileUri;
     FloatingActionButton fab;
+    int fv;
     RecyclerView relist_view;
     Bundle extra;
     SharedPreferences UserDetails, share, shareKey;
     ImageView iv_dwnldmaster_back;
-    TextView tool_header;
+    TextView tool_header, button_txt;
     Button btn_save;
     Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     JSONObject jsonsave;
     String mainForm;
+    CardView listCard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,9 +126,11 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
         iv_dwnldmaster_back = findViewById(R.id.iv_dwnldmaster_back);
         tool_header = findViewById(R.id.tool_header);
         btn_save = findViewById(R.id.btn_save);
+        button_txt = findViewById(R.id.button_txt);
+        listCard = findViewById(R.id.form_list_Cardview);
         Log.v("printing_frm_id", frm_id + "");
         sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf_or = new SimpleDateFormat("dd-MM-yyyy");
+        sdf_or = new SimpleDateFormat("dd-MM");
 
         common_class = new Common_Class(this);
 
@@ -134,10 +139,6 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
 
         callDynamicViewList();
 
-        if (value > 0)
-            fab.setVisibility(View.VISIBLE);
-        else
-            fab.setVisibility(View.GONE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
         iv_dwnldmaster_back.setOnClickListener(new View.OnClickListener() {
@@ -146,408 +147,11 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                 onBackPressed();
             }
         });
-        mainForm=getIntent().getStringExtra("jObject");
-        Log.d("xfd","sdg"+mainForm);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                SharedPreferences.Editor edit = share.edit();
-//                edit.putString("fab", "0");
-//                edit.commit();
+        mainForm = getIntent().getStringExtra("jObject");
+        Log.d("xfd", "sdg" + mainForm);
 
-/*
-                if (validationOfField()) {
-                    SharedPreferences.Editor edit = share.edit();
-                    edit.putString("fab", "0");
-                    edit.commit();
-                    try {
-                        JSONArray jjj = new JSONArray(shareKey.getString("keys", ""));
-
-                        if (jjj.length() != 0) {
-                            JSONObject jkey1 = new JSONObject();
-                            JSONArray jar = new JSONArray();
-                            jsonsave = new JSONObject();
-
-                            jsonsave.put("PK_ID", ViewActivity.key);
-                            jsonsave.put("FK_ID", "");
-                            jsonsave.put("SF", SF_code);
-                            jsonsave.put("date", Common_Class.GetDate());
-                            JSONArray jAA = new JSONArray();
-
-                            Log.v("btnfabSave-list",jAA.toString());
-                            for (int i = 0; i < array_view.size(); i++) {
-                                JSONObject jk = new JSONObject();
-                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
-                                    String col = array_view.get(i).getField_Col();
-                                    jk.put("id", array_view.get(i).getViewid());
-                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-                                        jk.put("value", sdf.format(d));
-                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-                                            || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
-                                        String pic = "";
-                                        String[] picVal = array_view.get(i).getValue().split(",");
-                                        for (int k = 0; k < picVal.length; k++) {
-                                            Log.v("picVal_entry", picVal[k]);
-                                            getMulipart(picVal[k], 0);
-                                            pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/"));
-                                        }
-                                        jk.put("value", pic);
-                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18")) {
-                                        if (TextUtils.isEmpty(array_view.get(i).getValue()))
-                                            jk.put("value", "0");
-                                        else
-                                            jk.put("value", array_view.get(i).getValue());
-                                    } else
-                                        jk.put("value", array_view.get(i).getValue());
-                                    jk.put("col", col);
-                                    jAA.put(jk);
-                                }
-                            }
-                            jsonsave.put("ctrl", jAA);
-                            jkey1.put(ViewActivity.header, jsonsave);
-                            jar.put(jkey1);
-                            Log.v("btnfabSave-jar", jar.toString());
-                            edit.putString("keys", jar.toString());
-                            edit.putString("pk", ViewActivity.key);
-
-//                            edit.putString("cntrlObject",jsonsave.toString());
-//                            edit.putString("pref_data", jAA.toString()).commit();
-
-                            edit.commit();
-
-//                            saveDynamicList();
-                        }
-                 else if(jjj.length() == 0) {
-                            JSONObject jkey1 = new JSONObject();
-                            JSONArray jar = new JSONArray();
-                            JSONObject js = new JSONObject();
-                            js.put("PK_ID", ViewActivity.key);
-                            js.put("FK_ID", shareKey.getString("pk", ""));
-                            js.put("SF", SF_code);
-                            js.put("date", Common_Class.GetDate());
-                            JSONArray jAA = new JSONArray();
-
-                            for (int i = 0; i < array_view.size(); i++) {
-                                JSONObject jk = new JSONObject();
-
-//                                Log.v("ProcureSave",jk.toString());
-
-
-                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
-                                    String col = array_view.get(i).getField_Col();
-                                    jk.put("id", array_view.get(i).getViewid());
-                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-                                        jk.put("value", sdf.format(d));
-                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-                                            || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
-                                        String pic = "";
-                                        String[] picVal = array_view.get(i).getValue().split(",");
-                                        for (int k = 0; k < picVal.length; k++) {
-                                            Log.v("picVal_entry", picVal[k]);
-                                            getMulipart(picVal[k], 0);
-                                            pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/") + 1) + ",";
-                                        }
-                                        jk.put("value", pic);
-                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18")) {
-                                        if (TextUtils.isEmpty(array_view.get(i).getValue()))
-                                            jk.put("value", "0");
-                                        else
-                                            jk.put("value", array_view.get(i).getValue());
-                                    } else
-                                        jk.put("value", array_view.get(i).getValue());
-                                    jk.put("col", col);
-                                    jk.put("SF", SF_code);
-                                    jk.put("date", Common_Class.GetDate());
-                                    jAA.put(jk);
-                                }
-                            }
-                            js.put("ctrl", jAA);
-                            jkey1.put(ViewActivity.header, js);
-                            jar.put(jkey1);
-                            Log.v("printing_shareing", jar.toString());
-                            edit.putString("keys", jar.toString());
-//                            edit.putString("cntrlObject",jsonsave.toString());
-                            edit.putString("pk", ViewActivity.key);
-                            edit.commit();
-
-//                            saveDynamicList();
-                        }
-
-
-                    } catch (Exception e) {
-                    }
-//                    saveDynamicList();
-                } else {
-                    Toast.makeText(ViewActivity.this, "Please fill the mandatory fields", Toast.LENGTH_SHORT).show();
-                }
-*/
-                callDynamicViewListView();
-
-               /* Intent i = new Intent(ViewActivity.this, ViewActivity.class);
-                i.putExtra("frmid", value);
-                i.putExtra("frmname",frm_name);
-                i.putExtra("btn_need", "0");*/
-//                i.putExtra("fab", "0");
-//                i.putExtra("jObject",jsonsave.toString());
-//                createDynamicView(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
-/*
-                startActivity(i);
-*/
-//                callDynamicViewList();
-                /*try {
-                    JSONArray jjj = new JSONArray(shareKey.getString("keys", ""));
-
-                    Log.v("fabSave-data-jjj",jjj.toString());
-
-                    if (jjj.length() == 0) {
-                        JSONObject jkey1 = new JSONObject();
-                        JSONArray jar = new JSONArray();
-                        JSONObject js = new JSONObject();
-
-                        js.put("PK_ID", ViewActivity.key);
-                        js.put("FK_ID", "");
-                        js.put("SF", SF_code);
-                        js.put("date", Common_Class.GetDate());
-                        JSONArray jAA = new JSONArray();
-                        JSONObject jk = new JSONObject();
-                        for (int i = 0; i < array_view.size(); i++) {
-//                            JSONObject jk = new JSONObject();
-
-//                                Log.v("ProcureSave",jk.toString());
-
-
-                            if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
-//                                String col1 = array_view.get(i).getField_Col();
-                                String c = array_view.get(i).getField_Col();
-                                jk.put("id", array_view.get(i).getViewid());
-                                if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-                                    Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-                                    jk.put("value", sdf.format(d));
-                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-                                        || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
-                                    String pic = "";
-                                    String[] picVal = array_view.get(i).getValue().split(",");
-                                    for (int k = 0; k < picVal.length; k++) {
-                                        Log.v("picVal_entry", picVal[k]);
-                                        getMulipart(picVal[k], 0);
-                                        pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/") + 1) + ",";
-                                    }
-                                    jk.put("value", pic);
-                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18")) {
-                                    if (TextUtils.isEmpty(array_view.get(i).getValue()))
-                                        jk.put("value", "0");
-                                    else
-                                        jk.put("value", array_view.get(i).getValue());
-                                } else
-                                    jk.put("value", array_view.get(i).getValue());
-
-                                jk.put("col", c);
-                                jk.put("SF", SF_code);
-                                jk.put("date", Common_Class.GetDate());
-                                jAA.put(jk);
-                            }
-                            }
-
-
-
-//
-//                        Log.v("fabSave-list",jAA.toString());
-//                        for (int i = 0; i < array_view.size(); i++) {
-//                            JSONObject jk = new JSONObject();
-//                            if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
-//                                String col = array_view.get(i).getField_Col();
-//                                jk.put("id", array_view.get(i).getViewid());
-//                                if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-//                                    Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-//                                    jk.put("value", sdf.format(d));
-//                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-//                                        || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
-//                                    String pic = "";
-//                                    String[] picVal = array_view.get(i).getValue().split(",");
-//                                    for (int k = 0; k < picVal.length; k++) {
-//                                        Log.v("picVal_entry", picVal[k]);
-//                                        getMulipart(picVal[k], 0);
-//                                        pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/"));
-//                                    }
-//                                    jk.put("value", pic);
-//                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18")) {
-//                                    if (TextUtils.isEmpty(array_view.get(i).getValue()))
-//                                        jk.put("value", "0");
-//                                    else
-//                                        jk.put("value", array_view.get(i).getValue());
-//                                } else
-//                                    jk.put("value", array_view.get(i).getValue());
-//                                jk.put("col", array_view.get(i).getField_Col());
-//                                jAA.put(jk);
-//                            }
-//                        }
-                        js.put("ctrl", jAA);
-//                        js.put("ctrl",jk);
-                        jkey1.put(ViewActivity.header, js);
-                        jar.put(jkey1);
-                        Log.v("btnSave-jar1", jar.toString());
-                        edit.putString("keys", jar.toString());
-                        edit.putString("pk", ViewActivity.key);
-                        edit.commit();
-
-
-//                        saveDynamicList();
-                    }
-                        else {
-                            JSONObject jkey1 = new JSONObject();
-                        JSONArray jar = new JSONArray();
-
-                        JSONObject js = new JSONObject();
-                            js.put("PK_ID", ViewActivity.key);
-                            js.put("FK_ID", shareKey.getString("pk", ""));
-                            js.put("SF", SF_code);
-                            js.put("date", Common_Class.GetDate());
-                            JSONArray jAA = new JSONArray();
-
-//                            for (int i = 0; i < array_view.size(); i++) {
-//                                JSONObject jk = new JSONObject();
-//
-////                                Log.v("ProcureSave",jk.toString());
-//
-//
-//                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
-//                                    String col = array_view.get(i).getField_Col();
-//                                    jk.put("id", array_view.get(i).getViewid());
-//                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-//                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-//                                        jk.put("value", sdf.format(d));
-//                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-//                                            || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
-//                                        String pic = "";
-//                                        String[] picVal = array_view.get(i).getValue().split(",");
-//                                        for (int k = 0; k < picVal.length; k++) {
-//                                            Log.v("picVal_entry", picVal[k]);
-//                                            getMulipart(picVal[k], 0);
-//                                            pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/") + 1) + ",";
-//                                        }
-//                                        jk.put("value", pic);
-//                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18")) {
-//                                        if (TextUtils.isEmpty(array_view.get(i).getValue()))
-//                                            jk.put("value", "0");
-//                                        else
-//                                            jk.put("value", array_view.get(i).getValue());
-//                                    } else
-//                                        jk.put("value", array_view.get(i).getValue());
-//                                    jk.put("col", array_view.get(i).getField_Col());
-//                                    jk.put("SF", SF_code);
-//                                    jk.put("date", Common_Class.GetDate());
-//                                    jAA.put(jk);
-//                                }
-//                            }
-                            js.put("ctrl", jAA);
-
-                            jkey1.put(ViewActivity.header, js);
-                            jjj.put(jkey1);
-                            Log.v("printing_shareing", jar.toString());
-                            edit.putString("keys", jar.toString());
-                            edit.putString("pk", ViewActivity.key);
-                            edit.commit();
-
-//                            saveDynamicList();
-                        }
-
-
-
-                } catch (Exception e) {
-                }*/
-
-//
-//                try {
-//                    JSONArray jjj = new JSONArray(shareKey.getString("keys", ""));
-//                    if (jjj.length() == 0) {
-//                        edit = shareKey.edit();
-//                        JSONObject jkey1 = new JSONObject();
-//                        JSONArray jar = new JSONArray();
-//                        JSONObject js = new JSONObject();
-//                        js.put("PK_ID", ViewActivity.key);
-//                        js.put("FK_ID", "");
-//                        js.put("SF", SF_code);
-//                        js.put("date", Common_Class.GetDate());
-//
-////                        createDynamicView(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
-//
-////                        JSONArray jAA = new JSONArray();
-////
-////                        Log.v("Fab_dataFormList",jAA.toString());
-////                        for (int i = 0; i < array_view.size(); i++) {
-////                            JSONObject jk = new JSONObject();
-////                            if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
-////                                String col = array_view.get(i).getField_Col();
-////                                jk.put("id", array_view.get(i).getViewid());
-////                                if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-////                                    Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-////                                    jk.put("value", sdf.format(d));
-////                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-////                                        || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
-////                                    String pic = "";
-////                                    String[] picVal = array_view.get(i).getValue().split(",");
-////                                    for (int k = 0; k < picVal.length; k++) {
-////                                        Log.v("picVal_entry", picVal[k]);
-////                                        getMulipart(picVal[k], 0);
-////                                        pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/"));
-////                                    }
-////                                    jk.put("value", pic);
-////                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18")) {
-////                                    if (TextUtils.isEmpty(array_view.get(i).getValue()))
-////                                        jk.put("value", "0");
-////                                    else
-////                                        jk.put("value", array_view.get(i).getValue());
-////                                } else
-////                                    jk.put("value", array_view.get(i).getValue());
-////                                jk.put("col", col);
-////                                jAA.put(jk);
-////                            }
-////                        }
-////                        js.put("ctrl", jAA);
-//
-//                        jkey1.put(ViewActivity.header, js);
-//                        jar.put(jkey1);
-//                        Log.v("fabdata-jar", jar.toString());
-//                        edit.putString("keys", jar.toString());
-//                        edit.putString("pk", ViewActivity.key);
-//                        edit.commit();
-//
-//
-//
-//                    } else {
-//                        edit = shareKey.edit();
-//                        JSONObject jkey1 = new JSONObject();
-//                        JSONObject js = new JSONObject();
-//                        js.put("PK_ID", ViewActivity.key);
-//                        js.put("FK_ID", shareKey.getString("pk", ""));
-//                        js.put("SF", SF_code);
-//                        js.put("date", Common_Class.GetDate());
-//                        jkey1.put(ViewActivity.header, js);
-//                        jjj.put(jkey1);
-//                        Log.v("fabdata-jjj", jjj.toString());
-//                        edit.putString("keys", jjj.toString());
-//                        edit.putString("pk", ViewActivity.key);
-//                        edit.commit();
-//
-//
-//                    }
-//                } catch (Exception e) {
-//                }
-//                Intent i = new Intent(ViewActivity.this, ViewActivity.class);
-//                i.putExtra("frmid", String.valueOf(value));
-//                i.putExtra("frmname","New Farmer" );
-//                i.putExtra("btn_need", "0");
-//                startActivity(i);
-
-//                saveDynamicList();
-            }
-        });
         Log.v("fab-key", shareKey.getString("keys", "") + " hello " + sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
         callDynamicViewList();
-
-//        createDynamicView(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -556,30 +160,28 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                     SharedPreferences.Editor edit = shareKey.edit();
                     try {
                         JSONArray jjj = new JSONArray(shareKey.getString("keys", ""));
-
-
                         if (jjj.length() == 0) {
                             JSONObject jkey1 = new JSONObject();
                             JSONArray jar = new JSONArray();
                             JSONObject js = new JSONObject();
-
-
                             js.put("PK_ID", ViewActivity.key);
                             js.put("FK_ID", "");
                             js.put("SF", SF_code);
                             js.put("date", Common_Class.GetDate());
                             JSONArray jAA = new JSONArray();
-
-                            Log.v("btnSave-list",jAA.toString());
                             for (int i = 0; i < array_view.size(); i++) {
                                 JSONObject jk = new JSONObject();
                                 if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
                                     String col = array_view.get(i).getField_Col();
                                     jk.put("id", array_view.get(i).getViewid());
-                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-                                        jk.put("value", sdf.format(d));
-                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
+//                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+//                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
+//                                        Date d1 = (Date) sdf_or.parse(array_view.get(i).getValue1());
+//                                        String da=(sdf.format(d)).concat(sdf.format(d1));
+//                                        jk.put("value",array_view.get(i).getValue()+","+array_view.get(i).getValue1());
+//                                        Log.v("dateValue",d.toString());
+//                                    } else
+                                        if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
                                             || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
                                         String pic = "";
                                         String[] picVal = array_view.get(i).getValue().split(",");
@@ -603,36 +205,30 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                             js.put("ctrl", jAA);
                             jkey1.put(ViewActivity.header, js);
                             jar.put(jkey1);
-                            Log.v("btnSave-jar", jar.toString());
+                            Log.v("printing_shareing23", jar.toString());
                             edit.putString("keys", jar.toString());
                             edit.putString("pk", ViewActivity.key);
-//                            edit.putString("cntrlObject",jsonsave.toString());
-
                             edit.commit();
-
-                            saveDynamicList();
-                        }
-                        else {
+                        } else {
                             JSONObject jkey1 = new JSONObject();
-                            JSONArray jar = new JSONArray();
                             JSONObject js = new JSONObject();
                             js.put("PK_ID", ViewActivity.key);
                             js.put("FK_ID", shareKey.getString("pk", ""));
                             js.put("SF", SF_code);
                             js.put("date", Common_Class.GetDate());
                             JSONArray jAA = new JSONArray();
-
                             for (int i = 0; i < array_view.size(); i++) {
                                 JSONObject jk = new JSONObject();
-
-
                                 if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
                                     String col = array_view.get(i).getField_Col();
                                     jk.put("id", array_view.get(i).getViewid());
-                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
-                                        jk.put("value", sdf.format(d));
-                                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
+//                                    if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+//                                        Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
+//                                        Date d1 = (Date) sdf_or.parse(array_view.get(i).getValue1());
+//                                        jk.put("value", array_view.get(i).getValue()+","+array_view.get(i).getValue1());
+//                                        Log.v("dateValue12",d.toString());
+//                                    } else
+                                        if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
                                             || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
                                         String pic = "";
                                         String[] picVal = array_view.get(i).getValue().split(",");
@@ -657,45 +253,20 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                             }
                             js.put("ctrl", jAA);
                             jkey1.put(ViewActivity.header, js);
-                            jar.put(jkey1);
-                            Log.v("printing_shareing", jar.toString());
-                            edit.putString("keys", jar.toString());
+                            jjj.put(jkey1);
+                            Log.v("printing_shareing", jjj.toString());
+                            edit.putString("keys", jjj.toString());
                             edit.putString("pk", ViewActivity.key);
                             edit.commit();
-//                            edit.putString("cntrlObject",jsonsave.toString());
-
-//                            saveDynamicList();
                         }
-
-
+                        saveDynamicList();
 
                     } catch (Exception e) {
                     }
-//                    saveDynamicList();
                 } else
                     Toast.makeText(ViewActivity.this, "Please fill the mandatory fields", Toast.LENGTH_SHORT).show();
             }
         });
-//click function added for field label (spinner)
-//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                if (array_view.size() == 0) {
-//
-//                } else {
-//                    if (array_view.get(i).getViewid().equalsIgnoreCase("4") || array_view.get(i).getViewid().equalsIgnoreCase("5")) {
-//                        popupSpinner(0, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
-//                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
-//                        datePick(i, 8);
-//                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("6") || array_view.get(i).getViewid().equalsIgnoreCase("7")) {
-//                        popupSpinner(1, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
-//
-//
-//                    }
-//                }
-//
-//            }
-//        });
 
         AdapterForDynamicView.bindListernerForDateRange(new UpdateUi() {
             @Override
@@ -716,48 +287,74 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                     case 4:
                         popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
                         break;
-                   /* case 5:
-                        popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
-                        break;*/
                     case 6:
                         popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
                         break;
-                   /* case 7:
-                        popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
-                        break;*/
                     case 8:
                         datePick(pos, value);
                         break;
-                 /*   case 9:
-                        datePick(pos, value);
-                        break;*/
+                    case 9:
+                        datePick1(pos, value);
+                        break;
                     default:
                         timePicker(pos, value);
                         break;
                 }
 
+            }
+        });
 
-//                if (value == 15) {
-//                    pos_upload_file = pos;
-//                    uploadFile();
-//                } else if (value == 16) {
-//                    pos_upload_file = pos;
-//                    captureFile();
-//                } else if (value == 17) {
-//                    pos_upload_file = pos;
-//                    popupCapture();
-//                } else if (value == 4) {
-//                    popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
-//                } else if (value == 5) {
-//                    popupSpinner(0, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
-//                } else if (value == 6) {
-//                    popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
-//                } else if (value == 7) {
-//                    popupSpinner(1, array_view.get(pos).getA_list(), pos, array_view.get(pos).getCreation_id());
-//                } else if (value > 5 && value < 10) {
-//                    datePick(pos, value);
-//                } else
-//                    timePicker(pos, value);
+        getFabValue();
+    }
+
+    public void getFabValue() {
+        Map<String, String> map = new HashMap<>();
+        map.put("slno", frm_id);
+        map.put("axn", "get/fab_value");
+        Call<ResponseBody> approval = apiService.getUniversalData1(map);
+        approval.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body() != null) {
+                            String resp = response.body().string();
+                            JSONObject jo = new JSONObject(resp);
+                            JSONArray j = jo.getJSONArray("response");
+                            for (int i = 0; i < j.length(); i++) {
+                                JSONObject job = j.getJSONObject(i);
+                                fv = job.getInt("Targt_Frm");
+                                btnSave = job.getString("Frm_Type");
+                                tool_header.setText(job.getString("Frm_Name"));
+                                Log.v("ghghg",tool_header.toString());
+                                Log.v("form_type_123",btnSave);
+                                if (fv > 0) {
+                                    fab.setVisibility(View.VISIBLE);
+                                    fab.setOnClickListener(v -> {
+                                        callDynamicViewList1();
+                                    });
+                                } else {
+                                    fab.setVisibility(View.GONE);
+                                }
+
+                                if(btnSave.equalsIgnoreCase("V")){
+                                    btn_save.setVisibility(View.VISIBLE);
+                                }
+                                else{
+                                    btn_save.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+
             }
         });
     }
@@ -990,23 +587,42 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
     }
 
 
+
     public void datePick(final int pos, final int value) {
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(ViewActivity.this, new DatePickerDialog.OnDateSetListener() {
-
+            String d="";
+            String dt="",t="";
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 ModelDynamicView mm = array_view.get(pos);
                 int mnth = monthOfYear + 1;
+                dt = dayOfMonth + "-" + mnth + "-" + year;
+
                 if (mm.getViewid().equalsIgnoreCase("9")) {
                     if (value == 8) {
-                        if (TextUtils.isEmpty(mm.getTvalue()))
-                            mm.setValue(dayOfMonth + "-" + mnth + "-" + year);
+                        if (TextUtils.isEmpty(mm.getTvalue())){
+                            TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+//                                    d = dayOfMonth + "-" + mnth + "-" + year + " " +hourOfDay + ":" + minute;
+                                    t = hourOfDay + ":" + minute;
+                                    mm.setValue(dt.concat(" ").concat(t));
+                                    adp_view.notifyDataSetChanged();
+
+                                }
+                            };
+                            new TimePickerDialog(ViewActivity.this, timeSetListener, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true).show();
+
+                        }
+
                         else {
                             String val = dayOfMonth + "-" + mnth + "-" + year;
                             if (dateDifference(val, mm.getTvalue()) < 0)
                                 Toast.makeText(ViewActivity.this, "From date should be lesser", Toast.LENGTH_SHORT).show();
                             else
-                                mm.setValue(dayOfMonth + "-" + mnth + "-" + year);
+                                mm.setValue(dayOfMonth + "-" + mnth + "qwq" + year);
                         }
                     } else {
                         if (TextUtils.isEmpty(mm.getValue()))
@@ -1016,9 +632,69 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                             if (dateDifference(mm.getValue(), val) < 0)
                                 Toast.makeText(ViewActivity.this, "To date should be greater", Toast.LENGTH_SHORT).show();
                             else
-                                mm.setTvalue(dayOfMonth + "-" + mnth + "-" + year);
+                                mm.setTvalue(dayOfMonth + "-" + mnth + "def" + year);
                         }
 
+
+                    }
+                } else
+                    mm.setValue(dayOfMonth + "-" + mnth + "ghi" + year);
+
+                adp_view.notifyDataSetChanged();
+                commonFun();
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.show();
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+    }
+
+
+    public void datePick1(final int pos, final int value) {
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(ViewActivity.this, new DatePickerDialog.OnDateSetListener() {
+            String d="";
+            String dt="",t="";
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                ModelDynamicView mm = array_view.get(pos);
+                int mnth = monthOfYear + 1;
+                dt = dayOfMonth + "-" + mnth + "-" + year;
+                if (mm.getViewid().equalsIgnoreCase("9")) {
+                    if (value == 9) {
+                        if (TextUtils.isEmpty(mm.getTvalue())){
+                            TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                                    t = hourOfDay + ":" + minute;
+
+                                    mm.setValue1(dt.concat(" ").concat(t));
+                                    adp_view.notifyDataSetChanged();
+                                    //Log.v("qwgtio2", d.toString());
+                                }
+                            };
+                            new TimePickerDialog(ViewActivity.this, timeSetListener, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true).show();
+
+                        }
+//                            mm.setValue1(dayOfMonth + "-" + mnth + "-" + year);
+                        else {
+                            String val = dayOfMonth + "-" + mnth + "-" + year;
+                            if (dateDifference(val, mm.getTvalue()) < 0)
+                                Toast.makeText(ViewActivity.this, "To date should be greater", Toast.LENGTH_SHORT).show();
+                            else
+                                mm.setValue1(dayOfMonth + "-" + mnth + "-" + year);
+                        }
+                    } else {
+                        if (TextUtils.isEmpty(mm.getValue()))
+                            Toast.makeText(ViewActivity.this, "Fill to date", Toast.LENGTH_SHORT).show();
+                        else {
+                            String val = dayOfMonth + "-" + mnth + "-" + year;
+                            if (dateDifference(mm.getValue(), val) < 0)
+                                Toast.makeText(ViewActivity.this, "from date should be lesser", Toast.LENGTH_SHORT).show();
+                            else
+                                mm.setTvalue(dayOfMonth + "-" + mnth + "-" + year);
+                        }
 
                     }
                 } else
@@ -1029,6 +705,8 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
     }
 
     public void timePicker(final int pos, final int value) {
@@ -1121,91 +799,102 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
 
         try {
 
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")))) {
+            /*if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")))) {
                 Log.v("FORM_ID:", frm_id);
-                Log.v("FORM_NAME:", getIntent().getStringExtra("frmtype") +" "+ frm_id);
-                JSONObject json = new JSONObject();
-                json.put("slno", frm_id);
+                Log.v("FORM_NAME:", getIntent().getStringExtra("frmtype") +" "+ frm_id);*/
+            JSONObject json = new JSONObject();
+            json.put("slno", frm_id);
 
-                Log.v("viewlist", json.toString());
-                Call<ResponseBody> approval = apiService.getView(json.toString());
-
-                approval.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            Log.v("viewlist-response", response.body().byteStream() + "");
-                            JSONObject jsonObject = null;
-                            String jsonData = null;
-
-                            InputStreamReader ip = null;
-                            StringBuilder is = new StringBuilder();
-                            String line = null;
-                            try {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                }
-
-                                sharedCommonPref.save(getIntent().getStringExtra("frmname"), is.toString());
-                                createDynamicView(is.toString());
-
-                            } catch (Exception e) {
-
+            Log.v("viewlist", json.toString());
+            Call<ResponseBody> approval = apiService.getView(json.toString());
+            approval.enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            if (response.body() == null) {
+                                Toast.makeText(ViewActivity.this, "Response is null", Toast.LENGTH_SHORT).show();
+                                return;
                             }
-
+                            String result = response.body().string();
+                            createDynamicView(result);
+                        } catch (Exception e) {
+                            Toast.makeText(ViewActivity.this, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, Throwable t) {
 
-                    }
-                });
-            } else {
+                }
+            });
+           /* } else {
 
                 createDynamicView(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
-            }
+            }*/
 
         } catch (Exception e) {
         }
 
     }
 
+    public void callDynamicViewList1() {
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("tno", String.valueOf(fv));
+            Call<ResponseBody> approval = apiService.getView(json.toString());
+            approval.enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            if (response.body() == null) {
+                                Toast.makeText(ViewActivity.this, "Response is null", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            String result = response.body().string();
+                            Log.v("qwee", result);
+//                            sharedCommonPref.save(getIntent().getStringExtra("frmname"), result);
+                            createDynamicView(result);
+                        } catch (Exception e) {
+                            Toast.makeText(ViewActivity.this, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+        } catch (Exception e) {
+        }
+
+    }
 
     void createDynamicView(String data) {
         try {
-
             array_view.clear();
-            Log.v("dynamicdata", data);
             JSONArray jsonArray = new JSONArray(data);
-
-            sharedCommonPref.save(Constants.dataArray, data);
-
-            Log.v("jsonArray", jsonArray.toString());
-
             if (jsonArray.length() == 0) {
                 Toast.makeText(ViewActivity.this, "No controls available for this form ", Toast.LENGTH_SHORT).show();
+                listCard.setVisibility(View.GONE);
+                btn_save.setVisibility(View.GONE);
                 progressDialog.dismiss();
-            }
-
-            else {
+            } else {
+                listCard.setVisibility(View.VISIBLE);
                 JSONObject jsonjk = jsonArray.getJSONObject(0);
                 if (jsonjk.getString("Control_id").equalsIgnoreCase("19")) {
                     callDynamicViewListView();
-                }
-
-                else {
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         if (share.getString("exist", "").equalsIgnoreCase("E") && share.getString("fab", "").equalsIgnoreCase("0")) {
                             ArrayList<SelectionModel> arr = new ArrayList<>();
                             JSONObject json = jsonArray.getJSONObject(i);
                             String gettingfield = json.getString("Fld_Src_Field");
-                        array_view.add(new ModelDynamicView("2", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", "", ""));
-//                            array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"),
-//                                    "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
+                            array_view.add(new ModelDynamicView("2", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", "", ""));
 
                             SharedPreferences.Editor edit = share.edit();
                             edit.putString("exist", "");
@@ -1235,13 +924,10 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                                 } else {
                                     filterList.add(new SelectionModel(filterText, filterValue));
                                 }
-                                //   Log.e("ListValues_fil", filterList.toString());
                             }
                         } catch (Exception e) {
-                            // Log.v("NO_INPUT:0", e.getMessage());
                         }
 
-                        //  Log.v("Printing_ctrl_id", json.getString("Control_id"));
                         if (json.getString("Control_id").equalsIgnoreCase("23")) {
                             try {
                                 //   Log.v("NO_INPUT:1", "In:" + i);
@@ -1250,194 +936,28 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                                         "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
                                 fab_value = json.getString("type");
                                 btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                header = json.getString("header");
-                                //  Log.v("NO_INPUT:1", "OUT:" + i);
+                                tool_header.setText(json.getString("Frm_Name"));
+
                             } catch (Exception e) {
                                 // Log.v("NO_INPUT:1", e.getMessage());
                             }
                         }
-                     /*  else if (json.getString("Control_id").equalsIgnoreCase("2")) {
-                            try {
-                                //   Log.v("NO_INPUT:1", "In:" + i);
-                                String gettingfield = json.getString("Fld_Src_Field");
-                                array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "",
-                                        "", json.getString("Target_Form"), "", "", ""));
-                                fab_value = json.getString("type");
-                                btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                header = json.getString("header");
-                                //  Log.v("NO_INPUT:1", "OUT:" + i);
-                            } catch (Exception e) {
-                                // Log.v("NO_INPUT:1", e.getMessage());
-                            }
-                        }*/
+                        if (json.getString("Control_id").equalsIgnoreCase("9") && json.getString("Fld_Name").equalsIgnoreCase("Feed and AH")) {
+                            button_txt.setVisibility(View.VISIBLE);
+                            button_txt.setTextColor(Color.parseColor("#b2d233"));
+                        }
+
                         else if (json.getString("Control_id").equalsIgnoreCase("19")) {
                             try {
-                                //Log.v("NO_INPUT:2", "In:" + i);
                                 String gettingfield = json.getString("Fld_Src_Field");
                                 array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "",
                                         "", json.getString("Target_Form"), "", "", ""));
                                 fab_value = json.getString("type");
                                 btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                // Log.v("FORM_NAME:", json.getString("header"));
-
-                                header = json.getString("header");
-                                // Log.v("NO_INPUT:2", "Out:" + i);
-
-                            } catch (Exception e) {
-                                //  Log.v("NO_INPUT:2", e.getMessage());
-                            }
-                        }
-                        else {
-                            try {
-                                if (jarray != null && jarray.length() != 0) {
-                                    for (int m = 0; m < jarray.length(); m++) {
-                                        //  Log.v("NO_INPUT:3", "InArr:" + m + ":com:" + i);
-
-                                        JSONObject jjss = jarray.getJSONObject(m);
-                                        //  Log.v("json_input_iss", jjss.getString(json.getString("code")));
-                                        arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
-                                        //Log.v("NO_INPUT:3", "OUTArr:" + m + ":com:" + i);
-                                    }
-                                }
-                                // Log.v("NO_INPUT:3", "In:" + i);
-
-
-                                //Log.v("NO_INPUT:3", "Out:1" + i);
-                                array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
-                                        arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
-                                        json.getString("Fld_Mandatory"), json.getString("Field_Col")));
-
-                                fab_value = json.getString("type");
-                                btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                header = json.getString("header");
-                                // Log.v("NO_INPUT:3", "Out:2" + i);
-                            } catch (Exception e) {
-                                // Log.v("NO_INPUT:3", e.getMessage());
-                            }
-                        }
-                    }
-
-                    adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
-                    list.setAdapter(adp_view);
-                    adp_view.notifyDataSetChanged();
-                    if (Integer.parseInt(fab_value) > 0) {
-                        fab.setVisibility(View.VISIBLE);
-                        value = Integer.parseInt(fab_value);
-                    }
-//                    if (btnShow.equalsIgnoreCase("V"))
-//                        btn_save.setVisibility(View.VISIBLE);
-                     if (btnShow.equalsIgnoreCase("T"))
-                        btn_save.setVisibility(View.VISIBLE);
-//                    else if (btnShow.equalsIgnoreCase("V"))
-//                        btn_save.setVisibility(View.VISIBLE);
-                    else
-                        btn_save.setVisibility(View.GONE);
-                    progressDialog.dismiss();
-                    key = SF_code + "_" + frm_id + "_" + System.currentTimeMillis();
-
-                }
-                //   Log.v("Printing_arr_view", array_view.size() + "");
-            }
-
-        } catch (Exception e) {
-              Log.v("NO_INPUT:Ex", e.getMessage());
-            progressDialog.dismiss();
-            adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
-            list.setAdapter(adp_view);
-            adp_view.notifyDataSetChanged();
-
-        }
-    }
-
-    /*private void callDynamicViewListView(String frmname) {
-
-        try {
-
-            array_view.clear();
-            Log.v("dynamicdata", frmname);
-            JSONArray jsonArray = new JSONArray(frmname);
-
-            Log.v("jsonArray", jsonArray.toString());
-
-            if (jsonArray.length() == 0) {
-                Toast.makeText(ViewActivity.this, "No controls available for this form ", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            }
-
-            else {
-                JSONObject jsonjk = jsonArray.getJSONObject(0);
-                if (jsonjk.getString("Control_id").equalsIgnoreCase("19")) {
-                    callDynamicViewListView(sharedCommonPref.getvalue(getIntent().getStringExtra("frmname")));
-                } else {
-                    if (share.getString("exist", "").equalsIgnoreCase("E") && share.getString("fab", "").equalsIgnoreCase("1") )  {
-                        ArrayList<SelectionModel> arr = new ArrayList<>();
-                        array_view.add(new ModelDynamicView("19", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", "", ""));
-
-                        SharedPreferences.Editor edit = share.edit();
-                        edit.putString("exist", "");
-                        edit.putString("fab", "");
-                        edit.putString("value", "");
-                        edit.putString("arr", "");
-                        edit.commit();
-
-                    }
-                    for (int i = 0; i < jsonArray.length(); i++) {
-
-                        ArrayList<SelectionModel> arr = new ArrayList<>();
-                        JSONObject json = jsonArray.getJSONObject(i);
-                        JSONArray jarray = null;
-                        try {
-                            jarray = json.getJSONArray("input");
-                            String filterText = json.getString("Filter_Text");
-                            String filterValue = json.getString("Filter_Value");
-                            if (!filterText.equals("")) {
-                                if (filterText.contains(",")) {
-                                    String[] txtArray = filterText.split(",");
-                                    String[] valueArray = filterValue.split(",");
-                                    for (int j = 0; j < txtArray.length; j++) {
-                                        filterList.add(new SelectionModel(txtArray[j], valueArray[j]));
-                                    }
-                                } else {
-                                    filterList.add(new SelectionModel(filterText, filterValue));
-                                }
-                                //   Log.e("ListValues_fil", filterList.toString());
-                            }
-                        } catch (Exception e) {
-                            // Log.v("NO_INPUT:0", e.getMessage());
-                        }
-
-                        //  Log.v("Printing_ctrl_id", json.getString("Control_id"));
-                        if (json.getString("Control_id").equalsIgnoreCase("23")) {
-                            try {
-                                //   Log.v("NO_INPUT:1", "In:" + i);
-                                String gettingfield = json.getString("Fld_Src_Field");
-                                array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"),
-                                        "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
-                                fab_value = json.getString("type");
-                                btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                header = json.getString("header");
-                                //  Log.v("NO_INPUT:1", "OUT:" + i);
-                            } catch (Exception e) {
-                                // Log.v("NO_INPUT:1", e.getMessage());
-                            }
-                        } else if (json.getString("Control_id").equalsIgnoreCase("19")) {
-                            try {
-                                //Log.v("NO_INPUT:2", "In:" + i);
-                                String gettingfield = json.getString("Fld_Src_Field");
-                                array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", "", ""));
-                                fab_value = json.getString("type");
-                                btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                // Log.v("FORM_NAME:", json.getString("header"));
-
-                                header = json.getString("header");
-                                // Log.v("NO_INPUT:2", "Out:" + i);
-
+                                tool_header.setText(json.getString("Frm_Name"));
+                                button_txt.setVisibility(View.VISIBLE);
+                                header = json.getString("Frm_Name");
+                                adp_view.notifyDataSetChanged();
                             } catch (Exception e) {
                                 //  Log.v("NO_INPUT:2", e.getMessage());
                             }
@@ -1445,26 +965,17 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                             try {
                                 if (jarray != null && jarray.length() != 0) {
                                     for (int m = 0; m < jarray.length(); m++) {
-                                        //  Log.v("NO_INPUT:3", "InArr:" + m + ":com:" + i);
-
                                         JSONObject jjss = jarray.getJSONObject(m);
-                                        //  Log.v("json_input_iss", jjss.getString(json.getString("code")));
                                         arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
-                                        //Log.v("NO_INPUT:3", "OUTArr:" + m + ":com:" + i);
                                     }
                                 }
-                                // Log.v("NO_INPUT:3", "In:" + i);
-
-                                fab_value = json.getString("type");
-                                btnShow = json.getString("target");
-                                tool_header.setText(json.getString("header"));
-                                header = json.getString("header");
-                                //Log.v("NO_INPUT:3", "Out:1" + i);
 
                                 array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
                                         arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
                                         json.getString("Fld_Mandatory"), json.getString("Field_Col")));
-                                // Log.v("NO_INPUT:3", "Out:2" + i);
+
+                                fab_value = json.getString("type");
+                                btnShow = json.getString("target");
                             } catch (Exception e) {
                                 // Log.v("NO_INPUT:3", e.getMessage());
                             }
@@ -1473,59 +984,31 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
 
                     adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
                     list.setAdapter(adp_view);
-                    adp_view.notifyDataSetChanged();
-                    if (Integer.parseInt(fab_value) > 0) {
-                        fab.setVisibility(View.VISIBLE);
-                        value = Integer.parseInt(fab_value);
 
-                        btn_save.setVisibility(View.VISIBLE);
-//                        btn_save.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                saveDynamicList();
-//                            }
-//                        });
-                    }
-                    if (btnShow.equalsIgnoreCase("T"))
-                        btn_save.setVisibility(View.VISIBLE);
-                    else
-                        btn_save.setVisibility(View.GONE);
                     progressDialog.dismiss();
                     key = SF_code + "_" + frm_id + "_" + System.currentTimeMillis();
 
                 }
-                //   Log.v("Printing_arr_view", array_view.size() + "");
             }
 
+            fab.setVisibility(View.GONE);
+
         } catch (Exception e) {
-            //  Log.v("NO_INPUT:Ex", e.getMessage());
+            Log.v("NO_INPUT:Ex", e.getMessage());
             progressDialog.dismiss();
             adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
             list.setAdapter(adp_view);
             adp_view.notifyDataSetChanged();
-
         }
     }
-*/
-    public void saveDynamicList()  {
-        try {
-//        SharedPreferences sharedPreferences = getSharedPreferences("localpref", MODE_PRIVATE);
-//        String value = sharedPreferences.getString("pref_data", "");
 
-        JSONObject json = new JSONObject();
+    public void saveDynamicList() {
+        try {
+            JSONObject json = new JSONObject();
 
             JSONArray ja = new JSONArray(shareKey.getString("keys", ""));
-//            JSONArray j = new JSONArray(value);
-
-//            String name = json.getString("value");
-//            String number = json.getString("number");
-
             json.put("data", ja);
-//            json.put("data1",j);
-
             Log.v("save-dynamiclist", ja.toString());
-//            Log.v("save-dynamiclist1", j.toString()+ja.toString());
-
             Call<ResponseBody> approval = apiService.saveView(json.toString());
 
             approval.enqueue(new Callback<ResponseBody>() {
@@ -1533,7 +1016,6 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                     if (response.isSuccessful()) {
-//                        Log.v("printing_res_track", response.body().byteStream() + "");
                         JSONObject jsonObject = null;
                         String jsonData = null;
                         InputStreamReader ip = null;
@@ -1545,21 +1027,15 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                             while ((line = bf.readLine()) != null) {
                                 is.append(line);
                             }
-//                            Log.v("printing_save_tp", is.toString());
                             JSONObject jj = new JSONObject(is.toString());
-                            Log.v("Save-dynamicdata",ja.toString());
-//                            Log.v("Save-dynamicdata",j.toString());
+                            Log.v("Save-dynamicdata", ja.toString());
                             Log.e("save-JSON_VALUES", ja.toString());
 
                             if (jj.getString("success").equals("true")) {
-                                //bommu
-
-                                Toast.makeText(ViewActivity.this,"Submitted Successfully",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ViewActivity.this, "Submitted Successfully", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(ViewActivity.this, ProcurementDashboardActivity.class);
-
                                 startActivity(i);
                             }
-
                         } catch (Exception e) {
                             Log.v("Exception_fmcg", e.getMessage());
                         }
@@ -1646,7 +1122,7 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
             approval.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if  (response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         Log.v("printing_res_track_LV", response.body().byteStream() + "");
                         JSONObject jsonObject = null;
                         String jsonData = null;
@@ -1670,13 +1146,12 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                             String[] splitbyComma = gettingfield.split(",");
 
                             JSONArray jarray = json.getJSONArray("input");
-
+                            Log.v("wedrty", fab_value);
                             adpt = new FilterDemoAdapter(ViewActivity.this, jarray, gettingfield, 0, json.getString("Targt_Frm"));
                             list.setAdapter(adpt);
                             fab_value = json.getString("type");
                             btnShow = json.getString("target");
-                            tool_header.setText(json.getString("header"));
-                            header = json.getString("header");
+                            tool_header.setText(json.getString("Frm_Name"));
                             array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
                                     arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
                                     json.getString("Fld_Mandatory"), json.getString("Field_Col")));
@@ -1685,12 +1160,10 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
                                 fab.setVisibility(View.VISIBLE);
                                 value = Integer.parseInt(fab_value);
                             }
-//                            if (btnShow.equalsIgnoreCase("V"))
-//                                btn_save.setVisibility(View.VISIBLE);
-//                             if (btnShow.equalsIgnoreCase("T"))
-//                                btn_save.setVisibility(View.GONE);
-//                            else
-//                                btn_save.setVisibility(View.VISIBLE);
+                            else{
+                                fab.setVisibility(View.GONE);
+                            }
+
                             progressDialog.dismiss();
 
                         } catch (Exception e) {
@@ -1821,26 +1294,4 @@ public class ViewActivity extends AppCompatActivity/* implements/* AdapterForSel
         header = tool_header.getText().toString();
     }
 
-//    @Override
-//    public void itemClick(SelectionModel selectionModel) {
-//        try {
-//            array_view.get(arrayViewPos).setValue(selectionModel.getTxt());
-//            if (filterList.size() != 0) {
-//                for (int j = 0; j < filterList.size(); j++) {
-//                    if (filterList.get(j).getTxt().equals(mCreationId)) {
-//                        selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), selectionModel.getTxt()));
-//                    }
-//                }
-//                Log.e("ListValues_fil", filterList.toString());
-//                Log.e("ListValues_select", selectedFilter.toString());
-//            }
-//            adp_view.notifyDataSetChanged();
-//
-//            dialog.dismiss();
-//            commonFun();
-//        } catch (Exception e) {
-//            Log.v("itemClick:", e.getMessage());
-//        }
-//
-//    }
 }
