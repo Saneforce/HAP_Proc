@@ -78,8 +78,6 @@
                 android:gravity="end"
                 android:text="Amount" />
 
-            <!--            Todo-->
-
         </LinearLayout>
 
         <LinearLayout

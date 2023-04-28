@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,17 +40,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SalesReturnHistoryActivity extends AppCompatActivity {
-
     TextView fromDateTV, toDateTV, totalTV;
     RecyclerView recyclerView;
     LinearLayout rowLayout;
     CardView totalLayout;
     DatePickerDialog fromDatePickerDialog;
-
     Context context = this;
     Common_Class common_class;
     Shared_Common_Pref shared_common_pref;
-
     ArrayList<SalesReturnHistoryModel> list;
     SalesReturnHistoryAdapter adapter;
     String date, stDate, endDate;
@@ -58,18 +56,15 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_return_history);
-
         fromDateTV = findViewById(R.id.tvStartDate);
         toDateTV = findViewById(R.id.tvEndDate);
         totalTV = findViewById(R.id.txtTotAmt);
         recyclerView = findViewById(R.id.invoicerecyclerview);
         rowLayout = findViewById(R.id.row_report);
         totalLayout = findViewById(R.id.cvTotParent);
-
         common_class = new Common_Class(context);
         shared_common_pref = new Shared_Common_Pref(context);
         list = new ArrayList<>();
-
         fromDateTV.setOnClickListener(v -> selectDate(1));
         toDateTV.setOnClickListener(v -> selectDate(2));
     }
@@ -105,6 +100,10 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
         if (fromDateTV.getText().toString().equals("") || toDateTV.getText().toString().equals("")) {
             return;
         }
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage("Loading returned sales...");
+        dialog.setCancelable(false);
+        dialog.show();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> params = new HashMap<>();
         params.put("axn", "get_sales_return_history");
@@ -120,6 +119,7 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
                     try {
                         if (response.body() == null) {
                             Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                             return;
                         }
                         String result = response.body().string();
@@ -137,11 +137,13 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Response Not Success", Toast.LENGTH_SHORT).show();
                 }
+                dialog.dismiss();
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
     }
@@ -178,9 +180,5 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
             totalLayout.setVisibility(View.GONE);
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public static void SampleMethod(Context context) {
-        Toast.makeText(context, "Item Clicked", Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,9 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,8 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -49,7 +45,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -58,7 +53,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SalesReturnActivity extends AppCompatActivity {
-
     ImageView home;
     TextView todayDate, outletName, outletAddress, selectedInvoice, back, submit, viewHistory, totalTV, quantitiesTV;
     RecyclerView recyclerView;
@@ -66,28 +60,22 @@ public class SalesReturnActivity extends AppCompatActivity {
     LinearLayout returnTypeLayout, ProductsFinal;
     RadioGroup returnTypeRG;
     RadioButton full, partial;
-
     Context context;
     Common_Class common_class;
-
     ArrayList<SalesReturnInvoiceModel> invoiceList;
     ArrayList<SalesReturnProductModel> productList;
-
     SalesReturnProductAdapter salesReturnProductAdapter;
-
     String selectedInvoiceNumber = "";
     String submissionResult;
     boolean isOnSubmitScreen = false;
     int itemsCount, qtyCount;
     double retInvTotal;
-
     Shared_Common_Pref sharedCommonPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_return);
-
         home = findViewById(R.id.toolbar_home);
         todayDate = findViewById(R.id.tv_date);
         outletName = findViewById(R.id.outletName);
@@ -106,19 +94,15 @@ public class SalesReturnActivity extends AppCompatActivity {
         viewHistory = findViewById(R.id.viewHistory);
         totalTV = findViewById(R.id.total);
         quantitiesTV = findViewById(R.id.quantities);
-
         context = this;
         common_class = new Common_Class(context);
         invoiceList = new ArrayList<>();
         productList = new ArrayList<>();
-
         sharedCommonPref = new Shared_Common_Pref(context);
-
         common_class.gotoHomeScreen(context, home);
         todayDate.setText("Date: " + new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
         outletName.setText(Shared_Common_Pref.OutletName.toUpperCase());
         outletAddress.setText(Shared_Common_Pref.OutletAddress);
-
         rlInvoice.setEnabled(false);
         rlInvoice.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -148,7 +132,6 @@ public class SalesReturnActivity extends AppCompatActivity {
                 Toast.makeText(context, "No Invoices made Today", Toast.LENGTH_SHORT).show();
             }
         });
-
         selectedInvoice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -397,17 +380,17 @@ public class SalesReturnActivity extends AppCompatActivity {
                             if (jsonObject.getBoolean("success")) {
                                 submissionResult = "Sales return submitted successfully...";
                                 progressDialog.dismiss();
-                                ShowFinalResult(submissionResult);
+                                ShowFinalResult();
                             }
                         } catch (Exception e) {
                             Toast.makeText(context, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-                            ShowFinalResult(submissionResult);
+                            ShowFinalResult();
                         }
                     } else {
                         Toast.makeText(context, "Response Not Success", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
-                        ShowFinalResult(submissionResult);
+                        ShowFinalResult();
                     }
                 }
 
@@ -415,17 +398,17 @@ public class SalesReturnActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                     Toast.makeText(context, "Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
-                    ShowFinalResult(submissionResult);
+                    ShowFinalResult();
                 }
             });
         } catch (Exception e) {
             progressDialog.dismiss();
-            ShowFinalResult(submissionResult);
+            ShowFinalResult();
             Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void ShowFinalResult(String submissionResult) {
+    private void ShowFinalResult() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(submissionResult);
         builder.setCancelable(false);
@@ -453,11 +436,23 @@ public class SalesReturnActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     try {
                         if (response.body() == null) {
+                            dialog.dismiss();
                             Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         String result = response.body().string();
                         JSONObject jsonObject = new JSONObject(result);
+                        if (jsonObject.getBoolean("isAlreadyRegistered")) {
+                            returnTypeLayout.setVisibility(View.GONE);
+                            submitLayout.setVisibility(View.GONE);
+                            dialog.dismiss();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setMessage("Sales Return already submitted for the selected invoice. Please select any another invoice! ");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Dismiss", (dialog1, which) -> dialog1.dismiss());
+                            builder.create().show();
+                            return;
+                        }
                         if (jsonObject.getBoolean("success")) {
                             JSONArray jsonArray = jsonObject.getJSONArray("response");
                             Log.e("status", "Request Result: \n" + jsonArray);
@@ -466,12 +461,10 @@ public class SalesReturnActivity extends AppCompatActivity {
                                 String productName = jsonArray.getJSONObject(i).getString("Product_Name");
                                 String materialCode = jsonArray.getJSONObject(i).getString("Sale_Erp_Code");
                                 String invUOM = jsonArray.getJSONObject(i).getString("Unit");
-                                String retUOM = invUOM;
                                 String retType = "";
                                 double MRP = jsonArray.getJSONObject(i).getDouble("MRP");
                                 double rate = jsonArray.getJSONObject(i).getDouble("Price");
                                 double invConvFac = jsonArray.getJSONObject(i).getDouble("Con_Fac");
-                                double retConvFac = invConvFac;
                                 double retTotal = 0;
                                 int invQty = jsonArray.getJSONObject(i).getInt("qty");
                                 int retQty = 0;
@@ -492,7 +485,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                                     double taxVal = taxArray.getJSONObject(j).getDouble("Tax_Val");
                                     taxList.add(new TaxModel(taxName, taxCode, taxAmt, taxVal));
                                 }
-                                productList.add(new SalesReturnProductModel(Product_Code, productName, materialCode, invUOM, retUOM, retType, MRP, rate, invConvFac, retConvFac, retTotal, retTax, invQty, retQty, uomList, taxList));
+                                productList.add(new SalesReturnProductModel(Product_Code, productName, materialCode, invUOM, invUOM, retType, MRP, rate, invConvFac, invConvFac, retTotal, retTax, invQty, retQty, uomList, taxList));
                             }
                         } else {
                             Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
@@ -523,8 +516,8 @@ public class SalesReturnActivity extends AppCompatActivity {
         String outletCode = Shared_Common_Pref.OutletCode;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> params = new HashMap<>();
-        params.put("axn", "get_latest_invoice_of_outlet");
-//        params.put("axn", "get_today_invoice_of_outlet");
+        params.put("axn", "get_latest_invoice_of_outlet"); // Enable this line to get last 30 days's invoices...
+//        params.put("axn", "get_today_invoice_of_outlet"); // Enable this line to get only today's invoices...
         params.put("outletCode", outletCode);
         Call<ResponseBody> call = apiInterface.getUniversalData(params);
         call.enqueue(new Callback<>() {

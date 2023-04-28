@@ -245,8 +245,6 @@
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
-            <!--            Todo-->
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
