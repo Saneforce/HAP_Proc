@@ -95,13 +95,16 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     TextView freezer_position_tv;
     SwitchCompat switch_customer_access_status, switch_available_status, switch_working_status;
 
-    String selectedFreezerPosition;
+    String selectedFreezerPosition, selectedFreezerID;
     boolean isCustomerAccessible, isLEDAvailable, isLEDWorking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooler_info_layout);
+
+        selectedFreezerID = "";
+        selectedFreezerPosition = "";
 
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
@@ -136,6 +139,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
             AlertDialog dialog = builder.create();
             adapter.setItemSelected((model1, position1) -> {
                 selectedFreezerPosition = model1.getName();
+                selectedFreezerID = model1.getId();
                 freezer_position_tv.setText(model1.getName());
                 dialog.dismiss();
             });
@@ -489,6 +493,13 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         HeadItem.put("make", etMake.getText().toString());
                         HeadItem.put("coolerType", etCoolerType.getText().toString());
 
+
+                        HeadItem.put("FreezerPosID", selectedFreezerID);
+                        HeadItem.put("FreezerPosName", selectedFreezerPosition);
+                        HeadItem.put("CustomerAccess", String.valueOf(switch_customer_access_status.isChecked()));
+                        HeadItem.put("IsLEDAvailable", String.valueOf(switch_available_status.isChecked()));
+                        HeadItem.put("IsLEDWorking", String.valueOf(switch_working_status.isChecked()));
+
                         HeadItem.put("recDate", tvReceivedDate.getText().toString());
                         HeadItem.put("cbPurity", "" + cbPurity.isChecked());
 
@@ -540,22 +551,23 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         common_class.ProgressdialogShow(0, "");
                         e.printStackTrace();
                     }
+
+                    Map<String, String> params = new HashMap<>();
+                    params.put("axn", "savecoolerinfonew");
+
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.approveCIEntry(data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+                    Call<ResponseBody> responseBodyCall = apiInterface.getUniversalData(params, data.toString());
+                    responseBodyCall.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 try {
                                     common_class.ProgressdialogShow(0, "");
-
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                    String res = response.body().string();
+                                    JSONObject jsonObjects = new JSONObject(res);
                                     String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
-
                                     common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
                                     ResetSubmitBtn(1);
-
                                     if (jsonObjects.getBoolean("success")) {
                                         finish();
                                     }
@@ -568,7 +580,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         }
 
                         @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
                             common_class.ProgressdialogShow(0, "");
                             Log.e("SUBMIT_VALUE", "ERROR");
                             ResetSubmitBtn(2);
@@ -610,8 +622,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                             etCoolerType.setText("" + arrObj.getString("CoolerType"));
                             tvReceivedDate.setText("" + arrObj.getString("ReceivedDate"));
                         }
-                    }
-                    else {
+                    } else {
                         common_class.showMsg(this, obj.getString("Msg"));
                         common_class.CommonIntentwithFinish(Invoice_History.class);
                     }
