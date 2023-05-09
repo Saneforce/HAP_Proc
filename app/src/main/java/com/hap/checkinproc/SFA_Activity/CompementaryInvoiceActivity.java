@@ -576,7 +576,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                                 JSONObject object = array.getJSONObject(i);
                                 String invoiceNumber = object.getString("Trans_Inv_Slno");
                                 String date = object.getJSONObject("Invoice_Date").getString("date");
-                                String value = String.valueOf(object.getString("Total")); // Todo: KingForce
+                                String value = String.valueOf(object.getString("Total"));
                                 invoiceList.add(new ComplementaryInvoiceModel(invoiceNumber, date, value, false));
                             }
                             showInvoiceList.setEnabled(true);
@@ -1191,7 +1191,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
         Category_Nametext.setText(listt.get(categoryPos).getName() + " ( " + String.valueOf(il) + " )");
 
         mProdct_Adapter = new CompementaryInvoiceActivity.Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_complementary_invoice_recyclerview, getApplicationContext(), categoryPos);
-        recyclerView.setAdapter(mProdct_Adapter); // Todo: SetAdapter
+        recyclerView.setAdapter(mProdct_Adapter);
 
     }
 
@@ -1747,7 +1747,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
                 }
                 holder.Rate.setText(CurrencySymbol + " " + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP())));
-                holder.Amount.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount())); // Todo: Set Text
+                holder.Amount.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 if (Product_Details_Modal.getRateEdit() == 1) {
@@ -1763,7 +1763,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
 
                 if (CategoryType >= 0) {
-                    holder.tvMRP.setText(CurrencySymbol + " " + Product_Details_Modal.getMRP()); // Todo: RRP - Product_Details_Modal.getMRP()
+                    holder.tvMRP.setText(CurrencySymbol + " " + Product_Details_Modal.getMRP());
 
                     holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() /**
                      Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()*/)));
@@ -2045,7 +2045,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
 
                             sumofTax(Product_Details_Modalitem, holder.getAdapterPosition());
-                            holder.Amount.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount())); //Todo
+                            holder.Amount.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
                             holder.tvTaxLabel.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getTax()));
 
                             updateToTALITEMUI();

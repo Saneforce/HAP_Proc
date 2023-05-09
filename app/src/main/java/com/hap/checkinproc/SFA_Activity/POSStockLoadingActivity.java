@@ -174,7 +174,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
             Category_Nametext.setOnClickListener(this);
 
             tvDistName.setOnClickListener(v -> {
-                startActivity(new Intent(this, LedgerHistoryActivity.class)); // Todo: RAGU M
+                startActivity(new Intent(this, LedgerHistoryActivity.class));
             });
 
 

@@ -77,7 +77,7 @@ public class ReportsListActivity extends AppCompatActivity {
                         if (obj.getString("name").equalsIgnoreCase("Outlet Reports")) {
                             Intent intent = new Intent(getApplicationContext(), Reports_Outler_Name.class);
                             startActivity(intent);
-                        } else if (obj.getString("name").equalsIgnoreCase("Primary Order")) { // Todo: Primary Reports Activity
+                        } else if (obj.getString("name").equalsIgnoreCase("Primary Order")) {
                             Intent intent = new Intent(ReportsListActivity.this, PrimaryOrderReportActivity.class);
                             startActivity(intent);
                         } else {

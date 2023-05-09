@@ -1,6 +1,9 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,16 +14,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -37,8 +45,15 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.CoolerPositionAdapter;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
+import com.hap.checkinproc.SFA_Adapter.SalesReturnInvoiceAdapter;
+import com.hap.checkinproc.SFA_Adapter.UOMAdapter;
+import com.hap.checkinproc.SFA_Model_Class.CoolerPositionModel;
+import com.hap.checkinproc.SFA_Model_Class.SalesReturnProductModel;
+import com.hap.checkinproc.SFA_Model_Class.TaxModel;
+import com.hap.checkinproc.SFA_Model_Class.UOMModel;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -48,9 +63,12 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,21 +84,68 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
     Gson gson;
     Shared_Common_Pref shared_common_pref;
     List<QPS_Modal> coolerFileList = new ArrayList<>();
+    Context context = this;
+    ArrayList<CoolerPositionModel> list;
 
     RecyclerView rvPurity, rvFrontage, rvNotWorking;
     private FilesAdapter filesAdapter;
     private String[] strLoc;
     final Handler handler = new Handler();
 
+    TextView freezer_position_tv;
+    SwitchCompat switch_customer_access_status, switch_available_status, switch_working_status;
+
+    String selectedFreezerPosition, selectedFreezerID;
+    boolean isCustomerAccessible, isLEDAvailable, isLEDWorking;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooler_info_layout);
 
+        selectedFreezerID = "";
+        selectedFreezerPosition = "";
+
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
         gson = new Gson();
+        list = new ArrayList<>();
         init();
+
+        getCoolerPosition();
+
+        isCustomerAccessible = false;
+        isLEDAvailable = false;
+        isLEDWorking = false;
+
+        switch_customer_access_status.setOnCheckedChangeListener((buttonView, isChecked) -> isCustomerAccessible = isChecked);
+        switch_available_status.setOnCheckedChangeListener((buttonView, isChecked) -> isLEDAvailable = isChecked);
+        switch_working_status.setOnCheckedChangeListener((buttonView, isChecked) -> isLEDWorking = isChecked);
+
+        freezer_position_tv.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
+            builder.setView(view);
+            builder.setCancelable(false);
+
+            TextView title = view.findViewById(R.id.title);
+            RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
+            TextView close = view.findViewById(R.id.close);
+
+            title.setText("Select freezer position");
+            recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+            CoolerPositionAdapter adapter = new CoolerPositionAdapter(list, context);
+            recyclerView1.setAdapter(adapter);
+            AlertDialog dialog = builder.create();
+            adapter.setItemSelected((model1, position1) -> {
+                selectedFreezerPosition = model1.getName();
+                selectedFreezerID = model1.getId();
+                freezer_position_tv.setText(model1.getName());
+                dialog.dismiss();
+            });
+            close.setOnClickListener(v1 -> dialog.dismiss());
+            dialog.show();
+        });
 
         tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
         findViewById(R.id.tvCoolerInfo).setVisibility(View.GONE);
@@ -196,6 +261,12 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         rvFrontage = findViewById(R.id.rvFTFiles);
         rvNotWorking = findViewById(R.id.rvNWFiles);
 
+
+        freezer_position_tv = findViewById(R.id.freezer_position);
+        switch_customer_access_status = findViewById(R.id.switch_customer_access_status);
+        switch_available_status = findViewById(R.id.switch_available_status);
+        switch_working_status = findViewById(R.id.switch_working_status);
+
         tvOrder.setOnClickListener(this);
         tvOtherBrand.setOnClickListener(this);
         tvQPS.setOnClickListener(this);
@@ -210,6 +281,56 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         ivNoWrkPreview.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         common_class.getDb_310Data(Constants.COOLER_INFO, this);
+    }
+
+    private void getCoolerPosition() {
+        list.clear();
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage("Loading cooler position");
+        dialog.setCancelable(false);
+        dialog.show();
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Map<String, String> params = new HashMap<>();
+        params.put("axn", "get/cooler_position_info");
+        Call<ResponseBody> call = apiInterface.getUniversalData(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body() == null) {
+                            dialog.dismiss();
+                            Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        String result = response.body().string();
+                        JSONObject jsonObject = new JSONObject(result);
+                        if (jsonObject.getBoolean("success")) {
+                            JSONArray jsonArray = jsonObject.getJSONArray("response");
+                            Log.e("status", "Request Result: \n" + jsonArray);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                String id = jsonArray.getJSONObject(i).getString("id");
+                                String name = jsonArray.getJSONObject(i).getString("Name");
+                                list.add(new CoolerPositionModel(id, name));
+                            }
+                        } else {
+                            Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error while parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Response Not Success", Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -372,6 +493,13 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         HeadItem.put("make", etMake.getText().toString());
                         HeadItem.put("coolerType", etCoolerType.getText().toString());
 
+
+                        HeadItem.put("FreezerPosID", selectedFreezerID);
+                        HeadItem.put("FreezerPosName", selectedFreezerPosition);
+                        HeadItem.put("CustomerAccess", String.valueOf(switch_customer_access_status.isChecked()));
+                        HeadItem.put("IsLEDAvailable", String.valueOf(switch_available_status.isChecked()));
+                        HeadItem.put("IsLEDWorking", String.valueOf(switch_working_status.isChecked()));
+
                         HeadItem.put("recDate", tvReceivedDate.getText().toString());
                         HeadItem.put("cbPurity", "" + cbPurity.isChecked());
 
@@ -423,22 +551,23 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         common_class.ProgressdialogShow(0, "");
                         e.printStackTrace();
                     }
+
+                    Map<String, String> params = new HashMap<>();
+                    params.put("axn", "savecoolerinfonew");
+
                     ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.approveCIEntry(data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+                    Call<ResponseBody> responseBodyCall = apiInterface.getUniversalData(params, data.toString());
+                    responseBodyCall.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 try {
                                     common_class.ProgressdialogShow(0, "");
-
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                    String res = response.body().string();
+                                    JSONObject jsonObjects = new JSONObject(res);
                                     String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
-
                                     common_class.showMsg(CoolerInfoActivity.this, jsonObjects.getString("Msg"));
                                     ResetSubmitBtn(1);
-
                                     if (jsonObjects.getBoolean("success")) {
                                         finish();
                                     }
@@ -451,7 +580,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                         }
 
                         @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
                             common_class.ProgressdialogShow(0, "");
                             Log.e("SUBMIT_VALUE", "ERROR");
                             ResetSubmitBtn(2);
@@ -493,8 +622,7 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                             etCoolerType.setText("" + arrObj.getString("CoolerType"));
                             tvReceivedDate.setText("" + arrObj.getString("ReceivedDate"));
                         }
-                    }
-                    else {
+                    } else {
                         common_class.showMsg(this, obj.getString("Msg"));
                         common_class.CommonIntentwithFinish(Invoice_History.class);
                     }

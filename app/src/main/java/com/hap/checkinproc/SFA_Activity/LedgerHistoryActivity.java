@@ -40,7 +40,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-// Todo: RAGU M
 public class LedgerHistoryActivity extends AppCompatActivity implements View.OnClickListener {
     public static String ledgerFDT = "", ledgerTDT = "";
     public TextView tvOutletName, tvStartDate, tvEndDate;

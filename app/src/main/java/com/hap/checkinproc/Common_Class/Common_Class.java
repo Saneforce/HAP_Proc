@@ -71,6 +71,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -489,6 +490,13 @@ public class Common_Class {
 
                 case Constants.ComplementaryOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalcomplementaryorderdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
+                case Constants.SalesReturnDetailsList:
+                    QuerySTring1 = "{\"tableName\":\"get_sales_return_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -1292,7 +1300,6 @@ public class Common_Class {
                 return false;
             }
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return b;
@@ -1742,6 +1749,10 @@ public class Common_Class {
         });
 
 
+    }
+
+    public String formatCurrency(double amount) {
+        return (HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(amount));
     }
 
 

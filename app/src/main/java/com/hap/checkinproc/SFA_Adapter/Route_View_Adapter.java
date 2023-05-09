@@ -236,6 +236,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 @Override
                 public void onClick(View v) {
                     mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+                    Shared_Common_Pref.OutletAddress = String.valueOf(mRetailer_Modal_List.getListedDrAddress1());
                 }
             });
 

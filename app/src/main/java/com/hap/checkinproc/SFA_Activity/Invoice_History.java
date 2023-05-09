@@ -513,6 +513,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             case R.id.tvOrder:
                 common_class.getDb_310Data(Constants.PreOrderQtyList, this);
                 break;
+
+            case R.id.tvSalesReturn:
+                startActivity(new Intent(this, SalesReturnActivity.class));
+                break;
         }
     }
 

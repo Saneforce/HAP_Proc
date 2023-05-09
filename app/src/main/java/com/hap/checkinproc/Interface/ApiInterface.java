@@ -697,16 +697,16 @@ public interface ApiInterface {
     @POST("copy.php?")
     Call<ResponseBody> loadData(@QueryMap Map<String, String> params);
 
-    // - - - - - - - - - - - - - - - - - - - - -
+    // <----------MyPHP.php----------->
 
-    // Todo: API Call with QueryMap and Json Data
     @FormUrlEncoded
     @POST("MyPHP.php?")
     Call<ResponseBody> getUniversalData(@QueryMap Map<String, String> params, @Field("data") String data);
 
-    // Todo: API Call only with QueryMap
     @POST("MyPHP.php?")
     Call<ResponseBody> getUniversalData(@QueryMap Map<String, String> params);
+
+    // - - - - - - - - - - - - - - - - - - - - -
 
     //    @FormUrlEncoded
     @GET("Db_v300_i.php?")

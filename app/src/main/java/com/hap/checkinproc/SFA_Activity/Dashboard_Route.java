@@ -555,7 +555,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private void getPendingCounts() { // Todo: RAGU M
+    private void getPendingCounts() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         String StockistCode = shared_common_pref.getvalue(Constants.Distributor_Id);
         Map<String, String> params = new HashMap<>();
@@ -1028,7 +1028,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                 if (PendingCount.getText().toString().equals("0"))
                     common_class.showMsg(this, "No Records Found");
                 else {
-                    Shared_Common_Pref.SALES_MODE = "pending"; //  Todo: Pending Order
+                    Shared_Common_Pref.SALES_MODE = "pending";
                     Intent intentInv = new Intent(getApplicationContext(), PendingOrdersActivity.class);
                     startActivity(intentInv);
                 }
@@ -1122,6 +1122,10 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
+                        if (routeArr.length() > 1) {
+                            Model_Pojo = new Common_Model("", "All", routeArr.getJSONObject(0).optString("stockist_code"));
+                            FRoute_Master.add(Model_Pojo);
+                        }
                         for (int i = 0; i < routeArr.length(); i++) {
                             JSONObject jsonObject1 = routeArr.getJSONObject(i);
                             String id = String.valueOf(jsonObject1.optInt("id"));
