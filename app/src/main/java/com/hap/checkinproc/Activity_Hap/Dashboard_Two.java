@@ -135,7 +135,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_dashboard__two);
             mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-            mShimmerViewContainer.startShimmerAnimation();
+            mShimmerViewContainer.startShimmer();
             db = new DatabaseHandler(this);
             gson = new Gson();
 
@@ -477,7 +477,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     }
     private void hideShimmer() {
         if (LoadingCnt >= 2) {
-            mShimmerViewContainer.stopShimmerAnimation();
+            mShimmerViewContainer.stopShimmer();
             mShimmerViewContainer.setVisibility(View.GONE);
         }
     }

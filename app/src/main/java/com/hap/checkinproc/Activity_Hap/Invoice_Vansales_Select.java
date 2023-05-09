@@ -1,6 +1,8 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -1231,14 +1233,18 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             case 1:
 
                 int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
+                if(StockCheck.equalsIgnoreCase("1") && qty > Product_ModalSetAdapter.get(uomPos).getBalance() ){
+                    common_class.showMsg(this, "Can't exceed Stock");
+                }else{
+                //if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
                     Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                     Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                     Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                     mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), 1);
-                } else {
-                    common_class.showMsg(this, "Can't exceed Stock");
                 }
+//                else {
+//                    common_class.showMsg(this, "Can't exceed Stock");
+//                }
                 break;
             case 20:
                 tvPayMode.setText("" + myDataset.get(position).getName());
@@ -1566,13 +1572,18 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if ((balance >= order) || Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0) {
+
+                        if(StockCheck.equalsIgnoreCase("1") && order > balance){
+                            common_class.showMsg(Invoice_Vansales_Select.this, "Can't exceed Stock");
+                        }else{
+                        ///if ((balance >= order) || Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0) {
                             if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                                 holder.tvStock.setText("" + (int) (balance - order));
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        } else {
-                            common_class.showMsg(Invoice_Vansales_Select.this, "Can't exceed stock");
                         }
+//                        else {
+//                            common_class.showMsg(Invoice_Vansales_Select.this, "Can't exceed stock");
+//                        }
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
@@ -1866,7 +1877,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(Invoice_Vansales_Select.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(Invoice_Vansales_Select.this, "Enter Rate is greater than MRP");
+                            common_class.showMsg(Invoice_Vansales_Select.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
                             alertDialog.dismiss();

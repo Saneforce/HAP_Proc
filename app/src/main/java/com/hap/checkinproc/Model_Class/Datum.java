@@ -86,6 +86,10 @@ public class Datum {
     @Expose
     private String distCode;
 
+    @SerializedName("StockCheck")
+    @Expose
+    private String StockCheck;
+
     @SerializedName("CutoffTime")
     @Expose
     private String CutoffTime;
@@ -417,6 +421,13 @@ public class Datum {
         this.THrsPerm = mTHrsPerm;
     }
 
+    public String getStockCheck() {
+        return StockCheck;
+    }
+
+    public void setStockCheck(String stockCheck) {
+        StockCheck = stockCheck;
+    }
 
     public String getLoginType() {
         return loginType;

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">HAP SFA</string>
-    <!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
+<!--        <string name="app_name" translatable="false">HAP Check-In</string>-->
     <!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
 
     <string name="loading_please_wait" translatable="false">Loading Please Wait......</string>
@@ -8,7 +8,10 @@
     <string name="sign_in" translatable="false">Sign-In</string>
     <string name="password" translatable="false">password</string>
     <string name="username" translatable="false">username</string>
+    <string name="Currency" translatable="true">₹</string>
+    <string name="MRPCAP" translatable="true">MRP</string>
     <string name="or" translatable="false">or</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="map_key" translatable="false">AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU</string>
     <string name="txt_haplocations" translatable="false">Select the HAP locations <font fgcolor='#E53935'> *</font></string>
@@ -89,8 +92,8 @@
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Photo</string>
-    <string name="app_ver">v8.1.2</string>
-    <string name="tool_app_ver">Ver 8.1.2</string>
+    <string name="app_ver">v8.1.6</string>
+    <string name="tool_app_ver">Ver 8.1.6</string>
     <string name="trv_exc_entry">Travel Mode Exception Entry</string>
     <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
     <string name="trv_exc_status">Travel Mode Exception Status</string>
@@ -114,7 +117,6 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="mrp">MRP</string>
 
 
 </resources>

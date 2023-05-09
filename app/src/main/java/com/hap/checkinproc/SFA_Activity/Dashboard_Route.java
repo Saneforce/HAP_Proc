@@ -5,6 +5,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -1327,8 +1328,17 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                                 Shared_Common_Pref.SecOrdOutletType = dashboard_route.categoryType;
                             Shared_Common_Pref.CUSTOMER_CODE = mRetailer_Modal_ListFilter.get(position).getCustomerCode();
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
-                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                            getActivity().overridePendingTransition(R.anim.in, R.anim.out);
+
+                            common_class.getDb_310Data(Constants.TAXList, getActiveActivity());
+                            common_class.ProgressdialogShow(1, "Loading Matrial Details");
+                            common_class.getProductDetails(getActiveActivity(), new OnLiveUpdateListener() {
+                                @Override
+                                public void onUpdate(String mode) {
+                                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                    getActivity().overridePendingTransition(R.anim.in, R.anim.out);
+                                    common_class.ProgressdialogShow(0, "");
+                                }
+                            });
                             //}
 
                         }

@@ -192,9 +192,9 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")) {
-                    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM), new InputFilter.LengthFilter(6)});
+                    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM), new InputFilter.LengthFilter(String.valueOf(StartedKM + maxKM).length())});
                 } else if (TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")) {
-                    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM), new InputFilter.LengthFilter(6)});
+                    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, StartedKM + maxKM), new InputFilter.LengthFilter(String.valueOf(StartedKM + maxKM).length())});
                 }
 
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {

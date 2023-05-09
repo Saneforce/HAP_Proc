@@ -121,14 +121,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
-            common_class.ProgressdialogShow(1, "Updating Material Details");
-            common_class.getProductDetails(this, new OnLiveUpdateListener() {
-                @Override
-                public void onUpdate(String mode) {
-
-                    common_class.ProgressdialogShow(0, "");
-                }
-            });
+//            common_class.ProgressdialogShow(1, "Updating Material Details");
+//            common_class.getProductDetails(this, new OnLiveUpdateListener() {
+//                @Override
+//                public void onUpdate(String mode) {
+//
+//                    common_class.ProgressdialogShow(0, "");
+//                }
+//            });
 
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
@@ -229,7 +229,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvStartDate.setText(Common_Class.GetDatewothouttime());
             tvEndDate.setText(Common_Class.GetDatewothouttime());
 
-            common_class.getDb_310Data(Constants.TAXList, this);
+            //common_class.getDb_310Data(Constants.TAXList, this);
             common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
             //common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
@@ -779,37 +779,24 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         break;
                     case Constants.FreeSchemeDiscList:
                         JSONObject jsonObject = new JSONObject(apiDataResponse);
-
                         if (jsonObject.getBoolean("success")) {
-
-
                             Gson gson = new Gson();
                             List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-
-
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
                             if (jsonArray != null && jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
                                     product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
                                             jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
                                             Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
                                             jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
                                             jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
-
-
                                 }
                             }
-
                             sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
-
-
                         } else {
                             sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
-
                         }
                         break;
                     case Constants.TAXList:

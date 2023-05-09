@@ -1415,7 +1415,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             }
             lin_orderrecyclerview.setVisibility(View.VISIBLE);
             Category_Nametext.setVisibility(View.VISIBLE);
-            Category_Nametext.setText(listt.get(categoryPos).getName()+" ( " + String.valueOf(listt.size()) + " )");
+            Category_Nametext.setText(listt.get(categoryPos).getName()+" ( " + String.valueOf(Product_ModalSetAdapter.size()) + " )");
 
             mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.adapter_primary_product, getApplicationContext(), categoryPos);
             recyclerView.setAdapter(mProdct_Adapter);
@@ -2008,10 +2008,13 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                 holder.tvDefUOM.setText("" + ProductItem.getProductUnit());
 
-
+                holder.llFreeProd.setVisibility(View.GONE);
+                if (ProductItem.getOff_Pro_name()!=null) {
+                    if (!(ProductItem.getOff_Pro_name().equalsIgnoreCase(ProductItem.getName())))
+                        holder.llFreeProd.setVisibility(View.VISIBLE);
+                }
                 if (CategoryType >= 0) {
                     holder.tvProERPCode.setText("" + ProductItem.getERP_Code());
-
                     holder.tvMRP.setText(CurrencySymbol+" "+ ProductItem.getMRP());
                     holder.totalQty.setText("Total Qty : " + (int) oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
 
@@ -2259,6 +2262,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                             }
 
+                            holder.llFreeProd.setVisibility(View.GONE);
                             if (!haveVal) {
                                 holder.Free.setText("0");
                                 holder.Disc.setText(CurrencySymbol+" 0.00");
@@ -2274,14 +2278,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
 
                             } else {
-
+                                String pna=Product_Details_Modalitem.get(holder.getAdapterPosition()).getName().toString();
                                 Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount((Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()) -
                                         (Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
 
                                 holder.Free.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getFree() +" EA");
                                 holder.lblFreeNm.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getOff_Pro_name());
                                 holder.Disc.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
-
+                                if (!(Product_Details_Modalitem.get(holder.getAdapterPosition()).getOff_Pro_name().equalsIgnoreCase(pna)))
+                                holder.llFreeProd.setVisibility(View.VISIBLE);
                                 holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
 
 
@@ -2400,7 +2405,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     QtyAmt, totalQty, tvTaxLabel, tvMRP, tvDefUOM, tvUomName, tvUomQty, tvMultiple, tvProERPCode,tvReplcQty;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
-
+            LinearLayout llFreeProd;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -2412,6 +2417,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 Qty = view.findViewById(R.id.Qty);
                 Amount = view.findViewById(R.id.Amount);
                 Free = view.findViewById(R.id.Free);
+                llFreeProd = view.findViewById(R.id.llFreeProd);
                 Disc = view.findViewById(R.id.Disc);
                 tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
                 tvDefUOM = view.findViewById(R.id.tvUOM);

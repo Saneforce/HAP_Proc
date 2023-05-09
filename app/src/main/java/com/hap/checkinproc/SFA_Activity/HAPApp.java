@@ -1,35 +1,31 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import static android.Manifest.permission.READ_PHONE_NUMBERS;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
-
-import static androidx.core.app.ActivityCompat.requestPermissions;
-
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
-import android.content.ComponentCallbacks;
-import android.content.ComponentCallbacks2;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.MainActivity;
+import com.hap.checkinproc.DefaultLauncherAlias;
+import com.hap.checkinproc.DistributorLauncherAlias;
+import com.hap.checkinproc.FFALauncherAlias;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.ConnectivityReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.TimerService;
@@ -47,8 +43,11 @@ public class HAPApp extends Application {
     private BroadcastReceiver mNetworkReceiver;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-    public static String CurrencySymbol = "₹";//₹ B$
+    public static String CurrencySymbol =  "₹";//₹ B$
     public static String MRPCap = "MRP";//₹ B$
+    public static String MyAppID = "com.hap.checkinproc";
+    public static String StockCheck = "1";//₹ B$
+    SharedPreferences UserDetails;
     public static Boolean ProductsLoaded = false;
     SharedPreferences CommUserDetails;
     public static final String UserDetail = "MyPrefs";
@@ -77,14 +76,22 @@ public class HAPApp extends Application {
                 CommUserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
                 try
                 {
-                    if(!CommUserDetails.getString("Sfcode","").equalsIgnoreCase(""))
-                    startService(new Intent(activeActivity, TimerService.class));
+                    if(!CommUserDetails.getString("Sfcode","").equalsIgnoreCase("")) {
+                        startService(new Intent(activeActivity, TimerService.class));
+                    }
                 }catch (Exception e){}
                 Shared_Common_Pref.Sf_Code = CommUserDetails.getString("Sfcode", "");
                 Shared_Common_Pref.Sf_Name = CommUserDetails.getString("SfName", "");
                 Shared_Common_Pref.Div_Code = CommUserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = CommUserDetails.getString("State_Code", "");
 
+                StockCheck=CommUserDetails.getString("StockCheck", "1");
+                CurrencySymbol = getActiveActivity().getResources().getString(R.string.Currency); //"₹";//₹
+                MRPCap = getActiveActivity().getResources().getString(R.string.MRPCAP);//₹ B$
+                if(Shared_Common_Pref.Sf_Code.equalsIgnoreCase("7951")){
+                    CurrencySymbol = "B$"; //"₹";//₹ B$
+                    MRPCap = "RRP";//₹ B$
+                }
             }
 
             @Override
@@ -98,8 +105,9 @@ public class HAPApp extends Application {
                 activeActivity = activity;
                 try
                 {
-                    if(!CommUserDetails.getString("Sfcode","").equalsIgnoreCase(""))
-                    startService(new Intent(activeActivity, TimerService.class));
+                    if(!CommUserDetails.getString("Sfcode","").equalsIgnoreCase("")) {
+                        startService(new Intent(activeActivity, TimerService.class));
+                    }
                 }catch (Exception e){}
             }
 
@@ -159,5 +167,45 @@ public class HAPApp extends Application {
     }
     public ApiComponent getNetComponent() {
         return mApiComponent;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
+    public static void setAppLogos(){
+
+        try {
+            PackageManager manager = getActiveActivity().getPackageManager();
+//            if (Shared_Common_Pref.LOGINTYPE.equalsIgnoreCase(Constants.DISTRIBUTER_TYPE)) {
+//                 //enable old icon
+//                manager.setComponentEnabledSetting(new ComponentName(activeActivity, DistributorLauncherAlias.class)
+//                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//                // disable new icon
+//                manager.setComponentEnabledSetting(new ComponentName(activeActivity, FFALauncherAlias.class)
+//                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//                manager.setComponentEnabledSetting(new ComponentName(activeActivity, MainActivity.class)
+//                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//                Toast.makeText(activeActivity, "Enable " + Constants.DISTRIBUTER_TYPE + " Icon", Toast.LENGTH_LONG).show();
+//            } else {
+//
+//                manager.setComponentEnabledSetting(new ComponentName(activeActivity, FFALauncherAlias.class)
+//                        , PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//                // disable new icon
+//                manager.setComponentEnabledSetting(new ComponentName(activeActivity, DistributorLauncherAlias.class)
+//                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                manager.setComponentEnabledSetting(new ComponentName(activeActivity, MainActivity.class)
+//                        , PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                Toast.makeText(activeActivity, "Enable " + Constants.CHECKIN_TYPE + " Icon", Toast.LENGTH_LONG).show();
+//
+//
+//            }
+
+        } catch (Exception e) {
+            Log.v("launcherIcon:", e.getMessage());
+        }
+
     }
 }

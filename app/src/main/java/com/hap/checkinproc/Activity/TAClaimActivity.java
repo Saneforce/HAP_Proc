@@ -253,7 +253,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_claim);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.startShimmerAnimation();
+        mShimmerViewContainer.startShimmer();
 
 
         mCommon_class = new Common_Class(this);
@@ -2375,7 +2375,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     mCommon_model_spinner = new Common_Model(id, name, "");
                     modelRetailDetails.add(mCommon_model_spinner);
                 }
-                mShimmerViewContainer.stopShimmerAnimation();
+                mShimmerViewContainer.stopShimmer();
                 mShimmerViewContainer.setVisibility(View.GONE);
                 scrlMain.setVisibility(View.VISIBLE);
             }

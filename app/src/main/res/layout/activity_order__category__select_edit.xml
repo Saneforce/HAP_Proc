@@ -377,7 +377,7 @@
                                         android:id="@+id/ERP_Code"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="@string/mrp"
+                                        android:text="@string/MRPCAP"
                                         android:textAlignment="textStart"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"

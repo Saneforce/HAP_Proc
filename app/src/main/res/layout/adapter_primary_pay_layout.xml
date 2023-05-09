@@ -78,11 +78,10 @@
                         android:layout_height="match_parent"
                         android:enabled="false"
                         android:fontFamily="sans-serif"
-                        android:gravity="end"
+                        android:gravity="center_vertical"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
-
+                        android:textSize="11sp"/>
 
                 </LinearLayout>
 
@@ -99,10 +98,11 @@
                         android:layout_height="match_parent"
                         android:enabled="false"
                         android:fontFamily="sans-serif"
-                        android:gravity="end"
+                        android:gravity="center_vertical|end"
+
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
+                        android:textSize="11sp"/>
 
 
                 </LinearLayout>
@@ -126,7 +126,7 @@
                     <EditText
 
                         android:id="@+id/Qty"
-                        android:layout_width="40dp"
+                        android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:background="@color/white"
@@ -135,12 +135,12 @@
                         android:hint="0"
                         android:inputType="number"
                         android:maxLength="4"
-                        android:paddingLeft="@dimen/C5dp"
-                        android:paddingRight="@dimen/C5dp"
+                        android:paddingLeft="@dimen/C1dp"
+                        android:paddingRight="@dimen/C1dp"
                         android:text=""
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp"
+                        android:textSize="11sp"
                         tools:ignore="RtlCompat" />
 
                     <ImageView
@@ -175,7 +175,7 @@
                         android:gravity="center_vertical|end"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -209,8 +209,28 @@
                         android:gravity="center_vertical|end"
                         android:text="Value"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llFreeProd"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <ImageView
+                    android:layout_width="@dimen/C30dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/tvFreeProd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/grey_800"
+                    android:visibility="visible" />
             </LinearLayout>
         </LinearLayout>
 

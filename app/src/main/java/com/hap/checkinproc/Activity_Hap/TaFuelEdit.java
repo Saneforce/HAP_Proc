@@ -142,8 +142,8 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
         TextMode.setText(MOTNm);
 
-        edtFrom.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, 99999999), new InputFilter.LengthFilter(6)});
-        edtTo.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, 99999999), new InputFilter.LengthFilter(6)});
+        edtFrom.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, 99999999), new InputFilter.LengthFilter(10)});
+        edtTo.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, 99999999), new InputFilter.LengthFilter(10)});
 
         gson = new Gson();
         inEdtFrom = Integer.valueOf(Common_Class.isNullOrEmpty(edtFrom.getText().toString()) ? "0" : edtFrom.getText().toString());
@@ -176,7 +176,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
                     //  if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                     inEdtFrom = Integer.valueOf(edtFrom.getText().toString().equalsIgnoreCase("") ? "0" : edtFrom.getText().toString());
                     int mxKm = inEdtFrom + Shared_Common_Pref.MaxKm;
-                    edtTo.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, mxKm), new InputFilter.LengthFilter(6)});
+                    edtTo.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, mxKm), new InputFilter.LengthFilter(10)});
                     edtTo.setText("");
                     // if (!edtTo.getText().toString().equals("")) {
 

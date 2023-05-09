@@ -245,6 +245,8 @@ public class PosHistoryActivity extends AppCompatActivity implements Master_Inte
                                     Shared_Common_Pref.TransSlNo = obj.getString("Trans_Sl_No");
                                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
                                     sharedCommonPref.save(Constants.FLAG, "POS INVOICE");
+                                    sharedCommonPref.save(Constants.Retailor_Name_ERP_Code,obj.getString("Cus_Name"));
+                                    sharedCommonPref.save(Constants.Retailor_PHNo,obj.getString("Cust_Mobie_No"));
                                     intent.putExtra("Order_Values", obj.getString("Order_Value"));
                                     intent.putExtra("Invoice_Values", obj.getString("invoicevalues"));
                                     //intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());

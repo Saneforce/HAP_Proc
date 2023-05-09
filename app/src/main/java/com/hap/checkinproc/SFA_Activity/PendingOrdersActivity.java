@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,20 +16,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.AdapterPendingOrder;
 import com.hap.checkinproc.SFA_Model_Class.ModelPendingOrder;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -35,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PendingOrdersActivity extends AppCompatActivity {
+public class PendingOrdersActivity extends AppCompatActivity implements UpdateResponseUI {
     ImageView home;
     RecyclerView recyclerView;
     ProgressBar progressBar;
@@ -62,7 +70,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
         headText = findViewById(R.id.headtext);
 
         shared_common_pref = new Shared_Common_Pref(context);
-        common_class = new Common_Class(context);
+        common_class = new Common_Class(PendingOrdersActivity.this);
         common_class.gotoHomeScreen(context, home);
 
         loadData();
@@ -120,12 +128,22 @@ public class PendingOrdersActivity extends AppCompatActivity {
                                 Shared_Common_Pref.Invoicetoorder = "1";
                                 shared_common_pref.save(Constants.FLAG, "ORDER");
                                 shared_common_pref.OutletCode = model.getOutletCode();
+                                shared_common_pref.OutletName = model.getTitle2();
                                 shared_common_pref.save(Constants.Retailor_Name_ERP_Code, model.getTitle2());
                                 shared_common_pref.save(Constants.Retailor_PHNo, model.getMobile());
                                 shared_common_pref.save(Constants.Retailor_Address, model.getAddress());
+                                common_class.getDb_310Data(Constants.FreeSchemeDiscList, PendingOrdersActivity.this);
+                                common_class.getDb_310Data(Constants.TAXList, PendingOrdersActivity.this);
+                                common_class.ProgressdialogShow(1, "Loading Matrial Details");
+                                common_class.getProductDetails(PendingOrdersActivity.this, new OnLiveUpdateListener() {
+                                    @Override
+                                    public void onUpdate(String mode) {
+                                        common_class.ProgressdialogShow(0, "");
+                                        Intent intent = new Intent(context, Print_Invoice_Activity.class);
+                                        startActivity(intent);
+                                    }
+                                });
 
-                                Intent intent = new Intent(context, Print_Invoice_Activity.class);
-                                startActivity(intent);
                             });
                         }
                     } catch (Exception e) {
@@ -155,4 +173,52 @@ public class PendingOrdersActivity extends AppCompatActivity {
         super.onResume();
         CometoPending = false;
     }
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            if (apiDataResponse != null && !apiDataResponse.equals("")) {
+
+                switch (key) {
+                    case Constants.FreeSchemeDiscList:
+                        JSONObject jsonObject = new JSONObject(apiDataResponse);
+                        if (jsonObject.getBoolean("success")) {
+                            Gson gson = new Gson();
+                            List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                            if (jsonArray != null && jsonArray.length() > 0) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                            jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                            Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
+                                            jsonObject1.getString("Package"), 0, jsonObject1.getString("Offer_Product"),
+                                            jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+                                }
+                            }
+                            shared_common_pref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
+                        } else {
+                            shared_common_pref.clear_pref(Constants.FreeSchemeDiscList);
+                        }
+                        break;
+                    case Constants.TAXList:
+                        JSONObject jsonObjectTax = new JSONObject(apiDataResponse);
+                        Log.v("TAX_PRIMARY:", apiDataResponse);
+
+                        if (jsonObjectTax.getBoolean("success")) {
+                            shared_common_pref.save(Constants.TAXList, apiDataResponse);
+
+                        } else {
+                            shared_common_pref.clear_pref(Constants.TAXList);
+
+                        }
+                        break;
+                }
+
+            }
+        } catch (Exception e) {
+            Log.v("Invoice History: ", e.getMessage());
+
+        }
+    }
+
 }

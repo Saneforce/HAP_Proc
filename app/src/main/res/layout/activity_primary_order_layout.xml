@@ -1031,7 +1031,6 @@
             android:background="@drawable/bottom_button"
             android:padding="@dimen/C5dp"
             android:visibility="visible">
-
             <ImageView
 
                 android:id="@+id/ivCart"
@@ -1041,7 +1040,6 @@
                 android:layout_marginLeft="@dimen/C5dp"
                 android:src="@drawable/ic_round_shopping_bag_24"
                 app:tint="@color/white"></ImageView>
-
             <TextView
                 android:id="@+id/tvCart"
                 android:layout_width="wrap_content"
@@ -1054,14 +1052,12 @@
 
 
             </TextView>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C3dp"
                 android:layout_toRightOf="@+id/tvCart"
                 android:orientation="vertical">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1095,29 +1091,6 @@
                     </TextView>
 
                 </LinearLayout>
-
-                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                    android:id="@+id/takeorder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/C15dp"
-                    android:background="#00000000"
-                    android:drawableTint="@color/white"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/C5dp"
-                    android:text="PROCEED"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:finalCornerAngle="50dp"
-                    app:initialCornerAngle="10dp"
-
-                    app:spinning_bar_color="#FFFFFFFF"
-                    app:spinning_bar_padding="5dp"
-                    app:spinning_bar_width="5dp"
-                    tools:ignore="RtlCompat" />
-
                 <TextView
                     android:id="@+id/tvTotUom"
 
@@ -1131,7 +1104,6 @@
                     android:textStyle="bold">
 
                 </TextView>
-
             </LinearLayout>
 
             <!--<TextView
@@ -1146,6 +1118,27 @@
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />-->
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                android:id="@+id/takeorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/C15dp"
+                android:background="#00000000"
+                android:drawableTint="@color/white"
+                android:gravity="center_vertical"
+                android:padding="@dimen/C5dp"
+                android:text="PROCEED"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:finalCornerAngle="50dp"
+                app:initialCornerAngle="10dp"
+
+                app:spinning_bar_color="#FFFFFFFF"
+                app:spinning_bar_padding="5dp"
+                app:spinning_bar_width="5dp"
+                tools:ignore="RtlCompat" />
 
         </RelativeLayout>
     </LinearLayout>

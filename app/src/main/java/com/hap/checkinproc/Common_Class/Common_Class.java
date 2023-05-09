@@ -171,8 +171,7 @@ public class Common_Class {
             nDialog.setMessage("Loading.......");
             if (message.length() > 1) {
                 nDialog.setTitle(message);
-                nDialog.setCancelable(true);
-
+                nDialog.setCancelable(false);
             }
             nDialog.setIndeterminate(false);
             nDialog.show();

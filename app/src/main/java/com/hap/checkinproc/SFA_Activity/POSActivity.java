@@ -1,7 +1,9 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.ProductsLoaded;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -767,17 +769,17 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
-
-            for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                double enterQty = Getorder_Array_List.get(z).getQty() * Getorder_Array_List.get(z).getCnvQty();
-                double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
-                if ((Getorder_Array_List.get(z).getBalance() - (int) totQty)<0){
-                    Toast.makeText(this,"Low Stock",Toast.LENGTH_LONG).show();
-                    ResetSubmitBtn(0);
-                    return;
+            if(StockCheck.equalsIgnoreCase("1")) {
+                for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                    double enterQty = Getorder_Array_List.get(z).getQty();
+                    double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
+                    if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
+                        Toast.makeText(this, "Low Stock", Toast.LENGTH_LONG).show();
+                        ResetSubmitBtn(0);
+                        return;
+                    }
                 }
             }
-
 
             AlertDialogBox.showDialog(POSActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
@@ -1456,14 +1458,18 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             case 1:
 
                 int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
+                if(StockCheck.equalsIgnoreCase("1") && qty > Product_ModalSetAdapter.get(uomPos).getBalance() ){
+                    common_class.showMsg(this, "Can't exceed Stock");
+                }else{
+                //if (Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
                     Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                     Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                     Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                     mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_pos_recyclerview, getApplicationContext(), 1);
-                } else {
-                    common_class.showMsg(this, "Can't exceed Stock");
                 }
+//                else {
+//                    common_class.showMsg(this, "Can't exceed Stock");
+//                }
                 break;
             case 20:
                 tvPayMode.setText("" + myDataset.get(position).getName());
@@ -1653,7 +1659,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     Log.v(TAG, "name:" + Product_Details_Modal.getName() + " :code:" + Product_Details_Modal.getBar_Code());
                 double totQty= Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
                 //holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance());
-                holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
 
                 holder.tvTknStock.setText("" + ((int) totQty) + " EA");
                 holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty) + " EA");
@@ -1739,12 +1745,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if ((balance >= order) || Product_Details_Modal.getCheckStock() == 0) {
+                        if(StockCheck.equalsIgnoreCase("1") && order > balance){
+                            common_class.showMsg(POSActivity.this, "Can't exceed Stock");
+                        }else{
+                            //if ((balance >= order) || Product_Details_Modal.getCheckStock() == 0) {
                             if (Product_Details_Modal.getCheckStock() == 1)
                                 holder.tvStock.setText("" + (int) (balance - order));
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        } else {
-                            common_class.showMsg(POSActivity.this, "Can't exceed stock");
+//                            } else {
+//                                common_class.showMsg(POSActivity.this, "Can't exceed stock");
+//                            }
                         }
                     }
                 });
@@ -1782,8 +1792,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
-                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty //&&  Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0
-                            ) {
+                            if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty  && StockCheck.equalsIgnoreCase("1")) {
 //                                totQty = 0;
 //                                enterQty = 0;
 //                                holder.Qty.setText("0");
@@ -1797,7 +1806,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             }
                             //if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)
                             //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()) + " EA");
-                            holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
 
                             holder.tvTknStock.setText("" + ((int) totQty) + " EA");
                             holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty) + " EA");
@@ -1806,7 +1815,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                 // holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
                             //holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
                             holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
-                            if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                            if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0 && StockCheck.equalsIgnoreCase("1")) {
                             holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
                              //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                                 // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
@@ -2071,7 +2080,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(POSActivity.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(POSActivity.this, "Enter Rate is greater than MRP");
+                            common_class.showMsg(POSActivity.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
                             alertDialog.dismiss();

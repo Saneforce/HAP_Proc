@@ -2,6 +2,9 @@ package com.hap.checkinproc.Activity_Hap;
 
 import static android.widget.Toast.LENGTH_LONG;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.MyAppID;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.setAppLogos;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -316,11 +319,13 @@ Log.d("Error","Can't Clear SFWish");
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 shared_common_pref.clear_pref(Constants.LOGIN_DATA);
                 SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
                 CheckInDetails.edit().clear().commit();
+                setAppLogos();
                 finishAffinity();
             }
         });
@@ -635,26 +640,8 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                //eMail="vinoth.k@hap.in";
-                //eMail="manikandan.ck@hap.in";
-
-                //eMail="ciadmin@hap.in";
-                //eMail="1007263@hap.in";
-               // eMail="venketesan.r@hap.in";
-                //eMail="1019100@hap.in";
-                eMail="1026574@hap.in";
-                //eMail="1028757@hap.in";
-                //eMail="boopathy.s@hap.in";
-                //eMail="sivakumar.s@hap.in";
-                //eMail="sajan@hap.in";
-                //eMail="iplusadmin@hap.in";
-                //eMail="1014700@hap.in";
-                //eMail="anandaraj.s@hap.in";
-                //eMail="1027526@hap.in";
-                //eMail="1025499@hap.in";
-                //eMail="1014604@hap.in";
-                //eMail="iplusadmin@hap.in";
-                //eMail="ciadmin@hap.in";
+                //eMail="1017481@hap.in";
+                eMail="1014700@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -835,6 +822,8 @@ Log.d("Error","Can't Clear SFWish");
                 }
                 userEditor.putString("SfName", response.getData().get(0).getStockist_Name());
                 userEditor.putString("GSTN", response.getData().get(0).getDisGSTN());
+                userEditor.putString("StockCheck", response.getData().get(0).getStockCheck());
+
 
                 userEditor.putString("url", String.valueOf(profile));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -933,6 +922,7 @@ Log.d("Error","Can't Clear SFWish");
                 String mProfPath = response.getData().get(0).getProfPath();
                 Integer OTFlg = response.getData().get(0).getOTFlg();
                 Integer Flight = response.getData().get(0).getFlightAllowed();
+                String sStockCheck = response.getData().get(0).getStockCheck();
                 Integer checkRadius = response.getData().get(0).getCheckRadius();
                 String SFJoinDate = response.getData().get(0).getSFJoinDate();
                 String SFJoinMxDate = response.getData().get(0).getSFJoinMxDate();
@@ -979,6 +969,7 @@ Log.d("Error","Can't Clear SFWish");
                 userEditor.putString("NwJoinMxDate", SFJoinMxDate);
                 userEditor.putInt("FlightAllowed", Flight);
                 userEditor.putInt("OTFlg", OTFlg);
+                userEditor.putString("StockCheck", sStockCheck);
                 Log.d("DeptType", String.valueOf(DeptType));
                 userEditor.putString("State_Code", Sf_type);
                 userEditor.putString("email", eMail);
@@ -1084,7 +1075,7 @@ Log.d("Error","Can't Clear SFWish");
                                     intent.setAction(
                                             Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                     Uri uri = Uri.fromParts("package",
-                                            BuildConfig.APPLICATION_ID, null);
+                                            MyAppID, null);
                                     intent.setData(uri);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);

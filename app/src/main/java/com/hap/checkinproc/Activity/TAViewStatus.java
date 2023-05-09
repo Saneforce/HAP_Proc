@@ -245,7 +245,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_view_status);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.startShimmerAnimation();
+        mShimmerViewContainer.startShimmer();
 
         mCommon_class = new Common_Class(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

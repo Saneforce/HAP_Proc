@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -1507,13 +1508,16 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
             case 1:
 
                 int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
+                if(StockCheck.equalsIgnoreCase("1") && qty > Product_ModalSetAdapter.get(uomPos).getBalance() ){
+                    common_class.showMsg(this, "Can't exceed Stock");
+                }else{
+                //if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty || Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0) {
                     Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                     Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                     Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                     mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), 1);
-                } else {
-                    common_class.showMsg(this, "Can't exceed Stock");
+//                } else {
+//                    common_class.showMsg(this, "Can't exceed Stock");
                 }
                 break;
             case 20:

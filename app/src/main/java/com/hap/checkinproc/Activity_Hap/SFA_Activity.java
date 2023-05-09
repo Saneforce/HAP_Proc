@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 import static com.hap.checkinproc.Common_Class.Constants.VAN_STOCK;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.setAppLogos;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -811,7 +812,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                             SharedPreferences.Editor editor = UserDetails.edit();
                             editor.putBoolean("Login", false);
                             editor.apply();
-                            CheckInDetails.edit().clear().commit();
+                            CheckInDetails.edit().clear().commit();setAppLogos();
                             finishAffinity();
                         }
                     }

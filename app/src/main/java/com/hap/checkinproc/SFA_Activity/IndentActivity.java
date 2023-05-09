@@ -1379,6 +1379,7 @@ public class IndentActivity extends AppCompatActivity implements View.OnClickLis
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
+
                         if (type.equalsIgnoreCase("INDENT") || (balance >= order)) {
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
 //                            if (type.equalsIgnoreCase("Stock Rotation"))

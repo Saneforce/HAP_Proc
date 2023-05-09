@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -1100,14 +1101,18 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         switch (type) {
             case 1:
                 int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
-                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty
-                    /*|| Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0*/) {
-                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
-                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
-                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
-                } else {
+                if(StockCheck.equalsIgnoreCase("1") && qty > Product_ModalSetAdapter.get(uomPos).getBalance() ){
                     common_class.showMsg(this, "Can't exceed Stock");
+                }else{
+                    //if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty
+                        /*|| Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0*///) {
+                        Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                        Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                        Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                        mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
+//                    } else {
+//                        common_class.showMsg(this, "Can't exceed Stock");
+//                    }
                 }
                 break;
         }
@@ -1375,12 +1380,14 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
 
                         int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
                         int balance = Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance();
-                        if ((balance >= order) /*|| Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0*/) {
+                        if(StockCheck.equalsIgnoreCase("1") && order > balance ){
+                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed Stock");
+                        }else{//if ((balance >= order) /*|| Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0*/) {
                             //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                             holder.tvStock.setText("" + (int) (balance - order));
                             holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        } else {
-                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
+//                        } else {
+//                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
                         }
                     }
                 });
@@ -1419,13 +1426,20 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
-                            if (/*Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
+                            if(StockCheck.equalsIgnoreCase("1") && totQty > Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() ){
                                 totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
                                 enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
-                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
-                                common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
-
+                                common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed Stock");
                             }
+//                            else
+//                            {//if (/*Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0 &&*/
+//                                // Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() < totQty) {
+//                                totQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty();
+//                                enterQty = Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty();
+//                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty());
+//                                common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
+//
+//                            }
 
                             /*      if (Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getAdapterPosition()).getCheckStock() > 0)*/
                             holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty));

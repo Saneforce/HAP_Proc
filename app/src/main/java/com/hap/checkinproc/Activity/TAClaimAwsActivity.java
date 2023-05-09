@@ -321,7 +321,7 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_claim);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.startShimmerAnimation();
+        mShimmerViewContainer.startShimmer();
 
         util = new Util();
         transferUtility = util.getTransferUtility(this);
@@ -2041,7 +2041,7 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
                     mCommon_model_spinner = new Common_Model(id, name, "");
                     modelRetailDetails.add(mCommon_model_spinner);
                 }
-                mShimmerViewContainer.stopShimmerAnimation();
+                mShimmerViewContainer.stopShimmer();
                 mShimmerViewContainer.setVisibility(View.GONE);
                 scrlMain.setVisibility(View.VISIBLE);
             }
