@@ -797,11 +797,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         HeadItem.put("UKey", Ukey);
                         HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         ActivityData.put("Activity_Report_Head", HeadItem);
-
+                        String cusName=etName.getText().toString();
+                        if(cusName.equalsIgnoreCase("")){
+                            cusName="Customer";
+                        }
                         JSONObject OutletItem = new JSONObject();
                         OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
                         OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                        OutletItem.put("name", etName.getText().toString());
+                        OutletItem.put("name", cusName);
                         OutletItem.put("phoneNo", etPhone.getText().toString());
                         OutletItem.put("address", etAddress.getText().toString());
                         OutletItem.put("CashDiscount", cashDiscount);
@@ -813,6 +816,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         OutletItem.put("payMode", tvPayMode.getText().toString());
                         OutletItem.put("totAmtTax", totTax);
 
+                        sharedCommonPref.save(Constants.Retailor_Name_ERP_Code,cusName);
+                        sharedCommonPref.save(Constants.Retailor_PHNo,etPhone.getText().toString());
                         OutletItem.put("RecAmt",
                                 tvPayMode.getText().toString().equalsIgnoreCase("cash") ? etRecAmt.getText().toString() : "0");
                         OutletItem.put("Balance", tvPayMode.getText().toString().equalsIgnoreCase("cash") ?
@@ -1666,7 +1671,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
                 holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
-                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0 && StockCheck.equalsIgnoreCase("1")) {
+                    holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
                     holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
@@ -1709,11 +1715,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             uomPos = position;
                             uomList = new ArrayList<>();
 
+                            String uomids="";
                             if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
                                 for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
                                     com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
-                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
+                                    if((";"+uomids).toLowerCase().indexOf(";"+uom.getUOM_Id().toLowerCase()+";")<0) {
+                                        uomids += uom.getUOM_Id().toLowerCase() + ";";
+                                        uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+                                    }
                                 }
                                 common_class.showCommonDialog(uomList, 1, POSActivity.this);
                             } else {

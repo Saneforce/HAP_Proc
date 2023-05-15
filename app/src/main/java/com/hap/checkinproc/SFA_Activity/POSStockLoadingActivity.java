@@ -980,7 +980,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                 holder.tvTknStock.setText("" + (int)totQty);
                 holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
                 if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty){
-
+                    holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
                     holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 }
@@ -1013,12 +1013,15 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                         public void onClick(View v) {
                             uomPos = position;
                             uomList = new ArrayList<>();
-
+                            String uomids="";
                             if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
                                 for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
                                     com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
-                                    uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
 
+                                    if((";"+uomids).toLowerCase().indexOf(";"+uom.getUOM_Id().toLowerCase()+";")<0) {
+                                        uomids += uom.getUOM_Id().toLowerCase() + ";";
+                                        uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+                                    }
                                 }
                                 common_class.showCommonDialog(uomList, 1, POSStockLoadingActivity.this);
                             } else {
@@ -1093,8 +1096,10 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getCnvQty());
 
 
-                            if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty)
-                                return;
+                            if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty) {
+                                common_class.showMsg(POSStockLoadingActivity.this, "Can't exceed stock");
+                               // return;
+                            }
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
@@ -1108,6 +1113,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                             holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
                             if(Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance()<totQty){
 
+                                holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
                                 holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
 
                             }

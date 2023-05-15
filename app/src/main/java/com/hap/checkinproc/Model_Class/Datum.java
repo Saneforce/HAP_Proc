@@ -70,7 +70,7 @@ public class Datum {
     @Expose
     private String sfCode;
 
-    @SerializedName("gstn")
+    @SerializedName("GSTN")
     @Expose
     private String disGSTN;
 

@@ -1525,7 +1525,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             // common_class.getDb_310Data(Constants.Primary_Product_List, this);
             getACBalance(0);  // common_class.getDb_310Data(Rout_List, this);
 
-            common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+            //common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
         }
 

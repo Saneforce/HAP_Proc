@@ -1699,7 +1699,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
-                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0 && StockCheck.equalsIgnoreCase("1")) {
                     holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
                     //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
@@ -1854,7 +1854,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             // holder.tvTknStock.setTextColor(getResources().getColor(R.color.green));
                             //holder.tvCLStock.setTextColor(getResources().getColor(R.color.green));
                             holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
-                            if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0) {
+                            if((Product_Details_Modalitem.get(holder.getAdapterPosition()).getBalance() - (int) totQty)<0 && StockCheck.equalsIgnoreCase("1")) {
                                 holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
                                 //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                                 // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));

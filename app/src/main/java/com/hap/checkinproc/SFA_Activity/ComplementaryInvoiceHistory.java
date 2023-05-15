@@ -142,15 +142,15 @@ public class ComplementaryInvoiceHistory extends AppCompatActivity implements Ma
 
 //                common_class.getDataFromApi(Constants.GetPosOrderHistory, ComplementaryInvoiceHistory.this, false);
                 getDataFromAPI();
-                common_class.getDb_310Data(Rout_List, this);
-                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+ //               common_class.getDb_310Data(Rout_List, this);
+ //               common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
                 break;
             case 3:
                 route_text.setText(myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Route_name, myDataset.get(position).getName());
                 sharedCommonPref.save(Constants.Route_Id, myDataset.get(position).getId());
-                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+//                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
 
                 break;
         }

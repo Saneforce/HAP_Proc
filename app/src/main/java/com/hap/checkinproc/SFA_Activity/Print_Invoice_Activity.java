@@ -2,11 +2,13 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.UserDetail;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -106,6 +108,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     String sPMode="";
 
     Boolean Addinf=false;
+    public static final String UserDetail = "MyPrefs";
+    SharedPreferences UserDetails;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -113,6 +117,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             mPrint_invoice_activity = this;
             setContentView(R.layout.activity_print__invoice_);
             ButterKnife.inject(this);
+            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
             printrecyclerview = findViewById(R.id.printrecyclerview);
             rvReturnInv = findViewById(R.id.rvReturnInv);
 
@@ -161,6 +166,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             RetailCode=sharedCommonPref.getvalue(Constants.Retailor_ERP_Code);
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            if(retailername.getText().toString().equalsIgnoreCase("")){
+                retailername.setText("Customer");
+            }
             tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             ivPrint = findViewById(R.id.ivPrint);
 
@@ -200,8 +208,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 }
             }
             else {
-                dis_gstn = sharedCommonPref.getvalue(Constants.Distributor_gst);
-                dis_fssai = sharedCommonPref.getvalue(Constants.Distributor_fssai);
+                //dis_gstn = sharedCommonPref.getvalue(Constants.Distributor_gst);
+                //dis_fssai =  sharedCommonPref.getvalue(Constants.Distributor_fssai);
+                dis_gstn = UserDetails.getString("GSTN",""); //sharedCommonPref.getvalue(Constants.Distributor_gst);
+                dis_fssai =  UserDetails.getString("FSSAI","");//sharedCommonPref.getvalue(Constants.Distributor_fssai);
             }
 
 
@@ -221,7 +231,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             tvDistributorPh.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Retailor_PHNo));
-
+if (tvRetailorPhone.getText().toString().equalsIgnoreCase("0")) tvRetailorPhone.setText("");
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
                 llDistCal.setVisibility(View.GONE);
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Retailor_PHNo)))
@@ -801,8 +811,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.setNormalText();
                 printama.setBold();
                 printama.printTextln(Printama.LEFT,billnumber.getText().toString());
-
-                printama.printTextln(Printama.LEFT,"PO No : "+PONo);
+                if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("INVOICE")) {
+                    printama.printTextln(Printama.LEFT, "PO No : " + PONo);
+                }
 //                printama.addNewLine();
 
                 printama.addNewLine();
@@ -1122,13 +1133,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
             paint.setTextAlign(Paint.Align.RIGHT);
             canvas.drawText("" + invoicedate.getText().toString(), wdth, y, paint);
-            y = y + 20;
-            paint.setTextAlign(Paint.Align.LEFT);
-            paint.setColor(Color.BLACK);
-            paint.setTextSize(11);
-            paint.setFakeBoldText(true);
-            canvas.drawText("PO No : " + PONo, x, y, paint);
 
+            paint.setTextAlign(Paint.Align.LEFT);
+            if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("INVOICE")) {
+                y = y + 20;
+                paint.setTextAlign(Paint.Align.LEFT);
+                paint.setColor(Color.BLACK);
+                paint.setTextSize(11);
+                paint.setFakeBoldText(true);
+                canvas.drawText("PO No : " + PONo, x, y, paint);
+            }
 
             y = y + 25;
             paint.setColor(Color.LTGRAY);
@@ -2125,7 +2139,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         }
 
-                        if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection")) {
+                        if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE")) {
+                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("HSN_Code"), 1, "1",
+                                    "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor")));
+                        }else if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection")) {
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", 0.0,
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));

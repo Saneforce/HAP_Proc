@@ -388,6 +388,9 @@ Log.d("Error","Can't Clear SFWish");
 
                 String ActStarted = shared_common_pref.getvalue("ActivityStart");
 
+                shared_common_pref.save(Constants.DistributorGst, UserDetails.getString("GSTN",""));
+                shared_common_pref.save(Constants.DistributorFSSAI, UserDetails.getString("FSSAI",""));
+
                 if (shared_common_pref.getvalue(Constants.LOGIN_TYPE).equals(Constants.DISTRIBUTER_TYPE)) {
                     Shared_Common_Pref.LOGINTYPE = Constants.DISTRIBUTER_TYPE;
                     startActivity(new Intent(this, SFA_Activity.class));
@@ -640,8 +643,8 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                //eMail="1017481@hap.in";
-                eMail="1014700@hap.in";
+                //eMail="ciadmin@hap.in";
+                eMail="1014057@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -822,6 +825,7 @@ Log.d("Error","Can't Clear SFWish");
                 }
                 userEditor.putString("SfName", response.getData().get(0).getStockist_Name());
                 userEditor.putString("GSTN", response.getData().get(0).getDisGSTN());
+                userEditor.putString("FSSAI", response.getData().get(0).getDisFSSAI());
                 userEditor.putString("StockCheck", response.getData().get(0).getStockCheck());
 
 
