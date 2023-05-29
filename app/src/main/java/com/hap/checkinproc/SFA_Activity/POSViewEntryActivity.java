@@ -6,66 +6,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
-import com.google.gson.Gson;
-import com.hap.checkinproc.Activity_Hap.ReportActivity;
-import com.hap.checkinproc.Activity_Hap.TAHistory;
-import com.hap.checkinproc.Activity_Hap.ViewReportActivity;
-import com.hap.checkinproc.Activity_Hap.ViewTAStatus;
-import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Common_Model;
-import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.UpdateResponseUI;
-import com.hap.checkinproc.Interface.ViewReport;
-import com.hap.checkinproc.Model_Class.DateReport;
-import com.hap.checkinproc.Model_Class.DateResult;
 import com.hap.checkinproc.Model_Class.POSDataList;
-import com.hap.checkinproc.Model_Class.ReportDataList;
-import com.hap.checkinproc.Model_Class.ReportModel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
-import com.hap.checkinproc.SFA_Adapter.PosOrder_History_Adapter;
-import com.hap.checkinproc.SFA_Adapter.Projection_History_Adapter;
-import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
-import com.hap.checkinproc.SFA_Model_Class.InshopModel;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.adapters.ReportViewAdapter;
-import com.hap.checkinproc.adapters.TAApprovHistoryAdapter;
-import com.hap.checkinproc.adapters.ViewTAStatusAdapter;
-import com.hap.checkinproc.common.DatabaseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

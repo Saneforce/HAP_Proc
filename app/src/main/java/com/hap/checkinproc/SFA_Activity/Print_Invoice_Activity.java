@@ -122,6 +122,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             rvReturnInv = findViewById(R.id.rvReturnInv);
 
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
+            sharedCommonPref.clear_pref(Constants.INVOICE_ORDERLIST);
             common_class = new Common_Class(this);
             netamount = findViewById(R.id.netamount);
             back = findViewById(R.id.back);

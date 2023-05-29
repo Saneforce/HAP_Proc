@@ -652,23 +652,6 @@ public class OutletReport_View_Modal {
 
     List<Product_Details_Modal> product_details_modal;
 
-    public OutletReport_View_Modal(int no_Of_items, String slno, String orderNo, String stockistCode, String transSlNo, String outletCode, String sfCode, String orderDate, Double orderValue, String invoice_Flag, String invoicevalues, String netAmount, String discount_Amount, String status) {
-        this.No_Of_items = no_Of_items;
-        this.slno = slno;
-        this.orderNo = orderNo;
-        this.stockistCode = stockistCode;
-        this.transSlNo = transSlNo;
-        this.outletCode = outletCode;
-        this.sfCode = sfCode;
-        this.orderDate = orderDate;
-        this.orderValue = orderValue;
-        Invoice_Flag = invoice_Flag;
-        this.invoicevalues = invoicevalues;
-        this.NetAmount = netAmount;
-        this.Discount_Amount = discount_Amount;
-        this.Status = status;
-    }
-
     public List<Product_Details_Modal> getProduct_details_modal() {
         return product_details_modal;
     }
@@ -716,18 +699,6 @@ public class OutletReport_View_Modal {
         this.uName = pUomName;
         this.taxVal = pTax;
 
-    }
-
-    public OutletReport_View_Modal(String slno, String orderNo, String stockistCode, String transSlNo, String outletCode, String sfCode, String orderDate, Double orderValue, String status) {
-        this.slno = slno;
-        this.orderNo = orderNo;
-        this.stockistCode = stockistCode;
-        this.transSlNo = transSlNo;
-        this.outletCode = outletCode;
-        this.sfCode = sfCode;
-        this.orderDate = orderDate;
-        this.orderValue = orderValue;
-        Status = status;
     }
 
     public String getSlno() {
@@ -834,68 +805,9 @@ public class OutletReport_View_Modal {
         Quantity = quantity;
     }
 
-    public List<OutletReport_View_Modal> getProductDetailsModal() {
+   /* public List<OutletReport_View_Modal> getProductDetailsModal() {
         return productDetailsModal;
-    }
-    public OutletReport_View_Modal(String Tax_Id, String Tax_Type, double Tax_Val, double Tax_Amt) {
-//        this.Tax_Val = Tax_Val;
-//        this.Tax_Type = Tax_Type;
-//        this.Tax_Id = Tax_Id;
-//        this.Tax_Amt = Tax_Amt;
+    }*/
 
-    }
-
-    public OutletReport_View_Modal(String Tax_Type, double Tax_Amt) {
-
-//        this.Tax_Type = Tax_Type;
-//
-//        this.Tax_Amt = Tax_Amt;
-
-    }
-
-    public OutletReport_View_Modal(String id, String name, String bookingDate, int Qty, String UOM) {
-//        this.id = id;
-        this.name = name;
-//        this.bookingDate = bookingDate;
-//        this.Qty = Qty;
-//        this.UOM = UOM;
-
-    }
-
-    public OutletReport_View_Modal(String id, String scheme, String free, double discount, String discount_type, String Package
-            , double tax, String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
-//        this.id = id;
-//        this.scheme = scheme;
-//        this.free = free;
-//        this.discount = discount;
-//        this.discount_type = discount_type;
-//        this.Package = Package;
-//        this.tax = tax;
-//        this.Off_Pro_code = off_Pro_code;
-//        this.Off_Pro_name = off_Pro_name;
-//        this.Off_Pro_Unit = off_Pro_Unit;
-
-    }
-
-    public OutletReport_View_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
-                                 String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
-                                 Integer RegularQty, Double Amount, List<OutletReport_View_Modal> productDetailsModal, String PaidAmount, double tax) {
-//        this.id = id;
-        this.name = name;
-//        this.productCatCode = productCatCode;
-//        this.rowNum = rowNum;
-//        this.productSaleUnit = productSaleUnit;
-//        this.productUnit = productUnit;
-//        this.unitCode = unitCode;
-//        this.defaultUOMQty = defaultUOMQty;
-//        this.defaultUOM = defaultUOM;
-//        this.Rate = Rate;
-//        this.Qty = Qty;
-//        this.RegularQty = RegularQty;
-//        this.Amount = Amount;
-        this.productDetailsModal = productDetailsModal;
-//        this.PaidAmount = PaidAmount;
-//        this.tax = tax;
-    }
 }
 

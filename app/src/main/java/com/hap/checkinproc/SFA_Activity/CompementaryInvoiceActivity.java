@@ -453,9 +453,9 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                     }
                 }
 
-            } else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
+            }
+            else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
                 Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA), userType);
-
             }
 
 

@@ -7,6 +7,7 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 import static com.hap.checkinproc.Activity_Hap.SFA_Activity.sfa_date;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.Common_Class.Constants.Vansales_VehNo;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.ProductsLoaded;
 
 import android.Manifest;
@@ -1137,18 +1138,18 @@ public class Common_Class {
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
-                            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+                            if(liveUpdateListener!=null) liveUpdateListener.onError(t.getLocalizedMessage());
                         }
                     });
                 }else{
-                    if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+                    if(liveUpdateListener!=null) liveUpdateListener.onError("Product Loading Failed");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+                if(liveUpdateListener!=null) liveUpdateListener.onError(e.getLocalizedMessage());
             }
         }else{
-            if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+            if(liveUpdateListener!=null) liveUpdateListener.onError("Internet Not Available");
         }
 
     }
