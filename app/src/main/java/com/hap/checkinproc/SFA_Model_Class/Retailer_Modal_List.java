@@ -43,44 +43,12 @@ public class Retailer_Modal_List {
         Others = others;
     }
 
-    public double getOthersVal() {
-        return OthersVal;
-    }
-
-    public void setOthersVal(double othersVal) {
-        OthersVal = othersVal;
-    }
-
-    public double getCurd() {
-        return Curd;
-    }
-
-    public void setCurd(double curd) {
-        Curd = curd;
-    }
-
-    public double getCurdVal() {
-        return CurdVal;
-    }
-
-    public void setCurdVal(double curdVal) {
-        CurdVal = curdVal;
-    }
-
     public double getMilk() {
         return Milk;
     }
 
     public void setMilk(double milk) {
         Milk = milk;
-    }
-
-    public double getMilkVal() {
-        return MilkVal;
-    }
-
-    public void setMilkVal(double milkVal) {
-        MilkVal = milkVal;
     }
 
     @SerializedName("Cust_Code")
@@ -91,9 +59,6 @@ public class Retailer_Modal_List {
         return CategoryList;
     }
 
-    public void setCategoryList(ArrayList<CateSpecList> categoryList) {
-        CategoryList = categoryList;
-    }
 
     @SerializedName("outlet_type_Details")
     @Expose
@@ -315,108 +280,55 @@ public class Retailer_Modal_List {
         InvoiceDate = invoiceDate;
     }
 
-    public String get_long() {
-        return _long;
-    }
 
     public void set_long(String _long) {
         this._long = _long;
     }
-
     public String getType() {
         return Type;
     }
-
     public void setType(String type) {
         Type = type;
     }
-
     public String getDelivType() {
         return DelivType;
     }
-
-    public void setDelivType(String delivType) {
-        DelivType = delivType;
-    }
-
     public String getFreezer_status() {
         return Freezer_status;
     }
-
     public void setFreezer_status(String freezer_status) {
         Freezer_status = freezer_status;
     }
-
     public String getFreezer_Tag_no() {
         return Freezer_Tag_no;
     }
-
-    public void setFreezer_Tag_no(String freezer_Tag_no) {
-        Freezer_Tag_no = freezer_Tag_no;
-    }
-
     public String getPan_No() {
         return Pan_No;
     }
-
-    public void setPan_No(String pan_No) {
-        Pan_No = pan_No;
-    }
-
     public String getFssiNo() {
         return FssiNo;
     }
-
-    public void setFssiNo(String fssiNo) {
-        FssiNo = fssiNo;
-    }
-
     public String getFreezer_capacity() {
         return freezer_capacity;
     }
-
-    public void setFreezer_capacity(String freezer_capacity) {
-        this.freezer_capacity = freezer_capacity;
-    }
-
     public String getFreezer_attachments() {
         return freezer_attachments;
     }
-
-    public void setFreezer_attachments(String freezer_attachments) {
-        this.freezer_attachments = freezer_attachments;
-    }
-
     public String getFreezer_make() {
         return Freezer_make;
     }
-
-    public void setFreezer_make(String freezer_make) {
-        Freezer_make = freezer_make;
-    }
-
     public String getDeposit_amount() {
         return deposit_amount;
     }
-
-    public void setDeposit_amount(String deposit_amount) {
-        this.deposit_amount = deposit_amount;
-    }
-
     public String getFreezer_required() {
         return freezer_required;
     }
-
     public void setFreezer_required(String freezer_required) {
         this.freezer_required = freezer_required;
     }
 
     public String getExpected_sales_value() {
         return expected_sales_value;
-    }
-
-    public void setExpected_sales_value(String expected_sales_value) {
-        this.expected_sales_value = expected_sales_value;
     }
 
     public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
@@ -835,15 +747,9 @@ public class Retailer_Modal_List {
     public String getTownCode() {
         return townCode;
     }
-
-    public void setTownCode(String townCode) {
-        this.townCode = townCode;
-    }
-
     public String getTownName() {
         return townName;
     }
-
     public void setTownName(String townName) {
         this.townName = townName;
     }
