@@ -15,10 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Model_Class.SalesReturnProductModel;
-import com.hap.checkinproc.SFA_Model_Class.TaxModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnProductAdapter.ViewHolder> {
     Context context;
     ArrayList<SalesReturnProductModel> list;
-
+    Common_Class common_class;
     CalculateTotal calculateTotal;
 
     boolean isUpdating;
@@ -35,6 +35,7 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
         this.context = context;
         this.list = list;
         this.isUpdating = false;
+        this.common_class = new Common_Class(context);
     }
 
     public void setCalculateTotal(CalculateTotal calculateTotal) {
@@ -49,26 +50,19 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
 
     @Override
     public void onBindViewHolder(@NonNull SalesReturnProductAdapter.ViewHolder holder, int pos) {
-        final SalesReturnProductModel model = list.get(pos);
-        holder.productName.setText(model.getProductName());
-        String matCode = "Mat Code: " + model.getMaterialCode();
+        holder.productName.setText(list.get(holder.getAdapterPosition()).getProduct_Name());
+        String matCode = "Mat Code: " + list.get(holder.getAdapterPosition()).getSale_Erp_Code();
         holder.materialCode.setText(matCode);
-        String mRp = "MRP: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(model.getMRP());
+        String mRp = "MRP: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getMRP());
         holder.MRP.setText(mRp);
-        String raTe = "Rate: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(model.getRate());
+        String raTe = "Rate: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getPrice());
         holder.rate.setText(raTe);
-        holder.invUOM.setText(model.getInvUOM());
-        holder.invQty.setText(String.valueOf(model.getInvQty()));
-        holder.retUOM.setText(model.getRetUOM());
-        holder.retQty.setText(String.valueOf(model.getRetQty()));
-        String value = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(model.getRetTotal());
+        holder.invUOM.setText(list.get(holder.getAdapterPosition()).getUOM());
+        holder.invQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getInvQty()));
+        holder.retUOM.setText(list.get(holder.getAdapterPosition()).getUOM());
+        holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
+        String value = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getRetAmount());
         holder.retAmount.setText(value);
-        if (model.getRetType().equalsIgnoreCase("")) {
-            String select = "--- Select ---";
-            holder.retType.setText(select);
-        } else {
-            holder.retType.setText(model.getRetType());
-        }
 
         holder.retQtyMinus.setOnClickListener(v -> {
             int retQtyCount = list.get(holder.getAdapterPosition()).getRetQty();
@@ -80,9 +74,7 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
 
         holder.retQtyPlus.setOnClickListener(v -> {
             int newQty = list.get(holder.getAdapterPosition()).getRetQty() + 1;
-            int invItemQty = (int) (list.get(holder.getAdapterPosition()).getInvQty() * list.get(holder.getAdapterPosition()).getInvConvFac());
-            int retItemQty = (int) (newQty * list.get(holder.getAdapterPosition()).getRetConvFac());
-            if (invItemQty >= retItemQty) {
+            if (list.get(holder.getAdapterPosition()).getInvQty() >= newQty) {
                 holder.retQty.setText(String.valueOf(newQty));
             } else {
                 Toast.makeText(context, "Return quantity can't exceed the invoice quantity", Toast.LENGTH_SHORT).show();
@@ -105,33 +97,24 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
                     }
                     int newQty = Integer.parseInt(Qty);
                     if (newQty != list.get(holder.getAdapterPosition()).getRetQty()) {
-                        int invItemQty = (int) (list.get(holder.getAdapterPosition()).getInvQty() * list.get(holder.getAdapterPosition()).getInvConvFac());
-                        int retItemQty = (int) (newQty * list.get(holder.getAdapterPosition()).getRetConvFac());
-                        if (invItemQty >= retItemQty) {
+                        int invQty = list.get(holder.getAdapterPosition()).getInvQty();
+                        if (invQty >= newQty) {
+                            double totalAmt = common_class.formatDecimalToTwoDecimal((list.get(holder.getAdapterPosition()).getInvAmount() / invQty * newQty));
+                            double totalTax = common_class.formatDecimalToTwoDecimal((list.get(holder.getAdapterPosition()).getInvTax() / invQty * newQty));
                             list.get(holder.getAdapterPosition()).setRetQty(newQty);
-                            double taxPercent = 0;
-                            for (TaxModel taxModel : list.get(holder.getAdapterPosition()).getTaxList()) {
-                                taxPercent += taxModel.getTaxVal();
-                            }
-                            double totalRate = newQty * list.get(holder.getAdapterPosition()).getRetConvFac() * list.get(holder.getAdapterPosition()).getRate();
-                            double totalTax = (taxPercent / 100 * totalRate);
-                            double totalAmt = (totalRate + totalTax);
-                            list.get(holder.getAdapterPosition()).setRetTotal(totalAmt);
+                            list.get(holder.getAdapterPosition()).setRetAmount(totalAmt);
                             list.get(holder.getAdapterPosition()).setRetTax(totalTax);
-                            String currency = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(totalAmt);
+                            String currency = "Return Amount: " + common_class.formatCurrency(totalAmt);
                             holder.retAmount.setText(currency);
                             if (calculateTotal != null) {
                                 calculateTotal.onClick();
                             }
                             holder.retQty.setText(String.valueOf(newQty));
-                            isUpdating = false;
                         } else {
                             holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
-                            isUpdating = false;
                         }
-                    } else {
-                        isUpdating = false;
                     }
+                    isUpdating = false;
                     holder.retQty.setSelection(holder.retQty.getText().toString().length());
                 }
             }
@@ -160,7 +143,6 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             productName = itemView.findViewById(R.id.ProductName);
             materialCode = itemView.findViewById(R.id.MatCode);
             MRP = itemView.findViewById(R.id.MRP);

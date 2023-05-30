@@ -2,7 +2,6 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
-import static com.hap.checkinproc.SFA_Activity.HAPApp.UserDetail;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -49,7 +48,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
-import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
@@ -106,6 +104,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     List<QPS_Modal> stockFileList = new ArrayList<>();
     String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
     String sPMode="";
+    Context context = this;
 
     Boolean Addinf=false;
     public static final String UserDetail = "MyPrefs";
@@ -187,10 +186,115 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             sPMode = sharedCommonPref.getvalue(Constants.FLAG);
 
-            if (sPMode.equalsIgnoreCase("Sales return"))
+            if (sPMode.equalsIgnoreCase("Sales return")) {
                 tvHeader.setText(sPMode);
-            else
+                RelativeLayout rlInvoicedAmt = findViewById(R.id.rlInvoicedAmt);
+                RelativeLayout rlToPay = findViewById(R.id.rlToPay);
+                TextView invoicedAmount = findViewById(R.id.invoicedAmount);
+                TextView toPayAmount = findViewById(R.id.toPayAmount);
+                TextView NetAmt = findViewById(R.id.NetAmt);
+                TextView referenceBillNumber = findViewById(R.id.referenceBillNumber);
+                NetAmt.setText("Return Amount");
+                rlInvoicedAmt.setVisibility(View.VISIBLE);
+                rlToPay.setVisibility(View.VISIBLE);
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                Map<String, String> params = new HashMap<>();
+                params.put("axn", "cal_rem_amt_sales_return");
+                params.put("invoice", Shared_Common_Pref.TransSlNo);
+                Call<ResponseBody> call = apiInterface.getUniversalData(params);
+                call.enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                if (response.body() == null) {
+                                    Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                String result = response.body().string();
+                                JSONObject jsonObject = new JSONObject(result);
+                                if (jsonObject.getBoolean("success")) {
+                                    JSONArray jsonArray = jsonObject.getJSONArray("response");
+                                    double InvAmt = jsonArray.getJSONObject(0).getDouble("InvAmt");
+                                    double RetAmt = jsonArray.getJSONObject(0).getDouble("RetAmt");
+                                    double RemAmt = jsonArray.getJSONObject(0).getDouble("RemAmt");
+                                    String RefInv = jsonArray.getJSONObject(0).getString("RefInv");
+                                    referenceBillNumber.setVisibility(View.VISIBLE);
+                                    referenceBillNumber.setText("Ref. Invoice: " + RefInv);
+                                    invoicedAmount.setText(common_class.formatCurrency(InvAmt));
+                                    netamount.setText(common_class.formatCurrency(RetAmt));
+                                    toPayAmount.setText(common_class.formatCurrency(RemAmt));
+                                } else {
+                                    Toast.makeText(context, "Error 1: Response Not Success", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(context, "Error 2: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "Error 3: Response Not Success", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                        Toast.makeText(context, "Error 4: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
                 tvHeader.setText("Sales " + sPMode);
+            }
+
+            if (sPMode.equalsIgnoreCase("INVOICE")) {
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                Map<String, String> params = new HashMap<>();
+                params.put("axn", "cal_rem_amt_invoice");
+                params.put("invoice", Shared_Common_Pref.TransSlNo);
+                Call<ResponseBody> call = apiInterface.getUniversalData(params);
+                call.enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                if (response.body() == null) {
+                                    Toast.makeText(context, "Response is Null", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                String result = response.body().string();
+                                JSONObject jsonObject = new JSONObject(result);
+                                if (jsonObject.getBoolean("success")) {
+                                    double InvTot = jsonObject.getDouble("InvTot");
+                                    double RetOrdVal = jsonObject.getDouble("RetOrdVal");
+                                    double RemAmt = jsonObject.getDouble("RemAmt");
+                                    String RetInv = jsonObject.getString("RetInv");
+                                    RelativeLayout rlInvoicedAmt = findViewById(R.id.rlInvoicedAmt);
+                                    RelativeLayout rlToPay = findViewById(R.id.rlToPay);
+                                    TextView invoicedAmount = findViewById(R.id.invoicedAmount);
+                                    TextView toPayAmount = findViewById(R.id.toPayAmount);
+                                    TextView NetAmt = findViewById(R.id.NetAmt);
+                                    TextView referenceBillNumber = findViewById(R.id.referenceInvNumber);
+                                    NetAmt.setText("Return Amount");
+                                    rlInvoicedAmt.setVisibility(View.VISIBLE);
+                                    rlToPay.setVisibility(View.VISIBLE);
+                                    referenceBillNumber.setVisibility(View.VISIBLE);
+                                    referenceBillNumber.setText("Sales Return Invoice: " + RetInv);
+                                    invoicedAmount.setText(common_class.formatCurrency(InvTot));
+                                    netamount.setText(common_class.formatCurrency(RetOrdVal));
+                                    toPayAmount.setText(common_class.formatCurrency(RemAmt));
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(context, "Error 2: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "Error 3: Response Not Success", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                        Toast.makeText(context, "Error 4: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
             Log.d("Distributor_Id",sharedCommonPref.getvalue(Constants.Distributor_Id));
             if(sharedCommonPref.getvalue(Constants.Distributor_Id).equalsIgnoreCase("7951")){
@@ -354,6 +458,7 @@ if (tvRetailorPhone.getText().toString().equalsIgnoreCase("0")) tvRetailorPhone.
             Log.v(TAG, e.getMessage());
         }
     }
+
     private void prepareIndentDetails() {
         Context context = this;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);

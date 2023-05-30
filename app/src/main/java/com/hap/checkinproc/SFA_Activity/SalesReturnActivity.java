@@ -117,7 +117,6 @@ public class SalesReturnActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             adapter.setItemSelect(invoiceNumber -> {
                 selectedInvoiceNumber = invoiceNumber;
-                returnTypeLayout.setVisibility(View.VISIBLE);
                 returnTypeRG.clearCheck();
                 recyclerView.setAdapter(null);
                 recyclerView.setVisibility(View.INVISIBLE);
@@ -164,15 +163,8 @@ public class SalesReturnActivity extends AppCompatActivity {
         full.setOnClickListener(v -> {
             for (SalesReturnProductModel model : productList) {
                 model.setRetQty(model.getInvQty());
-                double taxPercent = 0;
-                for (TaxModel taxModel : model.getTaxList()) {
-                    taxPercent += taxModel.getTaxVal();
-                }
-                double totalRate = model.getRetQty() * model.getRetConvFac() * model.getRate();
-                double totalTax = (taxPercent / 100 * totalRate);
-                double totalAmt = (totalRate + totalTax);
-                model.setRetTotal(totalAmt);
-                model.setRetTax(totalTax);
+                model.setRetAmount(model.getInvAmount());
+                model.setRetTax(model.getInvTax());
             }
             submit.setText("Submit");
             recyclerView.setAdapter(null);
@@ -184,7 +176,7 @@ public class SalesReturnActivity extends AppCompatActivity {
         partial.setOnClickListener(v -> {
             for (SalesReturnProductModel model : productList) {
                 model.setRetQty(0);
-                model.setRetTotal(0);
+                model.setRetAmount(0);
                 model.setRetTax(0);
             }
             submit.setText("Proceed");
@@ -211,14 +203,14 @@ public class SalesReturnActivity extends AppCompatActivity {
             for (SalesReturnProductModel model : productList) {
                 itemsCount += 1;
                 qtyCount += model.getRetQty();
-                retInvTotal += model.getRetTotal();
+                retInvTotal += model.getRetAmount();
             }
         } else if (partial.isChecked()) {
             for (SalesReturnProductModel model : productList) {
                 if (model.getRetQty() > 0) {
                     itemsCount += 1;
                     qtyCount += model.getRetQty();
-                    retInvTotal += model.getRetTotal();
+                    retInvTotal += model.getRetAmount();
                 }
             }
         }
@@ -318,7 +310,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                 if (model.getRetQty() > 0) {
                     String product_code = model.getProduct_Code();
                     int Product_Total_Qty = model.getRetQty();
-                    double Rate = model.getRate();
+                    double Rate = model.getPrice();
                     JSONArray taxDetails = new JSONArray();
                     for (TaxModel taxModel : model.getTaxList()) {
                         JSONObject object = new JSONObject();
@@ -333,9 +325,9 @@ public class SalesReturnActivity extends AppCompatActivity {
                     Order_Details_Object.put("Product_Total_Qty", Product_Total_Qty);
                     Order_Details_Object.put("Rate", Rate);
                     Order_Details_Object.put("MRP", model.getMRP());
-                    Order_Details_Object.put("UOM", model.getInvUOM());
-                    Order_Details_Object.put("conv_fac", model.getInvConvFac());
-                    Order_Details_Object.put("Product_Amount", model.getRetTotal());
+                    Order_Details_Object.put("UOM", model.getUOM());
+                    Order_Details_Object.put("conv_fac", model.getCon_Fac());
+                    Order_Details_Object.put("Product_Amount", model.getRetAmount());
                     Order_Details_Object.put("tax_Amount", model.getRetTax());
                     Order_Details_Object.put("TAX_details", taxDetails);
                     Order_Details.put(Order_Details_Object);
@@ -458,26 +450,21 @@ public class SalesReturnActivity extends AppCompatActivity {
                             Log.e("status", "Request Result: \n" + jsonArray);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 String Product_Code = jsonArray.getJSONObject(i).getString("Product_Code");
-                                String productName = jsonArray.getJSONObject(i).getString("Product_Name");
-                                String materialCode = jsonArray.getJSONObject(i).getString("Sale_Erp_Code");
-                                String invUOM = jsonArray.getJSONObject(i).getString("Unit");
-                                String retType = "";
-                                double MRP = jsonArray.getJSONObject(i).getDouble("MRP");
-                                double rate = jsonArray.getJSONObject(i).getDouble("Price");
-                                double invConvFac = jsonArray.getJSONObject(i).getDouble("Con_Fac");
-                                double retTotal = 0;
+                                String Product_Name = jsonArray.getJSONObject(i).getString("Product_Name");
+                                String Sale_Erp_Code = jsonArray.getJSONObject(i).getString("Sale_Erp_Code");
+                                String UOM = jsonArray.getJSONObject(i).getString("Unit");
                                 int invQty = jsonArray.getJSONObject(i).getInt("qty");
+                                int Con_Fac = jsonArray.getJSONObject(i).getInt("Con_Fac");
                                 int retQty = 0;
-                                JSONArray array = jsonArray.getJSONObject(i).getJSONArray("UOMList");
-                                ArrayList<UOMModel> uomList = new ArrayList<>();
-                                for (int j = 0; j < array.length(); j++) {
-                                    String UOM_Nm = array.getJSONObject(j).getString("UOM_Nm");
-                                    double CnvQty = array.getJSONObject(j).getDouble("CnvQty");
-                                    uomList.add(new UOMModel(UOM_Nm, CnvQty));
-                                }
+                                double MRP = jsonArray.getJSONObject(i).getDouble("MRP");
+                                double Price = jsonArray.getJSONObject(i).getDouble("Price");
+                                double invAmount = jsonArray.getJSONObject(i).getDouble("Amount");
+                                double invTax = jsonArray.getJSONObject(i).getDouble("Tax");
+                                double Margin = jsonArray.getJSONObject(i).getDouble("Margin");
+                                double retAmount = 0;
+                                double retTax = 0;
                                 JSONArray taxArray = jsonArray.getJSONObject(i).getJSONArray("taxList");
                                 ArrayList<TaxModel> taxList = new ArrayList<>();
-                                double retTax = 0;
                                 for (int j = 0; j < taxArray.length(); j++) {
                                     String taxName = taxArray.getJSONObject(j).getString("Tax_Name");
                                     String taxCode = taxArray.getJSONObject(j).getString("Tax_Code");
@@ -485,8 +472,9 @@ public class SalesReturnActivity extends AppCompatActivity {
                                     double taxVal = taxArray.getJSONObject(j).getDouble("Tax_Val");
                                     taxList.add(new TaxModel(taxName, taxCode, taxAmt, taxVal));
                                 }
-                                productList.add(new SalesReturnProductModel(Product_Code, productName, materialCode, invUOM, invUOM, retType, MRP, rate, invConvFac, invConvFac, retTotal, retTax, invQty, retQty, uomList, taxList));
+                                productList.add(new SalesReturnProductModel(Product_Code, Product_Name, Sale_Erp_Code, UOM, MRP, Price, invAmount, invTax, Margin, retAmount, retTax, invQty, Con_Fac, retQty, taxList));
                             }
+                            returnTypeLayout.setVisibility(View.VISIBLE);
                         } else {
                             Toast.makeText(context, "Request does not reached the server", Toast.LENGTH_SHORT).show();
                         }
