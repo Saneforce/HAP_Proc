@@ -3,28 +3,26 @@ package com.hap.checkinproc.SFA_Model_Class;
 import java.util.ArrayList;
 
 public class SalesReturnProductModel {
-    String Product_Code, productName, materialCode, invUOM, retUOM, retType;
-    double MRP, rate, invConvFac, retConvFac, retTotal, retTax;
-    int invQty, retQty;
-    ArrayList<UOMModel> uomList;
+    String Product_Code, Product_Name, Sale_Erp_Code, UOM;
+    double MRP, Price, invAmount, invTax, Margin, retAmount, retTax;
+    int invQty, Con_Fac, retQty;
     ArrayList<TaxModel> taxList;
 
-    public SalesReturnProductModel(String product_Code, String productName, String materialCode, String invUOM, String retUOM, String retType, double MRP, double rate, double invConvFac, double retConvFac, double retTotal, double retTax, int invQty, int retQty, ArrayList<UOMModel> uomList, ArrayList<TaxModel> taxList) {
-        this.Product_Code = product_Code;
-        this.productName = productName;
-        this.materialCode = materialCode;
-        this.invUOM = invUOM;
-        this.retUOM = retUOM;
-        this.retType = retType;
+    public SalesReturnProductModel(String product_Code, String product_Name, String sale_Erp_Code, String UOM, double MRP, double price, double invAmount, double invTax, double margin, double retAmount, double retTax, int invQty, int con_Fac, int retQty, ArrayList<TaxModel> taxList) {
+        Product_Code = product_Code;
+        Product_Name = product_Name;
+        Sale_Erp_Code = sale_Erp_Code;
+        this.UOM = UOM;
         this.MRP = MRP;
-        this.rate = rate;
-        this.invConvFac = invConvFac;
-        this.retConvFac = retConvFac;
-        this.retTotal = retTotal;
+        Price = price;
+        this.invAmount = invAmount;
+        this.invTax = invTax;
+        Margin = margin;
+        this.retAmount = retAmount;
         this.retTax = retTax;
         this.invQty = invQty;
+        Con_Fac = con_Fac;
         this.retQty = retQty;
-        this.uomList = uomList;
         this.taxList = taxList;
     }
 
@@ -33,47 +31,31 @@ public class SalesReturnProductModel {
     }
 
     public void setProduct_Code(String product_Code) {
-        this.Product_Code = product_Code;
+        Product_Code = product_Code;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProduct_Name() {
+        return Product_Name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProduct_Name(String product_Name) {
+        Product_Name = product_Name;
     }
 
-    public String getMaterialCode() {
-        return materialCode;
+    public String getSale_Erp_Code() {
+        return Sale_Erp_Code;
     }
 
-    public void setMaterialCode(String materialCode) {
-        this.materialCode = materialCode;
+    public void setSale_Erp_Code(String sale_Erp_Code) {
+        Sale_Erp_Code = sale_Erp_Code;
     }
 
-    public String getInvUOM() {
-        return invUOM;
+    public String getUOM() {
+        return UOM;
     }
 
-    public void setInvUOM(String invUOM) {
-        this.invUOM = invUOM;
-    }
-
-    public String getRetUOM() {
-        return retUOM;
-    }
-
-    public void setRetUOM(String retUOM) {
-        this.retUOM = retUOM;
-    }
-
-    public String getRetType() {
-        return retType;
-    }
-
-    public void setRetType(String retType) {
-        this.retType = retType;
+    public void setUOM(String UOM) {
+        this.UOM = UOM;
     }
 
     public double getMRP() {
@@ -84,36 +66,44 @@ public class SalesReturnProductModel {
         this.MRP = MRP;
     }
 
-    public double getRate() {
-        return rate;
+    public double getPrice() {
+        return Price;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setPrice(double price) {
+        Price = price;
     }
 
-    public double getInvConvFac() {
-        return invConvFac;
+    public double getInvAmount() {
+        return invAmount;
     }
 
-    public void setInvConvFac(double invConvFac) {
-        this.invConvFac = invConvFac;
+    public void setInvAmount(double invAmount) {
+        this.invAmount = invAmount;
     }
 
-    public double getRetConvFac() {
-        return retConvFac;
+    public double getInvTax() {
+        return invTax;
     }
 
-    public void setRetConvFac(double retConvFac) {
-        this.retConvFac = retConvFac;
+    public void setInvTax(double invTax) {
+        this.invTax = invTax;
     }
 
-    public double getRetTotal() {
-        return retTotal;
+    public double getMargin() {
+        return Margin;
     }
 
-    public void setRetTotal(double retTotal) {
-        this.retTotal = retTotal;
+    public void setMargin(double margin) {
+        Margin = margin;
+    }
+
+    public double getRetAmount() {
+        return retAmount;
+    }
+
+    public void setRetAmount(double retAmount) {
+        this.retAmount = retAmount;
     }
 
     public double getRetTax() {
@@ -132,20 +122,20 @@ public class SalesReturnProductModel {
         this.invQty = invQty;
     }
 
+    public int getCon_Fac() {
+        return Con_Fac;
+    }
+
+    public void setCon_Fac(int con_Fac) {
+        Con_Fac = con_Fac;
+    }
+
     public int getRetQty() {
         return retQty;
     }
 
     public void setRetQty(int retQty) {
         this.retQty = retQty;
-    }
-
-    public ArrayList<UOMModel> getUomList() {
-        return uomList;
-    }
-
-    public void setUomList(ArrayList<UOMModel> uomList) {
-        this.uomList = uomList;
     }
 
     public ArrayList<TaxModel> getTaxList() {
