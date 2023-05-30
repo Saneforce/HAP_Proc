@@ -1756,6 +1756,14 @@ public class Common_Class {
         return (HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(amount));
     }
 
+    public double formatDecimalToSingleDecimal(double amount) {
+        return Double.parseDouble(new DecimalFormat("0.0").format(amount));
+    }
+
+    public double formatDecimalToTwoDecimal(double amount) {
+        return Double.parseDouble(new DecimalFormat("0.00").format(amount));
+    }
+
 
 }
 

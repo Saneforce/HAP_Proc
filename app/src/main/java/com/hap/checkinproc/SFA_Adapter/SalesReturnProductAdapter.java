@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Model_Class.SalesReturnProductModel;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnProductAdapter.ViewHolder> {
     Context context;
     ArrayList<SalesReturnProductModel> list;
-
+    Common_Class common_class;
     CalculateTotal calculateTotal;
 
     boolean isUpdating;
@@ -35,6 +36,7 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
         this.context = context;
         this.list = list;
         this.isUpdating = false;
+        this.common_class = new Common_Class(context);
     }
 
     public void setCalculateTotal(CalculateTotal calculateTotal) {
@@ -113,9 +115,9 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
                             for (TaxModel taxModel : list.get(holder.getAdapterPosition()).getTaxList()) {
                                 taxPercent += taxModel.getTaxVal();
                             }
-                            double totalRate = newQty * list.get(holder.getAdapterPosition()).getRetConvFac() * list.get(holder.getAdapterPosition()).getRate();
-                            double totalTax = (taxPercent / 100 * totalRate);
-                            double totalAmt = (totalRate + totalTax);
+                            double totalRate = common_class.formatDecimalToTwoDecimal(newQty * list.get(holder.getAdapterPosition()).getRetConvFac() * list.get(holder.getAdapterPosition()).getRate());
+                            double totalTax = common_class.formatDecimalToTwoDecimal((taxPercent / 100 * totalRate));
+                            double totalAmt = common_class.formatDecimalToSingleDecimal((totalRate + totalTax));
                             list.get(holder.getAdapterPosition()).setRetTotal(totalAmt);
                             list.get(holder.getAdapterPosition()).setRetTax(totalTax);
                             String currency = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(totalAmt);
