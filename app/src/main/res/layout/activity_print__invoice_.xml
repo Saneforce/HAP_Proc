@@ -780,15 +780,46 @@
                                     android:textStyle="bold"></TextView>
 
                                 <TextView
-                                    android:id="@+id/referenceInvNumber"
+                                    android:id="@+id/netamount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone"
-                                    android:layout_below="@+id/NetAmt"
+                                    android:fontFamily="sans-serif-black"
+                                    android:text="₹ 0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"
+                                    android:textStyle="bold"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlRetAmt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:layout_marginTop="@dimen/C5dp">
+
+                                <TextView
+                                    android:id="@+id/frhtr"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-black"
+                                    android:text="Return Amount"
+                                    android:textAlignment="textStart"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"
+                                    android:textStyle="bold"></TextView>
+
+                                <TextView
+                                    android:id="@+id/referenceInvNumber"
+                                    android:layout_width="match_parent"
+                                    android:text="sd.gnlgn"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/frhtr"
                                     android:textSize="@dimen/C12dp"></TextView>
 
                                 <TextView
-                                    android:id="@+id/netamount"
+                                    android:id="@+id/returnAmount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif-black"

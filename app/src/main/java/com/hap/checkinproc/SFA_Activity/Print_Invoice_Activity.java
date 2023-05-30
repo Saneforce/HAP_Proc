@@ -188,15 +188,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             if (sPMode.equalsIgnoreCase("Sales return")) {
                 tvHeader.setText(sPMode);
-                RelativeLayout rlInvoicedAmt = findViewById(R.id.rlInvoicedAmt);
-                RelativeLayout rlToPay = findViewById(R.id.rlToPay);
-                TextView invoicedAmount = findViewById(R.id.invoicedAmount);
-                TextView toPayAmount = findViewById(R.id.toPayAmount);
-                TextView NetAmt = findViewById(R.id.NetAmt);
                 TextView referenceBillNumber = findViewById(R.id.referenceBillNumber);
-                NetAmt.setText("Return Amount");
-                rlInvoicedAmt.setVisibility(View.VISIBLE);
-                rlToPay.setVisibility(View.VISIBLE);
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                 Map<String, String> params = new HashMap<>();
                 params.put("axn", "cal_rem_amt_sales_return");
@@ -220,10 +212,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     double RemAmt = jsonArray.getJSONObject(0).getDouble("RemAmt");
                                     String RefInv = jsonArray.getJSONObject(0).getString("RefInv");
                                     referenceBillNumber.setVisibility(View.VISIBLE);
-                                    referenceBillNumber.setText("Ref. Invoice: " + RefInv);
-                                    invoicedAmount.setText(common_class.formatCurrency(InvAmt));
+                                    referenceBillNumber.setText("Reference Invoice:\n" + RefInv);
                                     netamount.setText(common_class.formatCurrency(RetAmt));
-                                    toPayAmount.setText(common_class.formatCurrency(RemAmt));
                                 } else {
                                     Toast.makeText(context, "Error 1: Response Not Success", Toast.LENGTH_SHORT).show();
                                 }
@@ -266,20 +256,18 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     double RetOrdVal = jsonObject.getDouble("RetOrdVal");
                                     double RemAmt = jsonObject.getDouble("RemAmt");
                                     String RetInv = jsonObject.getString("RetInv");
-                                    RelativeLayout rlInvoicedAmt = findViewById(R.id.rlInvoicedAmt);
+                                    RelativeLayout rlRetAmt = findViewById(R.id.rlRetAmt);
+                                    rlRetAmt.setVisibility(View.VISIBLE);
                                     RelativeLayout rlToPay = findViewById(R.id.rlToPay);
-                                    TextView invoicedAmount = findViewById(R.id.invoicedAmount);
-                                    TextView toPayAmount = findViewById(R.id.toPayAmount);
-                                    TextView NetAmt = findViewById(R.id.NetAmt);
-                                    TextView referenceBillNumber = findViewById(R.id.referenceInvNumber);
-                                    NetAmt.setText("Return Amount");
-                                    rlInvoicedAmt.setVisibility(View.VISIBLE);
                                     rlToPay.setVisibility(View.VISIBLE);
+                                    TextView retAmount = findViewById(R.id.returnAmount);
+                                    retAmount.setText(common_class.formatCurrency(RetOrdVal));
+                                    TextView toPayAmount = findViewById(R.id.toPayAmount);
+                                    toPayAmount.setText(common_class.formatCurrency(RemAmt));
+                                    TextView referenceBillNumber = findViewById(R.id.referenceInvNumber);
                                     referenceBillNumber.setVisibility(View.VISIBLE);
                                     referenceBillNumber.setText("Sales Return Invoice: " + RetInv);
-                                    invoicedAmount.setText(common_class.formatCurrency(InvTot));
-                                    netamount.setText(common_class.formatCurrency(RetOrdVal));
-                                    toPayAmount.setText(common_class.formatCurrency(RemAmt));
+                                    netamount.setText(common_class.formatCurrency(InvTot));
                                 }
                             } catch (Exception e) {
                                 Toast.makeText(context, "Error 2: " + e.getMessage(), Toast.LENGTH_SHORT).show();
