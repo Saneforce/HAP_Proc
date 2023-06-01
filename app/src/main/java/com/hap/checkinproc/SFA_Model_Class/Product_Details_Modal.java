@@ -252,6 +252,10 @@ public class Product_Details_Modal {
     @Expose
     private Double MarginTyp;
 
+    @SerializedName("RateTyp")
+    @Expose
+    private Double RateTyp;
+
     public Double getBillRate() {
         return BillRate;
     }
@@ -296,6 +300,14 @@ public class Product_Details_Modal {
     }
     public void setMarginTyp(Double marginTyp) {
         MarginTyp = marginTyp;
+    }
+
+    public Double getRateTyp() {
+        return RateTyp;
+    }
+
+    public void setRateTyp(Double rateTyp) {
+        RateTyp = rateTyp;
     }
 
     public int getOnHand() {

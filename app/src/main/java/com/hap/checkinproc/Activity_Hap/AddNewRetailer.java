@@ -2196,7 +2196,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                             for (int i = 0; i < categoryList.size(); i++) {
                                 String ERP = categoryList.get(i).getCheckouttime() + ",";
-                                Log.v(TAG + "cat:", "pos" + i + ":" + categoryList.get(i).getFlag() + ":ERP:" + ERP + ":grpERP:" + distGrpERP);
+                                Log.v(TAG + "cat:", "pos" + i+"-"+ categoryList.get(i).getId() + ":" + categoryList.get(i).getFlag() + ":ERP:" + ERP + ":grpERP:" + distGrpERP);
                                 if (categoryList.get(i).getFlag().contains(list.get(position).getName()) && ERP.contains(distGrpERP + ","))
                                     typeCatList.add(categoryList.get(i));
                             }

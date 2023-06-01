@@ -711,6 +711,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
                             ProdItem.put("Margin", String.format("%.2f", Getorder_Array_List.get(z).getMargin()));
                             ProdItem.put("MarginTyp", String.format("%.2f", Getorder_Array_List.get(z).getMarginTyp()));
+                            ProdItem.put("RateTyp", String.format("%.2f", Getorder_Array_List.get(z).getRateTyp()));
                             ProdItem.put("MRP", Getorder_Array_List.get(z).getMRP());
                             ProdItem.put("RTEd", Getorder_Array_List.get(z).getRateEdited());
 

@@ -801,6 +801,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             ProdItem.put("MRP", String.valueOf(Getorder_Array_List.get(z).getMRP()));
                             ProdItem.put("Margin", String.format("%.2f", Getorder_Array_List.get(z).getMargin()));
                             ProdItem.put("MarginTyp", String.format("%.2f", Getorder_Array_List.get(z).getMarginTyp()));
+                            ProdItem.put("RateTyp", String.format("%.2f", Getorder_Array_List.get(z).getRateTyp()));
                             ProdItem.put("RTEd", Getorder_Array_List.get(z).getRateEdited());
                             ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
