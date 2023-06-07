@@ -2,11 +2,14 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +34,10 @@ import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.AdapterPendingOrder;
+import com.hap.checkinproc.SFA_Adapter.CancelOrderAdapter;
+import com.hap.checkinproc.SFA_Adapter.CoolerPositionAdapter;
+import com.hap.checkinproc.SFA_Adapter.SalesReturnInvoiceAdapter;
+import com.hap.checkinproc.SFA_Model_Class.CancelOrderModel;
 import com.hap.checkinproc.SFA_Model_Class.ModelPendingOrder;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
@@ -51,14 +59,16 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
     ImageView home;
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    TextView headText,clscnclw;
+    TextView headText,clscnclw, cancelMessage, confirmCancel;
     RelativeLayout rlCnclOrd;
 
     public static boolean CometoPending = false;
+    String selectedInvoice;
 
     Context context = this;
 
     ArrayList<ModelPendingOrder> list = new ArrayList<>();
+    ArrayList<CancelOrderModel> cancelOrderModels = new ArrayList<>();
     AdapterPendingOrder adapter;
 
     Common_Class common_class;
@@ -75,16 +85,70 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         recyclerView = findViewById(R.id.rvDashboard);
         progressBar = findViewById(R.id.progressBar_pending_orders);
         headText = findViewById(R.id.headtext);
+        cancelMessage = findViewById(R.id.cancelMessage);
+        confirmCancel = findViewById(R.id.confirmCancel);
 
         shared_common_pref = new Shared_Common_Pref(context);
         common_class = new Common_Class(PendingOrdersActivity.this);
         common_class.gotoHomeScreen(context, home);
 
+        cancelOrderModels = new ArrayList<>();
+
         loadData();
         clscnclw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cancelMessage.setText("");
                 rlCnclOrd.setVisibility(View.GONE);
+            }
+        });
+        
+        loadCancelRemarks();
+    }
+
+    private void loadCancelRemarks() {
+        cancelOrderModels.clear();
+        Map<String, String> params = new HashMap<>();
+        params.put("axn", "get_order_cancel_remarks");
+        params.put("currentTime", Common_Class.GetDate());
+        params.put("sfCode", Shared_Common_Pref.Sf_Code);
+        params.put("State_Code", Shared_Common_Pref.StateCode);
+        params.put("divisionCode", Shared_Common_Pref.Div_Code);
+        params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getUniversalData(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body() == null) {
+                            Toast.makeText(context, "Error 1: Response is Null", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        String result = response.body().string();
+                        JSONObject myJsonObject = new JSONObject(result);
+                        if (myJsonObject.getBoolean("success")) {
+                            JSONArray array = myJsonObject.getJSONArray("response");
+                            for (int i = 0; i < array.length(); i++) {
+                                int id = array.getJSONObject(i).getInt("id");
+                                String remarks = array.getJSONObject(i).getString("remarks");
+                                cancelOrderModels.add(new CancelOrderModel(id, remarks));
+                            }
+                        } else {
+                            Toast.makeText(context, "Error 2: Response Not Success", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error 3: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Error 4: Response Not Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Error 5: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -158,11 +222,46 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 });
                             });
                             adapter.setCancelClicked((model, position) -> {
-                                AlertDialogBox.showDialog(PendingOrdersActivity.this, "HAP Check-In", "Do you confirm to cancel this order " ,
+                                selectedInvoice = model.getOrderID();
+                                AlertDialogBox.showDialog(PendingOrdersActivity.this, "HAP Check-In", "Do you want to cancel this order?" ,
                                         "Yes", "No", false, new AlertBox() {
                                             @Override
                                             public void PositiveMethod(DialogInterface dialog, int id) {
                                                 rlCnclOrd.setVisibility(View.VISIBLE);
+                                                cancelMessage.setOnClickListener(v -> {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                                    View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
+                                                    builder.setView(view);
+                                                    builder.setCancelable(false);
+
+                                                    TextView title = view.findViewById(R.id.title);
+                                                    RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
+                                                    TextView close = view.findViewById(R.id.close);
+
+                                                    title.setText("Select Reason");
+                                                    recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                                                    CancelOrderAdapter adapter = new CancelOrderAdapter(cancelOrderModels, context);
+                                                    recyclerView1.setAdapter(adapter);
+                                                    AlertDialog dialog1 = builder.create();
+                                                    adapter.setItemSelected((model1, position1) -> {
+                                                        cancelMessage.setText(model1.getRemark());
+                                                        dialog1.dismiss();
+                                                    });
+                                                    close.setOnClickListener(v1 -> dialog1.dismiss());
+                                                    if (cancelOrderModels.size() > 0) {
+                                                        dialog1.show();
+                                                    } else {
+                                                        Toast.makeText(context, "No templates found", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                confirmCancel.setOnClickListener(v -> {
+                                                    String message = cancelMessage.getText().toString().trim();
+                                                    if (TextUtils.isEmpty(message)) {
+                                                        Toast.makeText(context, "Please Select a Reason", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        cancelOrder(message, position);
+                                                    }
+                                                });
                                             }
 
                                             @Override
@@ -192,6 +291,60 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                 Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void cancelOrder(String message, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure you want to cancel this order?");
+        builder.setCancelable(false);
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Map<String, String> params = new HashMap<>();
+            params.put("axn", "update_order_cancel");
+            params.put("remarks", message);
+            params.put("orderId", selectedInvoice);
+            params.put("currentTime", Common_Class.GetDate());
+            params.put("sfCode", Shared_Common_Pref.Sf_Code);
+            params.put("State_Code", Shared_Common_Pref.StateCode);
+            params.put("divisionCode", Shared_Common_Pref.Div_Code);
+            params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
+            Call<ResponseBody> call = apiInterface.getUniversalData(params);
+            call.enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            if (response.body() == null) {
+                                Toast.makeText(context, "Error 1: Response is Null", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            String result = response.body().string();
+                            JSONObject jsonObject = new JSONObject(result);
+                            if (jsonObject.getBoolean("success")) {
+                                cancelMessage.setText("");
+                                rlCnclOrd.setVisibility(View.GONE);
+                                Toast.makeText(context, "Order cancelled successfully", Toast.LENGTH_SHORT).show();
+                                list.remove(position);
+                                adapter.notifyItemRemoved(position);
+                            } else {
+                                Toast.makeText(context, "Error 2: Response Not Success", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error 3: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(context, "Error 4: Response Not Success", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    Toast.makeText(context, "Error 5: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+        builder.create().show();
     }
 
     @Override

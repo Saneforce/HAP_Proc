@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -266,6 +267,51 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             setMenuAdapter();
         }
 
+        getNotify();
+
+    }
+
+    private void getNotify() {
+        Shared_Common_Pref mShared_common_pref = new Shared_Common_Pref(this);
+        if (com.hap.checkinproc.Activity_Hap.Common_Class.isNullOrEmpty(mShared_common_pref.getvalue(Constants.DB_TWO_GET_NOTIFY))) {
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptCall = apiInterface.getDataArrayListDist("get/dist_notify",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), sharedCommonPref.getvalue(Constants.Distributor_Id), "", null);
+            rptCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    try {
+                        JsonArray res = response.body();
+                        assignGetNotify(res);
+                        mShared_common_pref.save(Constants.DB_TWO_GET_NOTIFY, gson.toJson(response.body()));
+                    } catch (Exception e) {}
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {}
+            });
+        } else {
+            Type userType = new com.google.common.reflect.TypeToken<JsonArray>() {}.getType();
+            JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_NOTIFY), userType));
+            assignGetNotify(arr);
+        }
+    }
+
+    void assignGetNotify(JsonArray res) {
+        TextView txt = findViewById(R.id.MRQtxt);
+        txt.setText("");
+        txt.setVisibility(View.GONE);
+        String sMsg = "";
+        for (int il = 0; il < res.size(); il++) {
+            JsonObject Itm = res.get(il).getAsJsonObject();
+            sMsg += Itm.get("NtfyMsg").getAsString();
+        }
+        if (!sMsg.equalsIgnoreCase("")) {
+            txt.setText(Html.fromHtml(sMsg));
+            txt.setVisibility(View.VISIBLE);
+            txt.setSelected(true);
+        }
     }
 
     void setMenuAdapter() {
