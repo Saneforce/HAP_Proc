@@ -38,7 +38,7 @@ public class GrnPendingAdapter extends RecyclerView.Adapter<GrnPendingAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         try {
-            OutletReport_View_Modal Product_Details_Modal = listt.get(holder.getAdapterPosition());
+            OutletReport_View_Modal Product_Details_Modal = listt.get(holder.getBindingAdapterPosition());
 
             holder.prodName.setText(Product_Details_Modal.getProductName());
             holder.prodCode.setText(Product_Details_Modal.getProductCode());

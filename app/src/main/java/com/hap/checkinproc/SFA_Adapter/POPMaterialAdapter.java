@@ -124,7 +124,7 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                 public void onClick(View v) {
                     try {
 
-                        if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() >= 3) {
+                        if (mData.get(holder.getBindingAdapterPosition()).getFileUrls() != null && mData.get(holder.getBindingAdapterPosition()).getFileUrls().size() >= 3) {
                             Toast.makeText(context, "Limit Exceed...", Toast.LENGTH_SHORT).show();
 
                         } else {
@@ -137,10 +137,10 @@ public class POPMaterialAdapter extends RecyclerView.Adapter<POPMaterialAdapter.
                                     File file = new File(fullPath);
                                     Uri contentUri = Uri.fromFile(file);
 
-                                    if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
+                                    if (mData.get(holder.getBindingAdapterPosition()).getFileUrls() != null && mData.get(holder.getBindingAdapterPosition()).getFileUrls().size() > 0)
                                         list = (mData.get(position).getFileUrls());
                                     list.add(contentUri.toString());
-                                    mData.get(holder.getAdapterPosition()).setFileUrls(list);
+                                    mData.get(holder.getBindingAdapterPosition()).setFileUrls(list);
 
                                     filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
                                     holder.rvFile.setAdapter(filesAdapter);

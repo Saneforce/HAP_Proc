@@ -63,8 +63,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
-        if (fruitViewHolder.getAdapterPosition() >= contactListFiltered.size()) return;
-        final Common_Model contact = contactListFiltered.get(fruitViewHolder.getAdapterPosition());
+        if (fruitViewHolder.getBindingAdapterPosition() >= contactListFiltered.size()) return;
+        final Common_Model contact = contactListFiltered.get(fruitViewHolder.getBindingAdapterPosition());
         fruitViewHolder.mTextName.setText("" + contact.getName());
         String getAddress = contact.getAddress();
         String getPhone = contact.getPhone();
@@ -91,7 +91,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
             if (shared_common_pref.getvalue(Constants.MAP_KEY).equals(contact.getName())) {
                 fruitViewHolder.checkBox_select.setChecked(true);
-                lastCheckedPos = fruitViewHolder.getAdapterPosition();
+                lastCheckedPos = fruitViewHolder.getBindingAdapterPosition();
                 lastChecked = fruitViewHolder.checkBox_select;
             }
         } else if (typeName == 500) {
@@ -115,7 +115,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 CheckBox cb = (CheckBox) buttonView;
-                int clickedPos = fruitViewHolder.getAdapterPosition();
+                int clickedPos = fruitViewHolder.getBindingAdapterPosition();
 
 
                 if (cb.isChecked()) {
@@ -211,7 +211,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 if (typeName == 1000) {
 
                 } else {
-                    updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+                    updateUi.OnclickMasterType(contactListFiltered, this.getBindingAdapterPosition(), typeName);
                 }
 
             } catch (Exception e) {

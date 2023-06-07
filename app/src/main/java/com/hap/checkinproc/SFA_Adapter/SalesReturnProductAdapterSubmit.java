@@ -35,18 +35,18 @@ public class SalesReturnProductAdapterSubmit extends RecyclerView.Adapter<SalesR
 
     @Override
     public void onBindViewHolder(@NonNull SalesReturnProductAdapterSubmit.ViewHolder holder, int position) {
-        SalesReturnProductModel model = list.get(holder.getAdapterPosition());
-        holder.productName.setText(list.get(holder.getAdapterPosition()).getProduct_Name());
-        holder.materialCode.setText(list.get(holder.getAdapterPosition()).getSale_Erp_Code());
+        SalesReturnProductModel model = list.get(holder.getBindingAdapterPosition());
+        holder.productName.setText(list.get(holder.getBindingAdapterPosition()).getProduct_Name());
+        holder.materialCode.setText(list.get(holder.getBindingAdapterPosition()).getSale_Erp_Code());
         String mrp = HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(model.getMRP());
         holder.MRP.setText(mrp);
         String rates = HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(model.getPrice());
         holder.rate.setText(rates);
-        holder.invUOM.setText(list.get(holder.getAdapterPosition()).getUOM());
-        holder.invQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getInvQty()));
-        holder.retUOM.setText(list.get(holder.getAdapterPosition()).getUOM());
-        holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
-        String value = HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getRetAmount());
+        holder.invUOM.setText(list.get(holder.getBindingAdapterPosition()).getUOM());
+        holder.invQty.setText(String.valueOf(list.get(holder.getBindingAdapterPosition()).getInvQty()));
+        holder.retUOM.setText(list.get(holder.getBindingAdapterPosition()).getUOM());
+        holder.retQty.setText(String.valueOf(list.get(holder.getBindingAdapterPosition()).getRetQty()));
+        String value = HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getBindingAdapterPosition()).getRetAmount());
         holder.retAmount.setText(value);
     }
 

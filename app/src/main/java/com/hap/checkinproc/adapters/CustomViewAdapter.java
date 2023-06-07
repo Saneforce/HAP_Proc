@@ -82,7 +82,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
 
 
         Product_Array mProductArray = mProduct_arrays.get(position);
-        final int positions = holder.getAdapterPosition();
+        final int positions = holder.getBindingAdapterPosition();
         if (!mProductArray.getProductqty().toString().equals("0")) {
 
             quntaity = Integer.valueOf(mProductArray.getProductqty());

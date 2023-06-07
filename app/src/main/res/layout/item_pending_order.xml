@@ -72,11 +72,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/C5dp">
+            android:padding="@dimen/C2dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/C10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -85,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:text="order id"
                     android:textColor="@color/grey_600"
+                    android:textStyle="bold"
                     android:textSize="@dimen/C13dp" />
 
                 <TextView
@@ -95,6 +97,7 @@
                     android:text="Date time"
                     android:layout_marginEnd="5dp"
                     android:textColor="@color/grey_600"
+                    android:textStyle="bold"
                     android:textSize="11sp" />
 
             </RelativeLayout>
@@ -107,6 +110,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_600"
                 android:textSize="12dp"
+                android:paddingLeft="@dimen/C10dp"
+                android:paddingRight="@dimen/C10dp"
                 android:visibility="visible" />
 
             <TextView
@@ -116,8 +121,33 @@
                 android:fontFamily="sans-serif"
                 android:text="Total"
                 android:textColor="@color/black"
+                android:padding="@dimen/C10dp"
                 android:textSize="@dimen/C13dp" />
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/C10dp"
+    android:paddingLeft="@dimen/C5dp"
+    android:orientation="horizontal">
+            <TextView
+                android:id="@+id/cancel_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="15dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_gravity="end"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                android:textSize="@dimen/C13dp"
+                android:background="@drawable/button_red"
+                android:textStyle="bold" />
+    <androidx.legacy.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
             <TextView
                 android:id="@+id/view_order"
                 android:layout_width="wrap_content"
@@ -133,7 +163,7 @@
                 android:textSize="@dimen/C13dp"
                 android:background="@drawable/button_blue"
                 android:textStyle="bold" />
-
+        </LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

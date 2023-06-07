@@ -59,7 +59,7 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
 
                     JSONObject itm = null;
                     try {
-                        itm = mlist.getJSONObject(holder.getAdapterPosition());
+                        itm = mlist.getJSONObject(holder.getBindingAdapterPosition());
                         if (itemClick != null) itemClick.onItemClick(itm);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -70,8 +70,8 @@ public class RyclBrandListItemAdb extends RecyclerView.Adapter<RyclBrandListItem
                         pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     }
                     pholder = holder;
-                    common_class.brandPos = holder.getAdapterPosition();
-                    //  showOrderItemList(holder.getAdapterPosition(), "");
+                    common_class.brandPos = holder.getBindingAdapterPosition();
+                    //  showOrderItemList(holder.getBindingAdapterPosition(), "");
                     holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);

@@ -70,7 +70,7 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
 
                     JSONObject itm = null;
                     try {
-                        itm = mlist.getJSONObject(holder.getAdapterPosition());
+                        itm = mlist.getJSONObject(holder.getBindingAdapterPosition());
                         if (itemClick != null) itemClick.onItemClick(itm);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -81,7 +81,7 @@ public class RyclListItemAdb extends RecyclerView.Adapter<RyclListItemAdb.ViewHo
                         pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     }
                     pholder = holder;
-                    common_class.grpPos = holder.getAdapterPosition();
+                    common_class.grpPos = holder.getBindingAdapterPosition();
                     holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);

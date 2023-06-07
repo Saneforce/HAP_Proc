@@ -116,8 +116,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                         holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(qty *
                                 price));
 
-                        mData.get(holder.getAdapterPosition()).setQty(qty);
-                        mData.get(holder.getAdapterPosition()).setAmount(qty * price);
+                        mData.get(holder.getBindingAdapterPosition()).setQty(qty);
+                        mData.get(holder.getBindingAdapterPosition()).setAmount(qty * price);
                     } catch (Exception e) {
                         Log.v(TAG + " qty:", e.getMessage());
                     }
@@ -164,8 +164,8 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
                         holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(qty * price));
 
-                        mData.get(holder.getAdapterPosition()).setAmount(qty * price);
-                        mData.get(holder.getAdapterPosition()).setPrice(price);
+                        mData.get(holder.getBindingAdapterPosition()).setAmount(qty * price);
+                        mData.get(holder.getBindingAdapterPosition()).setPrice(price);
                     } catch (Exception e) {
                         Log.v(TAG + " :price: ", e.getMessage());
                     }
@@ -186,7 +186,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 
-                    mData.get(holder.getAdapterPosition()).setScheme((charSequence.toString()));
+                    mData.get(holder.getBindingAdapterPosition()).setScheme((charSequence.toString()));
 
 
                 }
@@ -209,7 +209,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     if (charSequence.toString().equals("")) {
 
                     } else {
-                        mData.get(holder.getAdapterPosition()).setSku((charSequence.toString()));
+                        mData.get(holder.getBindingAdapterPosition()).setSku((charSequence.toString()));
                     }
 
 
@@ -224,7 +224,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
             holder.rlDeleteBrand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteItem(holder.getAdapterPosition());
+                    deleteItem(holder.getBindingAdapterPosition());
 
                 }
             });
@@ -241,10 +241,10 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                                 File file = new File(fullPath);
                                 Uri contentUri = Uri.fromFile(file);
 
-                                if (mData.get(holder.getAdapterPosition()).getFileUrls() != null && mData.get(holder.getAdapterPosition()).getFileUrls().size() > 0)
+                                if (mData.get(holder.getBindingAdapterPosition()).getFileUrls() != null && mData.get(holder.getBindingAdapterPosition()).getFileUrls().size() > 0)
                                     list = (mData.get(position).getFileUrls());
                                 list.add(contentUri.toString());
-                                mData.get(holder.getAdapterPosition()).setFileUrls(list);
+                                mData.get(holder.getBindingAdapterPosition()).setFileUrls(list);
 
                                 filesAdapter = new FilesAdapter(mData.get(position).getFileUrls(), R.layout.adapter_local_files_layout, context);
                                 holder.rvFiles.setAdapter(filesAdapter);

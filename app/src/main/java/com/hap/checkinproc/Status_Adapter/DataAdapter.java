@@ -152,7 +152,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
         @Override
         public void onClick(View v) {
-            updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+            updateUi.OnclickMasterType(contactListFiltered, this.getBindingAdapterPosition(), typeName);
         }
     }
 

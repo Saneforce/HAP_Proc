@@ -102,7 +102,7 @@ public class InshopRetailerAdapter extends RecyclerView.Adapter<InshopRetailerAd
 //        holder.layparent.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+//                mAdapterOnClick.onIntentClick(holder.getBindingAdapterPosition());
 //            }
 //        });
 

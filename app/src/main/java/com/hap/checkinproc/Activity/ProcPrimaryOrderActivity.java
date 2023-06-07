@@ -1972,7 +1972,7 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
             try {
 
 
-                Product_Details_Modal ProductItem = Product_Details_Modalitem.get(holder.getAdapterPosition());
+                Product_Details_Modal ProductItem = Product_Details_Modalitem.get(holder.getBindingAdapterPosition());
                 holder.productname.setText("" + ProductItem.getName().toUpperCase());
                 holder.Rate.setText("₹" + formatter.format(ProductItem.getSBRate()));// * (Integer.parseInt(Product_Details_Modal.getConversionFactor()))));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(ProductItem.getAmount()));
@@ -1989,7 +1989,7 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                     holder.tvProERPCode.setText("" + ProductItem.getERP_Code());
 
                     holder.tvMRP.setText("₹" + ProductItem.getMRP());
-                    holder.totalQty.setText("Total Qty : " + (int) oQty);//((Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
+                    holder.totalQty.setText("Total Qty : " + (int) oQty);//((Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * (Integer.parseInt(Product_Details_Modal.getConversionFactor())))));
 
                     if (!ProductItem.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -2008,9 +2008,9 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
 
                     String name = "";
                     String uomQty = "";
-                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
-                        name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
-                        uomQty = uomQty + "" + qtyFormat.format((Double.parseDouble(ProductItem.getConversionFactor()) * ProductItem.getQty()) / (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+                    for (int i = 0; i < Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getUOMList().size(); i++) {
+                        name = name + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                        uomQty = uomQty + "" + qtyFormat.format((Double.parseDouble(ProductItem.getConversionFactor()) * ProductItem.getQty()) / (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
 
                     }
 
@@ -2107,22 +2107,22 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = enterQty;//* Double.valueOf(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()));
-                            double ProdAmt = totQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getSBRate();
+                            double totQty = enterQty;//* Double.valueOf(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getConversionFactor()));
+                            double ProdAmt = totQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getSBRate();
 
-                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty((int) enterQty);
+                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(ProdAmt));
-                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(ProdAmt);
+                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(ProdAmt);
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(ProdAmt));
                                 holder.totalQty.setText("Total Qty : " + (int) totQty);
 
                                 String name = "";
                                 String uomQty = "";
-                                for (int i = 0; i < Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().size(); i++) {
-                                    name = name + Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
-                                    uomQty = uomQty + "" + qtyFormat.format((Double.parseDouble(Product_Details_Modalitem.get(holder.getAdapterPosition()).getConversionFactor()) * enterQty) /
-                                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
+                                for (int i = 0; i < Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getUOMList().size(); i++) {
+                                    name = name + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getUOMList().get(i).getUOM_Nm() + "\n";
+                                    uomQty = uomQty + "" + qtyFormat.format((Double.parseDouble(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getConversionFactor()) * enterQty) /
+                                            (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getUOMList().get(i).getCnvQty())) + "\n";
 
                                 }
 
@@ -2151,13 +2151,13 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                                         haveVal = true;
                                         double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
 
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code(product_details_modalArrayList.get(i).getOff_Pro_code());
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name(product_details_modalArrayList.get(i).getOff_Pro_name());
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_Unit(product_details_modalArrayList.get(i).getOff_Pro_Unit());
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree_val(product_details_modalArrayList.get(i).getFree());
+                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_code(product_details_modalArrayList.get(i).getOff_Pro_code());
+                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_name(product_details_modalArrayList.get(i).getOff_Pro_name());
+                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_Unit(product_details_modalArrayList.get(i).getOff_Pro_Unit());
+                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree_val(product_details_modalArrayList.get(i).getFree());
 
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount_value(String.valueOf(product_details_modalArrayList.get(i).getDiscount()));
-                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount_type(product_details_modalArrayList.get(i).getDiscount_type());
+                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount_value(String.valueOf(product_details_modalArrayList.get(i).getDiscount()));
+                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount_type(product_details_modalArrayList.get(i).getDiscount_type());
 
 
                                         if (totQty >= schemeVal) {
@@ -2173,16 +2173,16 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                                                         double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
                                                                 get(i).getFree());
 
-                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree(String.valueOf(Math.round(freeVal)));
+                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree(String.valueOf(Math.round(freeVal)));
                                                     } else {
                                                         int val = (int) (totQty / highestScheme);
                                                         int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
-                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree(String.valueOf(freeVal));
+                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree(String.valueOf(freeVal));
                                                     }
                                                 } else {
 
                                                     holder.Free.setText("0");
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree("0");
+                                                    Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree("0");
 
                                                 }
 
@@ -2194,7 +2194,7 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                                                         )) / 100);
 
 
-                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(discountVal);
+                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(discountVal);
 
                                                     } else {
                                                         //Rs
@@ -2207,14 +2207,14 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
                                                             int val = (int) (totQty / highestScheme);
                                                             freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
                                                         }
-                                                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(freeVal);
+                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(freeVal);
 
                                                     }
 
 
                                                 } else {
                                                     holder.Disc.setText("₹0.00");
-                                                    Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(0.00);
+                                                    Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
 
                                                 }
 
@@ -2223,10 +2223,10 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
 
                                         } else {
                                             holder.Free.setText("0");
-                                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree("0");
+                                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree("0");
 
                                             holder.Disc.setText("₹0.00");
-                                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(0.00);
+                                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
 
 
                                         }
@@ -2241,34 +2241,34 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
 
                             if (!haveVal) {
                                 holder.Free.setText("0");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setFree("0");
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree("0");
 
                                 holder.Disc.setText("₹0.00");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount(0.00);
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_code("");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_name("");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setOff_Pro_Unit("");
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_code("");
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_name("");
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_Unit("");
 
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount_value("0.00");
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setDiscount_type("");
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount_value("0.00");
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount_type("");
 
 
                             } else {
 
-                                Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount((Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()) -
-                                        (Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
+                                Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount((Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()) -
+                                        (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
-                                holder.Free.setText("" + Product_Details_Modalitem.get(holder.getAdapterPosition()).getFree());
-                                holder.Disc.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getDiscount()));
+                                holder.Free.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getFree());
+                                holder.Disc.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
-                                holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
+                                holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
 
 
                             }
 
-                            sumofTax(Product_Details_Modalitem, holder.getAdapterPosition());
-                            holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
-                            holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getTax()));
+                            sumofTax(Product_Details_Modalitem, holder.getBindingAdapterPosition());
+                            holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
+                            holder.tvTaxLabel.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getTax()));
 
                             updateToTALITEMUI();
 

@@ -98,7 +98,7 @@ public class RetailerNearByADP extends RecyclerView.Adapter<RetailerNearByADP.My
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int posi = holder.getAdapterPosition();
+                    int posi = holder.getBindingAdapterPosition();
                     mAdapterOnClick.onIntentClick(jLists.get(posi).getAsJsonObject(), posi);
                     mAdapterOnClick.onIntentClick(posi);
                 }

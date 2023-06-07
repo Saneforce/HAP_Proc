@@ -75,7 +75,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
 
 
                         Intent intent = new Intent(context, ProductImageView.class);
-                        intent.putExtra("ImageUrl", AryDta.get(holder.getAdapterPosition()));
+                        intent.putExtra("ImageUrl", AryDta.get(holder.getBindingAdapterPosition()));
                         context.startActivity(intent);
                     } catch (Exception e) {
                         Log.e("FileAdapter: ", e.getMessage());
@@ -90,7 +90,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            AryDta.remove(holder.getAdapterPosition());
+                            AryDta.remove(holder.getBindingAdapterPosition());
                             notifyDataSetChanged();
 
                         }

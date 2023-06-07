@@ -55,7 +55,7 @@ public class OutletMasterCategoryFilterAdapter extends RecyclerView.Adapter<Outl
 
                     String itm = null;
                     try {
-                        itm = mlist.get(holder.getAdapterPosition());
+                        itm = mlist.get(holder.getBindingAdapterPosition());
                         if (itemClick != null) itemClick.CallMobile(itm);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -66,7 +66,7 @@ public class OutletMasterCategoryFilterAdapter extends RecyclerView.Adapter<Outl
                         pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     }
                     pholder = holder;
-                    common_class.grpPos = holder.getAdapterPosition();
+                    common_class.grpPos = holder.getBindingAdapterPosition();
                     holder.gridcolor.setBackground(mContext.getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);

@@ -92,9 +92,9 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
                         if (s.toString().equals(""))
-                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(0);
+                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty(0);
                         else
-                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(Integer.parseInt(s.toString()));
+                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty(Integer.parseInt(s.toString()));
                     } catch (Exception e) {
 
                     }

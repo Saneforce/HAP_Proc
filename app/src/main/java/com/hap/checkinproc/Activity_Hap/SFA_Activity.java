@@ -168,6 +168,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         if (!Common_Class.GetDatewothouttime().equalsIgnoreCase(sOffShown)){
             sharedCommonPref.clear_pref(Constants.DB_Offer_NOTIFY);
         }
+
         btnCloseOffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

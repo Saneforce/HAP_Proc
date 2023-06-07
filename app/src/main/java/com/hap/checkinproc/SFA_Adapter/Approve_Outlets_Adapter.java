@@ -81,7 +81,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
 
         holder.approve.setOnClickListener(v -> {
             if (approveClicked != null) {
-                approveClicked.OnClick(model, "", "0", holder.getAdapterPosition()); // 0 means approve, 1 means reject, 2 means pending
+                approveClicked.OnClick(model, "", "0", holder.getBindingAdapterPosition()); // 0 means approve, 1 means reject, 2 means pending
             }
         });
 
@@ -102,7 +102,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
                     Toast.makeText(context, "Reason for Rejection Required", Toast.LENGTH_SHORT).show();
                 } else {
                     if (rejectClicked != null) {
-                        rejectClicked.OnClick(model, message, "1", holder.getAdapterPosition()); // 0 means approve, 1 means reject, 2 means pending
+                        rejectClicked.OnClick(model, message, "1", holder.getBindingAdapterPosition()); // 0 means approve, 1 means reject, 2 means pending
                         dialog.dismiss();
                     }
                 }

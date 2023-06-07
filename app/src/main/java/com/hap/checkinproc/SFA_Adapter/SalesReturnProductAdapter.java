@@ -50,22 +50,22 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
 
     @Override
     public void onBindViewHolder(@NonNull SalesReturnProductAdapter.ViewHolder holder, int pos) {
-        holder.productName.setText(list.get(holder.getAdapterPosition()).getProduct_Name());
-        String matCode = "Mat Code: " + list.get(holder.getAdapterPosition()).getSale_Erp_Code();
+        holder.productName.setText(list.get(holder.getBindingAdapterPosition()).getProduct_Name());
+        String matCode = "Mat Code: " + list.get(holder.getBindingAdapterPosition()).getSale_Erp_Code();
         holder.materialCode.setText(matCode);
-        String mRp = "MRP: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getMRP());
+        String mRp = "MRP: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getBindingAdapterPosition()).getMRP());
         holder.MRP.setText(mRp);
-        String raTe = "Rate: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getPrice());
+        String raTe = "Rate: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getBindingAdapterPosition()).getPrice());
         holder.rate.setText(raTe);
-        holder.invUOM.setText(list.get(holder.getAdapterPosition()).getUOM());
-        holder.invQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getInvQty()));
-        holder.retUOM.setText(list.get(holder.getAdapterPosition()).getUOM());
-        holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
-        String value = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getAdapterPosition()).getRetAmount());
+        holder.invUOM.setText(list.get(holder.getBindingAdapterPosition()).getUOM());
+        holder.invQty.setText(String.valueOf(list.get(holder.getBindingAdapterPosition()).getInvQty()));
+        holder.retUOM.setText(list.get(holder.getBindingAdapterPosition()).getUOM());
+        holder.retQty.setText(String.valueOf(list.get(holder.getBindingAdapterPosition()).getRetQty()));
+        String value = "Return Amount: " + HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(list.get(holder.getBindingAdapterPosition()).getRetAmount());
         holder.retAmount.setText(value);
 
         holder.retQtyMinus.setOnClickListener(v -> {
-            int retQtyCount = list.get(holder.getAdapterPosition()).getRetQty();
+            int retQtyCount = list.get(holder.getBindingAdapterPosition()).getRetQty();
             if (retQtyCount > 0) {
                 int newQty = retQtyCount - 1;
                 holder.retQty.setText(String.valueOf(newQty));
@@ -73,8 +73,8 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
         });
 
         holder.retQtyPlus.setOnClickListener(v -> {
-            int newQty = list.get(holder.getAdapterPosition()).getRetQty() + 1;
-            if (list.get(holder.getAdapterPosition()).getInvQty() >= newQty) {
+            int newQty = list.get(holder.getBindingAdapterPosition()).getRetQty() + 1;
+            if (list.get(holder.getBindingAdapterPosition()).getInvQty() >= newQty) {
                 holder.retQty.setText(String.valueOf(newQty));
             } else {
                 Toast.makeText(context, "Return quantity can't exceed the invoice quantity", Toast.LENGTH_SHORT).show();
@@ -96,14 +96,14 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
                         Qty = s.toString();
                     }
                     int newQty = Integer.parseInt(Qty);
-                    if (newQty != list.get(holder.getAdapterPosition()).getRetQty()) {
-                        int invQty = list.get(holder.getAdapterPosition()).getInvQty();
+                    if (newQty != list.get(holder.getBindingAdapterPosition()).getRetQty()) {
+                        int invQty = list.get(holder.getBindingAdapterPosition()).getInvQty();
                         if (invQty >= newQty) {
-                            double totalAmt = common_class.formatDecimalToTwoDecimal((list.get(holder.getAdapterPosition()).getInvAmount() / invQty * newQty));
-                            double totalTax = common_class.formatDecimalToTwoDecimal((list.get(holder.getAdapterPosition()).getInvTax() / invQty * newQty));
-                            list.get(holder.getAdapterPosition()).setRetQty(newQty);
-                            list.get(holder.getAdapterPosition()).setRetAmount(totalAmt);
-                            list.get(holder.getAdapterPosition()).setRetTax(totalTax);
+                            double totalAmt = common_class.formatDecimalToTwoDecimal((list.get(holder.getBindingAdapterPosition()).getInvAmount() / invQty * newQty));
+                            double totalTax = common_class.formatDecimalToTwoDecimal((list.get(holder.getBindingAdapterPosition()).getInvTax() / invQty * newQty));
+                            list.get(holder.getBindingAdapterPosition()).setRetQty(newQty);
+                            list.get(holder.getBindingAdapterPosition()).setRetAmount(totalAmt);
+                            list.get(holder.getBindingAdapterPosition()).setRetTax(totalTax);
                             String currency = "Return Amount: " + common_class.formatCurrency(totalAmt);
                             holder.retAmount.setText(currency);
                             if (calculateTotal != null) {
@@ -111,7 +111,7 @@ public class SalesReturnProductAdapter extends RecyclerView.Adapter<SalesReturnP
                             }
                             holder.retQty.setText(String.valueOf(newQty));
                         } else {
-                            holder.retQty.setText(String.valueOf(list.get(holder.getAdapterPosition()).getRetQty()));
+                            holder.retQty.setText(String.valueOf(list.get(holder.getBindingAdapterPosition()).getRetQty()));
                         }
                     }
                     isUpdating = false;

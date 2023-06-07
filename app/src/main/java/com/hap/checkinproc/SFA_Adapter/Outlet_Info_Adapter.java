@@ -131,7 +131,7 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
         holder.layparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+                mAdapterOnClick.onIntentClick(holder.getBindingAdapterPosition());
             }
         });
 

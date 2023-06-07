@@ -72,7 +72,7 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
 
                         JSONObject itm = null;
                         try {
-                            itm = mlist.getJSONObject(holder.getAdapterPosition());
+                            itm = mlist.getJSONObject(holder.getBindingAdapterPosition());
                             if (itemClick != null) itemClick.onItemClick(itm);
                         } catch (JSONException e) {
                             e.printStackTrace();

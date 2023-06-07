@@ -153,7 +153,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     @Override
     public void onBindViewHolder(Route_View_Adapter.MyViewHolder holder, int pos) {
         try {
-            Retailer_Modal_List mRetailer_Modal_List = Retailer_Modal_Listitem.get(holder.getAdapterPosition());
+            Retailer_Modal_List mRetailer_Modal_List = Retailer_Modal_Listitem.get(holder.getBindingAdapterPosition());
             holder.textviewname.setText(mRetailer_Modal_List.getName().toUpperCase());
             holder.tvRetailorCode.setText(mRetailer_Modal_List.getERP_Code());
             holder.txOwnerNm.setText(mRetailer_Modal_List.getOwner_Name());
@@ -235,7 +235,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+                    mAdapterOnClick.onIntentClick(holder.getBindingAdapterPosition());
                     Shared_Common_Pref.OutletAddress = String.valueOf(mRetailer_Modal_List.getListedDrAddress1());
                 }
             });

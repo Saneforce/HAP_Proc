@@ -61,7 +61,7 @@ public class ReportsLIstAdapter extends RecyclerView.Adapter<ReportsLIstAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
-                        adapterOnClick.onIntentClick(mArr.getJSONObject(position), holder.getAdapterPosition());
+                        adapterOnClick.onIntentClick(mArr.getJSONObject(position), holder.getBindingAdapterPosition());
                     } catch (Exception e) {
 
                     }

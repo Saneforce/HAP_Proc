@@ -48,7 +48,7 @@
                     android:textSize="8sp" />
             </LinearLayout>
 
-            <Space
+            <androidx.legacy.widget.Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -3255,7 +3255,7 @@
                     android:paddingRight="@dimen/C8dp"
                     android:src="@drawable/back_arrow" />
 
-                <Space
+                <androidx.legacy.widget.Space
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />

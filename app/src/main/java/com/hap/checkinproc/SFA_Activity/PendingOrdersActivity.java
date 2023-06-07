@@ -3,12 +3,14 @@ package com.hap.checkinproc.SFA_Activity;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
@@ -47,7 +51,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
     ImageView home;
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    TextView headText;
+    TextView headText,clscnclw;
+    RelativeLayout rlCnclOrd;
 
     public static boolean CometoPending = false;
 
@@ -65,6 +70,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         setContentView(R.layout.activity_pending_orders);
 
         home = findViewById(R.id.toolbar_home);
+        rlCnclOrd = findViewById(R.id.rlCnclOrd);
+        clscnclw = findViewById(R.id.clscnclw);
         recyclerView = findViewById(R.id.rvDashboard);
         progressBar = findViewById(R.id.progressBar_pending_orders);
         headText = findViewById(R.id.headtext);
@@ -74,6 +81,12 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         common_class.gotoHomeScreen(context, home);
 
         loadData();
+        clscnclw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlCnclOrd.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void loadData() {
@@ -143,7 +156,20 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                         startActivity(intent);
                                     }
                                 });
+                            });
+                            adapter.setCancelClicked((model, position) -> {
+                                AlertDialogBox.showDialog(PendingOrdersActivity.this, "HAP Check-In", "Do you confirm to cancel this order " ,
+                                        "Yes", "No", false, new AlertBox() {
+                                            @Override
+                                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                                rlCnclOrd.setVisibility(View.VISIBLE);
+                                            }
 
+                                            @Override
+                                            public void NegativeMethod(DialogInterface dialog, int id) {
+
+                                            }
+                                        });
                             });
                         }
                     } catch (Exception e) {

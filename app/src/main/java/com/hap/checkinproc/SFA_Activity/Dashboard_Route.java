@@ -1342,6 +1342,12 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                                     getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                                     common_class.ProgressdialogShow(0, "");
                                 }
+
+                                @Override
+                                public void onError(String msg) {
+                                    Toast.makeText(getContext(), "Product Loading Failed...\n"+msg , Toast.LENGTH_SHORT).show();
+                                    common_class.ProgressdialogShow(0, "");
+                                }
                             });
                             //}
 
