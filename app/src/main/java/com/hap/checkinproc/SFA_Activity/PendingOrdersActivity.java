@@ -59,7 +59,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
     ImageView home;
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    TextView headText,clscnclw, cancelMessage, confirmCancel;
+    TextView headText, canceledOrders, clscnclw, cancelMessage, confirmCancel;
     RelativeLayout rlCnclOrd;
 
     public static boolean CometoPending = false;
@@ -87,6 +87,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         headText = findViewById(R.id.headtext);
         cancelMessage = findViewById(R.id.cancelMessage);
         confirmCancel = findViewById(R.id.confirmCancel);
+        canceledOrders = findViewById(R.id.canceledOrders);
 
         shared_common_pref = new Shared_Common_Pref(context);
         common_class = new Common_Class(PendingOrdersActivity.this);
@@ -102,6 +103,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                 rlCnclOrd.setVisibility(View.GONE);
             }
         });
+
+        canceledOrders.setOnClickListener(v -> startActivity(new Intent(context, CancelledOrdersActivity.class)));
         
         loadCancelRemarks();
     }
