@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +56,9 @@ public class CancelledOrdersActivity extends AppCompatActivity {
     ImageView showMore, home;
     ArrayList<CommonModelWithOneString> list;
 
+    LinearLayout error_layout;
+    TextView error_info;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,8 @@ public class CancelledOrdersActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         showMore = findViewById(R.id.showMore);
         animationView = findViewById(R.id.animationView);
+        error_layout = findViewById(R.id.error_layout);
+        error_info = findViewById(R.id.error_info);
 
         common_class.gotoHomeScreen(context, home);
         String today = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -146,6 +151,7 @@ public class CancelledOrdersActivity extends AppCompatActivity {
 
     private void getDataFromAPI() {
         animationView.setVisibility(View.GONE);
+        error_layout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -184,23 +190,28 @@ public class CancelledOrdersActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(adapter);
                                     recyclerView.setVisibility(View.VISIBLE);
                                 } else {
+                                    animationView.playAnimation();
                                     animationView.setVisibility(View.VISIBLE);
                                 }
                             } else {
-                                Toast.makeText(context, "Error 2: Response Not Success", Toast.LENGTH_SHORT).show();
+                                error_layout.setVisibility(View.VISIBLE);
+                                error_info.setText("Error 1: Response Not Success");
                             }
                         } catch (Exception e) {
-                            Toast.makeText(context, "Error 3: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            error_layout.setVisibility(View.VISIBLE);
+                            error_info.setText(e.getMessage());
                         }
                     } else {
-                        Toast.makeText(context, "Error 4: Response Not Success", Toast.LENGTH_SHORT).show();
+                        error_layout.setVisibility(View.VISIBLE);
+                        error_info.setText("Error 2: Response Not Success");
                     }
                     progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                    Toast.makeText(context, "Error 5: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable e) {
+                    error_layout.setVisibility(View.VISIBLE);
+                    error_info.setText(e.getMessage());
                     progressBar.setVisibility(View.GONE);
                 }
             });
