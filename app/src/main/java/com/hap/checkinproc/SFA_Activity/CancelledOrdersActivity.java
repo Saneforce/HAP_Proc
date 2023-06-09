@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -45,12 +46,12 @@ import retrofit2.Response;
 
 public class CancelledOrdersActivity extends AppCompatActivity {
     TextView fromDateTV, toDateTV;
+    LottieAnimationView progressBar, animationView;
     Context context;
     Common_Class common_class;
     Shared_Common_Pref shared_common_pref;
     String date;
     DatePickerDialog fromDatePickerDialog;
-    ProgressBar progressBar;
     RecyclerView recyclerView;
     ImageView showMore, home;
     ArrayList<CommonModelWithOneString> list;
@@ -70,6 +71,7 @@ public class CancelledOrdersActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar);
         recyclerView = findViewById(R.id.recyclerView);
         showMore = findViewById(R.id.showMore);
+        animationView = findViewById(R.id.animationView);
 
         common_class.gotoHomeScreen(context, home);
         String today = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -143,6 +145,7 @@ public class CancelledOrdersActivity extends AppCompatActivity {
     }
 
     private void getDataFromAPI() {
+        animationView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -181,7 +184,7 @@ public class CancelledOrdersActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(adapter);
                                     recyclerView.setVisibility(View.VISIBLE);
                                 } else {
-                                    Toast.makeText(context, "No records found", Toast.LENGTH_SHORT).show();
+                                    animationView.setVisibility(View.VISIBLE);
                                 }
                             } else {
                                 Toast.makeText(context, "Error 2: Response Not Success", Toast.LENGTH_SHORT).show();
