@@ -403,8 +403,49 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         }
     }
-
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
+        try {
+            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+            if (!Common_Class.isNullOrEmpty(taxRes)) {
+                JSONObject jsonObject = new JSONObject(taxRes);
+                JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                double TotalTax=getTotTax(Product_Details_Modalitem,pos);
+                double sellAmt=Product_Details_Modalitem.get(pos).getAmount();
+                sellAmt=sellAmt/((100+(TotalTax))/100);
+
+                double wholeTax = 0;
+                List<Product_Details_Modal> taxList = new ArrayList<>();
+                double totTax=0;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                    if (jsonObject1.getString("Product_Detail_Code").equals(Product_Details_Modalitem.get(pos).getId())) {
+                        if (jsonObject1.getDouble("Tax_Val") > 0) {
+
+                            double taxCal = sellAmt *
+                                    ((jsonObject1.getDouble("Tax_Val") / 100));
+                            wholeTax += taxCal;
+
+                            taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"),
+                                    jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), taxCal));
+
+
+                        }
+                    }
+                }
+
+                //Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()     )));
+                Product_Details_Modalitem.get(pos).setProductDetailsModal(taxList);
+                //Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()
+                //        + wholeTax)));
+                Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
+            }
+        } catch (Exception e) {
+            Log.d("st","dd");
+        }
+    }
+    /*public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
             String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
             if (!Common_Class.isNullOrEmpty(taxRes)) {
@@ -438,8 +479,35 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         } catch (Exception e) {
 
         }
-    }
+    }*/
 
+    public double getTotTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
+        double totTax=0;
+        try {
+            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+            if (!Common_Class.isNullOrEmpty(taxRes)) {
+                JSONObject jsonObject = new JSONObject(taxRes);
+                JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                double wholeTax = 0;
+                List<Product_Details_Modal> taxList = new ArrayList<>();
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                    if (jsonObject1.getString("Product_Detail_Code").equals(Product_Details_Modalitem.get(pos).getId())) {
+                        if (jsonObject1.getDouble("Tax_Val") > 0) {
+                            totTax+=jsonObject1.getDouble("Tax_Val");
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            Log.d("gd","sd");
+        }
+        return totTax;
+    }
     private void FilterTypes(String GrpID) {
         try {
             JSONArray TypGroups = new JSONArray();
@@ -782,6 +850,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     responseBodyCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            sharedCommonPref.clear_pref(Constants.LOC_SECONDARY_DATA);
                             if (response.isSuccessful()) {
                                 try {
                                     common_class.ProgressdialogShow(0, "");
@@ -791,7 +860,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     Log.e("Success_Message", san);
                                     ResetSubmitBtn(1);
                                     if (san.equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_SECONDARY_DATA);
                                         common_class.CommonIntentwithFinish(Invoice_History.class);
                                     }
                                     common_class.showMsg(Order_Category_Select.this, jsonObjects.getString("Msg"));
@@ -1346,9 +1414,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             double totQty = (enterQty + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRegularQty()) * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
 
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty((int) enterQty);
-                            holder.Amount.setText(CurrencySymbol + " "  + new DecimalFormat("##0.00").format(totQty * Double.parseDouble( Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR())));
-                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
-                                    Double.parseDouble( Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR()))));
+//                            holder.Amount.setText(CurrencySymbol + " "  + new DecimalFormat("##0.00").format(totQty * Double.parseDouble( Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR())));
+//                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
+//                                    Double.parseDouble( Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR()))));
 
                             Log.d("PRICE_PTR", Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR());
                             Log.d("PRICE_Qty", String.valueOf(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty()));
@@ -1356,6 +1424,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             Log.d("PRICE_Conv", String.valueOf(totQty));
                             Log.d("PRICE_Amount", CurrencySymbol+" "  + formatter.format( (totQty)*Double.parseDouble( Product_Details_Modal.getPTR())));
 
+                            Integer intdx=holder.getBindingAdapterPosition();
+
+                            double sellAmt=Double.valueOf(formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
+                                    Double.parseDouble(Product_Details_Modalitem.get(intdx).getPTR())));
+                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(sellAmt);
+                            double TotalTax=getTotTax(Product_Details_Modalitem,intdx);
+                            sellAmt=sellAmt/((100+(TotalTax))/100);
                             if (CategoryType >= 0) {
                                 //holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);

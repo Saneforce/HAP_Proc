@@ -1081,7 +1081,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                 }
             }
         }
-        tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(0.0));
+        tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(totalvalues));
         tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
@@ -1215,13 +1215,6 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                             Product_Modal.get(pm).setQty(
                                     jsonObject1.getInt("Quantity"));
 
-                            // Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() *
-                            //         Product_Modal.get(pm).getRate())));
-
-//                            double dMRPAmt = Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
-//                                    Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
-//                            double dMrgn = dMRPAmt * (Product_Modal.get(pm).getMargin() / 100);
-//                            double sellAmt = dMRPAmt - dMrgn;
                             double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
                                     Double.parseDouble(Product_Modal.get(pm).getPTR())));
 
@@ -1353,7 +1346,9 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
                 JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
                 double TotalTax = getTotTax(Product_Details_Modalitem, pos);
-                double sellAmt = Product_Details_Modalitem.get(pos).getAmount();
+                //double sellAmt = Product_Details_Modalitem.get(pos).getAmount();
+                double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pos).getCnvQty() * Product_Modal.get(pos).getQty()) *
+                        Double.parseDouble(Product_Modal.get(pos).getPTR())));
                 sellAmt = sellAmt / ((100 + (TotalTax)) / 100);
 
                 double wholeTax = 0;

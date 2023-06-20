@@ -421,7 +421,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                 //double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
                                 //double sellAmt=dMRPAmt-dMrgn;
 
-                                double sellAmt= jsonObject1.getInt("value"); //Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) * Double.parseDouble(Product_Modal.get(pm).getPTR())));
+                                //double sellAmt= jsonObject1.getDouble("value"); //Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) * Double.parseDouble(Product_Modal.get(pm).getPTR())));
+                                double sellAmt= Double.valueOf(formatter.format(psc * Double.parseDouble(Product_Modal.get(pm).getPTR())));
                                 Product_Modal.get(pm).setAmount(sellAmt);
                                 //Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
 
@@ -870,15 +871,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         responseBodyCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                sharedCommonPref.clear_pref(Constants.LOC_INVOICE_DATA);
                                 if (response.isSuccessful()) {
                                     try {
                                         common_class.ProgressdialogShow(0, "");
                                         Log.e("JSON_VALUES", response.body().toString());
                                         JSONObject jsonObjects = new JSONObject(response.body().toString());
-
                                         ResetSubmitBtn(1);
                                         if (jsonObjects.getString("success").equals("true")) {
-                                            sharedCommonPref.clear_pref(Constants.LOC_INVOICE_DATA);
                                             common_class.CommonIntentwithFinish(Invoice_History.class);
                                         }
                                         common_class.showMsg(Invoice_Category_Select.this, jsonObjects.getString("Msg"));
@@ -1296,7 +1296,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
             }
         } catch (Exception e) {
-
+            Log.d("st","dd");
         }
     }
 
@@ -1323,7 +1323,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             }
         } catch (Exception e) {
-
+            Log.d("gd","sd");
         }
         return totTax;
     }
@@ -1414,6 +1414,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             }
         } catch (Exception e) {
 
+            Log.d("gd","sd1");
         }
 
     }
@@ -1893,7 +1894,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 */
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty((int) enterQty);
-                            holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate()));
+                            holder.Amount.setText(CurrencySymbol+" "+ new DecimalFormat("##0.00").format(totQty * Double.parseDouble( Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR())));
                             //Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                             //        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate())));
                             Integer intdx=holder.getBindingAdapterPosition();

@@ -1434,17 +1434,6 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
                                 enterQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty();
                                 common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed Stock");
                             }
-//                            else
-//                            {//if (/*Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0 &&*/
-//                                // Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() < totQty) {
-//                                totQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
-//                                enterQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty();
-//                                //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty());
-//                                common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
-//
-//                            }
-
-                            /*      if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)*/
                             holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty));
 
 

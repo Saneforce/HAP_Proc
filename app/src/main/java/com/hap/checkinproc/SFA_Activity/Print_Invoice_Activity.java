@@ -58,6 +58,7 @@ import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -929,6 +930,7 @@ if (tvRetailorPhone.getText().toString().equalsIgnoreCase("0")) tvRetailorPhone.
                 printama.printDashedLine();
                 printama.setNormalText();
 
+                    JSONArray jFreeSmry=new JSONArray();String soffp="";
                 for (int i = 0; i < Order_Outlet_Filter.size(); i++) {
 
                     String[] lines = Split(Order_Outlet_Filter.get(i).getName().toString().trim(), 19, Order_Outlet_Filter.get(i).getName().toString().trim().length());
@@ -948,6 +950,29 @@ if (tvRetailorPhone.getText().toString().equalsIgnoreCase("0")) tvRetailorPhone.
                             PCS = String.valueOf((Order_Outlet_Filter.get(i).getQty() * sDp));
                             rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate()));
                             amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getAmount()));
+                            try {
+                                if (Double.parseDouble(Order_Outlet_Filter.get(i).getFree()) > 0) {
+                                    if ((";" + soffp).indexOf(";" + Order_Outlet_Filter.get(i).getOff_Pro_name() + ";") < 0) {
+                                        soffp = Order_Outlet_Filter.get(i).getOff_Pro_name() + ";";
+                                        JSONObject jitm = new JSONObject();
+                                        jitm.put("OffName", Order_Outlet_Filter.get(i).getOff_Pro_name());
+                                        jitm.put("free", Order_Outlet_Filter.get(i).getFree());
+                                        jFreeSmry.put(jitm);
+                                    } else {
+                                        for (int ilf = 0; ilf < jFreeSmry.length(); ilf++) {
+                                            if (jFreeSmry.getJSONObject(ilf).getString("OffName") == Order_Outlet_Filter.get(i).getOff_Pro_name()) {
+                                                double xfre = Double.parseDouble(jFreeSmry.getJSONObject(ilf).getString("free"));
+                                                double cfre = Double.parseDouble(Order_Outlet_Filter.get(i).getFree());
+                                                jFreeSmry.getJSONObject(ilf).put("free", String.valueOf(xfre + cfre));
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                            catch (JSONException je){
+
+                            }
                         }
                         String RowTx= Code + repeat(" ",19-Code.length()) +repeat(" ",3-qtyValue.length()) + qtyValue
                                 +repeat(" ",4-FqtyValue.length())+ FqtyValue +repeat(" ",3-PCS.length())+ PCS +repeat(" ",8-rateValue.length()) + rateValue +repeat(" ",9-amtValue.length()) + amtValue;
@@ -1015,6 +1040,17 @@ if (tvRetailorPhone.getText().toString().equalsIgnoreCase("0")) tvRetailorPhone.
                 printama.printTextln("Net amount" + "                          " + strAmount.substring(String.valueOf(NetTotAmt).length(), strAmount.length()));
                 printama.printDashedLine();
 //                printama.printLine();
+                    printama.printTextln(" ");
+                    printama.printTextln("Free Invoice Details");
+                    printama.printDashedLine();
+
+                    for (int j = 0; j < jFreeSmry.length(); j++) {
+                        try {
+                            String Pnm=jFreeSmry.getJSONObject(j).getString("OffName");
+                            printama.printTextln(Pnm+ repeat(" ",50-Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
+                        }
+                        catch (JSONException je){}
+                    }
                 printama.addNewLine(2);
                 if(sMode.equals("Primary Order") || sMode.equals("Secondary Order") || sMode.equals("VANSALES")   || sMode.equals("INVOICE"))
                 {
@@ -1470,7 +1506,6 @@ if (tvRetailorPhone.getText().toString().equalsIgnoreCase("0")) tvRetailorPhone.
                 canvas.drawText(jFreeSmry.getJSONObject(j).getString("OffName"), x, y, paint);
                 canvas.drawText(jFreeSmry.getJSONObject(j).getString("free"), widthSize-50, y, paint);
                 y = y + 20;
-
             }
 
             if(Addinf) {

@@ -200,6 +200,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
 
                             adapter.setViewClicked((model, position) -> {
                                 CometoPending = true;
+                                shared_common_pref.clear_pref(Constants.LOC_INVOICE_DATA);
                                 Shared_Common_Pref.TransSlNo = model.getOrderID();
                                 Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
                                 Shared_Common_Pref.Invoicetoorder = "1";
@@ -218,6 +219,12 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                         common_class.ProgressdialogShow(0, "");
                                         Intent intent = new Intent(context, Print_Invoice_Activity.class);
                                         startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(PendingOrdersActivity.this, "Product Loading Failed...\n"+msg , Toast.LENGTH_SHORT).show();
+                                        common_class.ProgressdialogShow(0, "");
                                     }
                                 });
                             });
