@@ -51,6 +51,13 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".SFA_Activity.CancelledOrdersActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SFA_Activity.SalesReturnHistoryActivity"
             android:exported="false">
             <meta-data

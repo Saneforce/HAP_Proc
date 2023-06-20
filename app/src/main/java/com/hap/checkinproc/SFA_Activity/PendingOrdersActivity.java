@@ -1,12 +1,10 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
-
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
@@ -35,8 +31,6 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.AdapterPendingOrder;
 import com.hap.checkinproc.SFA_Adapter.CancelOrderAdapter;
-import com.hap.checkinproc.SFA_Adapter.CoolerPositionAdapter;
-import com.hap.checkinproc.SFA_Adapter.SalesReturnInvoiceAdapter;
 import com.hap.checkinproc.SFA_Model_Class.CancelOrderModel;
 import com.hap.checkinproc.SFA_Model_Class.ModelPendingOrder;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
@@ -44,7 +38,6 @@ import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,11 +52,10 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
     ImageView home;
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    TextView headText,clscnclw, cancelMessage, confirmCancel;
+    TextView headText, canceledOrders, clscnclw, cancelMessage, confirmCancel;
     RelativeLayout rlCnclOrd;
 
     public static boolean CometoPending = false;
-    String selectedInvoice;
 
     Context context = this;
 
@@ -87,6 +79,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         headText = findViewById(R.id.headtext);
         cancelMessage = findViewById(R.id.cancelMessage);
         confirmCancel = findViewById(R.id.confirmCancel);
+        canceledOrders = findViewById(R.id.canceledOrders);
 
         shared_common_pref = new Shared_Common_Pref(context);
         common_class = new Common_Class(PendingOrdersActivity.this);
@@ -102,6 +95,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                 rlCnclOrd.setVisibility(View.GONE);
             }
         });
+
+        canceledOrders.setOnClickListener(v -> startActivity(new Intent(context, CancelledOrdersActivity.class)));
         
         loadCancelRemarks();
     }
@@ -229,53 +224,41 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 });
                             });
                             adapter.setCancelClicked((model, position) -> {
-                                selectedInvoice = model.getOrderID();
-                                AlertDialogBox.showDialog(PendingOrdersActivity.this, "HAP Check-In", "Do you want to cancel this order?" ,
-                                        "Yes", "No", false, new AlertBox() {
-                                            @Override
-                                            public void PositiveMethod(DialogInterface dialog, int id) {
-                                                rlCnclOrd.setVisibility(View.VISIBLE);
-                                                cancelMessage.setOnClickListener(v -> {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                                    View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
-                                                    builder.setView(view);
-                                                    builder.setCancelable(false);
+                                rlCnclOrd.setVisibility(View.VISIBLE);
+                                cancelMessage.setOnClickListener(v -> {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                    View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
+                                    builder.setView(view);
+                                    builder.setCancelable(false);
 
-                                                    TextView title = view.findViewById(R.id.title);
-                                                    RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
-                                                    TextView close = view.findViewById(R.id.close);
+                                    TextView title = view.findViewById(R.id.title);
+                                    RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
+                                    TextView close = view.findViewById(R.id.close);
 
-                                                    title.setText("Select Reason");
-                                                    recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-                                                    CancelOrderAdapter adapter = new CancelOrderAdapter(cancelOrderModels, context);
-                                                    recyclerView1.setAdapter(adapter);
-                                                    AlertDialog dialog1 = builder.create();
-                                                    adapter.setItemSelected((model1, position1) -> {
-                                                        cancelMessage.setText(model1.getRemark());
-                                                        dialog1.dismiss();
-                                                    });
-                                                    close.setOnClickListener(v1 -> dialog1.dismiss());
-                                                    if (cancelOrderModels.size() > 0) {
-                                                        dialog1.show();
-                                                    } else {
-                                                        Toast.makeText(context, "No templates found", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                                confirmCancel.setOnClickListener(v -> {
-                                                    String message = cancelMessage.getText().toString().trim();
-                                                    if (TextUtils.isEmpty(message)) {
-                                                        Toast.makeText(context, "Please Select a Reason", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        cancelOrder(message, position);
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void NegativeMethod(DialogInterface dialog, int id) {
-
-                                            }
-                                        });
+                                    title.setText("Select Reason");
+                                    recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                                    CancelOrderAdapter adapter = new CancelOrderAdapter(cancelOrderModels, context);
+                                    recyclerView1.setAdapter(adapter);
+                                    AlertDialog dialog1 = builder.create();
+                                    adapter.setItemSelected((model1, position1) -> {
+                                        cancelMessage.setText(model1.getRemark());
+                                        dialog1.dismiss();
+                                    });
+                                    close.setOnClickListener(v1 -> dialog1.dismiss());
+                                    if (cancelOrderModels.size() > 0) {
+                                        dialog1.show();
+                                    } else {
+                                        Toast.makeText(context, "No templates found", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                confirmCancel.setOnClickListener(v -> {
+                                    String message = cancelMessage.getText().toString().trim();
+                                    if (TextUtils.isEmpty(message)) {
+                                        Toast.makeText(context, "Please Select a Reason", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        cancelOrder(model, message, position);
+                                    }
+                                });
                             });
                         }
                     } catch (Exception e) {
@@ -300,17 +283,21 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         });
     }
 
-    private void cancelOrder(String message, int position) {
+    private void cancelOrder(ModelPendingOrder model, String message, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Are you sure you want to cancel this order?");
+        builder.setMessage(Html.fromHtml("Are you sure you want to cancel this order?<br>" + "Outlet Name: <b>" + model.getTitle2() + "</b><br>Order ID: <b>" + model.getOrderID() + "</b>"));
         builder.setCancelable(false);
-        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("No", (dialog, which) -> {
+            cancelMessage.setText("");
+            rlCnclOrd.setVisibility(View.GONE);
+            dialog.dismiss();
+        });
         builder.setPositiveButton("Yes", (dialog, which) -> {
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Map<String, String> params = new HashMap<>();
             params.put("axn", "update_order_cancel");
             params.put("remarks", message);
-            params.put("orderId", selectedInvoice);
+            params.put("orderId", model.getOrderID());
             params.put("currentTime", Common_Class.GetDate());
             params.put("sfCode", Shared_Common_Pref.Sf_Code);
             params.put("State_Code", Shared_Common_Pref.StateCode);
@@ -334,6 +321,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 Toast.makeText(context, "Order cancelled successfully", Toast.LENGTH_SHORT).show();
                                 list.remove(position);
                                 adapter.notifyItemRemoved(position);
+                                adapter.notifyItemRangeChanged(0, list.size());
                             } else {
                                 Toast.makeText(context, "Error 2: Response Not Success", Toast.LENGTH_SHORT).show();
                             }

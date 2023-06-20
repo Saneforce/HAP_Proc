@@ -1724,11 +1724,14 @@ public class Common_Class {
             public void onClick(View v) {
                 SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    context.startActivity(new Intent(context, SFA_Activity.class)); // To Avoid App Crash
-                } else
-                    context.startActivity(new Intent(context, Dashboard.class));
-
+                Intent intent;
+                if (CheckIn) {
+                    intent = new Intent(context, SFA_Activity.class);
+                } else {
+                    intent = new Intent(context, Dashboard.class);
+                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
             }
         });
 
