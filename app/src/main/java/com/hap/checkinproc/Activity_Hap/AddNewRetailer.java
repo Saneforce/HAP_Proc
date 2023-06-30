@@ -1275,7 +1275,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             reportObject.put("State_Code", "'" + stateCode + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
-            reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
+            reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDate()));
             reportObject.put("reason_category", common_class.addquote(reason_category_remarks));
             reportObject.put("Compititor_Id", common_class.addquote(Compititor_Id));
             reportObject.put("Compititor_Name", common_class.addquote(Compititor_Name));
