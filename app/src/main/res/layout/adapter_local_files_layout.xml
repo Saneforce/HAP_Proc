@@ -7,18 +7,15 @@
     <ImageView
         android:id="@+id/ivFile"
         android:layout_width="@dimen/C50dp"
-        android:layout_height="@dimen/C40dp"
-        android:padding="@dimen/C1dp"
-        android:src="@drawable/profile_img"></ImageView>
+        android:layout_height="@dimen/C50dp"
+        android:src="@drawable/profile_img" />
 
     <ImageView
         android:id="@+id/ivDel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/ivFile"
-        android:layout_gravity="end"
+        android:layout_gravity="center_horizontal"
         android:padding="@dimen/C3dp"
-        android:src="@drawable/delete_cart"></ImageView>
-
+        android:src="@drawable/delete_cart" />
 
 </LinearLayout>

@@ -92,14 +92,11 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.MyViewHolder
                             dialog.dismiss();
                             AryDta.remove(holder.getBindingAdapterPosition());
                             notifyDataSetChanged();
-
                         }
-
 
                         @Override
                         public void NegativeMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-
                         }
                     });
                 }
