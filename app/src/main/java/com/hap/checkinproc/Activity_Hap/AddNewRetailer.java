@@ -884,7 +884,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                         String photoName = new File(link.replaceAll("file:/", "")).getName();
                                         photosArray.put(photoName);
                                     }
-                                    freezerObject.put("photoList", photosArray.toString());
+                                    freezerObject.put("photoList", photosArray);
                                     freezerArray.put(freezerObject);
                                     isFreezerOK = true;
                                 }
