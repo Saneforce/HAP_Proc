@@ -1347,8 +1347,8 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
                 double TotalTax = getTotTax(Product_Details_Modalitem, pos);
                 //double sellAmt = Product_Details_Modalitem.get(pos).getAmount();
-                double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pos).getCnvQty() * Product_Modal.get(pos).getQty()) *
-                        Double.parseDouble(Product_Modal.get(pos).getPTR())));
+                double sellAmt=Double.valueOf(formatter.format((Product_Details_Modalitem.get(pos).getCnvQty() * Product_Details_Modalitem.get(pos).getQty()) *
+                        Double.parseDouble(Product_Details_Modalitem.get(pos).getPTR())));
                 sellAmt = sellAmt / ((100 + (TotalTax)) / 100);
 
                 double wholeTax = 0;
