@@ -289,7 +289,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     TextView title = view.findViewById(R.id.title);
                     RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
                     TextView close = view.findViewById(R.id.close);
-                    title.setText("Select freezer Group");
+                    title.setText("Select Freezer Status");
                     recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
                     CommonDialogAdapter adapter = new CommonDialogAdapter(freezerStaList, context);
                     recyclerView1.setAdapter(adapter);
@@ -314,7 +314,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     TextView title = view.findViewById(R.id.title);
                     RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
                     TextView close = view.findViewById(R.id.close);
-                    title.setText("Select freezer status");
+                    title.setText("Select Freezer Group");
                     recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
                     CommonDialogAdapter adapter = new CommonDialogAdapter(freezerGroupList, context);
                     recyclerView1.setAdapter(adapter);
@@ -338,7 +338,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     TextView title = view.findViewById(R.id.title);
                     RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
                     TextView close = view.findViewById(R.id.close);
-                    title.setText("Select freezer Capacity");
+                    title.setText("Select Freezer Capacity");
                     recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
                     CommonDialogAdapter adapter = new CommonDialogAdapter(freezerCapcityList, context);
                     recyclerView1.setAdapter(adapter);
@@ -836,11 +836,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     }*/
                     else if (cbFreezerYes.isChecked() && isServiceType) {
+                        // Todo
                         boolean isFreezerOK = false;
                         freezerArray = new JSONArray();
                         try {
-                            for (FreezerStatusModel model : freezerStatusList) {
+                            for (int i = 0; i < freezerStatusList.size(); i++) {
                                 isFreezerOK = false;
+                                FreezerStatusModel model = freezerStatusList.get(i);
                                 String freezerGroup = model.getFreezerGroup();
                                 String freezerGroupID = model.getFreezerGroupID();
                                 String freezerStatus = model.getFreezerStatus();
@@ -853,21 +855,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 String depositAmount = model.getDepositAmount();
                                 int freezerStatusCnvQty = model.getFreezerStatusCnvQty();
                                 ArrayList<String> photoList = model.getPhotoList();
-                                JSONObject freezerObject = new JSONObject();
                                 Boolean coolTyp = (!model.getFreezerStatus().toLowerCase().contains("own"));
                                 if (freezerGroup.isEmpty() || freezerGroupID.isEmpty()) {
-                                    common_class.showMsg(AddNewRetailer.this, "Selet Freezer/Cooler Group");
+                                    common_class.showMsg(AddNewRetailer.this, "Select Freezer/Cooler Group");
+                                    break;
                                 } else if (freezerStatus.isEmpty() || freezerStatusID.isEmpty()) {
-                                    common_class.showMsg(AddNewRetailer.this, "Selet Freezer/Cooler Status");
+                                    common_class.showMsg(AddNewRetailer.this, "Select Freezer/Cooler Status");
+                                    break;
                                 } else if (model.getFreezerMake().isEmpty() && coolTyp) {
-                                    common_class.showMsg(AddNewRetailer.this, "Selet Freezer/Cooler make");
+                                    common_class.showMsg(AddNewRetailer.this, "Select Freezer/Cooler make");
+                                    break;
                                 } else if (freezerTagNo.length() != 13 && coolTyp) {
                                     common_class.showMsg(AddNewRetailer.this, "Enter the 13 digits Freezer/Cooler Tag Number");
+                                    break;
                                 } else if (freezerCapacity.equalsIgnoreCase("") && coolTyp) {
                                     common_class.showMsg(AddNewRetailer.this, "Select the Freezer/Cooler Capacity");
+                                    break;
                                 } else if (photoList.isEmpty() && coolTyp) {
                                     common_class.showMsg(AddNewRetailer.this, "Please take Freezer/Cooler Photo");
+                                    break;
                                 } else {
+                                    JSONObject freezerObject = new JSONObject();
                                     freezerObject.put("freezerGroup", freezerGroup);
                                     freezerObject.put("freezerGroupID", freezerGroupID);
                                     freezerObject.put("freezerStatus", freezerStatus);
@@ -889,18 +897,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                     isFreezerOK = true;
                                 }
                             }
+                            if (isFreezerOK) {
+                                if (mSubmit.isAnimating()) return;
+                                mSubmit.startAnimation();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addNewRetailers();
+                                    }
+                                }, 500);
+                            }
                         } catch (Exception e) {
-                            Toast.makeText(context, "Json Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                        if (isFreezerOK) {
-                            if (mSubmit.isAnimating()) return;
-                            mSubmit.startAnimation();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addNewRetailers();
-                                }
-                            }, 500);
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         if (mSubmit.isAnimating()) return;
@@ -1364,22 +1372,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 }
 
             }
-
-//            Todo: Freezer Images
-            if (cbFreezerYes.isChecked() && isServiceType && freezerStatusList.size() > 0) {
-                for (FreezerStatusModel model : freezerStatusList) {
-                    for (String link : model.getPhotoList()) {
-                        String filePath = link.replaceAll("file:/", "");
-                        File file = new File(filePath);
-                        Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
-                        mIntent.putExtra("mFilePath", filePath);
-                        mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
-                        mIntent.putExtra("FileName", file.getName());
-                        mIntent.putExtra("Mode", "freezer");
-                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
-                    }
-                }
-            }
             /*if (mFreezerData.get(0).getFileUrls() != null && mFreezerData.get(0).getFileUrls().size() > 0) {
                 for (int j = 0; j < mFreezerData.get(0).getFileUrls().size(); j++) {
                     String filePath = mFreezerData.get(0).getFileUrls().get(j).replaceAll("file:/", "");
@@ -1402,7 +1394,23 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             JSONObject reportObject = new JSONObject();
             docMasterObject = new JSONObject();
 
-            reportObject.put("freezer_file_Details", freezerArray);
+//            Todo: Freezer Images
+            if (cbFreezerYes.isChecked() && isServiceType && freezerStatusList.size() > 0) {
+                reportObject.put("freezer_file_Details", freezerArray);
+                for (FreezerStatusModel model : freezerStatusList) {
+                    for (String link : model.getPhotoList()) {
+                        String filePath = link.replaceAll("file:/", "");
+                        File file = new File(filePath);
+                        Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
+                        mIntent.putExtra("mFilePath", filePath);
+                        mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                        mIntent.putExtra("FileName", file.getName());
+                        mIntent.putExtra("Mode", "freezer");
+                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
+                    }
+                }
+            }
+
             reportObject.put("town_code", "'" + routeId + "'");
             reportObject.put("wlkg_sequence", "null");
             reportObject.put("unlisted_doctor_name", "'" + addRetailerName.getText().toString() + "'");
