@@ -704,10 +704,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 mFreezerData.get(0).setFileUrls(jAryDta);
 
-                if (Retailer_Modal_List.get(getOutletPosition()).getFreezer_status().equalsIgnoreCase("Company Provided"))
+                /*if (Retailer_Modal_List.get(getOutletPosition()).getFreezer_status().equalsIgnoreCase("Company Provided"))
                     findViewById(R.id.llExpecSalVal).setVisibility(View.VISIBLE);
                 else
-                    findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
+                    findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);*/
                 filesAdapter = new FilesAdapter(jAryDta, R.layout.adapter_local_files_layout, AddNewRetailer.this);
 //                rvFreezerFiles.setAdapter(filesAdapter);
                 if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
