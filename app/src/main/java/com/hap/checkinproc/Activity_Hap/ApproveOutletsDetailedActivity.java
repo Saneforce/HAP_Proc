@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -72,9 +73,11 @@ import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.ApproveOutletsActivity;
-import com.hap.checkinproc.SFA_Activity.OutletApprovListActivity;
+import com.hap.checkinproc.SFA_Adapter.CommonDialogAdapter;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
+import com.hap.checkinproc.SFA_Adapter.FreezerStatusAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
+import com.hap.checkinproc.SFA_Model_Class.FreezerStatusModel;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
@@ -111,18 +114,20 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     EditText toolSearch;
     GoogleMap mGoogleMap;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, rlSubCategory, linServiceType, rlFreezerCapacity, rlFreezerSta;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, rlSubCategory, linServiceType;//, rlFreezerCapacity, rlFreezerSta;
     LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible, linClsRmks;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
-            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType, tvFreezerCapacity, tvFreezerSta, tvSubCategory;
+            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType, /*tvFreezerCapacity, tvFreezerSta,*/
+            tvSubCategory;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> categoryList = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     Gson gson;
-    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, etDistrict, addRetailerPhone, addRetailerEmail, edt_sub_category, edtDepositAmt, edtExpcSalVal,
-            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, edtFreezerMake, edtFreezerTag, edtDistCode;
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, etDistrict, addRetailerPhone, addRetailerEmail, edt_sub_category, /*edtDepositAmt, edtExpcSalVal,*/
+            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding, edtClsRetRmk, edtFSSAI, edtPAN, /*edtFreezerMake, edtFreezerTag,*/
+            edtDistCode;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -134,7 +139,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     Common_Class common_class;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     String outletCode = "";
-    ImageView copypaste, ivCapture, ivFreezerCapture;
+    ImageView copypaste, ivCapture/*, ivFreezerCapture*/;
     String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
     ImageView ivPhotoShop, ivProfilePreview;
@@ -144,10 +149,12 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> freezerCapcityList = new ArrayList<>();
     List<Common_Model> freezerStaList = new ArrayList<>();
+    List<Common_Model> freezerGroupList = new ArrayList<>();
     CircularProgressButton btnRefLoc;
     double RetLat = 0.0, RetLng = 0.0;
     List<Common_Model> deliveryTypeList, outletTypeList;
-    RecyclerView rvFiles, rvFreezerFiles, rvCategoryTypes;
+    RecyclerView rvFiles, /*rvFreezerFiles,*/
+            rvCategoryTypes;
     List<QPS_Modal> mData = new ArrayList<>();
     List<QPS_Modal> mFreezerData = new ArrayList<>();
     String divERP = "", freezerStaId = "", freezerCapId = "", distributorERP = "";
@@ -159,6 +166,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
     Button approveBtn, rejectBtn, updateButton;
     LinearLayout llUpdate, llApprove;
     boolean editMode = false;
+    RecyclerView freezerLayoutRV;
+    ArrayList<FreezerStatusModel> freezerStatusList;
+    FreezerStatusAdapter freezerStatusAdapter;
+    TextView addFreezer;
+    JSONArray freezerArray;
     private Uri outputFileUri;
     private String finalPath = "";
     private String place_id = "";
@@ -197,9 +209,9 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
             copypaste = findViewById(R.id.copypaste);
             ivCapture = findViewById(R.id.ivRetailCapture);
-            ivFreezerCapture = findViewById(R.id.ivFreezerCapture);
+//            ivFreezerCapture = findViewById(R.id.ivFreezerCapture);
             rvFiles = findViewById(R.id.rvFiles);
-            rvFreezerFiles = findViewById(R.id.rvFreezerFiles);
+//            rvFreezerFiles = findViewById(R.id.rvFreezerFiles);
             rvCategoryTypes = findViewById(R.id.rvCategoryTypes);
             edt_gst = findViewById(R.id.edt_gst);
             headtext = findViewById(R.id.headtext);
@@ -212,7 +224,9 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             etDistrict = findViewById(R.id.edt_district);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             edtDistCode = findViewById(R.id.edt_dist_code);
-            edtDepositAmt = findViewById(R.id.edt_depositAmt);
+//            edtDepositAmt = findViewById(R.id.edt_depositAmt);
+            freezerLayoutRV = findViewById(R.id.freezerLayoutRV);
+            addFreezer = findViewById(R.id.addFreezer);
 
             editDetails = findViewById(R.id.edit_details);
 
@@ -227,10 +241,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             edtClsRetRmk = findViewById(R.id.edtClsRetRmk);
             edtFSSAI = findViewById(R.id.edt_retailer_fssai);
             edtPAN = findViewById(R.id.edt_retailer_pan);
-            edtFreezerMake = findViewById(R.id.edt_retailer_freezerMake);
-            edtFreezerTag = findViewById(R.id.edt_retailer_freezerTagNo);
-            tvFreezerCapacity = findViewById(R.id.txFreezerCapacity);
-            tvFreezerSta = findViewById(R.id.txFreezerStatus);
+//            edtFreezerMake = findViewById(R.id.edt_retailer_freezerMake);
+//            edtFreezerTag = findViewById(R.id.edt_retailer_freezerTagNo);
+//            tvFreezerCapacity = findViewById(R.id.txFreezerCapacity);
+//            tvFreezerSta = findViewById(R.id.txFreezerStatus);
             tvSubCategory = findViewById(R.id.tvSubCategory);
 
             rlDelvryType = findViewById(R.id.rlDelvryType);
@@ -250,11 +264,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
             btnRefLoc = findViewById(R.id.btnRefLoc);
             linServiceType = findViewById(R.id.linear_service_type);
-            rlFreezerCapacity = findViewById(R.id.rlFreezerCapacity);
-            rlFreezerSta = findViewById(R.id.rlFreezerStatus);
+//            rlFreezerCapacity = findViewById(R.id.rlFreezerCapacity);
+//            rlFreezerSta = findViewById(R.id.rlFreezerStatus);
             tvServiceType = findViewById(R.id.txt_service_type);
             btnDistCode = findViewById(R.id.btn_dist_enter);
-            edtExpcSalVal = findViewById(R.id.edt_expectSaleVal);
+//            edtExpcSalVal = findViewById(R.id.edt_expectSaleVal);
             cbFranchise = findViewById(R.id.cbFranchise);
             cbFreezerYes = findViewById(R.id.cbFreezerYes);
             cbFreezerNo = findViewById(R.id.cbFreezerNo);
@@ -263,10 +277,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
-            ivFreezerCapture.setOnClickListener(this);
+//            ivFreezerCapture.setOnClickListener(this);
             btnDistCode.setOnClickListener(this);
-            rlFreezerCapacity.setOnClickListener(this);
-            rlFreezerSta.setOnClickListener(this);
+//            rlFreezerCapacity.setOnClickListener(this);
+//            rlFreezerSta.setOnClickListener(this);
             linReatilerClass.setOnClickListener(this);
             linReatilerChannel.setOnClickListener(this);
             rlSubCategory.setOnClickListener(this);
@@ -291,8 +305,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     txtRetailerRoute.setTextColor(getResources().getColor(R.color.disabled));
                     tvStateName.setTextColor(getResources().getColor(R.color.disabled));
                     txDelvryType.setTextColor(getResources().getColor(R.color.disabled));
-                    tvFreezerSta.setTextColor(getResources().getColor(R.color.disabled));
-                    tvFreezerCapacity.setTextColor(getResources().getColor(R.color.disabled));
+//                    tvFreezerSta.setTextColor(getResources().getColor(R.color.disabled));
+//                    tvFreezerCapacity.setTextColor(getResources().getColor(R.color.disabled));
 
                 } else {
                     editMode = true;
@@ -307,9 +321,100 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     txtRetailerRoute.setTextColor(getResources().getColor(R.color.black));
                     tvStateName.setTextColor(getResources().getColor(R.color.black));
                     txDelvryType.setTextColor(getResources().getColor(R.color.black));
-                    tvFreezerSta.setTextColor(getResources().getColor(R.color.black));
-                    tvFreezerCapacity.setTextColor(getResources().getColor(R.color.black));
+//                    tvFreezerSta.setTextColor(getResources().getColor(R.color.black));
+//                    tvFreezerCapacity.setTextColor(getResources().getColor(R.color.black));
                 }
+            });
+
+            freezerStatusList = new ArrayList<>();
+
+
+            freezerStatusList.add(new FreezerStatusModel("", "", "", "", "", "", "", "", "", "", 0, new ArrayList<>()));
+            freezerLayoutRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            freezerStatusAdapter = new FreezerStatusAdapter(this, freezerStatusList);
+            freezerLayoutRV.setAdapter(freezerStatusAdapter);
+
+            freezerGroupList.add(new Common_Model("-18", "1"));
+            freezerGroupList.add(new Common_Model("+4", "2"));
+
+            freezerStatusAdapter.setPerformClicks(new FreezerStatusAdapter.PerformClicks() {
+                @Override
+                public void onStatusSelect(int position) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
+                    builder.setView(view);
+                    builder.setCancelable(false);
+                    TextView title = view.findViewById(R.id.title);
+                    RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
+                    TextView close = view.findViewById(R.id.close);
+                    title.setText("Select Freezer Status");
+                    recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                    CommonDialogAdapter adapter = new CommonDialogAdapter(freezerStaList, context);
+                    recyclerView1.setAdapter(adapter);
+                    AlertDialog dialog = builder.create();
+                    adapter.setItemSelected((model1, position1) -> {
+                        freezerStatusList.get(position).setFreezerStatus(model1.getName());
+                        freezerStatusList.get(position).setFreezerStatusID(model1.getId());
+                        freezerStatusList.get(position).setFreezerStatusCnvQty(model1.getCnvQty());
+                        freezerStatusAdapter.notifyItemChanged(position);
+                        dialog.dismiss();
+                    });
+                    close.setOnClickListener(v1 -> dialog.dismiss());
+                    dialog.show();
+                }
+
+                @Override
+                public void onGroupSelect(int position) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
+                    builder.setView(view);
+                    builder.setCancelable(false);
+                    TextView title = view.findViewById(R.id.title);
+                    RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
+                    TextView close = view.findViewById(R.id.close);
+                    title.setText("Select Freezer Group");
+                    recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                    CommonDialogAdapter adapter = new CommonDialogAdapter(freezerGroupList, context);
+                    recyclerView1.setAdapter(adapter);
+                    AlertDialog dialog = builder.create();
+                    adapter.setItemSelected((model1, position1) -> {
+                        freezerStatusList.get(position).setFreezerGroup(model1.getName());
+                        freezerStatusList.get(position).setFreezerGroupID(model1.getId());
+                        freezerStatusAdapter.notifyItemChanged(position);
+                        dialog.dismiss();
+                    });
+                    close.setOnClickListener(v1 -> dialog.dismiss());
+                    dialog.show();
+                }
+
+                @Override
+                public void onCapacitySelect(int position) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    View view = LayoutInflater.from(context).inflate(R.layout.common_dialog_with_rv, null, false);
+                    builder.setView(view);
+                    builder.setCancelable(false);
+                    TextView title = view.findViewById(R.id.title);
+                    RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView);
+                    TextView close = view.findViewById(R.id.close);
+                    title.setText("Select Freezer Capacity");
+                    recyclerView1.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                    CommonDialogAdapter adapter = new CommonDialogAdapter(freezerCapcityList, context);
+                    recyclerView1.setAdapter(adapter);
+                    AlertDialog dialog = builder.create();
+                    adapter.setItemSelected((model1, position1) -> {
+                        freezerStatusList.get(position).setFreezerCapacity(model1.getName());
+                        freezerStatusList.get(position).setFreezerCapacityID(model1.getId());
+                        freezerStatusAdapter.notifyItemChanged(position);
+                        dialog.dismiss();
+                    });
+                    close.setOnClickListener(v1 -> dialog.dismiss());
+                    dialog.show();
+                }
+            });
+
+            addFreezer.setOnClickListener(v -> {
+                freezerStatusList.add(0, new FreezerStatusModel("", "", "", "", "", "", "", "", "", "", 0, new ArrayList<>()));
+                freezerStatusAdapter.notifyItemInserted(0);
             });
 
             approveBtn.setOnClickListener(v -> {
@@ -514,24 +619,77 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                         common_class.showMsg(ApproveOutletsDetailedActivity.this, "Check the Freezer/Cooler Required");
 
                     } else if (/*divERP.equalsIgnoreCase("21") && */cbFreezerYes.isChecked()) {
-                        if (tvFreezerSta.getText().toString().equalsIgnoreCase("")) {
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Selet the Freezer/Cooler Status");
-                        } else if (edtFreezerMake.getText().toString().equalsIgnoreCase(""))
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the Freezer/Cooler make");
-
-                        else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && edtFreezerTag.getText().toString().length() != 13) {
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the 13 digits Freezer/Cooler Tag Number");
-                        } else if (tvFreezerCapacity.getText().toString().equalsIgnoreCase("")) {
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select the Freezer/Cooler Capacity");
-                        } else if (!tvFreezerSta.getText().toString().equalsIgnoreCase("Own Freezer") && (mFreezerData == null || mFreezerData.size() == 0 || mFreezerData.get(0).getFileUrls() == null || mFreezerData.get(0).getFileUrls().size() == 0))
-                            common_class.showMsg(ApproveOutletsDetailedActivity.this, "Please take Freezer/Cooler Photo");
-                        else {
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addNewRetailers();
+                        // Todo
+                        boolean isFreezerOK = false;
+                        freezerArray = new JSONArray();
+                        try {
+                            for (int i = 0; i < freezerStatusList.size(); i++) {
+                                isFreezerOK = false;
+                                FreezerStatusModel model = freezerStatusList.get(i);
+                                String freezerGroup = model.getFreezerGroup();
+                                String freezerGroupID = model.getFreezerGroupID();
+                                String freezerStatus = model.getFreezerStatus();
+                                String freezerStatusID = model.getFreezerStatusID();
+                                String freezerMake = model.getFreezerMake();
+                                String freezerTagNo = model.getFreezerTagNo();
+                                String freezerCapacity = model.getFreezerCapacity();
+                                String freezerCapacityID = model.getFreezerCapacityID();
+                                String expectedSalesValue = model.getExpectedSalesValue();
+                                String depositAmount = model.getDepositAmount();
+                                int freezerStatusCnvQty = model.getFreezerStatusCnvQty();
+                                ArrayList<String> photoList = model.getPhotoList();
+                                Boolean coolTyp = (!model.getFreezerStatus().toLowerCase().contains("own"));
+                                if (freezerGroup.isEmpty() || freezerGroupID.isEmpty()) {
+                                    common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select Freezer/Cooler Group");
+                                    break;
+                                } else if (freezerStatus.isEmpty() || freezerStatusID.isEmpty()) {
+                                    common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select Freezer/Cooler Status");
+                                    break;
+                                } else if (model.getFreezerMake().isEmpty() && coolTyp) {
+                                    common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select Freezer/Cooler make");
+                                    break;
+                                } else if (freezerTagNo.length() != 13 && coolTyp) {
+                                    common_class.showMsg(ApproveOutletsDetailedActivity.this, "Enter the 13 digits Freezer/Cooler Tag Number");
+                                    break;
+                                } else if (freezerCapacity.equalsIgnoreCase("") && coolTyp) {
+                                    common_class.showMsg(ApproveOutletsDetailedActivity.this, "Select the Freezer/Cooler Capacity");
+                                    break;
+                                } else if (photoList.isEmpty() && coolTyp) {
+                                    common_class.showMsg(ApproveOutletsDetailedActivity.this, "Please take Freezer/Cooler Photo");
+                                    break;
+                                } else {
+                                    JSONObject freezerObject = new JSONObject();
+                                    freezerObject.put("freezerGroup", freezerGroup);
+                                    freezerObject.put("freezerGroupID", freezerGroupID);
+                                    freezerObject.put("freezerStatus", freezerStatus);
+                                    freezerObject.put("freezerStatusID", freezerStatusID);
+                                    freezerObject.put("freezerMake", freezerMake);
+                                    freezerObject.put("freezerTagNo", freezerTagNo);
+                                    freezerObject.put("freezerCapacity", freezerCapacity);
+                                    freezerObject.put("freezerCapacityID", freezerCapacityID);
+                                    freezerObject.put("expectedSalesValue", expectedSalesValue);
+                                    freezerObject.put("depositAmount", depositAmount);
+                                    freezerObject.put("freezerStatusCnvQty", freezerStatusCnvQty);
+                                    JSONArray photosArray = new JSONArray();
+                                    for (String link : photoList) {
+                                        String photoName = new File(link.replaceAll("file:/", "")).getName();
+                                        photosArray.put(photoName);
+                                    }
+                                    freezerObject.put("photoList", photosArray);
+                                    freezerArray.put(freezerObject);
+                                    isFreezerOK = true;
                                 }
-                            }, 500);
+                            }
+                            if (isFreezerOK) {
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addNewRetailers();
+                                    }
+                                }, 500);
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         handler.postDelayed(new Runnable() {
@@ -575,12 +733,12 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
         txDelvryType.setEnabled(editMode);
         cbFreezerYes.setEnabled(editMode);
         cbFreezerNo.setEnabled(editMode);
-        tvFreezerSta.setEnabled(editMode);
-        edtExpcSalVal.setEnabled(editMode);
-        edtDepositAmt.setEnabled(editMode);
-        edtFreezerMake.setEnabled(editMode);
-        edtFreezerTag.setEnabled(editMode);
-        tvFreezerCapacity.setEnabled(editMode);
+//        tvFreezerSta.setEnabled(editMode);
+//        edtExpcSalVal.setEnabled(editMode);
+//        edtDepositAmt.setEnabled(editMode);
+//        edtFreezerMake.setEnabled(editMode);
+//        edtFreezerTag.setEnabled(editMode);
+//        tvFreezerCapacity.setEnabled(editMode);
         edtFSSAI.setEnabled(editMode);
         edtPAN.setEnabled(editMode);
         edt_outstanding.setEnabled(editMode);
@@ -592,15 +750,15 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
         linReatilerChannel.setEnabled(editMode);
         rlSubCategory.setEnabled(editMode);
         linServiceType.setEnabled(editMode);
-        rlFreezerCapacity.setEnabled(editMode);
-        rlFreezerSta.setEnabled(editMode);
+//        rlFreezerCapacity.setEnabled(editMode);
+//        rlFreezerSta.setEnabled(editMode);
         rlState.setEnabled(editMode);
         linReatilerRoute.setEnabled(editMode);
         rlDistributor.setEnabled(editMode);
         rlOutletType.setEnabled(editMode);
 
         ivPhotoShop.setEnabled(editMode);
-        ivFreezerCapture.setEnabled(editMode);
+//        ivFreezerCapture.setEnabled(editMode);
 
     }
 
@@ -859,23 +1017,23 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
                             shared_common_pref.save(Constants.SERVICETYPE_LIST, gson.toJson(serviceTypeList));
                             categoryAdapter.notifyData(serviceTypeList, ApproveOutletsDetailedActivity.this);
-                            edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
-                            edtDepositAmt.setText(Retailer_Modal_List.get(getOutletPosition()).getDeposit_amount());
+//                            edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
+//                            edtDepositAmt.setText(Retailer_Modal_List.get(getOutletPosition()).getDeposit_amount());
                             edtFSSAI.setText(Retailer_Modal_List.get(getOutletPosition()).getFssiNo());
-                            edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
+//                            edtExpcSalVal.setText(Retailer_Modal_List.get(getOutletPosition()).getExpected_sales_value());
                             edtPAN.setText(Retailer_Modal_List.get(getOutletPosition()).getPan_No());
 
-                            edtFreezerMake.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_make());
-                            edtFreezerTag.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_Tag_no());
-                            tvFreezerSta.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
-                            tvFreezerCapacity.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
+//                            edtFreezerMake.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_make());
+//                            edtFreezerTag.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_Tag_no());
+//                            tvFreezerSta.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
+//                            tvFreezerCapacity.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
                             //freezerStaId
                             String FreReq = Retailer_Modal_List.get(getOutletPosition()).getFreezer_required();
                             cbFreezerYes.setChecked(false);
                             if (FreReq.equalsIgnoreCase("yes")) {
                                 cbFreezerNo.setChecked(false);
                                 cbFreezerYes.setChecked(true);
-                                findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+                                findViewById(R.id.freezerLayout).setVisibility(View.VISIBLE);
                             }
                             updateView("", false);
                             if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getLat()))
@@ -904,12 +1062,12 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
 
                             mFreezerData.get(0).setFileUrls(jAryDta);
 
-                            if (Retailer_Modal_List.get(getOutletPosition()).getFreezer_status().equalsIgnoreCase("Company Provided"))
+                            /*if (Retailer_Modal_List.get(getOutletPosition()).getFreezer_status().equalsIgnoreCase("Company Provided"))
                                 findViewById(R.id.llExpecSalVal).setVisibility(View.VISIBLE);
                             else
-                                findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
+                                findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);*/
                             filesAdapter = new FilesAdapter(jAryDta, R.layout.adapter_local_files_layout, ApproveOutletsDetailedActivity.this);
-                            rvFreezerFiles.setAdapter(filesAdapter);
+//                            rvFreezerFiles.setAdapter(filesAdapter);
                             if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
                                 addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
                             if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
@@ -1122,14 +1280,14 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                 if (isChecked) {
                                     cbFreezerNo.setChecked(false);
-                                    findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.freezerLayout).setVisibility(View.VISIBLE);
 
 
                                 } else {
                                     // cbFreezerNo.setChecked(true);
                                     getFreezerData("");
 
-                                    findViewById(R.id.llFreezer).setVisibility(View.GONE);
+                                    findViewById(R.id.freezerLayout).setVisibility(View.GONE);
                                 }
 
                             }
@@ -1140,12 +1298,12 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                 if (isChecked) {
                                     cbFreezerYes.setChecked(false);
-                                    findViewById(R.id.llFreezer).setVisibility(View.GONE);
+                                    findViewById(R.id.freezerLayout).setVisibility(View.GONE);
 
                                     getFreezerData("");
                                 } else {
                                     // cbFreezerYes.setChecked(true);
-                                    findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.freezerLayout).setVisibility(View.VISIBLE);
                                 }
 
 
@@ -1419,6 +1577,23 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             JSONObject reportObject = new JSONObject();
             docMasterObject = new JSONObject();
 
+//            Todo: Freezer Images
+            if (cbFreezerYes.isChecked() && freezerStatusList.size() > 0) {
+                reportObject.put("freezer_file_Details", freezerArray);
+                for (FreezerStatusModel model : freezerStatusList) {
+                    for (String link : model.getPhotoList()) {
+                        String filePath = link.replaceAll("file:/", "");
+                        File file = new File(filePath);
+                        Intent mIntent = new Intent(ApproveOutletsDetailedActivity.this, FileUploadService.class);
+                        mIntent.putExtra("mFilePath", filePath);
+                        mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                        mIntent.putExtra("FileName", file.getName());
+                        mIntent.putExtra("Mode", "freezer");
+                        FileUploadService.enqueueWork(ApproveOutletsDetailedActivity.this, mIntent);
+                    }
+                }
+            }
+
             reportObject.put("town_code", "'" + routeId + "'");
             reportObject.put("wlkg_sequence", "null");
             reportObject.put("unlisted_doctor_name", "'" + addRetailerName.getText().toString() + "'");
@@ -1484,15 +1659,15 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                     "'" + txtRetailerChannel.getText().toString() + "'");
             reportObject.put("category_type", catSubCat);
             reportObject.put("sub_categoryId", "'" + channelID + "'");
-            reportObject.put("expected_sales_value", "'" + edtExpcSalVal.getText().toString() + "'");
-            reportObject.put("deposit_amount", "'" + edtDepositAmt.getText().toString() + "'");
+//            reportObject.put("expected_sales_value", "'" + edtExpcSalVal.getText().toString() + "'");
+//            reportObject.put("deposit_amount", "'" + edtDepositAmt.getText().toString() + "'");
             reportObject.put("fssai_number", "'" + edtFSSAI.getText().toString() + "'");
             reportObject.put("pan_number", "'" + edtPAN.getText().toString() + "'");
 
-            reportObject.put("freezer_make", "'" + edtFreezerMake.getText().toString() + "'");
-            reportObject.put("freezer_tagno", "'" + edtFreezerTag.getText().toString() + "'");
-            reportObject.put("freezer_status", "'" + tvFreezerSta.getText().toString() + "'");
-            reportObject.put("freezer_capacity", "'" + tvFreezerCapacity.getText().toString() + "'");
+//            reportObject.put("freezer_make", "'" + edtFreezerMake.getText().toString() + "'");
+//            reportObject.put("freezer_tagno", "'" + edtFreezerTag.getText().toString() + "'");
+//            reportObject.put("freezer_status", "'" + tvFreezerSta.getText().toString() + "'");
+//            reportObject.put("freezer_capacity", "'" + tvFreezerCapacity.getText().toString() + "'");
             reportObject.put("freezer_statusId", "'" + freezerStaId + "'");
             reportObject.put("freezer_capacityId", "'" + freezerCapId + "'");
 
@@ -1766,11 +1941,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 break;
             case 14:
                 freezerCapId = myDataset.get(position).getId();
-                tvFreezerCapacity.setText(myDataset.get(position).getName());
+//                tvFreezerCapacity.setText(myDataset.get(position).getName());
                 break;
             case 15:
                 freezerStaId = myDataset.get(position).getId();
-                tvFreezerSta.setText(myDataset.get(position).getName());
+//                tvFreezerSta.setText(myDataset.get(position).getName());
                 freezerStaApproval = myDataset.get(position).getCnvQty();
                 if (myDataset.get(position).getName().equalsIgnoreCase("Company Provided"))
                     findViewById(R.id.llExpecSalVal).setVisibility(View.VISIBLE);
@@ -1827,10 +2002,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
             mFreezerData = new ArrayList<>();
             mFreezerData.add(new QPS_Modal("", "", ""));
 
-            edtFreezerMake.setText("");
-            edtFreezerTag.setText("");
-            tvFreezerSta.setText("");
-            tvFreezerCapacity.setText("");
+//            edtFreezerMake.setText("");
+//            edtFreezerTag.setText("");
+//            tvFreezerSta.setText("");
+//            tvFreezerCapacity.setText("");
             freezerCapId = "";
             freezerStaId = "";
             findViewById(R.id.llExpecSalVal).setVisibility(View.GONE);
@@ -1940,20 +2115,20 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 case R.id.ivRetailCapture:
                     captureImg(mData, rvFiles);
                     break;
-                case R.id.ivFreezerCapture:
+                /*case R.id.ivFreezerCapture:
                     captureImg(mFreezerData, rvFreezerFiles);
-                    break;
+                    break;*/
                 case R.id.linear_service_type:
                     common_class.showCommonDialog(serviceTypeList, 4, this);
 
                     break;
-                case R.id.rlFreezerCapacity:
+                /*case R.id.rlFreezerCapacity:
                     common_class.showCommonDialog(freezerCapcityList, 14, this);
                     break;
                 case R.id.rlFreezerStatus:
                     common_class.showCommonDialog(freezerStaList, 15, this);
 
-                    break;
+                    break;*/
                 case R.id.rl_state:
                     common_class.showCommonDialog(stateList, 1, this);
                     break;
@@ -2261,11 +2436,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
         }
 
         if (cbFreezerYes.isChecked())
-            findViewById(R.id.llFreezer).setVisibility(View.VISIBLE);
+            findViewById(R.id.freezerLayout).setVisibility(View.VISIBLE);
 
 
         if (cbFreezerNo.isChecked())
-            findViewById(R.id.llFreezer).setVisibility(View.GONE);
+            findViewById(R.id.freezerLayout).setVisibility(View.GONE);
 
         // cbFreezerYes.setChecked(isChecked);
 

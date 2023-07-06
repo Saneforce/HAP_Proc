@@ -1939,13 +1939,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     common_class.showCommonDialog(serviceTypeList, 4, this);
 
                     break;
-                case R.id.rlFreezerCapacity:
+                /*case R.id.rlFreezerCapacity:
                     common_class.showCommonDialog(freezerCapcityList, 14, this);
                     break;
                 case R.id.rlFreezerStatus:
                     common_class.showCommonDialog(freezerStaList, 15, this);
 
-                    break;
+                    break;*/
                 case R.id.rl_state:
                     common_class.showCommonDialog(stateList, 1, this);
                     break;
