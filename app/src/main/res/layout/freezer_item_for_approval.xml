@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginHorizontal="2dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginTop="8dp"
     android:orientation="vertical"
     app:cardElevation="@dimen/C8dp">
 
     <LinearLayout
+        android:id="@+id/background_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -41,7 +42,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/text_bg_grey"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
                     android:hint="Select Group"
                     android:padding="8dp"
                     android:textSize="13sp" />
@@ -68,7 +68,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/text_bg_grey"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
                     android:hint="Select Status"
                     android:padding="8dp"
                     android:textSize="13sp" />
@@ -99,16 +98,14 @@
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/edt_expectSaleVal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C8dp"
-                    android:text="anfwf \n vfvrvrvfwg"
                     android:background="@drawable/text_bg_grey"
                     android:gravity="start"
                     android:hint="Enter Expected Sales Value"
-                    android:inputType="numberDecimal"
                     android:padding="8dp"
                     android:textSize="13sp" />
 
@@ -128,7 +125,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/edt_depositAmt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,7 +133,6 @@
                     android:background="@drawable/text_bg_grey"
                     android:gravity="start"
                     android:hint="Enter Deposit Amount"
-                    android:inputType="numberDecimal"
                     android:padding="8dp"
                     android:textSize="13sp" />
 
@@ -152,7 +148,7 @@
             android:textColor="@android:color/black"
             android:textSize="13sp" />
 
-        <EditText
+        <TextView
             android:id="@+id/edt_retailer_freezerMake"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -183,7 +179,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/edt_retailer_freezerTagNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -216,7 +212,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/text_bg_grey"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
                     android:hint="Select Capacity"
                     android:padding="8dp"
                     android:textSize="13sp" />
@@ -246,7 +241,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:padding="@dimen/C5dp"
-                android:src="@drawable/ic_round_photo_camera_24" />
+                android:src="@drawable/ic_round_photo_camera_24"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFreezerFiles"
@@ -254,25 +250,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                tools:listitem="@layout/adapter_local_files_layout"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/adapter_local_files_layout" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/C10dp"
-            android:drawableEnd="@drawable/delete_cart"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="Remove Freezer"
-            android:textColor="@color/Exit" />
 
     </LinearLayout>
 
