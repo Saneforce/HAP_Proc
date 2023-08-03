@@ -369,6 +369,7 @@ public class DeviationEntry extends AppCompatActivity implements Master_Interfac
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
 

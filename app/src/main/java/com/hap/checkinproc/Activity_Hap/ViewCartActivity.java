@@ -888,6 +888,7 @@ public class ViewCartActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 Log.e("SUBMIT_VALUE", "ERROR");
             }
         });
@@ -975,6 +976,7 @@ public class ViewCartActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 common_class.ProgressdialogShow(2, "Day plan");
             }
         });

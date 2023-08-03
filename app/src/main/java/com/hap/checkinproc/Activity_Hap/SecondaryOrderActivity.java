@@ -953,6 +953,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 Log.e("SUBMIT_VALUE", "ERROR");
             }
         });

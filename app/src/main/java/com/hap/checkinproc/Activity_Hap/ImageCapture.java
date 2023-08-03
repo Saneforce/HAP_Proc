@@ -923,6 +923,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        call.cancel();
                         mProgress.dismiss();
                         Log.d("HAP_receive", "");
                     }
@@ -978,6 +979,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        call.cancel();
                         mProgress.dismiss();
                         Log.d("HAP_receive", "");
                     }
@@ -1071,6 +1073,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        call.cancel();
                         mProgress.dismiss();
                         Log.d("HAP_receive", "");
                     }

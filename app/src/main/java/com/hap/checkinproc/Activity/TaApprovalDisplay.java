@@ -372,6 +372,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
 
             }
         });
@@ -438,6 +439,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
     }

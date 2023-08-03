@@ -417,6 +417,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
 
                     Log.d("Tag", String.valueOf(t));
                 }
@@ -506,6 +507,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
 
                     Log.d(Tag, String.valueOf(t));
                 }
@@ -572,6 +574,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
                     Log.d(Tag, String.valueOf(t));
                     LoadingCnt++;
                     hideShimmer();
@@ -642,6 +645,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
                     Log.d(Tag, String.valueOf(t));
                     LoadingCnt++;
                     hideShimmer();
@@ -1045,6 +1049,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                     LoadingCnt++;
                     hideShimmer();
                 }
@@ -1328,6 +1333,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                // common_class.ProgressdialogShow(2, "");
             }
         });
@@ -1362,6 +1368,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
 
             }
         });

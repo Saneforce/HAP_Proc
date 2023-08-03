@@ -430,6 +430,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
+                            call.cancel();
 
                             common_class.showMsg(PrimaryOrderActivity.this, t.getMessage());
                             ResetSubmitBtn(0);
@@ -923,6 +924,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
+                                call.cancel();
                                 Log.e("SUBMIT_VALUE", "ERROR");
                                 ResetSubmitBtn(2);
                                 isSubmit = false;
@@ -1561,6 +1563,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1573,6 +1576,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1593,6 +1597,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });

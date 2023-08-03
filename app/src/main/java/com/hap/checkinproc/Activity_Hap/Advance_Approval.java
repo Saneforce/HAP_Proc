@@ -166,6 +166,7 @@ public class Advance_Approval extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
 
             }
         });

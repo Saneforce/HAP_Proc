@@ -689,6 +689,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
     }
@@ -764,6 +765,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
     }

@@ -275,6 +275,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
                 Log.e("error", "Failed3: " + t.getMessage());
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);

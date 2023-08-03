@@ -246,6 +246,7 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ReportDataList> call, Throwable t) {
+                call.cancel();
 
             }
         });

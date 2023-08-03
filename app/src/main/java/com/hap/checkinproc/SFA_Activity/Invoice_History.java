@@ -367,6 +367,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
+                            call.cancel();
 
                             Log.d("InvHistory", String.valueOf(t));
                         }
@@ -560,6 +561,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -572,6 +574,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -584,6 +587,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -609,6 +613,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
                         common_class.showMsg(Invoice_History.this, t.getMessage());
                     }
                 });
@@ -714,6 +719,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
+                            call.cancel();
                             Log.e("SUBMIT_VALUE", "ERROR");
                         }
                     });

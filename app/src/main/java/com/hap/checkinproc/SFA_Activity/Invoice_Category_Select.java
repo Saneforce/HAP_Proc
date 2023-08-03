@@ -893,6 +893,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
+                                call.cancel();
                                 Log.e("SUBMIT_VALUE", "ERROR");
                                 ResetSubmitBtn(2);
                             }
@@ -2193,6 +2194,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         @Override
         public int getItemCount() {
+
+            if(Product_Details_Modalitem.size()<=0){updateToTALITEMUI();}
             return Product_Details_Modalitem.size();
         }
 

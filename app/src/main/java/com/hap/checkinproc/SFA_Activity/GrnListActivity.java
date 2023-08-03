@@ -165,6 +165,7 @@ public class GrnListActivity extends AppCompatActivity
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                     Log.v("errormsg", t.toString());
                 }
             });

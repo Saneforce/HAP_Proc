@@ -585,6 +585,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
     }
@@ -642,6 +643,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
 
@@ -772,6 +774,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
     }

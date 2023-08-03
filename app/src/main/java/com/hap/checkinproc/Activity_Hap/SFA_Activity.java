@@ -289,7 +289,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void onFailure(Call<JsonArray> call, Throwable t) {}
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
+                }
             });
         } else {
             Type userType = new com.google.common.reflect.TypeToken<JsonArray>() {}.getType();
@@ -484,6 +486,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        call.cancel();
                         common_class.ProgressdialogShow(0, "");
 
                     }
@@ -522,6 +525,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                         Log.v("Projec_Product_List_ex", t.getMessage());
                         t.printStackTrace();
@@ -537,6 +541,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                         Log.v("Projec_Product_List_ex", t.getMessage());
                         t.printStackTrace();
@@ -552,6 +557,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                         Log.v("Projec_Product_List_ex", t.getMessage());
                         t.printStackTrace();
@@ -570,6 +576,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
                         Log.v("Projec_Product_fail", t.getMessage());
 
                     }
@@ -612,6 +619,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
                         Log.v("StockAudit:Ex", t.getMessage());
                     }
                 });
@@ -625,6 +633,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -638,6 +647,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -654,6 +664,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
                         Log.v("Projec_Product_fail", t.getMessage());
 
                     }
@@ -737,6 +748,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -913,6 +925,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
 
                     Log.d("Tag", String.valueOf(t));
                 }
@@ -1188,6 +1201,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
 
                 }
             });

@@ -255,6 +255,7 @@ public class TP_Approval_Details extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                     Log.e("SUBMIT_VALUE", "ERROR");
 
                 }

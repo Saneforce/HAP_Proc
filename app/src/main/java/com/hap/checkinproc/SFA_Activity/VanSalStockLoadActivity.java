@@ -63,6 +63,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -200,13 +201,13 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
             retaileAddress.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
-
+            getProductList();
             //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
-            userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-            }.getType();
-
-            Product_Modal = gson.fromJson(OrdersTable, userType);
+//            userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+//            }.getType();
+//
+//            Product_Modal = gson.fromJson(OrdersTable, userType);
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -505,6 +506,48 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
         }
+    }
+
+    private void getProductList(){
+        common_class.ProgressdialogShow(1, "Getting Matrial Details");
+
+        common_class.getPOSStockProduct(this, new OnLiveUpdateListener() {
+            @Override
+            public void onUpdate(String mode) {
+
+                String OrdersTable = String.valueOf(db.getMasterData(Constants.ProductStock_List));
+                userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                }.getType();
+
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+
+                JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+                LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(VanSalStockLoadActivity.this);
+                GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                Grpgrid.setLayoutManager(GrpgridlayManager);
+
+                RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, VanSalStockLoadActivity.this, new onListItemClick() {
+                    @Override
+                    public void onItemClick(JSONObject item) {
+
+                        try {
+                            FilterTypes(item.getString("id"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Grpgrid.setAdapter(grplistItems);
+                try {
+                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //selectedPos=0;
+                //showOrderItemList(selectedPos, "");
+                common_class.ProgressdialogShow(0, "");
+            }
+        });
     }
 
     public MultipartBody.Part convertimg(String tag, String path) {

@@ -135,6 +135,7 @@ public class ViewTAStatus extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
 
             }
         });
@@ -176,6 +177,7 @@ public class ViewTAStatus extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                     Log.e("SUBMIT_VALUE", "ERROR:" + t.getMessage());
                 }
             });

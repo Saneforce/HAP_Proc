@@ -868,6 +868,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 common_class.ProgressdialogShow(2, "Tour Plan");
             }
         });
@@ -920,6 +921,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
 
             }
         });

@@ -164,6 +164,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
 
                 }
             });
@@ -588,6 +589,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
                 Log.e("error", "Failed2: " + t.getMessage());
             }
         });
@@ -648,6 +650,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
 
             }
         });
@@ -698,6 +701,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
 
             }
         });
@@ -805,6 +809,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
                     updSale = false;
                     //if(StopedUpdate==false) updateSales();
                 }
@@ -878,6 +883,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        call.cancel();
                         Log.v("fail>>2", t.toString());
 
 

@@ -769,6 +769,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
 
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 Log.v("print_failure", "ggg" + t.getMessage());
             }
         });

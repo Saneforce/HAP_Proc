@@ -764,6 +764,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
+                            call.cancel();
                             Log.d("DACliam", "Error : " + t.getMessage());
                         }
                     });
@@ -1572,6 +1573,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
                     Toast.makeText(TAClaimActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
@@ -1609,6 +1611,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
             }
         });
     }
@@ -2137,6 +2140,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
                     Log.d("Error:", "Some Error" + t.getMessage());
                 }
             });
@@ -2382,6 +2386,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
             }
         });
     }
@@ -3303,6 +3308,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                 }
             });
 
@@ -4290,6 +4296,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
                     mCommon_class.ProgressdialogShow(0, "");
                     mCommon_class.showMsg(TAClaimActivity.this, "Failed.Try Again...");
 
@@ -4938,6 +4945,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
                     ResetSubmitBtn(2, btnAnim);
                 }
             });
@@ -5076,6 +5084,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
 
                 }
             });
@@ -5518,6 +5527,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
 
                 Log.d("Error:", "Alwance Error");
             }
@@ -5582,6 +5592,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
+                call.cancel();
                 Log.d("LeaveTypeList", "Error");
             }
         });
@@ -6002,6 +6013,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
                 mCommon_class.ProgressdialogShow(0, "");
                 mCommon_class.showMsg(TAClaimActivity.this, "Failed.Try Again...");
 
@@ -6092,6 +6104,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
             }
         });
 

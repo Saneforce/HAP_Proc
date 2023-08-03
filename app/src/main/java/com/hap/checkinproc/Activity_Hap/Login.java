@@ -643,9 +643,9 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-//                eMail="1025746@hap.in";
-                //eMail="1013566@hap.in";
-                eMail="mahesh.k@hap.in";
+                //eMail="balaji.ng@hap.in";
+                eMail="1013362@hap.in";
+                //eMail="perumal.t@hap.in";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
@@ -746,7 +746,7 @@ Log.d("Error","Can't Clear SFWish");
                                     Toast.makeText(getApplicationContext(), "Check username and password", LENGTH_LONG).show();
                                 }
                             }
-
+call.cancel();
                         } catch (Exception e) {
                             Log.v("Login:response", e.getMessage());
                         }
@@ -757,6 +757,7 @@ Log.d("Error","Can't Clear SFWish");
 
                         Toast.makeText(getApplicationContext(), t.getMessage(), LENGTH_LONG).show();
                         try {
+                            call.cancel();
                             mProgress.dismiss();
                         } catch (Exception e) {
 

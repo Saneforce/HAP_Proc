@@ -1118,6 +1118,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
             }
         });
     }
@@ -1651,6 +1652,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
+                    call.cancel();
                     Log.d("Error:", "Some Error" + t.getMessage());
                 }
             });
@@ -2653,6 +2655,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                 }
             });
 
@@ -4895,6 +4898,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
 
             }
         });

@@ -222,6 +222,7 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 common_class.ProgressdialogShow(2, "");
             }
         });

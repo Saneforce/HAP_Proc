@@ -2811,6 +2811,7 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                 }
             });
 
@@ -5293,6 +5294,7 @@ public class TAClaimAwsActivity extends AppCompatActivity implements Master_Inte
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                 }
             });
 

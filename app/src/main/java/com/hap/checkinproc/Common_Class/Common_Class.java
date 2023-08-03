@@ -572,6 +572,7 @@ public class Common_Class {
 
                 @Override
                 public void onFailure(Call<Object> call, Throwable t) {
+                    call.cancel();
                     updateUi.onErrorData(t.getMessage());
                     Log.e("api response ex:", t.getMessage());
                 }
@@ -1026,6 +1027,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        call.cancel();
                         Log.v("fail>>2", t.toString());
 
 
@@ -1097,6 +1099,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1109,6 +1112,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1121,6 +1125,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1138,6 +1143,7 @@ public class Common_Class {
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
+                            call.cancel();
                             if(liveUpdateListener!=null) liveUpdateListener.onError(t.getLocalizedMessage());
                         }
                     });
@@ -1179,6 +1185,7 @@ public class Common_Class {
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
+                            call.cancel();
                             if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
                         }
                     });
@@ -1221,6 +1228,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1233,6 +1241,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1245,6 +1254,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1262,6 +1272,7 @@ public class Common_Class {
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
 
                     }
                 });
@@ -1641,6 +1652,7 @@ public class Common_Class {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
 
             }
         });
@@ -1674,6 +1686,7 @@ public class Common_Class {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
 
             }
         });

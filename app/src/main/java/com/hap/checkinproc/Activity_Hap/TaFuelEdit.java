@@ -315,6 +315,7 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                 }
             });
         } else {

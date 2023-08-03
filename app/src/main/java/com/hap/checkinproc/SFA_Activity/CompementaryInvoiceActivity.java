@@ -981,6 +981,7 @@ public class CompementaryInvoiceActivity extends AppCompatActivity implements Vi
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                call.cancel();
                                 Log.e("SUBMIT_VALUE", "ERROR");
                                 ResetSubmitBtn(2);
                             }

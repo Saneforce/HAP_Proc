@@ -358,6 +358,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 common_class.ProgressdialogShow(2, "");
             }
         });

@@ -588,6 +588,7 @@ public class FlightTicketRequest extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                     ResetSubmitBtn(2, buttonSave);
 
                 }

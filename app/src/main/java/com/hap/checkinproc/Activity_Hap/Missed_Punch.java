@@ -799,6 +799,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 Log.d("ErrorSubmit", t.getMessage());
             }
         });

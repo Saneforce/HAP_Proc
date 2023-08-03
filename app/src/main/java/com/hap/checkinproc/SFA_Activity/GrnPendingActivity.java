@@ -216,6 +216,7 @@ public class GrnPendingActivity extends AppCompatActivity implements UpdateRespo
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
+                    call.cancel();
                     Log.v("errormsg", t.toString());
                 }
             });

@@ -449,6 +449,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
                     common_class.ProgressdialogShow(0, "");
                     common_class.showMsg(AllowanceActivityTwo.this, "Failed.Try Again...");
 
@@ -561,6 +562,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
                     ResetSubmitBtn(2);
                     Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
                 }
@@ -619,6 +621,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+                call.cancel();
                 Log.d("LeaveTypeList", "Error");
             }
         });
@@ -762,6 +765,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
 
                 }
             });
@@ -837,6 +841,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
                 Log.v("print_failure", "ggg" + t.getMessage());
             }
         });

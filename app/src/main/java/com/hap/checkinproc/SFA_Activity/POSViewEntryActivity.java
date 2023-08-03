@@ -153,6 +153,7 @@ public class POSViewEntryActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(Call<POSDataList> call, Throwable t) {
+                call.cancel();
                 Log.e("MdReportModelsErr", t.toString());
             }
         });

@@ -1656,6 +1656,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity implements
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
                     ResetSubmitBtn(0);
+                    call.cancel();
                     common_class.showMsg(ApproveOutletsDetailedActivity.this, t.getMessage());
 
                 }

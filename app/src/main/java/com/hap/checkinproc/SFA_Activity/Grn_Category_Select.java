@@ -598,6 +598,7 @@ public class Grn_Category_Select extends AppCompatActivity implements View.OnCli
 
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
+                                call.cancel();
                                 Log.e("SUBMIT_VALUE", "ERROR");
                                 ResetSubmitBtn(2);
                             }

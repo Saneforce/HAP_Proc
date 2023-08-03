@@ -205,6 +205,7 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 common_class.ProgressdialogShow(2, "");
             }
         });
@@ -325,6 +326,7 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                call.cancel();
                 common_class.ProgressdialogShow(2, "");
             }
         });
