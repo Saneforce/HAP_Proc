@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +47,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
     Context context = this;
     com.hap.checkinproc.Common_Class.Common_Class common_class;
     Shared_Common_Pref shared_common_pref;
+    ProgressDialog progressDialog;
+
+    JSONArray catArray, catArrayNew, freezerArray, freezerArrayNew;
+    ApiInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +82,62 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         deliveryType = findViewById(R.id.deliveryType);
         deliveryTypeNew = findViewById(R.id.deliveryTypeNew);
 
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(context);
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        rejectBtn.setOnClickListener(v -> RejectOutlet());
+
+        approveBtn.setOnClickListener(v -> ApproveOutlet());
 
         getApprovalData();
     }
 
+    private void ApproveOutlet() {
+        progressDialog.setMessage("Approving...");
+        progressDialog.show();
+    }
+
+    private void RejectOutlet() {
+        progressDialog.setMessage("Rejecting...");
+        progressDialog.show();
+        Map<String, String> params = new HashMap<>();
+        params.put("axn", "reject_outlet");
+        params.put("sfCode", Shared_Common_Pref.Sf_Code);
+        params.put("outletCode", getIntent().getStringExtra("OutletCode"));
+        params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
+        Call<ResponseBody> call = apiInterface.getUniversalData(params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        String result = response.body().string();
+                        JSONObject object = new JSONObject(result);
+                        if (object.getBoolean("success")) {
+                            Toast.makeText(context, "Outlet rejected successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable e) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void getApprovalData() {
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> params = new HashMap<>();
         params.put("axn", "get_outlet_info_for_approval");
         params.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -152,8 +206,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                                 deliveryTypeNew.setText(DELIVERY_TYPE_NEW);
                             }
 
-                            JSONArray catArray = res.getJSONArray("Outlet_Category_Mapping");
-                            JSONArray catArrayNew = res.getJSONArray("Mas_RetCatChangesReq");
+                            catArray = res.getJSONArray("Outlet_Category_Mapping");
+                            catArrayNew = res.getJSONArray("Mas_RetCatChangesReq");
                             for (int i = 0; i < catArrayNew.length(); i++) {
                                 JSONObject catObject = catArrayNew.getJSONObject(i);
                                 catArray.put(catObject);
@@ -163,8 +217,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                                 categoryType_ll.setVisibility(View.GONE);
                             }
 
-                            JSONArray freezerArray = res.getJSONArray("Outlet_Freezer_Mapping");
-                            JSONArray freezerArrayNew = res.getJSONArray("Mas_RetFreezerDetails");
+                            freezerArray = res.getJSONArray("Outlet_Freezer_Mapping");
+                            freezerArrayNew = res.getJSONArray("Mas_RetFreezerDetails");
                             for (int i = 0; i < freezerArrayNew.length(); i++) {
                                 JSONObject frzObject = freezerArrayNew.getJSONObject(i);
                                 freezerArray.put(frzObject);
