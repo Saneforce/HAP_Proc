@@ -807,32 +807,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     }*/
                     else if (cbFreezerYes.isChecked() && isServiceType) {
-                        freezerArray = new JSONArray();
-                        try {
-                            if (freezerGrId.isEmpty() || freezerGroup.isEmpty() || freezerStatus.isEmpty() || freezerStaId.isEmpty()) {
-                                Toast.makeText(context, "Please fill freezer details", Toast.LENGTH_SHORT).show();
-                            } else {
-                                JSONObject freezerObject = new JSONObject();
-                                freezerObject.put("freezerGroupID", freezerGrId);
-                                freezerObject.put("freezerGroup", freezerGroup);
-                                freezerObject.put("freezerStatus", freezerStatus);
-                                freezerObject.put("freezerStatusID", freezerStaId);
-                                if (freezerStatus.contains("Company")) {
-                                    freezerObject.put("expectedSalesValue", edt_expectSaleVal.getText().toString().trim());
-                                    freezerObject.put("depositAmount", edt_depositAmt.getText().toString().trim());
+                        if (freezerGrId.isEmpty() || freezerGroup.isEmpty() || freezerStatus.isEmpty() || freezerStaId.isEmpty()) {
+                            Toast.makeText(context, "Please fill freezer details", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (mSubmit.isAnimating()) return;
+                            mSubmit.startAnimation();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addNewRetailers();
                                 }
-                                freezerArray.put(freezerObject);
-                                if (mSubmit.isAnimating()) return;
-                                mSubmit.startAnimation();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        addNewRetailers();
-                                    }
-                                }, 500);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            }, 500);
                         }
 
 
@@ -1399,11 +1384,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //            reportObject.put("freezer_tagno", "'" + edtFreezerTag.getText().toString() + "'");
 //            reportObject.put("freezer_status", "'" + tvFreezerSta.getText().toString() + "'");
 //            reportObject.put("freezer_capacity", "'" + tvFreezerCapacity.getText().toString() + "'");
-            reportObject.put("freezer_statusId", "'" + freezerStaId + "'");
-            reportObject.put("freezer_capacityId", "'" + freezerCapId + "'");
 
+            // Todo: Freezer Info
             reportObject.put("freezer_required", cbFreezerYes.isChecked() ? "'Yes" : "'No" + "'");
-
+            reportObject.put("freezerGroupID", freezerGrId);
+            reportObject.put("freezerGroup", freezerGroup);
+            reportObject.put("freezer_status", freezerStatus);
+            reportObject.put("freezerStatusID", freezerStaId);
+            reportObject.put("expected_sales_value", edt_expectSaleVal.getText().toString().trim());
+            reportObject.put("deposit_amount", edt_depositAmt.getText().toString().trim());
 
             reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate") ? 1 : 0 + "'"));
 
@@ -1484,7 +1473,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
             // docMasterObject.put("unlisted_doctor_master", reportObject);
-            docMasterObject.put("newunlisted_doctor_master", reportObject);
+            docMasterObject.put("newunlisted_doctor_master_new", reportObject);
 
 
             mainArray = new JSONArray();
