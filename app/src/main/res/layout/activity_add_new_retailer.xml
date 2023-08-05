@@ -737,11 +737,11 @@
 
                     </LinearLayout>
 
-                    <!--<fragment
+                    <fragment
                         android:id="@+id/route_map"
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="130dp" />-->
+                        android:layout_height="130dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -1553,6 +1553,32 @@
                                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                             </LinearLayout>-->
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/FreezerDetailsLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Asset Details"
+                                android:textColor="@android:color/black"
+                                android:textSize="13sp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/freezerDetailsRV"
+                                android:layout_marginTop="@dimen/C8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clipToPadding="false"
+                                android:paddingBottom="@dimen/C2dp"
+                                tools:itemCount="2"
+                                tools:listitem="@layout/item_freezer_retailer_info" />
 
                         </LinearLayout>
 

@@ -41,6 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,6 +66,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.FreezerAPIClient;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
@@ -72,9 +74,8 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.CommonDialogAdapter;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
-import com.hap.checkinproc.SFA_Adapter.FreezerStatusAdapter;
+import com.hap.checkinproc.SFA_Adapter.FreezerAdapterRetailerInfo;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
-import com.hap.checkinproc.SFA_Model_Class.FreezerStatusModel;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
@@ -85,6 +86,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -96,6 +98,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -157,6 +162,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     String customer_code = "";
     boolean isServiceType = false;
     Context context = this;
+    JSONArray freezerArray;
+    LinearLayout freezerLayout, llExpecSalVal;
+    TextView txFreezerGroup, txFreezerStatus;
+    String freezerGroup = "", freezerStatus = "";
+    EditText edt_expectSaleVal, edt_depositAmt;
+
+    RecyclerView freezerDetailsRV;
+    FreezerAdapterRetailerInfo freezerAdapterRetailerInfo;
+
     private Uri outputFileUri;
     private String finalPath = "";
     private String place_id = "";
@@ -167,12 +181,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private String categoryId = "", approval = "", distGrpERP = "";
     private int typeUpdatePos = -1, freezerStaApproval;
     private Category_Adapter categoryAdapter;
-    JSONArray freezerArray;
-
-    LinearLayout freezerLayout, llExpecSalVal;
-    TextView txFreezerGroup, txFreezerStatus;
-    String freezerGroup = "", freezerStatus = "";
-    EditText edt_expectSaleVal, edt_depositAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +235,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //            tvFreezerCapacity = findViewById(R.id.txFreezerCapacity);
             //tvFreezerSta = findViewById(R.id.txFreezerStatus);
             tvSubCategory = findViewById(R.id.tvSubCategory);
+            freezerDetailsRV = findViewById(R.id.freezerDetailsRV);
 
             freezerLayout = findViewById(R.id.freezerLayout);
             llExpecSalVal = findViewById(R.id.llExpecSalVal);
@@ -597,6 +606,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             Log.e(TAG + "1:1", Shared_Common_Pref.Outler_AddFlag);
 
             getFreezerData(divERP);
+
+            if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
+                LinearLayout FreezerDetailsLL = findViewById(R.id.FreezerDetailsLL);
+                freezerLayout.setVisibility(View.GONE);
+                FreezerDetailsLL.setVisibility(View.VISIBLE);
+                getFreezerDataFromAPI();
+            }
+
             if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
                 addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
@@ -1054,6 +1071,42 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
 
 
+    }
+
+    private void getFreezerDataFromAPI() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("retailerCode", "195931000001");
+            object.put("customerCode", "1022250");
+        } catch (JSONException ignored) {
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), String.valueOf(object));
+        ApiInterface apiInterface = FreezerAPIClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getRetailerFreezerList(requestBody);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        String res = response.body().string();
+                        Log.e("dhmbgjsd", res);
+                        JSONObject main  = new JSONObject(res);
+                        if (main.optBoolean("Status")) {
+                            JSONArray AssetDetails = main.optJSONArray("AssetDetails");
+                            freezerDetailsRV.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                            freezerAdapterRetailerInfo = new FreezerAdapterRetailerInfo(AssetDetails, context);
+                            freezerDetailsRV.setAdapter(freezerAdapterRetailerInfo);
+                        }
+                    } catch (Exception ignored) { }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("dhmbgjsd", "Error: " + t.getMessage());
+            }
+        });
+//
     }
 
     private void hideMandatories() {
