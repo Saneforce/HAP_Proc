@@ -797,7 +797,6 @@ Log.d("Error","Can't Clear SFWish");
 
 
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
-                // Todo: ERP Details
                 shared_common_pref.save(Constants.DistributorERP, response.getData().get(0).getERP_Code());
                 shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
                 shared_common_pref.save(Constants.DistributorAdd, response.getData().get(0).getStockist_Address());

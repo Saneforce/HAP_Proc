@@ -7,63 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Retailer_Modal_List {
-    public Retailer_Modal_List(String cust_Code, String mnth, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
-        Cust_Code = cust_Code;
-        Mnth = mnth;
-        Others = others;
-        OthersVal = othersVal;
-        Curd = curd;
-        CurdVal = curdVal;
-        Milk = milk;
-        MilkVal = milkVal;
-    }
-
-
-    public String getCust_Code() {
-        return Cust_Code;
-    }
-
-    public void setCust_Code(String cust_Code) {
-        Cust_Code = cust_Code;
-    }
-
-    public String getMnth() {
-        return Mnth;
-    }
-
-    public void setMnth(String mnth) {
-        Mnth = mnth;
-    }
-
-    public double getOthers() {
-        return Others;
-    }
-
-    public void setOthers(double others) {
-        Others = others;
-    }
-
-    public double getMilk() {
-        return Milk;
-    }
-
-    public void setMilk(double milk) {
-        Milk = milk;
-    }
-
+    Retailer_Modal_List retailer_modal_list;
     @SerializedName("Cust_Code")
     @Expose
     private String Cust_Code;
-
-    public ArrayList<CateSpecList> getCategoryList() {
-        return CategoryList;
-    }
-
-
     @SerializedName("outlet_type_Details")
     @Expose
     private ArrayList<CateSpecList> CategoryList;
-
     @SerializedName("deposit_amount")
     @Expose
     private String deposit_amount;
@@ -97,322 +47,75 @@ public class Retailer_Modal_List {
     @SerializedName("Mnth")
     @Expose
     private String Mnth;
-
     @SerializedName("Others")
     @Expose
     private double Others;
-
     @SerializedName("OthersVal")
     @Expose
     private double OthersVal;
-
-    public String getDoctor_Active_flag() {
-        return Doctor_Active_flag;
-    }
-
     @SerializedName("Doctor_Active_flag")
     @Expose
     private String Doctor_Active_flag;
-
     @SerializedName("Curd")
     @Expose
     private double Curd;
-
-
     @SerializedName("CurdVal")
     @Expose
     private double CurdVal;
-
     @SerializedName("ClosedRmks")
     @Expose
     private String ClosedRemarks;
-
     @SerializedName("OrderFlg")
     @Expose
     private int OrderFlg;
-
-
     @SerializedName("Milk")
     @Expose
     private double Milk;
-
-
     @SerializedName("MilkVal")
     @Expose
     private double MilkVal;
-
-
     @SerializedName("id")
     @Expose
     private String id;
-
     @SerializedName("Type")
     @Expose
     private String Type;
-
     @SerializedName("DelivType")
     @Expose
     private String DelivType;
-
     @SerializedName("ERP_Code")
     @Expose
     private String ERP_Code;
-
     @SerializedName("CustomerCode")
     @Expose
     private String CustomerCode;
-
     @SerializedName("districtname")
     @Expose
     private String districtname;
-
-
-    public Retailer_Modal_List getRetailer_modal_list() {
-        return retailer_modal_list;
-    }
-
-    public void setRetailer_modal_list(Retailer_Modal_List retailer_modal_list) {
-        this.retailer_modal_list = retailer_modal_list;
-    }
-
-    public double getProductQty() {
-        return productQty;
-    }
-
-    public void setProductQty(double productQty) {
-        this.productQty = productQty;
-    }
-
-    public double getProductRate() {
-        return productRate;
-    }
-
-    public void setProductRate(double productRate) {
-        this.productRate = productRate;
-    }
-
-    Retailer_Modal_List retailer_modal_list;
-
-
-    public Retailer_Modal_List(String cust_Code, String mnth, List<Retailer_Modal_List> retailer_modal_lists) {
-        this.Cust_Code = cust_Code;
-        this.Mnth = mnth;
-        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
-    }
-
-
-    public Retailer_Modal_List(String productName, List<Retailer_Modal_List> retailer_modal_lists) {
-        this.productName = productName;
-        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
-
-    }
-
-
-    public Retailer_Modal_List(double productQty, double productRate) {
-        this.productQty = productQty;
-        this.productRate = productRate;
-
-    }
-
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public Retailer_Modal_List(String productName, double productQty, double productRate) {
-        this.productName = productName;
-        this.productQty = productQty;
-        this.productRate = productRate;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
+    @SerializedName("freezerGroupID")
+    @Expose
+    private String freezerGroupID;
+    @SerializedName("freezerGroup")
+    @Expose
+    private String freezerGroup;
+    @SerializedName("freezerStatusID")
+    @Expose
+    private String freezerStatusID;
     @SerializedName("productName")
     @Expose
     private String productName;
-
-
     @SerializedName("productQty")
     @Expose
     private double productQty;
-
-
     @SerializedName("productRate")
     @Expose
     private double productRate;
-
-
-    public String getStatusname() {
-        return Statusname;
-    }
-
-    public void setStatusname(String statusname) {
-        Statusname = statusname;
-    }
-
-
-
-
-
-    public String getValuesinv() {
-        return Valuesinv;
-    }
-
-    public void setValuesinv(String values) {
-        Valuesinv = values;
-    }
-
-    public String getInvoiceValues() {
-        return InvoiceValues;
-    }
-
-    public void setInvoiceValues(String invoiceValues) {
-        InvoiceValues = invoiceValues;
-    }
-
-    public String getInvoiceDate() {
-        return InvoiceDate;
-    }
-
-    public void setInvoiceDate(String invoiceDate) {
-        InvoiceDate = invoiceDate;
-    }
-
-
-    public void set_long(String _long) {
-        this._long = _long;
-    }
-    public String getType() {
-        return Type;
-    }
-    public void setType(String type) {
-        Type = type;
-    }
-    public String getDelivType() {
-        return DelivType;
-    }
-    public String getFreezer_status() {
-        return Freezer_status;
-    }
-    public void setFreezer_status(String freezer_status) {
-        Freezer_status = freezer_status;
-    }
-    public String getFreezer_Tag_no() {
-        return Freezer_Tag_no;
-    }
-    public String getPan_No() {
-        return Pan_No;
-    }
-    public String getFssiNo() {
-        return FssiNo;
-    }
-    public String getFreezer_capacity() {
-        return freezer_capacity;
-    }
-    public String getFreezer_attachments() {
-        return freezer_attachments;
-    }
-    public String getFreezer_make() {
-        return Freezer_make;
-    }
-    public String getDeposit_amount() {
-        return deposit_amount;
-    }
-    public String getFreezer_required() {
-        return freezer_required;
-    }
-    public void setFreezer_required(String freezer_required) {
-        this.freezer_required = freezer_required;
-    }
-
-    public String getExpected_sales_value() {
-        return expected_sales_value;
-    }
-
-    public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
-        Cust_Code = cust_Code;
-        Others = others;
-        OthersVal = othersVal;
-        Curd = curd;
-        CurdVal = curdVal;
-        Milk = milk;
-        MilkVal = milkVal;
-
-    }
-
-
-    public Retailer_Modal_List(String id, String name, String statusname, String Valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode) {
-        this.id = id;
-        this.name = name;
-        Statusname = statusname;
-        Valuesinv = Valuesinv;
-        InvoiceValues = invoiceValues;
-        InvoiceDate = invoiceDate;
-        this.townCode = townCode;
-        this.townName = townName;
-        this.lat = lat;
-        this._long = _long;
-        this.addrs = addrs;
-        this.listedDrAddress1 = listedDrAddress1;
-        this.listedDrSlNo = listedDrSlNo;
-        this.mobileNumber = mobileNumber;
-        this.docCatCode = docCatCode;
-        this.contactPersion = contactPersion;
-        this.docSpecialCode = docSpecialCode;
-    }
-
     @SerializedName("name")
     @Expose
     private String name;
-
-
     @SerializedName("Distributor_Code")
     @Expose
     private String DistCode;
-
-    public String getOwner_Name() {
-        return Owner_Name;
-    }
-
-
-    public void setOwner_Name(String owner_Name) {
-        Owner_Name = owner_Name;
-    }
-
-    public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String reason_category, String category_Universe_Id) {
-        this.id = id;
-        this.name = name;
-        Owner_Name = owner_Name;
-        Statusname = statusname;
-        Valuesinv = valuesinv;
-        InvoiceValues = invoiceValues;
-        InvoiceDate = invoiceDate;
-        this.townCode = townCode;
-        this.townName = townName;
-        this.lat = lat;
-        this._long = _long;
-        this.addrs = addrs;
-        this.listedDrAddress1 = listedDrAddress1;
-        this.listedDrSlNo = listedDrSlNo;
-        this.mobileNumber = mobileNumber;
-        this.docCatCode = docCatCode;
-        this.contactPersion = contactPersion;
-        this.docSpecialCode = docSpecialCode;
-        Invoice_Flag = invoice_Flag;
-        Hatsun_AvailablityId = hatsun_AvailablityId;
-        ListedDr_Email = listedDr_Email;
-        this.cityname = cityname;
-        Compititor_Name = compititor_Name;
-        Compititor_Id = compititor_Id;
-        LastUpdt_Date = lastUpdt_Date;
-        Hatsanavail_Switch = hatsanavail_Switch;
-        HatsanCategory_Switch = hatsanCategory_Switch;
-        this.reason_category = reason_category;
-        Category_Universe_Id = category_Universe_Id;
-    }
-
     @SerializedName("Owner_Name")
     @Expose
     private String Owner_Name;
@@ -485,7 +188,6 @@ public class Retailer_Modal_List {
     @SerializedName("Compititor_Name")
     @Expose
     private String Compititor_Name;
-
     @SerializedName("Compititor_Id")
     @Expose
     private String Compititor_Id;
@@ -498,8 +200,6 @@ public class Retailer_Modal_List {
     @SerializedName("HatsanCategory_Switch")
     @Expose
     private String HatsanCategory_Switch;
-
-
     @SerializedName("place_id")
     @Expose
     private String place_id = "ChIJ6fBt_tVnUjoRVxxz1mgBipI";
@@ -515,6 +215,116 @@ public class Retailer_Modal_List {
     @SerializedName("Imagename")
     @Expose
     private String Imagename;
+    @SerializedName("pin_code")
+    @Expose
+    private String pin_code;
+    @SerializedName("gst")
+    @Expose
+    private String gst;
+    @SerializedName("reason_category")
+    @Expose
+    private String reason_category;
+    @SerializedName("Category_Universe_Id")
+    @Expose
+    private String Category_Universe_Id;
+
+    public Retailer_Modal_List(String cust_Code, String mnth, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
+        Cust_Code = cust_Code;
+        Mnth = mnth;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
+    }
+
+    public Retailer_Modal_List(String cust_Code, String mnth, List<Retailer_Modal_List> retailer_modal_lists) {
+        this.Cust_Code = cust_Code;
+        this.Mnth = mnth;
+        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
+    }
+
+    public Retailer_Modal_List(String productName, List<Retailer_Modal_List> retailer_modal_lists) {
+        this.productName = productName;
+        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
+
+    }
+
+    public Retailer_Modal_List(double productQty, double productRate) {
+        this.productQty = productQty;
+        this.productRate = productRate;
+
+    }
+
+    public Retailer_Modal_List(String productName, double productQty, double productRate) {
+        this.productName = productName;
+        this.productQty = productQty;
+        this.productRate = productRate;
+    }
+
+    public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
+        Cust_Code = cust_Code;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
+
+    }
+
+    public Retailer_Modal_List(String id, String name, String statusname, String Valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode) {
+        this.id = id;
+        this.name = name;
+        Statusname = statusname;
+        Valuesinv = Valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+    }
+
+    public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String reason_category, String category_Universe_Id) {
+        this.id = id;
+        this.name = name;
+        Owner_Name = owner_Name;
+        Statusname = statusname;
+        Valuesinv = valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+        Invoice_Flag = invoice_Flag;
+        Hatsun_AvailablityId = hatsun_AvailablityId;
+        ListedDr_Email = listedDr_Email;
+        this.cityname = cityname;
+        Compititor_Name = compititor_Name;
+        Compititor_Id = compititor_Id;
+        LastUpdt_Date = lastUpdt_Date;
+        Hatsanavail_Switch = hatsanavail_Switch;
+        HatsanCategory_Switch = hatsanCategory_Switch;
+        this.reason_category = reason_category;
+        Category_Universe_Id = category_Universe_Id;
+    }
 
     public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String pin_code, String gst, String reason_category, String category_Universe_Id) {
         this.id = id;
@@ -550,9 +360,255 @@ public class Retailer_Modal_List {
         Category_Universe_Id = category_Universe_Id;
     }
 
-    @SerializedName("pin_code")
-    @Expose
-    private String pin_code;
+    public Retailer_Modal_List(String id, String name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String category_Universe_Id) {
+        this.id = id;
+        this.name = name;
+        Statusname = statusname;
+        Valuesinv = valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+        Invoice_Flag = invoice_Flag;
+        Hatsun_AvailablityId = hatsun_AvailablityId;
+        ListedDr_Email = listedDr_Email;
+        this.cityname = cityname;
+        Compititor_Name = compititor_Name;
+        Compititor_Id = compititor_Id;
+        Category_Universe_Id = category_Universe_Id;
+    }
+
+    public Retailer_Modal_List(String id, String name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String category_Universe_Id) {
+        this.id = id;
+        this.name = name;
+        this.Statusname = statusname;
+        this.Valuesinv = valuesinv;
+        this.InvoiceValues = invoiceValues;
+        this.InvoiceDate = invoiceDate;
+        this.Invoice_Flag = invoice_Flag;
+        this.Hatsun_AvailablityId = hatsun_AvailablityId;
+        this.Category_Universe_Id = category_Universe_Id;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+    }
+
+    public String getCust_Code() {
+        return Cust_Code;
+    }
+
+    public void setCust_Code(String cust_Code) {
+        Cust_Code = cust_Code;
+    }
+
+    public String getMnth() {
+        return Mnth;
+    }
+
+    public void setMnth(String mnth) {
+        Mnth = mnth;
+    }
+
+    public double getOthers() {
+        return Others;
+    }
+
+    public void setOthers(double others) {
+        Others = others;
+    }
+
+    public double getMilk() {
+        return Milk;
+    }
+
+    public void setMilk(double milk) {
+        Milk = milk;
+    }
+
+    public ArrayList<CateSpecList> getCategoryList() {
+        return CategoryList;
+    }
+
+    public String getDoctor_Active_flag() {
+        return Doctor_Active_flag;
+    }
+
+    public String getFreezerGroupID() {
+        return freezerGroupID;
+    }
+
+    public void setFreezerGroupID(String freezerGroupID) {
+        this.freezerGroupID = freezerGroupID;
+    }
+
+    public String getFreezerGroup() {
+        return freezerGroup;
+    }
+
+    public void setFreezerGroup(String freezerGroup) {
+        this.freezerGroup = freezerGroup;
+    }
+
+    public String getFreezerStatusID() {
+        return freezerStatusID;
+    }
+
+    public void setFreezerStatusID(String freezerStatusID) {
+        this.freezerStatusID = freezerStatusID;
+    }
+
+    public Retailer_Modal_List getRetailer_modal_list() {
+        return retailer_modal_list;
+    }
+
+    public void setRetailer_modal_list(Retailer_Modal_List retailer_modal_list) {
+        this.retailer_modal_list = retailer_modal_list;
+    }
+
+    public double getProductQty() {
+        return productQty;
+    }
+
+    public void setProductQty(double productQty) {
+        this.productQty = productQty;
+    }
+
+    public double getProductRate() {
+        return productRate;
+    }
+
+    public void setProductRate(double productRate) {
+        this.productRate = productRate;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getStatusname() {
+        return Statusname;
+    }
+
+    public void setStatusname(String statusname) {
+        Statusname = statusname;
+    }
+
+    public String getValuesinv() {
+        return Valuesinv;
+    }
+
+    public void setValuesinv(String values) {
+        Valuesinv = values;
+    }
+
+    public String getInvoiceValues() {
+        return InvoiceValues;
+    }
+
+    public void setInvoiceValues(String invoiceValues) {
+        InvoiceValues = invoiceValues;
+    }
+
+    public String getInvoiceDate() {
+        return InvoiceDate;
+    }
+
+    public void setInvoiceDate(String invoiceDate) {
+        InvoiceDate = invoiceDate;
+    }
+
+    public void set_long(String _long) {
+        this._long = _long;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
+    }
+
+    public String getDelivType() {
+        return DelivType;
+    }
+
+    public String getFreezer_status() {
+        return Freezer_status;
+    }
+
+    public void setFreezer_status(String freezer_status) {
+        Freezer_status = freezer_status;
+    }
+
+    public String getFreezer_Tag_no() {
+        return Freezer_Tag_no;
+    }
+
+    public String getPan_No() {
+        return Pan_No;
+    }
+
+    public String getFssiNo() {
+        return FssiNo;
+    }
+
+    public String getFreezer_capacity() {
+        return freezer_capacity;
+    }
+
+    public String getFreezer_attachments() {
+        return freezer_attachments;
+    }
+
+    public String getFreezer_make() {
+        return Freezer_make;
+    }
+
+    public String getDeposit_amount() {
+        return deposit_amount;
+    }
+
+    public String getFreezer_required() {
+        return freezer_required;
+    }
+
+    public void setFreezer_required(String freezer_required) {
+        this.freezer_required = freezer_required;
+    }
+
+    public String getExpected_sales_value() {
+        return expected_sales_value;
+    }
+
+    public String getOwner_Name() {
+        return Owner_Name;
+    }
+
+    public void setOwner_Name(String owner_Name) {
+        Owner_Name = owner_Name;
+    }
 
     public String getPin_code() {
         return pin_code;
@@ -569,10 +625,6 @@ public class Retailer_Modal_List {
     public void setGst(String gst) {
         this.gst = gst;
     }
-
-    @SerializedName("gst")
-    @Expose
-    private String gst;
 
     public String getHatsanavail_Switch() {
         return Hatsanavail_Switch;
@@ -606,43 +658,12 @@ public class Retailer_Modal_List {
         DistCode = distCode;
     }
 
-    @SerializedName("reason_category")
-    @Expose
-    private String reason_category;
-
     public String getLastUpdt_Date() {
         return LastUpdt_Date;
     }
 
     public void setLastUpdt_Date(String lastUpdt_Date) {
         LastUpdt_Date = lastUpdt_Date;
-    }
-
-    public Retailer_Modal_List(String id, String name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String category_Universe_Id) {
-        this.id = id;
-        this.name = name;
-        Statusname = statusname;
-        Valuesinv = valuesinv;
-        InvoiceValues = invoiceValues;
-        InvoiceDate = invoiceDate;
-        this.townCode = townCode;
-        this.townName = townName;
-        this.lat = lat;
-        this._long = _long;
-        this.addrs = addrs;
-        this.listedDrAddress1 = listedDrAddress1;
-        this.listedDrSlNo = listedDrSlNo;
-        this.mobileNumber = mobileNumber;
-        this.docCatCode = docCatCode;
-        this.contactPersion = contactPersion;
-        this.docSpecialCode = docSpecialCode;
-        Invoice_Flag = invoice_Flag;
-        Hatsun_AvailablityId = hatsun_AvailablityId;
-        ListedDr_Email = listedDr_Email;
-        this.cityname = cityname;
-        Compititor_Name = compititor_Name;
-        Compititor_Id = compititor_Id;
-        Category_Universe_Id = category_Universe_Id;
     }
 
     public String getCompititor_Name() {
@@ -693,33 +714,6 @@ public class Retailer_Modal_List {
         Category_Universe_Id = category_Universe_Id;
     }
 
-    public Retailer_Modal_List(String id, String name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String category_Universe_Id) {
-        this.id = id;
-        this.name = name;
-        this.Statusname = statusname;
-        this.Valuesinv = valuesinv;
-        this.InvoiceValues = invoiceValues;
-        this.InvoiceDate = invoiceDate;
-        this.Invoice_Flag = invoice_Flag;
-        this.Hatsun_AvailablityId = hatsun_AvailablityId;
-        this.Category_Universe_Id = category_Universe_Id;
-        this.townCode = townCode;
-        this.townName = townName;
-        this.lat = lat;
-        this._long = _long;
-        this.addrs = addrs;
-        this.listedDrAddress1 = listedDrAddress1;
-        this.listedDrSlNo = listedDrSlNo;
-        this.mobileNumber = mobileNumber;
-        this.docCatCode = docCatCode;
-        this.contactPersion = contactPersion;
-        this.docSpecialCode = docSpecialCode;
-    }
-
-    @SerializedName("Category_Universe_Id")
-    @Expose
-    private String Category_Universe_Id;
-
     public String getInvoice_Flag() {
         return Invoice_Flag;
     }
@@ -747,9 +741,11 @@ public class Retailer_Modal_List {
     public String getTownCode() {
         return townCode;
     }
+
     public String getTownName() {
         return townName;
     }
+
     public void setTownName(String townName) {
         this.townName = townName;
     }
@@ -906,9 +902,11 @@ public class Retailer_Modal_List {
     public void setPrimary_No(String primary_No) {
         Primary_No = primary_No;
     }
+
     public String getClosedRemarks() {
         return ClosedRemarks;
     }
+
     public void setClosedRemarks(String closedRemarks) {
         ClosedRemarks = closedRemarks;
     }
@@ -929,7 +927,7 @@ public class Retailer_Modal_List {
         this.districtname = districtname;
     }
 
-    public class CateSpecList{
+    public class CateSpecList {
         @SerializedName("OutletCode")
         @Expose
         public String OutletCode;
