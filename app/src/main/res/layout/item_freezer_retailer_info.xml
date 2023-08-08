@@ -166,6 +166,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/C8dp"
+            android:layout_marginTop="@dimen/C8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Freezer Capacity: "
+                android:textSize="@dimen/C13dp" />
+
+            <TextView
+                android:id="@+id/FreezerCapacityLtrs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:gravity="end"
+                android:text="HT FREEZER 60LTR WITH BRANDING-MILK"
+                android:textSize="@dimen/C13dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
 
@@ -40,18 +42,29 @@ public class FreezerAdapterRetailerInfo extends RecyclerView.Adapter<FreezerAdap
             holder.EquipmentNumber.setText(myArray.getJSONObject(holder.getBindingAdapterPosition()).optString("EquipmentNumber"));
             holder.FreezerReceivedDate.setText(myArray.getJSONObject(holder.getBindingAdapterPosition()).optString("FreezerReceivedDate"));
             holder.EquipmentType.setText(myArray.getJSONObject(holder.getBindingAdapterPosition()).optString("EquipmentType"));
+            holder.FreezerCapacityLtrs.setText(myArray.getJSONObject(holder.getBindingAdapterPosition()).optString("FreezerCapacityLtrs"));
 
             String image1 = myArray.getJSONObject(holder.getBindingAdapterPosition()).optString("FileAttachment1");
             String image2 = myArray.getJSONObject(holder.getBindingAdapterPosition()).optString("FileAttachment2");
 
             if (!image1.isEmpty()) {
                 Picasso.get().load(image1).into(holder.FileAttachment1);
+                holder.FileAttachment1.setOnClickListener(v -> {
+                    Intent intentProfile = new Intent(context, ProductImageView.class);
+                    intentProfile.putExtra("ImageUrl", image1);
+                    context.startActivity(intentProfile);
+                });
             } else {
                 holder.FileAttachment1.setVisibility(View.GONE);
             }
 
             if (!image2.isEmpty()) {
                 Picasso.get().load(image2).into(holder.FileAttachment2);
+                holder.FileAttachment2.setOnClickListener(v -> {
+                    Intent intentProfile = new Intent(context, ProductImageView.class);
+                    intentProfile.putExtra("ImageUrl", image2);
+                    context.startActivity(intentProfile);
+                });
             } else {
                 holder.FileAttachment2.setVisibility(View.GONE);
             }
@@ -64,7 +77,7 @@ public class FreezerAdapterRetailerInfo extends RecyclerView.Adapter<FreezerAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView Type, TagNumber, Make, EquipmentNumber, FreezerReceivedDate, EquipmentType;
+        TextView Type, TagNumber, Make, EquipmentNumber, FreezerReceivedDate, EquipmentType, FreezerCapacityLtrs;
         ImageView FileAttachment2, FileAttachment1;
 
         public ViewHolder(@NonNull View itemView) {
@@ -75,6 +88,7 @@ public class FreezerAdapterRetailerInfo extends RecyclerView.Adapter<FreezerAdap
             EquipmentNumber = itemView.findViewById(R.id.EquipmentNumber);
             FreezerReceivedDate = itemView.findViewById(R.id.FreezerReceivedDate);
             EquipmentType = itemView.findViewById(R.id.EquipmentType);
+            FreezerCapacityLtrs = itemView.findViewById(R.id.FreezerCapacityLtrs);
             FileAttachment2 = itemView.findViewById(R.id.FileAttachment2);
             FileAttachment1 = itemView.findViewById(R.id.FileAttachment1);
         }

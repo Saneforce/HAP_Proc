@@ -438,7 +438,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                         try {
                             Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
                             Shared_Common_Pref.Outlet_Info_Flag = "1";
-                            Shared_Common_Pref.Editoutletflag = "1";
+                            Shared_Common_Pref.Editoutletflag = "0";
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.FromActivity = "Outlets";
                             Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
