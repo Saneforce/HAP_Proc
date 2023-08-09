@@ -57,7 +57,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/C15dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -308,6 +309,7 @@
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
                             android:hint="Enter the Outlet Name"
+                            android:textColor="@android:color/black"
                             android:maxLines="2"
                             android:padding="10dp"
                             android:textSize="13dp"
@@ -601,6 +603,7 @@
                                         android:background="@drawable/text_bg_grey"
                                         android:gravity="start"
                                         android:hint="Enter the owner Name"
+                                        android:textColor="@android:color/black"
                                         android:maxLines="2"
                                         android:padding="10dp"
                                         android:textSize="13dp"
@@ -731,6 +734,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the Address"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -834,6 +838,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the Location"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -874,6 +879,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the District"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -906,6 +912,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the Pin Code"
                             android:inputType="number"
                             android:padding="10dp"
@@ -942,6 +949,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the gst"
                             android:padding="10dp"
                             android:textSize="13sp" />
@@ -984,9 +992,10 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
-                            android:maxLength="10"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the Phone No"
                             android:inputType="phone"
+                            android:maxLength="10"
                             android:padding="10dp"
                             android:textSize="13sp" />
 
@@ -1028,6 +1037,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the Second Phone No"
                             android:inputType="phone"
                             android:padding="10dp"
@@ -1062,6 +1072,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg_grey"
                             android:gravity="start"
+                            android:textColor="@android:color/black"
                             android:hint="Enter the Email"
                             android:inputType="textEmailAddress"
                             android:padding="10dp"
@@ -1252,7 +1263,7 @@
                                 android:layout_marginStart="@dimen/C2dp"
                                 android:layout_marginTop="@dimen/C3dp"
                                 android:src="@drawable/mandatory"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
                         </LinearLayout>
 
@@ -1320,66 +1331,6 @@
                                 android:visibility="visible"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="horizontal"
-                                android:visibility="visible">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Freezer/Cooler Required"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="13sp" />
-
-                                <ImageView
-                                    android:id="@+id/ivFreezReqMandatory"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/C2dp"
-                                    android:layout_marginTop="@dimen/C3dp"
-                                    android:src="@drawable/mandatory"
-                                    android:visibility="gone" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:padding="@dimen/C3dp"
-                                android:visibility="visible">
-
-                                <CheckBox
-                                    android:id="@+id/cbFreezerYes"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"></CheckBox>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="center_vertical"
-                                    android:paddingRight="@dimen/C3dp"
-                                    android:text="Yes"
-                                    android:textColor="@color/black" />
-
-                                <CheckBox
-                                    android:id="@+id/cbFreezerNo"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="@dimen/C3dp"></CheckBox>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="center_vertical"
-                                    android:text="No"
-                                    android:textColor="@color/black" />
-                            </LinearLayout>
-
                         </LinearLayout>
 
                         <RelativeLayout
@@ -1410,7 +1361,7 @@
 
                         </RelativeLayout>
 
-                        <androidx.cardview.widget.CardView
+                        <!--<androidx.cardview.widget.CardView
                             android:id="@+id/freezerLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -1441,11 +1392,12 @@
                                     android:paddingBottom="2dp"
                                     android:clipToPadding="false"
                                     tools:listitem="@layout/item_freezer_layout"
+                                    tools:itemCount="1"
                                     android:visibility="visible"/>
 
                             </LinearLayout>
 
-                        </androidx.cardview.widget.CardView>
+                        </androidx.cardview.widget.CardView>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -1475,6 +1427,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
+                                android:textColor="@android:color/black"
                                 android:hint="Enter the FSSAI Number"
                                 android:padding="10dp"
                                 android:textSize="13sp" />
@@ -1508,6 +1461,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
+                                android:textColor="@android:color/black"
                                 android:hint="Enter the PAN Number"
                                 android:padding="10dp"
                                 android:textSize="13sp" />
@@ -1518,7 +1472,6 @@
 
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:layout_marginBottom="20dp"
                             android:orientation="vertical">
 
 
@@ -1541,10 +1494,453 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
                                 android:gravity="start"
+                                android:textColor="@android:color/black"
                                 android:hint="@string/retailer_outstand_hint"
                                 android:inputType="numberDecimal"
                                 android:padding="10dp"
                                 android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freezer/Cooler Required"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <ImageView
+                                    android:id="@+id/ivFreezReqMandatory"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/C2dp"
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:src="@drawable/mandatory"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/C3dp"
+                                android:visibility="visible">
+
+                                <CheckBox
+                                    android:id="@+id/cbFreezerYes"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="true"></CheckBox>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center_vertical"
+                                    android:paddingRight="@dimen/C3dp"
+                                    android:text="Yes"
+                                    android:textColor="@color/black" />
+
+                                <CheckBox
+                                    android:id="@+id/cbFreezerNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="@dimen/C3dp"></CheckBox>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center_vertical"
+                                    android:text="No"
+                                    android:textColor="@color/black" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/freezerLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingVertical="10dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Freezer Group"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:id="@+id/txFreezerGroup"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:textColor="@android:color/black"
+                                        android:background="@drawable/text_bg_grey"
+                                        android:drawableEnd="@drawable/ic_arrow_drop_down"
+                                        android:hint="Select Group"
+                                        android:padding="8dp"
+                                        android:textSize="13sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Freezer status"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:id="@+id/txFreezerStatus"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:textColor="@android:color/black"
+                                        android:background="@drawable/text_bg_grey"
+                                        android:drawableEnd="@drawable/ic_arrow_drop_down"
+                                        android:hint="Select Status"
+                                        android:padding="8dp"
+                                        android:textSize="13sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/addFreezer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:layout_gravity="end"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/circle_bg_new"
+                                android:src="@drawable/add_new"
+                                app:tint="@color/white" />
+
+                            <LinearLayout
+                                android:id="@+id/llExpecSalVal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/C10dp"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Expected Sales Value"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="13sp" />
+
+                                        <EditText
+                                            android:id="@+id/edt_expectSaleVal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C8dp"
+                                            android:background="@drawable/text_bg_grey"
+                                            android:gravity="start"
+                                            android:textColor="@color/black"
+                                            android:hint="Enter Expected Sales Value"
+                                            android:inputType="numberDecimal"
+                                            android:padding="8dp"
+                                            android:textSize="13sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="4dp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Deposit Amount"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="13sp" />
+
+                                        <EditText
+                                            android:id="@+id/edt_depositAmt"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C8dp"
+                                            android:background="@drawable/text_bg_grey"
+                                            android:gravity="start"
+                                            android:textColor="@color/black"
+                                            android:hint="Enter Deposit Amount"
+                                            android:inputType="numberDecimal"
+                                            android:padding="8dp"
+                                            android:textSize="13sp" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/C10dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Freezer Capacity"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="13sp" />
+
+                                        <TextView
+                                            android:id="@+id/freezerCapacityTV_Company"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="@android:color/black"
+                                            android:layout_marginTop="@dimen/C8dp"
+                                            android:background="@drawable/text_bg_grey"
+                                            android:gravity="start"
+                                            android:hint="Select Freezer Capacity"
+                                            android:padding="8dp"
+                                            android:textSize="13sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="4dp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/OwnFreezerInfo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Freezer Make"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+
+                                    <EditText
+                                        android:id="@+id/freezerMakeET"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C8dp"
+                                        android:background="@drawable/text_bg_grey"
+                                        android:gravity="start"
+                                        android:hint="Enter Freezer Make"
+                                        android:padding="8dp"
+                                        android:textSize="13sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Freezer Capacity"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:id="@+id/freezerCapacityTV"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C8dp"
+                                        android:background="@drawable/text_bg_grey"
+                                        android:gravity="start"
+                                        android:hint="Select Freezer Capacity"
+                                        android:padding="8dp"
+                                        android:textSize="13sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/freezerPhotoLL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freezer Photo"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:id="@+id/captureFreezerPhoto"
+                                        android:layout_width="25dp"
+                                        android:layout_height="50dp"
+                                        android:layout_marginTop="@dimen/C8dp"
+                                        android:src="@drawable/ic_round_photo_camera_24" />
+
+                                    <ImageView
+                                        android:id="@+id/previewFreezerPhoto"
+                                        android:layout_width="25dp"
+                                        android:layout_height="50dp"
+                                        android:layout_marginStart="@dimen/C15dp"
+                                        android:layout_marginTop="@dimen/C8dp"
+                                        android:background="@drawable/drawable_border"
+                                        android:elevation="@dimen/C8dp"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/product_logo"
+                                        android:visibility="gone" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!--<TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:text="Freezer/Cooler Photo Upload"
+                                android:textColor="@android:color/black"
+                                android:textSize="13sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C8dp"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/ivFreezerCapture"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:padding="@dimen/C5dp"
+                                    android:src="@drawable/ic_round_photo_camera_24" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvFreezerFiles"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    tools:listitem="@layout/adapter_local_files_layout"
+                                    android:clipToPadding="false"
+                                    android:orientation="horizontal"
+                                    android:padding="5dp"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                            </LinearLayout>-->
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/FreezerDetailsLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Asset Details"
+                                android:textColor="@android:color/black"
+                                android:textSize="13sp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/freezerDetailsRV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:clipToPadding="false"
+                                android:paddingBottom="@dimen/C2dp"
+                                tools:itemCount="2"
+                                tools:listitem="@layout/item_freezer_retailer_info" />
+
                         </LinearLayout>
 
 

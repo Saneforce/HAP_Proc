@@ -1751,6 +1751,10 @@ public class Common_Class {
 
     }
 
+
+    public String formatCurrency(double amount) {
+        return (HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(amount));
+    }
     public void gotoProcurementDashboardScreen(Context context, View ivToolbarHome) {
         ivToolbarHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1766,10 +1770,6 @@ public class Common_Class {
         });
 
 
-    }
-
-    public String formatCurrency(double amount) {
-        return (HAPApp.CurrencySymbol + " " + new DecimalFormat("0.00").format(amount));
     }
 
     public double formatDecimalToSingleDecimal(double amount) {

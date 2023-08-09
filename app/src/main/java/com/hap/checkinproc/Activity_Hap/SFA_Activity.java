@@ -248,6 +248,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "GRN", "", "", "", R.drawable.ic_outline_assignment_turned_in_24));
 //                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
 
+                    // Todo: For Testing Approve Outlets
+                    menuList.add(new ListModel("", "Approve Outlets", "", "", "", R.drawable.ic_approve_outlets));
+
 
                     common_class.getPOSProduct(this);
                     common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);

@@ -27,6 +27,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -755,4 +756,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v300_i.php?axn=grnSync")
     Call<JsonObject> GRNSync(@Field("data") String body);
+
+    @POST("getRetailerFreezerList")
+    Call<ResponseBody> getRetailerFreezerList(@Body RequestBody requestBody);
 }

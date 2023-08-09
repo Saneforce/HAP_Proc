@@ -798,7 +798,6 @@ call.cancel();
                 shared_common_pref.save(Constants.DistributorFSSAI, response.getData().get(0).getDisFSSAI());
 
 
-
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
                 shared_common_pref.save(Constants.DistributorERP, response.getData().get(0).getERP_Code());
                 shared_common_pref.save(Constants.DivERP, response.getData().get(0).getDivERP());
