@@ -74,6 +74,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.FreezerStatusActivity;
 import com.hap.checkinproc.SFA_Adapter.CommonDialogAdapter;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.FreezerAdapterRetailerInfo;
@@ -166,7 +167,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONArray freezerArray;
 
     LinearLayout freezerLayout, llExpecSalVal, OwnFreezerInfo, freezerPhotoLL;
-    TextView txFreezerGroup, txFreezerStatus, freezerCapacityTV, freezerCapacityTV_Company, freezerCapacityTV_Dialog;
+    TextView txFreezerGroup, txFreezerStatus, freezerCapacityTV, freezerCapacityTV_Company, freezerCapacityTV_Dialog, frzStatus;
     ImageView captureFreezerPhoto, previewFreezerPhoto, addFreezer;
     String freezerGroup = "", freezerStatus = "", freezerImageName = "", freezerImageFullPath = "";
     EditText edt_expectSaleVal, edt_depositAmt, freezerMakeET;
@@ -254,6 +255,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             txFreezerStatus = findViewById(R.id.txFreezerStatus);
             edt_expectSaleVal = findViewById(R.id.edt_expectSaleVal);
             edt_depositAmt = findViewById(R.id.edt_depositAmt);
+            frzStatus = findViewById(R.id.frzStatus);
 
             rlDelvryType = findViewById(R.id.rlDelvryType);
             txDelvryType = findViewById(R.id.txDelvryType);
@@ -355,12 +357,26 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 AlertDialog dialog = builder.create();
                 adapter.setItemSelected((model1, position1) -> {
                     txFreezerGroup.setText(model1.getName());
+                    txFreezerStatus.setText("");
+                    freezerStatus = "";
+                    freezerStaId = "";
                     freezerGroup = model1.getName();
                     freezerGrId = model1.getId();
                     dialog.dismiss();
                 });
                 close.setOnClickListener(v1 -> dialog.dismiss());
                 dialog.show();
+            });
+
+            if (Shared_Common_Pref.Outlet_Info_Flag.equals("1") || Shared_Common_Pref.Editoutletflag.equals("1")) {
+                frzStatus.setVisibility(View.VISIBLE);
+            }
+
+            frzStatus.setOnClickListener(v -> {
+                Intent intent = new Intent(context, FreezerStatusActivity.class);
+                intent.putExtra("outletCode", outletCode);
+                intent.putExtra("distCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+                startActivity(intent);
             });
 
             findViewById(R.id.ivFreezReqMandatory).setVisibility(View.INVISIBLE);
@@ -735,6 +751,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                                 params.put("depAmt", depositAmt);
                                 params.put("frzCapID", freezerCapId);
                                 params.put("frzCap", cap);
+                                params.put("sfCode", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
                                 Call<ResponseBody> call = apiInterface.getUniversalData(params);
                                 call.enqueue(new Callback<>() {
                                     @Override
