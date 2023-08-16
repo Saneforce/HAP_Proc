@@ -40,9 +40,11 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
     LinearLayout name_ll, outletType_ll, gst_ll, deliveryType_ll, categoryType_ll, freezer_ll;
     RecyclerView categoryTypeRV, freezerRV;
     Button approveBtn, rejectBtn;
-    TextView outletID, updatedBy, updatedOn, outletName, outletNameNew, outletType, outletTypeNew, gst, gstNew, deliveryType, deliveryTypeNew;
+    TextView outletName, outletNameNew, outletType, outletTypeNew, gst, gstNew, deliveryType, deliveryTypeNew;
 
-    String OUTLET_ID, UPDATED_BY, UPDATED_ON, OUTLET_NAME, OUTLET_NAME_NEW, OUTLET_TYPE, OUTLET_TYPE_NEW, GST, GST_NEW, DELIVERY_TYPE, DELIVERY_TYPE_NEW;
+    String OUTLET_ID, UPDATED_BY, UPDATED_ON, OUTLET_NAME_NEW, OUTLET_TYPE, OUTLET_TYPE_NEW, GST, GST_NEW, DELIVERY_TYPE, DELIVERY_TYPE_NEW;
+    TextView OutletName, OutletCode, OutletMobile, OutletAddress;
+    String LISTED_DR_CODE, OUTLET_NAME, CUSTOMER_CODE, OUTLET_MOBILE, OUTLET_ADDRESS;
 
     Context context = this;
     com.hap.checkinproc.Common_Class.Common_Class common_class;
@@ -70,9 +72,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         approveBtn = findViewById(R.id.approveBtn);
         rejectBtn = findViewById(R.id.rejectBtn);
 
-        outletID = findViewById(R.id.outletID);
-        updatedBy = findViewById(R.id.updatedBy);
-        updatedOn = findViewById(R.id.updatedOn);
         outletName = findViewById(R.id.outletName);
         outletNameNew = findViewById(R.id.outletNameNew);
         outletType = findViewById(R.id.outletType);
@@ -81,6 +80,22 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         gstNew = findViewById(R.id.gstNew);
         deliveryType = findViewById(R.id.deliveryType);
         deliveryTypeNew = findViewById(R.id.deliveryTypeNew);
+
+        OutletName = findViewById(R.id.OutletName);
+        OutletCode = findViewById(R.id.OutletCode);
+        OutletMobile = findViewById(R.id.OutletMobile);
+        OutletAddress = findViewById(R.id.OutletAddress);
+
+        LISTED_DR_CODE = getIntent().getStringExtra("ListedDrCode");
+        OUTLET_NAME = getIntent().getStringExtra("OutletName");
+        CUSTOMER_CODE = getIntent().getStringExtra("CustomerCode");
+        OUTLET_MOBILE = getIntent().getStringExtra("OutletMobile");
+        OUTLET_ADDRESS = getIntent().getStringExtra("OutletAddress");
+
+        OutletName.setText(OUTLET_NAME);
+        OutletCode.setText(CUSTOMER_CODE);
+        OutletMobile.setText(OUTLET_MOBILE);
+        OutletAddress.setText(OUTLET_ADDRESS);
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
@@ -107,7 +122,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("axn", "reject_outlet");
         params.put("sfCode", Shared_Common_Pref.Sf_Code);
-        params.put("outletCode", getIntent().getStringExtra("OutletCode"));
+        params.put("outletCode", LISTED_DR_CODE);
         params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
         Call<ResponseBody> call = apiInterface.getUniversalData(params);
         call.enqueue(new Callback<>() {
@@ -141,7 +156,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("axn", "get_outlet_info_for_approval");
         params.put("sfCode", Shared_Common_Pref.Sf_Code);
-        params.put("outletCode", getIntent().getStringExtra("OutletCode"));
+        params.put("outletCode", LISTED_DR_CODE);
         params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
         Call<ResponseBody> call = apiInterface.getUniversalData(params);
         call.enqueue(new Callback<>() {
@@ -169,10 +184,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                             OUTLET_TYPE_NEW = Mas_OutletChangesReq.optString("OutletType");
                             DELIVERY_TYPE_NEW = Mas_OutletChangesReq.optString("DelvType");
                             OUTLET_NAME_NEW = Mas_OutletChangesReq.optString("OutletName");
-
-                            outletID.setText(String.format("Outlet ID: %S", OUTLET_ID));
-                            updatedBy.setText(String.format("Updated By: %S", UPDATED_BY));
-                            updatedOn.setText(String.format("Updated On: %S", UPDATED_ON));
 
                             if (OUTLET_NAME.equalsIgnoreCase(OUTLET_NAME_NEW)) {
                                 name_ll.setVisibility(View.GONE);

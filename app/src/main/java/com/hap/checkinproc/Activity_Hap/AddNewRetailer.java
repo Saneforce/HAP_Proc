@@ -75,6 +75,7 @@ import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.FreezerStatusActivity;
+import com.hap.checkinproc.SFA_Activity.PendingOutletsActivity;
 import com.hap.checkinproc.SFA_Adapter.CommonDialogAdapter;
 import com.hap.checkinproc.SFA_Adapter.FilesAdapter;
 import com.hap.checkinproc.SFA_Adapter.FreezerAdapterRetailerInfo;
@@ -1769,7 +1770,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("fssai_number", "'" + edtFSSAI.getText().toString() + "'");
             reportObject.put("pan_number", "'" + edtPAN.getText().toString() + "'");
 
-            reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate") ? 1 : 0 + "'"));
+            if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                reportObject.put("active_flag", "'2'");
+            } else {
+                reportObject.put("active_flag", "'" + (txOutletType.getText().toString().equalsIgnoreCase("Duplicate") ? 1 : 0 + "'"));
+            }
 
 
             boolean isApproval = false;

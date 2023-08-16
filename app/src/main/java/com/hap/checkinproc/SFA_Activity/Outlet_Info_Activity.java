@@ -64,7 +64,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     private TextView distributor_text;
     Switch swACOutlet, swOTHOutlet, swUpdOutlet, swUpdNoOutlet, swFreezerOutlet, swNoFreezerOutlet;
     int CountUR = 0, CountSR = 0, CountCls = 0;
-    TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta;
+    TextView txSrvOtlt, txUniOtlt, txClsOtlt, txAllOtlt, txSrvOtltCnt, txUniOtltCnt, txClsOtltCnt, tvApprovalSta, tvPending;
     LinearLayout btSrvOtlt, btUniOtlt, btClsOtlt, undrUni, undrCls, undrServ;
     public static Outlet_Info_Activity outlet_info_activity;
     public static int retailerSize;
@@ -111,6 +111,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             tvApprovalSta = findViewById(R.id.tvApprovSta);
             swFreezerOutlet = findViewById(R.id.swFreezerOutlet);
             swNoFreezerOutlet = findViewById(R.id.swNofreezerOutlet);
+            tvPending = findViewById(R.id.tvPending);
 
             tvApprovalSta.setVisibility(View.GONE);
             tvApprovalSta.setOnClickListener(this);
@@ -344,6 +345,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                 findViewById(R.id.ivDistSpinner).setVisibility(View.GONE);
             }
 
+            tvPending.setOnClickListener(v -> startActivity(new Intent(this, PendingOutletsActivity.class)));
+
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -431,7 +434,6 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             txClsOtltCnt.setText(String.valueOf(CountCls));
 
             if (Retailer_Modal_ListFilter != null) {
-
                 recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_ListFilter, R.layout.outlet_info_recyclerview, this, "Outlets", new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int position) {
@@ -447,19 +449,12 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                             intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
                             intent.putExtra("OutletMobile", Retailer_Modal_ListFilter.get(position).getPrimary_No());
                             intent.putExtra("OutletRoute", Retailer_Modal_ListFilter.get(position).getTownName());
-
                             startActivity(intent);
-                            // finish();
-                        } catch (Exception e) {
-
-                        }
-
+                        } catch (Exception ignored) { }
                     }
                 }));
-
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) { }
     }
 
     @Override
