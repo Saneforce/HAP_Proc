@@ -22,12 +22,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:background="@drawable/blue_bg">
 
                 <TextView
-
                     android:id="@+id/headtext"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Outlet Info"
@@ -35,6 +37,19 @@
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/frzStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="STATUS"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/C8dp"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -741,11 +756,11 @@
 
                     </LinearLayout>
 
-                    <fragment
+                    <!--<fragment
                         android:id="@+id/route_map"
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="130dp" />
+                        android:layout_height="130dp" />-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
