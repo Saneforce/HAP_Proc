@@ -1390,10 +1390,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         // Todo: getFreezerDataFromAPI
         JSONObject object = new JSONObject();
         try {
-            object.put("retailerCode", "130774000001");
-            object.put("customerCode", "1023176");
-            /*object.put("retailerCode", outletCode);
-            object.put("customerCode", shared_common_pref.getvalue(Constants.DistributorERP));*/
+
+//            object.put("retailerCode", "130774000001");
+//            object.put("customerCode", "1023176");
+
+            object.put("retailerCode", outletCode);
+            object.put("customerCode", shared_common_pref.getvalue(Constants.DistributorERP));
+
         } catch (JSONException ignored) {
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), String.valueOf(object));

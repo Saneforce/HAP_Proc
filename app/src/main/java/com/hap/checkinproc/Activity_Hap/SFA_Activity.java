@@ -1,6 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import static com.hap.checkinproc.Activity_Hap.Login.CheckInDetail;
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 import static com.hap.checkinproc.Common_Class.Constants.VAN_STOCK;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.setAppLogos;
@@ -26,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,7 +53,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.ApproveOutletsActivity;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
@@ -66,7 +63,6 @@ import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.POSActivity;
-import com.hap.checkinproc.SFA_Activity.POSStockLoadingActivity;
 import com.hap.checkinproc.SFA_Activity.PendingOutletsCategory;
 import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionCategorySelectActivity;
@@ -103,45 +99,48 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
+    public static final String UserDetail = "MyPrefs";
+    public static final String CheckInDetail = "CheckInDetail";
+    public static String sfa_date = "";
+    public static String updateTime = "";
     LinearLayout Lin_Route, Lin_Lead, Lin_Dashboard, Logout, SyncButon, linorders;
     Gson gson;
-
-    private SANGPSTracker mLUService;
-    private LocationReceiver myReceiver;
-    private boolean mBound = false;
-
-    public static final String UserDetail = "MyPrefs";
     Common_Class common_class;
     Shared_Common_Pref sharedCommonPref;
     SharedPreferences UserDetails;
     SharedPreferences CheckInDetails;
-    public static final String CheckInDetail = "CheckInDetail";
     DatabaseHandler db;
-
-    ImageView ivLogout, ivCalendar, ivProcureSync,btnCloseOffer;
-
-    LinearLayout llGridParent,linOffer;
-
+    ImageView ivLogout, ivCalendar, ivProcureSync, btnCloseOffer;
+    LinearLayout llGridParent, linOffer;
     OutletDashboardInfoAdapter cumulativeInfoAdapter;
-    private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
     RecyclerView recyclerView;
     TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls,
             tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls, tvUserName,
             tvPrimOrder, tvNoOrder, tvTotalValOrder, tvUpdTime, lblSlideNo;
-    private DatePickerDialog fromDatePickerDialog;
-
-    public static String sfa_date = "";
-
     MenuAdapter menuAdapter;
     RecyclerView rvMenu, rvPrimOrd, ryclOffers;
-    private List<ListModel> menuList = new ArrayList<>();
     NumberFormat formatter = new DecimalFormat("##0.00");
-
-    public static String updateTime = "";
     ApiInterface apiService;
-
     int menuItem = 0;
+    private SANGPSTracker mLUService;
+    private LocationReceiver myReceiver;
+    private boolean mBound = false;
+    private final ServiceConnection mServiceConection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
+            mBound = true;
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mLUService = null;
+            mBound = false;
+        }
+    };
+    private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
+    private DatePickerDialog fromDatePickerDialog;
+    private List<ListModel> menuList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,17 +155,17 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         apiService = ApiClient.getClient().create(ApiInterface.class);
 
 
-        linOffer=findViewById(R.id.linOffer);
+        linOffer = findViewById(R.id.linOffer);
         linOffer.setVisibility(View.GONE);
-        ryclOffers= findViewById(R.id.ryclOffers);
-        lblSlideNo =findViewById(R.id.lblSlideNo);
-        btnCloseOffer =findViewById(R.id.btnCloseOffer);
+        ryclOffers = findViewById(R.id.ryclOffers);
+        lblSlideNo = findViewById(R.id.lblSlideNo);
+        btnCloseOffer = findViewById(R.id.btnCloseOffer);
         init();
         setOnClickListener();
 
-        String sOffShown=sharedCommonPref.getvalue(Constants.DB_OfferShownOn,"");
+        String sOffShown = sharedCommonPref.getvalue(Constants.DB_OfferShownOn, "");
 
-        if (!Common_Class.GetDatewothouttime().equalsIgnoreCase(sOffShown)){
+        if (!Common_Class.GetDatewothouttime().equalsIgnoreCase(sOffShown)) {
             sharedCommonPref.clear_pref(Constants.DB_Offer_NOTIFY);
         }
 
@@ -213,8 +212,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        }
-        else {
+        } else {
             ivProcureSync.setVisibility(View.GONE);
             switch (sharedCommonPref.getvalue(Constants.LOGIN_TYPE)) {
                 case Constants.CHECKIN_TYPE:
@@ -249,7 +247,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 //                    menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
 
                     // Todo: For Testing Approve Outlets
-                    menuList.add(new ListModel("", "Approve Outlets", "", "", "", R.drawable.ic_approve_outlets));
+                    // menuList.add(new ListModel("", "Approve Outlets", "", "", "", R.drawable.ic_approve_outlets));
 
 
                     common_class.getPOSProduct(this);
@@ -288,14 +286,17 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         JsonArray res = response.body();
                         assignGetNotify(res);
                         mShared_common_pref.save(Constants.DB_TWO_GET_NOTIFY, gson.toJson(response.body()));
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<JsonArray> call, Throwable t) {}
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                }
             });
         } else {
-            Type userType = new com.google.common.reflect.TypeToken<JsonArray>() {}.getType();
+            Type userType = new com.google.common.reflect.TypeToken<JsonArray>() {
+            }.getType();
             JsonArray arr = (gson.fromJson(mShared_common_pref.getvalue(Constants.DB_TWO_GET_NOTIFY), userType));
             assignGetNotify(arr);
         }
@@ -862,7 +863,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                             SharedPreferences.Editor editor = UserDetails.edit();
                             editor.putBoolean("Login", false);
                             editor.apply();
-                            CheckInDetails.edit().clear().commit();setAppLogos();
+                            CheckInDetails.edit().clear().commit();
+                            setAppLogos();
                             finishAffinity();
                         }
                     }
@@ -905,7 +907,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         JsonArray res = response.body();
                         Log.d("getOfferNotify", String.valueOf(response.body()));
                         //  Log.d("NotifyMsg", response.body().toString());
-                        JSONArray sArr=new JSONArray(String.valueOf(response.body()));
+                        JSONArray sArr = new JSONArray(String.valueOf(response.body()));
                         assignOffGetNotify(sArr);
                         sharedCommonPref.save(Constants.DB_Offer_NOTIFY, gson.toJson(response.body()));
                     } catch (Exception e) {
@@ -923,7 +925,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             try {
-                JSONArray sArr=new JSONArray(String.valueOf(sharedCommonPref.getvalue(Constants.DB_Offer_NOTIFY)));
+                JSONArray sArr = new JSONArray(String.valueOf(sharedCommonPref.getvalue(Constants.DB_Offer_NOTIFY)));
                 //assignOffGetNotify(sArr);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -932,8 +934,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
     void assignOffGetNotify(JSONArray res) {
-        JSONArray fRes= res;
-        if (fRes.length()>0){
+        JSONArray fRes = res;
+        if (fRes.length() > 0) {
             LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
             TypgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             ryclOffers.setLayoutManager(TypgridlayManager);
@@ -943,19 +945,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 ryclOffers.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                     @Override
                     public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                        LinearLayoutManager layoutManager = ((LinearLayoutManager)ryclOffers.getLayoutManager());
+                        LinearLayoutManager layoutManager = ((LinearLayoutManager) ryclOffers.getLayoutManager());
                         int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
-                        lblSlideNo.setText((firstVisiblePosition+1)+"/"+fRes.length());
+                        lblSlideNo.setText((firstVisiblePosition + 1) + "/" + fRes.length());
                     }
                 });
-            }else{
+            } else {
                 ryclOffers.setOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
-                        LinearLayoutManager layoutManager = ((LinearLayoutManager)ryclOffers.getLayoutManager());
+                        LinearLayoutManager layoutManager = ((LinearLayoutManager) ryclOffers.getLayoutManager());
                         int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
-                        lblSlideNo.setText((firstVisiblePosition+1)+"/"+fRes.length());
+                        lblSlideNo.setText((firstVisiblePosition + 1) + "/" + fRes.length());
                     }
                 });
             }
@@ -973,9 +975,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             ryclOffers.setAdapter(TyplistItems);
             linOffer.setVisibility(View.VISIBLE);
 
-            sharedCommonPref.save(Constants.DB_OfferShownOn,Common_Class.GetDatewothouttime());
+            sharedCommonPref.save(Constants.DB_OfferShownOn, Common_Class.GetDatewothouttime());
         }
     }
+
     void showDashboardData() {
         common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
         //common_class.getDb_310Data(Constants.SERVICEOUTLET, this);
@@ -1199,7 +1202,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     public class OutletDashboardInfoAdapter extends RecyclerView.Adapter<OutletDashboardInfoAdapter.MyViewHolder> {
         Context context;
         private List<Cumulative_Order_Model> listt;
@@ -1268,8 +1270,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
         Context context;
-        private List<ListModel> listt;
         AdapterOnClick adapterOnClick;
+        private List<ListModel> listt;
 
         public MenuAdapter(Context applicationContext, List<ListModel> list, AdapterOnClick adapterOnClick) {
             this.context = applicationContext;
@@ -1341,21 +1343,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
-
-    private final ServiceConnection mServiceConection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mLUService = null;
-            mBound = false;
-        }
-    };
 }
 
   /*  private void getDashboardDataFromAPI() {
