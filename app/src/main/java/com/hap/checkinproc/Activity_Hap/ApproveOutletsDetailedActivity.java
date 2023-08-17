@@ -1,11 +1,15 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +25,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.ApproveOutletsActivity;
 import com.hap.checkinproc.SFA_Adapter.AdapterOutletApprovalCategory;
 import com.hap.checkinproc.SFA_Adapter.AdapterOutletApprovalFreezer;
 
@@ -87,6 +92,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         OutletAddress = findViewById(R.id.OutletAddress);
 
         LISTED_DR_CODE = getIntent().getStringExtra("ListedDrCode");
+        Log.e("mhfd", "LISTED_DR_CODE: " + LISTED_DR_CODE);
         OUTLET_NAME = getIntent().getStringExtra("OutletName");
         CUSTOMER_CODE = getIntent().getStringExtra("CustomerCode");
         OUTLET_MOBILE = getIntent().getStringExtra("OutletMobile");
@@ -104,9 +110,29 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         shared_common_pref = new Shared_Common_Pref(context);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        rejectBtn.setOnClickListener(v -> RejectOutlet());
+        rejectBtn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Are you sure you want to reject?");
+            builder.setCancelable(true);
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                RejectOutlet();
+                dialog.dismiss();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            builder.create().show();
+        });
 
-        approveBtn.setOnClickListener(v -> ApproveOutlet());
+        approveBtn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Are you sure you want to approve?");
+            builder.setCancelable(true);
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                ApproveOutlet();
+                dialog.dismiss();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            builder.create().show();
+        });
 
         getApprovalData();
     }
@@ -114,13 +140,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
     private void ApproveOutlet() {
         progressDialog.setMessage("Approving...");
         progressDialog.show();
-    }
-
-    private void RejectOutlet() {
-        progressDialog.setMessage("Rejecting...");
-        progressDialog.show();
         Map<String, String> params = new HashMap<>();
-        params.put("axn", "reject_outlet");
+        params.put("axn", "approve_outlet");
         params.put("sfCode", Shared_Common_Pref.Sf_Code);
         params.put("outletCode", LISTED_DR_CODE);
         params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -133,7 +154,9 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                         String result = response.body().string();
                         JSONObject object = new JSONObject(result);
                         if (object.getBoolean("success")) {
-                            Toast.makeText(context, "Outlet rejected successfully", Toast.LENGTH_SHORT).show();
+                            ApproveOutletsActivity.refresh = true;
+                            Toast.makeText(context, "Outlet approved successfully", Toast.LENGTH_SHORT).show();
+                            finish();
                         } else {
                             Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
                         }
@@ -150,6 +173,64 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                 Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void RejectOutlet() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_get_reason, null);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        EditText editText = view.findViewById(R.id.inputMessage);
+        TextView cancel = view.findViewById(R.id.cancel);
+        TextView submit = view.findViewById(R.id.submit);
+        cancel.setOnClickListener(v1 -> dialog.dismiss());
+        submit.setOnClickListener(v2 -> {
+            String message = editText.getText().toString().trim();
+            if (TextUtils.isEmpty(message)) {
+                Toast.makeText(context, "Reason for Rejection Required", Toast.LENGTH_SHORT).show();
+            } else {
+                progressDialog.setMessage("Rejecting...");
+                progressDialog.show();
+                Map<String, String> params = new HashMap<>();
+                params.put("axn", "reject_outlet");
+                params.put("sfCode", Shared_Common_Pref.Sf_Code);
+                params.put("outletCode", LISTED_DR_CODE);
+                params.put("distributorId", shared_common_pref.getvalue(Constants.Distributor_Id));
+                params.put("message", message);
+                Call<ResponseBody> call = apiInterface.getUniversalData(params);
+                call.enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            try {
+                                String result = response.body().string();
+                                JSONObject object = new JSONObject(result);
+                                if (object.getBoolean("success")) {
+                                    ApproveOutletsActivity.refresh = true;
+                                    Toast.makeText(context, "Outlet rejected successfully", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        dialog.dismiss();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable e) {
+                        dialog.dismiss();
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        builder.setCancelable(true);
+        dialog.show();
     }
 
     private void getApprovalData() {
