@@ -175,6 +175,7 @@ public class Constants {
     public static final String DistributorAdd = "distAddress";
 
     public static final String SlotTime = "slotTime";
+    public static final String OFFERPOS_Product_List = "posOfferProductList";
     public static final String POS_Product_List = "posProductList";
     public static final String POS_TAXList = "posTaxList";
     public static final String POS_Category_List = "posCategoryList";

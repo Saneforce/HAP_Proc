@@ -65,19 +65,9 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
+                android:visibility="gone"
                 android:textSize="13sp" />
 
-
-            <ImageView
-                android:id="@+id/ivScanner"
-                android:layout_width="@dimen/C30dp"
-                android:layout_height="@dimen/C30dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="@dimen/C3dp"
-                android:layout_marginRight="@dimen/C8dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:padding="5dp"
-                android:src="@drawable/ic_baseline_qr_code_scanner_24" />
 
             <ImageView
                 android:id="@+id/toolbar_home"
@@ -109,30 +99,6 @@
                 android:textAllCaps="true"
                 android:textColor="#FFF"
                 android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/btnPosStockLoad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/basic"
-                android:paddingEnd="@dimen/C10dp"
-                android:text="Stock Loading"
-                android:textAlignment="textEnd"
-                android:textColor="#FFF"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/btnPosEntrySales"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/basic"
-                android:paddingEnd="@dimen/C5dp"
-                android:text="Counter Sales Entry"
-                android:textAlignment="textEnd"
-                android:textColor="#FFF"
-                android:textSize="15dp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -397,7 +363,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/lbl_name"
@@ -423,20 +389,6 @@
                 android:layout_marginTop="@dimen/C5dp"
                 android:textSize="13sp"
                 android:visibility="gone" />
-            <TextView
-                android:id="@+id/btnOffCInv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Counter sales Offer"
-                android:textSize="13sp"
-                android:textAllCaps="true"
-                android:fontFamily="@font/poppins_bold"
-                android:background="@drawable/bottom_button"
-                android:paddingStart="@dimen/C16dp"
-                android:paddingEnd="@dimen/C16dp"
-                android:textColor="#ffffff"
-
-                />
         </LinearLayout>
         <!--<androidx.appcompat.widget.ActionMenuView
             android:layout_width=""
@@ -464,41 +416,9 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="@dimen/C2dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/C5dp"
-                    android:background="@color/grey_500"
-                    android:visibility="gone" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/PBrnd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginTop="@dimen/C5dp"
-                android:layout_marginRight="@dimen/C10dp"
-                android:layout_marginBottom="@dimen/C5dp"
-                android:background="@color/grey_300" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/category"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -517,13 +437,12 @@
                 android:orientation="vertical"
 
                 >
-
                 <RelativeLayout
                     android:id="@+id/rlSearchParent"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="@drawable/button_white"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/Category_Nametext"
@@ -540,8 +459,6 @@
 
 
                 </RelativeLayout>
-
-
                 <RelativeLayout
                     android:id="@+id/rlCategoryItemSearch"
                     android:layout_width="match_parent"
@@ -577,8 +494,6 @@
                         android:layout_marginRight="@dimen/C5dp"
                         android:src="@drawable/ic_baseline_close_24" />
                 </RelativeLayout>
-
-
                 <LinearLayout
                     android:id="@+id/llBillHeader"
                     android:layout_width="match_parent"
@@ -662,23 +577,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:visibility="gone">
-
-                                    <TextView
-                                        android:id="@+id/FreeQty"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginRight="@dimen/C3dp"
-                                        android:gravity="end"
-                                        android:text="Free"
-                                        android:textColor="@color/black"
-                                        android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -776,21 +674,6 @@
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:visibility="gone">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="Disc."
-                                        android:textAlignment="textEnd"
-                                        android:textColor="@color/black"
-                                        android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
 
 
                                 <LinearLayout
@@ -834,72 +717,14 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-
                             <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/orderrecyclerview"
+                                android:id="@+id/OrdOfferBund"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:visibility="visible"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                        </LinearLayout>
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cdFreeQtyParent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C5dp"
-                            android:visibility="gone"
-                            app:cardBackgroundColor="@color/grey_50"
-                            app:cardCornerRadius="@dimen/C5dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/C3dp"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/C3dp"
-                                    android:orientation="horizontal"
-                                    android:weightSum="2">
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:maxLines="1"
-                                        android:text="SKU"
-                                        android:textColor="@color/black"
-                                        android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.5"
-                                        android:gravity="end"
-                                        android:text="Free"
-                                        android:textColor="@color/black"
-                                        android:textSize="@dimen/C12dp"
-                                        android:textStyle="bold" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <androidx.recyclerview.widget.RecyclerView
-                                        android:id="@+id/freeRecyclerview"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:visibility="visible"
-                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                                </LinearLayout>
                             </LinearLayout>
-                        </androidx.cardview.widget.CardView>
 
 
                         <LinearLayout
@@ -996,6 +821,55 @@
                                     android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Discount"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:layout_marginEnd="@dimen/C5dp"
+                                    android:textSize="@dimen/C13dp" />
+                                <EditText
+                                    android:id="@+id/etdiscountPer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:hint="Disc"
+                                    android:inputType="numberDecimal"
+                                    android:text=""
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C13dp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="%"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/green"
+                                    android:textSize="@dimen/C13dp" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"/>
+
+                                <EditText
+                                    android:id="@+id/etdiscountAmt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:hint="Disc.Amt"
+                                    android:inputType="numberDecimal"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C13dp" />
+                            </LinearLayout>
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1066,16 +940,16 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp" />
                             </RelativeLayout>
-
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:orientation="horizontal"
                                 android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:text="Discount"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
@@ -1083,20 +957,20 @@
 
                                 <TextView
                                     android:id="@+id/tvcashdiscount"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
                                     android:text="0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/green"
                                     android:textSize="@dimen/C13dp" />
-                            </RelativeLayout>
+                            </LinearLayout>
 
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="3dp"
-                                android:layout_marginTop="-10dp"
+                                android:layout_marginTop="0dp"
                                 android:background="@color/black"
                                 android:outlineAmbientShadowColor="@color/black" />
 

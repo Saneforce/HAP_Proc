@@ -574,7 +574,7 @@ public class Common_Class {
                 public void onFailure(Call<Object> call, Throwable t) {
                     call.cancel();
                     updateUi.onErrorData(t.getMessage());
-                    Log.e("api response ex:", t.getMessage());
+                    Log.e("api response ex:"+key , t.getMessage());
                 }
             });
         } catch (Exception e) {
@@ -1073,6 +1073,59 @@ public class Common_Class {
     }
 
 
+    public void getOffPOSProductDetails(Activity activity, OnLiveUpdateListener liveUpdateListener) {
+
+        if (isNetworkAvailable(activity)) {
+            UserDetails = activity.getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            DatabaseHandler db = new DatabaseHandler(activity);
+            JSONObject jParam = new JSONObject();
+            try {
+                jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                jParam.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                jParam.put("outletId", Shared_Common_Pref.OutletCode);
+                jParam.put("div", UserDetails.getString("Divcode", ""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/prodGroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        // Log.v(TAG, response.toString());
+                        db.deleteMasterData(Constants.ProdGroups_List);
+                        db.addMasterData(Constants.ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
+
+                    }
+                });
+                ProductsLoaded=false;
+                service.getDataArrayList("get/posoffproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+//                            Log.v("SEC_Product_List", response.body().toString());
+                        db.deleteMasterData(Constants.OFFERPOS_Product_List);
+                        db.addMasterData(Constants.OFFERPOS_Product_List, response.body());
+                        ProductsLoaded=true;
+                        if(liveUpdateListener!=null) liveUpdateListener.onUpdate("");
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
+                        if(liveUpdateListener!=null) liveUpdateListener.onError(t.getLocalizedMessage());
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+                if(liveUpdateListener!=null) liveUpdateListener.onError(e.getLocalizedMessage());
+            }
+        }else{
+            if(liveUpdateListener!=null) liveUpdateListener.onError("Internet Not Available");
+        }
+
+    }
     public void getProductDetails(Activity activity) {
         getProductDetails(activity,null);
     }
@@ -1392,6 +1445,7 @@ public class Common_Class {
                             activity.finish();
                         } else {
                             CommonIntentwithFinish(moveActivity);
+
                         }
 
 
