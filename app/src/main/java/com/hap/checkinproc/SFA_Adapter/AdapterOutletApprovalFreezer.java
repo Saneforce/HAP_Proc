@@ -40,24 +40,23 @@ public class AdapterOutletApprovalFreezer extends RecyclerView.Adapter<AdapterOu
     @Override
     public void onBindViewHolder(@NonNull AdapterOutletApprovalFreezer.ViewHolder holder, int position) {
         try {
-            if (array.getJSONObject(holder.getBindingAdapterPosition()).optString("OutletCode").isEmpty()) {
+            if (array.getJSONObject(holder.getBindingAdapterPosition()).optString("flag").equals("2")) {
                 holder.background_ll.setBackgroundColor(Color.parseColor("#FFCDCD"));
             } else {
                 holder.background_ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
 
-            if (array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzStatus").contains("Own")) {
+            if (array.getJSONObject(holder.getBindingAdapterPosition()).optString("frzStatus").contains("Own")) {
                 holder.llExpecSalVal.setVisibility(View.GONE);
+            } else {
+                holder.llExpecSalVal.setVisibility(View.VISIBLE);
             }
-
-            holder.txFreezerGroup.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzGrp"));
-            holder.txFreezerStatus.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzStatus"));
-            holder.edt_expectSaleVal.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("SalesVal"));
-            holder.edt_depositAmt.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("DeposiAmt"));
-            holder.edt_retailer_freezerMake.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzMak"));
-            holder.edt_retailer_freezerTagNo.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzID"));
-            holder.txFreezerCapacity.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzCap"));
-            String frzImg = array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzImgs");
+            holder.txFreezerGroup.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("frzGrp"));
+            holder.txFreezerStatus.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("frzStatus"));
+            holder.edt_expectSaleVal.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("salesVal"));
+            holder.edt_depositAmt.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("depAmt"));
+            holder.freezerCapacityTV_Company.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("frzCap"));
+            /*String frzImg = array.getJSONObject(holder.getBindingAdapterPosition()).optString("FrzImgs");
             JSONArray array = new JSONArray(frzImg);
             List<String> jAryDta = new ArrayList<>();
             for (int i = 0; i < array.length(); i++) {
@@ -67,7 +66,7 @@ public class AdapterOutletApprovalFreezer extends RecyclerView.Adapter<AdapterOu
             }
             holder.rvFreezerFiles.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             filesAdapter = new FilesAdapter(jAryDta, R.layout.adapter_local_files_layout, context);
-            holder.rvFreezerFiles.setAdapter(filesAdapter);
+            holder.rvFreezerFiles.setAdapter(filesAdapter);*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -79,9 +78,8 @@ public class AdapterOutletApprovalFreezer extends RecyclerView.Adapter<AdapterOu
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        RecyclerView rvFreezerFiles;
-        TextView txFreezerGroup, txFreezerStatus, edt_expectSaleVal, edt_depositAmt, edt_retailer_freezerMake, edt_retailer_freezerTagNo, txFreezerCapacity;
-        LinearLayout background_ll, llExpecSalVal;
+        TextView txFreezerGroup, txFreezerStatus, edt_expectSaleVal, edt_depositAmt, freezerCapacityTV_Company;
+        LinearLayout llExpecSalVal, frzCapLayout, background_ll;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,12 +87,10 @@ public class AdapterOutletApprovalFreezer extends RecyclerView.Adapter<AdapterOu
             txFreezerStatus = itemView.findViewById(R.id.txFreezerStatus);
             edt_expectSaleVal = itemView.findViewById(R.id.edt_expectSaleVal);
             edt_depositAmt = itemView.findViewById(R.id.edt_depositAmt);
-            edt_retailer_freezerMake = itemView.findViewById(R.id.edt_retailer_freezerMake);
-            edt_retailer_freezerTagNo = itemView.findViewById(R.id.edt_retailer_freezerTagNo);
-            txFreezerCapacity = itemView.findViewById(R.id.txFreezerCapacity);
-            rvFreezerFiles = itemView.findViewById(R.id.rvFreezerFiles);
-            background_ll = itemView.findViewById(R.id.background_ll);
+            freezerCapacityTV_Company = itemView.findViewById(R.id.freezerCapacityTV_Company);
             llExpecSalVal = itemView.findViewById(R.id.llExpecSalVal);
+            frzCapLayout = itemView.findViewById(R.id.frzCapLayout);
+            background_ll = itemView.findViewById(R.id.background_ll);
         }
     }
 }

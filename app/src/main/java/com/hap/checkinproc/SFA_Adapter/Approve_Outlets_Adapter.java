@@ -67,7 +67,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
         holder.view.setOnClickListener(v -> {
             Intent intent = new Intent(context, ApproveOutletsDetailedActivity.class);
             Shared_Common_Pref.Outlet_Info_Flag = "1";
-            Shared_Common_Pref.Editoutletflag = "1";
+            Shared_Common_Pref.Editoutletflag = "0";
             Shared_Common_Pref.Outler_AddFlag = "0";
             Shared_Common_Pref.FromActivity = "Outlets";
             Shared_Common_Pref.OutletCode = String.valueOf(model.getListedDrCode());

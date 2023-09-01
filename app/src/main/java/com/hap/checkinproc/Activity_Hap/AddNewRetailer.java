@@ -545,6 +545,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 MakeEditable(true);
                 mSubmit.setVisibility(View.GONE);
                 headtext.setText("Edit Outlet");
+            } else {
+                MakeEditable(false);
             }
             //  getRouteDetails();
 //            getRetailerClass();
@@ -867,6 +869,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     cbFreezerYes.setChecked(true);
                     findViewById(R.id.freezerLayout).setVisibility(View.VISIBLE);
 
+                    freezerGroup = Retailer_Modal_List.get(getOutletPosition()).getFreezerGroup();
+                    freezerStatus = Retailer_Modal_List.get(getOutletPosition()).getFreezer_status();
                     txFreezerGroup.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezerGroup());
                     freezerGrId = Retailer_Modal_List.get(getOutletPosition()).getFreezerGroupID();
                     txFreezerStatus.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_status());
@@ -881,6 +885,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         freezerCapacityTV.setText(Retailer_Modal_List.get(getOutletPosition()).getFreezer_capacity());
                         if (!Common_Class.isNullOrEmpty(Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",")[1])) {
                             previewFreezerPhoto.setVisibility(View.VISIBLE);
+                            freezerImageName = Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",")[1];
                             freezerImageFullPath = "http://primary.hap.in/Outlet_Images/" + Retailer_Modal_List.get(getOutletPosition()).getFreezer_attachments().split(",")[1];
                             Glide.with(context)
                                     .load(freezerImageFullPath)
@@ -1315,10 +1320,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
             common_class.getDb_310Data(Constants.Rout_List, this);
             shared_common_pref.save(Constants.TEMP_DISTRIBUTOR_ID, shared_common_pref.getvalue(Constants.Distributor_Id));
-
-            if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
-                MakeEditable(false);
-            }
 
         } catch (Exception e) {
             Log.e(TAG + "catch:", e.getMessage());
