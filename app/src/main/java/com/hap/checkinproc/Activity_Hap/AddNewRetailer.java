@@ -538,6 +538,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
                 mSubmit.setVisibility(View.GONE);
                 headtext.setText("Outlet Info");
+                MakeEditable(false);
             }
 
             // Todo: Editoutletflag
@@ -545,8 +546,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 MakeEditable(true);
                 mSubmit.setVisibility(View.GONE);
                 headtext.setText("Edit Outlet");
-            } else {
-                MakeEditable(false);
             }
             //  getRouteDetails();
 //            getRetailerClass();
