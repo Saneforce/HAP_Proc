@@ -54,6 +54,9 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".face_recognition.FaceRecognitionActivity"
+            android:exported="false" />
+        <activity
             android:name=".SFA_Activity.FreezerStatusActivity"
             android:exported="false">
             <meta-data
