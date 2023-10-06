@@ -61,6 +61,9 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".face_recognition.FaceRecognition"
+            android:exported="false" />
+        <activity
             android:name=".SFA_Activity.FreezerStatusActivity"
             android:exported="false">
             <meta-data
