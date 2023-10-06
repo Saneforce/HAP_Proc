@@ -675,6 +675,50 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"></TextView>
                             </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Discount"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/cashdiscount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Base Price"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/BasePrice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+                            </RelativeLayout>
 
                             <RelativeLayout
                                 android:id="@+id/rlTax"
@@ -702,28 +746,6 @@
                             </RelativeLayout>
 
 
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Discount"
-                                    android:textAlignment="textStart"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C12dp"></TextView>
-
-                                <TextView
-                                    android:id="@+id/cashdiscount"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="₹0.00"
-                                    android:textAlignment="viewEnd"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C12dp"></TextView>
-                            </RelativeLayout>
 
                             <View
                                 android:layout_width="match_parent"

@@ -45,7 +45,8 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
             holder.productqty.setText("" + pm.getQty());
             holder.productUOM.setText("" + pm.getUnitCode());
             holder.productrate.setText("" + new DecimalFormat("##0.00").format(pm.getRate()));
-            holder.producttotal.setText("" + new DecimalFormat("##0.00").format(pm.getAmount()));
+            holder.producttotal.setText("" + new DecimalFormat("##0.00").format(pm.getQty()*pm.getRate()));
+            //holder.producttotal.setText("" + new DecimalFormat("##0.00").format(pm.getAmount()));
 
             if(flag.equalsIgnoreCase("PROJECTION")){
                 holder.llUom.setVisibility(View.GONE);

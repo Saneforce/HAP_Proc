@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -58,6 +59,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
 import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Adapter.RyclGrpListItemAdb;
@@ -222,14 +224,8 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
-            common_class.ProgressdialogShow(1, "Updating Matrial Details");
-            common_class.getProductDetails(this, new OnLiveUpdateListener() {
-                @Override
-                public void onUpdate(String mode) {
+            LoadingMaterials();
 
-                    common_class.ProgressdialogShow(0, "");
-                }
-            });
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
 
             getACBalance(0);
@@ -320,6 +316,38 @@ public class ProcPrimaryOrderActivity extends AppCompatActivity implements View.
         }
     }
 
+    public void LoadingMaterials(){
+        common_class.ProgressdialogShow(1, "Loading Material Details");
+        common_class.getProductDetails(getActiveActivity(), new OnLiveUpdateListener() {
+            @Override
+            public void onUpdate(String mode) {
+                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                getActiveActivity().overridePendingTransition(R.anim.in, R.anim.out);
+                common_class.ProgressdialogShow(0, "");
+            }
+
+            @Override
+            public void onError(String msg) {
+                RetryLoadingProds();
+                common_class.ProgressdialogShow(0, "");
+            }
+        });
+    }
+    public void RetryLoadingProds(){
+        AlertDialogBox.showDialog(getApplicationContext(), "HAP SFA", "Product Loading Failed. Do you want to Retry ?", "Retry", "Cancel", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                if (common_class.isNetworkAvailable(getApplicationContext())) {
+                    LoadingMaterials();
+                    dialog.dismiss();
+                }
+            }
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+    }
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {

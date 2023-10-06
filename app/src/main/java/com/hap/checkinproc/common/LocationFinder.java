@@ -118,6 +118,7 @@ public class LocationFinder {
         @Override
         public void onLocationResult(LocationResult locationResult) {
         List<Location> locationList = locationResult.getLocations();
+            Log.d(TAG, "onLocationResult: "+locationList.size());
         if (locationList.size() > 0) {
             //The last location in the list is the newest
 
@@ -165,10 +166,6 @@ public class LocationFinder {
                         switch (statusCode) {
                             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                                 try {
-                                    // Show the dialog by calling startResolutionForResult(), and check the
-                                    // result in onActivityResult().
-                                   // Log.i(TAG, "PendingIntent INSAP.");
-
                                     Log.v("LOACTION_SUCCESS","ONFAILURE");
                                     ResolvableApiException rae = (ResolvableApiException) e;
                                     rae.startResolutionForResult((Activity) activeActivity, 1000);

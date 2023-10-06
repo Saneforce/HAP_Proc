@@ -871,10 +871,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             JSONArray tax_Details = new JSONArray();
                             if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
                                     Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-
                                 for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
                                     JSONObject taxData = new JSONObject();
-
                                     String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
                                     Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
                                     taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
@@ -882,16 +880,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                     taxData.put("Tax_Type", label);
                                     taxData.put("Tax_Amt", formatter.format(amt));
                                     tax_Details.put(taxData);
-
-
                                 }
-
-
                             }
 
                             ProdItem.put("TAX_details", tax_Details);
                             Order_Details.put(ProdItem);
-
                         }
 
                         for (int i = 0; i < orderTotTax.size(); i++) {
@@ -926,7 +919,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                         sharedCommonPref.clear_pref(Constants.LOC_POS_DATA);
                                         Shared_Common_Pref.TransSlNo = jsonObjects.getString("OrderID");
                                         sharedCommonPref.save(Constants.FLAG, "POS INVOICE");ProductsLoaded=true;
-                                        common_class.ProgressdialogShow(1, "Updating Matrial Details");
+                                        common_class.ProgressdialogShow(1, "Updating Material Details");
                                         common_class.getPOSProduct(POSActivity.this, new OnLiveUpdateListener() {
                                             @Override
                                             public void onUpdate(String mode) {

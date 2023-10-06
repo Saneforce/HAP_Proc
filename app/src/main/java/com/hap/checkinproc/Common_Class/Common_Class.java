@@ -1153,7 +1153,6 @@ public class Common_Class {
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
                         call.cancel();
-
                     }
                 });
                 service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
@@ -1197,7 +1196,9 @@ public class Common_Class {
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
                             call.cancel();
-                            if(liveUpdateListener!=null) liveUpdateListener.onError(t.getLocalizedMessage());
+                            if(liveUpdateListener!=null){
+                                liveUpdateListener.onError(t.getLocalizedMessage());
+                            }
                         }
                     });
                 }else{
