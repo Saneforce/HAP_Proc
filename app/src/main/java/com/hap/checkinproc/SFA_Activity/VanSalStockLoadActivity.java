@@ -509,7 +509,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     }
 
     private void getProductList(){
-        common_class.ProgressdialogShow(1, "Getting Matrial Details");
+        common_class.ProgressdialogShow(1, "Getting Material Details");
 
         common_class.getPOSStockProduct(this, new OnLiveUpdateListener() {
             @Override

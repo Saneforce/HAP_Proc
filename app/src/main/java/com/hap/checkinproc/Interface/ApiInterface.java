@@ -523,6 +523,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/posorder")
     Call<JsonObject> savePOS(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=save/posofferorder")
+    Call<JsonObject> savePOSOffer(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
 
 
     @FormUrlEncoded

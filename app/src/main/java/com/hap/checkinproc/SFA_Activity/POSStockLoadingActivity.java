@@ -204,7 +204,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
         }
     }
     private void getProductList(){
-        common_class.ProgressdialogShow(1, "Getting Matrial Details");
+        common_class.ProgressdialogShow(1, "Getting Material Details");
 
         common_class.getPOSStockProduct(this, new OnLiveUpdateListener() {
             @Override
@@ -533,7 +533,7 @@ public class POSStockLoadingActivity extends AppCompatActivity  implements View.
                         if (response.isSuccessful()) {
                             try {
                                 common_class.ProgressdialogShow(0, "");
-                                common_class.ProgressdialogShow(1, "Updating Matrial Details");
+                                common_class.ProgressdialogShow(1, "Updating Material Details");
                                 common_class.getPOSProduct(POSStockLoadingActivity.this, new OnLiveUpdateListener() {
                                     @Override
                                     public void onUpdate(String mode) {

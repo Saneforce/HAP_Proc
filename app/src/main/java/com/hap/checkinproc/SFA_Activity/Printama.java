@@ -309,6 +309,11 @@ public class Printama {
     public void printTextln(int align, String text) {
         util.setAlign(align);
         printTextln(text);
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void printTextln(String text) {

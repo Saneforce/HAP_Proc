@@ -717,6 +717,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
+
             if(StockCheck.equalsIgnoreCase("1")) {
                 for (int z = 0; z < Getorder_Array_List.size(); z++) {
                     double enterQty = Getorder_Array_List.get(z).getQty();
@@ -802,11 +803,18 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                             ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                             ProdItem.put("BatchNo", Getorder_Array_List.get(z).getBatchNo());
+
+                            if(Getorder_Array_List.get(z).getQty()<1 || Getorder_Array_List.get(z).getOrderQty()<1){
+                                Toast.makeText(Invoice_Category_Select.this,"Zero Qty Found. Kindly Check Or Contact Admin",Toast.LENGTH_LONG).show();
+                                return;
+                            }
                             ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
                             double cf = (Getorder_Array_List.get(z).getCnvQty());
                            // ProdItem.put("Product_Total_Qty", cf > 0 ? (Getorder_Array_List.get(z).getQty()) *
                            //         cf : Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_Cnv_Qty", cf > 0 ? (Getorder_Array_List.get(z).getQty()) *
+                                    cf : Getorder_Array_List.get(z).getQty());
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getOrderQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                             ProdItem.put("MRP", String.valueOf(Getorder_Array_List.get(z).getMRP()));
@@ -828,10 +836,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
                             ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
-
                             JSONArray tax_Details = new JSONArray();
-
-
                             if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
                                     Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
 
@@ -851,8 +856,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             }
 
                             ProdItem.put("TAX_details", tax_Details);
-
-
                             Order_Details.put(ProdItem);
                         }
                         for (int i = 0; i < orderTotTax.size(); i++) {
@@ -865,6 +868,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
                         data.put(ActivityData);
+
+
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<JsonObject> responseBodyCall = apiInterface.saveInvoice(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code,
                                 sharedCommonPref.getvalue(Constants.LOGIN_TYPE), data.toString());

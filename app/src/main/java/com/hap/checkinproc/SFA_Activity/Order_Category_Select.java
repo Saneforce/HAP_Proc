@@ -1508,8 +1508,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                                         double discountVal = totQty * (((product_details_modalArrayList.get(i).getDiscount()
                                                         )) / 100);
 
-
-                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount((Math.round(discountVal)));
+                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount((discountVal));
 
                                                     } else {
                                                         //Rs
@@ -1518,8 +1517,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                                                             double freeVal = freePer * (product_details_modalArrayList.
                                                                     get(i).getDiscount());
-
-                                                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount((Math.round(freeVal)));
+                                                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount((freeVal));
                                                         } else {
                                                             int val = (int) (totQty / highestScheme);
                                                             double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));

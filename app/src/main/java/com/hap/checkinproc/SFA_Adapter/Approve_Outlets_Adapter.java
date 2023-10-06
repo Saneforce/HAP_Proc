@@ -71,7 +71,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
             Shared_Common_Pref.Outler_AddFlag = "0";
             Shared_Common_Pref.FromActivity = "Outlets";
             Shared_Common_Pref.OutletCode = String.valueOf(model.getListedDrCode());
-            intent.putExtra("OutletCode", String.valueOf(model.getListedDrCode()));
+            intent.putExtra("CustomerCode", String.valueOf(model.getCustomerID()));
             intent.putExtra("ListedDrCode", String.valueOf(model.getListedDrCode()));
             intent.putExtra("OutletName", model.getCustomerName());
             intent.putExtra("OutletAddress", model.getCustomerAddress());

@@ -1,7 +1,10 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -21,9 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
@@ -207,21 +212,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 shared_common_pref.save(Constants.Retailor_Address, model.getAddress());
                                 common_class.getDb_310Data(Constants.FreeSchemeDiscList, PendingOrdersActivity.this);
                                 common_class.getDb_310Data(Constants.TAXList, PendingOrdersActivity.this);
-                                common_class.ProgressdialogShow(1, "Loading Matrial Details");
-                                common_class.getProductDetails(PendingOrdersActivity.this, new OnLiveUpdateListener() {
-                                    @Override
-                                    public void onUpdate(String mode) {
-                                        common_class.ProgressdialogShow(0, "");
-                                        Intent intent = new Intent(context, Print_Invoice_Activity.class);
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void onError(String msg) {
-                                        Toast.makeText(PendingOrdersActivity.this, "Product Loading Failed...\n"+msg , Toast.LENGTH_SHORT).show();
-                                        common_class.ProgressdialogShow(0, "");
-                                    }
-                                });
+                                LoadingMaterials();
                             });
                             adapter.setCancelClicked((model, position) -> {
                                 rlCnclOrd.setVisibility(View.VISIBLE);
@@ -284,6 +275,38 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
         });
     }
 
+    public void LoadingMaterials(){
+        common_class.ProgressdialogShow(1, "Loading Material Details");
+        common_class.getProductDetails(getActiveActivity(), new OnLiveUpdateListener() {
+            @Override
+            public void onUpdate(String mode) {
+                Intent intent = new Intent(context, Print_Invoice_Activity.class);
+                startActivity(intent);
+                common_class.ProgressdialogShow(0, "");
+            }
+
+            @Override
+            public void onError(String msg) {
+                RetryLoadingProds();
+                common_class.ProgressdialogShow(0, "");
+            }
+        });
+    }
+    public void RetryLoadingProds(){
+        AlertDialogBox.showDialog(getApplicationContext(), "HAP SFA", "Product Loading Failed. Do you want to Retry ?", "Retry", "Cancel", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                if (common_class.isNetworkAvailable(getApplicationContext())) {
+                    LoadingMaterials();
+                    dialog.dismiss();
+                }
+            }
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+    }
     private void cancelOrder(ModelPendingOrder model, String message, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(Html.fromHtml("Are you sure you want to cancel this order?<br>" + "Outlet Name: <b>" + model.getTitle2() + "</b><br>Order ID: <b>" + model.getOrderID() + "</b>"));

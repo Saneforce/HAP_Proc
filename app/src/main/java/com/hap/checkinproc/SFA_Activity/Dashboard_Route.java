@@ -9,6 +9,7 @@ import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -48,11 +49,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
@@ -1340,21 +1343,8 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                             shared_common_pref.save(Constants.Retailor_PHNo, mRetailer_Modal_ListFilter.get(position).getPrimary_No());
 
                             common_class.getDb_310Data(Constants.TAXList, getActiveActivity());
-                            common_class.ProgressdialogShow(1, "Loading Matrial Details");
-                            common_class.getProductDetails(getActiveActivity(), new OnLiveUpdateListener() {
-                                @Override
-                                public void onUpdate(String mode) {
-                                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                                    getActivity().overridePendingTransition(R.anim.in, R.anim.out);
-                                    common_class.ProgressdialogShow(0, "");
-                                }
+                            LoadingMaterials();
 
-                                @Override
-                                public void onError(String msg) {
-                                    Toast.makeText(getContext(), "Product Loading Failed...\n"+msg , Toast.LENGTH_SHORT).show();
-                                    common_class.ProgressdialogShow(0, "");
-                                }
-                            });
                             //}
 
                         }
@@ -1362,7 +1352,38 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                         Log.v("AllDataFragment:", e.getMessage());
                     }
                 }
+                public void LoadingMaterials(){
+                    common_class.ProgressdialogShow(1, "Loading Material Details");
+                    common_class.getProductDetails(getActiveActivity(), new OnLiveUpdateListener() {
+                        @Override
+                        public void onUpdate(String mode) {
+                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                            getActivity().overridePendingTransition(R.anim.in, R.anim.out);
+                            common_class.ProgressdialogShow(0, "");
+                        }
 
+                        @Override
+                        public void onError(String msg) {
+                            RetryLoadingProds();
+                            common_class.ProgressdialogShow(0, "");
+                        }
+                    });
+                }
+                public void RetryLoadingProds(){
+                    AlertDialogBox.showDialog(getContext(), "HAP SFA", "Product Loading Failed. Do you want to Retry ?", "Retry", "Cancel", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            if (common_class.isNetworkAvailable(getContext())) {
+                                LoadingMaterials();
+                                dialog.dismiss();
+                            }
+                        }
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
                 @Override
                 public void CallMobile(String MobileNo) {
                     Log.d("Event", "CAll Mobile");
