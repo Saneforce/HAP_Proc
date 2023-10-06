@@ -1,93 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/C8dp"
+    android:layout_marginTop="@dimen/C8dp"
     android:clickable="true"
     android:focusable="true"
-    android:elevation="8dp"
-    android:layout_marginTop="@dimen/C8dp"
-    android:layout_marginHorizontal="@dimen/C8dp"
-    app:cardCornerRadius="@dimen/C8dp"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:id="@+id/background_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#CCCCCC"
-        android:paddingVertical="@dimen/C8dp"
+        android:orientation="horizontal"
         android:paddingHorizontal="@dimen/C10dp"
-        android:orientation="horizontal">
+        android:paddingVertical="@dimen/C8dp">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Group"/>
+                android:text="Group" />
 
             <TextView
                 android:id="@+id/group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:layout_marginEnd="@dimen/C8dp"
                 android:background="@drawable/text_bg_grey"
                 android:paddingHorizontal="@dimen/C10dp"
                 android:paddingVertical="6dp"
-                android:layout_marginEnd="@dimen/C8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="-18"/>
+                android:text="-18" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Category"/>
+                android:text="Category" />
 
             <TextView
                 android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:layout_marginEnd="@dimen/C8dp"
                 android:background="@drawable/text_bg_grey"
                 android:paddingHorizontal="@dimen/C10dp"
                 android:paddingVertical="6dp"
-                android:layout_marginEnd="@dimen/C8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Category"/>
+                android:text="Category" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sub Category"/>
+                android:text="Sub Category" />
 
             <TextView
                 android:id="@+id/subCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:layout_marginEnd="@dimen/C8dp"
                 android:background="@drawable/text_bg_grey"
                 android:paddingHorizontal="@dimen/C10dp"
                 android:paddingVertical="6dp"
-                android:layout_marginEnd="@dimen/C8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sub Category"/>
+                android:text="Sub Category" />
 
         </LinearLayout>
 

@@ -56,7 +56,7 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
     Shared_Common_Pref shared_common_pref;
     ProgressDialog progressDialog;
 
-    JSONArray catArray, catArrayNew, freezerArray, freezerArrayNew;
+    JSONArray catArray, catArrayNew, catForApprove, freezerArray, freezerArrayNew;
     ApiInterface apiInterface;
 
     @Override
@@ -109,6 +109,10 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(context);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+
+        String ss = shared_common_pref.getvalue(Constants.LOGIN_DATA);
+        Log.e("mhfd", "LOGIN_DATA: " + ss);
 
         rejectBtn.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -255,7 +259,6 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                         JSONObject object = new JSONObject(result);
                         if (object.getBoolean("success")) {
                             JSONObject res = object.getJSONObject("response");
-                            Log.e("skfjgh", res.toString());
 
                             JSONObject Mas_ListedDr = res.getJSONObject("Mas_ListedDr");
                             OUTLET_NAME = Mas_ListedDr.optString("ListedDr_Name");
@@ -264,9 +267,26 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                             DELIVERY_TYPE = Mas_ListedDr.optString("Allowance_Type");
 
                             outletName.setText(OUTLET_NAME);
-                            outletType.setText(OUTLET_TYPE);
                             gst.setText(GST);
                             deliveryType.setText(DELIVERY_TYPE);
+
+                            switch (OUTLET_TYPE) {
+                                case "0":
+                                    outletType.setText("Non Service");
+                                    break;
+                                case "1":
+                                    outletType.setText("Service");
+                                    break;
+                                case "2":
+                                    outletType.setText("Closed");
+                                    break;
+                                case "3":
+                                    outletType.setText("Duplicate");
+                                    break;
+                                default:
+                                    outletType.setText("");
+                                    break;
+                            }
 
                             JSONObject Mas_OutletChangesReq = res.optJSONObject("Mas_OutletChangesReq");
                             if (Mas_OutletChangesReq != null) {
@@ -290,7 +310,23 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                                 OUTLET_TYPE_NEW = OUTLET_TYPE;
                                 outletTypeNew.setVisibility(View.GONE);
                             } else {
-                                outletTypeNew.setText(OUTLET_TYPE_NEW);
+                                switch (OUTLET_TYPE_NEW) {
+                                    case "0":
+                                        outletTypeNew.setText("Non Service");
+                                        break;
+                                    case "1":
+                                        outletTypeNew.setText("Service");
+                                        break;
+                                    case "2":
+                                        outletTypeNew.setText("Closed");
+                                        break;
+                                    case "3":
+                                        outletTypeNew.setText("Duplicate");
+                                        break;
+                                    default:
+                                        outletTypeNew.setText("");
+                                        break;
+                                }
                             }
 
                             if (GST.equalsIgnoreCase(GST_NEW) || GST_NEW.isEmpty()) {
@@ -323,8 +359,8 @@ public class ApproveOutletsDetailedActivity extends AppCompatActivity {
                                 categoryTypeRV.setAdapter(adapterOutletApprovalCategory);
                             }
 
-                            freezerArray = res.getJSONArray("Outlet_Freezer_Mapping");
-                            freezerArrayNew = res.getJSONArray("Mas_RetFreezerDetails");
+                            freezerArray = res.getJSONArray("OurFreezers");
+                            freezerArrayNew = res.getJSONArray("PendingFreezers");
                             for (int i = 0; i < freezerArrayNew.length(); i++) {
                                 JSONObject frzObject = freezerArrayNew.getJSONObject(i);
                                 freezerArray.put(frzObject);

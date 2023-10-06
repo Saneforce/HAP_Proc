@@ -278,7 +278,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         editRetailJsonObj = jItem;
 
         //  shared_common_pref.save(Constants.Distributor_phone, myDataset.get(position).getPhone());
-        Shared_Common_Pref.Outlet_Info_Flag = "1";
+        Shared_Common_Pref.Outlet_Info_Flag = "0";
         Shared_Common_Pref.Editoutletflag = "1";
         Shared_Common_Pref.Outler_AddFlag = "0";
         Shared_Common_Pref.FromActivity = "Outlets";
