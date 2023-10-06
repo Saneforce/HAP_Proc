@@ -34,14 +34,14 @@ public class AdapterOutletApprovalCategory extends RecyclerView.Adapter<AdapterO
     @Override
     public void onBindViewHolder(@NonNull AdapterOutletApprovalCategory.ViewHolder holder, int position) {
         try {
-            if (array.getJSONObject(holder.getBindingAdapterPosition()).optString("ReqId").isEmpty()) {
+            if (array.getJSONObject(holder.getBindingAdapterPosition()).optString("flag").equals("0")) {
                 holder.background_ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
             } else {
                 holder.background_ll.setBackgroundColor(Color.parseColor("#FFCDCD"));
             }
-            holder.group.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("OutletCat_Type"));
-            holder.category.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("Category_Name"));
-            holder.subCategory.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("Sub_Category_Name"));
+            holder.group.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("catType"));
+            holder.category.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("catName"));
+            holder.subCategory.setText(array.getJSONObject(holder.getBindingAdapterPosition()).optString("subCatName"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
