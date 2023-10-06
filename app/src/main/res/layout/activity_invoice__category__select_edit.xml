@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".SFA_Activity.Order_Category_Select">
 
     <LinearLayout
@@ -545,18 +544,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/orderrecyclerview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:visibility="visible"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                    </LinearLayout>
-
+                            android:visibility="visible"/>
 
                     <LinearLayout
                         android:id="@+id/llPayNetAmountDetail"

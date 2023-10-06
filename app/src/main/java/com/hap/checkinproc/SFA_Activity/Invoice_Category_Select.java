@@ -386,45 +386,45 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
                 JSONArray jsonArray1 = new JSONArray(preOrderList);
 
-                if (jsonArray1 != null && jsonArray1.length() > 0) {
-                    for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                        for (int i = 0; i < jsonArray1.length(); i++) {
-                            JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
-
-                            if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
-                                //Product_Modal.get(pm).setRegularQty
-                                //        (jsonObject1.getInt("Quantity"));
-                                Product_Modal.get(pm).setQty(
-                                        jsonObject1.getInt("Quantity"));
-
-                                Product_Modal.get(pm).setUOM_Nm(jsonObject1.getString("UOM"));
-                                Product_Modal.get(pm).setUOM_Id("" + jsonObject1.getString("umo_unit"));
-                                Product_Modal.get(pm).setCnvQty(jsonObject1.getDouble("Conf_Fac"));
-
-                                Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
-                                Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("discount_price")));
-                                Product_Modal.get(pm).setOff_Pro_code(String.valueOf(jsonObject1.getString("Offer_ProductCd")));
-                                Product_Modal.get(pm).setOff_Pro_name(String.valueOf(jsonObject1.getString("Offer_ProductNm")));
-                                Product_Modal.get(pm).setRate((jsonObject1.getDouble("Rate")));
-
-                                double enterQty=jsonObject1.getInt("Quantity");
-                                double totQty = (enterQty + Product_Modal.get(pm).getRegularQty()) * (Product_Modal.get(pm).getCnvQty());
-                                if(Product_Modal.get(pm).getCnvQty()>1) {
-                                    totQty = ((enterQty + Product_Modal.get(pm).getRegularQty()) * Product_Modal.get(pm).getCnvQty()) - Double.parseDouble(Product_Modal.get(pm).getFree());
+                new Thread(() -> {
+                    if (jsonArray1 != null && jsonArray1.length() > 0) {
+                        for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                            for (int i = 0; i < jsonArray1.length(); i++) {
+                                JSONObject jsonObject1 = null;
+                                try {
+                                    jsonObject1 = jsonArray1.getJSONObject(i);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
                                 }
-                                int psc=(int)totQty;
-                                Product_Modal.get(pm).setOrderQty(psc);
-
-
-                                //double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
-                                // Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
-                                //double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
-                                //double sellAmt=dMRPAmt-dMrgn;
-
-                                //double sellAmt= jsonObject1.getDouble("value"); //Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) * Double.parseDouble(Product_Modal.get(pm).getPTR())));
-                                double sellAmt= Double.valueOf(formatter.format(psc * Double.parseDouble(Product_Modal.get(pm).getPTR())));
-                                Product_Modal.get(pm).setAmount(sellAmt);
-                                //Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
+                                try {
+                                    if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
+                                        //Product_Modal.get(pm).setRegularQty
+                                        //        (jsonObject1.getInt("Quantity"));
+                                        Product_Modal.get(pm).setQty(
+                                                jsonObject1.getInt("Quantity"));
+                                        Product_Modal.get(pm).setUOM_Nm(jsonObject1.getString("UOM"));
+                                        Product_Modal.get(pm).setUOM_Id("" + jsonObject1.getString("umo_unit"));
+                                        Product_Modal.get(pm).setCnvQty(jsonObject1.getDouble("Conf_Fac"));
+                                        Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
+                                        Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("discount_price")));
+                                        Product_Modal.get(pm).setOff_Pro_code(String.valueOf(jsonObject1.getString("Offer_ProductCd")));
+                                        Product_Modal.get(pm).setOff_Pro_name(String.valueOf(jsonObject1.getString("Offer_ProductNm")));
+                                        Product_Modal.get(pm).setRate((jsonObject1.getDouble("Rate")));
+                                        double enterQty=jsonObject1.getInt("Quantity");
+                                        double totQty = (enterQty + Product_Modal.get(pm).getRegularQty()) * (Product_Modal.get(pm).getCnvQty());
+                                        if(Product_Modal.get(pm).getCnvQty()>1) {
+                                            totQty = ((enterQty + Product_Modal.get(pm).getRegularQty()) * Product_Modal.get(pm).getCnvQty()) - Double.parseDouble(Product_Modal.get(pm).getFree());
+                                        }
+                                        int psc=(int)totQty;
+                                        Product_Modal.get(pm).setOrderQty(psc);
+                                        //double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
+                                        // Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
+                                        //double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
+                                        //double sellAmt=dMRPAmt-dMrgn;
+                                        //double sellAmt= jsonObject1.getDouble("value"); //Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) * Double.parseDouble(Product_Modal.get(pm).getPTR())));
+                                        double sellAmt= Double.valueOf(formatter.format(psc * Double.parseDouble(Product_Modal.get(pm).getPTR())));
+                                        Product_Modal.get(pm).setAmount(sellAmt);
+                                        //Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
 
                                 /*JSONArray taxArr = jsonObject1.getJSONArray("TAX_details");
                                 List<Product_Details_Modal> taxList = new ArrayList<>();
@@ -436,17 +436,17 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     wholeTax += taxObj.getDouble("Tax_Amt");
 
                                 }*/
-                                sumofTax(Product_Modal,pm);
-                                //Product_Modal.get(pm).setProductDetailsModal(taxList);
-                                //Product_Modal.get(pm).setTax(Double.parseDouble(formatter.format(wholeTax)));
-
-
+                                        sumofTax(Product_Modal,pm);
+                                        //Product_Modal.get(pm).setProductDetailsModal(taxList);
+                                        //Product_Modal.get(pm).setTax(Double.parseDouble(formatter.format(wholeTax)));
+                                    }
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
-
-
                         }
                     }
-                }
+                }).start();
 
             } else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
                 Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA), userType);
@@ -463,12 +463,22 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             JSONArray filterArr = new JSONArray();
 
-            for (int i = 0; i < ProdGroups.length(); i++) {
-                JSONObject obj = ProdGroups.getJSONObject(i);
-                if (Common_Class.isNullOrEmpty(Shared_Common_Pref.SecOrdOutletType) || (Shared_Common_Pref.SecOrdOutletType.contains(obj.getString("name"))))
-                    filterArr.put(obj);
-            }
-
+            new Thread(() -> {
+                for (int i = 0; i < ProdGroups.length(); i++) {
+                    JSONObject obj = null;
+                    try {
+                        obj = ProdGroups.getJSONObject(i);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        if (Common_Class.isNullOrEmpty(Shared_Common_Pref.SecOrdOutletType) || (Shared_Common_Pref.SecOrdOutletType.contains(obj.getString("name"))))
+                            filterArr.put(obj);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
 
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);

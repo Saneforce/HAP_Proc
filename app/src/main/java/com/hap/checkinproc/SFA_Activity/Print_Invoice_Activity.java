@@ -581,8 +581,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     if (stockFileList.get(0).getFileUrls() == null || stockFileList.get(0).getFileUrls().size() == 0) {
                         common_class.showMsg(this, "Please take picture");
                         return;
-
                     }
+
                     if (btnInvoice.isAnimating()) return;
                     btnInvoice.startAnimation();
                     handler.postDelayed(new Runnable() {
@@ -590,12 +590,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         public void run() {
                             String sLoc = sharedCommonPref.getvalue("CurrLoc");
                             if (sLoc.equalsIgnoreCase("")) {
-                                new LocationFinder(getApplication(), new LocationEvents() {
-                                    @Override
-                                    public void OnLocationRecived(Location location) {
-                                        strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                        confirmReturnInv();
-                                    }
+                                new LocationFinder(getApplication(), location -> {
+                                    strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                    confirmReturnInv();
                                 });
                             } else {
                                 strLoc = sLoc.split(":");
