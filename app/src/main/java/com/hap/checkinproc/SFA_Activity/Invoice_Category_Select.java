@@ -3,7 +3,6 @@ package com.hap.checkinproc.SFA_Activity;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -36,11 +35,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -66,17 +63,14 @@ import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,11 +88,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     TextView Out_Let_Name, Category_Nametext;
     //String CurrencySymbol="B$"; //₹
     CircularProgressButton takeorder, btnRepeat;
-
     private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
     LinearLayout lin_gridcategory;
     Common_Class common_class;
-
     String Ukey;
     String[] strLoc;
     String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "", mDCRMode;
@@ -106,22 +98,18 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     EditText cashdiscount,etDiscPer,etDiscAmt;
     Prodct_Adapter mProdct_Adapter;
     List<Product_Details_Modal> freeQty_Array_List;
-
     String TAG = "Invoice_Category_Select";
     DatabaseHandler db;
     public int selectedPos = 0;
-
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
     EditText etCategoryItemSearch, etRecAmt;
     private TextView tvTotalAmount;
     private double totalvalues,rDiscAmt,rDiscPer, InvAmt;
     double cashDiscount;
-
     private Integer totalQty;
     private TextView tvBillTotItem, tvPayMode, tvDate, tvOutStanding, tvTotOutstanding, tvInvAmt, tvPayAmt,txPONo;
     private double taxVal;
-
     RelativeLayout rlPayment;
 
     CheckBox cbCredit, cbCash;
@@ -146,14 +134,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_invoice__category__select_edit);
+
+            gson = new Gson();
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(Invoice_Category_Select.this);
             common_class = new Common_Class(this);
-            categorygrid = findViewById(R.id.category);
-            Grpgrid = findViewById(R.id.PGroup);
-            Brndgrid = findViewById(R.id.PBrnd);
-            takeorder = findViewById(R.id.takeorder);
-            btnRepeat = findViewById(R.id.btnRepeat);
+
+            initVariable();
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -161,34 +148,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
-            cashdiscount = findViewById(R.id.cashdiscount);
-            lin_gridcategory = findViewById(R.id.lin_gridcategory);
-            Out_Let_Name = findViewById(R.id.outlet_name);
-            Category_Nametext = findViewById(R.id.Category_Nametext);
-            rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
-            ivClose = findViewById(R.id.ivClose);
-
-            etCategoryItemSearch = findViewById(R.id.searchView);
-
-            rlPayment = findViewById(R.id.rlPayMode);
-            rlCredit = findViewById(R.id.rlPayTypeCredit);
-            rlCash = findViewById(R.id.rlPayTypeCash);
-            tvDate = findViewById(R.id.tvDate);
-            tvPayMode = findViewById(R.id.tvPayMode);
-            etRecAmt = findViewById(R.id.etRecAmt);
-            cbCash = findViewById(R.id.cbCash);
-            cbCredit = findViewById(R.id.cbCredit);
-            llPayMode = findViewById(R.id.llPayMode);
-            rlAddProduct = findViewById(R.id.rlAddProduct);
-            tvOutStanding = findViewById(R.id.tvOutstanding);
-            tvTotOutstanding = findViewById(R.id.tvTotOutstanding);
-            tvInvAmt = findViewById(R.id.tvInvAMt);
-            tvPayAmt = findViewById(R.id.tvPayAmt);
-            txPONo = findViewById(R.id.txPONum);
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             Product_ModalSetAdapter = new ArrayList<>();
-            gson = new Gson();
+
             takeorder.setOnClickListener(this);
             rlCategoryItemSearch.setOnClickListener(this);
             ivClose.setOnClickListener(this);
@@ -198,12 +161,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             rlAddProduct.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
-
-
             Ukey = Common_Class.GetEkey();
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
-            recyclerView = findViewById(R.id.orderrecyclerview);
-            freeRecyclerview = findViewById(R.id.freeRecyclerview);
+
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -211,8 +171,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
             Product_Modal = gson.fromJson(OrdersTable, userType);
-            etDiscPer=findViewById(R.id.etdiscountPer);
-            etDiscAmt=findViewById(R.id.etdiscountAmt);
+
             etDiscPer.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -512,6 +471,40 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             Log.e(TAG, " invoice oncreate: " + e.getMessage());
 
         }
+    }
+
+    private void initVariable() {
+        categorygrid = findViewById(R.id.category);
+        Grpgrid = findViewById(R.id.PGroup);
+        Brndgrid = findViewById(R.id.PBrnd);
+        takeorder = findViewById(R.id.takeorder);
+        btnRepeat = findViewById(R.id.btnRepeat);
+        cashdiscount = findViewById(R.id.cashdiscount);
+        lin_gridcategory = findViewById(R.id.lin_gridcategory);
+        Out_Let_Name = findViewById(R.id.outlet_name);
+        Category_Nametext = findViewById(R.id.Category_Nametext);
+        rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
+        ivClose = findViewById(R.id.ivClose);
+        etCategoryItemSearch = findViewById(R.id.searchView);
+        rlPayment = findViewById(R.id.rlPayMode);
+        rlCredit = findViewById(R.id.rlPayTypeCredit);
+        rlCash = findViewById(R.id.rlPayTypeCash);
+        tvDate = findViewById(R.id.tvDate);
+        tvPayMode = findViewById(R.id.tvPayMode);
+        etRecAmt = findViewById(R.id.etRecAmt);
+        cbCash = findViewById(R.id.cbCash);
+        cbCredit = findViewById(R.id.cbCredit);
+        llPayMode = findViewById(R.id.llPayMode);
+        rlAddProduct = findViewById(R.id.rlAddProduct);
+        tvOutStanding = findViewById(R.id.tvOutstanding);
+        tvTotOutstanding = findViewById(R.id.tvTotOutstanding);
+        tvInvAmt = findViewById(R.id.tvInvAMt);
+        tvPayAmt = findViewById(R.id.tvPayAmt);
+        txPONo = findViewById(R.id.txPONum);
+        recyclerView = findViewById(R.id.orderrecyclerview);
+        freeRecyclerview = findViewById(R.id.freeRecyclerview);
+        etDiscPer=findViewById(R.id.etdiscountPer);
+        etDiscAmt=findViewById(R.id.etdiscountAmt);
     }
 
     private void FilterTypes(String GrpID) {
@@ -942,11 +935,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setLayoutManager(linearLayoutManager);
         showFreeQtyList();
-
-
     }
 
     void showFreeQtyList() {
@@ -1481,29 +1476,22 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<Invoice_Category_Select.CategoryAdapter.MyViewHolder> {
-
         Context context;
         Invoice_Category_Select.CategoryAdapter.MyViewHolder pholder;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
             public LinearLayout gridcolor, undrCate;
             TextView icon;
             ImageView ivCategoryIcon;
 
-
             public MyViewHolder(View view) {
                 super(view);
-
                 icon = view.findViewById(R.id.textView);
                 gridcolor = view.findViewById(R.id.gridcolor);
                 ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
                 undrCate = view.findViewById(R.id.undrCate);
-
-
             }
         }
-
 
         public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
             this.context = applicationContext;
@@ -1531,8 +1519,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         @Override
         public void onBindViewHolder(Invoice_Category_Select.CategoryAdapter.MyViewHolder holder, int position) {
             try {
-
-
                 holder.icon.setText(listt.get(holder.getBindingAdapterPosition()).getName());
                 if (!listt.get(position).getCatImage().equalsIgnoreCase("")) {
                     holder.ivCategoryIcon.clearColorFilter();
@@ -1561,13 +1547,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
                         holder.undrCate.setVisibility(View.VISIBLE);
-
                     }
                 });
-
-
                 if (position == selectedPos) {
-
                     holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbtnprimary));
                     holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
@@ -1577,79 +1559,31 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.gridcolor.setBackground(getResources().getDrawable(R.drawable.cardbutton));
                     holder.icon.setTextColor(getResources().getColor(R.color.black));
                     holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
                 }
-
             } catch (
                     Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
-
-
         }
 
         @Override
         public int getItemCount() {
             return listt.size();
         }
-
-
     }
 
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
-        Context context;
+        private Context context;
         int CategoryType;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP;
-            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
-            EditText Qty;
-
-            LinearLayout rlUOM;
-
-            public MyViewHolder(View view) {
-                super(view);
-                productname = view.findViewById(R.id.productname);
-                erpCode = view.findViewById(R.id.erpCode);
-                QtyPls = view.findViewById(R.id.ivQtyPls);
-                QtyMns = view.findViewById(R.id.ivQtyMns);
-                Rate = view.findViewById(R.id.Rate);
-                Qty = view.findViewById(R.id.Qty);
-                RegularQty = view.findViewById(R.id.RegularQty);
-                Amount = view.findViewById(R.id.Amount);
-                Free = view.findViewById(R.id.Free);
-                Disc = view.findViewById(R.id.Disc);
-                tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
-                tvUOM = view.findViewById(R.id.tvUOM);
-                tvStock = view.findViewById(R.id.tvStockBal);
-                tvTknStock = view.findViewById(R.id.tvTknStock);
-                tvCLStock = view.findViewById(R.id.tvCLStock);
-                tvBatchNo= view.findViewById(R.id.tvBatchNo);
-                tvMRP = view.findViewById(R.id.MrpRate);
-
-                if (CategoryType >= 0) {
-                    ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
-                    lblRQty = view.findViewById(R.id.status);
-                    regularAmt = view.findViewById(R.id.RegularAmt);
-                    QtyAmt = view.findViewById(R.id.qtyAmt);
-                    totalQty = view.findViewById(R.id.totalqty);
-                    rlUOM = view.findViewById(R.id.rlUOM);
-                } else {
-                    ivDel = view.findViewById(R.id.ivDel);
-                }
-
-            }
-        }
+        boolean isLoad = true;
 
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
             this.Product_Details_Modalitem = Product_Details_Modalitem;
             this.rowLayout = rowLayout;
             this.context = context;
             this.CategoryType = categoryType;
-
         }
 
         public void notify(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
@@ -1658,9 +1592,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             this.context = context;
             this.CategoryType = categoryType;
             notifyDataSetChanged();
-
         }
-
 
         @Override
         public Prodct_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -1669,21 +1601,12 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         @Override
-        public int getItemViewType(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
         public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getBindingAdapterPosition());
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
                 holder.erpCode.setText("" + Product_Details_Modal.getERP_Code().toUpperCase());
+
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
                 else {
@@ -1692,6 +1615,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
                 }
+
                 holder.Rate.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
@@ -1709,6 +1633,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 if (Product_Details_Modal.getERP_Code().toUpperCase().equalsIgnoreCase("4000002046")){
                     Log.d("hi","gh");
                 }
+
                 double totQty= Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
                 holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
 
@@ -1733,15 +1658,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
-
                 //holder.tvMRP.setText(CurrencySymbol+" " + Product_Details_Modal.getMRP());
                 holder.tvMRP.setText(CurrencySymbol+" "  + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
 
-                if (CategoryType >= 0) {
-
-                    holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() /**
-                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()*/)));
-
+                if (CategoryType >= 0){
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
                         Glide.with(this.context)
@@ -1752,47 +1672,29 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
                         holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
                     }
+                }
 
+                final double[] sellAmt = new double[1];
+                final double[] TotalTax = new double[1];
+                if (CategoryType >= 0) {
+                    new Thread(() -> {
+                        holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() /**
+                         Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()*/)));
+
+                        //  Integer indx= holder.getBindingAdapterPosition();
+                        sellAmt[0] = Product_Details_Modalitem.get(position).getAmount();
+                        TotalTax[0] = getTotTax(Product_Details_Modalitem,position);
+                        sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
+                    }).start();
+
+                    sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
+                    holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(sellAmt[0]));
 
                     holder.regularAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
-                    Integer indx= holder.getBindingAdapterPosition();
-                    double sellAmt=Product_Details_Modalitem.get(indx).getAmount();
-                    double TotalTax=getTotTax(Product_Details_Modalitem,indx);
-                    sellAmt=sellAmt/((100+(TotalTax))/100);
-                    holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(sellAmt));
-
-                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            uomPos = position;
-                            uomList = new ArrayList<>();
-                            String uomids="";
-                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
-                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
-                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
-
-                                    if((";"+uomids).toLowerCase().indexOf(";"+uom.getUOM_Id().toLowerCase()+";")<0) {
-                                        uomids += uom.getUOM_Id().toLowerCase() + ";";
-                                        uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
-                                    }
-                                }
-                                common_class.showCommonDialog(uomList, 1, Invoice_Category_Select.this);
-                            } else {
-                                common_class.showMsg(Invoice_Category_Select.this, "No Records Found.");
-                            }
-                        }
-                    });
-
-
-                    //holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance());
-                    //holder.tvBatchNo.setText("Batch : "+Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBatchNo());
-
-
-
                 }
 
-                holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getTax()));
+                runOnUiThread(() -> holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getTax())));
 
                 if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
@@ -1802,52 +1704,63 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 else
                     holder.Free.setText("" + Product_Details_Modal.getFree());
 
-                holder.Disc.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getDiscount()));
-
+                runOnUiThread(() -> holder.Disc.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getDiscount())));
 
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        Thread thread = new Thread(){
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void run() {
+                                super.run();
+                                String sVal = holder.Qty.getText().toString();
+                                if (sVal.equalsIgnoreCase("")) sVal = "0";
+
+                                int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+                                if(StockCheck.equalsIgnoreCase("1") && order > balance ){
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            common_class.showMsg(Invoice_Category_Select.this, "Can't exceed Stock");
+                                        }
+                                    });
+                                }else{
+                                    //if ((balance >= order) || Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0) {
+                                    if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                        Log.e("txt_", "loop works");
+                                    String finalSVal = sVal;
+                                    runOnUiThread(() -> {
+                                        holder.tvStock.setText("" + (int) (balance - order));
+                                        holder.Qty.setText(String.valueOf(Integer.parseInt(finalSVal) + 1));
+                                    });
+                                }
+                            }
+                        };
+                        thread.start();
+
+                    }
+                });
+
+                holder.QtyMns.setOnClickListener(v -> {
+                    try {
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
+                        if (Integer.parseInt(sVal) > 0) {
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
 
-                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
-                        int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
-                        if(StockCheck.equalsIgnoreCase("1") && order > balance ){
-                            common_class.showMsg(Invoice_Category_Select.this, "Can't exceed Stock");
-                        }else{
-                        //if ((balance >= order) || Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0) {
+                            int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+                            int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
                             if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                                 holder.tvStock.setText("" + (int) (balance - order));
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
                         }
-//                        else {
-//                            common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
-//                        }
+
+                    } catch (Exception e) {
+                        Log.v(TAG + "QtyMns:", e.getMessage());
                     }
                 });
-                holder.QtyMns.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            String sVal = holder.Qty.getText().toString();
-                            if (sVal.equalsIgnoreCase("")) sVal = "0";
-                            if (Integer.parseInt(sVal) > 0) {
-                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
-
-                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
-                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
-                                if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
-                                    holder.tvStock.setText("" + (int) (balance - order));
-                            }
-
-                        } catch (Exception e) {
-                            Log.v(TAG + "QtyMns:", e.getMessage());
-                        }
-                    }
-                });
-
-
                 holder.Qty.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence charSequence, int start,
@@ -2111,7 +2024,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     @Override
                     public void afterTextChanged(Editable s) {
-
                     }
                 });
 
@@ -2119,7 +2031,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.ivDel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                             AlertDialogBox.showDialog(Invoice_Category_Select.this, "HAP SFA",
                                     "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
                                     , "OK", "Cancel", false, new AlertBox() {
@@ -2134,34 +2045,86 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         @Override
                                         public void NegativeMethod(DialogInterface dialog, int id) {
                                             dialog.dismiss();
-
                                         }
                                     });
-
                         }
                     });
                 }
+                holder.Rate.setOnClickListener(v -> showDialog(Product_Details_Modal));
 
-
-                holder.Rate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDialog(Product_Details_Modal);
-                    }
-                });
-
-                updateToTALITEMUI();
-                sumofTax(Product_Details_Modalitem,holder.getBindingAdapterPosition());
+                // using boolean function for single time load
+               if (isLoad){
+                   Log.e("isLoad_", "Loaded");
+                   updateToTALITEMUI();
+                   sumofTax(Product_Details_Modalitem, position);
+                   isLoad = false;
+               }
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
         }
 
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemCount() {
+//            if(Product_Details_Modalitem.size()<=0){
+//                updateToTALITEMUI();
+//            }
+//            return Product_Details_Modalitem.size();
+            return Product_Details_Modalitem.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt;
+            TextView        QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP;
+            ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
+            EditText Qty;
+            LinearLayout rlUOM;
+
+            public MyViewHolder(View view) {
+                super(view);
+                productname = view.findViewById(R.id.productname);
+                erpCode = view.findViewById(R.id.erpCode);
+                QtyPls = view.findViewById(R.id.ivQtyPls);
+                QtyMns = view.findViewById(R.id.ivQtyMns);
+                Rate = view.findViewById(R.id.Rate);
+                Qty = view.findViewById(R.id.Qty);
+                RegularQty = view.findViewById(R.id.RegularQty);
+                Amount = view.findViewById(R.id.Amount);
+                Free = view.findViewById(R.id.Free);
+                Disc = view.findViewById(R.id.Disc);
+                tvTaxLabel = view.findViewById(R.id.tvTaxTotAmt);
+                tvUOM = view.findViewById(R.id.tvUOM);
+                tvStock = view.findViewById(R.id.tvStockBal);
+                tvTknStock = view.findViewById(R.id.tvTknStock);
+                tvCLStock = view.findViewById(R.id.tvCLStock);
+                tvBatchNo= view.findViewById(R.id.tvBatchNo);
+                tvMRP = view.findViewById(R.id.MrpRate);
+
+                if (CategoryType >= 0) {
+                    ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
+                    lblRQty = view.findViewById(R.id.status);
+                    regularAmt = view.findViewById(R.id.RegularAmt);
+                    QtyAmt = view.findViewById(R.id.qtyAmt);
+                    totalQty = view.findViewById(R.id.totalqty);
+                    rlUOM = view.findViewById(R.id.rlUOM);
+                } else {
+                    ivDel = view.findViewById(R.id.ivDel);
+                }
+            }
+        }
 
         private void showDialog(Product_Details_Modal product_details_modal) {
             try {
-
-
                 LayoutInflater inflater = LayoutInflater.from(Invoice_Category_Select.this);
 
                 final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
@@ -2172,33 +2135,20 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 Button btnSave = (Button) view.findViewById(R.id.btn_save);
                 Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
 
-                btnSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
-                            common_class.showMsg(Invoice_Category_Select.this, "Empty value is not allowed");
-                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
-                            common_class.showMsg(Invoice_Category_Select.this, "Enter Rate is greater than "+MRPCap);
-
-                        } else {
-                            alertDialog.dismiss();
-                            product_details_modal.setRate(Double.valueOf(etComments.getText().toString()));
-                            etComments.setText("");
-                            notifyDataSetChanged();
-
-                        }
-
-                    }
-                });
-
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                btnSave.setOnClickListener(v -> {
+                    if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
+                        common_class.showMsg(Invoice_Category_Select.this, "Empty value is not allowed");
+                    } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
+                        common_class.showMsg(Invoice_Category_Select.this, "Enter Rate is greater than "+MRPCap);
+                    } else {
                         alertDialog.dismiss();
+                        product_details_modal.setRate(Double.valueOf(etComments.getText().toString()));
+                        etComments.setText("");
+                        notifyDataSetChanged();
+
                     }
                 });
-
+                btnCancel.setOnClickListener(v -> alertDialog.dismiss());
 
                 alertDialog.setView(view);
                 alertDialog.show();
@@ -2206,15 +2156,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 Log.e("OrderAdapter:dialog ", e.getMessage());
             }
         }
-
-        @Override
-        public int getItemCount() {
-
-            if(Product_Details_Modalitem.size()<=0){updateToTALITEMUI();}
-            return Product_Details_Modalitem.size();
-        }
-
-
     }
 
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
