@@ -117,6 +117,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     private List<Product_Details_Modal> orderTotTax;
     private ArrayList<Common_Model> uomList;
 
+    JSONArray CatFreeDetdata, FreeDetails;
     //String CurrencySymbol="B$"; //₹
 
 
@@ -587,14 +588,44 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
     }
 
+    private int getCatePos(Integer CId) throws JSONException {
+        int po=-1;
+        for(int il=0;il<CatFreeDetdata.length();il++){
+            if( CatFreeDetdata.getJSONObject(il).getInt("CatId")==CId){
+                po=il;
+            }
+        }
+        return po;
+    }
 
     void showOrderList() {
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
+        CatFreeDetdata=new JSONArray();
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
             if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
-                Getorder_Array_List.add(Product_Modal.get(pm));
+                Product_Details_Modal itm=Product_Modal.get(pm);
+                Getorder_Array_List.add(itm);
+                try {
+                    int ipo=getCatePos(itm.getpCatCode());
+                    if(ipo>-1){
+                        JSONObject oitm=CatFreeDetdata.getJSONObject(ipo);
+                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getOrderQty());
+                        CatFreeDetdata.getJSONObject(ipo).put("Value",oitm.getDouble("Value")+itm.getAmount());
+                    }else{
+                        JSONObject nItm=new JSONObject();
+                        nItm.put("CatId",itm.getpCatCode());
+                        nItm.put("Qty",itm.getOrderQty());
+                        nItm.put("Value",itm.getAmount());
+                        nItm.put("FPCode","");
+                        nItm.put("FPName","");
+                        nItm.put("FQty",0);
+                        CatFreeDetdata.put(nItm);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -839,6 +870,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("TOT_TAX_details", totTaxArr);
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
+                        ActivityData.put("FreeDetail", FreeDetails);
                         data.put(ActivityData);
 
                         Log.v(TAG+"submit:",data.toString());
@@ -920,6 +952,42 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     freeQty_Array_List.add(pm);
 
                 }
+            }
+        }
+        String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+
+        Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
+        }.getType();
+        List<Product_Details_Modal> catScheme = gson.fromJson(strSchemeList, type);
+
+        for(int il=0;il<CatFreeDetdata.length();il++){
+            JSONObject itm= null;
+            try {
+                itm = CatFreeDetdata.getJSONObject(il);
+                FreeDetails=new JSONArray();
+                if(catScheme!= null && catScheme.size()>0){
+                    for(int ij=0;ij<catScheme.size();ij++) {
+                        double schemeVal = Double.parseDouble(catScheme.get(ij).getScheme());
+                        if (String.valueOf(itm.getInt("CatId")).equalsIgnoreCase(catScheme.get(ij).getId()) &&
+                                itm.getDouble("Value") >= schemeVal
+                        ) {
+                            Product_Details_Modal nItm= new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(),catScheme.get(ij).getOff_Pro_name());
+                            nItm.setFree(catScheme.get(ij).getFree());
+                            freeQty_Array_List.add(nItm);
+                            JSONObject nItem=new JSONObject();
+                            nItem.put("CatId",itm.getString("CatId"));
+                            nItem.put("Qty",itm.getString("Qty"));
+                            nItem.put("Value",itm.getString("Value"));
+                            nItem.put("FPCode",catScheme.get(ij).getOff_Pro_code());
+                            nItem.put("FPName",catScheme.get(ij).getOff_Pro_name());
+                            nItem.put("FPQty",catScheme.get(ij).getFree());
+                            FreeDetails.put(nItem);
+                            Log.d(TAG, "showFreeQtyList: "+ itm.getString("Value"));
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
         if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {

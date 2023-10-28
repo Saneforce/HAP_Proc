@@ -10,10 +10,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    //public static String BASE_URL = "http://ff.hap.in/server/";
-    public static String BASE_URL = "http://Checkin.hap.in/server/";//Non field  6.1.2
-    //public static String BASE_URL = "http://hsfa.sanfmcg.com/server/";//field  9.1.1
-    //public static String BASE_URL = "http://primary.hap.in/server/";//distri 8.2.4
+    //public static String BASE_URL = "http://hapqc.sanfmcg.com/server/";//field  9.1.1
+    //public static String BASE_URL = "http://Checkin.hap.in/server/";//Non field  6.1.2
+    //public static String BASE_URL = "http://hapqc.sanfmcg.com/server/";//field  9.1.1
+    public static String BASE_URL = "http://primary.hap.in/server/";//distri 8.2.4
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         Log.d("BaseURL", BASE_URL);

@@ -106,6 +106,18 @@ public class Product_Details_Modal {
     @Expose
     private Integer productCatCode;
 
+    public Integer getpCatCode() {
+        return pCatCode;
+    }
+
+    public void setpCatCode(Integer pCatCode) {
+        this.pCatCode = pCatCode;
+    }
+
+    @SerializedName("CateCode")
+    @Expose
+    private Integer pCatCode;
+
     public String getPcode() {
         return pcode;
     }

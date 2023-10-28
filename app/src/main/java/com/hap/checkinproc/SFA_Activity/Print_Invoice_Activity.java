@@ -107,7 +107,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
     String sPMode="";
     Context context = this;
-    JSONArray TaxListDetails;
+    JSONArray TaxListDetails,CatwiseFreeList;
     Boolean Addinf=false;
     public static final String UserDetail = "MyPrefs";
     SharedPreferences UserDetails;
@@ -361,7 +361,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvRetFSSAI.setText(ret_fssai);
 
             Log.v("gst_dist",sharedCommonPref.getvalue(Constants.DistributorGst));
+            CatwiseFreeList=new JSONArray();
+if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("ORDER")
+|| sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")){
 
+    common_class.getDb_310Data(Constants.Categoryfree_List, this);
+}
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 storeName = retailername.getText().toString();
                 address = retaileAddress.getText().toString();
@@ -1086,17 +1091,28 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     printama.setNormalText();
                 printama.printDashedLine();
 //                printama.printLine();
-                if(jFreeSmry.length()>0){
+                if(jFreeSmry.length()>0 || CatwiseFreeList.length()>0){
                     printama.printTextln(" ");
                     printama.printTextln("Free Invoice Details");
                     printama.printDashedLine();
 
-                    for (int j = 0; j < jFreeSmry.length(); j++) {
-                        try {
-                            String Pnm=jFreeSmry.getJSONObject(j).getString("OffName");
-                            printama.printTextln(Pnm+ repeat(" ",50-Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
+                    if(jFreeSmry.length()>0) {
+                        for (int j = 0; j < jFreeSmry.length(); j++) {
+                            try {
+                                String Pnm=jFreeSmry.getJSONObject(j).getString("OffName");
+                                printama.printTextln(Pnm+ repeat(" ",50-Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
+                            }
+                            catch (JSONException je){}
                         }
-                        catch (JSONException je){}
+                    }
+                    if(CatwiseFreeList.length()>0) {
+                        for (int j = 0; j < CatwiseFreeList.length(); j++) {
+                            try {
+                                String Pnm = CatwiseFreeList.getJSONObject(j).getString("OffName");
+                                printama.printTextln(Pnm + repeat(" ", 50 - Pnm.length()) + CatwiseFreeList.getJSONObject(j).getString("free"));
+                            } catch (JSONException je) {
+                            }
+                        }
                     }
                 }
                 printama.addNewLine(2);
@@ -1576,7 +1592,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
-            if(jFreeSmry.length()>0) {
+            if(jFreeSmry.length()>0 || CatwiseFreeList.length()>0) {
                 y = y + 50;
                 paint.setFakeBoldText(true);
                 paint.setTextAlign(Paint.Align.LEFT);
@@ -1594,10 +1610,19 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 paint.setColor(Color.DKGRAY);
                 paint.setTextSize(12);
                 float cy = y;
-                for (int j = 0; j < jFreeSmry.length(); j++) {
-                    canvas.drawText(jFreeSmry.getJSONObject(j).getString("OffName"), x, y, paint);
-                    canvas.drawText(jFreeSmry.getJSONObject(j).getString("free"), widthSize - 50, y, paint);
-                    y = y + 20;
+                if(jFreeSmry.length()>0){
+                    for (int j = 0; j < jFreeSmry.length(); j++) {
+                        canvas.drawText(jFreeSmry.getJSONObject(j).getString("OffName"), x, y, paint);
+                        canvas.drawText(jFreeSmry.getJSONObject(j).getString("free"), widthSize - 50, y, paint);
+                        y = y + 20;
+                    }
+                }
+                if(CatwiseFreeList.length()>0) {
+                    for (int j = 0; j < CatwiseFreeList.length(); j++) {
+                        canvas.drawText(CatwiseFreeList.getJSONObject(j).getString("OffName"), x, y, paint);
+                        canvas.drawText(CatwiseFreeList.getJSONObject(j).getString("free"), widthSize - 50, y, paint);
+                        y = y + 20;
+                    }
                 }
             }
             if(Addinf) {
@@ -2168,6 +2193,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         tvOutstanding.setText(CurrencySymbol+" " + formatter.format(outstandAmt));
                         break;
+                    case Constants.Categoryfree_List:
+                        CatwiseFreeList = new JSONArray(apiDataResponse);
+                        break;
                 }
             }
         } catch (Exception e) {
@@ -2193,7 +2221,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 billnumber.setText("Bill No: " + Shared_Common_Pref.TransSlNo);
             }
 
-            if(!sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
+            if(!sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE")) {
                 taxList = new ArrayList<>();
                 taxList.clear();
             }
@@ -2372,7 +2400,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         subTotalVal += (obj.getDouble("value"));
                         bsubTotalVal+=obj.getInt("Quantity")*obj.getDouble("BillRate");
                         double taxAmt = 0.00, sTaxV = 0.0, SGSTAmt = 0.00, CGSTAmt = 0.00;
-                        if(!sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
+                        if(!sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE1")) {
                             try {
                                 JSONArray taxArr = obj.getJSONArray("TAX_details");
                                 for (int tax = 0; tax < taxArr.length(); tax++) {

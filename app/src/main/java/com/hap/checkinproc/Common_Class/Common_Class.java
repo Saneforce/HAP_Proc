@@ -612,6 +612,11 @@ public class Common_Class {
                         data.put("plant", jparam.get("plant").getAsString());
                         data.put("loc", jparam.get("loc").getAsString());
                         break;
+                    case Constants.Categoryfree_List:
+                        axnname = "get/getcatfree";
+                        data.put("orderID", Shared_Common_Pref.TransSlNo);
+                        data.put("flag", shared_common_pref.getvalue(Constants.FLAG));
+                        break;
 
                     case Constants.GroupFilter:
                         axnname = "get/groupfilter";
@@ -1314,7 +1319,7 @@ public class Common_Class {
                 });
 
                 ProductsLoaded=false;
-                service.getDataArrayList("get/posproddets", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                service.getDataArrayList("get/posproddetsn", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                         Log.v("POS:", response.body().toString());
