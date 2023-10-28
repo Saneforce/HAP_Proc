@@ -742,6 +742,7 @@ public class Product_Details_Modal {
         this.Off_Pro_code = off_Pro_code;
         this.Off_Pro_name = off_Pro_name;
         this.Off_Pro_Unit = off_Pro_Unit;
+        this.discount=Double.parseDouble(mFree);
     }
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,

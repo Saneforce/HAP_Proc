@@ -32,6 +32,40 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llhsncode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvhsncode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:text="code"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C13dp"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llmrp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvmrp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/sno1"
+                    android:gravity="end"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C13dp"></TextView>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llUOM"
@@ -65,7 +99,23 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llproductqtyPcs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone">
 
+                <TextView
+                    android:id="@+id/tvproductqtyPcs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/sno1"
+                    android:gravity="end"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C13dp"></TextView>
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/llPrice"
                 android:layout_width="0dp"

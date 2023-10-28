@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,16 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
                 holder.llUom.setVisibility(View.GONE);
                 holder.llPrice.setVisibility(View.GONE);
                 holder.llTot.setVisibility(View.GONE);
+            }else if(flag.equalsIgnoreCase("Order")||flag.equalsIgnoreCase("INVOICE")){
+                holder.llUom.setVisibility(View.GONE);
+                holder.llproductqtyPcs.setVisibility(View.VISIBLE);
+                holder.llmrp.setVisibility(View.VISIBLE);
+                holder.llhsncode.setVisibility(View.VISIBLE);
+                holder.tvhsncode.setText(""+pm.getHSNCode());
+                holder.tvmrp.setText(""+Double.parseDouble(pm.getMRP())*Double.parseDouble(pm.getConversionFactor()));
+               // Log.e("pcs",""+pm.getQty()*Double.parseDouble(pm.getConversionFactor()));
+                holder.tvproductqtyPcs.setText(""+(pm.getQty()*Double.parseDouble(pm.getConversionFactor())));
+                holder.productname.setText("" + pm.getName()+ "\n"+"(Discount Price Rs."+pm.getDiscount()+")");
             }
 
 
@@ -61,6 +72,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
 //            holder.productrate.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("Rate")));
 //            holder.producttotal.setText("" + new DecimalFormat("##0.00").format(mDate.getJSONObject(position).getDouble("value")));
         } catch (Exception e) {
+            Log.e("error",e.getMessage());
         }
     }
 
@@ -70,8 +82,8 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView productname, productqty, productrate, producttotal, productUOM;
-        LinearLayout llUom,llPrice,llTot;
+        TextView productname, productqty, productrate, producttotal, productUOM,tvhsncode,tvmrp,tvproductqtyPcs;
+        LinearLayout llUom,llPrice,llTot,llproductqtyPcs,llmrp,llhsncode;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,10 +92,18 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
             productrate = itemView.findViewById(R.id.productrate);
             producttotal = itemView.findViewById(R.id.producttotal);
             productUOM = itemView.findViewById(R.id.productUom);
+            tvhsncode=itemView.findViewById(R.id.tvhsncode);
+            tvmrp=itemView.findViewById(R.id.tvmrp);
+            tvproductqtyPcs=itemView.findViewById(R.id.tvproductqtyPcs);
 
             llUom=itemView.findViewById(R.id.llUOM);
             llPrice=itemView.findViewById(R.id.llPrice);
             llTot=itemView.findViewById(R.id.llTot);
+            llproductqtyPcs=itemView.findViewById(R.id.llproductqtyPcs);
+            llmrp=itemView.findViewById(R.id.llmrp);
+            llhsncode=itemView.findViewById(R.id.llhsncode);
+
+
 
         }
     }

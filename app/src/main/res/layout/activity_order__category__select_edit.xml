@@ -392,7 +392,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="Rate"
+                                        android:text="Margin Price"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
@@ -502,7 +502,21 @@
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
 
-
+                                <LinearLayout
+                                    android:id="@+id/ll_actual_total"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Actual Total Price"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -665,7 +679,7 @@
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -733,6 +747,29 @@
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Discount"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C13dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/tvcashdiscount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/color_red"
+                                    android:textSize="@dimen/C13dp"></TextView>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
                                 <TextView
@@ -754,29 +791,6 @@
                                     android:textSize="@dimen/C13dp"></TextView>
                             </RelativeLayout>
 
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Discount"
-                                    android:textAlignment="textStart"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C13dp"></TextView>
-
-                                <TextView
-                                    android:id="@+id/tvcashdiscount"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="0.00"
-                                    android:textAlignment="viewEnd"
-                                    android:textColor="@color/green"
-                                    android:textSize="@dimen/C13dp"></TextView>
-                            </RelativeLayout>
 
 
                             <View
@@ -847,7 +861,15 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C13dp"></TextView>
                             </RelativeLayout>
-
+                            <TextView
+                                android:id="@+id/tvTotalDiscLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:fontFamily="sans-serif"
+                                android:text=""
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
 
                             <TextView
                                 android:id="@+id/tvSaveAmt"

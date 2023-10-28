@@ -484,11 +484,13 @@ Log.d("Error","Can't Clear SFWish");
             name.setText(account.getEmail());
             profile = (account.getPhotoUrl());
             eMail = account.getEmail();
-            UserLastName = account.getFamilyName().replace("- ", "")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("/", "-");
-            UserLastName1 = account.getDisplayName();
+            if(account.getFamilyName()!=null) {
+                UserLastName = account.getFamilyName().replace("- ", "")
+                        .replace("(", "")
+                        .replace(")", "")
+                        .replace("/", "-");
+                UserLastName1 = account.getDisplayName();
+            }
             try {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
                 photo = account.getPhotoUrl().toString();

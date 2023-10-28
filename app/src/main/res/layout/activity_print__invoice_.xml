@@ -522,7 +522,153 @@
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
                             </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/sec_ord_row_report"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:padding="@dimen/C1dp"
+                                android:visibility="visible">
 
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.5"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/itemstextviewsec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:gravity="left"
+                                        android:text="Item"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/tvhsncodesec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:gravity="center"
+                                        android:text="HSN Code"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tvmrpsec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:gravity="right"
+                                        android:text="MRP"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                              <!--  <LinearLayout
+                                    android:id="@+id/llUOM"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="UOM"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>-->
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/orderqtysec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="Qty"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/orderqtypcssec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="Pcs"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/llPricesec"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/Ratesec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Price"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/llTotsec"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/totalsec"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Total"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C13dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+                            </LinearLayout>
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
@@ -584,7 +730,7 @@
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -698,6 +844,7 @@
                                     android:textSize="@dimen/C12dp"></TextView>
                             </RelativeLayout>
                             <RelativeLayout
+                                android:id="@+id/rl_BasePrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
@@ -812,6 +959,28 @@
                                     android:textSize="@dimen/C15dp"
                                     android:textStyle="bold"></TextView>
                             </RelativeLayout>
+                            <TextView
+                                android:id="@+id/tvTotalDiscLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:fontFamily="sans-serif"
+                                android:text=""
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+
+                            <TextView
+                                android:id="@+id/tvSaveAmt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+
+                                android:fontFamily="sans-serif"
+                                android:text=""
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+
 
                             <RelativeLayout
                                 android:id="@+id/rlRetAmt"
