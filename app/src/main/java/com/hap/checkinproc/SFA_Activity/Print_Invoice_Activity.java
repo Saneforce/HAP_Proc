@@ -111,6 +111,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Boolean Addinf=false;
     public static final String UserDetail = "MyPrefs";
     SharedPreferences UserDetails;
+    LinearLayout sec_ord_row_report,row_report;
+    TextView tvTotalDiscLabel,tvSaveAmt;
+    RelativeLayout rl_BasePrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -166,6 +169,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ivStockCapture = findViewById(R.id.ivStockCapture);
             rvStockCapture = findViewById(R.id.rvStockFiles);
             rlTax = findViewById(R.id.rlTax);
+            row_report=findViewById(R.id.row_report);
+            sec_ord_row_report=findViewById(R.id.sec_ord_row_report);
+            tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
+            tvSaveAmt=findViewById(R.id.tvSaveAmt);
+            rl_BasePrice=findViewById(R.id.rl_BasePrice);
+
 
             RetailCode=sharedCommonPref.getvalue(Constants.Retailor_ERP_Code);
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -188,7 +197,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
             sPMode = sharedCommonPref.getvalue(Constants.FLAG);
-
+            if (sPMode.equalsIgnoreCase("ORDER")||sPMode.equalsIgnoreCase("INVOICE")) {
+                sec_ord_row_report.setVisibility(View.VISIBLE);
+                row_report.setVisibility(View.GONE);
+            }else{
+                sec_ord_row_report.setVisibility(View.GONE);
+                row_report.setVisibility(View.VISIBLE);
+            }
             if (sPMode.equalsIgnoreCase("Sales return")) {
                 tvHeader.setText(sPMode);
                 TextView referenceBillNumber = findViewById(R.id.referenceBillNumber);
@@ -1036,10 +1051,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 }
 
 
-                    if (cashDisc > 0) {
-                        printama.printText("Cash Discount" + "                       " + discount.substring(String.valueOf(cashDisc).length(), discount.length()));
+                   // if (cashDisc > 0) {
+                        printama.printText("Discount" + "                       " + discount.substring(String.valueOf(cashDisc).length(), discount.length()));
                         printama.addNewLine();
-                    }
+                 //   }
                     if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                         printama.printText("Base Price " + "                       " + formatter.format(NetTotAmt / 1.05));
                         printama.addNewLine();
@@ -1379,7 +1394,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             wdth = wdth-2;
             paint.setTextAlign(Paint.Align.LEFT);
 
-            sText="Code______________________";
+            sText="HSN Code______________________";
             paint.getTextBounds(sText, 0, sText.length(), bounds);
             wdth = wdth-bounds.width();
             canvas.drawText(sText.replaceAll("_",""), wdth, y, paint);xHSN=wdth;
@@ -1405,6 +1420,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 for (int j = 0; j < lines.length; j++) {
                     System.out.println("lines[" + j + "]: (len: " + lines[j].length() + ") : " + lines[j]);
                     canvas.drawText(lines[j], x, y, paint);
+                    Log.e("ghvnh",""+j+"len"+lines.length);
+                    if(j==lines.length-1&&(sMode.equalsIgnoreCase("ORDER") || sMode.equalsIgnoreCase("INVOICE"))){
+                        y = y + 20;
+                        canvas.drawText("(Discount Rs."+Order_Outlet_Filter.get(i).getDiscount()+")",x,y,paint);
+                    }
                     y = y + 20;
 
                 }
@@ -1492,14 +1512,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             }
 
-            if (cashDisc > 0) {
+           // if (cashDisc > 0) {
                 paint.setTextAlign(Paint.Align.LEFT);
-                canvas.drawText("Cash Discount", x, y, paint);
+                canvas.drawText("Discount", x, y, paint);
                 paint.setTextAlign(Paint.Align.RIGHT);
                 canvas.drawText(cashdiscount.getText().toString(), xTot, y, paint);
                 //netamount=netamount - Double.parseDouble(cashdiscount.getText().toString());
                 y = y + 20;
-            }
+        //    }
 
             if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                 paint.setTextAlign(Paint.Align.LEFT);
@@ -1541,7 +1561,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             canvas.drawText("Net Amount", x, y, paint);
             paint.setTextAlign(Paint.Align.RIGHT);
             canvas.drawText(netamount.getText().toString(), xTot, y, paint);
+
             y = y + 20;
+
             if(sMode.equalsIgnoreCase("INVOICE")) {
                 TextView retAmount = findViewById(R.id.returnAmount);
                 TextView toPayAmount = findViewById(R.id.toPayAmount);
@@ -1576,6 +1598,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setColor(Color.LTGRAY);
             paint.setStrokeWidth(1);
             canvas.drawLine(0, y, widthSize, y, paint);
+
+            y = y + 20;
+            if(sMode.equalsIgnoreCase("INVOICE")||sMode.equalsIgnoreCase("ORDER")) {
+                paint.setColor(Color.BLACK);
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("" + tvSaveAmt.getText().toString(), x, y, paint);
+            }
+
             if(jFreeSmry.length()>0) {
                 y = y + 50;
                 paint.setFakeBoldText(true);
@@ -2184,7 +2214,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Order_Outlet_Filter.clear();
 
             int total_qtytext = 0;
+            int sec_total_qtytext=0;
+            double tot_mrp_value=0;
             double tcsVal = 0;
+
             subTotalVal = 0.00;double bsubTotalVal=0.00;
 
             if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection")) {
@@ -2365,11 +2398,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         tvUomQty.setText("" + uomQty);
                     }
                 } else {
+
                     JSONArray arr = new JSONArray(response);
+                    Log.e("json data:",arr.toString()) ;
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject obj = arr.getJSONObject(i);
                         total_qtytext += obj.getInt("Quantity");
                         subTotalVal += (obj.getDouble("value"));
+                        sec_total_qtytext+=(obj.getInt("Quantity")*obj.getDouble("ConversionFactor"));
+                        tot_mrp_value+=(obj.getInt("Quantity")*obj.getDouble("ConversionFactor")*obj.getDouble("MRP"));
                         bsubTotalVal+=obj.getInt("Quantity")*obj.getDouble("BillRate");
                         double taxAmt = 0.00, sTaxV = 0.0, SGSTAmt = 0.00, CGSTAmt = 0.00;
                         if(!sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
@@ -2423,6 +2460,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", 0.0,
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
+                        } else if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")) {
+                            Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("HSN_Code"), 1, "1",
+                                    "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+
                         } else {
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("Bar_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
@@ -2451,16 +2493,26 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
             subTotalVal = Double.parseDouble(formatter.format(subTotalVal + tcsVal));
-
-            totalqty.setText("" + String.valueOf(total_qtytext));
+            if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")){
+                tvSaveAmt.setVisibility(View.VISIBLE);
+                tvTotalDiscLabel.setVisibility(View.VISIBLE);
+                tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "+formatter.format(tot_mrp_value-subTotalVal));
+                tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" "+formatter.format(cashDisc)+")");
+                totalqty.setText("" + String.valueOf(sec_total_qtytext));
+            }else {
+                tvSaveAmt.setVisibility(View.GONE);
+                tvTotalDiscLabel.setVisibility(View.GONE);
+                totalqty.setText("" + String.valueOf(total_qtytext));
+            }
             totalitem.setText("" + Order_Outlet_Filter.size());
-            if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")){
+            if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")){
                 subtotal.setText(CurrencySymbol + " " + formatter.format(bsubTotalVal));
             }else {
                 subtotal.setText(CurrencySymbol + " " + formatter.format(subTotalVal));
             }
             NetTotAmt = subTotalVal - cashDisc;
             netamount.setText(CurrencySymbol + " " + formatter.format(NetTotAmt));
+
 
 
             returntotalqty.setText("" + String.valueOf(total_qtytext));
@@ -2475,9 +2527,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             cashdiscount.setText(CurrencySymbol + " " + formatter.format(cashDisc));
             tvBasePrice.setVisibility(View.GONE);
+            rl_BasePrice.setVisibility(View.GONE);
             if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                 tvBasePrice.setText(formatter.format(NetTotAmt/1.05));
                 tvBasePrice.setVisibility(View.VISIBLE);
+                rl_BasePrice.setVisibility(View.VISIBLE);
             }
             //gstrate.setText(CurrencySymbol + " " + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
 

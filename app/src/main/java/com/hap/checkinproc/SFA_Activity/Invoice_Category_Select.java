@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -126,7 +127,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     List<Product_Details_Modal> orderTotTax;
     private ArrayList<Common_Model> uomList;
     private int uomPos;
-
+    private double subtotalvalue;
+    LinearLayout ll_actual_total;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -162,6 +164,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             Category_Nametext.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
+            ll_actual_total=findViewById(R.id.ll_actual_total);
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -981,12 +984,17 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
         TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
         TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
+        TextView tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
+
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
         totalvalues = 0;
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
+        int totQty=0;
+        double totalMRP=0;
+        subtotalvalue=0;
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
             if (Product_Modal.get(pm).getRegularQty() != null) {
@@ -994,6 +1002,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     cashDiscount += Product_Modal.get(pm).getDiscount();
                     totalvalues += Product_Modal.get(pm).getAmount();
                     totalQty += Product_Modal.get(pm).getQty()/* + Product_Modal.get(pm).getRegularQty()*/;
+                    subtotalvalue+=Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getRate()*Product_Modal.get(pm).getCnvQty();
+                    totQty += Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getCnvQty();
+                    totalMRP+=Product_Modal.get(pm).getCnvQty()*Product_Modal.get(pm).getQty()*Double.parseDouble(Product_Modal.get(pm).getMRP());
+
                     if (Product_Modal.get(pm).getTax() > 0)
                         taxVal += Product_Modal.get(pm).getTax();
 
@@ -1007,14 +1019,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
-        if (Getorder_Array_List.size() == 1)
+        /*  if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
         else
-            tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
+            tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");*/
 
-        tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(totalvalues));
+        tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(subtotalvalue));
         tvBillTotItem.setText("" + Getorder_Array_List.size());
-        tvBillTotQty.setText("" + totalQty);
+        tvBillTotQty.setText("" + totQty);
         tvBillToPay.setText(CurrencySymbol+" "+ formatter.format(totalvalues));
         tvCashDiscount.setText(CurrencySymbol+" "+ formatter.format(cashDiscount));
         //  tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
@@ -1036,12 +1048,24 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
 
-
-        if (cashDiscount > 0) {
+        tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount)+")");
+        tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+        // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
+        ll_actual_total.setVisibility(View.VISIBLE);
+       /* if (cashDiscount > 0) {
+            ll_actual_total.setVisibility(View.VISIBLE);
+          tvSaveAmt.setVisibility(View.VISIBLE);
+            tvSaveAmt.setText("You will save "+CurrencySymbol+" "  + formatter.format(cashDiscount) + " on this order");
+            tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+        }else{
+            tvSaveAmt.setVisibility(View.GONE);
+           ll_actual_total.setVisibility(View.GONE);
+       }*/
+        /*if (cashDiscount > 0) {
             tvSaveAmt.setVisibility(View.VISIBLE);
             tvSaveAmt.setText("You will save "+CurrencySymbol+" " + formatter.format(cashDiscount) + " on this order");
         } else
-            tvSaveAmt.setVisibility(View.GONE);
+            tvSaveAmt.setVisibility(View.GONE);*/
 
 
         orderTotTax = new ArrayList<>();
@@ -1619,7 +1643,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 holder.Rate.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-
+                holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()-Product_Details_Modal.getDiscount()));
                 if (Product_Details_Modal.getRateEdit() == 1) {
                     holder.Rate.setEnabled(true);
                     holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
@@ -1672,6 +1696,29 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
                         holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
                     }
+
+                    holder.rlUOM.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            uomPos = position;
+                            uomList = new ArrayList<>();
+                            String uomids="";
+                            if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
+                                for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
+                                    com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
+
+                                    if((";"+uomids).toLowerCase().indexOf(";"+uom.getUOM_Id().toLowerCase()+";")<0) {
+                                        uomids += uom.getUOM_Id().toLowerCase() + ";";
+                                        uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
+                                    }
+                                }
+                                common_class.showCommonDialog(uomList, 1, Invoice_Category_Select.this);
+                            } else {
+                                common_class.showMsg(Invoice_Category_Select.this, "No Records Found.");
+                            }
+                        }
+                    });
+
                 }
 
                 final double[] sellAmt = new double[1];
@@ -1705,6 +1752,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.Free.setText("" + Product_Details_Modal.getFree());
 
                 runOnUiThread(() -> holder.Disc.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getDiscount())));
+                holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty())-Product_Details_Modal.getDiscount()));
 
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1901,6 +1949,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                                         holder.Amount.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(totQty * Double.parseDouble(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR())));
                                                         Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                                                 Double.parseDouble(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR()))));
+
+                                                        holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()))-Product_Details_Modal.getDiscount()));
+                                                        holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()-Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
+
                                                     }
                                                 } else {
 
@@ -1939,6 +1991,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                                 } else {
                                                     holder.Disc.setText(CurrencySymbol+" 0.00");
                                                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
+                                                    holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()))-Product_Details_Modal.getDiscount()));
 
                                                 }
 
@@ -1976,6 +2029,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                 Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount_value("0.00");
                                 Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount_type("");
+                                holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()))-Product_Details_Modal.getDiscount()));
 
 
                             } else {
@@ -1987,6 +2041,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                 holder.Disc.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
                                 holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
+                                holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()))-Product_Details_Modal.getDiscount()));
+                                holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()-Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
 
                             }
@@ -1997,6 +2053,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             sumofTax(Product_Details_Modalitem, holder.getBindingAdapterPosition());
                             holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
                             holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getTax()));
+                            holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()))-Product_Details_Modal.getDiscount()));
+                            holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()-Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
                             updateToTALITEMUI();
 
@@ -2049,6 +2107,15 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     });
                         }
                     });
+
+                  //  if(Product_Details_Modal.getDiscount()==0){
+                        holder.ll_ActualTotal.setVisibility(View.VISIBLE);
+                        holder.ActualTotal.setPaintFlags( holder.ActualTotal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()+Product_Details_Modal.getDiscount()));
+                  ///  }else{
+                       // holder.ll_ActualTotal.setVisibility(View.GONE);
+                  //  }
+
                 }
                 holder.Rate.setOnClickListener(v -> showDialog(Product_Details_Modal));
 
@@ -2085,10 +2152,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt;
-            TextView        QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP;
+            TextView        QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP, tvDiscBasePrice,ActualTotal;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
-            LinearLayout rlUOM;
+            LinearLayout rlUOM,ll_ActualTotal;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -2109,6 +2176,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 tvCLStock = view.findViewById(R.id.tvCLStock);
                 tvBatchNo= view.findViewById(R.id.tvBatchNo);
                 tvMRP = view.findViewById(R.id.MrpRate);
+                tvDiscBasePrice =view.findViewById(R.id.tvDiscBasePrice);
+                ll_ActualTotal=view.findViewById(R.id.ll_ActualTotal);
+                ActualTotal=view.findViewById(R.id.ActualTotal);
 
                 if (CategoryType >= 0) {
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);

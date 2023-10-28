@@ -410,7 +410,7 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
-                                <LinearLayout
+                             <!--   <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -424,7 +424,7 @@
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"/>
-                                </LinearLayout>
+                                </LinearLayout>-->
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -434,7 +434,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
-                                        android:gravity="end"
+                                        android:gravity="start"
                                         android:text="UOM"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
@@ -510,6 +510,21 @@
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
                                 <LinearLayout
+                                    android:id="@+id/ll_actual_total"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Actual Total Price"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1">
@@ -571,7 +586,7 @@
                             android:layout_height="1dp"
                             android:background="@color/grey_200" />
 
-                        <LinearLayout
+                       <!-- <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -602,13 +617,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Total item"
                                 android:textAlignment="textStart"
+                                android:layout_weight="1"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C13dp"></TextView>
 
@@ -621,6 +637,7 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C13dp"></TextView>
                         </LinearLayout>
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -646,6 +663,30 @@
                                 android:textSize="@dimen/C13dp" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Discount"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+
+                            <TextView
+                                android:id="@+id/tvcashdiscount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="0.00"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/C13dp" />
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -694,31 +735,146 @@
                                 android:textSize="@dimen/C13dp"></TextView>
                         </RelativeLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        </LinearLayout>-->
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/tvTotLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Subtotal"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+
+                            <TextView
+                                android:id="@+id/subtotal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="200.00"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Total item"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+
+                            <TextView
+                                android:id="@+id/totalitem"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="5"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Total Qty"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+
+                            <TextView
+                                android:id="@+id/tvtotalqty"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="10"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:visibility="gone">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:text="Total Free Qty"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+
+                            <TextView
+                                android:id="@+id/totalfreeqty"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="2"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:text="Discount"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/C13dp" />
+                                android:textSize="@dimen/C13dp"></TextView>
 
                             <TextView
                                 android:id="@+id/tvcashdiscount"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:text="0.00"
                                 android:textAlignment="viewEnd"
-                                android:textColor="@color/green"
-                                android:textSize="@dimen/C13dp" />
-                        </LinearLayout>
+                                android:textColor="@color/color_red"
+                                android:textSize="@dimen/C13dp"></TextView>
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvTaxLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+
+                            <TextView
+                                android:id="@+id/tvTaxVal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"></TextView>
+                        </RelativeLayout>
 
                         <View
                             android:layout_width="match_parent"
@@ -760,6 +916,15 @@
                             android:background="@color/black"
                             android:outlineAmbientShadowColor="@color/black"
                             android:visibility="visible" />
+                        <TextView
+                            android:id="@+id/tvTotalDiscLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:text=""
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
 
                         <TextView
                             android:id="@+id/tvSaveAmt"

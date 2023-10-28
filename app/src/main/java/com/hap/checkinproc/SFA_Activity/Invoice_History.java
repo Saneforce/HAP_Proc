@@ -882,6 +882,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         Shared_Common_Pref.Invoicetoorder = "1";
         Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
         sharedCommonPref.save(Constants.FLAG, status);
+        Log.e("Flag", status);
         Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
         intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
         intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
