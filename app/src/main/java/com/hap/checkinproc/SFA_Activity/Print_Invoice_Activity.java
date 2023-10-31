@@ -114,6 +114,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     LinearLayout sec_ord_row_report,row_report;
     TextView tvTotalDiscLabel,tvSaveAmt;
     RelativeLayout rl_BasePrice;
+    double orderValue=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -466,6 +467,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             cashDisc =0;
             if(getIntent().hasExtra("Discount_Amount")) {
                 cashDisc = Double.parseDouble(getIntent().getStringExtra("Discount_Amount"));
+            }
+            if(getIntent().hasExtra("Order_Values")) {
+                orderValue = Double.parseDouble(getIntent().getStringExtra("Order_Values"));
             }
             stockFileList.add(new QPS_Modal("", "", ""));//purity
 
@@ -2493,10 +2497,23 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
             subTotalVal = Double.parseDouble(formatter.format(subTotalVal + tcsVal));
+
+            totalitem.setText("" + Order_Outlet_Filter.size());
+            if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")){
+                subtotal.setText(CurrencySymbol + " " + formatter.format(bsubTotalVal));
+                NetTotAmt = orderValue;
+                netamount.setText(CurrencySymbol + " " + formatter.format(NetTotAmt));
+            }else {
+                NetTotAmt = subTotalVal - cashDisc;
+                netamount.setText(CurrencySymbol + " " + formatter.format(NetTotAmt));
+                subtotal.setText(CurrencySymbol + " " + formatter.format(subTotalVal));
+            }
             if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")){
                 tvSaveAmt.setVisibility(View.VISIBLE);
                 tvTotalDiscLabel.setVisibility(View.VISIBLE);
-                tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "+formatter.format(tot_mrp_value-subTotalVal));
+                //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "+formatter.format(tot_mrp_value-NetTotAmt));
+                tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(tot_mrp_value)+" - NetAmount "+formatter.format(NetTotAmt)+" = "+CurrencySymbol+" "  + formatter.format(tot_mrp_value-NetTotAmt));
+
                 tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" "+formatter.format(cashDisc)+")");
                 totalqty.setText("" + String.valueOf(sec_total_qtytext));
             }else {
@@ -2504,14 +2521,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 tvTotalDiscLabel.setVisibility(View.GONE);
                 totalqty.setText("" + String.valueOf(total_qtytext));
             }
-            totalitem.setText("" + Order_Outlet_Filter.size());
-            if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")){
-                subtotal.setText(CurrencySymbol + " " + formatter.format(bsubTotalVal));
-            }else {
-                subtotal.setText(CurrencySymbol + " " + formatter.format(subTotalVal));
-            }
-            NetTotAmt = subTotalVal - cashDisc;
-            netamount.setText(CurrencySymbol + " " + formatter.format(NetTotAmt));
 
 
 

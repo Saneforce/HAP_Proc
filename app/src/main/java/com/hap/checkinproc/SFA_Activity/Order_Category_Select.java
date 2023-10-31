@@ -1003,7 +1003,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         tvBillToPay.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvCashDiscount.setText("-"+CurrencySymbol+" " + formatter.format(cashDiscount));
         tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount)+")");
-        tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+        tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+
+        //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
         // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
         ll_actual_total.setVisibility(View.VISIBLE);
        /* if (cashDiscount > 0) {
@@ -1452,6 +1454,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             if (CategoryType >= 0) {
                                 //holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
+                                holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
                             }
 
