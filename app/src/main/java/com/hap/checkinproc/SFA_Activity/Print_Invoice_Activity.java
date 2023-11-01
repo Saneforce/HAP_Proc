@@ -2535,10 +2535,12 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
             totalitem.setText("" + Order_Outlet_Filter.size());
             if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")){
                 subtotal.setText(CurrencySymbol + " " + formatter.format(bsubTotalVal));
+               // subTotalVal=bsubTotalVal;
             }else {
                 subtotal.setText(CurrencySymbol + " " + formatter.format(subTotalVal));
+                NetTotAmt = subTotalVal - cashDisc;;
             }
-            NetTotAmt = subTotalVal - cashDisc;
+            NetTotAmt = subTotalVal ;
             netamount.setText(CurrencySymbol + " " + formatter.format(NetTotAmt));
 
 

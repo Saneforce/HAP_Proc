@@ -1221,7 +1221,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 sharedCommonPref.save(Constants.LOC_POS_DATA, gson.toJson(Product_Modal));
             } catch (Exception e) {
-
+                Log.d(TAG, "updateToTALITEMUI: ");
             }
        // }).start();
 
