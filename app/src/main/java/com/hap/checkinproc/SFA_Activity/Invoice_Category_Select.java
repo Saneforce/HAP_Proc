@@ -130,7 +130,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private int uomPos;
     private double subtotalvalue;
     LinearLayout ll_actual_total;
-
+    TextView tvSaveAmt;
+    TextView tvTotalDiscLabel;
+    double totalMRP=0;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +203,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                             tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
+                            tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                            tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
 
                         }
@@ -224,6 +228,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             totalvalues=InvAmt - rDiscAmt;
                             tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                             tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
+                            tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                            tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+
                         }
                         etDiscAmt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -249,6 +256,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                     tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
+                    tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                    tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
 
                 }
@@ -368,7 +377,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         Product_Modal.get(pm).setUOM_Nm(jsonObject1.getString("UOM"));
                                         Product_Modal.get(pm).setUOM_Id("" + jsonObject1.getString("umo_unit"));
                                         Product_Modal.get(pm).setCnvQty(jsonObject1.getDouble("Conf_Fac"));
-                                        Product_Modal.get(pm).setDiscount(jsonObject1.getInt("discount"));
+                                        Product_Modal.get(pm).setDiscount(jsonObject1.getDouble("discount")*jsonObject1.getInt("Quantity")*jsonObject1.getDouble("Conf_Fac"));
                                         Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("discount_price")));
                                         Product_Modal.get(pm).setOff_Pro_code(String.valueOf(jsonObject1.getString("Offer_ProductCd")));
                                         Product_Modal.get(pm).setOff_Pro_name(String.valueOf(jsonObject1.getString("Offer_ProductNm")));
@@ -385,7 +394,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         //double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
                                         //double sellAmt=dMRPAmt-dMrgn;
                                         //double sellAmt= jsonObject1.getDouble("value"); //Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) * Double.parseDouble(Product_Modal.get(pm).getPTR())));
-                                        double sellAmt= Double.valueOf(formatter.format(psc * Double.parseDouble(Product_Modal.get(pm).getPTR())));
+
+
+                                        double sellAmt= Double.valueOf(formatter.format((psc * Double.parseDouble(Product_Modal.get(pm).getPTR()))-Product_Modal.get(pm).getDiscount()));
                                         Product_Modal.get(pm).setAmount(sellAmt);
                                         //Product_Modal.get(pm).setAmount(jsonObject1.getDouble("value"));
 
@@ -1037,14 +1048,13 @@ private int getCatePos(Integer CId) throws JSONException {
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
         TextView tvTax = findViewById(R.id.tvTaxVal);
         TextView tvBillSubTotal = findViewById(R.id.subtotal);
-        TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
         tvBillTotItem = findViewById(R.id.totalitem);
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
         TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
         TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
-        TextView tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
-
+       tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
+        tvSaveAmt = findViewById(R.id.tvSaveAmt);
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
         totalvalues = 0;
@@ -1052,7 +1062,7 @@ private int getCatePos(Integer CId) throws JSONException {
         cashDiscount = 0;
         taxVal = 0;
         int totQty=0;
-        double totalMRP=0;
+        totalMRP=0;
         subtotalvalue=0;
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -1108,7 +1118,10 @@ private int getCatePos(Integer CId) throws JSONException {
         tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
 
         tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount)+")");
-        tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+        tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+
+        //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+
         // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
         ll_actual_total.setVisibility(View.VISIBLE);
        /* if (cashDiscount > 0) {
@@ -1799,7 +1812,8 @@ private int getCatePos(Integer CId) throws JSONException {
                     }).start();
 
                     sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
-                    holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(sellAmt[0]));
+                   // holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(sellAmt[0]));
+                    holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
                     holder.regularAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
@@ -1946,9 +1960,9 @@ private int getCatePos(Integer CId) throws JSONException {
 
                             double sellAmt=Double.valueOf(formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
                                     Double.parseDouble(Product_Details_Modalitem.get(intdx).getPTR())));
-                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(sellAmt);
+                           Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(sellAmt);
                             double TotalTax=getTotTax(Product_Details_Modalitem,intdx);
-                            sellAmt=sellAmt/((100+(TotalTax))/100);
+                           // sellAmt=sellAmt/((100+(TotalTax))/100);
 
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText(CurrencySymbol+" "+ formatter.format(sellAmt));

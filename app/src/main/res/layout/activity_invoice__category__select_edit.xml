@@ -382,7 +382,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="Rate"
+                                        android:text="Margin Price"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
@@ -518,7 +518,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="Actual Total Price"
+                                        android:text="Actual Price"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
@@ -916,26 +916,7 @@
                             android:background="@color/black"
                             android:outlineAmbientShadowColor="@color/black"
                             android:visibility="visible" />
-                        <TextView
-                            android:id="@+id/tvTotalDiscLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:fontFamily="sans-serif"
-                            android:text=""
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
 
-                        <TextView
-                            android:id="@+id/tvSaveAmt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:fontFamily="sans-serif"
-                            android:text=""
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold" />
 
 
                         <TextView
@@ -1306,6 +1287,26 @@
                                 android:textSize="@dimen/C13dp"></TextView>
 
                         </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvTotalDiscLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:text=""
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:id="@+id/tvSaveAmt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:text=""
+                            android:textColor="@color/green"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"

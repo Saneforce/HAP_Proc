@@ -50,81 +50,84 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
 
     @Override
     public void onBindViewHolder(Invoice_History_Adapter.MyViewHolder holder, int position) {
-        //   holder.llReturnInv.setVisibility(View.GONE);
+        try {
+            //   holder.llReturnInv.setVisibility(View.GONE);
 
-        if (mDate.get(position).getInvoice_Flag().equals("1")) {
-            //  holder.llReturnInv.setVisibility(View.VISIBLE);
-            holder.Statusinvoice.setText("Invoice Complete.");
-            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
-            holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
+            if (mDate.get(position).getInvoice_Flag().equals("1")) {
+                //  holder.llReturnInv.setVisibility(View.VISIBLE);
+                holder.Statusinvoice.setText("Invoice Complete.");
+                holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
+                holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
 
-            // holder.parent_layout.setBackgroundResource(R.color.white);
-        } else {
-            holder.Statusinvoice.setText("Order received.Pending for Invoice.");
-            holder.ivStatus.setImageResource(R.drawable.ic_baseline_fiber_manual_record_24);
-            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.checkout));
+                // holder.parent_layout.setBackgroundResource(R.color.white);
+            } else {
+                holder.Statusinvoice.setText("Order received.Pending for Invoice.");
+                holder.ivStatus.setImageResource(R.drawable.ic_baseline_fiber_manual_record_24);
+                holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.checkout));
 
-            //  holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
-        }
-        holder.txtOrderDate.setText("" + mDate.get(position).getOrderDate());
-        holder.txtOrderID.setText(mDate.get(position).getTransSlNo());
-        holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
-        holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
-        holder.txtType.setText("" + mDate.get(position).getStatus());
-
-        if (mDate.get(position).getStatus().equalsIgnoreCase("SALES RETURN") ||
-                mDate.get(position).getStatus().equalsIgnoreCase("STOCK ROTATION") ||
-                mDate.get(position).getStatus().equalsIgnoreCase("INDENT")) {
-            holder.Statusinvoice.setText(mDate.get(position).getStatus() + " Completed.");
-            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.txt_template_color));
-            holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
-            holder.txtType.setTextColor(context.getResources().getColor(R.color.txt_template_color));
-
-        }
-
-
-
-        if (mDate.get(position).getStatus().equalsIgnoreCase("Completed")) {
-            holder.Statusinvoice.setText("GRN Complete.");
-            holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
-            holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
-
-        }
-
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterOnClick.onIntentClick(position);
+                //  holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
             }
-        });
+            holder.txtOrderDate.setText("" + mDate.get(position).getOrderDate());
+            holder.txtOrderID.setText(mDate.get(position).getTransSlNo());
+            holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
+            holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
+            holder.txtType.setText("" + mDate.get(position).getStatus());
 
-        holder.llReturnInv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("TRANS_SLNO", mDate.get(position).getTransSlNo());
-                Shared_Common_Pref.TransSlNo = mDate.get(position).getTransSlNo();
-                Shared_Common_Pref.Invoicetoorder = "1";
-                Intent intent = new Intent(context, Print_Invoice_Activity.class);
-                sharedCommonPref.save(Constants.FLAG, "Return Invoice");
-                intent.putExtra("Order_Values", mDate.get(position).getOrderValue() + "");
-                intent.putExtra("Invoice_Values", mDate.get(position).getInvoicevalues());
-                intent.putExtra("No_Of_Items", mDate.get(position).getNo_Of_items());
-                intent.putExtra("Invoice_Date", mDate.get(position).getOrderDate());
-                intent.putExtra("NetAmount", mDate.get(position).getNetAmount());
-                intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
-                context.startActivity(intent);
+            if (mDate.get(position).getStatus().equalsIgnoreCase("SALES RETURN") ||
+                    mDate.get(position).getStatus().equalsIgnoreCase("STOCK ROTATION") ||
+                    mDate.get(position).getStatus().equalsIgnoreCase("INDENT")) {
+                holder.Statusinvoice.setText(mDate.get(position).getStatus() + " Completed.");
+                holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.txt_template_color));
+                holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
+                holder.txtType.setTextColor(context.getResources().getColor(R.color.txt_template_color));
+
             }
-        });
 
 
-        if (Common_Class.isNullOrEmpty(mDate.get(position).getIndent())) {
+            if (mDate.get(position).getStatus().equalsIgnoreCase("Completed")) {
+                holder.Statusinvoice.setText("GRN Complete.");
+                holder.Statusinvoice.setTextColor(context.getResources().getColor(R.color.green));
+                holder.ivStatus.setImageResource(R.drawable.ic_round_done_outline_24);
 
-            holder.llIndent.setVisibility(View.GONE);
-        } else {
-            holder.tvIndent.setText("" + mDate.get(position).getIndent());
+            }
+
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterOnClick.onIntentClick(position);
+                }
+            });
+
+            holder.llReturnInv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("TRANS_SLNO", mDate.get(position).getTransSlNo());
+                    Shared_Common_Pref.TransSlNo = mDate.get(position).getTransSlNo();
+                    Shared_Common_Pref.Invoicetoorder = "1";
+                    Intent intent = new Intent(context, Print_Invoice_Activity.class);
+                    sharedCommonPref.save(Constants.FLAG, "Return Invoice");
+                    intent.putExtra("Order_Values", mDate.get(position).getOrderValue() + "");
+                    intent.putExtra("Invoice_Values", mDate.get(position).getInvoicevalues());
+                    intent.putExtra("No_Of_Items", mDate.get(position).getNo_Of_items());
+                    intent.putExtra("Invoice_Date", mDate.get(position).getOrderDate());
+                    intent.putExtra("NetAmount", mDate.get(position).getNetAmount());
+                    intent.putExtra("Discount_Amount", mDate.get(position).getDiscount_Amount());
+                    context.startActivity(intent);
+                }
+            });
+
+
+            if (Common_Class.isNullOrEmpty(mDate.get(position).getIndent())) {
+
+                holder.llIndent.setVisibility(View.GONE);
+            } else {
+                holder.tvIndent.setText("" + mDate.get(position).getIndent());
+            }
+
+            holder.tvQty.setText("" + mDate.get(position).getQuantity());
+        }catch (Exception e){
+            Log.e("error:",e.getMessage());
         }
-
-        holder.tvQty.setText(""+mDate.get(position).getQuantity());
     }
 
     @Override

@@ -511,7 +511,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="Actual Total Price"
+                                        android:text="Actual Price"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C12dp"
