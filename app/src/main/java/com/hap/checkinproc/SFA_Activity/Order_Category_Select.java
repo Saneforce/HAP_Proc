@@ -444,6 +444,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 //Product_Details_Modalitem.get(pos).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(pos).getAmount()
                 //        + wholeTax)));
                 Product_Details_Modalitem.get(pos).setTax(Double.parseDouble(formatter.format(wholeTax)));
+                if(Product_Details_Modalitem.get(pos).getDiscount()>0) {
+                    double val = (100 + (TotalTax)) / 100;
+                    double finDisc = Product_Details_Modalitem.get(pos).getDiscount() / val;
+                    Product_Details_Modalitem.get(pos).setDiscount(finDisc);
+                }
             }
         } catch (Exception e) {
             Log.d("st","dd");
@@ -910,6 +915,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
+        updateToTALITEMUI(1);
         showFreeQtyList();
     }
 
@@ -939,7 +945,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
 
-    public void updateToTALITEMUI() {
+    public void updateToTALITEMUI(int flag) {
         TextView tvTotalItems = findViewById(R.id.tvTotalItems);
         TextView tvTotLabel = findViewById(R.id.tvTotLabel);
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
@@ -996,18 +1002,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvTotLabel.setText("Price (1 item)");
         else
             tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");*/
+  if(flag==1) {
+    tvBillSubTotal.setText(CurrencySymbol + " " + formatter.format(subtotalvalue));
+    tvBillTotItem.setText("" + Getorder_Array_List.size());
+    tvBillTotQty.setText("" + totQty);
+    tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
+    tvCashDiscount.setText("-" + CurrencySymbol + " " + formatter.format(cashDiscount));
+    tvTotalDiscLabel.setText("(Discounted Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+    tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
 
-        tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(subtotalvalue));
-        tvBillTotItem.setText("" + Getorder_Array_List.size());
-        tvBillTotQty.setText("" + totQty);
-        tvBillToPay.setText(CurrencySymbol+" " + formatter.format(totalvalues));
-        tvCashDiscount.setText("-"+CurrencySymbol+" " + formatter.format(cashDiscount));
-        tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount)+")");
-        tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-
-        //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-        // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
-        ll_actual_total.setVisibility(View.VISIBLE);
+    //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+    // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
+    ll_actual_total.setVisibility(View.VISIBLE);
        /* if (cashDiscount > 0) {
             ll_actual_total.setVisibility(View.VISIBLE);
           tvSaveAmt.setVisibility(View.VISIBLE);
@@ -1018,55 +1024,56 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
            ll_actual_total.setVisibility(View.GONE);
        }*/
 
-        orderTotTax = new ArrayList<>();
-        orderTotTax.clear();
+    orderTotTax = new ArrayList<>();
+    orderTotTax.clear();
 
-        for (int l = 0; l < Getorder_Array_List.size(); l++) {
-            if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
-                for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
-                    String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
-                    Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
-                    if (orderTotTax.size() == 0) {
-                        orderTotTax.add(new Product_Details_Modal(label, amt));
-                    } else {
+    for (int l = 0; l < Getorder_Array_List.size(); l++) {
+        if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
+            for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
+                String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
+                Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
+                if (orderTotTax.size() == 0) {
+                    orderTotTax.add(new Product_Details_Modal(label, amt));
+                } else {
 
-                        boolean isDuplicate = false;
-                        for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
-                            if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
-                                double oldAmt = orderTotTax.get(totTax).getTax_Amt();
-                                isDuplicate = true;
-                                orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
-
-                            }
-                        }
-
-                        if (!isDuplicate) {
-                            orderTotTax.add(new Product_Details_Modal(label, amt));
+                    boolean isDuplicate = false;
+                    for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
+                        if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
+                            double oldAmt = orderTotTax.get(totTax).getTax_Amt();
+                            isDuplicate = true;
+                            orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
 
                         }
                     }
 
+                    if (!isDuplicate) {
+                        orderTotTax.add(new Product_Details_Modal(label, amt));
+
+                    }
                 }
+
             }
         }
+    }
 
-        String label = "", amt = "";
-        for (int i = 0; i < orderTotTax.size(); i++) {
-            label = label + orderTotTax.get(i).getTax_Type() + "\n";
-            amt = amt + CurrencySymbol+" "  + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
-        }
-        tvTaxLabel.setText(label);
-        tvTax.setText(amt);
-        if (orderTotTax.size() == 0) {
-            tvTaxLabel.setVisibility(View.INVISIBLE);
-            tvTax.setVisibility(View.INVISIBLE);
-        } else {
-            tvTaxLabel.setVisibility(View.VISIBLE);
-            tvTax.setVisibility(View.VISIBLE);
-        }
+    String label = "", amt = "";
+    for (int i = 0; i < orderTotTax.size(); i++) {
+        label = label + orderTotTax.get(i).getTax_Type() + "\n";
+        amt = amt + CurrencySymbol + " " + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
+    }
+    tvTaxLabel.setText(label);
+    tvTax.setText(amt);
+    if (orderTotTax.size() == 0) {
+        tvTaxLabel.setVisibility(View.INVISIBLE);
+        tvTax.setVisibility(View.INVISIBLE);
+    } else {
+        tvTaxLabel.setVisibility(View.VISIBLE);
+        tvTax.setVisibility(View.VISIBLE);
+    }
 
-        String data = gson.toJson(Product_Modal);
-        sharedCommonPref.save(Constants.LOC_SECONDARY_DATA, data);
+    String data = gson.toJson(Product_Modal);
+    sharedCommonPref.save(Constants.LOC_SECONDARY_DATA, data);
+  }
 
     }
 
@@ -1614,9 +1621,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             holder.tvTaxLabel.setText(CurrencySymbol+" "  + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getTax()));
                             holder.tvDiscBasePrice.setText(CurrencySymbol+" "+formatter.format((Product_Details_Modal.getQty()*(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()))-Product_Details_Modal.getDiscount()));
                             holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()-Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
-
-                            updateToTALITEMUI();
-                            showFreeQtyList();
+                            holder.Disc.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
+                            if(CategoryType>=0) {
+                                updateToTALITEMUI(0);
+                            }else {
+                                updateToTALITEMUI(1);
+                                showFreeQtyList();
+                            }
 
                             //hide code for edit scenario not working properly (remove also unwanted situation)
 //                            if (CategoryType == -1) {
@@ -1665,7 +1676,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                             Product_Details_Modalitem.get(position).setQty(0);
                                             Product_Details_Modalitem.remove(position);
                                             notifyDataSetChanged();
-                                            updateToTALITEMUI();
+                                            updateToTALITEMUI(1);
                                             showFreeQtyList();
                                         }
 
@@ -1698,7 +1709,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     }
                 });
 
-                updateToTALITEMUI();
+               // updateToTALITEMUI();
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
@@ -1857,7 +1868,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.Free.setText("" + Product_Details_Modal.getFree());
 
 
-                updateToTALITEMUI();
+                updateToTALITEMUI(1);
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
