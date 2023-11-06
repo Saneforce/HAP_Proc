@@ -62,7 +62,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
                 holder.tvmrp.setText(""+Double.parseDouble(pm.getMRP())*Double.parseDouble(pm.getConversionFactor()));
                // Log.e("pcs",""+pm.getQty()*Double.parseDouble(pm.getConversionFactor()));
                 holder.tvproductqtyPcs.setText(""+(pm.getQty()*Double.parseDouble(pm.getConversionFactor())));
-                holder.productname.setText("" + pm.getName()+ "\n"+"(Discount Price Rs."+pm.getDiscount()+")");
+                holder.productname.setText("" + pm.getName()+ "\n"+"(Discount Price Rs."+ new DecimalFormat("##0.00").format(pm.getDiscount())+")");
             }
 
 
