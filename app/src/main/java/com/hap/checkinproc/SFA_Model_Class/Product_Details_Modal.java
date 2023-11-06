@@ -714,7 +714,7 @@ public class Product_Details_Modal {
 
     public Product_Details_Modal(String id, String name,String mMRP,String mHSNCode, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, String mPTR, Integer Qty,
-                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax,double mTaxPer,double mSGST,double mCGST,String mConv,String mFree,String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
+                                 Integer RegularQty, Double Amount, List<Product_Details_Modal> productDetailsModal, String PaidAmount, double tax,double mTaxPer,double mSGST,double mCGST,String mConv,String mDisc,String mFree,String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
         this.id = id;
         this.name = name;
         this.productCatCode = productCatCode;
@@ -742,7 +742,7 @@ public class Product_Details_Modal {
         this.Off_Pro_code = off_Pro_code;
         this.Off_Pro_name = off_Pro_name;
         this.Off_Pro_Unit = off_Pro_Unit;
-        this.discount=Double.parseDouble(mFree);
+        this.discount=Double.parseDouble(mDisc);
     }
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
                                  String unitCode, double defaultUOMQty, String defaultUOM, Double Rate, Integer Qty,
