@@ -317,7 +317,6 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             OrderTypId=ProdGroups.getJSONObject(0).getString("id");
             OrderTypNm=ProdGroups.getJSONObject(0).getString("name");
             FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
             common_class.getDb_310Data(Constants.POS_TAXList, this);
             common_class.getDb_310Data(Constants.POS_SCHEME, this);
 
@@ -1230,6 +1229,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     public void showOrderItemList(int categoryPos, String filterString) {
         categoryPos = selectedPos;
         Product_ModalSetAdapter.clear();
+        if(Product_Modal!=null){
         for (Product_Details_Modal personNpi : Product_Modal) {
             if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
                 if (Common_Class.isNullOrEmpty(filterString))
@@ -1237,6 +1237,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
                     Product_ModalSetAdapter.add(personNpi);
             }
+        }
         }
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         Category_Nametext.setVisibility(View.VISIBLE);
@@ -1691,7 +1692,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             this.rowLayout = rowLayout;
             this.context = context;
             this.CategoryType = categoryType;
-            notifyDataSetChanged();
+            if(Product_Details_Modalitem.size()>0) notifyItemRangeChanged(0,Product_Details_Modalitem.size());
 
         }
 
@@ -2094,7 +2095,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                         public void PositiveMethod(DialogInterface dialog, int id) {
                                             Product_Details_Modalitem.get(position).setQty(0);
                                             Product_Details_Modalitem.remove(position);
-                                            notifyDataSetChanged();
+                                            //notifyDataSetChanged();
+                                            notifyItemRemoved(position);
+                                            //notifyItemRangeChanged(position, Product_Details_Modalitem.size());
                                             updateToTALITEMUI();
                                         }
 

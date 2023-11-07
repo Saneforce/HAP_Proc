@@ -1087,13 +1087,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     tvBillTotItem.setText("" + Getorder_Array_List.size());
     tvBillTotQty.setText("" + totQty);
     tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
-    tvCashDiscount.setText("-" + CurrencySymbol + " " + formatter.format(cashDiscount));
-    tvTotalDiscLabel.setText("(Discounted Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
-    tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
-
+    tvCashDiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDiscount));
+    tvTotalDiscLabel.setText("(Scheme Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+    //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
+    tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
     //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
     // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
-    ll_actual_total.setVisibility(View.VISIBLE);
+    ll_actual_total.setVisibility(View.GONE);
        /* if (cashDiscount > 0) {
             ll_actual_total.setVisibility(View.VISIBLE);
           tvSaveAmt.setVisibility(View.VISIBLE);
@@ -1368,7 +1368,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             this.rowLayout = rowLayout;
             this.context = context;
             this.CategoryType = categoryType;
-            notifyDataSetChanged();
+            if(Product_Details_Modalitem.size()>0) notifyItemRangeChanged(0,Product_Details_Modalitem.size());
 
         }
 
@@ -1759,7 +1759,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                         public void PositiveMethod(DialogInterface dialog, int id) {
                                             Product_Details_Modalitem.get(position).setQty(0);
                                             Product_Details_Modalitem.remove(position);
-                                            notifyDataSetChanged();
+                                            //notifyDataSetChanged();
+                                            notifyItemRemoved(position);
+                                            //notifyItemRangeChanged(position, Product_Details_Modalitem.size());
                                             updateToTALITEMUI(1);
                                             showFreeQtyList();
                                         }
@@ -1776,7 +1778,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                       // if(Product_Details_Modal.getDiscount()>0){
-                        holder.ll_ActualTotal.setVisibility(View.VISIBLE);
+                        holder.ll_ActualTotal.setVisibility(View.GONE);
                          holder.ActualTotal.setPaintFlags( holder.ActualTotal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                          holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()+Product_Details_Modal.getDiscount()));
                      // }else{
@@ -1836,6 +1838,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                             etComments.setText("");
                             notifyDataSetChanged();
+
 
                         }
                     }
