@@ -46,6 +46,7 @@ public class Constants {
     public static final String GetTodayOrder_List = "getTodayOrderList";
     public static final String Outlet_Total_Orders = "outletTotalOrders";
     public static final String TodayOrderDetails_List = "TodayOrderDetails_List";
+    public static final String Categoryfree_List = "Categoryfree_List";
     public static final String Competitor_List = "Competitor_List";
     public static final String Todaydayplanresult = "Todaydayplanresult";
     public static final String Outlet_Total_AlldaysOrders = "Outlet_Total_AlldaysOrders";

@@ -645,14 +645,9 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                //eMail="balaji.ng@hap.in";
-              //  eMail="1013688@hap.in";
-//                eMail="1028523@hap.in";
-              //eMail="ciadmin@hap.in";
-              //  eMail="1021302@hap.in";
-                eMail="1014700@hap.in";
-                //eMail="1014700@hap.in";g
-              //  eMail="1007120@hap.in";
+                // eMail="1014576@hap.in";
+                // eMail="Anisfathima2406@gmail.com";
+               // eMail="SAN SALES";
 
                 Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {

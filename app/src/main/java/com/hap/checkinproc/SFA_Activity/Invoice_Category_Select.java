@@ -87,6 +87,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     Type userType;
     Gson gson;
     TextView Out_Let_Name, Category_Nametext;
+    JSONArray CatFreeDetdata, FreeDetails;
     //String CurrencySymbol="B$"; //₹
     CircularProgressButton takeorder, btnRepeat;
     private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
@@ -439,7 +440,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             JSONArray filterArr = new JSONArray();
 
-            new Thread(() -> {
+            //new Thread(() -> {
+
                 for (int i = 0; i < ProdGroups.length(); i++) {
                     JSONObject obj = null;
                     try {
@@ -453,8 +455,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                }
-            }).start();
+              }
+//            }).start();
 
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -603,18 +605,41 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             e.printStackTrace();
         }
     }
-
+private int getCatePos(Integer CId) throws JSONException {
+        int po=-1;
+    for(int il=0;il<CatFreeDetdata.length();il++){
+       if( CatFreeDetdata.getJSONObject(il).getInt("CatId")==CId){
+           po=il;
+       }
+    }
+    return po;
+}
 
     void showOrderList() {
 
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
-
+        CatFreeDetdata=new JSONArray();
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
-
             if (Product_Modal.get(pm).getQty() > 0) {
-                Getorder_Array_List.add(Product_Modal.get(pm));
-
+                Product_Details_Modal itm=Product_Modal.get(pm);
+                Getorder_Array_List.add(itm);
+                try {
+                    int ipo=getCatePos(itm.getpCatCode());
+                    if(ipo>-1){
+                        JSONObject oitm=CatFreeDetdata.getJSONObject(ipo);
+                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getOrderQty());
+                        CatFreeDetdata.getJSONObject(ipo).put("Value",oitm.getDouble("Value")+itm.getAmount());
+                    }else{
+                        JSONObject nItm=new JSONObject();
+                        nItm.put("CatId",itm.getpCatCode());
+                        nItm.put("Qty",itm.getOrderQty());
+                        nItm.put("Value",itm.getAmount());
+                        CatFreeDetdata.put(nItm);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -887,6 +912,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("TOT_TAX_details", totTaxArr);
                         ActivityData.put("Activity_Doctor_Report", OutletItem);
                         ActivityData.put("Order_Details", Order_Details);
+                        ActivityData.put("FreeDetail", FreeDetails);
                         data.put(ActivityData);
 
 
@@ -952,12 +978,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
-        recyclerView.setLayoutManager(linearLayoutManager);
         showFreeQtyList();
         updateToTALITEMUI(1);
     }
@@ -973,6 +995,43 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     freeQty_Array_List.add(pm);
 
                 }
+            }
+        }
+
+        String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+
+        Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
+        }.getType();
+        List<Product_Details_Modal> catScheme = gson.fromJson(strSchemeList, type);
+
+        for(int il=0;il<CatFreeDetdata.length();il++){
+            JSONObject itm= null;
+            try {
+                itm = CatFreeDetdata.getJSONObject(il);
+                FreeDetails=new JSONArray();
+                if(catScheme!= null && catScheme.size()>0){
+                    for(int ij=0;ij<catScheme.size();ij++) {
+                        double schemeVal = Double.parseDouble(catScheme.get(ij).getScheme());
+                        if (String.valueOf(itm.getInt("CatId")).equalsIgnoreCase(catScheme.get(ij).getId()) &&
+                                itm.getDouble("Value") >= schemeVal
+                        ) {
+                            Product_Details_Modal nItm= new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(),catScheme.get(ij).getOff_Pro_name());
+                            nItm.setFree(catScheme.get(ij).getFree());
+                            freeQty_Array_List.add(nItm);
+                            JSONObject nItem=new JSONObject();
+                            nItem.put("CatId",itm.getString("CatId"));
+                            nItem.put("Qty",itm.getString("Qty"));
+                            nItem.put("Value",itm.getString("Value"));
+                            nItem.put("FPCode",catScheme.get(ij).getOff_Pro_code());
+                            nItem.put("FPName",catScheme.get(ij).getOff_Pro_name());
+                            nItem.put("FPQty",catScheme.get(ij).getFree());
+                            FreeDetails.put(nItem);
+                            Log.d(TAG, "showFreeQtyList: "+ itm.getString("Value"));
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
         if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
@@ -1679,14 +1738,19 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 holder.Rate.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+
                 holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()+Product_Details_Modal.getDiscount()));
-                if (Product_Details_Modal.getRateEdit() == 1) {
-                    holder.Rate.setEnabled(true);
-                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
-                } else {
-                    holder.Rate.setEnabled(false);
-                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                }
+                holder.Rate.setVisibility(View.GONE);
+                if (Product_Details_Modal.getRateEdit() == 1)
+                    holder.Rate.setVisibility(View.VISIBLE);
+//                if (Product_Details_Modal.getRateEdit() == 1) {
+//                    holder.Rate.setEnabled(true);
+//                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.edit_small, 0);
+//                } else {
+//                    holder.Rate.setEnabled(false);
+//                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                }
+
 
                 if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() == null)
                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setBalance(0);

@@ -107,7 +107,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     String dis_gstn = "",dis_fssai="", ret_gstn = "",ret_fssai="",RetailCode="",PONo="";
     String sPMode="";
     Context context = this;
-    JSONArray TaxListDetails;
+    JSONArray TaxListDetails,CatwiseFreeList;
     Boolean Addinf=false;
     public static final String UserDetail = "MyPrefs";
     SharedPreferences UserDetails;
@@ -377,7 +377,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvRetFSSAI.setText(ret_fssai);
 
             Log.v("gst_dist",sharedCommonPref.getvalue(Constants.DistributorGst));
+            CatwiseFreeList=new JSONArray();
+if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("ORDER")
+|| sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")){
 
+    common_class.getDb_310Data(Constants.Categoryfree_List, this);
+}
             if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 storeName = retailername.getText().toString();
                 address = retaileAddress.getText().toString();
@@ -1105,17 +1110,28 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     printama.setNormalText();
                 printama.printDashedLine();
 //                printama.printLine();
-                if(jFreeSmry.length()>0){
+                if(jFreeSmry.length()>0 || CatwiseFreeList.length()>0){
                     printama.printTextln(" ");
                     printama.printTextln("Free Invoice Details");
                     printama.printDashedLine();
 
-                    for (int j = 0; j < jFreeSmry.length(); j++) {
-                        try {
-                            String Pnm=jFreeSmry.getJSONObject(j).getString("OffName");
-                            printama.printTextln(Pnm+ repeat(" ",50-Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
+                    if(jFreeSmry.length()>0) {
+                        for (int j = 0; j < jFreeSmry.length(); j++) {
+                            try {
+                                String Pnm=jFreeSmry.getJSONObject(j).getString("OffName");
+                                printama.printTextln(Pnm+ repeat(" ",50-Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
+                            }
+                            catch (JSONException je){}
                         }
-                        catch (JSONException je){}
+                    }
+                    if(CatwiseFreeList.length()>0) {
+                        for (int j = 0; j < CatwiseFreeList.length(); j++) {
+                            try {
+                                String Pnm = CatwiseFreeList.getJSONObject(j).getString("OffName");
+                                printama.printTextln(Pnm + repeat(" ", 50 - Pnm.length()) + CatwiseFreeList.getJSONObject(j).getString("free"));
+                            } catch (JSONException je) {
+                            }
+                        }
                     }
                 }
                 printama.addNewLine(2);
@@ -1610,7 +1626,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 canvas.drawText("" + tvSaveAmt.getText().toString(), x, y, paint);
             }
 
-            if(jFreeSmry.length()>0) {
+            if(jFreeSmry.length()>0 || CatwiseFreeList.length()>0) {
                 y = y + 50;
                 paint.setFakeBoldText(true);
                 paint.setTextAlign(Paint.Align.LEFT);
@@ -1628,10 +1644,19 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 paint.setColor(Color.DKGRAY);
                 paint.setTextSize(12);
                 float cy = y;
-                for (int j = 0; j < jFreeSmry.length(); j++) {
-                    canvas.drawText(jFreeSmry.getJSONObject(j).getString("OffName"), x, y, paint);
-                    canvas.drawText(jFreeSmry.getJSONObject(j).getString("free"), widthSize - 50, y, paint);
-                    y = y + 20;
+                if(jFreeSmry.length()>0){
+                    for (int j = 0; j < jFreeSmry.length(); j++) {
+                        canvas.drawText(jFreeSmry.getJSONObject(j).getString("OffName"), x, y, paint);
+                        canvas.drawText(jFreeSmry.getJSONObject(j).getString("free"), widthSize - 50, y, paint);
+                        y = y + 20;
+                    }
+                }
+                if(CatwiseFreeList.length()>0) {
+                    for (int j = 0; j < CatwiseFreeList.length(); j++) {
+                        canvas.drawText(CatwiseFreeList.getJSONObject(j).getString("OffName"), x, y, paint);
+                        canvas.drawText(CatwiseFreeList.getJSONObject(j).getString("free"), widthSize - 50, y, paint);
+                        y = y + 20;
+                    }
                 }
             }
             if(Addinf) {
@@ -2202,6 +2227,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                         tvOutstanding.setText(CurrencySymbol+" " + formatter.format(outstandAmt));
                         break;
+                    case Constants.Categoryfree_List:
+                        CatwiseFreeList = new JSONArray(apiDataResponse);
+                        break;
                 }
             }
         } catch (Exception e) {
@@ -2230,7 +2258,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 billnumber.setText("Bill No: " + Shared_Common_Pref.TransSlNo);
             }
 
-            if(!sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
+            if(!sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE")) {
                 taxList = new ArrayList<>();
                 taxList.clear();
             }
@@ -2299,7 +2327,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     }
                     Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("PCode"), obj.getString("PDetails"), obj.getString("MRP"), obj.getString("HSN_Code"), 1, "1",
                             "1", "5", "", 0, "0", obj.getDouble("Price"), obj.getString("PTR"),
-                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt), sTaxV, SGSTAmt, CGSTAmt, obj.getString("ConversionFactor"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+                            obj.getInt("Qty"), obj.getInt("Qty"), amt, pmTax, "0", (taxAmt), sTaxV, SGSTAmt, CGSTAmt, obj.getString("ConversionFactor"),"0", obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
 
 
                 }
@@ -2371,7 +2399,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         }
                         Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("HSN_Code"), 1, "1",
                                 "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("Rate"), obj.getString("PTR"),
-                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt), sTaxV, SGSTAmt, CGSTAmt, obj.getString("ConversionFactor"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+                                obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, paidAmt, (taxAmt), sTaxV, SGSTAmt, CGSTAmt, obj.getString("ConversionFactor"), "0",obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
 
 
                     }
@@ -2459,20 +2487,21 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE")) {
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("HSN_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
-                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"),"0", obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
                         }else if (sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Projection")) {
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", 0.0,
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt)));
-                        } else if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")) {
+                        }
+                        else if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("Order")||sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")) {
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("HSN_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
-                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
 
                         } else {
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("Bar_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
-                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
 
                         }
 
