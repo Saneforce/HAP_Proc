@@ -96,14 +96,13 @@
                                 android:gravity="center_vertical"
                                 android:text=""
                                 android:textColor="@color/txt_color_black"
-                                android:textSize="@dimen/C15dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:gravity="end"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/C10dp"
                             android:orientation="horizontal">
@@ -112,7 +111,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:inputType="number"
-                                android:text="Margin Price"
+                                android:text="RP : "
                                 android:textColor="@color/grey_800"
                                 android:textSize="12sp"
                                 android:visibility="visible" />
@@ -127,7 +126,7 @@
                                 android:gravity="center_vertical"
                                 android:text="₹0"
                                 android:textColor="@color/txt_color_black"
-                                android:textSize="@dimen/C15dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
@@ -177,7 +176,6 @@
                             android:layout_marginRight="@dimen/C10dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
-                            android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
                             android:text="₹0"

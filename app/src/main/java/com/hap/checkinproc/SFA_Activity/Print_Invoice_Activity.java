@@ -1061,7 +1061,8 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
 
 
                    // if (cashDisc > 0) {
-                        printama.printText("Discount" + "                       " + discount.substring(String.valueOf(cashDisc).length(), discount.length()));
+                    String sChDis="- "+cashDisc;
+                        printama.printText("Discount" + "                       " + discount.substring(String.valueOf(sChDis).length(), discount.length()));
                         printama.addNewLine();
                  //   }
                     if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
@@ -2541,9 +2542,9 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
                 tvSaveAmt.setVisibility(View.VISIBLE);
                 tvTotalDiscLabel.setVisibility(View.VISIBLE);
                 //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "+formatter.format(tot_mrp_value-NetTotAmt));
-                tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(tot_mrp_value)+" - NetAmount "+formatter.format(NetTotAmt)+" = "+CurrencySymbol+" "  + formatter.format(tot_mrp_value-NetTotAmt));
-
-                tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" "+formatter.format(cashDisc)+")");
+                //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(tot_mrp_value)+" - NetAmount "+formatter.format(NetTotAmt)+" = "+CurrencySymbol+" "  + formatter.format(tot_mrp_value-NetTotAmt));
+                tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(tot_mrp_value-NetTotAmt));
+                tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" "+formatter.format(cashDisc)+")");
                 totalqty.setText("" + String.valueOf(sec_total_qtytext));
             }else {
                 tvSaveAmt.setVisibility(View.GONE);
@@ -2563,7 +2564,7 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 
 
-            cashdiscount.setText(CurrencySymbol + " " + formatter.format(cashDisc));
+            cashdiscount.setText("- "+CurrencySymbol + " " + formatter.format(cashDisc));
             tvBasePrice.setVisibility(View.GONE);
             rl_BasePrice.setVisibility(View.GONE);
             if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {

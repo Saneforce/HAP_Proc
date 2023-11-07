@@ -204,8 +204,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                             tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
-                            tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
-                            tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                            tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                            //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                            tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
 
                         }
@@ -229,9 +230,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             totalvalues=InvAmt - rDiscAmt;
                             tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                             tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
-                            tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
-                            tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-
+                            tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                            //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                            tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
                         }
                         etDiscAmt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -257,9 +258,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                     tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
-                    tvTotalDiscLabel.setText("(Discounted Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
-                    tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-
+                    tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                    //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                    tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
                 }
 
@@ -436,7 +437,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
-           /* JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+           JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
 
             JSONArray filterArr = new JSONArray();
 
@@ -481,7 +482,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             FilterTypes(filterArr.getJSONObject(0).getString("id"));
 
             OrderTypId=filterArr.getJSONObject(0).getString("id");
-            OrderTypNm=filterArr.getJSONObject(0).getString("name");*/
+            OrderTypNm=filterArr.getJSONObject(0).getString("name");
 
             //common_class.getDb_310Data(Constants.STOCK_DATA, this);
 
@@ -1101,7 +1102,7 @@ private int getCatePos(Integer CId) throws JSONException {
            tvBillTotItem.setText("" + Getorder_Array_List.size());
            tvBillTotQty.setText("" + totQty);
            tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
-           tvCashDiscount.setText(CurrencySymbol + " " + formatter.format(cashDiscount));
+           tvCashDiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDiscount));
            //  tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
            //  tvPayAmount.setText("" + (int) totalvalues);
 
@@ -1121,13 +1122,13 @@ private int getCatePos(Integer CId) throws JSONException {
 
            tvTotOutstanding.setText(CurrencySymbol + " " + formatter.format(outstandAmt + (totalvalues - payAmt)));
 
-           tvTotalDiscLabel.setText("(Discounted Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
-           tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
-
+           tvTotalDiscLabel.setText("(Scheme Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+           //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
+           tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
            //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
            // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
-           ll_actual_total.setVisibility(View.VISIBLE);
+           ll_actual_total.setVisibility(View.GONE);
        /* if (cashDiscount > 0) {
             ll_actual_total.setVisibility(View.VISIBLE);
           tvSaveAmt.setVisibility(View.VISIBLE);
@@ -1708,7 +1709,7 @@ private int getCatePos(Integer CId) throws JSONException {
             this.rowLayout = rowLayout;
             this.context = context;
             this.CategoryType = categoryType;
-            notifyDataSetChanged();
+            if(Product_Details_Modalitem.size()>0)  notifyItemRangeChanged(0,Product_Details_Modalitem.size());
         }
 
         @Override
@@ -1720,9 +1721,10 @@ private int getCatePos(Integer CId) throws JSONException {
         @Override
         public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
             try {
+                int index=position;
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getBindingAdapterPosition());
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.erpCode.setText("" + Product_Details_Modal.getERP_Code().toUpperCase());
+                holder.productname.setText(Product_Details_Modal.getName().toUpperCase());
+                holder.erpCode.setText(Product_Details_Modal.getERP_Code().toUpperCase());
              //   Log.e("taxc",""+Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getTax());
              //   Log.e("totamountc",""+Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount());
              //   Log.e("totamount",""+Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount());
@@ -1740,7 +1742,7 @@ private int getCatePos(Integer CId) throws JSONException {
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()+Product_Details_Modal.getDiscount()));
-                holder.Rate.setVisibility(View.GONE);
+                //holder.Rate.setVisibility(View.GONE);
                 if (Product_Details_Modal.getRateEdit() == 1)
                     holder.Rate.setVisibility(View.VISIBLE);
 //                if (Product_Details_Modal.getRateEdit() == 1) {
@@ -1933,7 +1935,8 @@ private int getCatePos(Integer CId) throws JSONException {
                                 //totQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
                                 //enterQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty();
 
-                                common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
+                                //common_class.showMsg(Invoice_Category_Select.this, "Can't exceed stock");
+                                //return;
                                 //holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty());
 
                             }
@@ -2207,7 +2210,10 @@ private int getCatePos(Integer CId) throws JSONException {
                                         public void PositiveMethod(DialogInterface dialog, int id) {
                                             Product_Details_Modalitem.get(position).setQty(0);
                                             Product_Details_Modalitem.remove(position);
-                                            notifyDataSetChanged();
+                                            //notifyDataSetChanged();
+                                            //notifyItemChanged(position);
+                                            notifyItemRemoved(position);
+                                            //notifyItemRangeChanged(position, Product_Details_Modalitem.size());
                                             updateToTALITEMUI(1);
                                         }
 
@@ -2220,7 +2226,7 @@ private int getCatePos(Integer CId) throws JSONException {
                     });
 
                   //  if(Product_Details_Modal.getDiscount()==0){
-                        holder.ll_ActualTotal.setVisibility(View.VISIBLE);
+                        holder.ll_ActualTotal.setVisibility(View.GONE);
                         holder.ActualTotal.setPaintFlags( holder.ActualTotal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()+Product_Details_Modal.getDiscount()));
                   ///  }else{
@@ -2264,7 +2270,7 @@ private int getCatePos(Integer CId) throws JSONException {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt;
-            TextView        QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP, tvDiscBasePrice,ActualTotal;
+            TextView  QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP, tvDiscBasePrice,ActualTotal;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
             LinearLayout rlUOM,ll_ActualTotal;
