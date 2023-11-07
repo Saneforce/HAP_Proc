@@ -544,6 +544,9 @@ public class Product_Details_Modal {
     @Expose
     private String discount_value;
 
+
+    private double baseDiscount;
+
     public String getReplace_qty() {
         return replace_qty;
     }
@@ -1318,6 +1321,10 @@ public class Product_Details_Modal {
     public void setGrnTotal(Double grnTotal) {
         this.grnTotal = grnTotal;
     }
+
+    public double getBaseDiscount() {return baseDiscount;}
+
+    public void setBaseDiscount(double baseDiscount) {this.baseDiscount = baseDiscount;}
 
     @SerializedName("Net_Tot_Value")
     @Expose

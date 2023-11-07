@@ -839,6 +839,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("free", Getorder_Array_List.get(z).getFree());
                             ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
                             ProdItem.put("dis_value", Getorder_Array_List.get(z).getDiscount_value());
+                            ProdItem.put("base_dis", Getorder_Array_List.get(z).getBaseDiscount());
                             ProdItem.put("Off_Pro_code", Getorder_Array_List.get(z).getOff_Pro_code());
                             ProdItem.put("Off_Pro_name", Getorder_Array_List.get(z).getOff_Pro_name());
                             ProdItem.put("Off_Pro_Unit", Getorder_Array_List.get(z).getOff_Pro_Unit());
@@ -1421,7 +1422,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
 
 
-                holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+             //   holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 holder.tvMRP.setText(CurrencySymbol+" "  + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
 
@@ -1442,9 +1443,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     }
 
 
-                    holder.regularAmt.setText(CurrencySymbol+" "  + new DecimalFormat("##0.00").format((Product_Details_Modal.getCnvQty() * Product_Details_Modal.getRegularQty() )* Double.parseDouble( Product_Details_Modal.getPTR())));
+                   // holder.regularAmt.setText(CurrencySymbol+" "  + new DecimalFormat("##0.00").format((Product_Details_Modal.getCnvQty() * Product_Details_Modal.getRegularQty() )* Double.parseDouble( Product_Details_Modal.getPTR())));
 
-                    holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
+                   // holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
                    // Log.d("PRICE_PTR", Product_Details_Modal.getPTR());
                     Log.d("PRICE_Qty", String.valueOf(Product_Details_Modal.getQty()));
@@ -1543,7 +1544,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             if (CategoryType >= 0) {
                                 //holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
-                                holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
+                              //  holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
                             }
 
@@ -2089,7 +2090,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     double val = (100 + (TotalTax)) / 100;
                     double finDisc = Product_Details_Modalitem.getDiscount() / val;
                     Product_Details_Modalitem.setDiscount(finDisc);
+                    double baseDisc=finDisc/(Product_Details_Modalitem.getCnvQty()*Product_Details_Modalitem.getQty());
+                    Product_Details_Modalitem.setBaseDiscount(Double.parseDouble(formatter.format(baseDisc)));
+                }else{
+                    Product_Details_Modalitem.setBaseDiscount(0);
                 }
+
+
                 Product_Details_Modalitem.setAmount(Product_Details_Modalitem.getAmount()-Product_Details_Modalitem.getDiscount());
 
                 double sellAmt=Product_Details_Modalitem.getAmount();

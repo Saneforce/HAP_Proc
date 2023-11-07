@@ -1561,7 +1561,7 @@ private int getCatePos(Integer CId) throws JSONException {
                     Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                     Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                     Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), 1);
+                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), 1);
                 }
                 //if (Product_ModalSetAdapter.get(uomPos).getBalance() == null
                 //        || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty
@@ -1739,7 +1739,7 @@ private int getCatePos(Integer CId) throws JSONException {
 
                 holder.Rate.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
-                holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
+              //  holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
                 holder.ActualTotal.setText(CurrencySymbol+" "+formatter.format(Product_Details_Modal.getAmount()+Product_Details_Modal.getDiscount()));
                 //holder.Rate.setVisibility(View.GONE);
@@ -1823,25 +1823,25 @@ private int getCatePos(Integer CId) throws JSONException {
 
                 }
 
-                final double[] sellAmt = new double[1];
-                final double[] TotalTax = new double[1];
+               // final double[] sellAmt = new double[1];
+               // final double[] TotalTax = new double[1];
                 if (CategoryType >= 0) {
                     new Thread(() -> {
                         holder.totalQty.setText("Total Qty : " + ((int) (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() /**
                          Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()*/)));
 
                         //  Integer indx= holder.getBindingAdapterPosition();
-                        sellAmt[0] = Product_Details_Modalitem.get(position).getAmount();
-                        TotalTax[0] = getTotTaxNew(Product_Details_Modalitem.get(position));
-                        sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
+                      //  sellAmt[0] = Product_Details_Modalitem.get(position).getAmount();
+                      //  TotalTax[0] = getTotTaxNew(Product_Details_Modalitem.get(position));
+                      //  sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
                     }).start();
 
-                    sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
+                   // sellAmt[0] = sellAmt[0] /((100+(TotalTax[0]))/100);
                    // holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(sellAmt[0]));
-                    holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
+                  //  holder.QtyAmt.setText(CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
-                    holder.regularAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
-                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
+               //     holder.regularAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() *
+                          //  Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
                 }
 
                 runOnUiThread(() -> holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getTax())));
@@ -1995,8 +1995,8 @@ private int getCatePos(Integer CId) throws JSONException {
                            // sellAmt=sellAmt/((100+(TotalTax))/100);
 
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText(CurrencySymbol+" "+ formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
-                                        Double.parseDouble(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR())));
+                            //    holder.QtyAmt.setText(CurrencySymbol+" "+ formatter.format((Product_Details_Modalitem.get(intdx).getCnvQty() * Product_Details_Modalitem.get(intdx).getQty()) *
+                                      //  Double.parseDouble(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getPTR())));
                                 holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
 
 

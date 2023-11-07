@@ -1441,10 +1441,10 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
                 for (int j = 0; j < lines.length; j++) {
                     System.out.println("lines[" + j + "]: (len: " + lines[j].length() + ") : " + lines[j]);
                     canvas.drawText(lines[j], x, y, paint);
-                    Log.e("ghvnh",""+j+"len"+lines.length);
+                   // Log.e("ghvnh",""+j+"len"+lines.length);
                     if(j==lines.length-1&&(sMode.equalsIgnoreCase("ORDER") || sMode.equalsIgnoreCase("INVOICE"))){
                         y = y + 20;
-                        canvas.drawText("(Discount Rs."+Order_Outlet_Filter.get(i).getDiscount()+")",x,y,paint);
+                        canvas.drawText("(Discount Rs."+formatter.format(Order_Outlet_Filter.get(i).getDiscount())+")",x,y,paint);
                     }
                     y = y + 20;
 
@@ -1541,6 +1541,13 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
                 //netamount=netamount - Double.parseDouble(cashdiscount.getText().toString());
                 y = y + 20;
         //    }
+            if(sMode.equalsIgnoreCase("ORDER") || sMode.equalsIgnoreCase("INVOICE")) {
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("Taxable Amount", x, y, paint);
+                paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText(formatter.format(pBillAmt-cashDisc), xTot, y, paint);
+                y = y + 20;
+            }
 
             if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                 paint.setTextAlign(Paint.Align.LEFT);
