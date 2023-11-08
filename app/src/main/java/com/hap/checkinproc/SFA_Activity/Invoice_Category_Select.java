@@ -806,6 +806,7 @@ private int getCatePos(Integer CId) throws JSONException {
                         OutletItem.put("InvValue", formatter.format(InvAmt));
                         OutletItem.put("DiscPer", etDiscPer.getText().toString());
                         OutletItem.put("DiscAmt", rDiscAmt);
+                        OutletItem.put("prodDisAmt",cashDiscount);
                         cashDiscount=cashDiscount+rDiscAmt;
                         OutletItem.put("CashDiscount", cashDiscount);
 

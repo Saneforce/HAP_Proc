@@ -11,6 +11,9 @@ public class ModelPendingOrder {
     String total;
     String OutletCode;
 
+
+    String disTotal;
+
     public ModelPendingOrder(String title, String address, String mobile, String title2, String orderID, String date, String products, String total) {
         this.title = title;
         this.address = address;
@@ -21,7 +24,7 @@ public class ModelPendingOrder {
         this.products = products;
         this.total = total;
     }
-    public ModelPendingOrder(String ouletcode,String title, String address, String mobile, String title2, String orderID, String date, String products, String total) {
+    public ModelPendingOrder(String ouletcode,String title, String address, String mobile, String title2, String orderID, String date, String products, String total,String distotal) {
         this.title = title;
         this.address = address;
         this.mobile = mobile;
@@ -31,6 +34,7 @@ public class ModelPendingOrder {
         this.products = products;
         this.total = total;
         this.OutletCode=ouletcode;
+        this.disTotal=distotal;
     }
 
     public String getTitle() {
@@ -68,4 +72,9 @@ public class ModelPendingOrder {
     public String getOutletCode() { return OutletCode; }
 
     public void setOutletCode(String outletCode) { OutletCode = outletCode;}
+
+    public String getDisTotal() {return disTotal;}
+
+    public void setDisTotal(String disTotal) {this.disTotal = disTotal;}
+
 }

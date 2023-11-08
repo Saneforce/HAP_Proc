@@ -70,6 +70,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
 
     Common_Class common_class;
     Shared_Common_Pref shared_common_pref;
+    String orderValue="0";
+    String totalDiscount="0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +183,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 String orderID = array.getJSONObject(i).getString("TransactionNo");
                                 String date = array.getJSONObject(i).getString("Date_Time");
                                 String total = array.getJSONObject(i).getString("TransactionAmt");
+                                String disTotal=array.getJSONObject(i).getString("Dis_Total");
                                 JSONArray jsonArray = array.getJSONObject(i).getJSONArray("Products");
                                 StringBuilder builder = new StringBuilder();
                                 for (int j = 0; j < jsonArray.length(); j++) {
@@ -192,7 +195,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                     }
                                 }
                                 String products = builder.toString();
-                                list.add(new ModelPendingOrder(OutletCd,title, address, mobile, title2, orderID, date, products, total));
+                                list.add(new ModelPendingOrder(OutletCd,title, address, mobile, title2, orderID, date, products, total,disTotal));
                             }
                             adapter = new AdapterPendingOrder(context, list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -212,6 +215,9 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 shared_common_pref.save(Constants.Retailor_Address, model.getAddress());
                                 common_class.getDb_310Data(Constants.FreeSchemeDiscList, PendingOrdersActivity.this);
                                 common_class.getDb_310Data(Constants.TAXList, PendingOrdersActivity.this);
+                              //  Log.e("pending_orderValue:",model.getTotal());
+                                orderValue= model.getTotal();
+                                totalDiscount=model.getDisTotal();
                                 LoadingMaterials();
                             });
                             adapter.setCancelClicked((model, position) -> {
@@ -281,6 +287,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
             @Override
             public void onUpdate(String mode) {
                 Intent intent = new Intent(context, Print_Invoice_Activity.class);
+                intent.putExtra("Order_Values",orderValue);
+                intent.putExtra("Discount_Amount",totalDiscount);
                 startActivity(intent);
                 common_class.ProgressdialogShow(0, "");
             }
