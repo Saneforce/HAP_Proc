@@ -542,14 +542,17 @@ public class OutletReport_View_Modal {
     @SerializedName("Quantity")
     @Expose
     private int Quantity;
-
-
-
-
     @SerializedName("InvoiceDate")
     @Expose
     private String InvoiceDate = "";
+    @SerializedName("CashDiscount")
+    @Expose
+    private Double totCashDisc = 0.0;
 
+    public Double getTotCashDisc() {return totCashDisc;}
+
+    public void setTotCashDisc(Double totCashDisc) {this.totCashDisc = totCashDisc;
+    }
     public String getInvoiceDate() {
         return InvoiceDate;
     }

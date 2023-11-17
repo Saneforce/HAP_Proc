@@ -112,9 +112,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     public static final String UserDetail = "MyPrefs";
     SharedPreferences UserDetails;
     LinearLayout sec_ord_row_report,row_report;
-    TextView tvTotalDiscLabel,tvSaveAmt;
-    RelativeLayout rl_BasePrice;
+    TextView tvTotalDiscLabel,tvSaveAmt,tvtotcashdiscount;
+    RelativeLayout rl_BasePrice,rltotcashdiscount;
     double orderValue=0;
+    double invTotCashDisc=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -175,6 +176,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
             tvSaveAmt=findViewById(R.id.tvSaveAmt);
             rl_BasePrice=findViewById(R.id.rl_BasePrice);
+            rltotcashdiscount=findViewById(R.id.rltotcashdiscount);
+            tvtotcashdiscount=findViewById(R.id.tvtotcashdiscount);
 
 
             RetailCode=sharedCommonPref.getvalue(Constants.Retailor_ERP_Code);
@@ -475,6 +478,8 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
             }
             if(getIntent().hasExtra("Order_Values")) {
                 orderValue = Double.parseDouble(getIntent().getStringExtra("Order_Values"));
+            }  if(getIntent().hasExtra("Cash_Discount")) {
+                invTotCashDisc = getIntent().getDoubleExtra("Cash_Discount",0);
             }
             stockFileList.add(new QPS_Modal("", "", ""));//purity
 
@@ -1040,7 +1045,7 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
                 String subTotal = "           " + formatter.format(billAmt);
                 String totItem = "           " + totalitem.getText().toString();
                 String totqty = "           " + totalqty.getText().toString();
-                String discount = "           " + cashDisc;
+                String discount = "           " + formatter.format(cashDisc);
                 String outstand = "           " + outstandAmt;
 
                 printama.printText("SubTotal" + "                            " + subTotal.substring(String.valueOf(formatter.format(billAmt)).length(), subTotal.length()));
@@ -1062,7 +1067,7 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
 
                    // if (cashDisc > 0) {
                     String sChDis="- "+cashDisc;
-                        printama.printText("Discount" + "                       " + discount.substring(String.valueOf(sChDis).length(), discount.length()));
+                        printama.printText("Discount" + "                            " + discount.substring(String.valueOf(formatter.format(cashDisc)).length(), discount.length()));
                         printama.addNewLine();
                  //   }
                     if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
@@ -1087,26 +1092,34 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
 
 
                 printama.addNewLine(1.5);
-                String strAmount = "       " +CurrencySymbol+" "+ formatter.format(NetTotAmt);
+                String strAmount = "       "+formatter.format(NetTotAmt);
                 printama.printDashedLine();
 //
                     printama.setTallBold();
 
-                printama.printTextln("Net amount" + "                          " + strAmount.substring(String.valueOf(NetTotAmt).length(), strAmount.length()));
+                printama.printTextln("Net amount" + "                            " + strAmount.substring(String.valueOf(NetTotAmt).length(), strAmount.length()));
 
                     if(sMode.equalsIgnoreCase("INVOICE")) {
                         TextView retAmount = findViewById(R.id.returnAmount);
                         TextView toPayAmount = findViewById(R.id.toPayAmount);
                         TextView referenceBillNumber = findViewById(R.id.referenceInvNumber);
-                        //if(retAmount.getVisibility()==View.VISIBLE) {
-                            printama.printTextlnNormal("Return Amount" +  repeat(" ",33-retAmount.getText().toString().length()) + retAmount.getText().toString());
+                        if(retAmount.getVisibility()==View.VISIBLE) {
+                       // String retAmtCurrRep= retAmount.getText().toString().replaceAll(CurrencySymbol+" ","");
+                            printama.printTextlnNormal("Return Amount" +  repeat(" ",33-retAmount.getText().toString().length()) +  retAmount.getText().toString().replaceAll(CurrencySymbol+" ",""));
                             printama.printTextlnNormal(referenceBillNumber.getText().toString());
 
                         printama.setTallBold();
-                        printama.printTextln("To Pay " +  repeat(" ",39-toPayAmount.getText().toString().length()) + toPayAmount.getText().toString());
+                       // String toPayCurrRep=toPayAmount.getText().toString().replaceAll(CurrencySymbol+" ","");
+                        printama.printTextln("To Pay " +  repeat(" ",39-toPayAmount.getText().toString().length()) + toPayAmount.getText().toString().replaceAll(CurrencySymbol+" ","") );
 
-                        //}
+                        }
                     }
+                  /*  if(sMode.equalsIgnoreCase("INVOICE")||sMode.equalsIgnoreCase("ORDER")){
+                        printama.printText(tvTotalDiscLabel.getText().toString().replaceAll(CurrencySymbol+" ",""));
+                        printama.addNewLine();
+                        printama.printText(tvSaveAmt.getText().toString().replaceAll(CurrencySymbol+" ",""));
+                        printama.addNewLine();
+                    }*/
 
                     printama.setNormalText();
                 printama.printDashedLine();
@@ -1541,6 +1554,13 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
                 //netamount=netamount - Double.parseDouble(cashdiscount.getText().toString());
                 y = y + 20;
         //    }
+            if(sMode.equalsIgnoreCase("INVOICE")){
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("Cash Discount", x, y, paint);
+                paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText(tvtotcashdiscount.getText().toString(), xTot, y, paint);
+               y = y + 20;
+            }
             if(sMode.equalsIgnoreCase("ORDER") || sMode.equalsIgnoreCase("INVOICE")) {
                 paint.setTextAlign(Paint.Align.LEFT);
                 canvas.drawText("Taxable Amount", x, y, paint);
@@ -2570,8 +2590,15 @@ if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("POS INVOICE") || 
 
             sharedCommonPref.save(Constants.INVOICE_ORDERLIST, response);
 
+            if(sharedCommonPref.getvalue(Constants.FLAG).equalsIgnoreCase("INVOICE")){
+               rltotcashdiscount.setVisibility(View.VISIBLE);
+                cashdiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDisc-invTotCashDisc));
+               tvtotcashdiscount.setText("- " + CurrencySymbol + " " + formatter.format(invTotCashDisc));
 
-            cashdiscount.setText("- "+CurrencySymbol + " " + formatter.format(cashDisc));
+            }else {
+                rltotcashdiscount.setVisibility(View.GONE);
+                cashdiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDisc));
+            }
             tvBasePrice.setVisibility(View.GONE);
             rl_BasePrice.setVisibility(View.GONE);
             if(sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {

@@ -891,6 +891,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         intent.putExtra("PONumber", FilterOrderList.get(position).getOrderNo());
         intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
         intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+        intent.putExtra("Cash_Discount",FilterOrderList.get(position).getTotCashDisc());
         startActivity(intent);
         overridePendingTransition(R.anim.in, R.anim.out);
 

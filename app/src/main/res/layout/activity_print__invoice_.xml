@@ -844,6 +844,30 @@
                                     android:textSize="@dimen/C12dp"></TextView>
                             </RelativeLayout>
                             <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/rltotcashdiscount"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cash Discount"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/tvtotcashdiscount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+                            </RelativeLayout>
+                            <RelativeLayout
                                 android:id="@+id/rl_BasePrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
