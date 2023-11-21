@@ -2502,8 +2502,11 @@ private int getCatePos(Integer CId) throws JSONException {
             }.getType();
             List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type);
             String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
-            JSONObject jsonObject = new JSONObject(taxRes);
-            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+            JSONArray jsonArray=null;
+            if (!Common_Class.isNullOrEmpty(taxRes)) {
+                JSONObject jsonObject = new JSONObject(taxRes);
+                 jsonArray = jsonObject.getJSONArray("Data");
+            }
             if (Product_Modal.size() > 0) {
                 for (int a = 0; a < Product_Modal.size(); a++) {
 

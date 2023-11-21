@@ -957,8 +957,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                         common_class.getPOSProduct(POSActivity.this, new OnLiveUpdateListener() {
                                             @Override
                                             public void onUpdate(String mode) {
-                                                common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
+                                               // common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
                                                 common_class.ProgressdialogShow(0, "");
+                                                Intent intent=new Intent(getApplicationContext(),Print_Invoice_Activity.class);
+                                                intent.putExtra("Discount_Amount", String.valueOf(cashDiscount));
+                                                startActivity(intent);
+                                                finish();
                                             }
                                         });
                                         //common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
@@ -1178,7 +1182,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
                         for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
                             String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
-                            Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
+                            Double amt = Double.valueOf(formatter.format(Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt()));
                             if (orderTotTax.size() == 0) {
                                 orderTotTax.add(new Product_Details_Modal(label, amt));
                             } else {
