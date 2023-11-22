@@ -13,7 +13,7 @@ public class ApiClient {
     //public static String BASE_URL = "http://hapqc.sanfmcg.com/server/";//field  9.1.1
     //public static String BASE_URL = "http://Checkin.hap.in/server/";//Non field  6.1.2
     //public static String BASE_URL = "http://hapqc.sanfmcg.com/server/";//field  9.1.1
-    public static String BASE_URL = "http://primary.hap.in/server/";//distri 8.3.1
+    public static String BASE_URL = "http://primary.hap.in/server/";//distri 8.3.2
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         Log.d("BaseURL", BASE_URL);

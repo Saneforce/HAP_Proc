@@ -193,6 +193,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvOutstanding.setText(CurrencySymbol+" 0.00");
 
             loadNoOrdRemarks();
+            common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
             btnRmkClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -230,7 +231,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvEndDate.setText(Common_Class.GetDatewothouttime());
 
             //common_class.getDb_310Data(Constants.TAXList, this);
-            common_class.getDb_310Data(Constants.FreeSchemeDiscList, this);
             //common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
             SharedPreferences sessionCount = PreferenceManager.getDefaultSharedPreferences(this);
