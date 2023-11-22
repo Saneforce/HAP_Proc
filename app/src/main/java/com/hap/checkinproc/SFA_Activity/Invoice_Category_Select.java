@@ -806,6 +806,7 @@ private int getCatePos(Integer CId) throws JSONException {
                         OutletItem.put("InvValue", formatter.format(InvAmt));
                         OutletItem.put("DiscPer", etDiscPer.getText().toString());
                         OutletItem.put("DiscAmt", rDiscAmt);
+                        OutletItem.put("prodDisAmt",cashDiscount);
                         cashDiscount=cashDiscount+rDiscAmt;
                         OutletItem.put("CashDiscount", cashDiscount);
 
@@ -2501,50 +2502,59 @@ private int getCatePos(Integer CId) throws JSONException {
             }.getType();
             List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type);
             String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
-            JSONObject jsonObject = new JSONObject(taxRes);
-            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+            JSONArray jsonArray=null;
+            if (!Common_Class.isNullOrEmpty(taxRes)) {
+                JSONObject jsonObject = new JSONObject(taxRes);
+                 jsonArray = jsonObject.getJSONArray("Data");
+            }
             if (Product_Modal.size() > 0) {
                 for (int a = 0; a < Product_Modal.size(); a++) {
 
                     String productId = Product_Modal.get(a).getId();
-                    List<Product_Details_Modal.Scheme> schemeList = new ArrayList<>();
-                    if (product_details_modalArrayList.size() > 0) {
-                        for (int b = 0; b < product_details_modalArrayList.size(); b++) {
-                            String schemeProductId = product_details_modalArrayList.get(b).getId();
-                            if (productId.equalsIgnoreCase(schemeProductId)) {
-                                Product_Details_Modal.Scheme productScheme = new Product_Details_Modal.Scheme();
-                                productScheme.setPCode(product_details_modalArrayList.get(b).getId());
-                                productScheme.setScheme(Integer.parseInt(product_details_modalArrayList.get(b).getScheme()));
-                                productScheme.setOffProd(product_details_modalArrayList.get(b).getOff_Pro_code());
-                                productScheme.setOffProdNm(product_details_modalArrayList.get(b).getOff_Pro_name());
-                                productScheme.setOffProdUnit(product_details_modalArrayList.get(b).getOff_Pro_Unit());
-                                productScheme.setFreeUnit(product_details_modalArrayList.get(b).getFree());
-                                productScheme.setDiscountType(product_details_modalArrayList.get(b).getDiscount_type());
-                                productScheme.setPackages(product_details_modalArrayList.get(b).getPackage());
-                                productScheme.setDiscountValue(product_details_modalArrayList.get(b).getDiscount_value());
-                                productScheme.setDisc(product_details_modalArrayList.get(b).getDiscount());
-                                schemeList.add(productScheme);
+                    try {
+                        if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
+                            List<Product_Details_Modal.Scheme> schemeList = new ArrayList<>();
+                            for (int b = 0; b < product_details_modalArrayList.size(); b++) {
+                                String schemeProductId = product_details_modalArrayList.get(b).getId();
+                                if (productId.equalsIgnoreCase(schemeProductId)) {
+                                    Product_Details_Modal.Scheme productScheme = new Product_Details_Modal.Scheme();
+                                    productScheme.setPCode(product_details_modalArrayList.get(b).getId());
+                                    productScheme.setScheme(Integer.parseInt(product_details_modalArrayList.get(b).getScheme()));
+                                    productScheme.setOffProd(product_details_modalArrayList.get(b).getOff_Pro_code());
+                                    productScheme.setOffProdNm(product_details_modalArrayList.get(b).getOff_Pro_name());
+                                    productScheme.setOffProdUnit(product_details_modalArrayList.get(b).getOff_Pro_Unit());
+                                    productScheme.setFreeUnit(product_details_modalArrayList.get(b).getFree());
+                                    productScheme.setDiscountType(product_details_modalArrayList.get(b).getDiscount_type());
+                                    productScheme.setPackages(product_details_modalArrayList.get(b).getPackage());
+                                    productScheme.setDiscountValue(product_details_modalArrayList.get(b).getDiscount_value());
+                                    productScheme.setDisc(product_details_modalArrayList.get(b).getDiscount());
+                                    schemeList.add(productScheme);
+                                }
+
                             }
-
+                            Product_Modal.get(a).setSchemeList(schemeList);
                         }
-
-                    }
-                    Product_Modal.get(a).setSchemeList(schemeList);
-
-
-                    if (!Common_Class.isNullOrEmpty(taxRes)) {
-                        List<Product_Details_Modal> taxList = new ArrayList<>();
-                        double totTax = 0;
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                            if (jsonObject1.getString("Product_Detail_Code").equals(productId)) {
-                                taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"), jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), 0));
-                            }
-
-                        }
-                        Product_Modal.get(a).setProductDetailsModal(taxList);
+                    }catch (Exception e){
+                        Log.e("scheme error:",e.toString());
                     }
 
+
+                  try {
+                      if (!Common_Class.isNullOrEmpty(taxRes)) {
+                          List<Product_Details_Modal> taxList = new ArrayList<>();
+                          double totTax = 0;
+                          for (int i = 0; i < jsonArray.length(); i++) {
+                              JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                              if (jsonObject1.getString("Product_Detail_Code").equals(productId)) {
+                                  taxList.add(new Product_Details_Modal(jsonObject1.getString("Tax_Id"), jsonObject1.getString("Tax_Type"), jsonObject1.getDouble("Tax_Val"), 0));
+                              }
+
+                         }
+                          Product_Modal.get(a).setProductDetailsModal(taxList);
+                      }
+                  }catch (Exception e){
+                      Log.e("tax error:",e.toString());
+                  }
 
                 }
 
@@ -2605,38 +2615,40 @@ private int getCatePos(Integer CId) throws JSONException {
 
     public void sumofTaxNew(Product_Details_Modal Product_Details_Modalitem) {
         try {
-            if (Product_Details_Modalitem.getProductDetailsModal().size()>0) {
-                List<Product_Details_Modal> productTaxList=Product_Details_Modalitem.getProductDetailsModal();
-                double TotalTax=getTotTaxNew(Product_Details_Modalitem);
-                Log.e("sellAmt",""+Product_Details_Modalitem.getDiscount());
-                if(Product_Details_Modalitem.getDiscount()>0) {
+            if (Product_Details_Modalitem.getProductDetailsModal().size()>0||Product_Details_Modalitem.getDiscount()>0) {
+
+                double TotalTax = getTotTaxNew(Product_Details_Modalitem);
+                //Log.e("sellAmt", "" + Product_Details_Modalitem.getDiscount());
+                if (Product_Details_Modalitem.getDiscount() > 0) {
                     double val = (100 + (TotalTax)) / 100;
                     double finDisc = Product_Details_Modalitem.getDiscount() / val;
                     Product_Details_Modalitem.setDiscount(finDisc);
                 }
-                Product_Details_Modalitem.setAmount(Product_Details_Modalitem.getAmount()-Product_Details_Modalitem.getDiscount());
-                double sellAmt=Product_Details_Modalitem.getAmount();
-             //   sellAmt=sellAmt/((100+(TotalTax))/100);
-                Log.e("sellAmt",""+sellAmt+"TotalTax:"+TotalTax+"getamount:"+Product_Details_Modalitem.getAmount());
-                double wholeTax = 0;
-                List<Product_Details_Modal> taxList = new ArrayList<>();
-                for (int i = 0; i < productTaxList.size(); i++) {
-                    if (productTaxList.get(i).getTax_Val() > 0) {
-                        double taxCal = sellAmt *(productTaxList.get(i).getTax_Val() / 100);
-                        wholeTax += taxCal;
+                Product_Details_Modalitem.setAmount(Product_Details_Modalitem.getAmount() - Product_Details_Modalitem.getDiscount());
+                double sellAmt = Product_Details_Modalitem.getAmount();
+                //   sellAmt=sellAmt/((100+(TotalTax))/100);
+               // Log.e("sellAmt", "" + sellAmt + "TotalTax:" + TotalTax + "getamount:" + Product_Details_Modalitem.getAmount());
+                if (Product_Details_Modalitem.getProductDetailsModal().size() > 0) {
+                    List<Product_Details_Modal> productTaxList = Product_Details_Modalitem.getProductDetailsModal();
+                    double wholeTax = 0;
+                    List<Product_Details_Modal> taxList = new ArrayList<>();
+                    for (int i = 0; i < productTaxList.size(); i++) {
+                        if (productTaxList.get(i).getTax_Val() > 0) {
+                            double taxCal = sellAmt * (productTaxList.get(i).getTax_Val() / 100);
+                            wholeTax += taxCal;
 
-                        taxList.add(new Product_Details_Modal(productTaxList.get(i).getTax_Id(), productTaxList.get(i).getTax_Type(), productTaxList.get(i).getTax_Val(), taxCal));
+                            taxList.add(new Product_Details_Modal(productTaxList.get(i).getTax_Id(), productTaxList.get(i).getTax_Type(), productTaxList.get(i).getTax_Val(), taxCal));
+                        }
                     }
+
+
+                    Product_Details_Modalitem.setProductDetailsModal(taxList);
+                 //   Log.e("taxa", "" + wholeTax);
+                  //  Log.e("totamounta", "" + Product_Details_Modalitem.getAmount());
+                    Product_Details_Modalitem.setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.getAmount() + wholeTax)));
+                    Product_Details_Modalitem.setTax(Double.parseDouble(formatter.format(wholeTax)));
+
                 }
-
-
-
-                Product_Details_Modalitem.setProductDetailsModal(taxList);
-                Log.e("taxa",""+wholeTax);
-                Log.e("totamounta",""+Product_Details_Modalitem.getAmount());
-                Product_Details_Modalitem.setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.getAmount() + wholeTax)));
-                Product_Details_Modalitem.setTax(Double.parseDouble(formatter.format(wholeTax)));
-
             }
         } catch (Exception e) {
             Log.d("sumoftax error",e.getMessage());
