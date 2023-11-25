@@ -1030,11 +1030,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
         if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
             findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
+            findViewById(R.id.lblfrdet).setVisibility(View.VISIBLE);
             Free_Adapter mFreeAdapter = new Free_Adapter(freeQty_Array_List, R.layout.product_free_recyclerview, getApplicationContext());
             freeRecyclerview.setAdapter(mFreeAdapter);
 
         } else {
             findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
+            findViewById(R.id.lblfrdet).setVisibility(View.GONE);
 
         }
 
