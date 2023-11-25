@@ -62,7 +62,25 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
                 holder.tvmrp.setText(""+Double.parseDouble(pm.getMRP())*Double.parseDouble(pm.getConversionFactor()));
                // Log.e("pcs",""+pm.getQty()*Double.parseDouble(pm.getConversionFactor()));
                 holder.tvproductqtyPcs.setText(""+(pm.getQty()*Double.parseDouble(pm.getConversionFactor())));
-                holder.productname.setText("" + pm.getName()+ "\n"+"(Discount Price Rs."+ new DecimalFormat("##0.00").format(pm.getDiscount())+")");
+                String prodName=(pm.getDiscount()>0? pm.getName()+ "\n"+"(Discount Price Rs."+ new DecimalFormat("##0.00").format(pm.getDiscount())+")":pm.getName());
+                holder.productname.setText("" +prodName);
+               // holder.productname.setText("" + pm.getName()+ "\n"+"(Discount Price Rs."+ new DecimalFormat("##0.00").format(pm.getDiscount())+")");
+            }else if(flag.equalsIgnoreCase("POS INVOICE")){
+                holder.llUom.setVisibility(View.GONE);
+                holder.llproductqtyPcs.setVisibility(View.VISIBLE);
+                holder.llmrp.setVisibility(View.VISIBLE);
+                holder.llhsncode.setVisibility(View.VISIBLE);
+                double val = (100 + (pm.getTaxPer())) / 100;
+                double rateValue = Double.parseDouble(new DecimalFormat("##0.00").format(pm.getRate() / val));
+                double amtValue = Double.parseDouble(new DecimalFormat("##0.00").format(pm.getQty() * (pm.getRate() / val)));
+                holder.tvmrp.setText(""+Double.parseDouble(pm.getMRP())*Double.parseDouble(pm.getConversionFactor()));
+                String prodName=(pm.getDiscount()>0? pm.getName()+ "\n"+"(Discount Price Rs."+ new DecimalFormat("##0.00").format(pm.getDiscount())+")":pm.getName());
+                holder.productname.setText("" +prodName);
+                holder.productrate.setText("" + new DecimalFormat("##0.00").format(rateValue));
+                holder.producttotal.setText("" + new DecimalFormat("##0.00").format(amtValue));
+                holder.tvhsncode.setText(""+pm.getHSNCode());
+                holder.tvproductqtyPcs.setText(""+(pm.getQty()*Double.parseDouble(pm.getConversionFactor())));
+
             }
 
 

@@ -156,7 +156,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/C30dp"
                         android:orientation="horizontal">
+                        <LinearLayout
+                            android:visibility="visible"
+                            android:id="@+id/rlUOM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/C3dp"
+                            android:background="@drawable/order_qty_backround">
 
+
+                            <TextView
+                                android:id="@+id/tvUOM"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:background="@color/white"
+                                android:gravity="center_vertical"
+                                android:hint="UOM"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageView
+                                android:layout_width="10dp"
+                                android:layout_height="25dp"
+                                android:layout_toRightOf="@id/tvUOM"
+                                android:padding="@dimen/C1dp"
+                                android:src="@drawable/spin_down_arrow" />
+                        </LinearLayout>
                         <TextView
 
                             android:id="@+id/lblAddQty"
@@ -208,37 +238,7 @@
                                 app:tint="@color/green" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:visibility="visible"
-                            android:id="@+id/rlUOM"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/C3dp"
-                            android:background="@drawable/order_qty_backround">
 
-
-                            <TextView
-                                android:id="@+id/tvUOM"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:background="@color/white"
-                                android:gravity="center_vertical"
-                                android:hint="UOM"
-                                android:paddingLeft="@dimen/C5dp"
-                                android:paddingRight="@dimen/C5dp"
-                                android:text=""
-                                android:textAlignment="center"
-                                android:textColor="@color/black"
-                                tools:ignore="RtlCompat" />
-
-                            <ImageView
-                                android:layout_width="10dp"
-                                android:layout_height="25dp"
-                                android:layout_toRightOf="@id/tvUOM"
-                                android:padding="@dimen/C1dp"
-                                android:src="@drawable/spin_down_arrow" />
-                        </LinearLayout>
 
 
                         <RelativeLayout

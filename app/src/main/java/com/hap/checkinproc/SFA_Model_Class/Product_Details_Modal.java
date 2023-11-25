@@ -545,7 +545,7 @@ public class Product_Details_Modal {
     private String discount_value;
 
 
-    private double baseDiscount;
+    private double baseDiscount=0;
 
     public String getReplace_qty() {
         return replace_qty;

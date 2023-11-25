@@ -99,6 +99,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     String type = "";
 
     ImageView swipe_left_image;
+    TextView tv_no_data;
 
     //Updateed
     @Override
@@ -167,6 +168,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvStartDate = findViewById(R.id.tvStartDate);
             tvEndDate = findViewById(R.id.tvEndDate);
             tvSalesReturn = findViewById(R.id.tvSalesReturn);
+            tv_no_data=findViewById(R.id.tv_no_data);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -861,6 +863,13 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     FilterOrderList.add(filterlist);
                 }
             }
+        }
+        if(FilterOrderList.size()==0){
+            tv_no_data.setVisibility(View.VISIBLE);
+            invoicerecyclerview.setVisibility(View.GONE);
+        }else{
+            tv_no_data.setVisibility(View.GONE);
+            invoicerecyclerview.setVisibility(View.VISIBLE);
         }
         mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
             @Override

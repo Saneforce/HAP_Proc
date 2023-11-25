@@ -875,7 +875,7 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Base Price"
+                                    android:text="Taxable Amount"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"></TextView>

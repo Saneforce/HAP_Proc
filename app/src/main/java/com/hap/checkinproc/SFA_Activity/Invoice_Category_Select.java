@@ -2633,13 +2633,13 @@ private int getCatePos(Integer CId) throws JSONException {
         try {
             if (Product_Details_Modalitem.getProductDetailsModal().size()>0||Product_Details_Modalitem.getDiscount()>0) {
 
-                double TotalTax = getTotTaxNew(Product_Details_Modalitem);
+              /*  double TotalTax = getTotTaxNew(Product_Details_Modalitem);
                 //Log.e("sellAmt", "" + Product_Details_Modalitem.getDiscount());
                 if (Product_Details_Modalitem.getDiscount() > 0) {
                     double val = (100 + (TotalTax)) / 100;
                     double finDisc = Product_Details_Modalitem.getDiscount() / val;
                     Product_Details_Modalitem.setDiscount(finDisc);
-                }
+                }*/
                 Product_Details_Modalitem.setAmount(Product_Details_Modalitem.getAmount() - Product_Details_Modalitem.getDiscount());
                 double sellAmt = Product_Details_Modalitem.getAmount();
                 //   sellAmt=sellAmt/((100+(TotalTax))/100);

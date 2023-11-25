@@ -1114,6 +1114,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
                 TextView tvBillToPay = findViewById(R.id.tvnetamount);
                 TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
+                TextView tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
 
 
                 Getorder_Array_List = new ArrayList<>();
@@ -1122,6 +1123,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 totalQty = 0;
                 cashDiscount = 0;
                 taxVal = 0;
+                double totalMRP=0;
 
 
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -1134,6 +1136,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         totalvalues += Product_Modal.get(pm).getAmount();
 
                         totalQty += Product_Modal.get(pm).getQty();
+                        totalMRP+=Product_Modal.get(pm).getCnvQty()*Product_Modal.get(pm).getQty()*Double.parseDouble(Product_Modal.get(pm).getMRP());
 
                         if (Product_Modal.get(pm).getTax() > 0)
                             taxVal += Product_Modal.get(pm).getTax();
@@ -1172,10 +1175,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(totalvalues));
                 tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
-                if (Getorder_Array_List.size() == 1)
+               /* if (Getorder_Array_List.size() == 1)
                     tvTotLabel.setText("Price (1 item)");
                 else
-                    tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
+                    tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");*/
 
                 tvBillSubTotal.setText(CurrencySymbol + " " + formatter.format(totalvalues));
                 tvBillTotItem.setText("" + Getorder_Array_List.size());
@@ -1183,13 +1186,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
                 tvCashDiscount.setText(CurrencySymbol + " " + formatter.format(cashDiscount));
                 // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
+                tvTotalDiscLabel.setText("(Total Discount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+                //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
+                tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
 
-                if (cashDiscount > 0) {
+              /*  if (cashDiscount > 0) {
                     tvSaveAmt.setVisibility(View.VISIBLE);
                     tvSaveAmt.setText("You will save " + CurrencySymbol + " " + formatter.format(cashDiscount) + " on this order");
                 } else
-                    tvSaveAmt.setVisibility(View.GONE);
+                    tvSaveAmt.setVisibility(View.GONE);*/
                 orderTotTax = new ArrayList<>();
                 orderTotTax.clear();
 
