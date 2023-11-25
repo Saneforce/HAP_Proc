@@ -684,7 +684,85 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="4dp"
                                 android:background="@drawable/line_dash_background"></View>
+                            <TextView
+                                android:id="@+id/lblfrdet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C5dp"
+                                android:fontFamily="sans-serif"
+                                android:text="Free items details"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold" />
+                            <LinearLayout
 
+                                android:id="@+id/cdFreeQtyParent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <View
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/black"
+                                    android:outlineAmbientShadowColor="@color/statuscolor"></View>
+
+
+                                <LinearLayout
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:maxLines="1"
+                                        android:text="SKU"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:gravity="end"
+                                        android:text="Free"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
+
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/black"
+                                    android:outlineAmbientShadowColor="@color/statuscolor"></View>
+
+
+                                <LinearLayout
+                                    android:layout_marginTop="@dimen/C3dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/freeRecyclerview"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="visible"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                                </LinearLayout>
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="4dp"
+                                    android:background="@drawable/line_dash_background"></View>
+                            </LinearLayout>
 
                             <TextView
 
@@ -913,7 +991,7 @@
                                     android:text="₹0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C12dp"/>
+                                    android:textSize="@dimen/C12dp" />
                             </RelativeLayout>
 
 

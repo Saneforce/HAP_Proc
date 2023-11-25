@@ -23,7 +23,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -117,6 +119,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     RelativeLayout rl_BasePrice, rltotcashdiscount;
     double orderValue = 0;
     double invTotCashDisc = 0;
+    JSONArray CatFreeDetdata, FreeDetails,freeQtyNew;
+    RecyclerView freeRecyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +184,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             rl_BasePrice = findViewById(R.id.rl_BasePrice);
             rltotcashdiscount = findViewById(R.id.rltotcashdiscount);
             tvtotcashdiscount = findViewById(R.id.tvtotcashdiscount);
-
+            freeRecyclerview = findViewById(R.id.freeRecyclerview);
 
             RetailCode = sharedCommonPref.getvalue(Constants.Retailor_ERP_Code);
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -1175,7 +1179,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         for (int j = 0; j < jFreeSmry.length(); j++) {
                             try {
                                 String Pnm = jFreeSmry.getJSONObject(j).getString("OffName");
-                                printama.printTextln(Pnm + repeat(" ", 50 - Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
+                                printama.printTextln(Pnm + repeat(" ", 43 - Pnm.length()) + jFreeSmry.getJSONObject(j).getString("free"));
                             } catch (JSONException je) {
                             }
                         }
@@ -1184,7 +1188,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         for (int j = 0; j < CatwiseFreeList.length(); j++) {
                             try {
                                 String Pnm = CatwiseFreeList.getJSONObject(j).getString("OffName");
-                                printama.printTextln(Pnm + repeat(" ", 50 - Pnm.length()) + CatwiseFreeList.getJSONObject(j).getString("free"));
+                                printama.printTextln(Pnm + repeat(" ", 43 - Pnm.length()) + CatwiseFreeList.getJSONObject(j).getString("free"));
                             } catch (JSONException je) {
                             }
                         }
@@ -2668,7 +2672,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 totalqty.setText("" + String.valueOf(total_qtytext));
             }
 
-
+            showFreeQtyList();
             returntotalqty.setText("" + String.valueOf(total_qtytext));
             returntotalitem.setText("" + Order_Outlet_Filter.size());
             returnsubtotal.setText(CurrencySymbol + " " + formatter.format(subTotalVal));
@@ -2715,6 +2719,59 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             Log.e("PRINT:getData ", e.getMessage());
         }
     }
+
+    public void showFreeQtyList(){
+        List<Product_Details_Modal> freeQty_Array_List=new ArrayList<>();
+        freeQty_Array_List.clear();
+
+        freeQtyNew=new JSONArray();
+        try {
+            for (Product_Details_Modal pm : Order_Outlet_Filter) {
+
+                //  if (pm.getRegularQty() != null) {
+                if (!Common_Class.isNullOrEmpty(pm.getFree()) && Double.parseDouble(pm.getFree())>0) {
+                    int ik = getFProdPos(pm.getOff_Pro_code());
+                    try {
+                        if (ik > -1) {
+                            JSONObject itm = null;
+                            itm = freeQtyNew.getJSONObject(ik);
+
+                            double f = itm.getInt("FPQty");
+                            f += Double.parseDouble(pm.getFree());
+                            freeQtyNew.getJSONObject(ik).put("FPQty", f);
+                        } else {
+                            JSONObject itm = new JSONObject();
+
+                            itm.put("FPCode", pm.getOff_Pro_code());
+                            itm.put("FPName", pm.getOff_Pro_name());
+                            itm.put("FPQty", pm.getFree());
+                            freeQtyNew.put(itm);
+                        }
+                    } catch (JSONException e) {
+                        Log.e("showfreeListaddError:",e.getMessage());
+                    }
+                    freeQty_Array_List.add(pm);
+
+                }
+                // }
+            }
+            if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
+                findViewById(R.id.lblfrdet).setVisibility(View.VISIBLE);
+                findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
+                Log.e("dxdh", "rybdyb:" + freeQtyNew.toString());
+                Free_Adapter mFreeAdapter = new Free_Adapter(freeQtyNew, R.layout.product_free_recyclerview, getApplicationContext());
+                freeRecyclerview.setAdapter(mFreeAdapter);
+
+            } else {
+                findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
+                findViewById(R.id.lblfrdet).setVisibility(View.GONE);
+
+            }
+        }catch (Exception e){
+            Log.e("showfreeListError:",e.getMessage());
+        }
+
+    }
     void getTaxDetail(String apiDataResponse){
         JSONObject jObj=new JSONObject();
         try {
@@ -2756,4 +2813,89 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         });
 
     }
+    private int getFProdPos(String fPcode) {
+        int po=-1;
+        for(int il=0;il<freeQtyNew.length();il++){
+            try {
+                if( freeQtyNew.getJSONObject(il).getString("FPCode").equalsIgnoreCase(fPcode)){
+                    po=il;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return po;
+    }
+
+    public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
+        Context context;
+        private final JSONArray jFree;
+        private final int rowLayout;
+
+
+        public Free_Adapter(JSONArray FreeDet, int rowLayout, Context context) {
+            this.jFree = FreeDet;
+            this.rowLayout = rowLayout;
+            this.context = context;
+
+
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public void onBindViewHolder(Free_Adapter.MyViewHolder holder, int position) {
+            try {
+
+
+                JSONObject nItm = jFree.getJSONObject(position);
+
+
+                holder.productname.setText("" + nItm.getString("FPName").toUpperCase());
+
+                holder.Free.setText(String.valueOf( nItm.getString("FPQty")));
+
+
+                // updateToTALITEMUI();
+            } catch (Exception e) {
+                Log.e(TAG, "adapterProduct: " + e.getMessage());
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return jFree.length();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView productname, Free;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+                productname = view.findViewById(R.id.productname);
+                Free = view.findViewById(R.id.Free);
+
+            }
+        }
+
+
+    }
+
 }
