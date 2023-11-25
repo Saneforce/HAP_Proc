@@ -602,6 +602,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8">
+                <TextView
+                    android:id="@+id/tv_no_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="No Data Found"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:visibility="gone"/>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/invoicerecyclerview"

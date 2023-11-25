@@ -2098,7 +2098,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         try {
             if (Product_Details_Modalitem.getProductDetailsModal().size()>0||Product_Details_Modalitem.getDiscount()>0) {
 
-                double TotalTax=getTotTaxNew(Product_Details_Modalitem);
+               /* double TotalTax=getTotTaxNew(Product_Details_Modalitem);
                 if(Product_Details_Modalitem.getDiscount()>0) {
                     double val = (100 + (TotalTax)) / 100;
                     double finDisc = Product_Details_Modalitem.getDiscount() / val;
@@ -2107,7 +2107,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     Product_Details_Modalitem.setBaseDiscount(Double.parseDouble(formatter.format(baseDisc)));
                 }else{
                     Product_Details_Modalitem.setBaseDiscount(0);
-                }
+                }*/
 
                 Product_Details_Modalitem.setAmount(Product_Details_Modalitem.getAmount()-Product_Details_Modalitem.getDiscount());
 
