@@ -87,7 +87,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     Type userType;
     Gson gson;
     TextView Out_Let_Name, Category_Nametext;
-    JSONArray CatFreeDetdata, FreeDetails;
+    JSONArray CatFreeDetdata, FreeDetails,freeQtyNew;
     //String CurrencySymbol="B$"; //₹
     CircularProgressButton takeorder, btnRepeat;
     private RecyclerView recyclerView, categorygrid, freeRecyclerview, Grpgrid, Brndgrid;
@@ -615,12 +615,15 @@ private int getCatePos(Integer CId) throws JSONException {
     }
     return po;
 }
-
     private int getFProdPos(String fPcode) {
         int po=-1;
-        for(int il=0;il<freeQty_Array_List.size();il++){
-            if( freeQty_Array_List.get(il).getOff_Pro_code().equalsIgnoreCase(fPcode)){
-                po=il;
+        for(int il=0;il<freeQtyNew.length();il++){
+            try {
+                if( freeQtyNew.getJSONObject(il).getString("FPCode").equalsIgnoreCase(fPcode)){
+                    po=il;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
         return po;
@@ -999,16 +1002,31 @@ private int getCatePos(Integer CId) throws JSONException {
         freeQty_Array_List = new ArrayList<>();
         freeQty_Array_List.clear();
 
+        freeQtyNew=new JSONArray();
         for (Product_Details_Modal pm : Product_Modal) {
 
             if (pm.getRegularQty() != null) {
                 if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
                     int ik=getFProdPos(pm.getOff_Pro_code());
-                    if(ik>-1){
-                        int f=Integer.parseInt( freeQty_Array_List.get(ik).getFree());
-                        f+=Integer.parseInt( pm.getFree());
-                        freeQty_Array_List.get(ik).setFree(String.valueOf(f));
-                    }else
+                    try {
+                        if(ik>-1){
+                            JSONObject itm= null;
+                            itm = freeQtyNew.getJSONObject(ik);
+
+                            int f=itm.getInt("FPQty");
+                            f+=Integer.parseInt( pm.getFree());
+                            freeQtyNew.getJSONObject(ik).put("FPQty",f);
+                        }else {
+                            JSONObject itm=new JSONObject();
+
+                            itm.put("FPCode",pm.getOff_Pro_code());
+                            itm.put("FPName",pm.getOff_Pro_name());
+                            itm.put("FPQty",pm.getFree());
+                            freeQtyNew.put(itm);
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                         freeQty_Array_List.add(pm);
 
                 }
@@ -1035,6 +1053,20 @@ private int getCatePos(Integer CId) throws JSONException {
                             Product_Details_Modal nItm= new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(),catScheme.get(ij).getOff_Pro_name());
                             nItm.setFree(catScheme.get(ij).getFree());
                             freeQty_Array_List.add(nItm);
+                            int ik=getFProdPos(nItm.getOff_Pro_code());
+                            if(ik>-1){
+                                JSONObject fitm=freeQtyNew.getJSONObject(ik);
+                                int f=fitm.getInt("FPQty");
+                                f+=Integer.parseInt( catScheme.get(ij).getFree());
+                                freeQtyNew.getJSONObject(ik).put("FPQty",f);
+                            }else {
+                                JSONObject fitm=new JSONObject();
+
+                                itm.put("FPCode",catScheme.get(ij).getOff_Pro_code());
+                                itm.put("FPName",catScheme.get(ij).getOff_Pro_name());
+                                itm.put("FPQty",catScheme.get(ij).getFree());
+                                freeQtyNew.put(fitm);
+                            }
                             JSONObject nItem=new JSONObject();
                             nItem.put("CatId",itm.getString("CatId"));
                             nItem.put("Qty",itm.getString("Qty"));
@@ -1054,7 +1086,7 @@ private int getCatePos(Integer CId) throws JSONException {
         if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
             findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
             findViewById(R.id.lblfrdet).setVisibility(View.VISIBLE);
-            Free_Adapter mFreeAdapter = new Free_Adapter(freeQty_Array_List, R.layout.product_free_recyclerview, getApplicationContext(), -1);
+            Free_Adapter mFreeAdapter = new Free_Adapter(freeQtyNew, R.layout.product_free_recyclerview, getApplicationContext());
             freeRecyclerview.setAdapter(mFreeAdapter);
 
         } else {
@@ -2364,29 +2396,15 @@ private int getCatePos(Integer CId) throws JSONException {
         }
     }
 
+
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
-        private List<Product_Details_Modal> Product_Details_Modalitem;
-        private int rowLayout;
-
         Context context;
+        private final JSONArray jFree;
+        private final int rowLayout;
 
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, tvDisc, Free, RegularQty, productQty, totalQty, tvTax;
-
-
-            public MyViewHolder(View view) {
-                super(view);
-                productname = view.findViewById(R.id.productname);
-
-                Free = view.findViewById(R.id.Free);
-
-            }
-        }
-
-
-        public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int Categorycolor) {
-            this.Product_Details_Modalitem = Product_Details_Modalitem;
+        public Free_Adapter(JSONArray FreeDet, int rowLayout, Context context) {
+            this.jFree = FreeDet;
             this.rowLayout = rowLayout;
             this.context = context;
 
@@ -2412,10 +2430,17 @@ private int getCatePos(Integer CId) throws JSONException {
         @Override
         public void onBindViewHolder(Free_Adapter.MyViewHolder holder, int position) {
             try {
-                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-                holder.productname.setText("" + Product_Details_Modal.getOff_Pro_name().toUpperCase());
-                holder.Free.setText("" + Product_Details_Modal.getFree());
-                updateToTALITEMUI(1);
+
+
+                JSONObject nItm = jFree.getJSONObject(position);
+
+
+                holder.productname.setText("" + nItm.getString("FPName").toUpperCase());
+
+                holder.Free.setText(String.valueOf( nItm.getString("FPQty")));
+
+
+                // updateToTALITEMUI();
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
@@ -2425,7 +2450,19 @@ private int getCatePos(Integer CId) throws JSONException {
 
         @Override
         public int getItemCount() {
-            return Product_Details_Modalitem.size();
+            return jFree.length();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView productname, Free;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+                productname = view.findViewById(R.id.productname);
+                Free = view.findViewById(R.id.Free);
+
+            }
         }
 
 

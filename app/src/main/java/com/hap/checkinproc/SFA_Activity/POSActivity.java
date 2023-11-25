@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.QRCodeScanner;
@@ -96,6 +97,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     List<Product_Details_Modal> Product_ModalSetAdapter;
     List<Product_Details_Modal> Getorder_Array_List;
     List<Product_Details_Modal> freeQty_Array_List;
+
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
@@ -132,7 +134,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     RecyclerView rvCurrentStk;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
-    JSONArray CatFreeDetdata, FreeDetails;
+    JSONArray CatFreeDetdata, FreeDetails,freeQtyNew;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -663,9 +665,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     }
     private int getFProdPos(String fPcode) {
         int po=-1;
-        for(int il=0;il<freeQty_Array_List.size();il++){
-            if( freeQty_Array_List.get(il).getOff_Pro_code().equalsIgnoreCase(fPcode)){
-                po=il;
+        for(int il=0;il<freeQtyNew.length();il++){
+            try {
+                if( freeQtyNew.getJSONObject(il).getString("FPCode").equalsIgnoreCase(fPcode)){
+                    po=il;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
         return po;
@@ -1033,16 +1039,31 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         freeQty_Array_List = new ArrayList<>();
         freeQty_Array_List.clear();
 
+        freeQtyNew=new JSONArray();
         for (Product_Details_Modal pm : Product_Modal) {
 
             if (pm.getQty() > 0) {
                 if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
                     int ik=getFProdPos(pm.getOff_Pro_code());
+                    try {
                     if(ik>-1){
-                        int f=Integer.parseInt( freeQty_Array_List.get(ik).getFree());
+                        JSONObject itm= null;
+                            itm = freeQtyNew.getJSONObject(ik);
+
+                        int f=itm.getInt("FPQty");
                         f+=Integer.parseInt( pm.getFree());
-                        freeQty_Array_List.get(ik).setFree(String.valueOf(f));
-                    }else
+                        freeQtyNew.getJSONObject(ik).put("FPQty",f);
+                    }else {
+                        JSONObject itm=new JSONObject();
+
+                        itm.put("FPCode",pm.getOff_Pro_code());
+                        itm.put("FPName",pm.getOff_Pro_name());
+                        itm.put("FPQty",pm.getFree());
+                        freeQtyNew.put(itm);
+                    }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                         freeQty_Array_List.add(pm);
 
                 }
@@ -1066,9 +1087,24 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         if (String.valueOf(itm.getInt("CatId")).equalsIgnoreCase(catScheme.get(ij).getId()) &&
                          itm.getDouble("Value") >= schemeVal
                         ) {
-                           Product_Details_Modal nItm= new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(),catScheme.get(ij).getOff_Pro_name());
-                           nItm.setFree(catScheme.get(ij).getFree());
+                            Product_Details_Modal nItm= new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(),catScheme.get(ij).getOff_Pro_name());
+                            nItm.setFree(catScheme.get(ij).getFree());
                             freeQty_Array_List.add(nItm);
+                            int ik=getFProdPos(nItm.getOff_Pro_code());
+                            if(ik>-1){
+                                JSONObject fitm=freeQtyNew.getJSONObject(ik);
+                                int f=fitm.getInt("FPQty");
+                                f+=Integer.parseInt( catScheme.get(ij).getFree());
+                                freeQtyNew.getJSONObject(ik).put("FPQty",f);
+                            }else {
+                                JSONObject fitm=new JSONObject();
+
+                                itm.put("FPCode",catScheme.get(ij).getOff_Pro_code());
+                                itm.put("FPName",catScheme.get(ij).getOff_Pro_name());
+                                itm.put("FPQty",catScheme.get(ij).getFree());
+                                freeQtyNew.put(fitm);
+                            }
+
                             JSONObject nItem=new JSONObject();
                             nItem.put("CatId",itm.getString("CatId"));
                             nItem.put("Qty",itm.getString("Qty"));
@@ -1087,7 +1123,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
         if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
             findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
-            Free_Adapter mFreeAdapter = new Free_Adapter(freeQty_Array_List, R.layout.product_free_recyclerview, getApplicationContext());
+            Free_Adapter mFreeAdapter = new Free_Adapter(freeQtyNew, R.layout.product_free_recyclerview, getApplicationContext());
             freeRecyclerview.setAdapter(mFreeAdapter);
 
         } else {
@@ -2267,12 +2303,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
         Context context;
-        private final List<Product_Details_Modal> Product_Details_Modalitem;
+        private final JSONArray jFree;
         private final int rowLayout;
 
 
-        public Free_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context) {
-            this.Product_Details_Modalitem = Product_Details_Modalitem;
+        public Free_Adapter(JSONArray FreeDet, int rowLayout, Context context) {
+            this.jFree = FreeDet;
             this.rowLayout = rowLayout;
             this.context = context;
 
@@ -2300,12 +2336,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             try {
 
 
-                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
+                JSONObject nItm = jFree.getJSONObject(position);
 
 
-                holder.productname.setText("" + Product_Details_Modal.getOff_Pro_name().toUpperCase());
+                holder.productname.setText("" + nItm.getString("FPName").toUpperCase());
 
-                holder.Free.setText("" + Product_Details_Modal.getFree());
+                holder.Free.setText(String.valueOf( nItm.getString("FPQty")));
 
 
                // updateToTALITEMUI();
@@ -2318,7 +2354,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
         @Override
         public int getItemCount() {
-            return Product_Details_Modalitem.size();
+            return jFree.length();
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
