@@ -2129,8 +2129,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 //                                    Product_Details_Modalitem.remove(position);
 //                                    notifyDataSetChanged();
 //                                }
+
 //                                showFreeQtyList();
 //                            }
+                            if (CategoryType == -1) {
+                                showFreeQtyList();
+                            }
 
                         } catch (Exception e) {
                             Log.v(TAG, " orderAdapter:qty " + e.getMessage());

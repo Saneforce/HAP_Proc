@@ -1030,7 +1030,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                         jFreeSmry.put(jitm);
                                     } else {
                                         for (int ilf = 0; ilf < jFreeSmry.length(); ilf++) {
-                                            if (jFreeSmry.getJSONObject(ilf).getString("OffName") == Order_Outlet_Filter.get(i).getOff_Pro_name()) {
+                                            if (jFreeSmry.getJSONObject(ilf).getString("OffName").equalsIgnoreCase(Order_Outlet_Filter.get(i).getOff_Pro_name())) {
                                                 double xfre = Double.parseDouble(jFreeSmry.getJSONObject(ilf).getString("free"));
                                                 double cfre = Double.parseDouble(Order_Outlet_Filter.get(i).getFree());
                                                 jFreeSmry.getJSONObject(ilf).put("free", String.valueOf(xfre + cfre));
@@ -1526,7 +1526,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         jFreeSmry.put(jitm);
                     } else {
                         for (int ilf = 0; ilf < jFreeSmry.length(); ilf++) {
-                            if (jFreeSmry.getJSONObject(ilf).getString("OffName") == Order_Outlet_Filter.get(i).getOff_Pro_name()) {
+                            if (jFreeSmry.getJSONObject(ilf).getString("OffName").equalsIgnoreCase(Order_Outlet_Filter.get(i).getOff_Pro_name())) {
                                 double xfre = Double.parseDouble(jFreeSmry.getJSONObject(ilf).getString("free"));
                                 double cfre = Double.parseDouble(Order_Outlet_Filter.get(i).getFree());
                                 jFreeSmry.getJSONObject(ilf).put("free", String.valueOf(xfre + cfre));
