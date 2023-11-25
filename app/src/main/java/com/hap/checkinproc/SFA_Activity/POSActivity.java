@@ -661,6 +661,15 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
         }
         return po;
     }
+    private int getFProdPos(String fPcode) {
+        int po=-1;
+        for(int il=0;il<freeQty_Array_List.size();il++){
+            if( freeQty_Array_List.get(il).getOff_Pro_code().equalsIgnoreCase(fPcode)){
+                po=il;
+            }
+        }
+        return po;
+    }
     void showOrderList() {
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
@@ -1028,7 +1037,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
             if (pm.getQty() > 0) {
                 if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
-                    freeQty_Array_List.add(pm);
+                    int ik=getFProdPos(pm.getOff_Pro_code());
+                    if(ik>-1){
+                        int f=Integer.parseInt( freeQty_Array_List.get(ik).getFree());
+                        f+=Integer.parseInt( pm.getFree());
+                        freeQty_Array_List.get(ik).setFree(String.valueOf(f));
+                    }else
+                        freeQty_Array_List.add(pm);
 
                 }
             }
@@ -2282,7 +2297,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
 
 
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                holder.productname.setText("" + Product_Details_Modal.getOff_Pro_name().toUpperCase());
 
                 holder.Free.setText("" + Product_Details_Modal.getFree());
 

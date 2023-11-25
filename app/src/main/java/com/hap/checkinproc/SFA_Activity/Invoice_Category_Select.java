@@ -616,6 +616,15 @@ private int getCatePos(Integer CId) throws JSONException {
     return po;
 }
 
+    private int getFProdPos(String fPcode) {
+        int po=-1;
+        for(int il=0;il<freeQty_Array_List.size();il++){
+            if( freeQty_Array_List.get(il).getOff_Pro_code().equalsIgnoreCase(fPcode)){
+                po=il;
+            }
+        }
+        return po;
+    }
     void showOrderList() {
 
         Getorder_Array_List = new ArrayList<>();
@@ -994,7 +1003,13 @@ private int getCatePos(Integer CId) throws JSONException {
 
             if (pm.getRegularQty() != null) {
                 if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
-                    freeQty_Array_List.add(pm);
+                    int ik=getFProdPos(pm.getOff_Pro_code());
+                    if(ik>-1){
+                        int f=Integer.parseInt( freeQty_Array_List.get(ik).getFree());
+                        f+=Integer.parseInt( pm.getFree());
+                        freeQty_Array_List.get(ik).setFree(String.valueOf(f));
+                    }else
+                        freeQty_Array_List.add(pm);
 
                 }
             }
@@ -2524,6 +2539,7 @@ private int getCatePos(Integer CId) throws JSONException {
                                     productScheme.setOffProdNm(product_details_modalArrayList.get(b).getOff_Pro_name());
                                     productScheme.setOffProdUnit(product_details_modalArrayList.get(b).getOff_Pro_Unit());
                                     productScheme.setFreeUnit(product_details_modalArrayList.get(b).getFree());
+                                    productScheme.setFree(Integer.parseInt(product_details_modalArrayList.get(b).getFree()));
                                     productScheme.setDiscountType(product_details_modalArrayList.get(b).getDiscount_type());
                                     productScheme.setPackages(product_details_modalArrayList.get(b).getPackage());
                                     productScheme.setDiscountValue(product_details_modalArrayList.get(b).getDiscount_value());
