@@ -1157,7 +1157,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 printama.setNormalText();
                 printama.printDashedLine();
                 if (sMode.equalsIgnoreCase("INVOICE") || sMode.equalsIgnoreCase("ORDER")) {
-                    printama.setTall();
+                   // printama.setTall();
                     // printama.printText(tvTotalDiscLabel.getText().toString().replaceAll(CurrencySymbol + " ", ""));
                     printama.printTextln("Total Discount " + formatter.format(cashDisc));
                     printama.addNewLine();
@@ -1535,11 +1535,21 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     }
 
                 }
+                if (sMode.equals("POS INVOICE")) {
+                    double val = (100 + (Order_Outlet_Filter.get(i).getTaxPer())) / 100;
+                     String rateValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getRate() / val));
+                    String amtValue = String.valueOf(formatter.format(Order_Outlet_Filter.get(i).getQty() * (Order_Outlet_Filter.get(i).getRate() / val)));
+                    canvas.drawText("" +rateValue, xPr, cy, paint);
+                    canvas.drawText("" + amtValue, xTot, cy, paint);
+                    pBillAmt += Order_Outlet_Filter.get(i).getQty() * (Order_Outlet_Filter.get(i).getRate() / val);
+
+                }else{
                 double bAmt = Order_Outlet_Filter.get(i).getQty() * Order_Outlet_Filter.get(i).getRate();
                 canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getRate()), xPr, cy, paint);
                 canvas.drawText("" + formatter.format(bAmt), xTot, cy, paint);
                 //canvas.drawText("" + formatter.format(Order_Outlet_Filter.get(i).getAmount()), xTot, cy, paint);
                 pBillAmt += bAmt;
+            }
 
             }
 
@@ -1606,7 +1616,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 canvas.drawText(tvtotcashdiscount.getText().toString(), xTot, y, paint);
                 y = y + 20;
             }
-            if (sMode.equalsIgnoreCase("ORDER") || sMode.equalsIgnoreCase("INVOICE")) {
+            if (sMode.equalsIgnoreCase("ORDER") || sMode.equalsIgnoreCase("INVOICE") || sMode.equalsIgnoreCase("POS INVOICE")) {
                 paint.setTextAlign(Paint.Align.LEFT);
                 canvas.drawText("Taxable Amount", x, y, paint);
                 paint.setTextAlign(Paint.Align.RIGHT);
@@ -1614,13 +1624,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 y = y + 20;
             }
 
-            if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
+            /* if (sharedCommonPref.getvalue(Constants.FLAG).equals("POS INVOICE")) {
                 paint.setTextAlign(Paint.Align.LEFT);
                 canvas.drawText("Base Price", x, y, paint);
                 paint.setTextAlign(Paint.Align.RIGHT);
                 canvas.drawText(formatter.format(NetTotAmt / 1.05), xTot, y, paint);
                 y = y + 20;
-            }
+            }*/
 //            y = y + 30;
 //            canvas.drawText("Gst Rate", x, y, paint);
 //            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
