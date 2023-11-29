@@ -135,6 +135,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     JSONArray CatFreeDetdata, FreeDetails,freeQtyNew;
+    TextView tv_no_match;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -160,6 +161,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ivClose = findViewById(R.id.ivClose);
             tvCounterEntrySales = findViewById(R.id.btnPosEntrySales);
             btnPosStockLoad = findViewById(R.id.btnPosStockLoad);
+            tv_no_match=findViewById(R.id.tv_no_match);
 
             tvCounterEntrySales.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -810,9 +812,27 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             ResetSubmitBtn(0);
                         }
                     } else {
-                        showOrderList();
-                        ResetSubmitBtn(0);
+                        int count=0;
+                        if(StockCheck.equalsIgnoreCase("1")) {
+                            for (int z = 0; z < Product_Modal.size(); z++) {
+                                double enterQty = Product_Modal.get(z).getQty();
+                                double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
+                                if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
+                                    count+=1;
+                                }
+                            }
+                        }
+                        if(count==0){
+                            showOrderList();
+                            ResetSubmitBtn(0);
+                        }else{
+                            Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
+                        //showOrderList();
+                        //ResetSubmitBtn(0);
+
                 } catch (Exception e) {
                     Log.v(TAG, e.getMessage());
                 }
@@ -947,6 +967,8 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         ActivityData.put("Order_Details", Order_Details);
                         ActivityData.put("FreeDetail", FreeDetails);
                         data.put(ActivityData);
+
+                        Log.e("posData:",data.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1299,6 +1321,18 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     Product_ModalSetAdapter.add(personNpi);
             }
         }
+        }
+        if(Product_ModalSetAdapter.size()>0){
+            recyclerView.setVisibility(View.VISIBLE);
+            tv_no_match.setVisibility(View.GONE);
+        }else{
+            if(!filterString.equalsIgnoreCase("")) {
+                tv_no_match.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }else{
+                recyclerView.setVisibility(View.VISIBLE);
+                tv_no_match.setVisibility(View.GONE);
+            }
         }
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         Category_Nametext.setVisibility(View.VISIBLE);
@@ -2172,6 +2206,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                                             notifyItemRemoved(position);
                                             //notifyItemRangeChanged(position, Product_Details_Modalitem.size());
                                             updateToTALITEMUI();
+                                            showFreeQtyList();
                                         }
 
                                         @Override

@@ -510,7 +510,15 @@
             android:layout_weight="1"
             android:padding="@dimen/C8dp"
             app:cardCornerRadius="@dimen/C5dp">
-
+            <TextView
+                android:id="@+id/tv_no_match"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="No matches found"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:visibility="gone"/>
             <LinearLayout
 
                 android:id="@+id/lin_orderrecyclerview"

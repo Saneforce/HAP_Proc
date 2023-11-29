@@ -177,7 +177,15 @@
             android:layout_weight="1"
             android:padding="@dimen/C8dp"
             app:cardCornerRadius="@dimen/C5dp">
-
+            <TextView
+                android:id="@+id/tv_no_match"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="No matches found"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:visibility="gone"/>
             <LinearLayout
 
                 android:id="@+id/lin_orderrecyclerview"
@@ -570,7 +578,17 @@
                                 android:visibility="visible"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                         </LinearLayout>
-
+                        <TextView
+                            android:id="@+id/lblfrdet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:fontFamily="sans-serif"
+                            android:text="Free items details"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"
+                            android:visibility="gone"/>
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cdFreeQtyParent"
                             android:layout_width="match_parent"

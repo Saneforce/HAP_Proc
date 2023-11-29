@@ -133,6 +133,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     TextView tvSaveAmt;
     TextView tvTotalDiscLabel;
     double totalMRP=0;
+    TextView tv_no_match;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +169,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             btnRepeat.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             ll_actual_total=findViewById(R.id.ll_actual_total);
+            tv_no_match=findViewById(R.id.tv_no_match);
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -730,7 +732,22 @@ private int getCatePos(Integer CId) throws JSONException {
                         common_class.showMsg(this, "Your Cart is empty...");
                     }
                 } else {
-                    showOrderList();
+                    int count=0;
+                    if(StockCheck.equalsIgnoreCase("1")) {
+                        for (int z = 0; z < Product_Modal.size(); z++) {
+                            double enterQty = Product_Modal.get(z).getQty();
+                            double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
+                            if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
+                                count+=1;
+                            }
+                        }
+                    }
+                    if(count==0){
+                        showOrderList();
+                    }else{
+                        Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 break;
 
@@ -1262,6 +1279,18 @@ private int getCatePos(Integer CId) throws JSONException {
 
                 }
                 il++;
+            }
+        }
+        if(Product_ModalSetAdapter.size()>0){
+            recyclerView.setVisibility(View.VISIBLE);
+            tv_no_match.setVisibility(View.GONE);
+        }else{
+            if(!filterString.equalsIgnoreCase("")) {
+                tv_no_match.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }else{
+                recyclerView.setVisibility(View.VISIBLE);
+                tv_no_match.setVisibility(View.GONE);
             }
         }
 
@@ -2268,6 +2297,7 @@ private int getCatePos(Integer CId) throws JSONException {
                                             notifyItemRemoved(position);
                                             //notifyItemRangeChanged(position, Product_Details_Modalitem.size());
                                             updateToTALITEMUI(1);
+                                            showFreeQtyList();
                                         }
 
                                         @Override

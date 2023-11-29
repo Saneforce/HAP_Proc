@@ -122,6 +122,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     JSONArray CatFreeDetdata, FreeDetails,freeQtyNew;
     //String CurrencySymbol="B$"; //₹
+    TextView tv_no_match;
 
 
     @Override
@@ -155,6 +156,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
             tvDeliveryDate = findViewById(R.id.tvDeliveryDate);
             ll_actual_total=findViewById(R.id.ll_actual_total);
+            tv_no_match=findViewById(R.id.tv_no_match);
 
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
@@ -707,6 +709,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         tvDeliveryDate.setText("" + dayOfMonth + "/" + month + "/" + year);
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.getDatePicker().setMinDate(newCalendar.getTimeInMillis());
                 fromDatePickerDialog.show();
 
                 break;
@@ -1217,6 +1220,21 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     Product_ModalSetAdapter.add(personNpi);
                 else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
                     Product_ModalSetAdapter.add(personNpi);
+
+
+            }
+        }
+
+        if(Product_ModalSetAdapter.size()>0){
+            recyclerView.setVisibility(View.VISIBLE);
+            tv_no_match.setVisibility(View.GONE);
+        }else{
+            if(!filterString.equalsIgnoreCase("")) {
+                tv_no_match.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }else{
+                recyclerView.setVisibility(View.VISIBLE);
+                tv_no_match.setVisibility(View.GONE);
             }
         }
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
@@ -1884,7 +1902,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     public void onClick(View v) {
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(Order_Category_Select.this, "Empty value is not allowed");
-                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getRate())) {
+                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
                             common_class.showMsg(Order_Category_Select.this, "Enter Rate is greater than "+MRPCap);
 
                         } else {
