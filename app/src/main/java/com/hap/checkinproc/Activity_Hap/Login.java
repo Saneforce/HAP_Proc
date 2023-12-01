@@ -68,6 +68,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Datum;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationReceiver;
@@ -648,9 +649,24 @@ Log.d("Error","Can't Clear SFWish");
 
                 //eMail="1014700@hap.in";
                 // eMail="Anisfathima2406@gmail.com";
+              //  eMail="balasaneforceqc@gmail.com";
                // eMail="SAN SALES";
-
-                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
+              //  eMail="1021302@hap.in";//sd agencies
+               //   eMail="1013237@hap.in";//selva sivagami
+                 // eMail="aship.t@hap.in";//MUHAMMAD ASHIP
+                 //eMail="sarathkumar.a@hap.in";//sarathkumar
+                //eMail="karunakar.ns@hap.in";//karunakar
+                //eMail="prakash.v@hap.in";//prakash.v
+               //   eMail="iplusadmin@hap.in";//i-plus
+               // eMail="asif.l@hap.in";//asif.l
+                  //eMail="sanefordceleadforce@gmail.com";
+                 // eMail="murugesan.r@hap.in";//murugesan.r
+                  // eMail="jaidev.r@hap.in";//jaidev.r
+                  // eMail="rohit.rk@hap.in";
+                //eMail="sakthivel.p@hap.in";
+                //eMail="1030666@hap.in";//vishv milk parlour
+                eMail="1028757@hap.in";//Double m general
+                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,"6.1.1", deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
                     @Override
                     public void onResponse(Call<Model> call, Response<Model> response) {
@@ -799,6 +815,13 @@ call.cancel();
                 shared_common_pref.save(Constants.RSM_CUTOFF_TIME, response.getData().get(0).getRSMCutoffTime());
                 shared_common_pref.save(Constants.DistributorGst, response.getData().get(0).getDisGSTN());
                 shared_common_pref.save(Constants.DistributorFSSAI, response.getData().get(0).getDisFSSAI());
+                shared_common_pref.save(Constants.DistributorFSSAI, response.getData().get(0).getDisFSSAI());
+                shared_common_pref.save(Constants.Dist_Export_Flag,response.getData().get(0).getExportFlag());
+                shared_common_pref.save(Constants.Export_Currency_Symbol,response.getData().get(0).getExportCurrencySymbol());
+                shared_common_pref.save(Constants.Export_MRP,response.getData().get(0).getExportMRP());
+              /*  if(response.getData().get(0).getExportFlag()==1){
+                    HAPApp.CurrencySymbol=response.getData().get(0).getExportCurrencySymbol();
+                }*/
 
 
                 shared_common_pref.save(Constants.SlotTime, gson.toJson(response.getData().get(0).getSlotTime()));
@@ -832,6 +855,9 @@ call.cancel();
                 userEditor.putString("GSTN", response.getData().get(0).getDisGSTN());
                 userEditor.putString("FSSAI", response.getData().get(0).getDisFSSAI());
                 userEditor.putString("StockCheck", response.getData().get(0).getStockCheck());
+                userEditor.putInt("ExportFlag",response.getData().get(0).getExportFlag());
+                userEditor.putString("ExportCurrSym",response.getData().get(0).getExportCurrencySymbol());
+                userEditor.putString("ExportMRP",response.getData().get(0).getExportMRP());
 
 
                 userEditor.putString("url", String.valueOf(profile));
@@ -954,6 +980,7 @@ call.cancel();
                 shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.getData().get(0).getSfDesignationShortName()); //l
                 shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type)); //l
                 shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
+                shared_common_pref.save(Constants.Dist_Export_Flag,0);
                 Shared_Common_Pref.Dept_Type = DeptType;
                 Shared_Common_Pref.SF_Type = Sf_type;
                 /*Endof Unwanted Lines*/

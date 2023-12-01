@@ -206,6 +206,18 @@ public class Datum {
     @SerializedName("checkRadius")
     @Expose
     private Integer checkRadius;
+
+
+
+    @SerializedName("Export_Flag")
+    @Expose
+    private Integer exportFlag;
+    @SerializedName("Export_Curr_Symbol")
+    @Expose
+    private String ExportCurrencySymbol ;
+    @SerializedName("Export_MRP")
+    @Expose
+    private String ExportMRP ;
 //
 //    @SerializedName("SFJoinDate")
 //    @Expose
@@ -553,4 +565,16 @@ public class Datum {
     public void setCheckRadius(Integer checkRadius) {
         this.checkRadius = checkRadius;
     }
+
+    public Integer getExportFlag() {return exportFlag;}
+
+    public void setExportFlag(Integer exportFlag) {this.exportFlag = exportFlag;}
+
+    public String getExportCurrencySymbol() {return ExportCurrencySymbol;}
+
+    public void setExportCurrencySymbol(String exportCurrencySymbol) {ExportCurrencySymbol = exportCurrencySymbol;}
+
+    public String getExportMRP() {return ExportMRP;}
+
+    public void setExportMRP(String exportMRP) {ExportMRP = exportMRP;}
 }

@@ -394,6 +394,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.POSActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.OfferCounterActivity"

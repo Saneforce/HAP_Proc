@@ -1522,6 +1522,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                  //   Log.d("PRICE_Amount", CurrencySymbol+" "  + formatter.format( (Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty())*Double.parseDouble( Product_Details_Modal.getPTR())));
 
                     if(uomClickCnt==1){
+                        uomClickCnt++;
                         loadUomFirstData(Product_Details_Modalitem,holder,CategoryType);
                     }
                     holder.rlUOM.setOnClickListener(new View.OnClickListener() {

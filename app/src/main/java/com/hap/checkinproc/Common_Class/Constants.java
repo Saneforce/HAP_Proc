@@ -223,4 +223,7 @@ public class Constants {
     public static final String GroupFilter="groupFilter";
     public static final String Freezer_Mandatory="freezerMandatory";
     public static final String VanSalOrderList="vansalOrderList";
+    public static final String  Dist_Export_Flag= "distExportFlag";
+    public static final String  Export_Currency_Symbol= "exportCurrencySymbol";
+    public static final String  Export_MRP= "exportMRP";
 }

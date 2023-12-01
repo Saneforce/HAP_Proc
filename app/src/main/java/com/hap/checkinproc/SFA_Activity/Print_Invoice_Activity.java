@@ -327,7 +327,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             }
 
             Log.d("Distributor_Id", sharedCommonPref.getvalue(Constants.Distributor_Id));
-            if (sharedCommonPref.getvalue(Constants.Distributor_Id).equalsIgnoreCase("7951")) {
+            if (sharedCommonPref.getIntValue(Constants.Dist_Export_Flag)==1) {
                 Addinf = true;
             }
             if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE) == Constants.CHECKIN_TYPE) {
@@ -2755,7 +2755,18 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 }
                 // }
             }
-            if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
+            if (CatwiseFreeList.length() > 0) {
+                for (int j = 0; j < CatwiseFreeList.length(); j++) {
+
+                    JSONObject itm = new JSONObject();
+                    itm.put("FPCode", CatwiseFreeList.getJSONObject(j).getString("FPCode") );
+                    itm.put("FPName", CatwiseFreeList.getJSONObject(j).getString("OffName"));
+                    itm.put("FPQty",  CatwiseFreeList.getJSONObject(j).getString("free"));
+                    freeQtyNew.put(itm);
+
+                }
+            }
+            if ((freeQty_Array_List != null && freeQty_Array_List.size() > 0)||(CatwiseFreeList!=null&&CatwiseFreeList.length() > 0)) {
                 findViewById(R.id.lblfrdet).setVisibility(View.VISIBLE);
                 findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
                 Log.e("dxdh", "rybdyb:" + freeQtyNew.toString());

@@ -1883,8 +1883,9 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                     holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()));
 
            if(uomClickCnt==1){
+               uomClickCnt++;
                 loadUomFirstData(Product_Details_Modalitem,holder,CategoryType);
-                }
+           }
                     holder.rlUOM.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -1969,7 +1970,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         }
                     }
                 });
-                sumofTax(Product_Details_Modalitem, holder.getBindingAdapterPosition());
+
                 holder.Qty.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence charSequence, int start,

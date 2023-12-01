@@ -1878,6 +1878,7 @@ private int getCatePos(Integer CId) throws JSONException {
                         holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
                     }
                     if(uomClickCnt==1){
+                        uomClickCnt++;
                         loadUomFirstData(Product_Details_Modalitem,holder,CategoryType);
                     }
                     holder.rlUOM.setOnClickListener(new View.OnClickListener() {
