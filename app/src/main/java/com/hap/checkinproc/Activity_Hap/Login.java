@@ -665,8 +665,8 @@ Log.d("Error","Can't Clear SFWish");
                   // eMail="rohit.rk@hap.in";
                 //eMail="sakthivel.p@hap.in";
                 //eMail="1030666@hap.in";//vishv milk parlour
-                eMail="1028757@hap.in";//Double m general
-                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,"6.1.1", deviceToken);
+              //  eMail="1028757@hap.in";//Double m general
+                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
                 modelCall.enqueue(new Callback<Model>() {
                     @Override
                     public void onResponse(Call<Model> call, Response<Model> response) {
