@@ -1243,10 +1243,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 tvBillTotQty.setText("" + totalQty);
                 tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
                 tvCashDiscount.setText(CurrencySymbol + " " + formatter.format(cashDiscount));
+
+
                 // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
-                tvTotalDiscLabel.setText("(Total Discount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+                tvTotalDiscLabel.setText("(Scheme Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
                 //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
-                tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
 
               /*  if (cashDiscount > 0) {

@@ -90,7 +90,7 @@ public class HAPApp extends Application {
                 MRPCap = getActiveActivity().getResources().getString(R.string.MRPCAP);//₹ B$
              //   if(Shared_Common_Pref.Sf_Code.equalsIgnoreCase("7951"))
                 Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(HAPApp.this);
-                if (sharedCommonPref.getIntValue(Constants.Dist_Export_Flag)==1){
+                if (sharedCommonPref.getIntValue(Constants.Dist_Export_Flag)==1||sharedCommonPref.getIntValue(Constants.Dist_Export_Flag)==2){
                   //  CurrencySymbol = "B$"; //"₹";//₹ B$
                     CurrencySymbol=sharedCommonPref.getvalue(Constants.Export_Currency_Symbol);
                     MRPCap = sharedCommonPref.getvalue(Constants.Export_MRP);//₹ B$

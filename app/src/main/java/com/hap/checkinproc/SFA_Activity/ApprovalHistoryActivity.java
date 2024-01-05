@@ -2,7 +2,10 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,7 +44,7 @@ public class ApprovalHistoryActivity extends AppCompatActivity {
     AdapterOutletsApprovalHistory adapter;
     Context context = this;
     Common_Class common_class;
-
+    EditText searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +54,23 @@ public class ApprovalHistoryActivity extends AppCompatActivity {
         outletsCount = findViewById(R.id.count);
         recyclerView = findViewById(R.id.recyclerview__ApprovalHistoryActivity);
         progressBar = findViewById(R.id.progressbar_ApprovalHistoryActivity);
-
+        searchView = findViewById(R.id.et_searchView);
+        searchView.setVisibility(View.GONE);
         common_class = new Common_Class(context);
         home.setOnClickListener(v -> common_class.gotoHomeScreen(context, v));
+        searchView.addTextChangedListener(new TextWatcher() {
 
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s.toString());
+            }
+        });
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(this::StartLoading);
     }
@@ -90,6 +106,7 @@ public class ApprovalHistoryActivity extends AppCompatActivity {
                                 adapter = new AdapterOutletsApprovalHistory(list, context);
                                 recyclerView.setAdapter(adapter);
                                 progressBar.setVisibility(View.GONE);
+                                searchView.setVisibility(View.VISIBLE);
                             });
                         } else {
                             Toast.makeText(context, "List is empty", Toast.LENGTH_SHORT).show();

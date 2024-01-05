@@ -206,9 +206,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                             tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
-                            tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                            tvTotalDiscLabel.setText("(Total Discount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
                             //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-                            tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                            tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
 
                         }
@@ -232,9 +232,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             totalvalues=InvAmt - rDiscAmt;
                             tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                             tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
-                            tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                            tvTotalDiscLabel.setText("(Total Discount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
                             //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-                            tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                            tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
                         }
                         etDiscAmt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -260,9 +260,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     tvPayAmt.setText(CurrencySymbol+" " + formatter.format(totalvalues ));
                     tvTotOutstanding.setText(CurrencySymbol+" "+ formatter.format(outstandAmt + (totalvalues - payAmt)));
-                    tvTotalDiscLabel.setText("(Scheme Amount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
+                    tvTotalDiscLabel.setText("(Total Discount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
                     //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-                    tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                    tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
                 }
 
@@ -1189,9 +1189,9 @@ private int getCatePos(Integer CId) throws JSONException {
 
            tvTotOutstanding.setText(CurrencySymbol + " " + formatter.format(outstandAmt + (totalvalues - payAmt)));
 
-           tvTotalDiscLabel.setText("(Scheme Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+           tvTotalDiscLabel.setText("(Total Discount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
            //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
-           tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+           tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
            //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
 
            // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
@@ -1864,6 +1864,7 @@ private int getCatePos(Integer CId) throws JSONException {
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
                 //holder.tvMRP.setText(CurrencySymbol+" " + Product_Details_Modal.getMRP());
+                holder.tvMRPLabel.setText(MRPCap);
                 holder.tvMRP.setText(CurrencySymbol+" "  + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
 
                 if (CategoryType >= 0){
@@ -2354,7 +2355,7 @@ private int getCatePos(Integer CId) throws JSONException {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt;
-            TextView  QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP, tvDiscBasePrice,ActualTotal;
+            TextView  QtyAmt, totalQty, tvTaxLabel, tvUOM, tvStock,tvTknStock,tvCLStock,tvBatchNo, tvMRP, tvDiscBasePrice,ActualTotal,tvMRPLabel;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
             LinearLayout rlUOM,ll_ActualTotal;
@@ -2381,6 +2382,7 @@ private int getCatePos(Integer CId) throws JSONException {
                 tvDiscBasePrice =view.findViewById(R.id.tvDiscBasePrice);
                 ll_ActualTotal=view.findViewById(R.id.ll_ActualTotal);
                 ActualTotal=view.findViewById(R.id.ActualTotal);
+                tvMRPLabel=view.findViewById(R.id.MrpLabel);
 
                 if (CategoryType >= 0) {
                     ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);

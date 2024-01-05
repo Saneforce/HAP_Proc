@@ -111,7 +111,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     Common_Model mCommon_model_spinner;
     Integer count = 0;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
-
+    String currentScreenTimeStamp = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +119,8 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        currentScreenTimeStamp = "MP" + Shared_Common_Pref.Sf_Code + "-" + com.hap.checkinproc.Activity_Hap.Common_Class.getTimeStamp(com.hap.checkinproc.Activity_Hap.Common_Class.getCurrentTime(com.hap.checkinproc.Activity_Hap.Common_Class.FORMAT), com.hap.checkinproc.Activity_Hap.Common_Class.FORMAT);
+        Log.e("currentScreenTimeStamp:",currentScreenTimeStamp);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextModeTravel = findViewById(R.id.txt_mode_travel);
         TextDate = findViewById(R.id.txt_date);
@@ -751,7 +753,9 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             jsonleaveType.put("to_code", StrToCode);
             jsonleaveType.put("fare", "");
             jsonleaveType.put("aflag", visbleMOde);
+            jsonleaveType.put("eKey",currentScreenTimeStamp);
             jsonleaveTypeS.put("MissedPunchEntry", jsonleaveType);
+
             jsonArray1.put(jsonleaveTypeS);
 
         } catch (JSONException e) {

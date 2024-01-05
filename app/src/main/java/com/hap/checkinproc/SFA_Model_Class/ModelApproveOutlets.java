@@ -1,14 +1,23 @@
 package com.hap.checkinproc.SFA_Model_Class;
 
 public class ModelApproveOutlets {
-    String customerName, customerID, customerMobile, customerAddress, listedDrCode;
+    String customerName;
+    String customerID;
+    String customerMobile;
+    String customerAddress;
+    String listedDrCode;
 
-    public ModelApproveOutlets(String customerName, String customerID, String customerMobile, String customerAddress, String listedDrCode) {
+
+
+    String customerCreatedDate;
+
+    public ModelApproveOutlets(String customerName, String customerID, String customerMobile, String customerAddress, String listedDrCode,String customerCreatedDate) {
         this.customerName = customerName;
         this.customerID = customerID;
         this.customerMobile = customerMobile;
         this.customerAddress = customerAddress;
         this.listedDrCode = listedDrCode;
+        this.customerCreatedDate=customerCreatedDate;
     }
 
     public String getCustomerName() {
@@ -50,4 +59,8 @@ public class ModelApproveOutlets {
     public void setListedDrCode(String listedDrCode) {
         this.listedDrCode = listedDrCode;
     }
+
+    public String getCustomerCreatedDate() {return customerCreatedDate;}
+
+    public void setCustomerCreatedDate(String customerCreatedDate) {this.customerCreatedDate = customerCreatedDate;}
 }

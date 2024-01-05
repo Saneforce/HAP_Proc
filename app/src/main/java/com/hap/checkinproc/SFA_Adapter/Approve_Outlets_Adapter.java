@@ -58,6 +58,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
         holder.id.setText(model.getCustomerID());
         holder.mobile.setText(model.getCustomerMobile());
         holder.address.setText(model.getCustomerAddress());
+        holder.createdDate.setText("Created Date : "+model.getCustomerCreatedDate());
 
         holder.mobile.setOnClickListener(v -> {
             Common_Class common_class = new Common_Class(context);
@@ -127,7 +128,7 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, id, mobile, address, view, approve, reject;
+        TextView name, id, mobile, address, view, approve, reject,createdDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -138,6 +139,8 @@ public class Approve_Outlets_Adapter extends RecyclerView.Adapter<Approve_Outlet
             view = itemView.findViewById(R.id.viewBtn);
             approve = itemView.findViewById(R.id.approveBtn);
             reject = itemView.findViewById(R.id.rejectBtn);
+            createdDate=itemView.findViewById(R.id.createdDate_outletInfo);
+
         }
     }
 }

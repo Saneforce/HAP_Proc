@@ -227,7 +227,9 @@ public class Retailer_Modal_List {
     @SerializedName("Category_Universe_Id")
     @Expose
     private String Category_Universe_Id;
-
+    @SerializedName("CountryCode")
+    @Expose
+    private String countryCode;
     public Retailer_Modal_List(String cust_Code, String mnth, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
         Cust_Code = cust_Code;
         Mnth = mnth;
@@ -878,7 +880,13 @@ public class Retailer_Modal_List {
     public void setStateCode(String stateCode) {
         StateCode = stateCode;
     }
+    public String getCountryCode() {
+        return countryCode;
+    }
 
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
     public String getImagename() {
         return Imagename;
     }
@@ -946,5 +954,7 @@ public class Retailer_Modal_List {
         @SerializedName("Sub_Category_Name")
         @Expose
         public String Sub_Category_Name;
+
+
     }
 }

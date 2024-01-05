@@ -62,6 +62,7 @@ public class Weekly_Off extends AppCompatActivity {
     String maxYear = "", maxMonth = "", maxDay = "", minYear = "", minMonth = "", minDay = "", maxDate = "", minDate = "";
     Boolean CheckIn;
     ConstraintLayout ConstraintLayout;
+    String currentScreenTimeStamp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,9 @@ public class Weekly_Off extends AppCompatActivity {
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        currentScreenTimeStamp = "WP" + Shared_Common_Pref.Sf_Code + "-" + Common_Class.getTimeStamp(Common_Class.getCurrentTime(Common_Class.FORMAT), Common_Class.FORMAT);
+        Log.e("currentScreenTimeStamp:",currentScreenTimeStamp);
+
         CheckIn = CheckInDetails.getBoolean("CheckIn", false);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +238,10 @@ public class Weekly_Off extends AppCompatActivity {
                 minYear = separated1[0];
                 minMonth = separated1[1];
                 minDay = separated1[2];
+
+                minYear = String.valueOf(2023);
+                minMonth = "10";
+                minDay = "23";
                 Log.e("Sresdfsd", minYear);
                 Log.e("Sresdfsd", minMonth);
                 Log.e("Sresdfsd", minDay);
@@ -259,6 +267,7 @@ public class Weekly_Off extends AppCompatActivity {
 
             jsonleaveType.put("WKDate", eText.getText().toString());
             jsonleaveType.put("reason", remark.getText().toString());
+            jsonleaveType.put("eKey",currentScreenTimeStamp);
 
             jsonleaveTypeS.put("WeekofPunch", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);

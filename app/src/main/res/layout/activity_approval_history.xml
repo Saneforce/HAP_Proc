@@ -96,6 +96,23 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+        <EditText
+
+            android:id="@+id/et_searchView"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="@dimen/C5dp"
+            android:background="@drawable/search_backround"
+            android:drawableLeft="@drawable/ic_search_icon"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:hint="Search "
+            android:visibility="visible"
+            tools:ignore="RtlCompat" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview__ApprovalHistoryActivity"

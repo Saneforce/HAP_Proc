@@ -108,7 +108,8 @@ public class ApproveOutletsActivity extends AppCompatActivity {
                                 String customerMobile = array.getJSONObject(i).getString("OutletMobile");
                                 String customerAddress = array.getJSONObject(i).getString("OutletAddress");
                                 String listedDrCode = array.getJSONObject(i).getString("ListedDrCode");
-                                list.add(new ModelApproveOutlets(customerName, customerID, customerMobile, customerAddress, listedDrCode));
+                                String createdDate = array.getJSONObject(i).getString("Created_Date");
+                                list.add(new ModelApproveOutlets(customerName, customerID, customerMobile, customerAddress, listedDrCode,createdDate));
                             }
                             runOnUiThread(() -> {
                                 String c = "No. of Outlets\n" + list.size();

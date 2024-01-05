@@ -90,6 +90,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -117,10 +118,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     EditText toolSearch;
     GoogleMap mGoogleMap;
     ApiInterface service;
-    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, rlSubCategory, linServiceType;//, rlFreezerCapacity, rlFreezerSta;
+    RelativeLayout linReatilerRoute, rlDistributor, rlDelvryType, rlOutletType, rlState, linReatilerChannel, rlSubCategory, linServiceType,rlCountry;//, rlFreezerCapacity, rlFreezerSta;
     LinearLayout linReatilerClass, CurrentLocLin, retailercodevisible, linClsRmks;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text,
-            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType, tvSubCategory;
+            txDelvryType, txOutletType, tvStateName, retailercode, tvServiceType, tvSubCategory,tvCountryName;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -134,7 +135,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONObject docMasterObject;
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue, imageConvert = "", imageServer = "";
     Integer classId, channelID, iOutletTyp, stateCode;
-    String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
+    String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "",countryCode="";
     Shared_Common_Pref shared_common_pref;
     SharedPreferences UserDetails, CheckInDetails;
     Common_Class common_class;
@@ -180,12 +181,16 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private String finalPath = "";
     private String place_id = "";
     private ArrayList<Common_Model> stateList = new ArrayList<>();
+    private ArrayList<Common_Model> countryList = new ArrayList<>();
     private ArrayList<Common_Model> serviceTypeList;
     private String name = "";
     private FilesAdapter filesAdapter;
     private String categoryId = "", approval = "", distGrpERP = "";
     private int typeUpdatePos = -1, freezerStaApproval;
     private Category_Adapter categoryAdapter;
+
+    LinearLayout ll_country;
+    TextView gstLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,6 +292,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             linReatilerClass = findViewById(R.id.linear_retailer_class);
             txtRetailerClass = findViewById(R.id.txt_retailer_class);
 
+            ll_country=findViewById(R.id.ll_country);
+            rlCountry = findViewById(R.id.rl_country);
+            tvCountryName = findViewById(R.id.tvCountry);
+            gstLabel=findViewById(R.id.gst_label);
 
             linServiceType.setOnClickListener(this);
             ivCapture.setOnClickListener(this);
@@ -301,7 +310,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             freezerGroupList.add(new Common_Model("-18", "1"));
             freezerGroupList.add(new Common_Model("+4", "2"));
-
+            if (shared_common_pref.getIntValue(Constants.Dist_Export_Flag)==2) {
+             // ll_country.setVisibility(View.VISIBLE);
+              gstLabel.setText("TRN");
+              edt_gst.setHint("Enter The TRN");
+            }
             txFreezerStatus.setOnClickListener(v -> {
                 if (txFreezerGroup.getText().toString().trim().isEmpty()) {
                     Toast.makeText(context, "Please select freezer group", Toast.LENGTH_SHORT).show();
@@ -438,6 +451,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             copypaste.setOnClickListener(this);
             ivPhotoShop.setOnClickListener(this);
             rlState.setOnClickListener(this);
+            rlCountry.setOnClickListener(this);
             btnRefLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -626,6 +640,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 common_class.getDb_310Data(Constants.STATE_LIST, this);
             else {
                 stateList = gson.fromJson(shared_common_pref.getvalue(Constants.STATE_LIST), commonType);
+            }
+
+            if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.COUNTRY_LIST)))
+                common_class.getDb_310Data(Constants.COUNTRY_LIST, this);
+            else {
+                countryList = gson.fromJson(shared_common_pref.getvalue(Constants.COUNTRY_LIST), commonType);
             }
 
             Intent i = getIntent();
@@ -1368,6 +1388,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         edtClsRetRmk.setEnabled(isEditable);
         btnDistCode.setEnabled(isEditable);
         txFreezerGroup.setEnabled(isEditable);
+        tvCountryName.setEnabled(isEditable);
 
         rlDelvryType.setEnabled(isEditable);
         linReatilerClass.setEnabled(isEditable);
@@ -1380,6 +1401,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         linReatilerRoute.setEnabled(isEditable);
         rlDistributor.setEnabled(isEditable);
         rlOutletType.setEnabled(isEditable);
+        rlCountry.setEnabled(isEditable);
 
         ivPhotoShop.setEnabled(isEditable);
         captureFreezerPhoto.setEnabled(isEditable);
@@ -1741,6 +1763,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("OutletTypeNm", txOutletType.getText().toString());
             reportObject.put("OutletTypeCd", iOutletTyp);
             reportObject.put("OutletTypeRmks", edtClsRetRmk.getText().toString());
+            reportObject.put("country_code","'"+countryCode+"'");
 
             reportObject.put("unlisted_doctor_areaname", "''");
             reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
@@ -2052,6 +2075,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 freezerCapId = myDataset.get(position).getId();
                 freezerCapacityTV_Dialog.setText(myDataset.get(position).getName());
                 break;
+            case 17:
+                tvCountryName.setText(myDataset.get(position).getName());
+                countryCode = myDataset.get(position).getId();
+                break;
         }
     }
 
@@ -2231,7 +2258,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 case R.id.rl_state:
                     common_class.showCommonDialog(stateList, 1, this);
                     break;
-
+                case R.id.rl_country:
+                    common_class.showCommonDialog(countryList, 17, this);
+                    break;
                 case R.id.rl_route:
                     if (FRoute_Master != null && FRoute_Master.size() > 1) {
                         common_class.showCommonDialog(FRoute_Master, 3, this);
@@ -2319,7 +2348,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
         }
 
+        if (countryList.size() > 0) {
+            for (int i = 0; i < countryList.size(); i++) {
+                if (countryList.get(i).getId().equalsIgnoreCase(Retailer_Modal_List.get(getOutletPosition()).getCountryCode())) {
+                    tvCountryName.setText(countryList.get(i).getName());
+                    countryCode = countryList.get(i).getId();
 
+                }
+            }
+        }
         if (getIntent().getExtras().getString("Compititor_Id") != null)
             Compititor_Id = getIntent().getExtras().getString("Compititor_Id");
         if (getIntent().getExtras().getString("Compititor_Name") != null)
@@ -2504,6 +2541,38 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         }
                         if (stateList.size() > 0)
                             shared_common_pref.save(Constants.STATE_LIST, gson.toJson(stateList));
+                        break;
+                    case Constants.COUNTRY_LIST:
+                        Log.v(TAG, "country:" + apiDataResponse);
+                        JSONObject countryObj = new JSONObject(apiDataResponse);
+                        if (countryObj.getBoolean("success")) {
+                            countryList = new ArrayList<>();
+                            countryList.clear();
+
+                            JSONArray array = countryObj.getJSONArray("Data");
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject obj = array.getJSONObject(i);
+
+                                countryList.add(new Common_Model(obj.getString("Country_name"), obj.getString("Country_code")));
+
+                               /* try {
+                                    if (!Shared_Common_Pref.Outler_AddFlag.equals("1") && getOutletPosition() >= 0 && (Retailer_Modal_List.get(getOutletPosition()).getCountryCode() != null && obj.getString("Country_code").equals
+                                            (Retailer_Modal_List.get(getOutletPosition()).getCountryCode()))) {
+                                        if (obj.getString("Country_code").equalsIgnoreCase("2")) {
+                                            tvCountryName.setText("" + obj.getString("Country_name"));
+                                            countryCode = Integer.valueOf(obj.getString("Country_code"));
+                                        }
+                                    }
+                                } catch (Exception e) {
+
+                                }*/
+                            }
+
+
+                        }
+                        if (countryList.size() > 0)
+                            shared_common_pref.save(Constants.COUNTRY_LIST, gson.toJson(countryList));
                         break;
                 }
 

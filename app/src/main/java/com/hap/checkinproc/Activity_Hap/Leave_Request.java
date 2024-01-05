@@ -113,6 +113,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     int AutoPost=0,MaxDays=0;
     private JsonArray WrkedDys = new JsonArray();
     HAPListItem lstWrkDts;
+    String currentScreenTimeStamp = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +121,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+        currentScreenTimeStamp = "LR" + Shared_Common_Pref.Sf_Code + "-" + Common_Class.getTimeStamp(Common_Class.getCurrentTime(Common_Class.FORMAT), Common_Class.FORMAT);
+        Log.e("currentScreenTimeStamp:",currentScreenTimeStamp);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -731,6 +734,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             jsonleaveType.put("Outime", wrkCOut.getText());
             jsonleaveType.put("NoofHrs", wrkHrs.getText());
             jsonleaveType.put("EligDys", wrkEligi.getText());
+            jsonleaveType.put("eKey",currentScreenTimeStamp);
 
             jsonleaveTypeS.put("LeaveForm", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);

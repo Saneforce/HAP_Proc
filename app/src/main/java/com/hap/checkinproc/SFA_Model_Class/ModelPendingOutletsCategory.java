@@ -14,13 +14,17 @@ public class ModelPendingOutletsCategory {
 
     String designation;
 
-    public ModelPendingOutletsCategory(String sfCode, String sfName, String stockistCode, String stockistName, String listedDrCount, String designation) {
+
+    String erpCode;
+
+    public ModelPendingOutletsCategory(String sfCode, String sfName, String stockistCode, String stockistName, String listedDrCount, String designation,String erpCode) {
         this.sfCode = sfCode;
         this.sfName = sfName;
         this.stockistCode = stockistCode;
         this.stockistName = stockistName;
         this.listedDrCount = listedDrCount;
         this.designation = designation;
+        this.erpCode=erpCode;
     }
 
     public String getSfCode() {
@@ -70,4 +74,8 @@ public class ModelPendingOutletsCategory {
     public void setDesignation(String designation) {
         this.designation = designation;
     }
+    public String getErpCode() {return erpCode;}
+
+    public void setErpCode(String ERP_Code) {this.erpCode = ERP_Code;}
+
 }

@@ -1142,9 +1142,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     tvBillTotQty.setText("" + totQty);
     tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
     tvCashDiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDiscount));
-    tvTotalDiscLabel.setText("(Scheme Amount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+    tvTotalDiscLabel.setText("(Total Discount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
     //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
-    tvSaveAmt.setText("Total Savings Amount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+    tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
     //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
     // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
     ll_actual_total.setVisibility(View.GONE);
@@ -1492,7 +1492,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
              //   holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-
+                holder.tvMRPLabel.setText(MRPCap);
                 holder.tvMRP.setText(CurrencySymbol+" "  + formatter.format(Double.parseDouble(Product_Details_Modal.getMRP()) * Product_Details_Modal.getCnvQty()));
 
                 if (CategoryType >= 0) {
@@ -1937,7 +1937,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView erpCode,productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt,
-                    QtyAmt, totalQty, tvTaxLabel, tvUOM,tvMRP, tvDiscBasePrice,ActualTotal/*, tvUomName, tvUomQty*/;
+                    QtyAmt, totalQty, tvTaxLabel, tvUOM,tvMRP, tvDiscBasePrice,ActualTotal,tvMRPLabel/*, tvUomName, tvUomQty*/;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1963,6 +1963,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 tvDiscBasePrice =view.findViewById(R.id.tvDiscBasePrice);
                 ll_ActualTotal=view.findViewById(R.id.ll_ActualTotal);
                 ActualTotal=view.findViewById(R.id.ActualTotal);
+                tvMRPLabel=view.findViewById(R.id.MrpLabel);
 
 
                 if (CategoryType >= 0) {

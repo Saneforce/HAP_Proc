@@ -3,7 +3,10 @@ package com.hap.checkinproc.SFA_Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,7 +47,7 @@ public class PendingOutletsCategory extends AppCompatActivity {
     Common_Class common_class;
 
     public static boolean refresh = false;
-
+    EditText searchViews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +57,24 @@ public class PendingOutletsCategory extends AppCompatActivity {
         history = findViewById(R.id.view_history);
         recyclerView = findViewById(R.id.recyclerview_PendingOutletsCategory);
         progressBar = findViewById(R.id.progressbar_PendingOutletsCategory);
-
+        searchViews = findViewById(R.id.et_searchView);
+        searchViews.setVisibility(View.GONE);
         common_class = new Common_Class(context);
         home.setOnClickListener(v -> {
             common_class.gotoHomeScreen(context, v);
+        });
+        searchViews.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s.toString());
+            }
         });
 
         history.setOnClickListener(v -> {
@@ -80,6 +97,8 @@ public class PendingOutletsCategory extends AppCompatActivity {
     private void StartLoading() {
         list.clear();
         progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        searchViews.setVisibility(View.GONE);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiInterface.getPendingOutletsCategory("get_pending_outlets_category");
         call.enqueue(new Callback<>() {
@@ -98,13 +117,16 @@ public class PendingOutletsCategory extends AppCompatActivity {
                                 String Stockist_Name = array.getJSONObject(i).getString("Stockist_Name");
                                 String ListedDrCount = array.getJSONObject(i).getString("ListedDrCount");
                                 String sf_Designation_Short_Name = array.getJSONObject(i).getString("sf_Designation_Short_Name");
-                                list.add(new ModelPendingOutletsCategory(SF_Code, Sf_Name, Stockist_Code, Stockist_Name, ListedDrCount, sf_Designation_Short_Name));
+                                String stockist_erpCode=array.getJSONObject(i).getString("ERP_Code");
+                                list.add(new ModelPendingOutletsCategory(SF_Code, Sf_Name, Stockist_Code, Stockist_Name, ListedDrCount, sf_Designation_Short_Name,stockist_erpCode));
                             }
                             runOnUiThread(() -> {
                                 recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                                 adapter = new AdapterPendingOutletsCategory(list, context);
                                 recyclerView.setAdapter(adapter);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.GONE);
+                                searchViews.setVisibility(View.VISIBLE);
                             });
                         } else {
                             Toast.makeText(context, "List is empty", Toast.LENGTH_SHORT).show();

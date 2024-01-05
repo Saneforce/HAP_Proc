@@ -907,6 +907,10 @@ public class Common_Class {
                         axnname = "get/states";
                         data.put("sfCode", Shared_Common_Pref.Sf_Code);
                         break;
+                    case Constants.COUNTRY_LIST:
+                        axnname = "get/country";
+                        data.put("sfCode", Shared_Common_Pref.Sf_Code);
+                        break;
                     case Constants.Category_List:
                         axnname = "get/prodCate";
                         data.put("SF", UserDetails.getString("Sfcode", ""));
@@ -1759,6 +1763,7 @@ public class Common_Class {
         sharedCommonPref.clear_pref(Constants.RETAIL_CLASS);
         sharedCommonPref.clear_pref(Constants.Freezer_Status);
         sharedCommonPref.clear_pref(Constants.Freezer_capacity);
+        sharedCommonPref.clear_pref(Constants.COUNTRY_LIST);
 
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,10 +19,11 @@ import java.util.ArrayList;
 public class AdapterOutletsApprovalHistory extends RecyclerView.Adapter<AdapterOutletsApprovalHistory.ViewHolder> {
     ArrayList<ModelOutletsApprovalHistory> list;
     Context context;
-
+    ArrayList<ModelOutletsApprovalHistory> listNew;
     public AdapterOutletsApprovalHistory(ArrayList<ModelOutletsApprovalHistory> list, Context context) {
         this.list = list;
         this.context = context;
+        this.listNew=list;
     }
 
     @NonNull
@@ -62,7 +64,37 @@ public class AdapterOutletsApprovalHistory extends RecyclerView.Adapter<AdapterO
     public int getItemCount() {
         return list.size();
     }
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString().toLowerCase().trim().replaceAll("\\s", "");
+                ArrayList<ModelOutletsApprovalHistory> filteredList = new ArrayList<>();
+                ArrayList<ModelOutletsApprovalHistory> filteredany = new ArrayList<>();
+                for (ModelOutletsApprovalHistory row : listNew) {
+                    String sName = row.getName().toLowerCase().trim().replaceAll("\\s", "");
+                    String getModifyDate = (row.getModifiedOn()!= null) ? row.getModifiedOn().toLowerCase().trim().replaceAll("\\s", "") : "";
+                    //String getPhone = (row.getCustomerMobile() != null) ? row.getCustomerMobile().toLowerCase().trim().replaceAll("\\s", "") : "";
+                    if ((";" + sName).contains(";" + charString) || (";" + getModifyDate).contains(";" + charString)) {
+                        filteredList.add(row);
+                    } else if (sName.contains(charString) || getModifyDate.contains(charString)) {
+                        filteredany.add(row);
+                    }
+                }
+                filteredList.addAll(filteredany);
+                list = filteredList;
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = list;
+                return filterResults;
+            }
 
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                list = (ArrayList<ModelOutletsApprovalHistory>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView Approve, Reject, Name, Code, Mobile, Address, ApprovedBy, ModifiedOn, Remarks;
 

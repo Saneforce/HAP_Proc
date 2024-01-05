@@ -575,7 +575,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="left"
                                         android:gravity="right"
-                                        android:text="MRP"
+                                        android:text="@string/MRPCAP"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C13dp"
                                         android:textStyle="bold"></TextView>

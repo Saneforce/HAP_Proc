@@ -92,7 +92,7 @@ public class DeviationEntry extends AppCompatActivity implements Master_Interfac
     CustomListViewDialog customDialog;
     Location mLocation;
     LinearLayout LinearDevaitaionType;
-
+    String currentScreenTimeStamp = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +101,8 @@ public class DeviationEntry extends AppCompatActivity implements Master_Interfac
         gson = new Gson();
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+        currentScreenTimeStamp = "DE" + Shared_Common_Pref.Sf_Code + "-" + Common_Class.getTimeStamp(Common_Class.getCurrentTime(Common_Class.FORMAT), Common_Class.FORMAT);
+        Log.e("currentScreenTimeStamp:",currentScreenTimeStamp);
         DeviationTypeEntry = findViewById(R.id.deviation_type);
         chooseDate = (EditText) findViewById(R.id.choose_date);
         remarks = findViewById(R.id.remarks);
@@ -332,6 +334,7 @@ public class DeviationEntry extends AppCompatActivity implements Master_Interfac
             deviationObject.put("reason", "'" + remarks.getText().toString() + "'");
             deviationObject.put("Time", "'" + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()) + "'");
             deviationObject.put("LatLng", "'" + Currentlocation + "'");
+            deviationObject.put("eKey",currentScreenTimeStamp);
             deviationArray.put("DeviationEntry", deviationObject);
             jsonArray1.put(deviationArray);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);

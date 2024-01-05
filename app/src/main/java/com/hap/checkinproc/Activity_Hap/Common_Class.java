@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class Common_Class {
@@ -26,7 +28,7 @@ public class Common_Class {
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String CheckInfo = "CheckInDetail";
-
+    public static final String FORMAT = "yyyy-MM-dd HH:mm:ss";
     public void openDateTimeSetting() {
         Intent intent = new Intent(Settings.ACTION_DATE_SETTINGS);
         //this.webView.getContext().startActivity(intent);
@@ -336,6 +338,29 @@ public class Common_Class {
             e.printStackTrace();
         }
         return (Date2.getTime() - Date1.getTime()) / (60 * 1000);
+    }
+
+    public static long getTimeStamp(String date, String format){
+
+        Date date2 = null;
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+            date2 = sdf.parse(date);
+
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return date2.getTime();
+    }
+    public  static String getCurrentTime(String format) {
+//       2021-01-20 11:33:05
+        long timestampMilliseconds = System.currentTimeMillis();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        String stringDate = simpleDateFormat.format(new Date(timestampMilliseconds));
+        return stringDate;
     }
 
 }
