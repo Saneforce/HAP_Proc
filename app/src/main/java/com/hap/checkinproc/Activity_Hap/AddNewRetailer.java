@@ -141,6 +141,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
     String outletCode = "";
+    String outletErpCode="";
     ImageView copypaste, ivCapture;
     String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
@@ -490,7 +491,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             gson = new Gson();
             outletCode = Shared_Common_Pref.OutletCode;
-
+            outletErpCode = Shared_Common_Pref.OutletErpCode;
 
             divERP = shared_common_pref.getvalue(Constants.DivERP);
 
@@ -678,7 +679,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             getFreezerData(divERP);
 
-            if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
+            if ((Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))||Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
                 getFreezerDataFromAPI();
             }
 
@@ -1416,7 +1417,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //            object.put("retailerCode", "130774000001");
 //            object.put("customerCode", "1023176");
 
-            object.put("retailerCode", outletCode);
+            object.put("retailerCode", outletErpCode);
             object.put("customerCode", shared_common_pref.getvalue(Constants.DistributorERP));
 
         } catch (JSONException ignored) {

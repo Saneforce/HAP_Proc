@@ -219,6 +219,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                     Shared_Common_Pref.FromActivity = "Outlets";
                     Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_List.getId());
+                    Shared_Common_Pref.OutletErpCode=mRetailer_Modal_List.getERP_Code();
                     intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_List.getId()));
                     intent.putExtra("OutletName", mRetailer_Modal_List.getName());
                     intent.putExtra("OutletAddress", mRetailer_Modal_List.getListedDrAddress1());

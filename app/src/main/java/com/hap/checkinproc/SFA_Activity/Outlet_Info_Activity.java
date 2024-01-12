@@ -444,6 +444,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.FromActivity = "Outlets";
                             Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
+                            Shared_Common_Pref.OutletErpCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getERP_Code());
                             intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
                             intent.putExtra("OutletName", Retailer_Modal_ListFilter.get(position).getName());
                             intent.putExtra("OutletAddress", Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
