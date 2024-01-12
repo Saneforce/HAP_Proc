@@ -48,6 +48,8 @@ public class Shared_Common_Pref {
 
     public static String DistributorGst = "GSTN";
 
+    public static String OutletErpCode="OutletErpCode";
+
 
     public static int TravelAllowance = 0;
 
