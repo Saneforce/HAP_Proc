@@ -184,6 +184,8 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 String date = array.getJSONObject(i).getString("Date_Time");
                                 String total = array.getJSONObject(i).getString("TransactionAmt");
                                 String disTotal=array.getJSONObject(i).getString("Dis_Total");
+                                String outletType=array.getJSONObject(i).getString("OutTyp");
+
                                 JSONArray jsonArray = array.getJSONObject(i).getJSONArray("Products");
                                 StringBuilder builder = new StringBuilder();
                                 for (int j = 0; j < jsonArray.length(); j++) {
@@ -195,7 +197,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                     }
                                 }
                                 String products = builder.toString();
-                                list.add(new ModelPendingOrder(OutletCd,title, address, mobile, title2, orderID, date, products, total,disTotal));
+                                list.add(new ModelPendingOrder(OutletCd,title, address, mobile, title2, orderID, date, products, total,disTotal,outletType));
                             }
                             adapter = new AdapterPendingOrder(context, list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -215,6 +217,7 @@ public class PendingOrdersActivity extends AppCompatActivity implements UpdateRe
                                 shared_common_pref.save(Constants.Retailor_Address, model.getAddress());
                                 common_class.getDb_310Data(Constants.FreeSchemeDiscList, PendingOrdersActivity.this);
                                 common_class.getDb_310Data(Constants.TAXList, PendingOrdersActivity.this);
+                                Shared_Common_Pref.SecOrdOutletType=model.getOutletTyp();
                               //  Log.e("pending_orderValue:",model.getTotal());
                                 orderValue= model.getTotal();
                                 totalDiscount=model.getDisTotal();
