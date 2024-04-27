@@ -92,8 +92,8 @@
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Photo</string>
-    <string name="app_ver">v8.3.4</string>
-    <string name="tool_app_ver">Ver 8.3.4</string>
+    <string name="app_ver">vt6</string>
+    <string name="tool_app_ver">Ver t6</string>
     <string name="trv_exc_entry">Travel Mode Exception Entry</string>
     <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
     <string name="trv_exc_status">Travel Mode Exception Status</string>
@@ -118,6 +118,22 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="vehicle_no">Vehicle No<font color='#F44336'>*</font></string>
+    <string name="start_km">Starting Km<font color='#F44336'>*</font></string>
+    <string name="end_km">Closing Km<font color='#F44336'>*</font></string>
+    <string name="km_name">Km<font color='#F44336'>*</font></string>
+
+    <string name="name_star">Name <font color='#F44336'>*</font></string>
+    <string name="cus_name_star">Customer Name <font color='#F44336'>*</font></string>
+    <string name="dist_name">Distributor Name<font color='#F44336'>*</font></string>
+    <string name="received_amt">Received Amount <font color='#F44336'>*</font></string>
+    <string name="advance_amt">Advance Amount <font color='#F44336'>*</font></string>
+    <string name="payment_mode">Payment Mode <font color='#F44336'>*</font></string>
+    <string name="Collected_by">Collected By <font color='#F44336'>*</font></string>
+    <string name="ref_no">Reference No <font color='#F44336'>*</font></string>
+    <string name="bank_name">Bank Name  <font color='#F44336'>*</font></string>
+    <string name="payment_date">Pay Date  <font color='#F44336'>*</font></string>
 
 
 </resources>

@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/basic"
                 android:paddingLeft="@dimen/C5dp"
-                android:text="INVOICE"
+                android:text="VAN INVOICE"
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
                 android:textColor="#FFF"
@@ -439,8 +439,22 @@
                                         android:textSize="@dimen/C12dp"
                                         android:textStyle="bold"></TextView>
                                 </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/ll_actual_total"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:visibility="gone">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Actual Price"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C12dp"
+                                        android:textStyle="bold"></TextView>
 
-
+                                </LinearLayout>
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -475,6 +489,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_no_match"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="No matches found"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:visibility="gone"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -700,6 +723,108 @@
                             android:outlineAmbientShadowColor="@color/black"
                             android:visibility="visible" />
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:layout_marginBottom="@dimen/C10dp"
+                            android:orientation="vertical">
+                            <View
+
+                                android:layout_width="match_parent"
+                                android:layout_height="3dp"
+                                android:background="@color/black"
+                                android:outlineAmbientShadowColor="@color/black"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/tvVehNo_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C15dp"
+                                android:fontFamily="sans-serif"
+                                android:text="@string/vehicle_no"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+
+                            <EditText
+                                android:id="@+id/edtVehNo"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/C40dp"
+                                android:background="@drawable/edit_bg"
+                                android:paddingStart="@dimen/C10dp"
+                                android:paddingEnd="@dimen/C10dp"
+                                android:singleLine="true"
+                                android:hint="Enter the Vehicle No"
+                                android:layout_marginTop="@dimen/C7dp"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/grey_500"
+                                android:textSize="12sp"
+                                android:textStyle="normal"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/tvstartkm_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/km_name"
+                                android:layout_marginTop="@dimen/C8dp"
+                                android:fontFamily="sans-serif"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"/>
+
+                            <LinearLayout
+                                android:id="@+id/ll_startkm"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/C40dp"
+                                android:layout_marginTop="@dimen/C5dp"
+                                android:background="@drawable/edit_bg"
+                                android:weightSum="2"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/edtStartKm"
+                                    android:layout_width="200dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@null"
+                                    android:paddingStart="@dimen/C10dp"
+                                    android:paddingEnd="@dimen/C10dp"
+                                    android:singleLine="true"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_500"
+                                    android:textSize="12sp"
+                                    android:hint="Enter the Km"
+                                    android:layout_weight="2"
+                                    android:textStyle="normal"
+                                    android:visibility="visible"
+                                    android:inputType="number"/>
+                                <ImageView
+                                    android:id="@+id/attachedImage"
+                                    android:layout_width="@dimen/C40dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="end"
+                                    android:padding="@dimen/C2dp"/>
+                                <ImageView
+                                    android:id="@+id/startkm_attach"
+                                    android:layout_width="@dimen/C40dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:src="@drawable/attach_files" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvTotalDiscLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:text=""
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
+
                         <TextView
                             android:id="@+id/tvSaveAmt"
                             android:layout_width="match_parent"
@@ -876,7 +1001,33 @@
                                 android:textSize="@dimen/C13dp"
                                 android:textStyle="bold" />
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:orientation="horizontal">
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
+                                android:text="PO Number"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C14dp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/txPONum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:hint="PO Number"
+                                android:inputType="textCapCharacters"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -906,7 +1057,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C5dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -927,7 +1079,54 @@
                                 android:textSize="@dimen/C13dp" />
 
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Discount"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:layout_marginEnd="@dimen/C5dp"
+                                android:textSize="@dimen/C13dp" />
+                            <EditText
+                                android:id="@+id/etdiscountPer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:hint="Disc"
+                                android:inputType="numberDecimal"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="%"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/C13dp" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"/>
+
+                            <EditText
+                                android:id="@+id/etdiscountAmt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:hint="Disc.Amt"
+                                android:inputType="numberDecimal"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp" />
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -984,7 +1183,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C5dp"
                             android:layout_marginBottom="@dimen/C10dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -1007,6 +1207,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/lblfrdet"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C5dp"
@@ -1184,6 +1385,13 @@
                 app:spinning_bar_color="#FFFFFFFF"
                 app:spinning_bar_padding="5dp"
                 app:spinning_bar_width="5dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="tvDate"
+                android:visibility="gone"/>
             <!--            <TextView-->
             <!--                android:id="@+id/takeorder"-->
             <!--                android:layout_width="wrap_content"-->

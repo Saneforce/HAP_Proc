@@ -53,7 +53,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
                 holder.llUom.setVisibility(View.GONE);
                 holder.llPrice.setVisibility(View.GONE);
                 holder.llTot.setVisibility(View.GONE);
-            }else if(flag.equalsIgnoreCase("Order")||flag.equalsIgnoreCase("INVOICE")){
+            }else if(flag.equalsIgnoreCase("Order")||flag.equalsIgnoreCase("INVOICE")||flag.equalsIgnoreCase("VANSALES")){
                 holder.llUom.setVisibility(View.GONE);
                 holder.llproductqtyPcs.setVisibility(View.VISIBLE);
                 holder.llmrp.setVisibility(View.VISIBLE);

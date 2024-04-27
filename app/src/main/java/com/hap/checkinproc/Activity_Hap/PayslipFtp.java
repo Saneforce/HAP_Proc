@@ -1,21 +1,28 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.Interface.onPayslipItemClick;
 import com.hap.checkinproc.R;
@@ -92,7 +99,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
                         }
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"Error1:"+e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -105,7 +113,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
                     getPaySlipFolder("");
                     //refreshCurrFolder();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"Error2:"+e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -129,7 +138,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
                     FldrItems.put(jsonObject);
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
+                Toast.makeText(getApplicationContext(),"Error3:"+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
         bkFldrItems = new adBackFolders(FldrItems, this);
@@ -175,7 +185,9 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
                 return status;
             }
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not connect to host " + host + "\n" + e.getMessage());
+            Toast.makeText(getApplicationContext(),"Failed to connect your FTP",Toast.LENGTH_SHORT).show();
+
+           // Toast.makeText(getApplicationContext(), "Error: could not connect to host " + host + "\n" + e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -187,7 +199,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             mFTPClient.disconnect();
             return true;
         } catch (Exception e) {
-            Log.d(TAG, "Error occurred while disconnecting from ftp server.");
+           // Log.d(TAG, "Error occurred while disconnecting from ftp server.");
+            Toast.makeText(getApplicationContext(),"Error4:Error occurred while disconnecting from ftp server.",Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -200,7 +213,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             String workingDir = mFTPClient.printWorkingDirectory();
             return workingDir;
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not get current working directory.");
+            //Log.d(TAG, "Error: could not get current working directory.");
+            Toast.makeText(getApplicationContext(),"Error5: could not get current working directory",Toast.LENGTH_SHORT).show();
         }
 
         return null;
@@ -212,7 +226,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
         try {
             mFTPClient.changeWorkingDirectory(directory_path);
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not change directory to " + directory_path);
+          //  Log.d(TAG, "Error: could not change directory to " + directory_path);
+            Toast.makeText(getApplicationContext(),"Error6: could not change directory to " + directory_path,Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -247,7 +262,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             }
             return fileList;
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"Error7:"+e.getMessage(), Toast.LENGTH_SHORT).show();
             return fileList;
         }
     }
@@ -259,8 +275,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             boolean status = mFTPClient.makeDirectory(new_dir_path);
             return status;
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not create new directory named "
-                    + new_dir_path);
+           // Log.d(TAG, "Error: could not create new directory named " + new_dir_path);
+            Toast.makeText(getApplicationContext(),"Error8: could not create new directory named " + new_dir_path, Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -273,7 +289,9 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             boolean status = mFTPClient.removeDirectory(dir_path);
             return status;
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not remove directory named " + dir_path);
+            //Log.d(TAG, "Error: could not remove directory named " + dir_path);
+            Toast.makeText(getApplicationContext(),"Error9: could not remove directory named " + dir_path, Toast.LENGTH_SHORT).show();
+
         }
 
         return false;
@@ -286,7 +304,8 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             boolean status = mFTPClient.deleteFile(filePath);
             return status;
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"Error10:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -300,6 +319,7 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             return status;
         } catch (Exception e) {
             Log.d(TAG, "Could not rename file: " + from + " to: " + to);
+            Toast.makeText(getApplicationContext(),"Error11: Could not rename file: " + from + " to: " + to, Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -316,16 +336,46 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
         boolean status = false;
         try {
             if (ftpConnect("sf.hap.in", "hapftp", "VFAY$du3@=9^", 21)) {
-                FileOutputStream desFileStream = new FileOutputStream(desFilePath);
-                status = mFTPClient.retrieveFile(srcFilePath, desFileStream);
+                if (SDK_INT >= 30) {
+                    if (!Environment.isExternalStorageManager()) {
+                        Snackbar.make(findViewById(android.R.id.content), "Permission needed!", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Settings", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
 
-                //pdfView.fromStream(desFileStream).load();
-                desFileStream.close();
-                ftpDisconnect();
-                return status;
+                                        try {
+                                            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                                            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
+                                            startActivity(intent);
+                                        } catch (Exception ex) {
+                                            Intent intent = new Intent();
+                                            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                })
+                                .show();
+                    } else {
+                        FileOutputStream desFileStream = new FileOutputStream(desFilePath);
+                        status = mFTPClient.retrieveFile(srcFilePath, desFileStream);
+
+                        //pdfView.fromStream(desFileStream).load();
+                        desFileStream.close();
+                        ftpDisconnect();
+                    }
+                }else {
+                    FileOutputStream desFileStream = new FileOutputStream(desFilePath);
+                    status = mFTPClient.retrieveFile(srcFilePath, desFileStream);
+
+                    //pdfView.fromStream(desFileStream).load();
+                    desFileStream.close();
+                    ftpDisconnect();
+                }
+                    return status;
+
             }
         } catch (Exception e) {
-            Log.d(TAG, "download failed" + e.getMessage());
+            Toast.makeText(getApplicationContext(), "Download Failed: " + e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
         return status;
@@ -355,7 +405,9 @@ public class PayslipFtp extends AppCompatActivity implements View.OnClickListene
             return status;
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "upload failed: " + e);
+           // Log.d(TAG, "upload failed: " + e);
+            Toast.makeText(getApplicationContext(),"Error12: upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
         }
 
         return status;

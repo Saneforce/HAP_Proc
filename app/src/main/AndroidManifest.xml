@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -280,6 +281,10 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SFA_Activity.VanSalePaymentNewActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.PaymentActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
@@ -422,6 +427,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.VanSalStockLoadActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.VanSalStockTopUpActivity"
             android:screenOrientation="portrait" /> <!-- <activity -->
         <!-- android:name=".SFA_Activity.VanSalPaymentActivity" -->
         <!-- android:screenOrientation="portrait" /> -->

@@ -218,6 +218,10 @@ public interface ApiInterface {
     @POST("Db_v300.php?axn=get/tknPerm")
     Call<Object> availabilityLeave(@Query("PDt") String PDT, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                    @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
+    @FormUrlEncoded
+    @POST("Db_v300.php?axn=get/tknPermNew")
+    Call<JsonObject> availabilityLeaveNew(@Query("PDt") String PDT, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
+                                   @Query("rSF") String rSF, @Query("State_Code") String StateCode,@Query("flag") int flag, @Field("data") String data);
 
 
     @FormUrlEncoded
@@ -300,6 +304,14 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/startkmdetails")
     Call<ResponseBody> getStartKmDetails(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/daexpnew")
+    Call<ResponseBody> saveDailyAllowanceNew(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/expsendtoapprovalnew")
+    Call<ResponseBody> submitOfAppNew(@Field("data") String userData);
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/daexp")
@@ -544,6 +556,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/invoice")
     Call<JsonObject> saveInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Query("loginType") String loginType, @Field("data") String toString);
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=save/vansales")
+    Call<JsonObject> saveVanInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Query("loginType") String loginType, @Field("data") String toString);
 
     @FormUrlEncoded
     @POST("MyPHP.php?axn=save_complementary_invoice")
@@ -763,4 +778,12 @@ public interface ApiInterface {
 
     @POST("getRetailerFreezerList")
     Call<ResponseBody> getRetailerFreezerList(@Body RequestBody requestBody);
+
+    @POST("Db_v310.php?")
+    Call<ResponseBody>getPendPayDets(@QueryMap Map<String,Object>queryParrams);
+
+    @Multipart
+    @POST("Db_v300.php?")
+    Call<ResponseBody> getResponses(@Part("data") RequestBody data,
+                                    @QueryMap Map<String, Object> queryParrams);
 }

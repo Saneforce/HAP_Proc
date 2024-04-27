@@ -100,6 +100,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     String maxDate, minDate;
     String maxYear, maxMonth, maxDay, minYear, minMonth, minDay, StringFromTinme = "", StringPremissonEntry = "", TOTime = "";
     TextView PermissionHours;
+    String clickedDateNew;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
@@ -172,7 +173,12 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         AvlHrs=TotHrs-tknHrs;
         hrsAvail.setText(String.valueOf(AvlHrs));
         takenHrs.setText(String.valueOf(tknHrs));
-
+        final Calendar cldr = Calendar.getInstance();
+        int day = cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
+        clickedDate=  year + "-" + (month+1) + "-" + day ;
+        AvalaibilityHours(0);
         permsissionDate = (EditText) findViewById(R.id.permission_date);
         permsissionDate.setInputType(InputType.TYPE_NULL);
         permsissionDate.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +196,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                 permsissionDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                                 /*07/15/2016*/
                                 clickedDate =  year + "-" + (monthOfYear + 1) + "-" + dayOfMonth ;
-                                AvalaibilityHours();
+                                AvalaibilityHours(1);
                             }
                         }, year, month, day);
 
@@ -492,37 +498,48 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
     /*Checking availability with date*/
 
-    public void AvalaibilityHours() {
+    public void AvalaibilityHours(int flag) {
 
         String datePermission = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> call = service.availabilityLeave(clickedDate, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, datePermission);
-        call.enqueue(new Callback<Object>() {
+        Call<JsonObject> call = service.availabilityLeaveNew(clickedDate, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode,flag, datePermission);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
+                JsonObject jsonObject = response.body();
 
-                Type userType1 = new TypeToken<ArrayList<AvalaibilityHours>>() {
-                }.getType();
-                mAvalaibilityHours = gson.fromJson(new Gson().toJson(response.body()), userType1);
-                Log.e("REMAINING_LEAVES", String.valueOf(response.body()));
-                for (int i = 0; i < mAvalaibilityHours.size(); i++) {
-                    takenLeave = mAvalaibilityHours.get(i).getTknHrS();
-                    if (takenLeave != null) {
-                        takenHrs.setText(takenLeave);
-                        tknHrs = Integer.parseInt(takenLeave);
-                    } else {
-                        takenHrs.setText("0");
-                        tknHrs = 0;
-                    }
-                    differ();
+                Log.e("TOTAL_REPOSNE", String.valueOf(jsonObject));
+                String Msg = jsonObject.get("msg").getAsString();
+                Boolean success=jsonObject.get("success").getAsBoolean();
+                if(success) {
+                    JsonArray array=jsonObject.get("data").getAsJsonArray();
+                    JsonObject jsonObject1=array.get(0).getAsJsonObject();
+                    String takenHours=jsonObject1.get("tknHrS").getAsString();
+                  /*  Type userType1 = new TypeToken<ArrayList<AvalaibilityHours>>() {}.getType();
+                    mAvalaibilityHours = gson.fromJson(new Gson().toJson(response.body()), userType1);
+                    Log.e("REMAINING_LEAVES", String.valueOf(response.body()));
+                    for (int i = 0; i < mAvalaibilityHours.size(); i++) {
+                    //takenLeave = mAvalaibilityHours.get(i).getTknHrS();*/
+                        takenLeave = takenHours;
+                        if (takenLeave != null) {
+                            takenHrs.setText(takenLeave);
+                            tknHrs = Integer.parseInt(takenLeave);
+                        } else {
+                            takenHrs.setText("0");
+                            tknHrs = 0;
+                        }
+                        differ();
+                   // }
+                }else{
+                    Toast.makeText(getApplicationContext(),Msg,Toast.LENGTH_SHORT).show();
                 }
 
 
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
     }
@@ -769,7 +786,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                     }
 
                 }
-                AvalaibilityHours();
+                AvalaibilityHours(1);
             }
 
             @Override

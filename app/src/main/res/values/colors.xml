@@ -136,5 +136,6 @@
     <color name="Exit">#d34836</color>
 
     <color name="black_80">#CC000000</color>
-
+    <color name="call_preview_header_line">#989898</color>
+    <color name="quantum_black_divider">#1f000000</color>
 </resources>

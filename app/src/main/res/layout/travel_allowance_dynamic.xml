@@ -192,6 +192,7 @@
             android:id="@+id/txt_tv_ukey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></TextView>
+
     </LinearLayout>
 
     <TextView
@@ -199,6 +200,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tx_te_ukey"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"></TextView>
     <ImageView
         android:id="@+id/delete_button"
         android:layout_width="30dp"

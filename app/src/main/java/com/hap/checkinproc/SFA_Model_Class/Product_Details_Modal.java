@@ -162,6 +162,13 @@ public class Product_Details_Modal {
     private int Dr;
     private int RateEdited=0;
 
+
+
+    @SerializedName("LoadStock")
+    @Expose
+    private int loadStock;
+
+
     public int getCr() {
         return cr;
     }
@@ -201,6 +208,10 @@ public class Product_Details_Modal {
     public void setDrAmt(double drAmt) {
         DrAmt = drAmt;
     }
+
+    public int getLoadStock() {return loadStock;}
+
+    public void setLoadStock(int loadStock) {this.loadStock = loadStock;}
 
     private int Bal;
     private double crAmt,DrAmt,BalAmt;

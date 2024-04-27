@@ -2665,157 +2665,161 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
     @SuppressLint("SetTextI18n")
     public void lodingDraft(JsonArray lodingDraft, JsonArray ContSty) {
-        JsonArray jsonAddition = null;
-        JsonObject ldraft;
-        if (lodingDraft.size() > 0 || ContSty.size() > 0) {
+        try {
+            JsonArray jsonAddition = null;
+            JsonObject ldraft;
+            if (lodingDraft.size() > 0 || ContSty.size() > 0) {
 
-            lodgContvw.setVisibility(View.VISIBLE);
-            lodgCont.setVisibility(View.VISIBLE);
-            ldg_stayloc.setVisibility(View.VISIBLE);
-            ldg_stayDt.setVisibility(View.VISIBLE);
-            lodgJoin.setVisibility(View.VISIBLE);
-            linContinueStay.setVisibility(View.VISIBLE);
-            SumOFLodging(0);
-        }
-        for (int i = 0; i < lodingDraft.size(); i++) {
-            ldraft = (JsonObject) lodingDraft.get(i);
-            jsonAddition = ldraft.getAsJsonArray("Additional");
+                lodgContvw.setVisibility(View.VISIBLE);
+                lodgCont.setVisibility(View.VISIBLE);
+                ldg_stayloc.setVisibility(View.VISIBLE);
+                ldg_stayDt.setVisibility(View.VISIBLE);
+                lodgJoin.setVisibility(View.VISIBLE);
+                linContinueStay.setVisibility(View.VISIBLE);
+                SumOFLodging(0);
+            }
+            for (int i = 0; i < lodingDraft.size(); i++) {
+                ldraft = (JsonObject) lodingDraft.get(i);
+                jsonAddition = ldraft.getAsJsonArray("Additional");
 
 //             ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
-            if (ContSty.size() < 1) {
-                sLocId = ldraft.get("LocId").getAsString();
-                sLocName = ldraft.get("Ldg_Stay_Loc").getAsString();
-                lodgStyLocation.setText(sLocName);
-                if (sLocId.equalsIgnoreCase("-1"))
-                    sLocName = "Other Location";
-                txt_Styloc.setText(sLocName);
+                if (ContSty.size() < 1) {
+                    sLocId = ldraft.get("LocId").getAsString();
+                    sLocName = ldraft.get("Ldg_Stay_Loc").getAsString();
+                    lodgStyLocation.setText(sLocName);
+                    if (sLocId.equalsIgnoreCase("-1"))
+                        sLocName = "Other Location";
+                    txt_Styloc.setText(sLocName);
+                }
+                Double drvAmt = Double.valueOf(ldraft.get("Driver_Ldg_Amount").getAsString());
+                txtDrivEligi.setVisibility(View.GONE);
+                if (drvAmt != 0) {
+                    txtDrivEligi.setVisibility(View.VISIBLE);
+                    txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(drvAmt));
+                    ldgDrvEligi = drvAmt;
+                }
+                ConStay = ldraft.get("Continuous_Stay").getAsString();
+                ErlyStay = ldraft.get("Early_Checkin").getAsString();
+                LteStay = ldraft.get("Late_Checkout").getAsString();
+
+                ErlyChecIn = ldraft.get("Erly_Check_in").getAsString();
+                ErlyChecOut = ldraft.get("Erly_Check_out").getAsString();
+                ErlyAmt = ldraft.get("Ear_bill_amt").getAsString();
+
+                LteChecIn = ldraft.get("lat_chec_in").getAsString();
+                LteChecOut = ldraft.get("lat_check_out").getAsString();
+                LteAmt = ldraft.get("lat_bill_amt").getAsString();
+
+
+                earCheckIn.setText(ErlyChecIn);
+                earCheckOut.setText(ErlyChecOut);
+                latCheckIn.setText(LteChecIn);
+                latCheckOut.setText(LteChecOut);
+                edtEarBill.setText(ErlyAmt);
+                edtLateBill.setText(LteAmt);
+
+                if (ConStay.equalsIgnoreCase("1")) mChckCont.setChecked(true);
+                //if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
+                //if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
+
+                if (mChckCont.isChecked()) {
+                    //linCheckOut.setVisibility(View.INVISIBLE);
+                    vwldgBillAmt.setVisibility(View.GONE);
+                    ldgGstLayout.setVisibility(View.GONE);
+                    cnSty = 1;
+                    countLoding = 1;
+                    //ldg_cout.setText("");
+                    //ldg_coutDt.setText("");
+                    SumOFLodging(1);
+                } else {
+                    SumOFLodging(0);
+                    cnSty = 0;
+                    countLoding = 0;
+                    vwldgBillAmt.setVisibility(View.VISIBLE);
+                    ldgGstLayout.setVisibility(View.VISIBLE);
+                    linCheckOut.setVisibility(View.VISIBLE);
+                }
+
+                stayDays.setVisibility(View.VISIBLE);
+                Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
+                Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
+
+                txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
+
+                double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
+
+
+                txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
+
+                double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
+                txtJNEligi.setText("₹" + new DecimalFormat("##0.00").format(srtjdgAmt));
+                Double wobal = Double.valueOf(ldraft.get("WOB_Amt").getAsString());
+
+                Log.v("ldgWOBBal", String.valueOf(wobal));
+                ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(wobal));
+                Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
+
+                edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
+                txtStyDays.setText(ldraft.get("NO_Of_Days").getAsString());
+                ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
+                ldg_cout.setText(ldraft.get("To_Date").getAsString());
+                edtLdgGstNum.setText(ldraft.get("GSTNo").getAsString());
+                edtLdgGstAmt.setText(ldraft.get("GSTAmt").getAsString());
+                edtLdgGstBillNo.setText(ldraft.get("GSTBNo").getAsString());
+
+
+                JNLdgEAra.setVisibility(View.GONE);
+                if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
+                    txt_ldg_type.setText("Joined Stay");
+                    JNLdgEAra.setVisibility(View.VISIBLE);
+                    TotalDays.setVisibility(View.VISIBLE);
+                } else if (ldraft.get("Lodging_Type").getAsString().equals("Independent Stay")) {
+                    txt_ldg_type.setText("Independent Stay");
+                    lodgJoin.setVisibility(View.GONE);
+                    TotalDays.setVisibility(View.VISIBLE);
+                } else {
+                    txt_ldg_type.setText("Stay At Relative's House");
+                }
+
+                JsonObject jsonObjectAdd = null;
+                for (int l = 0; l < jsonAddition.size(); l++) {
+                    Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
+                    jsonObjectAdd = (JsonObject) jsonAddition.get(l);
+
+                    jointLodging.setVisibility(View.VISIBLE);
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    layoutParams.setMargins(15, 15, 15, 15);
+                    View rowView = inflater.inflate(R.layout.activity_loding_layout, null);
+                    jointLodging.addView(rowView, layoutParams);
+
+                    Integer jfd = jointLodging.indexOfChild(rowView);
+
+                    View jdV = jointLodging.getChildAt(jfd);
+                    edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
+                    txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
+                    txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
+                    txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
+                    txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
+                    txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
+                    txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+
+                    edt_ldg_JnEmp.setText(jsonObjectAdd.get("Emp_Code").getAsString());
+                    txtJNName.setText(jsonObjectAdd.get("Sf_Name").getAsString());
+                    txtJNDesig.setText(jsonObjectAdd.get("Desig").getAsString());
+                    txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
+                    txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
+                    txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
+
+                    float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
+                    txtJNMyEli.setText("₹" + new DecimalFormat("##0.00").format(sum));
+
+                }
             }
-            Double drvAmt = Double.valueOf(ldraft.get("Driver_Ldg_Amount").getAsString());
-            txtDrivEligi.setVisibility(View.GONE);
-            if (drvAmt != 0) {
-                txtDrivEligi.setVisibility(View.VISIBLE);
-                txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(drvAmt));
-                ldgDrvEligi = drvAmt;
-            }
-            ConStay = ldraft.get("Continuous_Stay").getAsString();
-            ErlyStay = ldraft.get("Early_Checkin").getAsString();
-            LteStay = ldraft.get("Late_Checkout").getAsString();
-
-            ErlyChecIn = ldraft.get("Erly_Check_in").getAsString();
-            ErlyChecOut = ldraft.get("Erly_Check_out").getAsString();
-            ErlyAmt = ldraft.get("Ear_bill_amt").getAsString();
-
-            LteChecIn = ldraft.get("lat_chec_in").getAsString();
-            LteChecOut = ldraft.get("lat_check_out").getAsString();
-            LteAmt = ldraft.get("lat_bill_amt").getAsString();
-
-
-            earCheckIn.setText(ErlyChecIn);
-            earCheckOut.setText(ErlyChecOut);
-            latCheckIn.setText(LteChecIn);
-            latCheckOut.setText(LteChecOut);
-            edtEarBill.setText(ErlyAmt);
-            edtLateBill.setText(LteAmt);
-
-            if (ConStay.equalsIgnoreCase("1")) mChckCont.setChecked(true);
-            //if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
-            //if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
-
-            if (mChckCont.isChecked()) {
-                //linCheckOut.setVisibility(View.INVISIBLE);
-                vwldgBillAmt.setVisibility(View.GONE);
-                ldgGstLayout.setVisibility(View.GONE);
-                cnSty = 1;
-                countLoding = 1;
-                //ldg_cout.setText("");
-                //ldg_coutDt.setText("");
-                SumOFLodging(1);
-            } else {
-                SumOFLodging(0);
-                cnSty = 0;
-                countLoding = 0;
-                vwldgBillAmt.setVisibility(View.VISIBLE);
-                ldgGstLayout.setVisibility(View.VISIBLE);
-                linCheckOut.setVisibility(View.VISIBLE);
-            }
-
-            stayDays.setVisibility(View.VISIBLE);
-            Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
-            Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
-
-            txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
-
-            double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
-
-
-            txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
-
-            double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
-            txtJNEligi.setText("₹" + new DecimalFormat("##0.00").format(srtjdgAmt));
-            Double wobal = Double.valueOf(ldraft.get("WOB_Amt").getAsString());
-
-            Log.v("ldgWOBBal", String.valueOf(wobal));
-            ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(wobal));
-            Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
-
-            edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
-            txtStyDays.setText(ldraft.get("NO_Of_Days").getAsString());
-            ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
-            ldg_cout.setText(ldraft.get("To_Date").getAsString());
-            edtLdgGstNum.setText(ldraft.get("GSTNo").getAsString());
-            edtLdgGstAmt.setText(ldraft.get("GSTAmt").getAsString());
-            edtLdgGstBillNo.setText(ldraft.get("GSTBNo").getAsString());
-
-
-            JNLdgEAra.setVisibility(View.GONE);
-            if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
-                txt_ldg_type.setText("Joined Stay");
-                JNLdgEAra.setVisibility(View.VISIBLE);
-                TotalDays.setVisibility(View.VISIBLE);
-            } else if (ldraft.get("Lodging_Type").getAsString().equals("Independent Stay")) {
-                txt_ldg_type.setText("Independent Stay");
-                lodgJoin.setVisibility(View.GONE);
-                TotalDays.setVisibility(View.VISIBLE);
-            } else {
-                txt_ldg_type.setText("Stay At Relative's House");
-            }
-
-            JsonObject jsonObjectAdd = null;
-            for (int l = 0; l < jsonAddition.size(); l++) {
-                Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
-                jsonObjectAdd = (JsonObject) jsonAddition.get(l);
-
-                jointLodging.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                layoutParams.setMargins(15, 15, 15, 15);
-                View rowView = inflater.inflate(R.layout.activity_loding_layout, null);
-                jointLodging.addView(rowView, layoutParams);
-
-                Integer jfd = jointLodging.indexOfChild(rowView);
-
-                View jdV = jointLodging.getChildAt(jfd);
-                edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
-                txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
-                txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
-                txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
-                txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
-                txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
-                txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
-
-                edt_ldg_JnEmp.setText(jsonObjectAdd.get("Emp_Code").getAsString());
-                txtJNName.setText(jsonObjectAdd.get("Sf_Name").getAsString());
-                txtJNDesig.setText(jsonObjectAdd.get("Desig").getAsString());
-                txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
-                txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
-                txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
-
-                float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
-                txtJNMyEli.setText("₹" + new DecimalFormat("##0.00").format(sum));
-
-            }
+        }catch(Exception e){
+            Log.e("dvcxcv",e.getMessage());
         }
 
     }

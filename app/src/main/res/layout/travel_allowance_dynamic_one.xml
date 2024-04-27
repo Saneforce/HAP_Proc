@@ -23,6 +23,15 @@
         android:padding="@dimen/C10dp"
         android:textColorHint="#C0C0C0"
         android:textSize="@dimen/C14dp" />
+    <TextView
+        android:id="@+id/tv_tp_ukey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ukey"
+        android:padding="@dimen/C10dp"
+        android:textColorHint="#C0C0C0"
+        android:textSize="@dimen/C14dp"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/delete_button"

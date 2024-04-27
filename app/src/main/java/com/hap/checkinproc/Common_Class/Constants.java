@@ -4,6 +4,8 @@ public class Constants {
 
     public static  final String RSM_CUTOFF_TIME="SFCutoff";
     public static final String Vansales_VehNo="Vansales_VehNo";
+    public static final String Vansales_StartKm="Vansales_StartKm";
+    public static final String Vansales_SalesManName="Vansales_SalesManName";
     public static final String rSFCode="Reporting_To_SF";
     public static final String BillingID = "Billing_Document";
     public static final String SalesID = "Sales_Document";
@@ -46,6 +48,7 @@ public class Constants {
     public static final String GetTodayOrder_List = "getTodayOrderList";
     public static final String Outlet_Total_Orders = "outletTotalOrders";
     public static final String TodayOrderDetails_List = "TodayOrderDetails_List";
+    public static final String VanTodayOrderDetails_List = "VanTodayOrderDetails_List";
     public static final String Categoryfree_List = "Categoryfree_List";
     public static final String Competitor_List = "Competitor_List";
     public static final String Todaydayplanresult = "Todaydayplanresult";
@@ -87,6 +90,7 @@ public class Constants {
     public static final String QPS_LOCALPICLIST = "qpsLocalPicList";
     public static final String CUMULATIVEDATA = "cumulativeData";
     public static final String OUTSTANDING = "outstanding";
+    public static final String VAN_OUTSTANDING = "vanoutstanding";
     public static final String PAYMODES = "payModes";
     public static final String POP_ENTRY_STATUS = "popEntryStatus";
     public static final String POP_LOCALPICLIST = "popLocPicList";
@@ -97,6 +101,8 @@ public class Constants {
     public static final String SFA_DASHBOARD = "sfaDashboard";
     public static final String STATE_LIST = "stateList";
     public static final String RETAILER_STATUS = "retailerStatus";
+
+    public static final String VAN_RETAILER_STATUS = "vanretailerStatus";
     public static final String POP_MATERIAL = "popMaterialMaster";
     public static final String QPS_HAPBRAND = "hapBrand";
     public static final String QPS_COMBO = "qpsCombo";
@@ -154,6 +160,8 @@ public class Constants {
     public static final String DIST_STOCK = "distStock";
     public static final String STOCK_LEDGER = "stockLedger";
     public static final String VAN_STOCK = "vanStock";
+    public static final String VAN_STOCK_AMT = "vanStockAmt";
+    public static final String VAN_LOAD_DETAILS = "vanLoadDetails";
     public static final String VAN_STOCK_DTWS = "vanStockdtws";
     public static final String POS_ENTRY_LIST = "posEntryList";
 
@@ -204,6 +212,8 @@ public class Constants {
     public static final String GetGrn_Pending_List = "getGRNPendingList";
 
     public static final String SR_GetTodayOrder_List="srGetOrderDetailList";
+    public static final String Van_GetTodayOrder_List="vanGetOrderDetailList";
+    public static final String Van_Get_Payment_Details="VanGetPaymentDetails";
     public static final String PreInvOrderQty="preInvoiceOrderQty";
     public static final String GetProjectionOrderHistory="getProjectionHistory";
     public static final String ProjectionProdGroups_List="projectionProdGrpList";
@@ -227,4 +237,9 @@ public class Constants {
     public static final String  Export_Currency_Symbol= "exportCurrencySymbol";
     public static final String  Export_MRP= "exportMRP";
     public static final String COUNTRY_LIST = "countryList";
+    public static final String VAN_STOCK_TOPUP = "StockTopUp";
+
+    public static final String RETAILER_CHECKIN="RetailerCheckIn";
+    public static final String Van_ProdGroups_List = "VanProdGroupList";
+    public static final String VAN_STOCK_LOADING_TIME = "Stock Loading Time";
 }

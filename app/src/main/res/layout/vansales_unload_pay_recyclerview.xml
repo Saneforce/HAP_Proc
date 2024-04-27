@@ -55,7 +55,14 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/C13dp"
                         android:textStyle="bold" />
-
+                    <TextView
+                        android:id="@+id/erpCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -295,7 +302,7 @@
                             android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
-                            android:maxLength="4"
+                            android:maxLength="8"
                             android:text="0"
                             android:textAlignment="viewEnd"
                             android:textColor="@color/black"
@@ -441,7 +448,7 @@
                             android:gravity="center_vertical"
                             android:hint=""
                             android:inputType="number"
-                            android:maxLength="4"
+                            android:maxLength="8"
                            android:text="0"
                             android:textAlignment="viewEnd"
                             android:textColor="@color/black"

@@ -93,6 +93,8 @@ public class PdfViewerActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             Log.v("PdfViewerActivity:", e.getMessage());
+            Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -166,15 +168,19 @@ public class PdfViewerActivity extends AppCompatActivity {
                         try {
                             pdfFile.createNewFile();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                           // e.printStackTrace();
+                            Toast.makeText(PdfViewerActivity.this, "Download Error1 :"+e.getMessage(), Toast.LENGTH_LONG).show();
+
                         }
                         FileDownloader.downloadFile(fileUrl, pdfFile);
                     }
                 } catch (Exception e) {
-                    Log.v("download:", e.getMessage());
+                    Toast.makeText(PdfViewerActivity.this, "Download Error2 :"+e.getMessage(), Toast.LENGTH_LONG).show();
+                    //Log.v("download:", e.getMessage());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                Toast.makeText(PdfViewerActivity.this, "Download Error3 :"+e.getMessage(), Toast.LENGTH_LONG).show();
                 return null;
             }
             return inputStream;

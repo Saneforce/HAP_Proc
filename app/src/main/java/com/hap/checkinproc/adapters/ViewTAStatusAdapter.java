@@ -49,64 +49,67 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+try {
+    JsonObject jsonObject = (JsonObject) taJsonArray.get(position);
+    Log.v("TaAmount", jsonObject.get("Total_Amount").getAsString());
 
-        JsonObject jsonObject = (JsonObject) taJsonArray.get(position);
-        Log.v("TaAmount", jsonObject.get("Total_Amount").getAsString());
+    holder.taDate.setText(jsonObject.get("EDT").getAsString());
+    holder.taStatus.setText(jsonObject.get("ApSTatus").getAsString());
+    holder.taTotalAmt.setText(jsonObject.get("Total_Amount").getAsString());
+    holder.taDaAmt.setText(jsonObject.get("Boarding_Amt").getAsString());
+    holder.taTLAmt.setText(jsonObject.get("Ta_totalAmt").getAsString());
+    holder.taFaAmt.setText(jsonObject.get("trv_lc_amt").getAsString());
+    holder.taLaAmt.setText(jsonObject.get("Ldg_totalAmt").getAsString());
+    holder.taLcAmt.setText(jsonObject.get("Lc_totalAmt").getAsString());
+    holder.taOeAmt.setText(jsonObject.get("Oe_totalAmt").getAsString());
 
-        holder.taDate.setText(jsonObject.get("EDT").getAsString());
-        holder.taStatus.setText(jsonObject.get("ApSTatus").getAsString());
-        holder.taTotalAmt.setText(jsonObject.get("Total_Amount").getAsString());
-        holder.taDaAmt.setText(jsonObject.get("Boarding_Amt").getAsString());
-        holder.taTLAmt.setText(jsonObject.get("Ta_totalAmt").getAsString());
-        holder.taFaAmt.setText(jsonObject.get("trv_lc_amt").getAsString());
-        holder.taLaAmt.setText(jsonObject.get("Ldg_totalAmt").getAsString());
-        holder.taLcAmt.setText(jsonObject.get("Lc_totalAmt").getAsString());
-        holder.taOeAmt.setText(jsonObject.get("Oe_totalAmt").getAsString());
+    holder.mCardView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent TAViewAct = new Intent(context, TAViewStatus.class);
 
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent TAViewAct = new Intent(context, TAViewStatus.class);
+            TAViewAct.putExtra("sfCode", Shared_Common_Pref.Sf_Code);
 
-                TAViewAct.putExtra("sfCode", Shared_Common_Pref.Sf_Code);
+            UserDetails = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-                UserDetails = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            TAViewAct.putExtra("name", UserDetails.getString("SfName", ""));
+            TAViewAct.putExtra("head_quaters", UserDetails.getString("SFHQ", ""));
+            TAViewAct.putExtra("desig", UserDetails.getString("SFDesig", ""));
+            TAViewAct.putExtra("dept", UserDetails.getString("DeptName", ""));
+            TAViewAct.putExtra("sf_emp_id", UserDetails.getString("EmpId", ""));
 
-                TAViewAct.putExtra("name", UserDetails.getString("SfName",""));
-                TAViewAct.putExtra("head_quaters", UserDetails.getString("SFHQ",""));
-                TAViewAct.putExtra("desig", UserDetails.getString("SFDesig",""));
-                TAViewAct.putExtra("dept", UserDetails.getString("DeptName",""));
-                TAViewAct.putExtra("sf_emp_id", UserDetails.getString("EmpId",""));
+            TAViewAct.putExtra("TA_Date", jsonObject.get("Expdt").getAsString());
+            TAViewAct.putExtra("TA_APPROVAL", "0");
+            TAViewAct.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
+            context.startActivity(TAViewAct);
+        }
+    });
+    holder.btnCancel.setVisibility(View.GONE);
+    if (jsonObject.get("ApSTatus").getAsString().equalsIgnoreCase("Approval Pending"))
+        holder.btnCancel.setVisibility(View.VISIBLE);
 
-                TAViewAct.putExtra("TA_Date", jsonObject.get("Expdt").getAsString());
-                TAViewAct.putExtra("TA_APPROVAL", "0");
-                TAViewAct.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
-                context.startActivity(TAViewAct);
-            }
-        });
-        holder.btnCancel.setVisibility(View.GONE);
-        if (jsonObject.get("ApSTatus").getAsString().equalsIgnoreCase("Approval Pending"))
-            holder.btnCancel.setVisibility(View.VISIBLE);
+    holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AlertDialogBox.showDialog(context, "HAP SFA", "Are You Sure Want to Cancel?", "OK", "Cancel", false, new AlertBox() {
+                @Override
+                public void PositiveMethod(DialogInterface dialog, int id) {
+                    adapterOnClick.onIntentClick(jsonObject, position);
+                }
 
-        holder.btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialogBox.showDialog(context, "HAP SFA", "Are You Sure Want to Cancel?", "OK", "Cancel", false, new AlertBox() {
-                    @Override
-                    public void PositiveMethod(DialogInterface dialog, int id) {
-                        adapterOnClick.onIntentClick(jsonObject, position);
-                    }
+                @Override
+                public void NegativeMethod(DialogInterface dialog, int id) {
+                    dialog.dismiss();
 
-                    @Override
-                    public void NegativeMethod(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-
-                    }
-                });
+                }
+            });
 
 
-            }
-        });
+        }
+    });
+     }catch (Exception e){
+    Log.e("error:",e.getMessage());
+     }
     }
 
 

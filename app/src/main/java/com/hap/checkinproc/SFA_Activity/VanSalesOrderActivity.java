@@ -841,7 +841,7 @@ public class VanSalesOrderActivity extends AppCompatActivity implements View.OnC
         }
 
         sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stockList));
-
+        sharedCommonPref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
     }
 
     private void FilterProduct(List<Product_Details_Modal> orderList) {

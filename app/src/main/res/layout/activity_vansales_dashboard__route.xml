@@ -178,7 +178,7 @@
                 android:fontFamily="@font/basic"
                 android:gravity="center_vertical"
                 android:paddingRight="@dimen/C5dp"
-                android:text="Payment"
+                android:text="Transaction"
                 android:textAlignment="textEnd"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
@@ -257,8 +257,21 @@
                             android:padding="@dimen/C5dp"
                             android:text="Stock Loading"
                             android:textColor="@color/black"
+                            tools:ignore="NestedWeights"
+                            android:visibility="gone"/>
+                        <TextView
+                            android:id="@+id/tvStockTopUp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/C5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cardbutton"
+                            android:gravity="center"
+                            android:letterSpacing="0.01"
+                            android:padding="@dimen/C5dp"
+                            android:text="Stock Topup"
+                            android:textColor="@color/black"
                             tools:ignore="NestedWeights" />
-
 
                         <TextView
                             android:id="@+id/tvStockUnload"
@@ -273,6 +286,7 @@
                             android:text="Stock UnLoading"
                             android:textColor="@color/black"
                             tools:ignore="NestedWeights" />
+
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -282,7 +296,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
-                app:cardCornerRadius="@dimen/C5dp">
+                app:cardCornerRadius="@dimen/C5dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"

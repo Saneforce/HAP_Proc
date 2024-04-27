@@ -62,6 +62,7 @@ import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.PosHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
+import com.hap.checkinproc.SFA_Activity.VanSalPaymentActivity;
 import com.hap.checkinproc.SFA_Activity.VanStockViewActivity;
 import com.hap.checkinproc.common.DatabaseHandler;
 
@@ -80,9 +81,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,7 +123,19 @@ public class Common_Class {
         activity.startActivity(intent);
         activity.finish();
     }
+    public static long getTimeStamp(String date, String format){
 
+        Date date2 = null;
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+            date2 = sdf.parse(date);
+
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return date2.getTime();
+    }
     public String getDateWithFormat(String dateInString, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
@@ -134,7 +150,9 @@ public class Common_Class {
         dateInString = sdf.format(resultdate);
         return dateInString;
     }
-
+    public static RequestBody toRequestBody (JsonArray value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value.toString());
+    }
     public Common_Class(Context context) {
         this.context = context;
         shared_common_pref = new Shared_Common_Pref(context);
@@ -359,9 +377,23 @@ public class Common_Class {
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
 
                     break;
+                case Constants.Van_GetTodayOrder_List:
+                    QuerySTring1 = "{\"tableName\":\"vangettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
+                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+
+                    break;
+                case Constants.Van_Get_Payment_Details:
+                    QuerySTring1 = "{\"tableName\":\"vangetpaymentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
+                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+
+                    break;
 
                 case Constants.VanSalOrderList:
-                    QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QuerySTring1 = "{\"tableName\":\"vangetpaymentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
@@ -436,6 +468,12 @@ public class Common_Class {
                     break;
                 case Constants.TodayOrderDetails_List:
                     QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+                case Constants.VanTodayOrderDetails_List:
+                    QuerySTring1 = "{\"tableName\":\"VanGettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -802,6 +840,10 @@ public class Common_Class {
                         axnname = "get/retailerorderstatusch";
                         data.put("distname", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
+                    case Constants.VAN_RETAILER_STATUS:
+                        axnname = "get/vanretailerorderstatusch";
+                        data.put("distname", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
 
 //                    case Constants.DIST_STOCK:
 //                        axnname = "get/diststock";
@@ -825,6 +867,11 @@ public class Common_Class {
 
                     case Constants.OUTSTANDING:
                         axnname = "get/customeroutstanding";
+                        data.put("retailerCode", Shared_Common_Pref.OutletCode);
+                        data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
+                    case Constants.VAN_OUTSTANDING:
+                        axnname = "get/customeroutstandingvan";
                         data.put("retailerCode", Shared_Common_Pref.OutletCode);
                         data.put("distributorcode", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
@@ -962,6 +1009,24 @@ public class Common_Class {
                         data.put("fromdate", VanStockViewActivity.stDate);
                         data.put("todate", VanStockViewActivity.endDate);
                         break;
+                    case Constants.VAN_STOCK_AMT:
+
+                        axnname = "get/vanstockamt";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("dt", Common_Class.GetDatewothouttime());
+                        data.put("fromdate", VanSalPaymentActivity.stDate);
+                        data.put("todate", VanSalPaymentActivity.endDate);
+                        break;
+                    case Constants.VAN_LOAD_DETAILS:
+                        //dist stock for stock loading
+                        axnname = "get/vanloaddet";
+                        data.put("SF", UserDetails.getString("Sfcode", ""));
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("div", UserDetails.getString("Divcode", ""));
+                        data.put("dt", Common_Class.GetDatewothouttime());
+                        break;
                     case Constants.VAN_STOCK_DTWS:
                         //dist stock for stock loading
                         axnname = "get/vanstockleg";
@@ -993,6 +1058,8 @@ public class Common_Class {
                 }
 
                 QueryString.put("axn", axnname);
+                Log.e("dataDB_v_310",data.toString());
+                Log.e("queryString",QueryString.toString());
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 Call<ResponseBody> call = service.GetRouteObject310(QueryString, data.toString());
                 call.enqueue(new Callback<ResponseBody>() {
@@ -1164,6 +1231,19 @@ public class Common_Class {
                         call.cancel();
                     }
                 });
+                service.getDataArrayList("get/vanprodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                         Log.v("vanprodGroupdata", response.toString());
+                        db.deleteMasterData(Constants.Van_ProdGroups_List);
+                        db.addMasterData(Constants.Van_ProdGroups_List, response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+                        call.cancel();
+                    }
+                });
                 service.getDataArrayList("get/prodTypes", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -1190,7 +1270,7 @@ public class Common_Class {
 
                     }
                 });
-                if (!Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
+            //    if (!Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
                     ProductsLoaded=false;
                     service.getDataArrayList("get/prodDets", jParam.toString()).enqueue(new Callback<JsonArray>() {
                         @Override
@@ -1210,9 +1290,9 @@ public class Common_Class {
                             }
                         }
                     });
-                }else{
-                    if(liveUpdateListener!=null) liveUpdateListener.onError("Product Loading Failed");
-                }
+              //  }else{
+                    //if(liveUpdateListener!=null) liveUpdateListener.onError("Product Loading Failed");
+               // }
             } catch (JSONException e) {
                 e.printStackTrace();
                 if(liveUpdateListener!=null) liveUpdateListener.onError(e.getLocalizedMessage());

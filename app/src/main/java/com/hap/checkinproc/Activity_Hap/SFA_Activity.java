@@ -352,10 +352,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
 
                     case "Van Sales":
-                        if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING)))
+                      //  if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.VAN_STOCK_LOADING)))
                             common_class.getDb_310Data(Constants.VAN_STOCK, SFA_Activity.this);
-                        sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
-                        startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                            sharedCommonPref.save(Shared_Common_Pref.DCRMode, "Van Sales");
+
 
                         break;
                     case "Outlets":
@@ -1005,21 +1005,26 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             if (apiDataResponse != null) {
                 switch (key) {
                     case VAN_STOCK:
-                        JSONObject stkObj = new JSONObject(apiDataResponse);
+                        try {
+                            JSONObject stkObj = new JSONObject(apiDataResponse);
 
-                        if (stkObj.getBoolean("success")) {
-                            JSONArray arr = stkObj.getJSONArray("Data");
-                            List<Product_Details_Modal> stkList = new ArrayList<>();
-                            for (int i = 0; i < arr.length(); i++) {
-                                JSONObject obj = arr.getJSONObject(i);
-                                stkList.add(new Product_Details_Modal(obj.getString("PCode"), obj.getInt("Cr"), obj.getInt("Dr"), (obj.getInt("Bal"))));
+                            if (stkObj.getBoolean("success")) {
+                                JSONArray arr = stkObj.getJSONArray("Data");
+                                List<Product_Details_Modal> stkList = new ArrayList<>();
+                                for (int i = 0; i < arr.length(); i++) {
+                                    JSONObject obj = arr.getJSONObject(i);
+                                    stkList.add(new Product_Details_Modal(obj.getString("PCode"), obj.getInt("Cr"), obj.getInt("Dr"), (obj.getInt("Bal"))));
+                                }
+
+                                sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stkList));
+                                sharedCommonPref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
+
                             }
-
-                            sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stkList));
+                            startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
+                            Log.v(key, apiDataResponse);
+                        }catch (Exception e){
 
                         }
-
-                        Log.v(key, apiDataResponse);
                         break;
                     case GroupFilter:
                         Log.v(key, apiDataResponse);

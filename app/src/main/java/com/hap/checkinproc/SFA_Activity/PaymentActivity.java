@@ -111,8 +111,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-
-        common_class.getDb_310Data(Constants.OUTSTANDING, this);
+        if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+            common_class.getDb_310Data(Constants.VAN_OUTSTANDING, this);
+        }else{
+            common_class.getDb_310Data(Constants.OUTSTANDING, this);
+        }
         common_class.getDb_310Data(Constants.PAYMODES, this);
 
 
@@ -161,7 +164,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 HeadItem.put("amtReceived", etAmtRec.getText().toString());
                 HeadItem.put("remainOutstand", tvRemainAmt.getText().toString());
                 HeadItem.put("outstandDate", Common_Class.GetDatewothouttime());
-
+                if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                    HeadItem.put("ordType", "VanSale");
+                }else{
+                    HeadItem.put("ordType", "SecOrder");
+                }
 
                 Call<ResponseBody> call = service.submitPayData(HeadItem.toString());
                 call.enqueue(new Callback<ResponseBody>() {
@@ -288,6 +295,25 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             switch (key) {
                 case Constants.OUTSTANDING:
+
+
+                    if (jsonObject.getBoolean("success")) {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            outstandAmt = jsonArray.getJSONObject(i).getDouble("Outstanding");
+                            if (outstandAmt < 0) outstandAmt = Math.abs(outstandAmt);
+                            else outstandAmt = 0 - outstandAmt;
+                            tvOutStandAmt.setText(CurrencySymbol+" " + formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
+
+                        }
+
+                    } else {
+                        outstandAmt = 0.00;
+                        tvOutStandAmt.setText(CurrencySymbol+" " + 0.00);
+                    }
+                    break;
+                case Constants.VAN_OUTSTANDING:
 
 
                     if (jsonObject.getBoolean("success")) {

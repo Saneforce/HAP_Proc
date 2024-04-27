@@ -126,7 +126,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose,img_lodg_atta,attachedImage;
-    EditText etCategoryItemSearch, edtVehicleNo, edtStartKm;
+    EditText etCategoryItemSearch, edtVehicleNo, edtStartKm,edtSalesManName;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -171,6 +171,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             attachedImage = findViewById(R.id.attachedImage);
             edtVehicleNo = findViewById(R.id.edtVehNo);
             edtStartKm = findViewById(R.id.edtStartKm);
+            edtSalesManName=findViewById(R.id.edtSaleManName);
 
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
             tvPOP = (TextView) findViewById(R.id.tvPOP);
@@ -457,7 +458,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
 
 
-            JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+            JSONArray ProdGroups = db.getMasterData(Constants.Van_ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -500,7 +501,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 tvCoolerInfo.setVisibility(View.VISIBLE);
 
 
-            common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
+           // common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -521,7 +522,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
                 Product_Modal = gson.fromJson(OrdersTable, userType);
 
-                JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+                JSONArray ProdGroups = db.getMasterData(Constants.Van_ProdGroups_List);
                 LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(VanSalStockLoadActivity.this);
                 GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                 Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -793,7 +794,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             Getorder_Array_List.get(pm).setBalance((int) (Getorder_Array_List.get(pm).getQty() * Getorder_Array_List.get(pm).getCnvQty()));
         }
         sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(Getorder_Array_List));
-
+        sharedCommonPref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
     }
 
     public void ResetSubmitBtn(int resetMode) {
@@ -858,27 +859,37 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-                            Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
-                            if (takeorder.isAnimating()) return;
-                            takeorder.startAnimation();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String sLoc = sharedCommonPref.getvalue("CurrLoc");
-                                    if (sLoc.equalsIgnoreCase("")) {
-                                        new LocationFinder(getApplication(), new LocationEvents() {
-                                            @Override
-                                            public void OnLocationRecived(Location location) {
-                                                strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
-                                                SaveOrder(axn);
-                                            }
-                                        });
-                                    } else {
-                                        strLoc = sLoc.split(":");
-                                        SaveOrder(axn);
-                                    }
-                                }
-                            }, 500);
+
+                         if(edtVehicleNo.getText().toString().equals(""))  {
+                             Toast.makeText(getApplicationContext(),"Enter the Vehicle No",Toast.LENGTH_SHORT ).show();
+                         }else if(edtStartKm.getText().toString().equals("")) {
+                             Toast.makeText(getApplicationContext(),"Enter the Start Km",Toast.LENGTH_SHORT ).show();
+                         }else if(imageSet.equals("")){
+                             Toast.makeText(getApplicationContext(),"Please Attach Photo",Toast.LENGTH_SHORT ).show();
+                         }else {
+                             Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
+                             if (takeorder.isAnimating()) return;
+                             takeorder.startAnimation();
+                             handler.postDelayed(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                                     if (sLoc.equalsIgnoreCase("")) {
+                                         new LocationFinder(getApplication(), new LocationEvents() {
+                                             @Override
+                                             public void OnLocationRecived(Location location) {
+                                                 strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                                                 SaveOrder(axn);
+                                             }
+                                         });
+                                     } else {
+                                         strLoc = sLoc.split(":");
+                                         SaveOrder(axn);
+                                     }
+
+                                 }
+                             }, 500);
+                         }
                         } else {
                             common_class.showMsg(this, "Your Cart is empty...");
                         }
@@ -923,6 +934,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                     HeadItem.put("Vansales_VehNo",edtVehicleNo.getText().toString());
                     HeadItem.put("Vansales_StartKm",edtStartKm.getText().toString());
+                    HeadItem.put("VanSales_SalesManNm",edtSalesManName.getText().toString());
                     HeadItem.put("Vansales_StartKm_Image",imageSet);
 
                     Log.v("vansalesLoad",HeadItem.toString());
@@ -930,6 +942,8 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 //                    Log.v("dsrte1",sharedCommonPref.getvalue(Constants.Vansales_VehNo));
 
                     sharedCommonPref.save(Constants.Vansales_VehNo,edtVehicleNo.getText().toString());
+                    sharedCommonPref.save(Constants.Vansales_StartKm,edtStartKm.getText().toString());
+                    sharedCommonPref.save(Constants.Vansales_SalesManName,edtSalesManName.getText().toString());
                     Log.v("dsrte2",sharedCommonPref.getvalue(Constants.Vansales_VehNo));
 
                     ActivityData.put("Activity_Report_Head", HeadItem);
@@ -1036,6 +1050,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Log.e("vanstockload data:", data.toString());
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                 Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(axn, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
                 responseBodyCall.enqueue(new Callback<JsonObject>() {
@@ -1154,6 +1169,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
         TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
+        TextView tvBillTotVal=findViewById(R.id.tvtotalvalue);
 
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
@@ -1161,6 +1177,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
+
+        double totQty=0;
+
 
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -1173,6 +1192,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     totalvalues += Product_Modal.get(pm).getAmount();
 
                     totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
+                    totQty+=Product_Modal.get(pm).getQty();//*Product_Modal.get(pm).getCnvQty();
 
                     if (Product_Modal.get(pm).getTax() > 0)
                         taxVal += Product_Modal.get(pm).getTax();
@@ -1195,15 +1215,16 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
         tvBillSubTotal.setText(CurrencySymbol+" "+ formatter.format(totalvalues));
         tvBillTotItem.setText("" + Getorder_Array_List.size());
-        tvBillTotQty.setText("" + totalQty);
+        tvBillTotQty.setText("" + totQty);
         tvBillToPay.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvCashDiscount.setText(CurrencySymbol+" " + formatter.format(cashDiscount));
+        tvBillTotVal.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
 
 
         if (cashDiscount > 0) {
             tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save "+CurrencySymbol+" " + formatter.format(cashDiscount) + " on this order");
+           // tvSaveAmt.setText("You will save "+CurrencySymbol+" " + formatter.format(cashDiscount) + " on this order");
         } else
             tvSaveAmt.setVisibility(View.GONE);
         orderTotTax = new ArrayList<>();
@@ -1324,7 +1345,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
     void moveProductScreen() {
         lin_gridcategory.setVisibility(View.VISIBLE);
-        findViewById(R.id.orderTypesLayout).setVisibility(View.VISIBLE);
+     //   findViewById(R.id.orderTypesLayout).setVisibility(View.VISIBLE);
         findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
@@ -1527,6 +1548,9 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getBindingAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+
+
+                holder.erpCode.setText(Product_Details_Modal.getERP_Code().toUpperCase());
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
 
@@ -1641,7 +1665,12 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 //                        if ((balance >= order) /*|| Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0*/) {
                         //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                         //holder.tvStock.setText("" + (int) (balance - order));
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
+                        if(Integer.parseInt(sVal) + 1>9999) {
+                            holder.Qty.setText("9999");
+                        }else {
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                        }
 //                        } else {
 //                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
 //                        }
@@ -1977,7 +2006,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,erpCode;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -2000,7 +2029,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 tvUOM = view.findViewById(R.id.tvUOM);
                 ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                 tvStock = view.findViewById(R.id.tvStockBal);
-
+                erpCode = view.findViewById(R.id.erpCode);
                 if (CategoryType >= 0) {
                     tvMRP = view.findViewById(R.id.MrpRate);
                     lblRQty = view.findViewById(R.id.status);

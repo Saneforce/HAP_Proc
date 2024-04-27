@@ -2,10 +2,9 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
-import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -91,7 +90,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VanSalStockUnLoadActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
+public class VanSalStockTopUpActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
 
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -101,22 +100,26 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    SharedPreferences UserDetails;
+    Dialog dialog;
     CircularProgressButton takeorder;
-    TextView Out_Let_Name, Category_Nametext,tvVehNo,
-            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader, tvVanSalPay, tvStockView;
+    TextView Out_Let_Name, Category_Nametext,
+            tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
-    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "",vehNo="",salesManName="", UserInfo = "MyPrefs";
+    String Worktype_code = "", UserInfo = "MyPrefs", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
+
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+
     Prodct_Adapter mProdct_Adapter;
     String TAG = "VanSalesOrderActivity";
     DatabaseHandler db;
     RelativeLayout rlCategoryItemSearch;
-    ImageView ivClose, attachedImage, endKmImg;
-    EditText etCategoryItemSearch, edtEndKm,edtSalesManName;
+    ImageView ivClose, img_lodg_atta, attachedImage;
+    EditText etCategoryItemSearch, edtVehicleNo, edtStartKm,edtSaleManName;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -130,27 +133,24 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     private int uomPos;
     private ArrayList<Common_Model> uomList;
 
-    String axn = "",imageSet = "", imageServer = "",imageConvert = "";
-    private double totStkAmt;
-
-    private double startKm=0;
-    TextView tvsrtKm;
-
+    String axn = "", ImageUKey = "", keyEk = "EK", modeId = "", imageSet = "", imageServer = "", imageConvert = "";
+    private String van_id = "", vehNo = "";
+    LinearLayout ll_startkm;
+    TextView tvVehNo_label,tvstartkm_label;
+    String salesmanName="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_vansale_unload);
+            setContentView(R.layout.activity_vanstock_loading);
             db = new DatabaseHandler(this);
+            sharedCommonPref = new Shared_Common_Pref(VanSalStockTopUpActivity.this);
 
             UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
-            sharedCommonPref = new Shared_Common_Pref(VanSalStockUnLoadActivity.this);
             common_class = new Common_Class(this);
             tvHeader = findViewById(R.id.tvHeader);
-            tvVanSalPay = findViewById(R.id.tvVanSalPay);
-            tvStockView = findViewById(R.id.tvStockView);
             Grpgrid = findViewById(R.id.PGroup);
             Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
@@ -163,7 +163,21 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             ivClose = findViewById(R.id.ivClose);
-            tvVehNo = findViewById(R.id.tvUnloadVehNo);
+            attachedImage = findViewById(R.id.attachedImage);
+            edtVehicleNo = findViewById(R.id.edtVehNo);
+            edtStartKm = findViewById(R.id.edtStartKm);
+            edtSaleManName=findViewById(R.id.edtSaleManName);
+            tvVehNo_label=findViewById(R.id.tvVehNo_label);
+            tvstartkm_label=findViewById(R.id.tvstartkm_label);
+            ll_startkm=findViewById(R.id.ll_startkm);
+
+            tvVehNo_label.setVisibility(View.GONE);
+            tvstartkm_label.setVisibility(View.GONE);
+            edtStartKm.setVisibility(View.GONE);
+            edtVehicleNo.setVisibility(View.GONE);
+            ll_startkm.setVisibility(View.GONE);
+          //  salesmanName=sharedCommonPref.getvalue(Constants.Vansales_SalesManName);
+           // edtSaleManName.setText(""+salesmanName);
 
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
             tvPOP = (TextView) findViewById(R.id.tvPOP);
@@ -172,13 +186,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             etCategoryItemSearch = findViewById(R.id.searchView);
             retaileAddress = findViewById(R.id.retaileAddress);
             tvRetailorPhone = findViewById(R.id.retailePhoneNum);
-            edtEndKm=findViewById(R.id.edtEndKm);
-            edtSalesManName=findViewById(R.id.edtSaleManName);
-            tvsrtKm=findViewById(R.id.tvsrtKm);
-
-            endKmImg=findViewById(R.id.endKm_attach);
-            attachedImage=findViewById(R.id.attachedUnloadEndImage);
-
+            img_lodg_atta = findViewById(R.id.startkm_attach);
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
             Product_ModalSetAdapter = new ArrayList<>();
@@ -194,46 +202,78 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
+            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
+                llCalMob.setVisibility(View.GONE);
+            else
+                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
+            retaileAddress.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
+            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
+            getProductList();
+            //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
+//            userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+//            }.getType();
+//
+//            Product_Modal = gson.fromJson(OrdersTable, userType);
 
+
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
+
+            Log.v(TAG, " order oncreate:h ");
+
+            //showOrderItemList(0, "");
+
+            Log.v(TAG, " order oncreate:i ");
+            tvOtherBrand.setOnClickListener(this);
+            tvQPS.setOnClickListener(this);
+            tvPOP.setOnClickListener(this);
+            tvCoolerInfo.setOnClickListener(this);
+            Category_Nametext.setOnClickListener(this);
+
+//            vehNo=edtVehicleNo.getText().toString().trim();
+
+            findViewById(R.id.tvOrder).setVisibility(View.GONE);
             vehNo=sharedCommonPref.getvalue(Constants.Vansales_VehNo);
-            salesManName=sharedCommonPref.getvalue(Constants.Vansales_SalesManName);
-            Log.v("vehNo_ghj",vehNo);
-            tvVehNo.setText(vehNo);
-            edtSalesManName.setText(salesManName);
-            if(!sharedCommonPref.getvalue(Constants.Vansales_StartKm).equals("")) {
-                startKm = Double.parseDouble(sharedCommonPref.getvalue(Constants.Vansales_StartKm));
-                tvsrtKm.setText(""+startKm);
-            }
-            common_class.getDb_310Data(Constants.VAN_LOAD_DETAILS, getActiveActivity());
-
-
-           /* edtEndKm.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if(!editable.toString().equalsIgnoreCase("")){
-                        if(startKm>=Double.parseDouble(editable.toString())){
-                            Toast.makeText(getApplicationContext(),"Enter Valid Km",Toast.LENGTH_SHORT).show();
-                            edtEndKm.setText("");
-                        }
-                    }
-
-                }
-            });*/
-            endKmImg.setOnClickListener(new View.OnClickListener() {
+            salesmanName=sharedCommonPref.getvalue(Constants.Vansales_SalesManName);
+            edtSaleManName.setText(salesmanName);
+//            img_lodg_atta.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.v("MODE_ID", "DATA " + modeId);
+//
+//                    CameraPermission cameraPermission = new CameraPermission(VanSalStockLoadActivity.this, getApplicationContext());
+//
+//                    if (!cameraPermission.checkPermission()) {
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                            cameraPermission.requestPermission();
+//                        }
+//                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+//                    } else {
+//                        Log.v("PERMISSION", "PERMISSION");
+//
+//                        setOnImagePickListener(new OnImagePickListener() {
+//                            @Override
+//                            public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+////                            imageServer = FileName;
+////                            imageConvert = fullPath;
+////                            attachedImage.setImageBitmap(image);
+////                            attachedImage.setVisibility(View.VISIBLE);
+////
+//                                UploadPhoto(fullPath, UserDetails.getString("Sfcode", ""), FileName, "Travel", image);
+//                            }
+//                        });
+//                        Intent intent = new Intent(VanSalStockLoadActivity.this, AllowancCapture.class);
+//                       intent.putExtra("allowance", "One");
+//                        startActivity(intent);
+//                    }
+//                }
+//            });
+            img_lodg_atta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    CameraPermission cameraPermission = new CameraPermission(VanSalStockUnLoadActivity.this, getApplicationContext());
+                    CameraPermission cameraPermission = new CameraPermission(VanSalStockTopUpActivity.this, getApplicationContext());
 
                     if (!cameraPermission.checkPermission()) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -253,7 +293,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
                             }
                         });
-                        Intent intent = new Intent(VanSalStockUnLoadActivity.this, AllowancCapture.class);
+                        Intent intent = new Intent(VanSalStockTopUpActivity.this, AllowancCapture.class);
                         intent.putExtra("allowance", "Two");
                         startActivity(intent);
 
@@ -271,46 +311,6 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     startActivity(intent);
                 }
             });
-
-
-
-            if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_phone)))
-                llCalMob.setVisibility(View.GONE);
-            else
-                tvRetailorPhone.setText(sharedCommonPref.getvalue(Constants.Distributor_phone));
-            retaileAddress.setText(sharedCommonPref.getvalue(Constants.DistributorAdd));
-            Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
-
-            //GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1", "");
-          //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
-           // userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-            //}.getType();
-
-//            if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA)) && Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
-//                Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_VANSALES_DATA), userType);
-//            else {
-         //   Product_Modal = gson.fromJson(OrdersTable, userType);
-
-            // }
-
-            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
-            common_class.gotoHomeScreen(this, ivToolbarHome);
-
-            Log.v(TAG, " order oncreate:h ");
-
-            // showOrderItemList(0, "");
-
-            Log.v(TAG, " order oncreate:i ");
-            tvOtherBrand.setOnClickListener(this);
-            tvQPS.setOnClickListener(this);
-            tvPOP.setOnClickListener(this);
-            tvCoolerInfo.setOnClickListener(this);
-            Category_Nametext.setOnClickListener(this);
-            tvVanSalPay.setOnClickListener(this);
-            tvStockView.setOnClickListener(this);
-
-            findViewById(R.id.tvOrder).setVisibility(View.GONE);
-
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -464,9 +464,9 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
 
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6", "");
-            getProductList();
 
-        /*    JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
+
+            JSONArray ProdGroups = db.getMasterData(Constants.Van_ProdGroups_List);
             LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(this);
             GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             Grpgrid.setLayoutManager(GrpgridlayManager);
@@ -485,22 +485,25 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             });
             Grpgrid.setAdapter(grplistItems);
 
-            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));*/
+            FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
 
             tvHeader.setText(Constants.VAN_SALES_MODE);
 
 
-//            switch (Constants.VAN_SALES_MODE) {
-//                case Constants.VAN_STOCK_LOADING:
-//                    axn = "save/stockloading";
-//                    break;
-//                case Constants.VAN_STOCK_UNLOADING:
-            axn = "save/stockunloading";
-//                    break;
-//                case Constants.VAN_SALES_ORDER:
-//                    axn = "save/vansales";
-//                    break;
-//            }
+            switch (Constants.VAN_SALES_MODE) {
+                case Constants.VAN_STOCK_LOADING:
+                    axn = "save/stockloading";
+                    break;
+                case Constants.VAN_STOCK_UNLOADING:
+                    axn = "save/stockunloading";
+                    break;
+                case Constants.VAN_SALES_ORDER:
+                    axn = "save/vansales";
+                    break;
+                case Constants.VAN_STOCK_TOPUP:
+                    axn = "save/stocktopup";
+                    break;
+            }
 
 
             tvCoolerInfo.setVisibility(View.GONE);
@@ -509,11 +512,54 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 tvCoolerInfo.setVisibility(View.VISIBLE);
 
 
-         //   common_class.getDb_310Data(Constants.VAN_STOCK, this);
+            common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
+
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
         }
+    }
+
+    private void getProductList() {
+        common_class.ProgressdialogShow(1, "Getting Material Details");
+
+        common_class.getPOSStockProduct(this, new OnLiveUpdateListener() {
+            @Override
+            public void onUpdate(String mode) {
+
+                String OrdersTable = String.valueOf(db.getMasterData(Constants.ProductStock_List));
+                userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                }.getType();
+
+                Product_Modal = gson.fromJson(OrdersTable, userType);
+
+                JSONArray ProdGroups = db.getMasterData(Constants.Van_ProdGroups_List);
+                LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(VanSalStockTopUpActivity.this);
+                GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                Grpgrid.setLayoutManager(GrpgridlayManager);
+
+                RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, VanSalStockTopUpActivity.this, new onListItemClick() {
+                    @Override
+                    public void onItemClick(JSONObject item) {
+
+                        try {
+                            FilterTypes(item.getString("id"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Grpgrid.setAdapter(grplistItems);
+                try {
+                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //selectedPos=0;
+                //showOrderItemList(selectedPos, "");
+                common_class.ProgressdialogShow(0, "");
+            }
+        });
     }
 
     public MultipartBody.Part convertimg(String tag, String path) {
@@ -569,7 +615,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
                                 if (image != null) {
 
-                                    imageServer=FileName;
+                                    imageServer = FileName;
                                     imageConvert = path;
                                     imageSet = "file://" + path;
                                     attachedImage.setImageBitmap(image);
@@ -580,21 +626,21 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
                                 common_class.ProgressdialogShow(0, "");
 
-                                common_class.showMsg(VanSalStockUnLoadActivity.this, "File uploading successful ");
+                                common_class.showMsg(VanSalStockTopUpActivity.this, "File uploading successful ");
                             } else {
                                 common_class.ProgressdialogShow(0, "");
-                                common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+                                common_class.showMsg(VanSalStockTopUpActivity.this, "Failed.Try Again...");
                             }
                         } else {
 
                             common_class.ProgressdialogShow(0, "");
-                            common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+                            common_class.showMsg(VanSalStockTopUpActivity.this, "Failed.Try Again...");
 
                         }
 
                     } catch (Exception e) {
                         common_class.ProgressdialogShow(0, "");
-                        common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+                        common_class.showMsg(VanSalStockTopUpActivity.this, "Failed.Try Again...");
 
                     }
                 }
@@ -602,7 +648,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     common_class.ProgressdialogShow(0, "");
-                    common_class.showMsg(VanSalStockUnLoadActivity.this, "Failed.Try Again...");
+                    common_class.showMsg(VanSalStockTopUpActivity.this, "Failed.Try Again...");
 
                     Log.e("SEND_IMAGE_Response", "ERROR");
                 }
@@ -613,6 +659,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             Log.e("TAClaim:", e.getMessage());
         }
     }
+
 
     public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
@@ -718,14 +765,14 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
                 selectedPos = 0;
 
-                VanSalStockUnLoadActivity.CategoryAdapter customAdapteravail = new VanSalStockUnLoadActivity.CategoryAdapter(getApplicationContext(),
+                CategoryAdapter customAdapteravail = new CategoryAdapter(getApplicationContext(),
                         Category_Modal);
                 categorygrid.setAdapter(customAdapteravail);
 
 //                if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
 //                    showOrderList();
 //                else
-//                    showOrderItemList(selectedPos, "");
+                showOrderItemList(selectedPos, "");
             }
 
         } catch (JSONException e) {
@@ -749,6 +796,15 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         else
             FilterProduct(Getorder_Array_List);
 
+
+    }
+
+    void updateStockBal() {
+        for (int pm = 0; pm < Getorder_Array_List.size(); pm++) {
+            Getorder_Array_List.get(pm).setBalance((int) (Getorder_Array_List.get(pm).getQty() * Getorder_Array_List.get(pm).getCnvQty()));
+        }
+        sharedCommonPref.save(Constants.VAN_STOCK_LOADING, gson.toJson(Getorder_Array_List));
+        sharedCommonPref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
     }
 
     public void ResetSubmitBtn(int resetMode) {
@@ -773,17 +829,8 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvVanSalPay:
-                Intent intent = new Intent(VanSalStockUnLoadActivity.this, VanSalPaymentActivity.class);
-                intent.putExtra("stkLoadAmt", totStkAmt);
-                startActivity(intent);
-                break;
-            case R.id.tvStockView:
-                startActivity(new Intent(VanSalStockUnLoadActivity.this, VanStockViewActivity.class));
-                break;
-
             case R.id.btnCallMob:
-                common_class.showCalDialog(VanSalStockUnLoadActivity.this, "Do you want to Call this Distributor?",
+                common_class.showCalDialog(VanSalStockTopUpActivity.this, "Do you want to Call this Distributor?",
                         tvRetailorPhone.getText().toString().replaceAll(",", ""));
 
                 break;
@@ -822,15 +869,11 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-                            if(tvVehNo.getText().toString().equals(""))  {
+                           /* if(edtVehicleNo.getText().toString().equals(""))  {
                                 Toast.makeText(getApplicationContext(),"Enter the Vehicle No",Toast.LENGTH_SHORT ).show();
-                            }else if(edtEndKm.getText().toString().equals("")) {
-                                Toast.makeText(getApplicationContext(),"Enter the Closing Km",Toast.LENGTH_SHORT ).show();
-                            }else if(startKm>Double.parseDouble(edtEndKm.getText().toString())) {
-                                Toast.makeText(getApplicationContext(),"Enter Valid Closing Km",Toast.LENGTH_SHORT ).show();
-                            }else if(imageSet.equals("")) {
-                                Toast.makeText(getApplicationContext(),"Please Attach Photo",Toast.LENGTH_SHORT ).show();
-                            }else {
+                            }else if(edtStartKm.getText().toString().equals("")) {
+                                Toast.makeText(getApplicationContext(),"Enter the Start Km",Toast.LENGTH_SHORT ).show();
+                            }else {*/
                                 Log.d("RepeatAni", String.valueOf(takeorder.isAnimating()));
                                 if (takeorder.isAnimating()) return;
                                 takeorder.startAnimation();
@@ -852,7 +895,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                                         }
                                     }
                                 }, 500);
-                            }
+                         //   }
                         } else {
                             common_class.showMsg(this, "Your Cart is empty...");
                         }
@@ -869,75 +912,84 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
     }
 
     private void SaveOrder(String axn) {
-        if (common_class.isNetworkAvailable(this)) {
+        // if (common_class.isNetworkAvailable(this)) {
 
-            AlertDialogBox.showDialog(VanSalStockUnLoadActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
-                @Override
-                public void PositiveMethod(DialogInterface dialog, int id) {
-                    common_class.ProgressdialogShow(1, "");
-                    JSONArray data = new JSONArray();
-                    JSONObject ActivityData = new JSONObject();
-                    try {
-                        JSONObject HeadItem = new JSONObject();
-                        HeadItem.put("id", sharedCommonPref.getvalue(Constants
-                                .VAN_ID));
+        AlertDialogBox.showDialog(VanSalStockTopUpActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                common_class.ProgressdialogShow(1, "");
+                JSONArray data = new JSONArray();
 
-                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
-                        HeadItem.put("Worktype_code", Worktype_code);
-                        HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
-                        HeadItem.put("dcr_activity_date", Common_Class.GetDate());
-                        // HeadItem.put("Daywise_Remarks", "");
-                        HeadItem.put("UKey", Ukey);
-                        //  HeadItem.put("orderValue", formatter.format(totalvalues));
-                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
-                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+                Log.d("vsloadhjj", "ghkj" + data.toString());
 
-                        HeadItem.put("Vansales_VehNo",vehNo);
-                        HeadItem.put("Vansales_EndKm",edtEndKm.getText().toString());
-                        HeadItem.put("VanSales_SalesManNm",edtSalesManName.getText().toString());
-                        HeadItem.put("Vansales_Endkm_Image",imageSet);
+                JSONObject ActivityData = new JSONObject();
 
-                        Log.v("vansalesUnload",HeadItem.toString());
+                try {
+                    JSONObject HeadItem = new JSONObject();
+                    van_id = Common_Class.GetEkey();
+                    HeadItem.put("id", van_id);
 
-                        ActivityData.put("Activity_Report_Head", HeadItem);
+                    HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                    HeadItem.put("Worktype_code", Worktype_code);
+                    HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
+                    HeadItem.put("dcr_activity_date", Common_Class.GetDate());
+                    // HeadItem.put("Daywise_Remarks", "");
+                    HeadItem.put("UKey", Ukey);
+                    //  HeadItem.put("orderValue", formatter.format(totalvalues));
+                    HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                    HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
+                    HeadItem.put("Vansales_VehNo",vehNo );//edtVehicleNo.getText().toString()
+                    HeadItem.put("Vansales_StartKm",edtStartKm.getText().toString() );
+                    String name=edtSaleManName.getText().toString().equalsIgnoreCase(salesmanName)?"":edtSaleManName.getText().toString();
+                    HeadItem.put("VanSales_SalesManNm",name);//edtSaleManName.getText().toString()
+                    HeadItem.put("Vansales_StartKm_Image", imageSet);
 
-                        JSONObject OutletItem = new JSONObject();
+                    Log.v("vansalesLoad", HeadItem.toString());
+                    Log.v("dsrte1", imageSet);
+//                    Log.v("dsrte1",sharedCommonPref.getvalue(Constants.Vansales_VehNo));
+
+                   // sharedCommonPref.save(Constants.Vansales_VehNo, edtVehicleNo.getText().toString());
+                   // Log.v("dsrte2", sharedCommonPref.getvalue(Constants.Vansales_VehNo));
+
+                    ActivityData.put("Activity_Report_Head", HeadItem);
+
+                    JSONObject OutletItem = new JSONObject();
 //                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
 //                        OutletItem.put("modified_time", Common_Class.GetDate());
-                        OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
-                        OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
-                        OutletItem.put("orderValue", formatter.format(totalvalues));
-                        OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("NetAmount", formatter.format(totalvalues));
-                        OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
-                        //  OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
-                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                        OutletItem.put("ordertype", "Van Stock UnLoading");
+                    OutletItem.put("stockist_code", sharedCommonPref.getvalue(Constants.Distributor_Id));
+                    OutletItem.put("stockist_name", sharedCommonPref.getvalue(Constants.Distributor_name));
+                    // OutletItem.put("orderValue", formatter.format(totalvalues));
+                    // OutletItem.put("CashDiscount", cashDiscount);
+                    // OutletItem.put("NetAmount", formatter.format(totalvalues));
+                    OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
+                    //  OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+                    OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
+                    OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
+                    OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
+                    OutletItem.put("ordertype", "Van Stock Loading");
 
-                        if (strLoc.length > 0) {
-                            OutletItem.put("Lat", strLoc[0]);
-                            OutletItem.put("Long", strLoc[1]);
-                        } else {
-                            OutletItem.put("Lat", "");
-                            OutletItem.put("Long", "");
-                        }
-                        JSONArray Order_Details = new JSONArray();
-                        JSONArray totTaxArr = new JSONArray();
+                    if (strLoc.length > 0) {
+                        OutletItem.put("Lat", strLoc[0]);
+                        OutletItem.put("Long", strLoc[1]);
+                    } else {
+                        OutletItem.put("Lat", "");
+                        OutletItem.put("Long", "");
+                    }
+                    JSONArray Order_Details = new JSONArray();
+                    // JSONArray totTaxArr = new JSONArray();
 
-                        for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                            JSONObject ProdItem = new JSONObject();
-                            ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
-                            ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
-                            ProdItem.put("Stock_Qty", Getorder_Array_List.get(z).getQty());
+                    for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                        JSONObject ProdItem = new JSONObject();
+                        ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
+                        ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
+                        ProdItem.put("Stock_Qty", Getorder_Array_List.get(z).getQty());
 
-                            ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty()-Getorder_Array_List.get(z).getDr());
-                            //   ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                        ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
+                        //   ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
 //                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
 //                                    Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
+                        ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+                        ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
 
 //                            ProdItem.put("free", Getorder_Array_List.get(z).getFree());
 //                            ProdItem.put("dis", Getorder_Array_List.get(z).getDiscount());
@@ -948,106 +1000,122 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 //                            ProdItem.put("Off_Scheme_Unit", Getorder_Array_List.get(z).getScheme());
 //                            ProdItem.put("discount_type", Getorder_Array_List.get(z).getDiscount_type());
 
-                            ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
-                            ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
-                            ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
+                        ProdItem.put("ConversionFactor", Getorder_Array_List.get(z).getCnvQty());
+                        ProdItem.put("UOM_Id", Getorder_Array_List.get(z).getUOM_Id());
+                        ProdItem.put("UOM_Nm", Getorder_Array_List.get(z).getUOM_Nm());
 
 
-                            JSONArray tax_Details = new JSONArray();
+//                            JSONArray tax_Details = new JSONArray();
+//
+//
+//                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
+//                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
+//
+//                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
+//                                    JSONObject taxData = new JSONObject();
+//
+//                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
+//                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
+//                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
+//                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
+//                                    taxData.put("Tax_Type", label);
+//                                    taxData.put("Tax_Amt", formatter.format(amt));
+//                                    tax_Details.put(taxData);
+//
+//
+//                                }
+//
+//
+//                            }
+//
+//                            ProdItem.put("TAX_details", tax_Details);
 
+                        Order_Details.put(ProdItem);
 
-                            if (Getorder_Array_List.get(z).getProductDetailsModal() != null &&
-                                    Getorder_Array_List.get(z).getProductDetailsModal().size() > 0) {
-
-                                for (int i = 0; i < Getorder_Array_List.get(z).getProductDetailsModal().size(); i++) {
-                                    JSONObject taxData = new JSONObject();
-
-                                    String label = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Type();
-                                    Double amt = Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Amt();
-                                    taxData.put("Tax_Id", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Id());
-                                    taxData.put("Tax_Val", Getorder_Array_List.get(z).getProductDetailsModal().get(i).getTax_Val());
-                                    taxData.put("Tax_Type", label);
-                                    taxData.put("Tax_Amt", formatter.format(amt));
-                                    tax_Details.put(taxData);
-
-
-                                }
-
-
-                            }
-
-                            ProdItem.put("TAX_details", tax_Details);
-
-                            Order_Details.put(ProdItem);
-
-                        }
-
-                        for (int i = 0; i < orderTotTax.size(); i++) {
-                            JSONObject totTaxObj = new JSONObject();
-
-                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
-                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
-                            totTaxArr.put(totTaxObj);
-
-                        }
-
-                        OutletItem.put("TOT_TAX_details", totTaxArr);
-                        ActivityData.put("Activity_Doctor_Report", OutletItem);
-                        ActivityData.put("Order_Details", Order_Details);
-                        data.put(ActivityData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                    Log.e("vanstockunload data:", data.toString());
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(axn, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.isSuccessful()) {
-                                try {
-                                    common_class.ProgressdialogShow(0, "");
-                                    Log.e("JSON_VALUES", response.body().toString());
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
-                                    ResetSubmitBtn(1);
-                                    if (san.equals("true")) {
-                                        sharedCommonPref.clear_pref(Constants.LOC_VANSALES_DATA);
-                                        sharedCommonPref.clear_pref(Constants.VAN_STOCK_LOADING);
-                                        sharedCommonPref.clear_pref(Constants.VAN_STOCK_LOADING_TIME);
-                                        //  common_class.CommonIntentwithFinish(Invoice_History.class);
-                                        finish();
-                                    }
-                                    common_class.showMsg(VanSalStockUnLoadActivity.this, jsonObjects.getString("Msg"));
 
-                                } catch (Exception e) {
-                                    common_class.ProgressdialogShow(0, "");
-                                    ResetSubmitBtn(2);
+//                        for (int i = 0; i < orderTotTax.size(); i++) {
+//                            JSONObject totTaxObj = new JSONObject();
+//
+//                            totTaxObj.put("Tax_Type", orderTotTax.get(i).getTax_Type());
+//                            totTaxObj.put("Tax_Amt", formatter.format(orderTotTax.get(i).getTax_Amt()));
+//                            totTaxArr.put(totTaxObj);
+//
+//                        }
+
+                    //  OutletItem.put("TOT_TAX_details", totTaxArr);
+                    ActivityData.put("Activity_Doctor_Report", OutletItem);
+                    ActivityData.put("Order_Details", Order_Details);
+
+
+                    data.put(ActivityData);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                Log.e("vanstocktopupdata:", data.toString());
+                Call<JsonObject> responseBodyCall = apiInterface.saveVanSales(axn, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                responseBodyCall.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                common_class.ProgressdialogShow(0, "");
+                                Log.e("JSON_VALUES", response.body().toString());
+                                JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                String san = jsonObjects.getString("success");
+
+//                                Log.v("VEHNO & STARTKM",jsonObjects.toString());
+//
+//                                jsonObjects.put("VansalesVehNo",edtVehicleNo);
+//                                jsonObjects.put("VansalesStartKm",edtStartKm);
+
+
+                                Log.e("Success_Message", san);
+                                ResetSubmitBtn(1);
+                                if (san.equals("true")) {
+
+                                    // sharedCommonPref.clear_pref(Constants.LOC_VANSALES_DATA);
+                                    //  common_class.CommonIntentwithFinish(Invoice_History.class);
+
+                                    String data = gson.toJson(Product_Modal);
+                                    sharedCommonPref.save(Constants.LOC_VANSALES_DATA, data);
+                                    sharedCommonPref.save(Constants.VAN_ID, van_id);
+
+                                    updateStockBal();
+
+                                    finish();
                                 }
+                                common_class.showMsg(VanSalStockTopUpActivity.this, jsonObjects.getString("Msg"));
+
+                            } catch (Exception e) {
+                                common_class.ProgressdialogShow(0, "");
+                                ResetSubmitBtn(2);
                             }
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            common_class.ProgressdialogShow(0, "");
-                            Log.e("SUBMIT_VALUE", "ERROR");
-                            ResetSubmitBtn(2);
-                        }
-                    });
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        common_class.ProgressdialogShow(0, "");
+                        Log.e("SUBMIT_VALUE", "ERROR"+t.toString());
+                        ResetSubmitBtn(2);
+                    }
+                });
 
-                }
+            }
 
-                @Override
-                public void NegativeMethod(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                    ResetSubmitBtn(0);
-                }
-            });
-        } else {
-            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
-            ResetSubmitBtn(0);
-        }
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                ResetSubmitBtn(0);
+            }
+        });
+//        } else {
+//            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+//            ResetSubmitBtn(0);
+//        }
     }
 
     private void FilterProduct(List<Product_Details_Modal> orderList) {
@@ -1060,8 +1128,8 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
-
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansales_unload_pay_recyclerview, getApplicationContext(), -1);
+Log.e("orderList",orderList.toString());
+        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansales_product_pay_recyclerview, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
     }
@@ -1111,7 +1179,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
-
+        double totQty=0;
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
@@ -1120,10 +1188,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
                     cashDiscount += (int) Product_Modal.get(pm).getDiscount();
 
-                    totalvalues += Product_Modal.get(pm).getCrAmt()-Product_Modal.get(pm).getDrAmt();
+                    totalvalues += Product_Modal.get(pm).getAmount();
 
                     totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
-
+                    totQty+=Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getCnvQty();
                     if (Product_Modal.get(pm).getTax() > 0)
                         taxVal += Product_Modal.get(pm).getTax();
 
@@ -1135,7 +1203,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             }
         }
 
-        tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(totalvalues));
+        tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(totalvalues));
         tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
         if (Getorder_Array_List.size() == 1)
@@ -1143,17 +1211,17 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         else
             tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
 
-        tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(totalvalues));
+        tvBillSubTotal.setText(CurrencySymbol + " " + formatter.format(totalvalues));
         tvBillTotItem.setText("" + Getorder_Array_List.size());
-        tvBillTotQty.setText("" + totalQty);
-        tvBillToPay.setText(CurrencySymbol+" " + formatter.format(totalvalues));
-        tvCashDiscount.setText(CurrencySymbol+" " + formatter.format(cashDiscount));
-        // tvTax.setText(CurrencySymbol+" "+ formatter.format(taxVal));
+        tvBillTotQty.setText("" + totQty);
+        tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
+        tvCashDiscount.setText(CurrencySymbol + " " + formatter.format(cashDiscount));
+        // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
 
 
         if (cashDiscount > 0) {
             tvSaveAmt.setVisibility(View.VISIBLE);
-            tvSaveAmt.setText("You will save " +CurrencySymbol+" "+ formatter.format(cashDiscount) + " on this order");
+            tvSaveAmt.setText("You will save " + CurrencySymbol + " " + formatter.format(cashDiscount) + " on this order");
         } else
             tvSaveAmt.setVisibility(View.GONE);
         orderTotTax = new ArrayList<>();
@@ -1191,7 +1259,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         String label = "", amt = "";
         for (int i = 0; i < orderTotTax.size(); i++) {
             label = label + orderTotTax.get(i).getTax_Type() + "\n";
-            amt = amt + CurrencySymbol+" " + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
+            amt = amt + CurrencySymbol + " " + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
         }
         tvTaxLabel.setText(label);
         tvTax.setText(amt);
@@ -1232,76 +1300,27 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         try {
             switch (key) {
 
-                case Constants.VAN_STOCK:
+                case Constants.STOCK_LEDGER:
                     JSONObject stkObj = new JSONObject(apiDataResponse);
-
-
-                    totStkAmt = 0;
                     if (stkObj.getBoolean("success")) {
                         JSONArray arr = stkObj.getJSONArray("Data");
-                        List<Product_Details_Modal> stkList = new ArrayList<>();
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject obj = arr.getJSONObject(i);
 
-                            //  Getorder_Array_List.clear();
-
-
                             for (int pm = 0; pm < Product_Modal.size(); pm++) {
-                                if (obj.getString("PCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
-                                    Product_Modal.get(pm).setQty(obj.getInt("Cr"));
-                                    Product_Modal.get(pm).setCr(obj.getInt("Cr"));
-                                    Product_Modal.get(pm).setDr(obj.getInt("Dr"));
-                                    Product_Modal.get(pm).setBalance(obj.getInt("Bal"));
-
-
-                                    try {
-                                        Product_Modal.get(pm).setCrAmt(obj.getDouble("CrAmt"));
-                                        Product_Modal.get(pm).setDrAmt(obj.getDouble("DrAmt"));
-                                        Product_Modal.get(pm).setAmount(obj.getDouble("CrAmt"));
-                                        Product_Modal.get(pm).setBalAmt(obj.getDouble("BalAmt"));
-
-                                        totStkAmt += obj.getDouble("CrAmt");
-
-
-                                    } catch (Exception e) {
-
-                                    }
-
-                                    //  Getorder_Array_List.add(Product_Modal.get(pm));
-
+                                if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
+                                    Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
+                                    Log.v("name:" + Product_Modal.get(pm).getName(), ":Bal:" + obj.getInt("Balance"));
+                                    break;
                                 }
-
                             }
-
-                            showOrderList();
-
-                            // mProdct_Adapter.notify(Getorder_Array_List,R.layout.vansales_unload_pay_recyclerview,VanSalStockUnLoadActivity.this,-1);
                         }
 
-
+                        mProdct_Adapter.notifyDataSetChanged();
                     }
-
                     break;
-                case Constants.VAN_LOAD_DETAILS:
-                   // Log.v("data","van startkm"+apiDataResponse);
-                    JSONArray vanarr = new JSONArray(apiDataResponse);
-
-                    if(vanarr.length()>0){
-                        JSONObject obj = vanarr.getJSONObject(0);
-                         vehNo=obj.getString("vehno");
-                         salesManName=obj.getString("smname");
-                         tvVehNo.setText(""+vehNo);
-                         edtSalesManName.setText(""+salesManName);
-                         startKm=obj.getDouble("startkm");
-                         tvsrtKm.setText(""+obj.getDouble("startkm")+" KM");
-                    }
-
-                    break;
-
-
             }
         } catch (Exception e) {
-            Log.e("data error",e.getMessage());
 
         }
     }
@@ -1355,10 +1374,18 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
-                Product_ModalSetAdapter.get(uomPos).setCnvQty(1);
+//                int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
+//                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty
+                //    /*|| Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0*/) {
+                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
                 Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
                 Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
                 mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
+//                } else {
+//                    common_class.showMsg(this, "Can't exceed Stock");
+//                }
+
+
                 break;
         }
     }
@@ -1390,7 +1417,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        public void onBindViewHolder(MyViewHolder holder, int position) {
             try {
                 holder.icon.setText(listt.get(position).getName());
                 if (!listt.get(position).getCatImage().equalsIgnoreCase("")) {
@@ -1512,15 +1539,16 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        public void onBindViewHolder(MyViewHolder holder, int position) {
             try {
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getBindingAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
                 holder.erpCode.setText(Product_Details_Modal.getERP_Code().toUpperCase());
-                holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
+                holder.Amount.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-
+               // holder.tvTknStockLabel.setVisibility(View.GONE);
+              //  holder.tvTknStock.setVisibility(View.GONE);
 
                 if (!Common_Class.isNullOrEmpty(Product_Details_Modal.getUOM_Nm()))
                     holder.tvUOM.setText(Product_Details_Modal.getUOM_Nm());
@@ -1528,12 +1556,12 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     holder.tvUOM.setText(Product_Details_Modal.getDefault_UOM_Name());
                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setUOM_Nm(Product_Details_Modal.getDefault_UOM_Name());
                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setUOM_Id("" + Product_Details_Modal.getDefaultUOM());
-                    Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setCnvQty(1);
+                    Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setCnvQty(Product_Details_Modal.getDefaultUOMQty());
 
 
                 }
 
-                holder.Rate.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
+                holder.Rate.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getCnvQty()));
 
 //                if (Product_Details_Modal.getRateEdit() == 1) {
 //                    holder.Rate.setEnabled(true);
@@ -1542,10 +1570,6 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 //                    holder.Rate.setEnabled(false);
 //                    holder.Rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 //                }
-
-                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() == null)
-                    Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setBalance(0);
-
 
                 if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                     holder.ImgVwProd.clearColorFilter();
@@ -1563,27 +1587,30 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     holder.QtyMns.setVisibility(View.INVISIBLE);
                     holder.Qty.setEnabled(false);
                 }
+                holder.tvStock.setText("" + Product_Details_Modal.getLoadStock());
 
+//                holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance());
+//
+//                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
+//                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+//                else
+//                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 if (CategoryType >= 0) {
+                   holder.tvTknStockLabel.setVisibility(View.GONE);
+                      holder.tvTknStock.setVisibility(View.GONE);
+                    if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() == null)
+                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setBalance(0);
 
-                    holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance());
-
-                    if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
-                        holder.tvStock.setTextColor(getResources().getColor(R.color.green));
-                    else
-                        holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
-
-
-                    holder.tvMRP.setText(CurrencySymbol+" " + Product_Details_Modal.getMRP());
+                    holder.tvMRP.setText(CurrencySymbol + " " + Product_Details_Modal.getMRP());
 
                     holder.totalQty.setText("Total Qty : " + (int) ((Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty()/* +
                             (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRegularQty())) * Product_Details_Modal.getCnvQty()*/)));
 
 
-                    holder.regularAmt.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate()));
+                    holder.regularAmt.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate()));
 
-                    holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
+                    holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty() * Product_Details_Modal.getCnvQty()));
 
 
                     holder.rlUOM.setOnClickListener(new View.OnClickListener() {
@@ -1591,26 +1618,26 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                         public void onClick(View v) {
                             uomPos = position;
                             uomList = new ArrayList<>();
-                            String uomids="";
+                            String uomids = "";
                             if (Product_Details_Modal.getUOMList() != null && Product_Details_Modal.getUOMList().size() > 0) {
                                 for (int i = 0; i < Product_Details_Modal.getUOMList().size(); i++) {
                                     com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal.UOM uom = Product_Details_Modal.getUOMList().get(i);
 
-                                    if((";"+uomids).toLowerCase().indexOf(";"+uom.getUOM_Id().toLowerCase()+";")<0) {
+                                    if ((";" + uomids).toLowerCase().indexOf(";" + uom.getUOM_Id().toLowerCase() + ";") < 0) {
                                         uomids += uom.getUOM_Id().toLowerCase() + ";";
                                         uomList.add(new Common_Model(uom.getUOM_Nm(), uom.getUOM_Id(), "", "", String.valueOf(uom.getCnvQty())));
                                     }
                                 }
-                                common_class.showCommonDialog(uomList, 1, VanSalStockUnLoadActivity.this);
+                                common_class.showCommonDialog(uomList, 1, VanSalStockTopUpActivity.this);
                             } else {
-                                common_class.showMsg(VanSalStockUnLoadActivity.this, "No Records Found.");
+                                common_class.showMsg(VanSalStockTopUpActivity.this, "No Records Found.");
                             }
                         }
                     });
 
                 }
 
-                holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getTax()));
+                holder.tvTaxLabel.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modal.getTax()));
                 if (Product_Details_Modal.getQty() > 0)
                     holder.Qty.setText("" + Product_Details_Modal.getQty());
 
@@ -1620,7 +1647,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     holder.Free.setText("" + Product_Details_Modal.getFree());
 
 
-                holder.Disc.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getDiscount()));
+                holder.Disc.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modal.getDiscount()));
 
 
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
@@ -1628,16 +1655,39 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     public void onClick(View v) {
                         String sVal = holder.Qty.getText().toString();
                         if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+
+//                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+//                        int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+//                        if ((balance >= order) /*|| Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0*/) {
+                        //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                        //holder.tvStock.setText("" + (int) (balance - order));
+                        if(Integer.parseInt(sVal) + 1>9999) {
+                            holder.Qty.setText("9999");
+                        }else {
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                        }
+//                        } else {
+//                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
+//                        }
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal = holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal = "0";
-                        if (Integer.parseInt(sVal) > 0) {
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                        try {
+                            String sVal = holder.Qty.getText().toString();
+                            if (sVal.equalsIgnoreCase("")) sVal = "0";
+                            if (Integer.parseInt(sVal) > 0) {
+                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+
+//                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+//                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+                                //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                //  holder.tvStock.setText("" + (int) (balance - order));
+                            }
+
+                        } catch (Exception e) {
+                            Log.v(TAG + "QtyMns:", e.getMessage());
                         }
                     }
                 });
@@ -1653,16 +1703,30 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                             if (!charSequence.toString().equals(""))
                                 enterQty = Double.valueOf(charSequence.toString());
 
-                            double totQty = ((enterQty + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRegularQty()) * Product_Details_Modal.getCnvQty());
+                            double totQty = (enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty());
+
+
+                            //  if (/*Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() < totQty) {
+//                                totQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
+//                                enterQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty();
+//                                holder.Qty.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty());
+//                                common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
+//
+//                            }
+
+                            /*      if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)*/
+                            //   holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty));
 
 
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty((int) enterQty);
-                            holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate()));
+                            holder.Amount.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate()));
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
                                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
-                                holder.QtyAmt.setText(CurrencySymbol+" " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modal.getCnvQty()));
-                                holder.totalQty.setText("Total Qty : " + (int)/* totQty*/enterQty);
+                                holder.QtyAmt.setText(CurrencySymbol + " " + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()));
+                                holder.totalQty.setText("Total Qty : " + (int) /*totQty*/enterQty);
+
+
                             }
 
 
@@ -1726,7 +1790,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                                                         )) / 100);
 
 
-                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount((Math.round(discountVal)));
+                                                        Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(((discountVal)));
 
                                                     } else {
                                                         //Rs
@@ -1736,7 +1800,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                                                             double freeVal = freePer * (product_details_modalArrayList.
                                                                     get(i).getDiscount());
 
-                                                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount((Math.round(freeVal)));
+                                                            Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(((freeVal)));
                                                         } else {
                                                             int val = (int) (totQty / highestScheme);
                                                             double freeVal = (double) (val * (product_details_modalArrayList.get(i).getDiscount()));
@@ -1746,7 +1810,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
 
                                                 } else {
-                                                    holder.Disc.setText(CurrencySymbol+" 0.00");
+                                                    holder.Disc.setText(CurrencySymbol + " 0.00");
                                                     Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
 
                                                 }
@@ -1758,7 +1822,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                                             holder.Free.setText("0");
                                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree("0");
 
-                                            holder.Disc.setText(CurrencySymbol+" 0.00");
+                                            holder.Disc.setText(CurrencySymbol + " 0.00");
                                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
 
 
@@ -1776,7 +1840,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                                 holder.Free.setText("0");
                                 Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setFree("0");
 
-                                holder.Disc.setText(CurrencySymbol+" 0.00");
+                                holder.Disc.setText(CurrencySymbol + " 0.00");
                                 Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setDiscount(0.00);
 
                                 Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setOff_Pro_code("");
@@ -1793,27 +1857,27 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                                         (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
                                 holder.Free.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getFree());
-                                holder.Disc.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
+                                holder.Disc.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
 
-                                holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
+                                holder.Amount.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
 
 
                             }
+
+
                             sumofTax(Product_Details_Modalitem, holder.getBindingAdapterPosition());
-                            holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
-                            holder.tvTaxLabel.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getTax()));
+                            holder.Amount.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
+                            holder.tvTaxLabel.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getTax()));
 
                             updateToTALITEMUI();
 
+
 //                            if (CategoryType == -1) {
 //                                String amt = holder.Amount.getText().toString();
-//                                Log.v(TAG + position, ":OUT:amt:" + amt);
 //                                if (amt.equals(CurrencySymbol+" 0.00")) {
-//                                    Log.v(TAG + position, ":IN:amt:" + amt);
 //                                    Product_Details_Modalitem.remove(position);
 //                                    notifyDataSetChanged();
 //                                }
-//
 //                                showFreeQtyList();
 //                            }
 
@@ -1827,8 +1891,6 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     @Override
                     public void beforeTextChanged(CharSequence s, int start,
                                                   int count, int after) {
-
-
                     }
 
                     @Override
@@ -1837,33 +1899,17 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     }
                 });
 
+
                 if (CategoryType == -1) {
 
                     if (Constants.VAN_SALES_MODE.equalsIgnoreCase(Constants.VAN_STOCK_UNLOADING))
                         holder.ivDel.setVisibility(View.INVISIBLE);
 
-                    //  holder.Qty.setText("" + Product_Details_Modal.getQty());
-                    // holder.Amount.setText(CurrencySymbol+" "+ formatter.format(Product_Details_Modal.getCrAmt()));
-
-
-                    holder.tvSalesQty.setText("" + Product_Details_Modal.getDr());
-                    holder.tvSalesAmt.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modal.getDrAmt()));
-
-
-                    holder.tvunloadQty.setText("" + (Product_Details_Modal.getCr() - Product_Details_Modal.getDr()));
-                    double unloadAmt=Product_Details_Modal.getCrAmt() - Product_Details_Modal.getDrAmt();
-                    if(unloadAmt>=0) {
-                        holder.tvUnloadAmt.setText(CurrencySymbol + " " + formatter.format(Product_Details_Modal.getCrAmt() - Product_Details_Modal.getDrAmt()));
-                    }else{
-                        holder.tvUnloadAmt.setText(CurrencySymbol + " " + formatter.format(0));
-                    }
-
-
                     holder.ivDel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
-                            AlertDialogBox.showDialog(VanSalStockUnLoadActivity.this, "HAP SFA",
+                            AlertDialogBox.showDialog(VanSalStockTopUpActivity.this, "HAP SFA",
                                     "Do you want to remove " + Product_Details_Modalitem.get(position).getName().toUpperCase() + " from your cart?"
                                     , "OK", "Cancel", false, new AlertBox() {
                                         @Override
@@ -1910,10 +1956,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
             try {
 
 
-                LayoutInflater inflater = LayoutInflater.from(VanSalStockUnLoadActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(VanSalStockTopUpActivity.this);
 
                 final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
-                AlertDialog alertDialog = new AlertDialog.Builder(VanSalStockUnLoadActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(VanSalStockTopUpActivity.this).create();
                 alertDialog.setCancelable(false);
 
                 final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
@@ -1924,9 +1970,9 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     @Override
                     public void onClick(View v) {
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
-                            common_class.showMsg(VanSalStockUnLoadActivity.this, "Empty value is not allowed");
+                            common_class.showMsg(VanSalStockTopUpActivity.this, "Empty value is not allowed");
                         } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getRate())) {
-                            common_class.showMsg(VanSalStockUnLoadActivity.this, "Enter Rate is greater than "+MRPCap);
+                            common_class.showMsg(VanSalStockTopUpActivity.this, "Enter Rate is greater than " + MRPCap);
 
                         } else {
                             alertDialog.dismiss();
@@ -1955,7 +2001,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock, tvSalesQty, tvSalesAmt, tvunloadQty, tvUnloadAmt,erpCode;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,erpCode,tvTknStockLabel,tvTknStock;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -1977,7 +2023,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                 llRegular = view.findViewById(R.id.llRegular);
                 tvUOM = view.findViewById(R.id.tvUOM);
                 ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
+                tvStock = view.findViewById(R.id.tvStockBal);
                 erpCode = view.findViewById(R.id.erpCode);
+                tvTknStockLabel=view.findViewById(R.id.tvTknStockLabel);
+                tvTknStock=view.findViewById(R.id.tvTknStock);
 
                 if (CategoryType >= 0) {
                     tvMRP = view.findViewById(R.id.MrpRate);
@@ -1986,15 +2035,10 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     QtyAmt = view.findViewById(R.id.qtyAmt);
                     totalQty = view.findViewById(R.id.totalqty);
                     rlUOM = view.findViewById(R.id.rlUOM);
-                    tvStock = view.findViewById(R.id.tvStockBal);
 
 
                 } else {
                     ivDel = view.findViewById(R.id.ivDel);
-                    tvSalesQty = view.findViewById(R.id.salesQty);
-                    tvSalesAmt = view.findViewById(R.id.salesAmount);
-                    tvunloadQty = view.findViewById(R.id.unLoadQty);
-                    tvUnloadAmt = view.findViewById(R.id.tvUnLoadAmount);
                 }
 
 
@@ -2062,6 +2106,8 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Free;
+
+
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
@@ -2071,46 +2117,5 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         }
 
 
-    }
-    private void getProductList(){
-        common_class.ProgressdialogShow(1, "Getting Material Details");
-
-        common_class.getPOSStockProduct(this, new OnLiveUpdateListener() {
-            @Override
-            public void onUpdate(String mode) {
-
-                String OrdersTable = String.valueOf(db.getMasterData(Constants.ProductStock_List));
-                userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                }.getType();
-
-                Product_Modal = gson.fromJson(OrdersTable, userType);
-                common_class.getDb_310Data(Constants.VAN_STOCK, getActiveActivity());
-            /*    JSONArray ProdGroups = db.getMasterData(Constants.ProdGroups_List);
-                LinearLayoutManager GrpgridlayManager = new LinearLayoutManager(VanSalStockUnLoadActivity.this);
-                GrpgridlayManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                Grpgrid.setLayoutManager(GrpgridlayManager);
-
-                RyclListItemAdb grplistItems = new RyclListItemAdb(ProdGroups, VanSalStockUnLoadActivity.this, new onListItemClick() {
-                    @Override
-                    public void onItemClick(JSONObject item) {
-
-                        try {
-                            FilterTypes(item.getString("id"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                Grpgrid.setAdapter(grplistItems);
-                try {
-                    FilterTypes(ProdGroups.getJSONObject(0).getString("id"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-                //selectedPos=0;
-                //showOrderItemList(selectedPos, "");
-                common_class.ProgressdialogShow(0, "");
-            }
-        });
     }
 }
