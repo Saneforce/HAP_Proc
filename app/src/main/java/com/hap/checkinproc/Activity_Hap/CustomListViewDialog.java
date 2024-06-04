@@ -113,7 +113,13 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                da.getFilter().filter(s.toString());
+                try {
+
+
+                    da.getFilter().filter(s.toString());
+                }catch (Exception e){
+                    Log.e("searcherror:",e.getMessage());
+                }
             }
         });
 

@@ -257,6 +257,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 lin_order.setVisibility(View.GONE);
                 lin_noOrder.setVisibility(View.VISIBLE);
                 card_date.setVisibility(View.GONE);
+                tvSalesReturn.setVisibility(View.GONE);
             }
             if (!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)) {
                 //  common_class.getDentDatas(this);

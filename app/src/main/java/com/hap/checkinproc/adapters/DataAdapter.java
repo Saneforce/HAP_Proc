@@ -63,6 +63,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
+       try{
         if (fruitViewHolder.getBindingAdapterPosition() >= contactListFiltered.size()) return;
         final Common_Model contact = contactListFiltered.get(fruitViewHolder.getBindingAdapterPosition());
         fruitViewHolder.mTextName.setText("" + contact.getName());
@@ -139,13 +140,20 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
 
             }
+
         });
+    }catch(Exception e ){
+        Log.e("binderror:", e.getMessage());
+    }
+
     }
 
     @Override
     public int getItemCount() {
-        if (contactListFiltered == null) return 0;
-        return contactListFiltered.size();
+
+            if (contactListFiltered == null) return 0;
+            return contactListFiltered.size();
+
     }
 
     @Override
@@ -175,8 +183,14 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactListFiltered = (ArrayList<Common_Model>) filterResults.values;
-                notifyDataSetChanged();
+              try {
+                  contactListFiltered = (ArrayList<Common_Model>) filterResults.values;
+
+
+                  notifyDataSetChanged();
+              }catch (Exception e){
+                  Log.e("filtererror:",e.getMessage());
+              }
             }
         };
     }

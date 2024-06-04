@@ -212,6 +212,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             vehNo=sharedCommonPref.getvalue(Constants.Vansales_VehNo);
             Log.v("vehNo_ghj",vehNo);
             edtVehicleNo.setText(vehNo);
+
             etDiscPer.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

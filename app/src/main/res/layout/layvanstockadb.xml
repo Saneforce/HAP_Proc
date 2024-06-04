@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -329,194 +329,31 @@
                 android:layout_marginRight="@dimen/C5dp"
                 android:background="@color/black"
                 android:outlineAmbientShadowColor="@color/statuscolor"></View>
-            <LinearLayout
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/ll_vanData"
+            android:layout_margin="@dimen/C5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextStyle"
+                android:text="Load Details"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVanLoadDet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/ll_vanData">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="SalesManName"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvsalesManName"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="Vehicle No"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvVehicleNo"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="Starting KM"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvSrtKm"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="CheckIn Date"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvCheckInDate"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="CheckIn Time"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvCheckInTime"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="Closing KM"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvEndKm"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="CheckOut Date"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvCheckOutDate"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="CheckOut Time"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvCheckOutTime"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:text="Total KM"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-
-                    android:id="@+id/tvTotalKm"
-                    style="@style/TextStyle"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text=""
-                    android:textStyle="bold"></TextView>
-            </LinearLayout>
-            </LinearLayout>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-
                 android:layout_marginLeft="@dimen/C5dp"
                 android:layout_marginRight="@dimen/C5dp"
                 android:background="@color/black"

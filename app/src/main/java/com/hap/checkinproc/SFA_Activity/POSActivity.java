@@ -456,7 +456,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Log.v(TAG, " order oncreate:j " + preOrderList);*/
 
             initData();
-            // common_class.getDb_310Data(Constants.STOCK_DATA, this);
+             //common_class.getDb_310Data(Constants.STOCK_DATA, this);
             if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX)))
                 common_class.getDb_310Data(Constants.POS_NETAMT_TAX, this);
 
@@ -817,8 +817,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                             for (int z = 0; z < Product_Modal.size(); z++) {
                                 double enterQty = Product_Modal.get(z).getQty();
                                 double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
-                                if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
-                                    count+=1;
+                                if(Product_Modal.get(z).getBalance()!=null) {
+                                    if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
+                                        count += 1;
+                                    }
                                 }
                             }
                         }
@@ -848,10 +850,12 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 for (int z = 0; z < Getorder_Array_List.size(); z++) {
                     double enterQty = Getorder_Array_List.get(z).getQty();
                     double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
-                    if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
-                        Toast.makeText(this, "Low Stock", Toast.LENGTH_LONG).show();
-                        ResetSubmitBtn(0);
-                        return;
+                    if(Getorder_Array_List.get(z).getBalance()!=null) {
+                        if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
+                            Toast.makeText(this, "Low Stock", Toast.LENGTH_LONG).show();
+                            ResetSubmitBtn(0);
+                            return;
+                        }
                     }
                 }
             }

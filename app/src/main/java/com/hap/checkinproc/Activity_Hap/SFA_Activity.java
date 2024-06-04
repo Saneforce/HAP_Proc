@@ -2,6 +2,8 @@ package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 import static com.hap.checkinproc.Common_Class.Constants.VAN_STOCK;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.activeActivity;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.setAppLogos;
 
 import android.app.Activity;
@@ -50,6 +52,7 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
@@ -57,6 +60,7 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.GrnListActivity;
 import com.hap.checkinproc.SFA_Activity.InshopActivity;
+import com.hap.checkinproc.SFA_Activity.Invoice_History;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.MyTeamActivity;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
@@ -318,7 +322,38 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             txt.setSelected(true);
         }
     }
+    public void LoadingMaterials(){
+        common_class.ProgressdialogShow(1, "");
+        common_class.getPOSProduct(getActiveActivity(), new OnLiveUpdateListener() {
+            @Override
+            public void onUpdate(String mode) {
+                common_class.CommonIntentwithNEwTask(POSActivity.class);
+                activeActivity.overridePendingTransition(R.anim.in, R.anim.out);
+                common_class.ProgressdialogShow(0, "");
+            }
 
+            @Override
+            public void onError(String msg) {
+                RetryLoadingProds();
+                common_class.ProgressdialogShow(0, "");
+            }
+        });
+    }
+    public void RetryLoadingProds(){
+        AlertDialogBox.showDialog(getApplicationContext(), "HAP SFA", "Product Loading Failed. Do you want to Retry ?", "Retry", "Cancel", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                if (common_class.isNetworkAvailable(getApplicationContext())) {
+                    LoadingMaterials();
+                    dialog.dismiss();
+                }
+            }
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+    }
     void setMenuAdapter() {
         RecyclerView.LayoutManager manager = new GridLayoutManager(this, 4);
         rvMenu.setLayoutManager(manager);
@@ -336,7 +371,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         common_class.CommonIntentwithNEwTask(GrnListActivity.class);
                         break;
                     case "Counter Sales":
-                        common_class.CommonIntentwithNEwTask(POSActivity.class);
+                        LoadingMaterials();
+                       // common_class.CommonIntentwithNEwTask(POSActivity.class);
                         break;
                     case "Primary Order":
                         common_class.getDb_310Data(Constants.PrimaryTAXList, SFA_Activity.this);

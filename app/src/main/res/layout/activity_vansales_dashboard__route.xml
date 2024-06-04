@@ -258,7 +258,7 @@
                             android:text="Stock Loading"
                             android:textColor="@color/black"
                             tools:ignore="NestedWeights"
-                            android:visibility="gone"/>
+                            android:visibility="visible"/>
                         <TextView
                             android:id="@+id/tvStockTopUp"
                             android:layout_width="0dp"
@@ -271,7 +271,8 @@
                             android:padding="@dimen/C5dp"
                             android:text="Stock Topup"
                             android:textColor="@color/black"
-                            tools:ignore="NestedWeights" />
+                            tools:ignore="NestedWeights"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/tvStockUnload"

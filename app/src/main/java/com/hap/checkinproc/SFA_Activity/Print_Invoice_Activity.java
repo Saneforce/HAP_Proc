@@ -226,6 +226,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 Map<String, String> params = new HashMap<>();
                 params.put("axn", "cal_rem_amt_sales_return");
                 params.put("invoice", Shared_Common_Pref.TransSlNo);
+                params.put("invoice", Shared_Common_Pref.TransSlNo);
                 Call<ResponseBody> call = apiInterface.getUniversalData(params);
                 call.enqueue(new Callback<>() {
                     @Override
@@ -3072,9 +3073,11 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("totdiscount"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
 
                         } else {
+                            String dis=obj.has("discount")?obj.getString("discount"):"0";
+                            String dis_price=obj.has("discount_price")?obj.getString("discount_price"):"0";
                             Order_Outlet_Filter.add(new Product_Details_Modal(obj.getString("Product_Code"), obj.getString("Product_Name"), obj.getString("MRP"), obj.getString("Bar_Code"), 1, "1",
                                     "1", "5", obj.getString("UOM"), 0, "0", obj.getDouble("BillRate"), obj.getString("PTR"),
-                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), obj.getString("discount"), obj.getString("discount_price"), obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
+                                    obj.getInt("Quantity"), obj.getInt("qty"), obj.getDouble("value"), taxList, "0", (taxAmt), (sTaxV), (SGSTAmt), (CGSTAmt), obj.getString("ConversionFactor"), dis,dis_price, obj.getString("Offer_ProductCd"), obj.getString("Offer_ProductNm"), obj.getString("off_pro_unit")));
 
                         }
 

@@ -2,7 +2,9 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -513,6 +515,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
 
 
             common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
+            common_class.getDb_310Data(Constants.STOCK_DATA, this);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -900,7 +903,22 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
                             common_class.showMsg(this, "Your Cart is empty...");
                         }
                     } else {
-                        showOrderList();
+                       // showOrderList();
+                        int count=0;
+                        if(StockCheck.equalsIgnoreCase("1")) {
+                            for (int z = 0; z < Product_Modal.size(); z++) {
+                                double enterQty = Product_Modal.get(z).getQty();
+                                double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
+                                if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
+                                    count+=1;
+                                }
+                            }
+                        }
+                        if(count==0){
+                            showOrderList();
+                        }else{
+                            Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 } catch (Exception e) {
 
@@ -913,6 +931,18 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
 
     private void SaveOrder(String axn) {
         // if (common_class.isNetworkAvailable(this)) {
+
+        if(StockCheck.equalsIgnoreCase("1")) {
+            for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                double enterQty = Getorder_Array_List.get(z).getQty();
+                double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
+                if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
+                    Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
+                    ResetSubmitBtn(0);
+                    return;
+                }
+            }
+        }
 
         AlertDialogBox.showDialog(VanSalStockTopUpActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
             @Override
@@ -1129,7 +1159,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
 Log.e("orderList",orderList.toString());
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansales_product_pay_recyclerview, getApplicationContext(), -1);
+        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansale_product_pay_recyclerview_topup, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         showFreeQtyList();
     }
@@ -1289,7 +1319,7 @@ Log.e("orderList",orderList.toString());
         Category_Nametext.setVisibility(View.VISIBLE);
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), categoryPos);
+        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview_topup, getApplicationContext(), categoryPos);
         recyclerView.setAdapter(mProdct_Adapter);
 
     }
@@ -1309,7 +1339,7 @@ Log.e("orderList",orderList.toString());
 
                             for (int pm = 0; pm < Product_Modal.size(); pm++) {
                                 if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
-                                    Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
+                                    Product_Modal.get(pm).setLoadStock(obj.getInt("Balance"));
                                     Log.v("name:" + Product_Modal.get(pm).getName(), ":Bal:" + obj.getInt("Balance"));
                                     break;
                                 }
@@ -1319,6 +1349,24 @@ Log.e("orderList",orderList.toString());
                         mProdct_Adapter.notifyDataSetChanged();
                     }
                     break;
+                case Constants.STOCK_DATA:
+                    JSONObject stkObjnew = new JSONObject(apiDataResponse);
+                    if (stkObjnew.getBoolean("success")) {
+                        JSONArray arr = stkObjnew.getJSONArray("Data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            JSONObject obj = arr.getJSONObject(i);
+
+                            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                                if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
+                                    Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
+                                    break;
+                                }
+                            }
+                        }
+
+                        mProdct_Adapter.notifyDataSetChanged();
+                    }
+
             }
         } catch (Exception e) {
 
@@ -1374,14 +1422,20 @@ Log.e("orderList",orderList.toString());
         common_class.dismissCommonDialog(type);
         switch (type) {
             case 1:
+                int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
+                if(StockCheck.equalsIgnoreCase("1") && qty > Product_ModalSetAdapter.get(uomPos).getBalance() ){
+                    common_class.showMsg(this, "Can't exceed Stock");
+                }else {
 //                int qty = (int) (Product_ModalSetAdapter.get(uomPos).getQty() * Double.parseDouble((myDataset.get(position).getPhone())));
 //                if (Product_ModalSetAdapter.get(uomPos).getBalance() == null || Product_ModalSetAdapter.get(uomPos).getBalance() >= qty
-                //    /*|| Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0*/) {
-                Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
-                Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
-                Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
-                mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
-//                } else {
+                    //    /*|| Product_ModalSetAdapter.get(uomPos).getCheckStock() == null || Product_ModalSetAdapter.get(uomPos).getCheckStock() == 0*/) {
+                    Product_ModalSetAdapter.get(uomPos).setCnvQty(Double.parseDouble((myDataset.get(position).getPhone())));
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Id(myDataset.get(position).getId());
+                    Product_ModalSetAdapter.get(uomPos).setUOM_Nm(myDataset.get(position).getName());
+                    mProdct_Adapter.notify(Product_ModalSetAdapter, R.layout.vansales_product_order_recyclerview, getApplicationContext(), 1);
+
+                }
+                //                } else {
 //                    common_class.showMsg(this, "Can't exceed Stock");
 //                }
 
@@ -1587,14 +1641,22 @@ Log.e("orderList",orderList.toString());
                     holder.QtyMns.setVisibility(View.INVISIBLE);
                     holder.Qty.setEnabled(false);
                 }
-                holder.tvStock.setText("" + Product_Details_Modal.getLoadStock());
+                holder.tvLoadStock.setText("" + Product_Details_Modal.getLoadStock());
 
-//                holder.tvStock.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance());
-//
-//                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
-//                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
-//                else
-//                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
+                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() == null)
+                    Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setBalance(0);
+                double totQty= Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
+                holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
+                if((Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty)<0 && StockCheck.equalsIgnoreCase("1")) {
+                    holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
+                    //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
+                    // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
+                }
+                holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                else
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 if (CategoryType >= 0) {
                    holder.tvTknStockLabel.setVisibility(View.GONE);
@@ -1653,29 +1715,60 @@ Log.e("orderList",orderList.toString());
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal = holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+                        //String sVal = holder.Qty.getText().toString();
+                      //  if (sVal.equalsIgnoreCase("")) sVal = "0";
 
 //                        int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
 //                        int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
 //                        if ((balance >= order) /*|| Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0*/) {
                         //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                         //holder.tvStock.setText("" + (int) (balance - order));
-                        if(Integer.parseInt(sVal) + 1>9999) {
-                            holder.Qty.setText("9999");
-                        }else {
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
-                        }
+                      //  if(Integer.parseInt(sVal) + 1>9999) {
+                          //  holder.Qty.setText("9999");
+                       // }else {
+                            //holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
+                       // }
 //                        } else {
 //                            common_class.showMsg(VanSalesOrderActivity.this, "Can't exceed stock");
 //                        }
+                        Thread thread = new Thread(){
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void run() {
+                                super.run();
+                                String sVal = holder.Qty.getText().toString();
+                                if (sVal.equalsIgnoreCase("")) sVal = "0";
+
+                                int order = (int) ((Integer.parseInt(sVal) + 1) * Product_Details_Modal.getCnvQty());
+                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+                                if(StockCheck.equalsIgnoreCase("1") && order > balance ){
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            common_class.showMsg(VanSalStockTopUpActivity.this, "Can't exceed Stock");
+                                        }
+                                    });
+                                }else{
+                                    //if ((balance >= order) || Product_Details_Modal.getCheckStock() == null || Product_Details_Modal.getCheckStock() == 0) {
+                                    if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                        Log.e("txt_", "loop works");
+                                    String finalSVal = sVal;
+                                    runOnUiThread(() -> {
+                                        holder.tvStock.setText("" + (int) (balance - order));
+                                        holder.Qty.setText(String.valueOf(Integer.parseInt(finalSVal) + 1));
+                                    });
+                                }
+                            }
+                        };
+                        thread.start();
+
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         try {
-                            String sVal = holder.Qty.getText().toString();
+                           /* String sVal = holder.Qty.getText().toString();
                             if (sVal.equalsIgnoreCase("")) sVal = "0";
                             if (Integer.parseInt(sVal) > 0) {
                                 holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
@@ -1684,6 +1777,16 @@ Log.e("orderList",orderList.toString());
 //                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
                                 //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                                 //  holder.tvStock.setText("" + (int) (balance - order));
+                            }*/
+                            String sVal = holder.Qty.getText().toString();
+                            if (sVal.equalsIgnoreCase("")) sVal = "0";
+                            if (Integer.parseInt(sVal) > 0) {
+                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+
+                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+                                if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                    holder.tvStock.setText("" + (int) (balance - order));
                             }
 
                         } catch (Exception e) {
@@ -1704,6 +1807,8 @@ Log.e("orderList",orderList.toString());
                                 enterQty = Double.valueOf(charSequence.toString());
 
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty());
+                            holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+
 
 
                             //  if (/*Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() < totQty) {
@@ -1717,7 +1822,10 @@ Log.e("orderList",orderList.toString());
                             /*      if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)*/
                             //   holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty));
 
-
+                            holder.itemView.setBackgroundColor(getResources().getColor(R.color.white));
+                            if((Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty)<0 && StockCheck.equalsIgnoreCase("1")) {
+                                holder.itemView.setBackgroundColor(getResources().getColor(R.color.color_red));
+                            }
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setQty((int) enterQty);
                             holder.Amount.setText(CurrencySymbol + " " + new DecimalFormat("##0.00").format(totQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getRate()));
                             Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).setAmount(Double.valueOf(formatter.format(totQty *
@@ -2001,7 +2109,7 @@ Log.e("orderList",orderList.toString());
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, productQty, regularAmt, tvUOM,
-                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,erpCode,tvTknStockLabel,tvTknStock;
+                    QtyAmt, totalQty, tvTaxLabel, tvMRP, tvStock,erpCode,tvTknStockLabel,tvTknStock,tvLoadStock;
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
@@ -2027,6 +2135,7 @@ Log.e("orderList",orderList.toString());
                 erpCode = view.findViewById(R.id.erpCode);
                 tvTknStockLabel=view.findViewById(R.id.tvTknStockLabel);
                 tvTknStock=view.findViewById(R.id.tvTknStock);
+                tvLoadStock=view.findViewById(R.id.tvLoadStock);
 
                 if (CategoryType >= 0) {
                     tvMRP = view.findViewById(R.id.MrpRate);

@@ -421,6 +421,11 @@ public class SalesReturnActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("axn", "get_product_list_for_invoice");
         params.put("invoice", invoice);
+        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+            params.put("ordertype", "vansale");
+        }else{
+            params.put("ordertype", "secondary");
+        }
         Call<ResponseBody> call = apiInterface.getUniversalData(params);
         call.enqueue(new Callback<>() {
             @Override
@@ -504,8 +509,13 @@ public class SalesReturnActivity extends AppCompatActivity {
         String outletCode = Shared_Common_Pref.OutletCode;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> params = new HashMap<>();
-//        params.put("axn", "get_latest_invoice_of_outlet"); // Enable this line to get last 30 days's invoices...
-        params.put("axn", "get_today_invoice_of_outlet"); // Enable this line to get only today's invoices...
+        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+            //params.put("axn", "get_latest_vaninvoice_of_outlet"); // Enable this line to get last 30 days's vaninvoices...
+              params.put("axn", "get_today_vaninvoice_of_outlet"); // Enable this line to get only today's vaninvoices...
+        }else {
+            //params.put("axn", "get_latest_invoice_of_outlet"); // Enable this line to get last 30 days's invoices...
+            params.put("axn", "get_today_invoice_of_outlet"); // Enable this line to get only today's invoices...
+        }
         params.put("outletCode", outletCode);
         Call<ResponseBody> call = apiInterface.getUniversalData(params);
         call.enqueue(new Callback<>() {

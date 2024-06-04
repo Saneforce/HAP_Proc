@@ -590,7 +590,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         }
 
 
-        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))&&shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING).equals(Common_Class.GetDateOnly())  ) {
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))&&shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING_TIME).equals(Common_Class.GetDateOnly())  ) {
             tvStockLoad.setTextColor(getResources().getColor(R.color.grey_500));
             tvStockLoad.setEnabled(false);
             tvStockLoad.setVisibility(View.GONE);
@@ -617,6 +617,39 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 }
         }
     }
+
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+
+        if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
+            tvStockUnload.setTextColor(getResources().getColor(R.color.grey_500));
+            tvStockUnload.setEnabled(false);
+            tvStockLoad.setVisibility(View.VISIBLE);
+            tvStockLoad.setTextColor(getResources().getColor(R.color.black));
+            tvStockLoad.setEnabled(true);
+            tvStockTopUp.setVisibility(View.GONE);
+
+        }
+
+
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))&&shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING).equals(Common_Class.GetDateOnly())  ) {
+            tvStockLoad.setTextColor(getResources().getColor(R.color.grey_500));
+            tvStockLoad.setEnabled(false);
+            tvStockLoad.setVisibility(View.GONE);
+            tvStockTopUp.setVisibility(View.VISIBLE);
+
+
+            tvStockUnload.setTextColor(getResources().getColor(R.color.black));
+            tvStockUnload.setEnabled(true);
+
+        }
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
+            common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
+        }
+
+    }*/
+
 
     private void getLastInvoiceData() {
         try {

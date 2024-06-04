@@ -32,6 +32,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
     int RowLayout;
     Context context;
     NumberFormat formatter = new DecimalFormat("##0.00");
+
     public rvVanStockview(JSONArray jList, int rowLayout, Context mcontext){
         jLists=jList;
         RowLayout=rowLayout;
@@ -64,35 +65,10 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
                 JSONArray arr = jItem.getJSONArray("Details");
                 JSONArray arrData=jItem.getJSONArray("VanData");
 
+                Log.e("VanData len:",""+arr.length());
                if(arrData.length()>0){
                    holder.ll_vanData.setVisibility(View.VISIBLE);
-                   JSONObject objNew = arrData.getJSONObject(0);
-                   holder.tvsalesManName.setText(""+objNew.getString("salesManName"));
-                   holder.tvVehicleNo.setText(""+objNew.getString("vehNo"));
-                   double srtKm=objNew.getDouble("srtKm");
-                   double endKm=objNew.getDouble("endKm");
-                   if(srtKm>0) {holder.tvSrtKm.setText("" +srtKm );}else{holder.tvSrtKm.setText("-");}
-                   if(endKm>0) {
-                       holder.tvEndKm.setText("" +endKm );
-                       holder.tvCheckOutDate.setText(""+objNew.getString("vanDate"));
-                       holder.tvCheckOutTime.setText(""+objNew.getString("checkoutTime"));
-                   }else{
-                       holder.tvEndKm.setText("-");
-                       holder.tvCheckOutDate.setText("-");
-                       holder.tvCheckOutTime.setText("-");
-                   }
-                   holder.tvCheckInDate.setText(""+objNew.getString("vanDate"));
-                   holder.tvCheckInTime.setText(""+objNew.getString("checkInTime"));
-                   if(endKm==0){
-                       holder.tvTotalKm.setText("Closing Not Done");
-                   }else{
-                       double totkm=endKm-srtKm;
-                       if(totkm<0) {
-                           holder.tvTotalKm.setText("Closing Not Done");
-                       }else {
-                           holder.tvTotalKm.setText("" + totkm);
-                       }
-                   }
+                   holder.rvVanLoadDet.setAdapter(new VanLoadDetAdapter(arrData, R.layout.item_vanload_details, context));
                }else{
                    holder.ll_vanData.setVisibility(View.GONE);
                }
@@ -119,7 +95,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
                 holder.tvTotStkVal.setText(""+ formatter.format(totLoadAmt));
                 holder.tvTotTopUpVal.setText(""+ formatter.format(totTopupAmt));
                 holder.tvTotVanSalVal.setText(""+ formatter.format(totSalAmt));
-                holder.tvTotUnLoadVal.setText(""+ formatter.format(totLoadAmt+totTopupAmt-totSalAmt));
+                holder.tvTotUnLoadVal.setText(""+ formatter.format(totUnLoadAmt));
 
 
                 //  tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(getIntent().getDoubleExtra("stkLoadAmt", 0) - salAmt));
@@ -150,8 +126,8 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvDt, tvLoadAmt, tvUnLoadAmt, tvTotVanSalQty, tvTotStkQty,tvTotTopUpQty,tvTotUnLoadQty;//tvTotLoad;
         TextView tvTotVanSalVal, tvTotStkVal,tvTotTopUpVal,tvTotUnLoadVal;
-        TextView tvsalesManName,tvVehicleNo,tvSrtKm,tvCheckInDate,tvCheckInTime,tvEndKm,tvCheckOutDate,tvCheckOutTime,tvTotalKm;
-        RecyclerView rvVanSales;
+       // TextView tvsalesManName,tvVehicleNo,tvSrtKm,tvCheckInDate,tvCheckInTime,tvEndKm,tvCheckOutDate,tvCheckOutTime,tvTotalKm;
+        RecyclerView rvVanSales,rvVanLoadDet;
         LinearLayout parent_layout,ll_vanData;
 
         public MyViewHolder(View view) {
@@ -161,6 +137,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
 
                 rvVanSales = itemView.findViewById(R.id.rvVanSal);
                 tvDt = itemView.findViewById(R.id.tvVSPayDate);
+                rvVanLoadDet=itemView.findViewById(R.id.rvVanLoadDet);
 
                 tvTotVanSalQty = itemView.findViewById(R.id.tvTotSalQty);
                 tvTotStkQty = itemView.findViewById(R.id.tvTotLoadQty);
@@ -170,15 +147,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
                 tvTotStkVal = itemView.findViewById(R.id.tvTotLoadVal);
                 tvTotTopUpVal = itemView.findViewById(R.id.tvTotTopUpVal);
                 tvTotUnLoadVal = itemView.findViewById(R.id.tvTotUnLoadVal);
-                tvsalesManName = itemView.findViewById(R.id.tvsalesManName);
-                tvVehicleNo=itemView.findViewById(R.id.tvVehicleNo);
-                tvSrtKm = itemView.findViewById(R.id.tvSrtKm);
-                tvCheckInDate= itemView.findViewById(R.id.tvCheckInDate);
-                tvCheckInTime = itemView.findViewById(R.id.tvCheckInTime);
-                tvEndKm= itemView.findViewById(R.id.tvEndKm);
-                tvCheckOutDate= itemView.findViewById(R.id.tvCheckOutDate);
-                tvCheckOutTime= itemView.findViewById(R.id.tvCheckOutTime);
-                tvTotalKm= itemView.findViewById(R.id.tvTotalKm);
+
                 ll_vanData=itemView.findViewById(R.id.ll_vanData);
                 //tvTotLoad=itemView.findViewById(R.id.tvTotLoad);
 
