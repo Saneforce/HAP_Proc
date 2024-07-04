@@ -379,12 +379,16 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case "Secondary Order":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
+                        Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
                         startActivity(new Intent(SFA_Activity.this, Dashboard_Route.class));
+
                         break;
 
                     case "Sales Return":
                         sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SR");
-                        startActivity(new Intent(SFA_Activity.this, Dashboard_Route.class));
+                        Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
+                        startActivity (new Intent(SFA_Activity.this, Dashboard_Route.class));
+
                         break;
 
                     case "Van Sales":
@@ -924,7 +928,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.Lin_Route:
                 sharedCommonPref.save(sharedCommonPref.DCRMode, "");
+                Shared_Common_Pref.SFA_MENU = "Dashboard_Route";
                 common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
+
                 break;
 
             case R.id.SyncButon:
@@ -1056,6 +1062,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                 sharedCommonPref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
 
                             }
+                            Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
                             startActivity(new Intent(SFA_Activity.this, VanSalesDashboardRoute.class));
                             Log.v(key, apiDataResponse);
                         }catch (Exception e){

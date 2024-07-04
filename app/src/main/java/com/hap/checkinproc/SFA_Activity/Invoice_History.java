@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Common_Class.getDateYearMonthFormat;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
 import android.annotation.SuppressLint;
@@ -232,9 +233,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            tvStartDate.setText(Common_Class.GetDatewothouttime());
-            tvEndDate.setText(Common_Class.GetDatewothouttime());
+           // tvStartDate.setText(Common_Class.GetDatewothouttime());
+           // tvEndDate.setText(Common_Class.GetDatewothouttime());
 
+            tvStartDate.setText(Common_Class.GetDatewothouttimenew());
+            tvEndDate.setText(Common_Class.GetDatewothouttimenew());
             //common_class.getDb_310Data(Constants.TAXList, this);
             //common_class.getDb_310Data(Constants.OUTSTANDING, this);
 
@@ -331,9 +334,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 int month = monthOfYear + 1;
                 String date = ("" + year + "-" + month + "-" + dayOfMonth);
+                String datenew = ("" +  dayOfMonth+ "-" + month + "-" +year );
 
-                if (common_class.checkDates(pos == 0 ? date : tvStartDate.getText().toString(), pos == 1 ? date : tvEndDate.getText().toString(), Invoice_History.this)) {
-                    tv.setText(date);
+                if (common_class.checkDates(pos == 0 ? date : getDateYearMonthFormat(tvStartDate.getText().toString()), pos == 1 ? date : getDateYearMonthFormat(tvEndDate.getText().toString()), Invoice_History.this)) {
+                    tv.setText(datenew);
                     if (sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode).equalsIgnoreCase("SR"))
                         common_class.getDataFromApi(Constants.SR_GetTodayOrder_List, Invoice_History.this, false);
                     else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){

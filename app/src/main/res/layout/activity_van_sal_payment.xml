@@ -55,21 +55,27 @@
                 android:id="@+id/lin_orderrecyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                >
+                android:orientation="vertical">
+                <TextView
+                    android:textStyle="bold"
+                    style="@style/TextStyle"
+                    android:text="Invoice Details"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:textStyle="bold"
                     android:id="@+id/tvVSPayDate"
                     style="@style/TextStyle"
-                    android:text="Date : 25-05-2022" />
+                    android:text="Date : 25-05-2022"
+                    android:drawableRight="@drawable/ic_baseline_date_range_24"
+                    android:drawableTint="@color/colorPrimaryDark"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                   >
 
 
                     <TextView
@@ -90,10 +96,21 @@
                 </LinearLayout>
 
                 <TextView
-                    android:textStyle="bold"
+                    android:id="@+id/tv_nodata"
                     style="@style/TextStyle"
-                    android:text="Invoice Details"
-                    android:textSize="15sp" />
+                    android:text="No data available"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:id="@+id/ll_head"
+                  android:layout_marginTop="@dimen/C5dp">
 
 
                 <View
@@ -158,17 +175,46 @@
                         android:gravity="end"
                         android:layout_marginEnd="@dimen/C3dp"></TextView>
                 </LinearLayout>
-                </LinearLayout>
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:gravity="center">
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:text="Paytype"
+                          android:layout_marginStart="@dimen/C8dp"
+                          android:gravity="end"></TextView>
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1.5"
+                          android:text="Ref.No"
+                          android:gravity="end"></TextView>
+                      <TextView
+                          android:id="@+id/tvBankName"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1.5"
+                          android:text="BankName"
+                          android:gravity="end"
+                          android:layout_marginEnd="@dimen/C3dp"></TextView>
+                  </LinearLayout>
 
 
-                <View
+
+
+                  <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/C5dp"
                     android:layout_marginRight="@dimen/C5dp"
                     android:background="@color/black"
                     android:outlineAmbientShadowColor="@color/statuscolor"></View>
-
+              </LinearLayout>
+    </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:orientation="vertical"
@@ -179,17 +225,20 @@
                     tools:listitem="@layout/adapter_vansales_pay"
                     tools:itemCount="5"
                    />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/ll_total">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-
-                    android:layout_marginLeft="@dimen/C5dp"
-                    android:layout_marginRight="@dimen/C5dp"
-                    android:background="@color/black"
-                    android:outlineAmbientShadowColor="@color/statuscolor"></View>
-
-                <LinearLayout
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/C5dp"
+            android:layout_marginRight="@dimen/C5dp"
+            android:background="@color/black"
+            android:outlineAmbientShadowColor="@color/statuscolor" />
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -273,7 +322,7 @@
 
             </LinearLayout>
 
-
+    </LinearLayout>
 
 
 

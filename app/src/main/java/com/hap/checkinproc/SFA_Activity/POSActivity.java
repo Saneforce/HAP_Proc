@@ -1860,10 +1860,10 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 //                holder.tvTknStock.setVisibility(View.GONE);
 //                holder.tvCLStock.setVisibility(View.GONE);
 //
-//                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
-//                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
-//                else
-//                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
+                if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.green));
+                else
+                    holder.tvStock.setTextColor(getResources().getColor(R.color.color_red));
 
                 if (CategoryType >= 0) {
 

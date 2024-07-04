@@ -571,7 +571,12 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
 
                                     imageServer=FileName;
                                     imageConvert = path;
-                                    imageSet = "file://" + path;
+                                    if(path!=null) {
+                                        String[] name = path.split("/");
+                                        imageSet= name[name.length - 1];
+                                    }
+                                  //  imageSet = "file://" + path;
+                                    Log.e("imageSetdata",imageSet);
                                     attachedImage.setImageBitmap(image);
                                     attachedImage.setVisibility(View.VISIBLE);
 
@@ -822,8 +827,12 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     if (takeorder.getText().toString().equalsIgnoreCase("SUBMIT")) {
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
-                            if(tvVehNo.getText().toString().equals(""))  {
+                            if(!edtSalesManName.getText().toString().equals("")&&edtSalesManName.getText().toString().trim().equals(""))  {
+                                Toast.makeText(getApplicationContext(),"Enter the Valid SalesManName",Toast.LENGTH_SHORT ).show();
+                            } else if(tvVehNo.getText().toString().equals(""))  {
                                 Toast.makeText(getApplicationContext(),"Enter the Vehicle No",Toast.LENGTH_SHORT ).show();
+                            } else if(tvVehNo.getText().toString().trim().equals(""))  {
+                                Toast.makeText(getApplicationContext(),"Enter the Valid Vehicle No",Toast.LENGTH_SHORT ).show();
                             }else if(edtEndKm.getText().toString().equals("")) {
                                 Toast.makeText(getApplicationContext(),"Enter the Closing Km",Toast.LENGTH_SHORT ).show();
                             }else if(startKm>Double.parseDouble(edtEndKm.getText().toString())) {
@@ -1104,6 +1113,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
         TextView tvBillToPay = findViewById(R.id.tvnetamount);
         TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
+        TextView tvBillSalTotQty=findViewById(R.id.tvtotalsaleqty);
 
         Getorder_Array_List = new ArrayList<>();
         Getorder_Array_List.clear();
@@ -1111,6 +1121,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         totalQty = 0;
         cashDiscount = 0;
         taxVal = 0;
+        int totsalQty=0;
 
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -1123,6 +1134,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
                     totalvalues += Product_Modal.get(pm).getCrAmt()-Product_Modal.get(pm).getDrAmt();
 
                     totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
+                    totsalQty+=Product_Modal.get(pm).getDr();
 
                     if (Product_Modal.get(pm).getTax() > 0)
                         taxVal += Product_Modal.get(pm).getTax();
@@ -1146,6 +1158,7 @@ public class VanSalStockUnLoadActivity extends AppCompatActivity implements View
         tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvBillTotItem.setText("" + Getorder_Array_List.size());
         tvBillTotQty.setText("" + totalQty);
+        tvBillSalTotQty.setText("" + totsalQty);
         tvBillToPay.setText(CurrencySymbol+" " + formatter.format(totalvalues));
         tvCashDiscount.setText(CurrencySymbol+" " + formatter.format(cashDiscount));
         // tvTax.setText(CurrencySymbol+" "+ formatter.format(taxVal));

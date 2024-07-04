@@ -303,6 +303,11 @@ android:background="@color/white"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 android:textStyle="bold"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:id="@+id/llTknStock">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -324,6 +329,7 @@ android:background="@color/white"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 android:textStyle="bold"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tvBatchNo"

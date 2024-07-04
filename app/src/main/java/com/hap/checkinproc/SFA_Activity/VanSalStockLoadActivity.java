@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.Activity_Hap.AllowancCapture.setOnImagePickListener;
+import static com.hap.checkinproc.Common_Class.Common_Class.formatNumber;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
@@ -131,6 +132,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     EditText etCategoryItemSearch, edtVehicleNo, edtStartKm,edtSalesManName;
     int cashDiscount;
     NumberFormat formatter = new DecimalFormat("##0.00");
+    DecimalFormat newFormat = new DecimalFormat("##.00");
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     public int selectedPos = 0;
     private TextView tvTotalAmount;
@@ -608,7 +610,13 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
                                     imageServer=FileName;
                                     imageConvert = path;
-                                    imageSet = "file://" + path;
+                                    //imageSet = "file://" + path;
+                                    if(path!=null) {
+                                        String[] name = path.split("/");
+                                        imageSet= name[name.length - 1];
+                                    }
+                                    //  imageSet = "file://" + path;
+                                    Log.e("imageSetdata",imageSet);
                                     attachedImage.setImageBitmap(image);
                                     attachedImage.setVisibility(View.VISIBLE);
 
@@ -862,9 +870,13 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                         if (Getorder_Array_List != null
                                 && Getorder_Array_List.size() > 0) {
 
-                         if(edtVehicleNo.getText().toString().equals(""))  {
-                             Toast.makeText(getApplicationContext(),"Enter the Vehicle No",Toast.LENGTH_SHORT ).show();
-                         }else if(edtStartKm.getText().toString().equals("")) {
+                            if(!edtSalesManName.getText().toString().equals("")&&edtSalesManName.getText().toString().trim().equals(""))  {
+                                Toast.makeText(getApplicationContext(),"Enter the Valid SalesManName",Toast.LENGTH_SHORT ).show();
+                            } else if(edtVehicleNo.getText().toString().equals(""))  {
+                                Toast.makeText(getApplicationContext(),"Enter the Vehicle No",Toast.LENGTH_SHORT ).show();
+                            } else if(edtVehicleNo.getText().toString().trim().equals(""))  {
+                                Toast.makeText(getApplicationContext(),"Enter the Valid Vehicle No",Toast.LENGTH_SHORT ).show();
+                            }else if(edtStartKm.getText().toString().equals("")) {
                              Toast.makeText(getApplicationContext(),"Enter the Start Km",Toast.LENGTH_SHORT ).show();
                          }else if(imageSet.equals("")){
                              Toast.makeText(getApplicationContext(),"Please Attach Photo",Toast.LENGTH_SHORT ).show();
@@ -904,11 +916,16 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                         int count=0;
                         if(StockCheck.equalsIgnoreCase("1")) {
                             for (int z = 0; z < Product_Modal.size(); z++) {
-                                double enterQty = Product_Modal.get(z).getQty();
-                                double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
-                                if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
-                                    count+=1;
-                                }
+                               if(Product_Modal.get(z).getQty()>0) {
+                                 //  Log.e("quantity:", "" + Product_Modal.get(z).getQty() * Product_Modal.get(z).getCnvQty());
+                                  // Log.e("quaninvoice:", "" + Product_Modal.get(z).getBalance() + Product_Modal.get(z).getName());
+                                   double enterQty = Product_Modal.get(z).getQty();
+                                   double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
+                                   if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
+                                       Log.e("quaninvoiceIN:", "" + (Product_Modal.get(z).getBalance() - (int) totQty) + Product_Modal.get(z).getName());
+                                       count += 1;
+                                   }
+                               }
                             }
                         }
                         if(count==0){
@@ -930,12 +947,14 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         // if (common_class.isNetworkAvailable(this)) {
         if(StockCheck.equalsIgnoreCase("1")) {
             for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                double enterQty = Getorder_Array_List.get(z).getQty();
-                double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
-                if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
-                    Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
-                    ResetSubmitBtn(0);
-                    return;
+                if(Getorder_Array_List.get(z).getQty()>0) {
+                    double enterQty = Getorder_Array_List.get(z).getQty();
+                    double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
+                    if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
+                        Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
+                        ResetSubmitBtn(0);
+                        return;
+                    }
                 }
             }
         }
@@ -1152,7 +1171,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         //for testing
-        //  findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
+        findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
@@ -1224,7 +1243,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     totalvalues += Product_Modal.get(pm).getAmount();
 
                     totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
-                    totQty+=Product_Modal.get(pm).getQty();//*Product_Modal.get(pm).getCnvQty();
+                    totQty+=Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getCnvQty();
 
                     if (Product_Modal.get(pm).getTax() > 0)
                         taxVal += Product_Modal.get(pm).getTax();
@@ -1564,7 +1583,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         int CategoryType;
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
-
+        int uomClickCnt=0;
 
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int categoryType) {
             this.Product_Details_Modalitem = Product_Details_Modalitem;
@@ -1606,7 +1625,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(holder.getBindingAdapterPosition());
 
                 holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-
+                 holder.llTknStock.setVisibility(View.GONE);
 
                 holder.erpCode.setText(Product_Details_Modal.getERP_Code().toUpperCase());
                 holder.Amount.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
@@ -1659,7 +1678,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                     //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
-                holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
 
 
 
@@ -1794,16 +1813,27 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                                 //  if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
                                 //  holder.tvStock.setText("" + (int) (balance - order));
                            //}
-                            String sVal = holder.Qty.getText().toString();
-                            if (sVal.equalsIgnoreCase("")) sVal = "0";
-                            if (Integer.parseInt(sVal) > 0) {
-                                holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
 
-                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
-                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
-                                if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
-                                    holder.tvStock.setText("" + (int) (balance - order));
-                            }
+
+                                String sVal = holder.Qty.getText().toString();
+                                if (sVal.equalsIgnoreCase("")) sVal = "0";
+                                if (Integer.parseInt(sVal) > 0) {
+                                    holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                                    int val=Integer.parseInt(sVal) - 1;
+                                    if(CategoryType==-1 &&val==0) {
+                                        Product_Details_Modalitem.get(position).setQty(0);
+                                        Product_Details_Modalitem.remove(position);
+                                        notifyDataSetChanged();
+                                        updateToTALITEMUI();
+                                    }else{
+
+                                        int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+                                        int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+                                        if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                            holder.tvStock.setText("" + (int) (balance - order));
+                                    }
+                                }
+
 
                         } catch (Exception e) {
                             Log.v(TAG + "QtyMns:", e.getMessage());
@@ -1824,7 +1854,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty());
 
-                            holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())+ " " + holder.tvUOM.getText());
                             //  if (/*Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() < totQty) {
 //                                totQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
 //                                enterQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty();
@@ -2071,6 +2101,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
         }
 
+
         @Override
         public int getItemCount() {
             return Product_Details_Modalitem.size();
@@ -2129,7 +2160,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             ImageView ImgVwProd, QtyPls, QtyMns, ivDel;
             EditText Qty;
 
-            LinearLayout llRegular, rlUOM;
+            LinearLayout llRegular, rlUOM,llTknStock;
 
 
             public MyViewHolder(View view) {
@@ -2149,6 +2180,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
                 tvStock = view.findViewById(R.id.tvStockBal);
                 erpCode = view.findViewById(R.id.erpCode);
+                llTknStock=view.findViewById(R.id.llTknStock);
                 if (CategoryType >= 0) {
                     tvMRP = view.findViewById(R.id.MrpRate);
                     lblRQty = view.findViewById(R.id.status);

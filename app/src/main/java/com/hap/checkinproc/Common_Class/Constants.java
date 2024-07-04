@@ -242,4 +242,5 @@ public class Constants {
     public static final String RETAILER_CHECKIN="RetailerCheckIn";
     public static final String Van_ProdGroups_List = "VanProdGroupList";
     public static final String VAN_STOCK_LOADING_TIME = "Stock Loading Time";
+    public static final String VanRetailorTodayData = "vanretailorTodayData";
 }

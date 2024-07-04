@@ -63,8 +63,8 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
 
         stDate = Common_Class.GetDatewothouttime();
         endDate = Common_Class.GetDatewothouttime();
-        tvStartDate.setText(stDate);
-        tvEndDate.setText(endDate);
+        tvStartDate.setText(Common_Class.GetDatewothouttimenew());
+        tvEndDate.setText(Common_Class.GetDatewothouttimenew());
 //
 ////        Log.v("sdate",tvStartDate.toString());
 
@@ -90,21 +90,22 @@ public class VanStockViewActivity extends AppCompatActivity implements View.OnCl
                 int month = monthOfYear + 1;
 
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
+                String datenew=(""+dayOfMonth+"-"+month+"-"+year);
                 if (val == 1) {
-                    if (common_class.checkDates(date, tvEndDate.getText().toString(), VanStockViewActivity.this) ||
+                    if (common_class.checkDates(datenew, datenew, VanStockViewActivity.this) ||
                             tvEndDate.getText().toString().equals("")) {
-                        tvStartDate.setText(date);
-                        stDate = tvStartDate.getText().toString();
+                        tvStartDate.setText(datenew);
+                        stDate = date;
 
                         Log.v("sdatefd",stDate);
                         common_class.getDb_310Data(Constants.VAN_STOCK_DTWS, VanStockViewActivity.this);
                     } else
                         common_class.showMsg(VanStockViewActivity.this, "Please select valid date");
                 } else {
-                    if (common_class.checkDates(tvStartDate.getText().toString(), date, VanStockViewActivity.this) ||
+                    if (common_class.checkDates(datenew, datenew, VanStockViewActivity.this) ||
                             tvStartDate.getText().toString().equals("")) {
-                        tvEndDate.setText(date);
-                        endDate = tvEndDate.getText().toString();
+                        tvEndDate.setText(datenew);
+                        endDate = date;
                         Log.v("sdatefd",endDate);
 
                         common_class.getDb_310Data(Constants.VAN_STOCK_DTWS, VanStockViewActivity.this);

@@ -8,6 +8,7 @@ import static com.hap.checkinproc.Common_Class.Constants.STOCK_LEDGER;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -123,7 +124,11 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     TextView tvStockTopUp;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+    ImageView btnFilter;
+    LinearLayout ll_van_det;
 
+    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_vansale,tv_tot_norder;
+    int vansaleCnt=0,vanNoOrdCnt=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,7 +175,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 Log.d("LiveEvent", "reloadList");
                 if (mode.equalsIgnoreCase("reloadSale") && updSale == false) {
                     getSalesCounts();
-                    getLastInvoiceData();
+                   // getLastInvoiceData();
+                    getLastVanInvoiceData();
                 }
             }
         });
@@ -263,6 +269,30 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
             txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+            getLastVanInvoiceData();
+            btnFilter=findViewById(R.id.btnFilter);
+            ll_van_det=findViewById(R.id.ll_van_det);
+            tv_tot_sku=findViewById(R.id.tv_tot_sku);
+            tv_tot_qty=findViewById(R.id.tv_tot_qty);
+            tv_tot_value=findViewById(R.id.tv_tot_value);
+            tv_tot_vansale=findViewById(R.id.tv_tot_vansale);
+            tv_tot_norder=findViewById(R.id.tv_tot_noorder);
+
+            common_class.gotoHomeScreen(this, ivToolbarHome);
+
+            btnFilter.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onClick(View v) {
+                    if(ll_van_det.getVisibility()==View.GONE) {
+                        ll_van_det.setVisibility(View.VISIBLE);
+                        btnFilter.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter_off));
+                    }else{
+                        ll_van_det.setVisibility(View.GONE);
+                        btnFilter.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter));
+                    }
+                }
+            });
 
             ivBtnRpt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -453,7 +483,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
                 common_class.getDb_310Data(Rout_List, this);
-                getLastInvoiceData();
+             //   getLastInvoiceData();
+                getLastVanInvoiceData();
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
@@ -649,7 +680,81 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         }
 
     }*/
+private void  getLastVanInvoiceData(){
+    try {
 
+        if (common_class.isNetworkAvailable(this)) {
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            JSONObject HeadItem = new JSONObject();
+            HeadItem.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+
+            String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+            HeadItem.put("divisionCode", div_code);
+
+
+            Call<ResponseBody> call = service.getVanInvData(shared_common_pref.getvalue(Constants.Distributor_Id),HeadItem.toString());
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    InputStreamReader ip = null;
+                    StringBuilder is = new StringBuilder();
+                    String line = null;
+                    try {
+
+
+                        if (response.isSuccessful()) {
+                            ip = new InputStreamReader(response.body().byteStream());
+                            BufferedReader bf = new BufferedReader(ip);
+                            while ((line = bf.readLine()) != null) {
+                                is.append(line);
+                                Log.v("Res>>", is.toString());
+                            }
+
+                            shared_common_pref.save(Constants.VanRetailorTodayData, is.toString());
+                           // Log.e("vanjson4:",shared_common_pref.getvalue(Constants.VanRetailorTodayData));
+                            JSONArray TodaySales = new JSONArray(shared_common_pref.getvalue(Constants.VanRetailorTodayData));
+                            int sku=0;
+                            int qty=0;
+                            double value=0;
+                            if (TodaySales.length() > 0) {
+                                for (int i = 0; i < TodaySales.length(); i++) {
+                                    JSONObject item = TodaySales.getJSONObject(i);
+
+                                       sku+=item.getInt("Item");
+                                       qty+=item.getInt("TotQty");
+                                       value+=item.getDouble("InvValue");
+
+
+                                }
+                            }
+                            tv_tot_sku.setText(""+sku);
+                            tv_tot_qty.setText(""+qty);
+                            tv_tot_value.setText(""+value);
+                        }
+
+                    } catch (Exception e) {
+
+                        Log.v("fail>>1", e.getMessage());
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.v("fail>>2", t.toString());
+
+
+                }
+            });
+        } else {
+            common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
+        }
+    } catch (Exception e) {
+        Log.v("fail>>", e.getMessage());
+
+
+    }
+}
 
     private void getLastInvoiceData() {
         try {
@@ -855,7 +960,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             shared_common_pref.save(Constants.DistributorFSSAI,myDataset.get(position).getDisFssai());
 
             common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
-            getLastInvoiceData();
+           // getLastInvoiceData();
+            getLastVanInvoiceData();
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);
             shared_common_pref.save(Constants.DivERP, myDataset.get(position).getDivERP());
@@ -922,7 +1028,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
                             String outletCode = "";
 
-
+                            vanNoOrdCnt=0;
+                            vansaleCnt=0;
                             for (int arr = 0; arr < jsonArray.length(); arr++) {
                                 JSONObject arrObj = jsonArray.getJSONObject(arr);
 
@@ -931,9 +1038,17 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                                 String sMode = flag == 0 ? "BTG" : flag == 3 ? "invoice" : flag == 2 ? "order" : flag == 4? "Van invoice " :"no order";
 
                                 outletCode = outletCode + arrObj.getString("ListedDrCode") + sMode + ",";
-
+                                if(flag==4) {
+                                    vansaleCnt += 1;
+                                }
+                                if(flag!=0&&flag!=3&&flag!=2&&flag!=4){
+                                  vanNoOrdCnt+=1;
+                                }
 
                             }
+                            tv_tot_vansale.setText(""+vansaleCnt);
+                            tv_tot_norder.setText(""+vanNoOrdCnt);
+                            ll_van_det.setVisibility(View.VISIBLE);
 
                             shared_common_pref.save(Constants.VAN_RETAILER_STATUS, outletCode);
 
@@ -1068,6 +1183,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                             Shared_Common_Pref.Freezer_Required = mRetailer_Modal_ListFilter.get(position).getFreezer_required();
 
                             Shared_Common_Pref.SFA_MENU = "VanSalesDashboardRoute";
+                            common_class.getDb_310Data(Constants.TAXList, getActiveActivity());
                           //  common_class.CommonIntentwithoutFinish(Invoice_History.class);
                           //  getActivity().overridePendingTransition(R.anim.in, R.anim.out);
                             LoadingMaterials();

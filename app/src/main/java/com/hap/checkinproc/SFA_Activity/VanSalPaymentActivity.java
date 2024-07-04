@@ -2,13 +2,16 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,18 +27,23 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Calendar;
 
-public class VanSalPaymentActivity extends AppCompatActivity implements UpdateResponseUI {
+public class VanSalPaymentActivity extends AppCompatActivity implements UpdateResponseUI, View.OnClickListener {
 
     Common_Class common_class;
-    TextView tvDt, tvLoadAmt, tvUnLoadAmt, tvTotVanSal,tvTotCollAmt,tvTotCredit;
+    TextView  tvLoadAmt, tvUnLoadAmt, tvTotVanSal,tvTotCollAmt,tvTotCredit;
     NumberFormat formatter = new DecimalFormat("##0.00");
     RecyclerView rvVanSales;
     private double salAmt,collectAmt,creditAmt;
     private double totStkAmt;
 
     public static String stDate = "", endDate = "";
-
+    LinearLayout ll_head,ll_total;
+    TextView tv_nodata;
+    public static  String date="";
+    private DatePickerDialog fromDatePickerDialog;
+    public static TextView tvDt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +58,12 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
         tvTotVanSal = findViewById(R.id.tvTotSal);
         tvTotCollAmt = findViewById(R.id.tvTotCollAmt);
         tvTotCredit=findViewById(R.id.tvTotCredit);
+        ll_head=findViewById(R.id.ll_head);
+        ll_total=findViewById(R.id.ll_total);
+        tv_nodata=findViewById(R.id.tv_nodata);
         tvDt.setText("Date : " + Common_Class.GetDatemonthyearformat());
+        tvDt.setOnClickListener(this);
+        date=Common_Class.GetDatewothouttime();
 
         totStkAmt = getIntent().getDoubleExtra("stkLoadAmt",-1.00 );
 
@@ -128,7 +141,25 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                 tvTotCredit.setText(CurrencySymbol+" "+ formatter.format(creditAmt));
 
                 tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
-                rvVanSales.setAdapter(new Pay_Adapter(filterArr, R.layout.adapter_vansales_pay, VanSalPaymentActivity.this));
+
+                if(filterArr.length()>0){
+                    tv_nodata.setVisibility(View.GONE);
+                    ll_total.setVisibility(View.VISIBLE);
+                    ll_head.setVisibility(View.VISIBLE);
+                    rvVanSales.setVisibility(View.VISIBLE);
+                    rvVanSales.setAdapter(new Pay_Adapter(filterArr, R.layout.adapter_vansales_pay, VanSalPaymentActivity.this));
+                }else {
+                    tv_nodata.setVisibility(View.VISIBLE);
+                    ll_total.setVisibility(View.GONE);
+                    ll_head.setVisibility(View.GONE);
+                    rvVanSales.setVisibility(View.GONE);
+                }
+               // rvVanSales.setAdapter(new Pay_Adapter(filterArr, R.layout.adapter_vansales_pay, VanSalPaymentActivity.this));
+            }else {
+                tv_nodata.setVisibility(View.VISIBLE);
+                ll_total.setVisibility(View.GONE);
+                ll_head.setVisibility(View.GONE);
+                rvVanSales.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             Log.v("adap:", e.getMessage());
@@ -136,6 +167,30 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvVSPayDate:
+                showDatePickerDialog();
+            break;
+        }
+    }
+    void showDatePickerDialog() {
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(VanSalPaymentActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                int month = monthOfYear + 1;
+                date = ("" + year + "-" + month + "-" + dayOfMonth);
+                String datenew=(""+dayOfMonth+"-"+month+"-"+year);
+               tvDt.setText("Date : " +datenew);
+                common_class.getDataFromApi(Constants.VanSalOrderList, VanSalPaymentActivity.this , false);
+
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.show();
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+    }
     public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> {
         Context context;
         private JSONArray arr;
@@ -182,6 +237,10 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                 holder.tvCollectedAmt.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Collect_Amt")));
                 holder.tvCredit.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Order_Value") -obj.getDouble("Collect_Amt")));
 
+                holder.tvPaytype.setText(""+obj.getString("Pay_Mode"));
+                holder.tvRefNo.setText(""+obj.getString("Pay_Ref_no"));
+                holder.tvBankName.setText(""+obj.getString("PaymentName"));
+
 
             } catch (Exception e) {
                 Log.e("adapterProduct: ", e.getMessage());
@@ -197,6 +256,7 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView tvSNo, tvInvNo, tvAmt,tvRetailerName,tvCollectedAmt,tvCredit;
+            TextView tvPaytype,tvRefNo,tvBankName;
 
 
             public MyViewHolder(View view) {
@@ -207,6 +267,9 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                 tvRetailerName=view.findViewById(R.id.tvRetailerName);
                 tvCollectedAmt=view.findViewById(R.id.tvCollectedAmt);
                 tvCredit=view.findViewById(R.id.tvCredit);
+                tvPaytype=view.findViewById(R.id.tvPaytype);
+                tvRefNo=view.findViewById(R.id.tvRefno);
+                tvBankName=view.findViewById(R.id.tvBankname);
 
             }
         }

@@ -307,7 +307,7 @@
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="@dimen/C5dp"
                         android:background="@color/black"
-                        android:outlineAmbientShadowColor="@color/statuscolor"/>
+                        android:outlineAmbientShadowColor="@color/statuscolor" />
 
 
                     <LinearLayout
@@ -774,7 +774,7 @@
                                 android:outlineAmbientShadowColor="@color/black"
                                 android:visibility="visible" />
                             <RelativeLayout
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp">
@@ -816,7 +816,7 @@
                             <EditText
                                 android:id="@+id/edtSaleManName"
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/C40dp"
+                                android:layout_height="@dimen/C50dp"
                                 android:background="@drawable/edit_bg"
                                 android:paddingStart="@dimen/C10dp"
                                 android:paddingEnd="@dimen/C10dp"

@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Common_Class.Common_Class.formatNumber;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
@@ -208,7 +209,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
             Product_Modal = gson.fromJson(OrdersTable, userType);
-          //  setProductSchemeAndTax(0);
+            setProductSchemeAndTax(0);
             vehNo=sharedCommonPref.getvalue(Constants.Vansales_VehNo);
             Log.v("vehNo_ghj",vehNo);
             edtVehicleNo.setText(vehNo);
@@ -1350,7 +1351,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
 
     }
 
-   /* void loadData(String apiDataResponse) {
+    void loadData(String apiDataResponse) {
         try {
             Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.Product_List)), userType);
             setProductSchemeAndTax(1);
@@ -1498,7 +1499,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             Log.v(TAG + ":loadData:", e.getMessage());
         }
 
-    }*/
+    }
 
    /* public void sumofTax(List<Product_Details_Modal> Product_Details_Modalitem, int pos) {
         try {
@@ -1932,7 +1933,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                 }
 
                 double totQty= Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
-                holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
 
                 holder.tvTknStock.setText("" + ((int) totQty) + " EA");
                 holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty) + " EA");
@@ -2118,7 +2119,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                             }
                             //if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)
                             //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()) + " EA");
-                            holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
 
                             holder.tvTknStock.setText("" + ((int) totQty) + " EA");
                             holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty) + " EA");
@@ -2878,7 +2879,13 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
 
                                     imageServer=FileName;
                                     imageConvert = path;
-                                    imageSet = "file://" + path;
+                                    ///imageSet = "file://" + path;
+                                    if(path!=null) {
+                                        String[] name = path.split("/");
+                                        imageSet= name[name.length - 1];
+                                    }
+                                    //  imageSet = "file://" + path;
+                                    Log.e("imageSetdata",imageSet);
                                     attachedImage.setImageBitmap(image);
                                     attachedImage.setVisibility(View.VISIBLE);
 
@@ -2982,7 +2989,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             }
             //if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)
             //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()) + " EA");
-            holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+            holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
 
             holder.tvTknStock.setText("" + ((int) totQty) + " EA");
             holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty) + " EA");

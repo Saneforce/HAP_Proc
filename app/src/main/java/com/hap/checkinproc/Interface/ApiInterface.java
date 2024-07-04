@@ -650,8 +650,7 @@ public interface ApiInterface {
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/Taimg")
-    Call<ResponseBody> uploadOutletImage(
-            @Part MultipartBody.Part file);
+    Call<ResponseBody> uploadOutletImage(@Part MultipartBody.Part file);
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
@@ -786,4 +785,8 @@ public interface ApiInterface {
     @POST("Db_v300.php?")
     Call<ResponseBody> getResponses(@Part("data") RequestBody data,
                                     @QueryMap Map<String, Object> queryParrams);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/todayvaninvdetails")
+    Call<ResponseBody> getVanInvData(@Query("distCode") String distCode,@Field("data") String body);
 }

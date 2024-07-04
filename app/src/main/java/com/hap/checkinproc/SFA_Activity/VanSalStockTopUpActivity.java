@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Common_Class.formatNumber;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
@@ -620,7 +621,13 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
 
                                     imageServer = FileName;
                                     imageConvert = path;
-                                    imageSet = "file://" + path;
+                                   // imageSet = "file://" + path;
+                                    if(path!=null) {
+                                        String[] name = path.split("/");
+                                        imageSet= name[name.length - 1];
+                                    }
+                                    //  imageSet = "file://" + path;
+                                    Log.e("imageSetdata",imageSet);
                                     attachedImage.setImageBitmap(image);
                                     attachedImage.setVisibility(View.VISIBLE);
 
@@ -1153,7 +1160,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         //for testing
-        //  findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
+          findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
@@ -1652,7 +1659,7 @@ Log.e("orderList",orderList.toString());
                     //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
-                holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())) + " " + holder.tvUOM.getText());
                 if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
                     holder.tvStock.setTextColor(getResources().getColor(R.color.green));
                 else
@@ -1782,11 +1789,19 @@ Log.e("orderList",orderList.toString());
                             if (sVal.equalsIgnoreCase("")) sVal = "0";
                             if (Integer.parseInt(sVal) > 0) {
                                 holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
+                                int val=Integer.parseInt(sVal) - 1;
+                                if(CategoryType==-1 &&val==0) {
+                                    Product_Details_Modalitem.get(position).setQty(0);
+                                    Product_Details_Modalitem.remove(position);
+                                    notifyDataSetChanged();
+                                    updateToTALITEMUI();
+                                }else{
 
-                                int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
-                                int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
-                                if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
-                                    holder.tvStock.setText("" + (int) (balance - order));
+                                    int order = (int) ((Integer.parseInt(sVal) - 1) * Product_Details_Modal.getCnvQty());
+                                    int balance = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance();
+                                    if (Product_Details_Modal.getCheckStock() != null && Product_Details_Modal.getCheckStock() == 1)
+                                        holder.tvStock.setText("" + (int) (balance - order));
+                                }
                             }
 
                         } catch (Exception e) {
@@ -1807,7 +1822,7 @@ Log.e("orderList",orderList.toString());
                                 enterQty = Double.valueOf(charSequence.toString());
 
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty());
-                            holder.tvStock.setText("" + String.format("%.2f", (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + String.format(formatNumber (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())) + " " + holder.tvUOM.getText());
 
 
 

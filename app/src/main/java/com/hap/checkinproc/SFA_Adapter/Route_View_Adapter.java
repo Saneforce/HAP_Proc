@@ -49,16 +49,19 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     AdapterOnClick mAdapterOnClick;
     JSONObject PreSales;
     Shared_Common_Pref shared_common_pref;
+
+    String vanSales;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC, llDataParent, icFreezer;
+        LinearLayout parent_layout, cdParent, linDistance, btnCallMob, linDirection, icAC, llDataParent, icFreezer,ll_vandetail;
         ImageView icMob, btnEditRet;
         RecyclerView lstTdyView, lstPreView;
         Button btnView;
+        TextView tv_sku,tv_qty,tv_value;
 
 
         public MyViewHolder(View view) {
@@ -101,6 +104,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
                 icAC = view.findViewById(R.id.icAC);
+                tv_qty=view.findViewById(R.id.tv_qty);
+                tv_sku=view.findViewById(R.id.tv_sku);
+                tv_value=view.findViewById(R.id.tv_value);
+                ll_vandetail=view.findViewById(R.id.ll_vandetail);
+
 
 
                 linDistance.setVisibility(View.GONE);
@@ -129,8 +137,15 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             this.context = context;
             this.mAdapterOnClick = mAdapterOnClick;
             shared_common_pref = new Shared_Common_Pref(context);
-            String todayorderliost = shared_common_pref.getvalue(Constants.RetailorTodayData);
-            PreSales = new JSONObject(todayorderliost);
+
+            if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
+               // Log.e("vanjson3:",shared_common_pref.getvalue(Constants.VanRetailorTodayData));
+                String todayVanOrd = shared_common_pref.getvalue(Constants.VanRetailorTodayData);
+                vanSales = todayVanOrd;
+            }else{
+                String todayorderliost = shared_common_pref.getvalue(Constants.RetailorTodayData);
+                PreSales = new JSONObject(todayorderliost);
+            }
 
         } catch (Exception e) {
             Log.e("RouteAdapter:constr ", e.getMessage());
@@ -243,6 +258,62 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     Shared_Common_Pref.OutletAddress = String.valueOf(mRetailer_Modal_List.getListedDrAddress1());
                 }
             });
+           // Log.e("vanjson1:",""+vanSales);
+            if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                holder.btnView.setVisibility(View.GONE);
+                holder.ll_vandetail.setVisibility(View.VISIBLE);
+              //  Log.e("vanjson",""+vanSales);
+                JSONArray TodaySales = new JSONArray(vanSales);
+                Boolean DtaBnd = false;
+                if (TodaySales.length() > 0) {
+                    for (int i = 0; i < TodaySales.length(); i++) {
+                        JSONObject item = TodaySales.getJSONObject(i);
+                        if (item.getString("CusCode").equals(mRetailer_Modal_List.getId())) {
+
+                            holder.tv_sku.setText("SKU : " + item.getString("Item"));
+                            holder.tv_qty.setText("QTY(EA) : " + item.getString("TotQty"));
+                            holder.tv_value.setText("Value : " + item.getString("InvValue"));
+                        }else{
+
+                        }
+                    }
+                }
+            }else{
+                holder.btnView.setVisibility(View.VISIBLE);
+                holder.ll_vandetail.setVisibility(View.GONE);
+                //PreSales
+                JSONArray TodaySales = PreSales.getJSONArray("todaydata");
+                Boolean DtaBnd = false;
+                if (TodaySales.length() > 0) {
+                    for (int i = 0; i < TodaySales.length(); i++) {
+                        JSONObject item = TodaySales.getJSONObject(i);
+                        if (item.getString("Cust_Code").equals(mRetailer_Modal_List.getId())) {
+                            JSONArray BindArry = item.getJSONArray("Items");
+                            holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry, R.layout.categorywise_sales_adp, context));
+                            DtaBnd = true;
+
+                            int iQty = 0;
+                            double iVal = 0.0;
+                            for (int il = 0; il < BindArry.length(); il++) {
+                                JSONObject itm = BindArry.getJSONObject(il);
+                                if (itm.has("Vals")) {
+                                    JSONArray itmv = itm.getJSONArray("Vals");
+                                    if (itmv.length() > 0) {
+                                        iQty += itmv.getJSONObject(0).getInt("Qty");
+                                        iVal += itmv.getJSONObject(0).getDouble("Val");
+                                    }
+                                }
+                            }
+                            holder.txTodayTotQty.setText(String.valueOf(iQty));
+                            holder.txTodayTotVal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(iVal));
+                        }
+                    }
+                }
+                if (DtaBnd == false) {
+                    JSONArray BindArry = PreSales.getJSONArray("Group");
+                    holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry, R.layout.categorywise_sales_adp, context));
+                }
+            }
 
             holder.btnView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -250,6 +321,8 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     if (holder.btnView.getText().toString().equalsIgnoreCase("VIEW")) {
                         holder.btnView.setText("HIDE");
                         holder.llDataParent.setVisibility(View.VISIBLE);
+
+
                     } else {
                         holder.btnView.setText("VIEW");
                         holder.llDataParent.setVisibility(View.GONE);
@@ -261,38 +334,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             holder.txTodayTotVal.setText(CurrencySymbol+" 0.00");
             holder.txPreTotQty.setText("0");
             holder.txPreTotVal.setText(CurrencySymbol+" 0.00");
-            //PreSales
-            JSONArray TodaySales = PreSales.getJSONArray("todaydata");
-            Boolean DtaBnd = false;
-            if (TodaySales.length() > 0) {
-                for (int i = 0; i < TodaySales.length(); i++) {
-                    JSONObject item = TodaySales.getJSONObject(i);
-                    if (item.getString("Cust_Code").equals(mRetailer_Modal_List.getId())) {
-                        JSONArray BindArry = item.getJSONArray("Items");
-                        holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry, R.layout.categorywise_sales_adp, context));
-                        DtaBnd = true;
 
-                        int iQty = 0;
-                        double iVal = 0.0;
-                        for (int il = 0; il < BindArry.length(); il++) {
-                            JSONObject itm = BindArry.getJSONObject(il);
-                            if (itm.has("Vals")) {
-                                JSONArray itmv = itm.getJSONArray("Vals");
-                                if (itmv.length() > 0) {
-                                    iQty += itmv.getJSONObject(0).getInt("Qty");
-                                    iVal += itmv.getJSONObject(0).getDouble("Val");
-                                }
-                            }
-                        }
-                        holder.txTodayTotQty.setText(String.valueOf(iQty));
-                        holder.txTodayTotVal.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(iVal));
-                    }
-                }
-            }
-            if (DtaBnd == false) {
-                JSONArray BindArry = PreSales.getJSONArray("Group");
-                holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry, R.layout.categorywise_sales_adp, context));
-            }
 
             getMnthlyDta(holder, mRetailer_Modal_List.getId(), holder.tvFirstMonth.getText().toString());
             holder.tvFirstMonth.setOnClickListener(new View.OnClickListener() {

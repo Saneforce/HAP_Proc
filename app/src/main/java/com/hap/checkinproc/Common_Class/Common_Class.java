@@ -150,6 +150,17 @@ public class Common_Class {
         dateInString = sdf.format(resultdate);
         return dateInString;
     }
+    public static String getDateYearMonthFormat(String date){
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("dd-MM-yyyy");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("yyyy-MM-dd");
+            date = spf.format(newDate);
+        }catch (Exception e){
+
+        }
+        return date;
+    }
     public static RequestBody toRequestBody (JsonArray value) {
         return RequestBody.create(MediaType.parse("text/plain"), value.toString());
     }
@@ -242,6 +253,13 @@ public class Common_Class {
     public static String GetDatewothouttime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+
+    public static String GetDatewothouttimenew() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
@@ -372,24 +390,24 @@ public class Common_Class {
 
                 case Constants.GetTodayOrder_List:
                     QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
-                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("fromdate", getDateYearMonthFormat(Invoice_History.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(Invoice_History.tvEndDate.getText().toString()));
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
 
                     break;
                 case Constants.Van_GetTodayOrder_List:
                     QuerySTring1 = "{\"tableName\":\"vangettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
-                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("fromdate", getDateYearMonthFormat(Invoice_History.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(Invoice_History.tvEndDate.getText().toString()));
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
 
                     break;
                 case Constants.Van_Get_Payment_Details:
                     QuerySTring1 = "{\"tableName\":\"vangetpaymentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
-                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("fromdate", getDateYearMonthFormat(Invoice_History.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(Invoice_History.tvEndDate.getText().toString()));
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
-
+                    QueryString.put("DateNew",VanSalPaymentActivity.date);
                     break;
 
                 case Constants.VanSalOrderList:
@@ -397,13 +415,14 @@ public class Common_Class {
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    QueryString.put("DateNew",VanSalPaymentActivity.date);
                     break;
 
 
                 case Constants.SR_GetTodayOrder_List:
                     QuerySTring1 = "{\"tableName\":\"getsalesandstockreturn\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                    QueryString.put("fromdate", Invoice_History.tvStartDate.getText().toString());
-                    QueryString.put("todate", Invoice_History.tvEndDate.getText().toString());
+                    QueryString.put("fromdate", getDateYearMonthFormat(Invoice_History.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(Invoice_History.tvEndDate.getText().toString()));
                     break;
                 case Constants.GetGrn_History:
                     QuerySTring1 = "{\"tableName\":\"getindentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -1460,6 +1479,33 @@ public class Common_Class {
         return b;
     }
 
+    public boolean checkDatesNew(String stDate, String endDate, Activity activity) {
+        boolean b = false;
+        try {
+            SimpleDateFormat dfDate = new SimpleDateFormat("dd-MM-yyyy");
+
+            Date date1 = dfDate.parse(stDate);
+            Date date2 = dfDate.parse(endDate);
+            long diff = date2.getTime() - date1.getTime();
+            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
+                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
+                    b = true;//If start date is before end date
+                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
+                    b = true;//If two dates are equal
+                } else {
+                    b = false; //If start date is after the end date
+                }
+
+            } else {
+                Toast.makeText(activity, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
     public void showCalDialog(Activity activity, String msg, String num) {
         AlertDialogBox.showDialog(activity, "HAP Check-In", msg, "Yes", "No", false, new AlertBox() {
             @Override
@@ -1917,6 +1963,15 @@ public class Common_Class {
 
     }
 
+
+    public static String formatNumber(double num) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formatted = df.format(num);
+        if (formatted.endsWith(".00")) {
+            return formatted.substring(0, formatted.length() - 3);
+        }
+        return formatted;
+    }
     public double formatDecimalToSingleDecimal(double amount) {
         return Double.parseDouble(new DecimalFormat("0.0").format(amount));
     }
