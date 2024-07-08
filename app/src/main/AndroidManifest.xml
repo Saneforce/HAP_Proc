@@ -383,6 +383,9 @@
             android:name=".SFA_Activity.Order_Category_Select"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SFA_Activity.Van_Order_Category_Select"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.ProjectionCategorySelectActivity"
             android:screenOrientation="portrait" />
         <activity

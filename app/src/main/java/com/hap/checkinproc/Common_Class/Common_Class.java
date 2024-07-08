@@ -492,7 +492,7 @@ public class Common_Class {
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
                 case Constants.VanTodayOrderDetails_List:
-                    QuerySTring1 = "{\"tableName\":\"VanGettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -1425,7 +1425,7 @@ public class Common_Class {
                 service.getDataArrayList("get/posproddetsn", jParam.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.v("POS:", response.body().toString());
+                      //  Log.v("POS:", response.body().toString());
                         db.deleteMasterData(Constants.POS_Product_List);
                         db.addMasterData(Constants.POS_Product_List, response.body());
                         ProductsLoaded=true;

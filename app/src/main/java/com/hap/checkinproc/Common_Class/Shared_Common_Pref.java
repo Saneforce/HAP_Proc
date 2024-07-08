@@ -82,7 +82,9 @@ public class Shared_Common_Pref {
     public static String Tp_Monthname = "Tp_Monthname";
     public static String Tp_SFCode = "Tp_SFCode";
     public static String DCRMode = "DCRMode";
-
+    public static  String Van_No_Order_Cnt = "vannoordercount";
+    public static  String Van_Order_Cnt = "vanordercount";
+    public static  String Van_Invoice_Cnt = "vaninvoicecount";
     public static int MaxKm = 1000;
 
     public Shared_Common_Pref(Activity Ac) {

@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,7 +53,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
     String vanSales;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
-
+    NumberFormat formatter;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, txTodayTotQty, txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate, txAdd, txOwnerNm, txMobile, txDistName, txChannel, txRetNo,
@@ -146,7 +147,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 String todayorderliost = shared_common_pref.getvalue(Constants.RetailorTodayData);
                 PreSales = new JSONObject(todayorderliost);
             }
-
+             formatter = new DecimalFormat("##0.00");
         } catch (Exception e) {
             Log.e("RouteAdapter:constr ", e.getMessage());
         }
@@ -263,18 +264,20 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 holder.btnView.setVisibility(View.GONE);
                 holder.ll_vandetail.setVisibility(View.VISIBLE);
               //  Log.e("vanjson",""+vanSales);
-                JSONArray TodaySales = new JSONArray(vanSales);
-                Boolean DtaBnd = false;
-                if (TodaySales.length() > 0) {
-                    for (int i = 0; i < TodaySales.length(); i++) {
-                        JSONObject item = TodaySales.getJSONObject(i);
-                        if (item.getString("CusCode").equals(mRetailer_Modal_List.getId())) {
+                if(vanSales!=null) {
+                    JSONArray TodaySales = new JSONArray(vanSales);
+                    Boolean DtaBnd = false;
+                    if (TodaySales.length() > 0) {
+                        for (int i = 0; i < TodaySales.length(); i++) {
+                            JSONObject item = TodaySales.getJSONObject(i);
+                            if (item.getString("CusCode").equals(mRetailer_Modal_List.getId())) {
 
-                            holder.tv_sku.setText("SKU : " + item.getString("Item"));
-                            holder.tv_qty.setText("QTY(EA) : " + item.getString("TotQty"));
-                            holder.tv_value.setText("Value : " + item.getString("InvValue"));
-                        }else{
-
+                                holder.tv_sku.setText("SKU : " + item.getString("Item"));
+                                holder.tv_qty.setText("QTY(EA) : " + item.getString("TotQty"));
+                                if (item.getString("InvValue") != null) {
+                                    holder.tv_value.setText("Value : " + CurrencySymbol + " " + formatter.format(Double.parseDouble(item.getString("InvValue"))));
+                                }
+                            }
                         }
                     }
                 }
@@ -313,6 +316,8 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     JSONArray BindArry = PreSales.getJSONArray("Group");
                     holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry, R.layout.categorywise_sales_adp, context));
                 }
+
+                getMnthlyDta(holder, mRetailer_Modal_List.getId(), holder.tvFirstMonth.getText().toString());
             }
 
             holder.btnView.setOnClickListener(new View.OnClickListener() {
@@ -336,7 +341,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             holder.txPreTotVal.setText(CurrencySymbol+" 0.00");
 
 
-            getMnthlyDta(holder, mRetailer_Modal_List.getId(), holder.tvFirstMonth.getText().toString());
+
             holder.tvFirstMonth.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

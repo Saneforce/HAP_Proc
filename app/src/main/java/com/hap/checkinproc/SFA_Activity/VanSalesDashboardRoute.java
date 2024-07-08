@@ -4,7 +4,9 @@ import static android.Manifest.permission.CALL_PHONE;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
+import static com.hap.checkinproc.Common_Class.Constants.Route_name;
 import static com.hap.checkinproc.Common_Class.Constants.STOCK_LEDGER;
+import static com.hap.checkinproc.Common_Class.Constants.VAN_STOCK;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 
@@ -64,6 +66,7 @@ import com.hap.checkinproc.PushNotification.MyFirebaseMessagingService;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
@@ -75,6 +78,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -127,8 +131,10 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     ImageView btnFilter;
     LinearLayout ll_van_det;
 
-    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_vansale,tv_tot_norder;
-    int vansaleCnt=0,vanNoOrdCnt=0;
+    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_vansale,tv_tot_norder,tv_tot_vanorder;
+    int vansaleCnt=0,vanNoOrdCnt=0,vanorderCnt=0;
+    NumberFormat formatter = new DecimalFormat("##0.00");
+   Switch  swPlus4, swMinus18, swAmbient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,7 +241,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             tvVanSalPay = findViewById(R.id.tvVanSalPay);
             tvStockView=findViewById(R.id.tvStockView);
             tvStockTopUp=findViewById(R.id.tvStockTopUp);
-
+            swPlus4 = findViewById(R.id.swPlus4);
+            swAmbient = findViewById(R.id.swAmbient);
+            swMinus18 = findViewById(R.id.swMinus18);
 
 
             ReachedOutlet.setOnClickListener(this);
@@ -277,9 +285,12 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             tv_tot_value=findViewById(R.id.tv_tot_value);
             tv_tot_vansale=findViewById(R.id.tv_tot_vansale);
             tv_tot_norder=findViewById(R.id.tv_tot_noorder);
+            tv_tot_vanorder=findViewById(R.id.tv_tot_vanorder);
 
             common_class.gotoHomeScreen(this, ivToolbarHome);
-
+            categoryType = "+4";
+            swAmbient.setChecked(false);
+            swPlus4.setChecked(true);
             btnFilter.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 @Override
@@ -417,6 +428,52 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 }
             });
 
+
+            swMinus18.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swAmbient.setChecked(false);
+
+
+
+                    }
+
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
+                    //  setPagerAdapter(false);
+                }
+            });
+            swPlus4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        swMinus18.setChecked(false);
+                        swAmbient.setChecked(false);
+
+
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
+                }
+            });
+
+            swAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    Log.e("swambient_switch",""+isChecked);
+                    if (isChecked) {
+                        swPlus4.setChecked(false);
+                        swMinus18.setChecked(false);
+
+                    }
+                    getCategoryType(swMinus18.isChecked(), swPlus4.isChecked(), swAmbient.isChecked());
+
+                }
+            });
+
             txSearchRet.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -484,7 +541,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
                 common_class.getDb_310Data(Rout_List, this);
              //   getLastInvoiceData();
-                getLastVanInvoiceData();
+                  getLastVanInvoiceData();
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
@@ -606,10 +663,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         StopedUpdate = true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
+    public void updateVanScreen(){
         if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
             tvStockUnload.setTextColor(getResources().getColor(R.color.grey_500));
             tvStockUnload.setEnabled(false);
@@ -635,6 +689,38 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+       /* if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
+            tvStockUnload.setTextColor(getResources().getColor(R.color.grey_500));
+            tvStockUnload.setEnabled(false);
+            tvStockLoad.setVisibility(View.VISIBLE);
+            tvStockLoad.setTextColor(getResources().getColor(R.color.black));
+            tvStockLoad.setEnabled(true);
+            tvStockTopUp.setVisibility(View.GONE);
+
+        }
+
+
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))&&shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING_TIME).equals(Common_Class.GetDateOnly())  ) {
+            tvStockLoad.setTextColor(getResources().getColor(R.color.grey_500));
+            tvStockLoad.setEnabled(false);
+            tvStockLoad.setVisibility(View.GONE);
+            tvStockTopUp.setVisibility(View.VISIBLE);
+
+
+            tvStockUnload.setTextColor(getResources().getColor(R.color.black));
+            tvStockUnload.setEnabled(true);
+
+        }
+        if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
+            common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
+        }*/
+        updateVanScreen();
 
     }
 
@@ -680,6 +766,12 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         }
 
     }*/
+
+    private void getCategoryType(boolean isMinus18, boolean isPlus4, boolean isAmbient) {
+        categoryType = isMinus18 ? "-18" : isPlus4 ? "+4" : isAmbient ? "Ambient" : "";
+        Log.v("categoryTypes:DR", categoryType);
+        setPagerAdapter(true);
+    }
 private void  getLastVanInvoiceData(){
     try {
 
@@ -719,17 +811,21 @@ private void  getLastVanInvoiceData(){
                             if (TodaySales.length() > 0) {
                                 for (int i = 0; i < TodaySales.length(); i++) {
                                     JSONObject item = TodaySales.getJSONObject(i);
-
-                                       sku+=item.getInt("Item");
-                                       qty+=item.getInt("TotQty");
-                                       value+=item.getDouble("InvValue");
+                                 if((shared_common_pref.getvalue(Route_Id).equalsIgnoreCase(item.getString("Route"))||
+                                         shared_common_pref.getvalue(Route_name).equalsIgnoreCase("ALL")||
+                                         shared_common_pref.getvalue(Route_name).equalsIgnoreCase("ALL"))&&
+                                         (item.getString("catType").contains(categoryType)||categoryType.equalsIgnoreCase(""))){
+                                               sku+=item.getInt("Item");
+                                               qty+=item.getInt("TotQty");
+                                               value+=item.getDouble("InvValue");
+                                 }
 
 
                                 }
                             }
                             tv_tot_sku.setText(""+sku);
                             tv_tot_qty.setText(""+qty);
-                            tv_tot_value.setText(""+value);
+                            tv_tot_value.setText(""+CurrencySymbol+" " + formatter.format(value));
                         }
 
                     } catch (Exception e) {
@@ -815,9 +911,12 @@ private void  getLastVanInvoiceData(){
     }
 
     private void createTabFragment() {
-        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "+4", "", "");
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", categoryType, "", "");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        tv_tot_vanorder.setText(Shared_Common_Pref.Van_Order_Cnt);
+        tv_tot_norder.setText(Shared_Common_Pref.Van_No_Order_Cnt);
+        tv_tot_vansale.setText(Shared_Common_Pref.Van_Invoice_Cnt);
     }
 
     @Override
@@ -959,7 +1058,11 @@ private void  getLastVanInvoiceData(){
             shared_common_pref.save(Constants.DistributorGst,myDataset.get(position).getDisGst());
             shared_common_pref.save(Constants.DistributorFSSAI,myDataset.get(position).getDisFssai());
 
+
+            shared_common_pref.save(Constants.VAN_STOCK_LOADING, "");
+            shared_common_pref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
             common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
+            common_class.getDb_310Data(Constants.VAN_STOCK, this);
            // getLastInvoiceData();
             getLastVanInvoiceData();
             common_class.getDataFromApi(Retailer_OutletList, this, false);
@@ -970,6 +1073,7 @@ private void  getLastVanInvoiceData(){
             shared_common_pref.save(Constants.Route_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_Id, myDataset.get(position).getId());
             setPagerAdapter(false);
+            getLastVanInvoiceData();
         }
     }
 
@@ -1007,6 +1111,10 @@ private void  getLastVanInvoiceData(){
                     case Rout_List:
                         JSONArray routeArr = new JSONArray(apiDataResponse);
                         FRoute_Master.clear();
+                        if (routeArr.length() > 1) {
+                            Model_Pojo = new Common_Model("", "All", routeArr.getJSONObject(0).optString("stockist_code"));
+                            FRoute_Master.add(Model_Pojo);
+                        }
                         for (int i = 0; i < routeArr.length(); i++) {
                             JSONObject jsonObject1 = routeArr.getJSONObject(i);
                             String id = String.valueOf(jsonObject1.optInt("id"));
@@ -1028,26 +1136,32 @@ private void  getLastVanInvoiceData(){
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
                             String outletCode = "";
 
-                            vanNoOrdCnt=0;
+                            vanorderCnt=0;
                             vansaleCnt=0;
+                            vanNoOrdCnt=0;
                             for (int arr = 0; arr < jsonArray.length(); arr++) {
                                 JSONObject arrObj = jsonArray.getJSONObject(arr);
 
                                 int flag = arrObj.getInt("OrderFlg");
                                 //  BTG=0,invoice-3,order-2,no order-1;
-                                String sMode = flag == 0 ? "BTG" : flag == 3 ? "invoice" : flag == 2 ? "order" : flag == 4? "Van invoice " :"no order";
+                                String sMode = flag == 0 ? "BTG" : flag == 3 ? "invoice" : flag == 2 ? "Van order" : flag == 4? "Van invoice " :"no order";
 
                                 outletCode = outletCode + arrObj.getString("ListedDrCode") + sMode + ",";
                                 if(flag==4) {
                                     vansaleCnt += 1;
-                                }
-                                if(flag!=0&&flag!=3&&flag!=2&&flag!=4){
+                                }else if(flag==2){
+                                    vanorderCnt+=1;
+                                } else if(flag ==1){
                                   vanNoOrdCnt+=1;
                                 }
 
                             }
+                            Shared_Common_Pref.Van_No_Order_Cnt=""+vanNoOrdCnt;
+                            Shared_Common_Pref.Van_Invoice_Cnt=""+vansaleCnt;
+                            Shared_Common_Pref.Van_Order_Cnt=""+vanorderCnt;
                             tv_tot_vansale.setText(""+vansaleCnt);
                             tv_tot_norder.setText(""+vanNoOrdCnt);
+                            tv_tot_vanorder.setText(""+vanorderCnt);
                             ll_van_det.setVisibility(View.VISIBLE);
 
                             shared_common_pref.save(Constants.VAN_RETAILER_STATUS, outletCode);
@@ -1055,6 +1169,31 @@ private void  getLastVanInvoiceData(){
                             Log.v("statusList:", outletCode);
 
                             setPagerAdapter(false);
+                        }
+                        break;
+                    case VAN_STOCK:
+                        try {
+
+                            JSONObject stkObj = new JSONObject(apiDataResponse);
+
+                            if (stkObj.getBoolean("success")) {
+                                JSONArray arr = stkObj.getJSONArray("Data");
+                                List<Product_Details_Modal> stkList = new ArrayList<>();
+                                for (int i = 0; i < arr.length(); i++) {
+                                    JSONObject obj = arr.getJSONObject(i);
+                                    stkList.add(new Product_Details_Modal(obj.getString("PCode"), obj.getInt("Cr"), obj.getInt("Dr"), (obj.getInt("Bal"))));
+                                }
+
+                                shared_common_pref.save(Constants.VAN_STOCK_LOADING, gson.toJson(stkList));
+                                shared_common_pref.save(Constants.VAN_STOCK_LOADING_TIME, Common_Class.GetDateOnly());
+
+
+
+                            }
+                            updateVanScreen();
+                            Log.v(key, apiDataResponse);
+                        }catch (Exception e){
+
                         }
                         break;
                 }
@@ -1115,12 +1254,19 @@ private void  getLastVanInvoiceData(){
 
 
             if (isFilter) {
-                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", "", "", "");
+                adapter.notifyData(Retailer_Modal_ListFilter, tabLayout.getSelectedTabPosition(), txSearchRet.getText().toString(), RetType, "", categoryType, "", "");
+                tv_tot_vanorder.setText(Shared_Common_Pref.Van_Order_Cnt);
+                tv_tot_norder.setText(Shared_Common_Pref.Van_No_Order_Cnt);
+                tv_tot_vansale.setText(Shared_Common_Pref.Van_Invoice_Cnt);
+                getLastVanInvoiceData();
             } else {
-                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", "+4", "", "");
+                adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getSelectedTabPosition(), Retailer_Modal_ListFilter, RetType, this, "VanSalesDashboardRoute", "", categoryType, "", "");
                 viewPager.setCurrentItem(tabLayout.getSelectedTabPosition());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
+                tv_tot_vanorder.setText(Shared_Common_Pref.Van_Order_Cnt);
+                tv_tot_norder.setText(Shared_Common_Pref.Van_No_Order_Cnt);
+                tv_tot_vansale.setText(Shared_Common_Pref.Van_Invoice_Cnt);
             }
         } catch (Exception e) {
             Log.v("DAshboard_Route:", e.getMessage());
@@ -1154,9 +1300,9 @@ private void  getLastVanInvoiceData(){
 
                         if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
                             Toast.makeText(getActivity(), "Select Franchise", Toast.LENGTH_SHORT).show();
-                        } else if (dashboard_route.route_text.getText().toString().equals("")) {
+                        } /*else if (dashboard_route.route_text.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-                        }
+                        }*/
 
 //                        else if (Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.VAN_STOCK_LOADING))) {
 //                            common_class.showMsg(getActivity(), "No Stock");

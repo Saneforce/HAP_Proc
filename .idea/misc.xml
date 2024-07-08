@@ -2,18 +2,45 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_dashboard__route.xml" value="0.11145833333333334" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_add_new_retailer.xml" value="0.2515625" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_checkin.xml" value="0.1" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_compementary_invoice.xml" value="0.11639492753623189" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_dashboard.xml" value="0.1484375" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_dashboard__route.xml" value="0.2" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_dashboard__two.xml" value="0.1484375" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_history_info.xml" value="0.1125" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_invoice__category__select_edit.xml" value="0.1" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_invoice__history.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_leave__request.xml" value="0.264" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_leave_dashboard.xml" value="0.1484375" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_login.xml" value="0.11145833333333334" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_missed__punch.xml" value="0.2515625" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_offer_counter_layout.xml" value="0.2515625" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_order__category__select_edit.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_pos_layout.xml" value="0.16" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_print__invoice_.xml" value="0.2" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_product_image_view.xml" value="0.128125" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_reports_list.xml" value="0.2515625" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_s_f_a__dashboard.xml" value="0.1484375" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_sfactivity.xml" value="0.264" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_t_a_claim.xml" value="0.1359375" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_vansales_dashboard__route.xml" value="0.11639492753623189" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_vansalesorder_category.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/activity_view__all__status_.xml" value="0.1359375" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/dashboard_deviation_dialog.xml" value="0.2515625" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/fragment_tab_outlet.xml" value="0.2515625" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/invoice_pay_recyclerview_edit.xml" value="0.264" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/item_pending_order.xml" value="0.1" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/print_invoice_recyclerview.xml" value="0.2" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.264" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/product_order_recyclerview.xml" value="0.2" />
         <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/product_pay_recyclerview_edit.xml" value="0.2" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/product_pos_pay_recyclerview.xml" value="0.13645833333333332" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/product_pos_recyclerview.xml" value="0.264" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.2515625" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/row_deviation_request_status.xml" value="0.264" />
+        <entry key="..\:/Users/SANEFORCE/Desktop/Hap_proc_new/app/src/main/res/layout/view_all_status_listitem.xml" value="0.2" />
       </map>
     </option>
   </component>

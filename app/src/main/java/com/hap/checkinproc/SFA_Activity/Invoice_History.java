@@ -2,7 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.getDateYearMonthFormat;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
-
+import com.hap.checkinproc.BuildConfig;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -257,7 +257,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 linVanSales.setVisibility(View.VISIBLE);
                 lin_invoice.setVisibility(View.GONE);
                 lin_complementary.setVisibility(View.GONE);
-                lin_order.setVisibility(View.GONE);
+               // lin_order.setVisibility(View.GONE);
                 lin_noOrder.setVisibility(View.VISIBLE);
                 card_date.setVisibility(View.GONE);
                 tvSalesReturn.setVisibility(View.GONE);
@@ -459,8 +459,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
 
             case R.id.lin_order:
-                Shared_Common_Pref.Invoicetoorder = "0";
-                common_class.getDb_310Data(Constants.PreOrderQtyList, this);
+
+                if (Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                    common_class.CommonIntentwithFinish(Van_Order_Category_Select.class);
+                    overridePendingTransition(R.anim.in, R.anim.out);
+                }else {
+                    Shared_Common_Pref.Invoicetoorder = "0";
+                    common_class.getDb_310Data(Constants.PreOrderQtyList, this);
+                }
 
                 //Shared_Common_Pref.TransSlNo = "0";
                 break;
@@ -692,6 +698,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         HeadItem.put("UKey", Common_Class.GetEkey());
                         HeadItem.put("orderValue", "0");
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
                         String orderType="secOrder";
                         if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
                             orderType="vanSales";

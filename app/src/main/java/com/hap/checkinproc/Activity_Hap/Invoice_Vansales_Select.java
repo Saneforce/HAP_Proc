@@ -428,7 +428,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
 
 
 
-           /* txPONo.setEnabled(true);
+           // txPONo.setEnabled(true);
             if (Shared_Common_Pref.Invoicetoorder.equals("4")) {
                 orderId = Shared_Common_Pref.TransSlNo;
                 Shared_Common_Pref.Invoicetoorder = "2";
@@ -503,10 +503,10 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                     }
                 }).start();
 
-            } else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
+            } /*else if (!Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA))) {
                 Product_Modal = gson.fromJson(sharedCommonPref.getvalue(Constants.LOC_INVOICE_DATA), userType);
+*/
 
-            }*/
 
 
          //   common_class.getDb_310Data(Constants.VAN_OUTSTANDING, this);
@@ -521,6 +521,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
 
             //common_class.getDb_310Data(Constants.STOCK_DATA, this);
             common_class.getDb_310Data(Constants.VAN_STOCK, this);
+            //setGroupList();
         } catch (Exception e) {
 
             Log.e(TAG, " invoice oncreate: " + e.getMessage());
@@ -1619,7 +1620,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                     if (stkObj.getBoolean("success")) {
                         JSONArray arr = stkObj.getJSONArray("Data");
                         List<Product_Details_Modal> stkList = new ArrayList<>();
-                        Product_FilterList.clear();
+                      //  Product_FilterList.clear();
 
                         for (int pm = 0; pm < Product_Modal.size(); pm++) {
                             Product_Modal.get(pm).setBalance(0);
@@ -1627,17 +1628,17 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                                 JSONObject obj = arr.getJSONObject(i);
                                 if (obj.getString("PCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
                                     Product_Modal.get(pm).setBalance(obj.getInt("Bal"));
-                                    Product_FilterList.add(Product_Modal.get(pm));
+                                 //   Product_FilterList.add(Product_Modal.get(pm));
 
 
                                 }
                             }
                         }
 
-                           if(Product_FilterList.size()>0) {
+                          /* if(Product_FilterList.size()>0) {
                                Product_Modal.clear();
                                Product_Modal.addAll(Product_FilterList);
-                           }
+                           }*/
                            setGroupList();
                          // mProdct_Adapter.notifyDataSetChanged();
 
@@ -1648,10 +1649,10 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                             Product_Modal.get(pm).setBalance(0);
 
                         }
-                        if(Product_FilterList.size()>0) {
+                      /*  if(Product_FilterList.size()>0) {
                             Product_Modal.clear();
                             Product_Modal.addAll(Product_FilterList);
-                        }
+                        }*/
                         setGroupList();
                     }
 

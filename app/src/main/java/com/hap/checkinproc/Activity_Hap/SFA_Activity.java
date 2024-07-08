@@ -235,7 +235,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     menuList.add(new ListModel("", "Projection", "", "", "", R.drawable.ic_projection));
                     // menuList.add(new ListModel("", "Stock Audit", "", "", "", R.drawable.ic_stock_audit));
                     menuList.add(new ListModel("", "Inshop", "", "", "", R.drawable.ic_inshop));
-
+                    menuList.add(new ListModel("", "Van Sales", "", "", "", R.drawable.ic_outline_local_shipping_24));
                     if (Common_Class.isNullOrEmpty(sharedCommonPref.getvalue(Constants.Distributor_Id)))
                         common_class.getDb_310Data(Constants.Distributor_List, this);
                     break;

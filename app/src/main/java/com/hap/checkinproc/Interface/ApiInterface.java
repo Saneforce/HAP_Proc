@@ -789,4 +789,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/todayvaninvdetails")
     Call<ResponseBody> getVanInvData(@Query("distCode") String distCode,@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=save/salesvancalls")
+    Call<JsonObject> saveVanCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
 }
