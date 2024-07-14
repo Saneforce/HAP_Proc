@@ -81,14 +81,14 @@
                     android:text="SKU"></TextView>
 
                 <TextView
-                    android:textStyle="bold"
-                    android:layout_width="0dp"
-                    android:gravity="end"
-                    android:textAlignment="viewEnd"
                     android:id="@+id/tvStockQty"
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="Load\nQty"></TextView>
+                    android:gravity="end"
+                    android:text="Load\nQty"
+                    android:textAlignment="viewEnd"
+                    android:textStyle="bold"></TextView>
                 <TextView
                     android:textStyle="bold"
                     android:text="Topup\nQty"
@@ -116,7 +116,15 @@
                     style="@style/TextStyle"
                     android:layout_weight="0.5">
                 </TextView>
-
+                <TextView
+                    android:textStyle="bold"
+                    android:text="Bal.\nQty"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:id="@+id/tvBalQty"
+                    style="@style/TextStyle"
+                    android:layout_weight="0.5">
+                </TextView>
                 <TextView
                     android:textStyle="bold"
                     android:text="Unload\nQty"
@@ -157,6 +165,26 @@
                 android:layout_marginRight="@dimen/C5dp"
                 android:background="@color/black"
                 android:outlineAmbientShadowColor="@color/statuscolor"></View>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_weight="1"
+                    android:text="Total SKU"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+
+                    android:id="@+id/tvTotSku"
+                    style="@style/TextStyle"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text=""
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

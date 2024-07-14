@@ -51,6 +51,13 @@
         <TextView
             android:layout_width="0dp"
             android:textAlignment="textEnd"
+            android:id="@+id/tvBalQty"
+            style="@style/TextStyle"
+            android:layout_weight="0.5"
+            ></TextView>
+        <TextView
+            android:layout_width="0dp"
+            android:textAlignment="textEnd"
             android:id="@+id/tvUnLoadQty"
             style="@style/TextStyle"
             android:layout_weight="0.7"

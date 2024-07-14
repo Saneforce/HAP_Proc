@@ -277,7 +277,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
             txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-            getLastVanInvoiceData();
+           // getLastVanInvoiceData();
             btnFilter=findViewById(R.id.btnFilter);
             ll_van_det=findViewById(R.id.ll_van_det);
             tv_tot_sku=findViewById(R.id.tv_tot_sku);
@@ -688,7 +688,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         }
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
+           // getLastVanInvoiceData();
         }
+
     }
 
     @Override
@@ -813,7 +815,7 @@ private void  getLastVanInvoiceData(){
                                     JSONObject item = TodaySales.getJSONObject(i);
                                  if((shared_common_pref.getvalue(Route_Id).equalsIgnoreCase(item.getString("Route"))||
                                          shared_common_pref.getvalue(Route_name).equalsIgnoreCase("ALL")||
-                                         shared_common_pref.getvalue(Route_name).equalsIgnoreCase("ALL"))&&
+                                         shared_common_pref.getvalue(Route_name).equalsIgnoreCase(""))&&
                                          (item.getString("catType").contains(categoryType)||categoryType.equalsIgnoreCase(""))){
                                                sku+=item.getInt("Item");
                                                qty+=item.getInt("TotQty");
@@ -1064,10 +1066,11 @@ private void  getLastVanInvoiceData(){
             common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
             common_class.getDb_310Data(Constants.VAN_STOCK, this);
            // getLastInvoiceData();
-            getLastVanInvoiceData();
+
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);
             shared_common_pref.save(Constants.DivERP, myDataset.get(position).getDivERP());
+            getLastVanInvoiceData();
         } else if (type == 3) {
             route_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_name, myDataset.get(position).getName());

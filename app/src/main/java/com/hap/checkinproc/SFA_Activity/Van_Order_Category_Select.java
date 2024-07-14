@@ -87,7 +87,7 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    CircularProgressButton takeorder;
+    CircularProgressButton takeorder,btnRepeat;
     TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvDeliveryDate, tvRetailorPhone, retaileAddress;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
@@ -157,7 +157,9 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
             tv_no_match=findViewById(R.id.tv_no_match);
 
             llCalMob = findViewById(R.id.btnCallMob);
+            btnRepeat=findViewById(R.id.btnRepeat);
             llCalMob.setOnClickListener(this);
+            btnRepeat.setOnClickListener(this);
 
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
@@ -611,9 +613,11 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
 
     private int getCatePos(Integer CId) throws JSONException {
         int po=-1;
-        for(int il=0;il<CatFreeDetdata.length();il++){
-            if( CatFreeDetdata.getJSONObject(il).getInt("CatId")==CId){
-                po=il;
+        if(CatFreeDetdata!=null&&CatFreeDetdata.length()>0) {
+            for (int il = 0; il < CatFreeDetdata.length(); il++) {
+                if (CatFreeDetdata.getJSONObject(il).getInt("CatId") == CId) {
+                    po = il;
+                }
             }
         }
         return po;
@@ -644,13 +648,15 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
                 try {
                     int ipo=getCatePos(itm.getpCatCode());
                     if(ipo>-1){
+                        Log.e("dssfx",""+ipo);
                         JSONObject oitm=CatFreeDetdata.getJSONObject(ipo);
-                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getOrderQty());
+                        Log.e("dssfxvv",""+oitm);
+                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getQty());
                         CatFreeDetdata.getJSONObject(ipo).put("Value",oitm.getDouble("Value")+itm.getAmount());
                     }else{
                         JSONObject nItm=new JSONObject();
                         nItm.put("CatId",itm.getpCatCode());
-                        nItm.put("Qty",itm.getOrderQty());
+                        nItm.put("Qty",itm.getQty());
                         nItm.put("Value",itm.getAmount());
                         nItm.put("FPCode","");
                         nItm.put("FPName","");
@@ -658,7 +664,8 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
                         CatFreeDetdata.put(nItm);
                     }
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                   // throw new RuntimeException(e);
+                    Log.e("orderShowlist:",e.getMessage());
                 }
             }
         }
@@ -684,6 +691,8 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
             public void run() {
                 takeorder.stopAnimation();
                 takeorder.revertAnimation();
+                btnRepeat.stopAnimation();
+                btnRepeat.revertAnimation();
             }
         }, dely);
 
@@ -776,6 +785,17 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
 
                 }
                 break;
+            case R.id.btnRepeat:
+                if (btnRepeat.isAnimating()) return;
+                btnRepeat.startAnimation();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        common_class.getDataFromApi(Constants.REPEAT_VAN_ORDER, Van_Order_Category_Select.this, false);
+                    }
+                }, 500);
+                break;
+
 
 
         }
@@ -963,189 +983,198 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
     }
 
     private void FilterProduct(List<Product_Details_Modal> orderList) {
-        findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
-        findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
-        findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
-        findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
-        findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
-        lin_gridcategory.setVisibility(View.GONE);
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        takeorder.setText("SUBMIT");
-
-        mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.van_product_pay_recyclerview_edit, getApplicationContext(), -1);
-        recyclerView.setAdapter(mProdct_Adapter);
-        updateToTALITEMUI(1);
-        showFreeQtyList();
+        try {
+            findViewById(R.id.orderTypesLayout).setVisibility(View.GONE);
+            findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
+            findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
+            findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
+            findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
+            lin_gridcategory.setVisibility(View.GONE);
+            lin_orderrecyclerview.setVisibility(View.VISIBLE);
+            takeorder.setText("SUBMIT");
+            btnRepeat.setVisibility(View.GONE);
+            mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.van_product_pay_recyclerview_edit, getApplicationContext(), -1);
+            recyclerView.setAdapter(mProdct_Adapter);
+            updateToTALITEMUI(1);
+            showFreeQtyList();
+        }catch (Exception e){
+            Log.e("dsfg",e.getMessage());
+        }
     }
 
     void showFreeQtyList() {
-        freeQty_Array_List = new ArrayList<>();
-        freeQty_Array_List.clear();
+        try {
+            freeQty_Array_List = new ArrayList<>();
+            freeQty_Array_List.clear();
 
-        freeQtyNew=new JSONArray();
-        for (Product_Details_Modal pm : Product_Modal) {
+            freeQtyNew = new JSONArray();
+            for (Product_Details_Modal pm : Product_Modal) {
 
-            if (pm.getRegularQty() != null) {
-                if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
-                    int ik=getFProdPos(pm.getOff_Pro_code());
-                    try {
-                        if(ik>-1){
-                            JSONObject itm= null;
-                            itm = freeQtyNew.getJSONObject(ik);
+                if (pm.getRegularQty() != null) {
+                    if (!Common_Class.isNullOrEmpty(pm.getFree()) && !pm.getFree().equals("0")) {
+                        int ik = getFProdPos(pm.getOff_Pro_code());
+                        try {
+                            if (ik > -1) {
+                                JSONObject itm = null;
+                                itm = freeQtyNew.getJSONObject(ik);
 
-                            int f=itm.getInt("FPQty");
-                            f+=Integer.parseInt( pm.getFree());
-                            freeQtyNew.getJSONObject(ik).put("FPQty",f);
-                        }else {
-                            JSONObject itm=new JSONObject();
+                                int f = itm.getInt("FPQty");
+                                f += Integer.parseInt(pm.getFree());
+                                freeQtyNew.getJSONObject(ik).put("FPQty", f);
+                            } else {
+                                JSONObject itm = new JSONObject();
 
-                            itm.put("FPCode",pm.getOff_Pro_code());
-                            itm.put("FPName",pm.getOff_Pro_name());
-                            itm.put("FPQty",pm.getFree());
-                            freeQtyNew.put(itm);
-                        }
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    freeQty_Array_List.add(pm);
-
-                }
-            }
-        }
-        String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
-
-        Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
-        }.getType();
-        List<Product_Details_Modal> catScheme = gson.fromJson(strSchemeList, type);
-
-        for(int il=0;il<CatFreeDetdata.length();il++){
-            JSONObject itm= null;
-            try {
-                itm = CatFreeDetdata.getJSONObject(il);
-                FreeDetails=new JSONArray();
-                if(catScheme!= null && catScheme.size()>0){
-                    for(int ij=0;ij<catScheme.size();ij++) {
-                        double schemeVal = Double.parseDouble(catScheme.get(ij).getScheme());
-                        if (String.valueOf(itm.getInt("CatId")).equalsIgnoreCase(catScheme.get(ij).getId()) &&
-                                itm.getDouble("Value") >= schemeVal
-                        ) {
-                            Product_Details_Modal nItm= new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(),catScheme.get(ij).getOff_Pro_name());
-                            nItm.setFree(catScheme.get(ij).getFree());
-                            freeQty_Array_List.add(nItm);
-                            int ik=getFProdPos(nItm.getOff_Pro_code());
-                            if(ik>-1){
-                                JSONObject fitm=freeQtyNew.getJSONObject(ik);
-                                int f=fitm.getInt("FPQty");
-                                f+=Integer.parseInt( catScheme.get(ij).getFree());
-                                freeQtyNew.getJSONObject(ik).put("FPQty",f);
-                            }else {
-                                JSONObject fitm=new JSONObject();
-
-                                itm.put("FPCode",catScheme.get(ij).getOff_Pro_code());
-                                itm.put("FPName",catScheme.get(ij).getOff_Pro_name());
-                                itm.put("FPQty",catScheme.get(ij).getFree());
-                                freeQtyNew.put(fitm);
+                                itm.put("FPCode", pm.getOff_Pro_code());
+                                itm.put("FPName", pm.getOff_Pro_name());
+                                itm.put("FPQty", pm.getFree());
+                                freeQtyNew.put(itm);
                             }
-                            JSONObject nItem=new JSONObject();
-                            nItem.put("CatId",itm.getString("CatId"));
-                            nItem.put("Qty",itm.getString("Qty"));
-                            nItem.put("Value",itm.getString("Value"));
-                            nItem.put("FPCode",catScheme.get(ij).getOff_Pro_code());
-                            nItem.put("FPName",catScheme.get(ij).getOff_Pro_name());
-                            nItem.put("FPQty",catScheme.get(ij).getFree());
-                            FreeDetails.put(nItem);
-                            Log.d(TAG, "showFreeQtyList: "+ itm.getString("Value"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
+                        freeQty_Array_List.add(pm);
+
                     }
                 }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
             }
-        }
-        if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
-            findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
-            findViewById(R.id.lblfrdet).setVisibility(View.VISIBLE);
-            Van_Order_Category_Select.Free_Adapter mFreeAdapter = new Van_Order_Category_Select.Free_Adapter(freeQtyNew, R.layout.product_free_recyclerview, getApplicationContext());
-            freeRecyclerview.setAdapter(mFreeAdapter);
+            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
 
-        } else {
-            findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-            findViewById(R.id.lblfrdet).setVisibility(View.GONE);
+            Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
+            }.getType();
+            List<Product_Details_Modal> catScheme = gson.fromJson(strSchemeList, type);
 
+            for (int il = 0; il < CatFreeDetdata.length(); il++) {
+                JSONObject itm = null;
+                try {
+                    itm = CatFreeDetdata.getJSONObject(il);
+                    FreeDetails = new JSONArray();
+                    if (catScheme != null && catScheme.size() > 0) {
+                        for (int ij = 0; ij < catScheme.size(); ij++) {
+                            double schemeVal = Double.parseDouble(catScheme.get(ij).getScheme());
+                            if (String.valueOf(itm.getInt("CatId")).equalsIgnoreCase(catScheme.get(ij).getId()) &&
+                                    itm.getDouble("Value") >= schemeVal
+                            ) {
+                                Product_Details_Modal nItm = new Product_Details_Modal(catScheme.get(ij).getOff_Pro_code(), catScheme.get(ij).getOff_Pro_name());
+                                nItm.setFree(catScheme.get(ij).getFree());
+                                freeQty_Array_List.add(nItm);
+                                int ik = getFProdPos(nItm.getOff_Pro_code());
+                                if (ik > -1) {
+                                    JSONObject fitm = freeQtyNew.getJSONObject(ik);
+                                    int f = fitm.getInt("FPQty");
+                                    f += Integer.parseInt(catScheme.get(ij).getFree());
+                                    freeQtyNew.getJSONObject(ik).put("FPQty", f);
+                                } else {
+                                    JSONObject fitm = new JSONObject();
+
+                                    itm.put("FPCode", catScheme.get(ij).getOff_Pro_code());
+                                    itm.put("FPName", catScheme.get(ij).getOff_Pro_name());
+                                    itm.put("FPQty", catScheme.get(ij).getFree());
+                                    freeQtyNew.put(fitm);
+                                }
+                                JSONObject nItem = new JSONObject();
+                                nItem.put("CatId", itm.getString("CatId"));
+                                nItem.put("Qty", itm.getString("Qty"));
+                                nItem.put("Value", itm.getString("Value"));
+                                nItem.put("FPCode", catScheme.get(ij).getOff_Pro_code());
+                                nItem.put("FPName", catScheme.get(ij).getOff_Pro_name());
+                                nItem.put("FPQty", catScheme.get(ij).getFree());
+                                FreeDetails.put(nItem);
+                                Log.d(TAG, "showFreeQtyList: " + itm.getString("Value"));
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (freeQty_Array_List != null && freeQty_Array_List.size() > 0) {
+                findViewById(R.id.cdFreeQtyParent).setVisibility(View.VISIBLE);
+                findViewById(R.id.lblfrdet).setVisibility(View.VISIBLE);
+                Van_Order_Category_Select.Free_Adapter mFreeAdapter = new Van_Order_Category_Select.Free_Adapter(freeQtyNew, R.layout.product_free_recyclerview, getApplicationContext());
+                freeRecyclerview.setAdapter(mFreeAdapter);
+
+            } else {
+                findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
+                findViewById(R.id.lblfrdet).setVisibility(View.GONE);
+
+            }
+        }catch (Exception e){
+            Log.e("fdxg",e.getMessage());
         }
 
     }
 
 
     public void updateToTALITEMUI(int flag) {
-        TextView tvTotalItems = findViewById(R.id.tvTotalItems);
-        TextView tvTotLabel = findViewById(R.id.tvTotLabel);
-        tvTotalAmount = findViewById(R.id.tvTotalAmount);
-        TextView tvTax = findViewById(R.id.tvTaxVal);
-        TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
-        TextView tvBillSubTotal = findViewById(R.id.subtotal);
-        TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
-        tvBillTotItem = findViewById(R.id.totalitem);
-        TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
-        TextView tvBillToPay = findViewById(R.id.tvnetamount);
-        TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
-        TextView tvTotalDiscLabel=findViewById(R.id.tvTotalDiscLabel);
+        try {
+            TextView tvTotalItems = findViewById(R.id.tvTotalItems);
+            TextView tvTotLabel = findViewById(R.id.tvTotLabel);
+            tvTotalAmount = findViewById(R.id.tvTotalAmount);
+            TextView tvTax = findViewById(R.id.tvTaxVal);
+            TextView tvTaxLabel = findViewById(R.id.tvTaxLabel);
+            TextView tvBillSubTotal = findViewById(R.id.subtotal);
+            TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
+            tvBillTotItem = findViewById(R.id.totalitem);
+            TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
+            TextView tvBillToPay = findViewById(R.id.tvnetamount);
+            TextView tvCashDiscount = findViewById(R.id.tvcashdiscount);
+            TextView tvTotalDiscLabel = findViewById(R.id.tvTotalDiscLabel);
 
-        Getorder_Array_List = new ArrayList<>();
-        Getorder_Array_List.clear();
-        totalvalues = 0;
-        totalQty = 0;
-        cashDiscount = 0;
-        taxVal = 0;
-        subtotalvalue=0;
-        int totQty=0;
-        double totalMRP=0;
-
-
-        for (int pm = 0; pm < Product_Modal.size(); pm++) {
-
-            if (Product_Modal.get(pm).getRegularQty() != null) {
-                if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
-
-                    cashDiscount += Product_Modal.get(pm).getDiscount();
-
-                    totalvalues += Product_Modal.get(pm).getAmount();
-                    subtotalvalue+=Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getRate()*Product_Modal.get(pm).getCnvQty();
-
-                    totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
-                    totQty += Product_Modal.get(pm).getQty()*Product_Modal.get(pm).getCnvQty();
-                    totalMRP+=Product_Modal.get(pm).getCnvQty()*Product_Modal.get(pm).getQty()*Double.parseDouble(Product_Modal.get(pm).getMRP());
-
-                    if (Product_Modal.get(pm).getTax() > 0)
-                        taxVal += Product_Modal.get(pm).getTax();
+            Getorder_Array_List = new ArrayList<>();
+            Getorder_Array_List.clear();
+            totalvalues = 0;
+            totalQty = 0;
+            cashDiscount = 0;
+            taxVal = 0;
+            subtotalvalue = 0;
+            int totQty = 0;
+            double totalMRP = 0;
 
 
-                    Getorder_Array_List.add(Product_Modal.get(pm));
+            for (int pm = 0; pm < Product_Modal.size(); pm++) {
+
+                if (Product_Modal.get(pm).getRegularQty() != null) {
+                    if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
+
+                        cashDiscount += Product_Modal.get(pm).getDiscount();
+
+                        totalvalues += Product_Modal.get(pm).getAmount();
+                        subtotalvalue += Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getRate() * Product_Modal.get(pm).getCnvQty();
+
+                        totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
+                        totQty += Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getCnvQty();
+                        totalMRP += Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() * Double.parseDouble(Product_Modal.get(pm).getMRP());
+
+                        if (Product_Modal.get(pm).getTax() > 0)
+                            taxVal += Product_Modal.get(pm).getTax();
 
 
+                        Getorder_Array_List.add(Product_Modal.get(pm));
+
+
+                    }
                 }
             }
-        }
 
-        tvTotalAmount.setText(CurrencySymbol+" "+ formatter.format(totalvalues));
-        tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
+            tvTotalAmount.setText(CurrencySymbol + " " + formatter.format(totalvalues));
+            tvTotalItems.setText("Items : " + Getorder_Array_List.size() + "   Qty : " + totalQty);
 
       /*  if (Getorder_Array_List.size() == 1)
             tvTotLabel.setText("Price (1 item)");
         else
             tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");*/
-        if(flag==1) {
-            tvBillSubTotal.setText(CurrencySymbol + " " + formatter.format(subtotalvalue));
-            tvBillTotItem.setText("" + Getorder_Array_List.size());
-            tvBillTotQty.setText("" + totQty);
-            tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
-            tvCashDiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDiscount));
-            tvTotalDiscLabel.setText("(Total Discount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
-            //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
-            tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-            //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-            // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
-            ll_actual_total.setVisibility(View.GONE);
+            if (flag == 1) {
+                tvBillSubTotal.setText(CurrencySymbol + " " + formatter.format(subtotalvalue));
+                tvBillTotItem.setText("" + Getorder_Array_List.size());
+                tvBillTotQty.setText("" + totQty);
+                tvBillToPay.setText(CurrencySymbol + " " + formatter.format(totalvalues));
+                tvCashDiscount.setText("- " + CurrencySymbol + " " + formatter.format(cashDiscount));
+                tvTotalDiscLabel.setText("(Total Discount " + CurrencySymbol + " " + formatter.format(cashDiscount) + ")");
+                //tvSaveAmt.setText("Your Saving Amount is MRP " + formatter.format(totalMRP) + " - NetAmount " + formatter.format(totalvalues) + " = " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
+                tvSaveAmt.setText("Total Profit " + CurrencySymbol + " " + formatter.format(totalMRP - totalvalues));
+                //  tvSaveAmt.setText("Total Scheme Discount "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                // tvTax.setText(CurrencySymbol+" " + formatter.format(taxVal));
+                ll_actual_total.setVisibility(View.GONE);
        /* if (cashDiscount > 0) {
             ll_actual_total.setVisibility(View.VISIBLE);
           tvSaveAmt.setVisibility(View.VISIBLE);
@@ -1156,55 +1185,59 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
            ll_actual_total.setVisibility(View.GONE);
        }*/
 
-            orderTotTax = new ArrayList<>();
-            orderTotTax.clear();
+                orderTotTax = new ArrayList<>();
+                orderTotTax.clear();
 
-            for (int l = 0; l < Getorder_Array_List.size(); l++) {
-                if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
-                    for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
-                        String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
-                        Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
-                        if (orderTotTax.size() == 0) {
-                            orderTotTax.add(new Product_Details_Modal(label, amt));
-                        } else {
+                for (int l = 0; l < Getorder_Array_List.size(); l++) {
+                    if (Getorder_Array_List.get(l).getProductDetailsModal() != null) {
+                        for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
+                            String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
+                            Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
+                            if (orderTotTax.size() == 0) {
+                                orderTotTax.add(new Product_Details_Modal(label, amt));
+                            } else {
 
-                            boolean isDuplicate = false;
-                            for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
-                                if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
-                                    double oldAmt = orderTotTax.get(totTax).getTax_Amt();
-                                    isDuplicate = true;
-                                    orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+                                boolean isDuplicate = false;
+                                for (int totTax = 0; totTax < orderTotTax.size(); totTax++) {
+                                    if (orderTotTax.get(totTax).getTax_Type().equals(label)) {
+                                        double oldAmt = orderTotTax.get(totTax).getTax_Amt();
+                                        isDuplicate = true;
+                                        orderTotTax.set(totTax, new Product_Details_Modal(label, oldAmt + amt));
+
+                                    }
+                                }
+
+                                if (!isDuplicate) {
+                                    orderTotTax.add(new Product_Details_Modal(label, amt));
 
                                 }
                             }
 
-                            if (!isDuplicate) {
-                                orderTotTax.add(new Product_Details_Modal(label, amt));
-
-                            }
                         }
-
                     }
                 }
-            }
 
-            String label = "", amt = "";
-            for (int i = 0; i < orderTotTax.size(); i++) {
-                label = label + orderTotTax.get(i).getTax_Type() + "\n";
-                amt = amt + CurrencySymbol + " " + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
-            }
-            tvTaxLabel.setText(label);
-            tvTax.setText(amt);
-            if (orderTotTax.size() == 0) {
-                tvTaxLabel.setVisibility(View.INVISIBLE);
-                tvTax.setVisibility(View.INVISIBLE);
-            } else {
-                tvTaxLabel.setVisibility(View.VISIBLE);
-                tvTax.setVisibility(View.VISIBLE);
-            }
+                String label = "", amt = "";
+                for (int i = 0; i < orderTotTax.size(); i++) {
+                    label = label + orderTotTax.get(i).getTax_Type() + "\n";
+                    amt = amt + CurrencySymbol + " " + String.valueOf(formatter.format(orderTotTax.get(i).getTax_Amt())) + "\n";
+                }
+                tvTaxLabel.setText(label);
+                tvTax.setText(amt);
+                if (orderTotTax.size() == 0) {
+                    tvTaxLabel.setVisibility(View.INVISIBLE);
+                    tvTax.setVisibility(View.INVISIBLE);
+                } else {
+                    tvTaxLabel.setVisibility(View.VISIBLE);
+                    tvTax.setVisibility(View.VISIBLE);
+                }
 
-            String data = gson.toJson(Product_Modal);
-            sharedCommonPref.save(Constants.LOC_SECONDARY_DATA, data);
+                String data = gson.toJson(Product_Modal);
+                sharedCommonPref.save(Constants.LOC_SECONDARY_DATA, data);
+            }
+        }catch(Exception e){
+            Log.e("cfhg",e.getMessage());
+
         }
 
     }
@@ -1247,6 +1280,19 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
 
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            switch (key) {
+                case Constants.REPEAT_VAN_ORDER:
+                    if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
+                        ResetSubmitBtn(0);
+                        common_class.showMsg(Van_Order_Category_Select.this, "No Records Found.");
+                    } else
+                        loadData(apiDataResponse);
+                    break;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
 
     }
 
@@ -1273,6 +1319,178 @@ public class Van_Order_Category_Select extends AppCompatActivity implements View
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
+        btnRepeat.setVisibility(View.VISIBLE);
+    }
+
+
+    void loadData(String apiDataResponse) {
+        try {
+            Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.Product_List)), userType);
+            setProductSchemeAndTax();
+            JSONArray jsonArray1 = new JSONArray(apiDataResponse);
+            if (jsonArray1 != null && jsonArray1.length() > 0) {
+                for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                    for (int q = 0; q < jsonArray1.length(); q++) {
+                        JSONObject jsonObject1 = jsonArray1.getJSONObject(q);
+                        if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
+                            Product_Modal.get(pm).setUOM_Nm(jsonObject1.getString("UOM"));
+                            Product_Modal.get(pm).setUOM_Id("" + jsonObject1.getString("umo_unit"));
+                            Product_Modal.get(pm).setCnvQty(jsonObject1.getDouble("Conf_Fac"));
+
+                            Product_Modal.get(pm).setQty(
+                                    jsonObject1.getInt("Quantity"));
+
+                            // Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() *
+                            //         Product_Modal.get(pm).getRate())));
+
+//                            double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
+//                                    Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
+//                            double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
+//                            double sellAmt=dMRPAmt-dMrgn;
+
+                            //  double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Double.parseDouble(Product_Modal.get(pm).getPTR())));
+                            double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Product_Modal.get(pm).getRate()));
+                            Product_Modal.get(pm).setAmount(sellAmt);
+
+                            double enterQty = Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getCnvQty();
+                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+
+                            // Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                            // }.getType();
+                            //  List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
+
+                            double highestScheme = 0;
+                            boolean haveVal = false;
+                            List<Product_Details_Modal.Scheme> schemeList = Product_Modal.get(pm).getSchemeList();
+                            if (schemeList != null && schemeList.size() > 0) {
+
+                                for (int i = 0; i < schemeList.size(); i++) {
+
+                                    if (Product_Modal.get(pm).getId().equals(schemeList.get(i).getPCode())) {
+
+                                        haveVal = true;
+                                        double schemeVal = schemeList.get(i).getScheme();
+
+                                        if (enterQty >= schemeVal) {
+
+                                            if (schemeVal > highestScheme) {
+                                                highestScheme = schemeVal;
+
+
+                                                if (!String.valueOf(schemeList.get(i).getFree()).equals("0")) {
+                                                    if (schemeList.get(i).getPackages().equals("N")) {
+                                                        double freePer = (enterQty / highestScheme);
+
+                                                        double freeVal = freePer * Double.parseDouble(String.valueOf(schemeList.
+                                                                get(i).getFree()));
+
+                                                        Product_Modal.get(pm).setFree(String.valueOf(Math.round(freeVal)));
+                                                    } else {
+                                                        int val = (int) (enterQty / highestScheme);
+                                                        int freeVal = val * Integer.parseInt(String.valueOf(schemeList.get(i).getFree()));
+                                                        Product_Modal.get(pm).setFree(String.valueOf(freeVal));
+                                                    }
+                                                } else {
+
+                                                    Product_Modal.get(pm).setFree("0");
+
+                                                }
+
+
+                                                if (schemeList.get(i).getDisc() != 0) {
+
+                                                    if (schemeList.get(i).getDiscountType().equals("%")) {
+                                                        double discountVal = enterQty * (((schemeList.get(i).getDisc()
+                                                        )) / 100);
+                                                        Product_Modal.get(pm).setDiscount(discountVal);
+
+                                                    } else {
+                                                        //Rs
+                                                        double freeVal;
+                                                        if (schemeList.get(i).getPackages().equals("N")) {
+                                                            double freePer = (enterQty / highestScheme);
+                                                            freeVal = freePer * (schemeList.
+                                                                    get(i).getDisc());
+
+                                                        } else {
+                                                            int val = (int) (enterQty / highestScheme);
+                                                            freeVal = (double) (val * (schemeList.get(i).getDisc()));
+                                                        }
+                                                        Product_Modal.get(pm).setDiscount(freeVal);
+
+
+                                                    }
+
+                                                } else {
+                                                    Product_Modal.get(pm).setDiscount(0.00);
+
+                                                }
+
+
+                                            }
+
+                                        } else {
+                                            Product_Modal.get(pm).setFree("0");
+
+                                            Product_Modal.get(pm).setDiscount(0.00);
+
+
+                                        }
+
+
+                                    }
+
+                                }
+
+
+                            }
+
+                            if (!haveVal) {
+                                Product_Modal.get(pm).setFree("0");
+
+                                Product_Modal.get(pm).setDiscount(0.00);
+
+                            } else {
+                                // Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getAmount()) -
+                                // Double.valueOf(Product_Modal.get(pm).getDiscount()));
+                            }
+
+                            // sumofTax(Product_Modal, pm);
+                            sumofTaxNew(Product_Modal.get(pm));
+                        }
+
+                    }
+                }
+
+
+            }
+            ResetSubmitBtn(0);
+             showOrderList();
+
+
+        } catch (Exception e) {
+            Log.v(TAG + ":loadData:", e.getMessage());
+        }
+
+    }
+
+    public void showOrdListNew(){
+        Getorder_Array_List = new ArrayList<>();
+        Getorder_Array_List.clear();
+
+        for (int pm = 0; pm < Product_Modal.size(); pm++) {
+
+            if (Product_Modal.get(pm).getQty() > 0) {
+                Getorder_Array_List.add(Product_Modal.get(pm));
+
+
+            }
+        }
+
+        if (Getorder_Array_List.size() == 0)
+            Toast.makeText(getApplicationContext(), "Order is empty", Toast.LENGTH_SHORT).show();
+        else
+            FilterProduct(Getorder_Array_List);
     }
 
     @Override

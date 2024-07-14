@@ -88,6 +88,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
 
 
                 }
+                holder.tvTotSku.setText(""+arr.length());
                 holder.tvTotVanSalQty.setText("" + totSal);
                 holder.tvTotStkQty.setText("" + totStk);
                 holder.tvTotTopUpQty.setText(""+totTopUp);
@@ -129,6 +130,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
        // TextView tvsalesManName,tvVehicleNo,tvSrtKm,tvCheckInDate,tvCheckInTime,tvEndKm,tvCheckOutDate,tvCheckOutTime,tvTotalKm;
         RecyclerView rvVanSales,rvVanLoadDet;
         LinearLayout parent_layout,ll_vanData;
+        TextView tvTotSku;
 
         public MyViewHolder(View view) {
             super(view);
@@ -147,6 +149,7 @@ public class rvVanStockview  extends RecyclerView.Adapter<rvVanStockview.MyViewH
                 tvTotStkVal = itemView.findViewById(R.id.tvTotLoadVal);
                 tvTotTopUpVal = itemView.findViewById(R.id.tvTotTopUpVal);
                 tvTotUnLoadVal = itemView.findViewById(R.id.tvTotUnLoadVal);
+                tvTotSku=itemView.findViewById(R.id.tvTotSku);
 
                 ll_vanData=itemView.findViewById(R.id.ll_vanData);
                 //tvTotLoad=itemView.findViewById(R.id.tvTotLoad);

@@ -4,6 +4,8 @@ import static com.hap.checkinproc.Common_Class.Common_Class.formatNumber;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -177,7 +179,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             edtStartKm.setVisibility(View.GONE);
             edtVehicleNo.setVisibility(View.GONE);
             ll_startkm.setVisibility(View.GONE);
-            btnRepeat.setVisibility(View.GONE);
+
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
@@ -197,6 +199,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             rlAddProduct.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
+            btnRepeat.setVisibility(View.GONE);
             Ukey = Common_Class.GetEkey();
             ll_actual_total=findViewById(R.id.ll_actual_total);
             tv_no_match=findViewById(R.id.tv_no_match);
@@ -213,6 +216,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             vehNo=sharedCommonPref.getvalue(Constants.Vansales_VehNo);
             Log.v("vehNo_ghj",vehNo);
             edtVehicleNo.setText(vehNo);
+            common_class.getDb_310Data(Constants.VAN_LOAD_DETAILS, getActiveActivity());
 
             etDiscPer.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -652,9 +656,11 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
     }
     private int getCatePos(Integer CId) throws JSONException {
         int po=-1;
-        for(int il=0;il<CatFreeDetdata.length();il++){
-            if( CatFreeDetdata.getJSONObject(il).getInt("CatId")==CId){
-                po=il;
+        if(CatFreeDetdata!=null&&CatFreeDetdata.length()>0) {
+            for (int il = 0; il < CatFreeDetdata.length(); il++) {
+                if (CatFreeDetdata.getJSONObject(il).getInt("CatId") == CId) {
+                    po = il;
+                }
             }
         }
         return po;
@@ -685,12 +691,12 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                     int ipo=getCatePos(itm.getpCatCode());
                     if(ipo>-1){
                         JSONObject oitm=CatFreeDetdata.getJSONObject(ipo);
-                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getOrderQty());
+                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getQty());
                         CatFreeDetdata.getJSONObject(ipo).put("Value",oitm.getDouble("Value")+itm.getAmount());
                     }else{
                         JSONObject nItm=new JSONObject();
                         nItm.put("CatId",itm.getpCatCode());
-                        nItm.put("Qty",itm.getOrderQty());
+                        nItm.put("Qty",itm.getQty());
                         nItm.put("Value",itm.getAmount());
                         CatFreeDetdata.put(nItm);
                     }
@@ -711,16 +717,16 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-          /*  case R.id.btnRepeat:
+            case R.id.btnRepeat:
                 if (btnRepeat.isAnimating()) return;
                 btnRepeat.startAnimation();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        common_class.getDataFromApi(Constants.PreInvOrderQty, Invoice_Vansales_Select.this, false);
+                        common_class.getDataFromApi(Constants.REPEAT_VAN_INVOICE, Invoice_Vansales_Select.this, false);
                     }
                 }, 500);
-                break;*/
+                break;
             case R.id.rlAddProduct:
                 moveProductScreen();
                 break;
@@ -863,7 +869,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                         HeadItem.put("orderValue", formatter.format(totalvalues));
                         HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
                         HeadItem.put("AppVer", BuildConfig.VERSION_NAME);
-                        HeadItem.put("Vansales_VehNo",edtVehicleNo.getText().toString());
+                        HeadItem.put("Vansales_VehNo",vehNo);
                         HeadItem.put("Vansales_Km",edtStartKm.getText().toString());
                         HeadItem.put("Vansales_Km_Image",imageSet);
                         //sharedCommonPref.save(Constants.Vansales_VehNo,edtVehicleNo.getText().toString());
@@ -1354,11 +1360,12 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
 
     void loadData(String apiDataResponse) {
         try {
-            Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.Product_List)), userType);
-            setProductSchemeAndTax(1);
+           // Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.Product_List)), userType);
+           // setProductSchemeAndTax(1);
             JSONArray jsonArray1 = new JSONArray(apiDataResponse);
             if (jsonArray1 != null && jsonArray1.length() > 0) {
                 for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                    //Product_Modal.get(pm).setBalance(0);
                     for (int q = 0; q < jsonArray1.length(); q++) {
                         JSONObject jsonObject1 = jsonArray1.getJSONObject(q);
                         if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
@@ -1370,24 +1377,14 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                             Product_Modal.get(pm).setQty(
                                     jsonObject1.getInt("Quantity"));
 
-                            // Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() *
-                            //         Product_Modal.get(pm).getRate())));
+                            int totQty= (int) (jsonObject1.getInt("Quantity")*jsonObject1.getDouble("Conf_Fac"));
+                            Product_Modal.get(pm).setOrderQty(totQty);
 
-//                            double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
-//                                    Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
-//                            double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
-//                            double sellAmt=dMRPAmt-dMrgn;
-
-                            //  double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Double.parseDouble(Product_Modal.get(pm).getPTR())));
                             double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Product_Modal.get(pm).getRate()));
                             Product_Modal.get(pm).setAmount(sellAmt);
 
                             double enterQty = Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getCnvQty();
-                            String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
 
-                           // Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                           // }.getType();
-                          //  List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
 
                             double highestScheme = 0;
                             boolean haveVal = false;
@@ -1657,16 +1654,16 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                     }
 
                     break;
-               /* case Constants.PreInvOrderQty:
+                case Constants.REPEAT_VAN_INVOICE:
                     if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
                         ResetSubmitBtn(0);
                         common_class.showMsg(Invoice_Vansales_Select.this, "No Records Found.");
                     } else {
 
 
-                    //    loadData(apiDataResponse);
+                        loadData(apiDataResponse);
                     }
-                    break;*/
+                    break;
               /*  case Constants.VAN_OUTSTANDING:
 
                     JSONObject jsonObject = new JSONObject(apiDataResponse);
@@ -1708,6 +1705,19 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                     }
                     if (payList.size() > 0) {
                         common_class.showCommonDialog(payList, 20, this);
+                    }
+
+                    break;
+
+                case Constants.VAN_LOAD_DETAILS:
+                    // Log.v("data","van startkm"+apiDataResponse);
+                    JSONArray vanarr = new JSONArray(apiDataResponse);
+
+                    if(vanarr.length()>0){
+                        JSONObject obj = vanarr.getJSONObject(0);
+                        vehNo=obj.getString("vehno");
+                        edtVehicleNo.setText(""+vehNo);
+
                     }
 
                     break;

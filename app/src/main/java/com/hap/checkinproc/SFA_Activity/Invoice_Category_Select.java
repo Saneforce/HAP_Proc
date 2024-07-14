@@ -168,6 +168,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             rlAddProduct.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
+            btnRepeat.setVisibility(View.GONE);
             Ukey = Common_Class.GetEkey();
             ll_actual_total=findViewById(R.id.ll_actual_total);
             tv_no_match=findViewById(R.id.tv_no_match);
@@ -644,12 +645,12 @@ private int getCatePos(Integer CId) throws JSONException {
                     int ipo=getCatePos(itm.getpCatCode());
                     if(ipo>-1){
                         JSONObject oitm=CatFreeDetdata.getJSONObject(ipo);
-                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getOrderQty());
+                        CatFreeDetdata.getJSONObject(ipo).put("Qty",oitm.getInt("Qty")+itm.getQty());
                         CatFreeDetdata.getJSONObject(ipo).put("Value",oitm.getDouble("Value")+itm.getAmount());
                     }else{
                         JSONObject nItm=new JSONObject();
                         nItm.put("CatId",itm.getpCatCode());
-                        nItm.put("Qty",itm.getOrderQty());
+                        nItm.put("Qty",itm.getQty());
                         nItm.put("Value",itm.getAmount());
                         CatFreeDetdata.put(nItm);
                     }
@@ -1325,24 +1326,15 @@ private int getCatePos(Integer CId) throws JSONException {
                             Product_Modal.get(pm).setQty(
                                     jsonObject1.getInt("Quantity"));
 
-                           // Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty() *
-                           //         Product_Modal.get(pm).getRate())));
+                            int totQty= (int) (jsonObject1.getInt("Quantity")*jsonObject1.getDouble("Conf_Fac"));
+                            Product_Modal.get(pm).setOrderQty(totQty);
 
-//                            double dMRPAmt =Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *
-//                                    Double.parseDouble(Product_Modal.get(pm).getMRP().toString())));
-//                            double dMrgn=dMRPAmt * (Product_Modal.get(pm).getMargin()/100);
-//                            double sellAmt=dMRPAmt-dMrgn;
 
-                             //  double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Double.parseDouble(Product_Modal.get(pm).getPTR())));
                               double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Product_Modal.get(pm).getRate()));
                             Product_Modal.get(pm).setAmount(sellAmt);
 
                             double enterQty = Product_Modal.get(pm).getQty() * Product_Modal.get(pm).getCnvQty();
-                            /*String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
 
-                            Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                            }.getType();
-                            List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);*/
 
                             double highestScheme = 0;
                             boolean haveVal = false;
@@ -2532,7 +2524,7 @@ private int getCatePos(Integer CId) throws JSONException {
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         rlAddProduct.setVisibility(View.GONE);
-        btnRepeat.setVisibility(View.VISIBLE);
+        //btnRepeat.setVisibility(View.VISIBLE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");
@@ -2690,6 +2682,8 @@ private int getCatePos(Integer CId) throws JSONException {
                                 FilterTypes(item.getString("id"));
                                 OrderTypId = item.getString("id");
                                 OrderTypNm = item.getString("name");
+                                sharedCommonPref.SecInvCatNm=item.getString("name");
+                                sharedCommonPref.SecInvCatId=item.getString("id");
                                 common_class.brandPos = 0;
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -2702,6 +2696,8 @@ private int getCatePos(Integer CId) throws JSONException {
 
                     OrderTypId = filterArr.getJSONObject(0).getString("id");
                     OrderTypNm = filterArr.getJSONObject(0).getString("name");
+                    sharedCommonPref.SecInvCatNm= filterArr.getJSONObject(0).getString("name");
+                    sharedCommonPref.SecInvCatId=filterArr.getJSONObject(0).getString("id");
                 }
             }
         } catch (JSONException e) {

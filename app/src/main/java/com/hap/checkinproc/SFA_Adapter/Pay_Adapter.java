@@ -63,6 +63,7 @@ public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> 
             holder.tvTopUpQty.setText("" + obj.getInt("topupCr"));
             holder.tvUnLoadQty.setText("" + obj.getInt("unloadDr"));
             holder.tvTotLoadQty.setText(""+(obj.getInt("loadCr")+obj.getInt("topupCr")));
+            holder.tvBalQty.setText(""+obj.getInt("BalCr"));
 
 
         } catch (Exception e) {
@@ -78,7 +79,7 @@ public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvSku, tvStkQty, tvSalQty,tvTopUpQty,tvUnLoadQty,tvTotLoadQty;
+        public TextView tvSku, tvStkQty, tvSalQty,tvTopUpQty,tvUnLoadQty,tvTotLoadQty,tvBalQty;
 
 
         public MyViewHolder(View view) {
@@ -89,6 +90,7 @@ public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> 
             tvTopUpQty = view.findViewById(R.id.tvTopUpQty);
             tvUnLoadQty = view.findViewById(R.id.tvUnLoadQty);
             tvTotLoadQty=view.findViewById(R.id.tvTotLoadQty);
+            tvBalQty=view.findViewById(R.id.tvBalQty);
 
 
         }

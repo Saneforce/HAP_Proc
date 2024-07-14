@@ -48,6 +48,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Activity_Hap.Invoice_Vansales_Select;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -104,7 +105,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
     Type userType;
     Gson gson;
     Dialog dialog;
-    CircularProgressButton takeorder;
+    CircularProgressButton takeorder,btnRepeat;
     TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
@@ -173,6 +174,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
             tvVehNo_label=findViewById(R.id.tvVehNo_label);
             tvstartkm_label=findViewById(R.id.tvstartkm_label);
             ll_startkm=findViewById(R.id.ll_startkm);
+            btnRepeat = findViewById(R.id.btnRepeat);
 
             tvVehNo_label.setVisibility(View.GONE);
             tvstartkm_label.setVisibility(View.GONE);
@@ -233,7 +235,8 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
             tvPOP.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
-
+            btnRepeat.setOnClickListener(this);
+            btnRepeat.setVisibility(View.GONE);
 //            vehNo=edtVehicleNo.getText().toString().trim();
 
             findViewById(R.id.tvOrder).setVisibility(View.GONE);
@@ -831,6 +834,8 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
             public void run() {
                 takeorder.stopAnimation();
                 takeorder.revertAnimation();
+                btnRepeat.stopAnimation();
+                btnRepeat.revertAnimation();
             }
         }, dely);
 
@@ -930,6 +935,16 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
                 } catch (Exception e) {
 
                 }
+                break;
+            case R.id.btnRepeat:
+                if (btnRepeat.isAnimating()) return;
+                btnRepeat.startAnimation();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        common_class.getDataFromApi(Constants.REPEAT_VAN_INVOICE, VanSalStockTopUpActivity.this, false);
+                    }
+                }, 500);
                 break;
 
 
@@ -1165,6 +1180,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
+        btnRepeat.setVisibility(View.GONE);
 Log.e("orderList",orderList.toString());
         mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansale_product_pay_recyclerview_topup, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
@@ -1404,6 +1420,7 @@ Log.e("orderList",orderList.toString());
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED");
+       // btnRepeat.setVisibility(View.VISIBLE);
         showOrderItemList(selectedPos, "");
     }
 

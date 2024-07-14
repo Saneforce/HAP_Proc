@@ -243,4 +243,8 @@ public class Constants {
     public static final String Van_ProdGroups_List = "VanProdGroupList";
     public static final String VAN_STOCK_LOADING_TIME = "Stock Loading Time";
     public static final String VanRetailorTodayData = "vanretailorTodayData";
+    public static final String REPEAT_VAN_ORDER = "repeatVanOrder";
+    public static final String REPEAT_SECONDARY_ORDER = "repeatSecOrder";
+    public static final String REPEAT_VAN_LOADING = "repeatVanLoading";
+    public static final String REPEAT_VAN_INVOICE = "repeatVanInvoice";
 }

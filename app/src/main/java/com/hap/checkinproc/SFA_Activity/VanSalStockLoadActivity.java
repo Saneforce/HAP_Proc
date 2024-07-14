@@ -111,7 +111,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
     Type userType;
     Gson gson;
     Dialog dialog;
-    CircularProgressButton takeorder;
+    CircularProgressButton takeorder,btnRepeat;
     TextView Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvRetailorPhone, retaileAddress, tvHeader;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct, llCalMob;
@@ -187,6 +187,11 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             img_lodg_atta = findViewById(R.id.startkm_attach);
             llCalMob = findViewById(R.id.btnCallMob);
             llCalMob.setOnClickListener(this);
+            btnRepeat=findViewById(R.id.btnRepeat);
+            btnRepeat.setOnClickListener(this);
+
+
+
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
             takeorder.setOnClickListener(this);
@@ -821,6 +826,8 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
             public void run() {
                 takeorder.stopAnimation();
                 takeorder.revertAnimation();
+                btnRepeat.stopAnimation();
+                btnRepeat.revertAnimation();
             }
         }, dely);
 
@@ -922,7 +929,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                                    double enterQty = Product_Modal.get(z).getQty();
                                    double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
                                    if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
-                                       Log.e("quaninvoiceIN:", "" + (Product_Modal.get(z).getBalance() - (int) totQty) + Product_Modal.get(z).getName());
+                                       //Log.e("quaninvoiceIN:", "" + (Product_Modal.get(z).getBalance() - (int) totQty) + Product_Modal.get(z).getName());
                                        count += 1;
                                    }
                                }
@@ -937,6 +944,16 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                 } catch (Exception e) {
 
                 }
+                break;
+            case R.id.btnRepeat:
+                if (btnRepeat.isAnimating()) return;
+                btnRepeat.startAnimation();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        common_class.getDataFromApi(Constants.REPEAT_VAN_LOADING, VanSalStockLoadActivity.this, false);
+                    }
+                }, 500);
                 break;
 
 
@@ -1176,6 +1193,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
+        btnRepeat.setVisibility(View.GONE);
 
         mProdct_Adapter = new Prodct_Adapter(orderList, R.layout.vansales_product_pay_recyclerview, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
@@ -1393,10 +1411,60 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
 
                     break;
+
+                case Constants.REPEAT_VAN_LOADING:
+                    if (Common_Class.isNullOrEmpty(apiDataResponse) || apiDataResponse.equals("[]")) {
+                        ResetSubmitBtn(0);
+                        common_class.showMsg(VanSalStockLoadActivity.this, "No Records Found.");
+                    } else
+                        loadData(apiDataResponse);
+                    break;
             }
         } catch (Exception e) {
 
         }
+    }
+
+    void loadData(String apiDataResponse) {
+        try {
+            Product_Modal = gson.fromJson(String.valueOf(db.getMasterData(Constants.ProductStock_List)), userType);
+Log.e("Product_Modal_sz:",""+Product_Modal.size());
+            JSONArray jsonArray1 = new JSONArray(apiDataResponse);
+            if (jsonArray1 != null && jsonArray1.length() > 0) {
+                for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                    for (int q = 0; q < jsonArray1.length(); q++) {
+                        JSONObject jsonObject1 = jsonArray1.getJSONObject(q);
+                        if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
+
+                            Product_Modal.get(pm).setUOM_Nm(jsonObject1.getString("UOM"));
+                            Product_Modal.get(pm).setUOM_Id("" + jsonObject1.getString("umo_unit"));
+                            Product_Modal.get(pm).setCnvQty(jsonObject1.getDouble("Conf_Fac"));
+
+                            Product_Modal.get(pm).setQty(
+                                    jsonObject1.getInt("Quantity"));
+                            int totQty= (int) (jsonObject1.getInt("Quantity")*jsonObject1.getDouble("Conf_Fac"));
+                            Product_Modal.get(pm).setOrderQty(totQty);
+
+                            double sellAmt=Double.valueOf(formatter.format((Product_Modal.get(pm).getCnvQty() * Product_Modal.get(pm).getQty()) *Product_Modal.get(pm).getRate()));
+                            Product_Modal.get(pm).setAmount(sellAmt);
+
+
+
+                        }
+
+                    }
+                }
+                Log.e("Product_Modal_sz:",""+Product_Modal.size());
+              showOrderList();
+            }
+            ResetSubmitBtn(0);
+
+
+
+        } catch (Exception e) {
+            Log.v(TAG + ":loadData:", e.getMessage());
+        }
+
     }
 
     @Override
@@ -1423,6 +1491,8 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED");
+        btnRepeat.setVisibility(View.VISIBLE);
+
         showOrderItemList(selectedPos, "");
     }
 

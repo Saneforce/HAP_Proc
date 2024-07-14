@@ -87,6 +87,12 @@ public class Shared_Common_Pref {
     public static  String Van_Invoice_Cnt = "vaninvoicecount";
     public static int MaxKm = 1000;
 
+    public static String SecOrdCatNm="";
+    public static String SecOrdCatId="";
+
+    public static String SecInvCatNm="";
+    public static String SecInvCatId="";
+
     public Shared_Common_Pref(Activity Ac) {
         activity = Ac;
         if (activity != null) {

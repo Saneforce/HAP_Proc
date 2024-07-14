@@ -492,8 +492,10 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 } else {
                 Shared_Common_Pref.Invoicetoorder = "1";
                     Constants.VAN_SALES_MODE = Constants.VAN_SALES_ORDER;
-                    startActivity(new Intent(getApplicationContext(), Invoice_Vansales_Select.class));
+                    //startActivity(new Intent(getApplicationContext(), Invoice_Vansales_Select.class));
+                    common_class.CommonIntentwithFinish(Invoice_Vansales_Select.class);
                     overridePendingTransition(R.anim.in, R.anim.out);
+
                 }
 
 

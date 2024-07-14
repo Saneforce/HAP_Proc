@@ -515,6 +515,37 @@ public class Common_Class {
                 case Constants.PreInvOrderQty:
                     QuerySTring1 = "{\"tableName\":\"getpreviousinvoice\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    QueryString.put("CategoryType",Shared_Common_Pref.SecOrdOutletType);
+                    QueryString.put("CategoryName",Shared_Common_Pref.SecInvCatNm);
+                    QueryString.put("CategoryId",Shared_Common_Pref.SecInvCatId);
+                    //  axnname = "getpreviousinvoice";
+
+                    break;
+
+                case Constants.REPEAT_VAN_ORDER:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousvanorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    //  axnname = "getpreviousinvoice";
+
+                    break;
+                case Constants.REPEAT_VAN_LOADING:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousvanload\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    //  axnname = "getpreviousinvoice";
+
+                    break;
+                case Constants.REPEAT_VAN_INVOICE:
+                    QuerySTring1 = "{\"tableName\":\"getpreviousvaninvoice\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    //  axnname = "getpreviousinvoice";
+
+                    break;
+                case Constants.REPEAT_SECONDARY_ORDER:
+                    QuerySTring1 = "{\"tableName\":\"getprevioussecorder\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    QueryString.put("CategoryType",Shared_Common_Pref.SecOrdOutletType);
+                    QueryString.put("CategoryName",Shared_Common_Pref.SecOrdCatNm);
+                    QueryString.put("CategoryId",Shared_Common_Pref.SecOrdCatId);
                     //  axnname = "getpreviousinvoice";
 
                     break;
