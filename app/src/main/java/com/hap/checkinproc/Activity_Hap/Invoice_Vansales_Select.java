@@ -199,7 +199,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
             rlAddProduct.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
-            btnRepeat.setVisibility(View.GONE);
+           // btnRepeat.setVisibility(View.GONE);
             Ukey = Common_Class.GetEkey();
             ll_actual_total=findViewById(R.id.ll_actual_total);
             tv_no_match=findViewById(R.id.tv_no_match);
@@ -780,7 +780,8 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                         common_class.showMsg(this, "Your Cart is empty...");
                     }
                 } else {
-                    int count=0;
+                    showOrderList();
+                    /*int count=0;
                     if(StockCheck.equalsIgnoreCase("1")) {
                         for (int z = 0; z < Product_Modal.size(); z++) {
                             double enterQty = Product_Modal.get(z).getQty();
@@ -794,7 +795,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
                         showOrderList();
                     }else{
                         Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
 
                 }
                 break;
@@ -2630,7 +2631,7 @@ public class Invoice_Vansales_Select extends AppCompatActivity implements View.O
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         rlAddProduct.setVisibility(View.GONE);
-       // btnRepeat.setVisibility(View.VISIBLE);
+        btnRepeat.setVisibility(View.VISIBLE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");

@@ -168,7 +168,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             rlAddProduct.setOnClickListener(this);
             Category_Nametext.setOnClickListener(this);
             btnRepeat.setOnClickListener(this);
-            btnRepeat.setVisibility(View.GONE);
+           // btnRepeat.setVisibility(View.GONE);
             Ukey = Common_Class.GetEkey();
             ll_actual_total=findViewById(R.id.ll_actual_total);
             tv_no_match=findViewById(R.id.tv_no_match);
@@ -735,7 +735,10 @@ private int getCatePos(Integer CId) throws JSONException {
                     }
                     //E  -14Vanilla iCone 100 ML (8Nos) Rs55
                 } else {
-                    int count=0;
+
+
+                    showOrderList();
+                   /* int count=0;
                     if(StockCheck.equalsIgnoreCase("1")) {
                         for (int z = 0; z < Product_Modal.size(); z++) {
                             if(Product_Modal.get(z).getQty()>0) {
@@ -751,7 +754,7 @@ private int getCatePos(Integer CId) throws JSONException {
                         showOrderList();
                     }else{
                         Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
 
                 }
                 break;
@@ -2524,7 +2527,7 @@ private int getCatePos(Integer CId) throws JSONException {
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
         rlAddProduct.setVisibility(View.GONE);
-        //btnRepeat.setVisibility(View.VISIBLE);
+        btnRepeat.setVisibility(View.VISIBLE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED");
         showOrderItemList(selectedPos, "");

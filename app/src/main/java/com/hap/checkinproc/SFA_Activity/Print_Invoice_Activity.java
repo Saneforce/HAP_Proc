@@ -1428,6 +1428,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 String srateValue = "Price";
                 String samtValue = "Amount";
                 String mrp = MRPCap;
+                String ptr=MRPCap.equalsIgnoreCase("RRP")?"RBP":"Rate";
 
                 int freeNd = 0;
                 if (freeNd == 1) {
@@ -1436,8 +1437,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 //String sRowTx= sCode + repeat(" ",19-sCode.length()) +repeat(" ",3-sqtyValue.length()) + sqtyValue
                 //        +repeat(" ",5-sFqtyValue.length()) + sFqtyValue+repeat(" ",4-sPCS.length())+ sPCS +repeat(" ",6-srateValue.length()) + srateValue +repeat(" ",9-samtValue.length()) + samtValue;
                 // String sRowTx= sCode + repeat(" ",21-sCode.length()) +repeat(" ",3-sqtyValue.length()) + sqtyValue+ repeat(" ",6-sPCS.length())+ sPCS +repeat(" ",8-srateValue.length()) + srateValue +repeat(" ",9-samtValue.length()) + samtValue;
-                String sRowTx = sCode + repeat(" ", 18 - sCode.length()) + repeat(" ", 4 - sqtyValue.length()) + sqtyValue + repeat(" ", 8 - mrp.length()) + mrp + repeat(" ", 8 - srateValue.length()) + srateValue + repeat(" ", 9 - samtValue.length()) + samtValue;
-
+                //String sRowTx = sCode + repeat(" ", 18 - sCode.length()) + repeat(" ", 4 - sqtyValue.length()) + sqtyValue + repeat(" ", 8 - mrp.length()) + mrp + repeat(" ", 8 - srateValue.length()) + srateValue + repeat(" ", 9 - samtValue.length()) + samtValue;
+                String sRowTx = sCode + repeat(" ", 13 - sCode.length()) + repeat(" ", 4 - sqtyValue.length()) + sqtyValue + repeat(" ", 7 - mrp.length()) + mrp +repeat(" ", 8 - ptr.length()) + ptr+ repeat(" ", 7 - srateValue.length()) + srateValue + repeat(" ", 8 - samtValue.length()) + samtValue;
                 printama.printTextln(sRowTx);
                 //printama.printTextln("Item"+repeat(" ",15) + repeat(" ",7) + "Qty" +repeat(" ",8) + "Price" "" + "Total");
                 printama.printDashedLine();
@@ -1452,7 +1453,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     for (int j = 0; j < lines.length; j++) {
                        // printama.setBold();
-                        printama.setNormalText();
+                        printama.setSmallText();
                         String qtyValue = "";
                         String FqtyValue = "";
                         String PCS = "";
@@ -1460,6 +1461,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         String amtValue = "";
                         String Code = lines[j];
                         String MRP = "";
+                        String PTR="";
                         if (j == 0) {
                             qtyValue = String.valueOf(Order_Outlet_Filter.get(i).getQty());
                             FqtyValue = String.valueOf(Order_Outlet_Filter.get(i).getFree());
@@ -1479,6 +1481,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                 billAmt += Order_Outlet_Filter.get(i).getQty() * Order_Outlet_Filter.get(i).getRate();
                             }
                             MRP = String.valueOf(formatter.format(Double.parseDouble(Order_Outlet_Filter.get(i).getMRP())));
+                            PTR = String.valueOf(formatter.format(Double.parseDouble(Order_Outlet_Filter.get(i).getPTR())));
+                            Log.e("dsf","dfdds"+PTR);
                             try {
                                 if (Double.parseDouble(Order_Outlet_Filter.get(i).getFree()) > 0) {
                                     if ((";" + soffp).indexOf(";" + Order_Outlet_Filter.get(i).getOff_Pro_name() + ";") < 0) {
@@ -1506,12 +1510,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         //        +repeat(" ",4-FqtyValue.length())+ FqtyValue +repeat(" ",6-PCS.length())+ PCS +repeat(" ",8-rateValue.length()) + rateValue +repeat(" ",9-amtValue.length()) + amtValue;
                         //  String RowTx= Code + repeat(" ",21-Code.length()) +repeat(" ",3-qtyValue.length()) + qtyValue
                         // +repeat(" ",6-PCS.length())+ PCS +repeat(" ",8-rateValue.length()) + rateValue +repeat(" ",9-amtValue.length()) + amtValue;
-                        String RowTx = Code + repeat(" ", 18 - Code.length()) + repeat(" ", 4 - qtyValue.length()) + qtyValue
-                                + repeat(" ", 8 - MRP.length()) + MRP + repeat(" ", 8 - rateValue.length()) + rateValue + repeat(" ", 9 - amtValue.length()) + amtValue;
+                       // String RowTx = Code + repeat(" ", 18 - Code.length()) + repeat(" ", 4 - qtyValue.length()) + qtyValue
+                              //  + repeat(" ", 8 - MRP.length()) + MRP + repeat(" ", 8 - rateValue.length()) + rateValue + repeat(" ", 9 - amtValue.length()) + amtValue;
+                         String RowTx = Code + repeat(" ", 14 - Code.length()) + repeat(" ", 4 - qtyValue.length()) + qtyValue
+                          + repeat(" ", 10 - MRP.length()) + MRP+ repeat(" ", 11 - PTR.length()) + PTR + repeat(" ", 10 - rateValue.length()) + rateValue + repeat(" ", 11 - amtValue.length()) + amtValue;
 
                         printama.printTextln(RowTx);
                     }
-                    printama.setNormalText();
+                    printama.addNewLine();
+                    printama.setSmallText();
                     if (sMode.equalsIgnoreCase("Order") || sMode.equals("VAN ORDER")  || sMode.equals("VANSALES") || sMode.equals("INVOICE") || sMode.equalsIgnoreCase("POS INVOICE")) {
                         if(sharedCommonPref.getIntValue(Constants.Dist_Export_Flag)==1){
                             printama.printTextln(Order_Outlet_Filter.get(i).getHSNCode().toString());
@@ -1528,7 +1535,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     }
                     printama.setSmallText();
                     printama.printTextln(" ");
-                    printama.setNormalText();
+                    printama.setSmallText();
 
                 }
 

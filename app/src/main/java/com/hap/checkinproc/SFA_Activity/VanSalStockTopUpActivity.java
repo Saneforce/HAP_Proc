@@ -919,11 +919,13 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
                         int count=0;
                         if(StockCheck.equalsIgnoreCase("1")) {
                             for (int z = 0; z < Product_Modal.size(); z++) {
-                                double enterQty = Product_Modal.get(z).getQty();
-                                double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
-                                if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
-                                    count+=1;
-                                }
+                                if(Product_Modal.get(z).getQty()>0) {
+                                    double enterQty = Product_Modal.get(z).getQty();
+                                    double totQty = (enterQty * Product_Modal.get(z).getCnvQty());
+                                    if ((Product_Modal.get(z).getBalance() - (int) totQty) < 0) {
+                                        count += 1;
+                                    }
+                               }
                             }
                         }
                         if(count==0){
@@ -956,12 +958,14 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
 
         if(StockCheck.equalsIgnoreCase("1")) {
             for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                if(Getorder_Array_List.get(z).getQty()>0) {
                 double enterQty = Getorder_Array_List.get(z).getQty();
                 double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
                 if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
                     Toast.makeText(this, "Low Stock", Toast.LENGTH_SHORT).show();
                     ResetSubmitBtn(0);
                     return;
+                }
                 }
             }
         }
