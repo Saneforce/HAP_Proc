@@ -519,7 +519,7 @@ public class VanSalStockTopUpActivity extends AppCompatActivity implements View.
 
 
             common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
-            common_class.getDb_310Data(Constants.STOCK_DATA, this);
+            common_class.getDb_310Data(Constants.STOCK_DATA_NEW, this);
 
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
@@ -1376,7 +1376,7 @@ Log.e("orderList",orderList.toString());
                         mProdct_Adapter.notifyDataSetChanged();
                     }
                     break;
-                case Constants.STOCK_DATA:
+                case Constants.STOCK_DATA_NEW:
                     JSONObject stkObjnew = new JSONObject(apiDataResponse);
                     if (stkObjnew.getBoolean("success")) {
                         JSONArray arr = stkObjnew.getJSONArray("Data");
@@ -1680,7 +1680,7 @@ Log.e("orderList",orderList.toString());
                     //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
-                holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())) + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll("\\.00$","") + " " + holder.tvUOM.getText());
                 if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() > 0)
                     holder.tvStock.setTextColor(getResources().getColor(R.color.green));
                 else
@@ -1843,7 +1843,7 @@ Log.e("orderList",orderList.toString());
                                 enterQty = Double.valueOf(charSequence.toString());
 
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty());
-                            holder.tvStock.setText("" + String.format(formatNumber (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())) + " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + String.format(formatNumber (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll("\\.00$","") + " " + holder.tvUOM.getText());
 
 
 

@@ -2,6 +2,8 @@ package com.hap.checkinproc.SFA_Activity;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.getDateYearMonthFormat;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
+
 import com.hap.checkinproc.BuildConfig;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -259,8 +261,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 lin_complementary.setVisibility(View.GONE);
                // lin_order.setVisibility(View.GONE);
                 lin_noOrder.setVisibility(View.VISIBLE);
-                card_date.setVisibility(View.GONE);
-                tvSalesReturn.setVisibility(View.GONE);
+                card_date.setVisibility(View.VISIBLE);
+               // tvSalesReturn.setVisibility(View.GONE);
             }
             if (!Common_Class.isNullOrEmpty(Shared_Common_Pref.CUSTOMER_CODE)) {
                 //  common_class.getDentDatas(this);
@@ -362,9 +364,12 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             jParam.put("Stk", sharedCommonPref.getvalue(Constants.Distributor_Id));
             jParam.put("Cus", Shared_Common_Pref.OutletCode);
             jParam.put("div", UserDetails.getString("Divcode", ""));
-
+            String axn="get/outstanding";
+            if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                axn="get/vanoutstanding" ;
+            }
             ApiClient.getClient().create(ApiInterface.class)
-                    .getDataArrayList("get/outstanding", jParam.toString())
+                    .getDataArrayList(axn, jParam.toString())
                     .enqueue(new Callback<JsonArray>() {
                         @Override
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -437,7 +442,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     common_class.CommonIntentwithoutFinish(VanSalePaymentNewActivity.class);
                     overridePendingTransition(R.anim.in, R.anim.out);
                 }else {
-                    common_class.CommonIntentwithoutFinish(PaymentActivity.class);
+                      //common_class.CommonIntentwithoutFinish(PaymentActivity.class);
+                    common_class.CommonIntentwithoutFinish(VanSalePaymentNewActivity.class);
                     overridePendingTransition(R.anim.in, R.anim.out);
                 }
                 break;
@@ -475,8 +481,9 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             case R.id.lin_invoice:
                 Shared_Common_Pref.Invoicetoorder = "2";
                 //getInvoiceOrderQty();
-                common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
-                overridePendingTransition(R.anim.in, R.anim.out);
+                //common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                //overridePendingTransition(R.anim.in, R.anim.out);
+                LoadingMaterials();
 
                 break;
             case R.id.lin_complementary:
@@ -544,6 +551,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             case R.id.tvOrder:
                 common_class.getDb_310Data(Constants.PreOrderQtyList, this);
                 break;
+
 
             case R.id.tvSalesReturn:
                 startActivity(new Intent(this, SalesReturnActivity.class));
@@ -961,6 +969,40 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             return true;
         }
         return false;
+    }
+    public void LoadingMaterials(){
+        common_class.ProgressdialogShow(1, "Loading Material Details");
+        common_class.getProductDetails(getActiveActivity(), new OnLiveUpdateListener() {
+            @Override
+            public void onUpdate(String mode) {
+              //  common_class.CommonIntentwithoutFinish(Invoice_History.class);
+               // getActiveActivity().overridePendingTransition(R.anim.in, R.anim.out);
+                common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                overridePendingTransition(R.anim.in, R.anim.out);
+                common_class.ProgressdialogShow(0, "");
+            }
+
+            @Override
+            public void onError(String msg) {
+                RetryLoadingProds();
+                common_class.ProgressdialogShow(0, "");
+            }
+        });
+    }
+    public void RetryLoadingProds(){
+        AlertDialogBox.showDialog(getApplicationContext(), "HAP SFA", "Product Loading Failed. Do you want to Retry ?", "Retry", "Cancel", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                if (common_class.isNetworkAvailable(getApplicationContext())) {
+                    LoadingMaterials();
+                    dialog.dismiss();
+                }
+            }
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
     }
 
 }

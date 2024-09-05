@@ -46,7 +46,11 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
         JsonObject jParam = new JsonObject();
         jParam.addProperty("FDate", ledgerFDT);
         jParam.addProperty("TDate", ledgerTDT);
-        common_class.getDb_310Data(Constants.LEDGER, this, jParam);
+        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+            common_class.getDb_310Data(Constants.LEDGER_VAN, this, jParam);
+        }else {
+            common_class.getDb_310Data(Constants.LEDGER, this, jParam);
+        }
 
         // tvOutletName.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
         tvOutletName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
@@ -104,8 +108,12 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                         JsonObject jParam = new JsonObject();
                         jParam.addProperty("FDate", ledgerFDT);
                         jParam.addProperty("TDate", ledgerTDT);
-                        common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity
-                                .this, jParam);
+                      //  common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this, jParam);
+                        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                            common_class.getDb_310Data(Constants.LEDGER_VAN, PayLedgerActivity.this, jParam);
+                        }else {
+                            common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this, jParam);
+                        }
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
                 } else {
@@ -117,7 +125,13 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                         JsonObject jParam = new JsonObject();
                         jParam.addProperty("FDate", ledgerFDT);
                         jParam.addProperty("TDate", ledgerTDT);
-                        common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this, jParam);
+                       // common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this, jParam);
+                        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                            common_class.getDb_310Data(Constants.LEDGER_VAN, PayLedgerActivity.this, jParam);
+                        }else {
+                            common_class.getDb_310Data(Constants.LEDGER, PayLedgerActivity.this, jParam);
+                        }
+
 
                     } else
                         common_class.showMsg(PayLedgerActivity.this, "Please select valid date");
@@ -148,6 +162,18 @@ public class PayLedgerActivity extends AppCompatActivity implements View.OnClick
                             totAmt += obj.getDouble("ClAmt");
                         }
                         tvGrandTot.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totAmt));
+                        break;
+                    case Constants.LEDGER_VAN:
+                        JSONArray legList_new = new JSONArray(apiDataResponse);
+                        plAdapter = new PayLedger_Adapter(this, legList_new);
+                        rvLedger.setAdapter(plAdapter);
+
+                        double totAmta = 0;
+                        for (int i = 0; i < legList_new.length(); i++) {
+                            JSONObject obj = legList_new.getJSONObject(i);
+                            totAmta += obj.getDouble("ClAmt");
+                        }
+                        tvGrandTot.setText(CurrencySymbol+" " + new DecimalFormat("##0.00").format(totAmta));
                         break;
                 }
             }

@@ -58,6 +58,7 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
     SalesReturnHistoryAdapter adapter;
     String date, stDate, endDate;
     ImageView home;
+    String orderType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,11 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
         list = new ArrayList<>();
 //        common_class.gotoHomeScreen(context, home);
 
+
+        Intent intentNew=getIntent();
+        if(intentNew.hasExtra("orderType")){
+            orderType=intentNew.getStringExtra("orderType");
+        }
         home.setOnClickListener(v -> {
             try {
                 AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
@@ -134,7 +140,13 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
         dialog.show();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> params = new HashMap<>();
-        params.put("axn", "get_sales_return_history");
+        if(orderType.equalsIgnoreCase("CounterSales")) {
+            params.put("axn", "get_countersales_return_history");
+        }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+            params.put("axn", "get_vansales_return_history");
+        }else {
+            params.put("axn", "get_sales_return_history");
+        }
         params.put("fromDate", stDate);
         params.put("toDate", endDate);
         params.put("fromStockist", shared_common_pref.getvalue(Constants.Distributor_Id));
@@ -196,6 +208,7 @@ public class SalesReturnHistoryActivity extends AppCompatActivity {
                 return;
             }
             adapter = new SalesReturnHistoryAdapter(context, list);
+            adapter.setOrderType(orderType);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
             recyclerView.setAdapter(adapter);
             rowLayout.setVisibility(View.VISIBLE);

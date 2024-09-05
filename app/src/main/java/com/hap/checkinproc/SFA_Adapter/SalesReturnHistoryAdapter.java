@@ -21,13 +21,18 @@ import com.hap.checkinproc.SFA_Model_Class.SalesReturnHistoryModel;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+
 public class SalesReturnHistoryAdapter extends RecyclerView.Adapter<SalesReturnHistoryAdapter.ViewHolder> {
     Context context;
     ArrayList<SalesReturnHistoryModel> list;
+    String orderType="";
 
     public SalesReturnHistoryAdapter(Context context, ArrayList<SalesReturnHistoryModel> list) {
         this.context = context;
         this.list = list;
+    }
+    public void setOrderType(String orderTypes){
+        orderType=orderTypes;
     }
 
     @NonNull
@@ -48,7 +53,13 @@ public class SalesReturnHistoryAdapter extends RecyclerView.Adapter<SalesReturnH
             Shared_Common_Pref.TransSlNo = model.getReturnID();
             Intent intent = new Intent(context, Print_Invoice_Activity.class);
             Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(context);
-            sharedCommonPref.save(Constants.FLAG, "SALES RETURN");
+            if(orderType.equalsIgnoreCase("CounterSales")) {
+                sharedCommonPref.save(Constants.FLAG, "COUNTERSALES RETURN");
+            }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+                sharedCommonPref.save(Constants.FLAG, "VANSALES RETURN");
+            }else {
+                sharedCommonPref.save(Constants.FLAG, "SALES RETURN");
+            }
             context.startActivity(intent);
         });
     }

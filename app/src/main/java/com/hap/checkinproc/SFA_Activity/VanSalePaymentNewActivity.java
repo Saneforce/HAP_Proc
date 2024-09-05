@@ -42,6 +42,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnPaymentItemClickListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Model_Class.PaymentModel;
 import com.hap.checkinproc.Model_Class.PaymentModel;
@@ -85,7 +86,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
     Double amt=0.0;
 
     //  DBController dbController;
-    EditText et_received_amt, et_ref_no, et_bank_name;//et_collected_by
+    EditText  et_ref_no, et_bank_name;//et_received_amt,et_collected_by
     TextView tv_payment_mode, tv_pay_date, tv_advance_pay, tv_refund_amt, btn_submit;//, tv_dist_name ,btn_refund
     CardView cv_ref_no, cv_bank_name;
     LinearLayout ll_ref_no, ll_bank_name, ll_advance_pay, ll_refund;
@@ -104,6 +105,9 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
     ImageView  ivToolbarHome;
     String ekey = "";
     NumberFormat formatter = new DecimalFormat("##0.00");
+    int currentPosition=-1;
+    TextView tv_outstanding_amt;
+    TextView tvVanSalPay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +118,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
     public void init() {
         CardView cv_selected_retailer = findViewById(R.id.cv_selected_retailer);
         tv_selected_retailer = findViewById(R.id.tv_selected_retailer);
-        et_received_amt = findViewById(R.id.et_received_amt);
+       // et_received_amt = findViewById(R.id.et_received_amt);
         tv_payment_mode = findViewById(R.id.tv_payment_mode);
         et_ref_no = findViewById(R.id.et_ref_no);
         et_bank_name = findViewById(R.id.et_bank_name);
@@ -127,6 +131,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         cv_bank_name = findViewById(R.id.cv_bank_name);
         ll_ref_no = findViewById(R.id.ll_ref_no);
         ll_bank_name = findViewById(R.id.ll_bank_name);
+        tvVanSalPay=findViewById(R.id.tvVanSalPay);
 
         ll_advance_pay = findViewById(R.id.ll_advance_pay);
         ll_refund = findViewById(R.id.ll_refund);
@@ -137,6 +142,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         ivToolbarHome=  findViewById(R.id.toolbar_home);
         tv_amount_label=findViewById(R.id.tv_amount_label);
         LinearLayout llToolbar = findViewById(R.id.ll_toolbar);
+        tv_outstanding_amt=findViewById(R.id.tv_outstanding_amt);
 
 
         llToolbar.setVisibility(View.VISIBLE);
@@ -191,9 +197,22 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         // cv_selected_retailer.setOnClickListener(this);
         tv_payment_mode.setOnClickListener(this);
         ivToolbarHome.setOnClickListener(this);
+        tvVanSalPay.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rv_pending_payment.setLayoutManager(layoutManager);
-        paymentAdapter = new PaymentAdapter(getApplicationContext(), paymentList);
+        paymentAdapter = new PaymentAdapter(getApplicationContext(), paymentList, new OnPaymentItemClickListener() {
+            @Override
+            public void onClickProduct(int currentPosition1, PaymentModel paymentModel, int type) {
+                Log.e("currentposition:",""+currentPosition1);
+                currentPosition=currentPosition1;
+             if(type==PaymentAdapter.PAY_MODE){
+                 if(FPayment_Mode!=null&& FPayment_Mode.size()>1){
+                     common_class.showCommonDialog(FPayment_Mode,12,VanSalePaymentNewActivity.this);
+                 }
+             }
+
+            }
+        });
         rv_pending_payment.setAdapter(paymentAdapter);
 
 
@@ -262,7 +281,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
 
         });
 
-        et_received_amt.addTextChangedListener(new TextWatcher() {
+       /* et_received_amt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -284,13 +303,13 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
 
             }
 
-        });
+        });*/
         if(swRefund.isChecked()){
             tv_advance_pay.setText("0.0");
 
             ll_refund.setVisibility(View.VISIBLE);
-            amt = Double.parseDouble(et_received_amt.getText().toString()) - getTotalPaidAmt();
-            tv_refund_amt.setText("(" + et_received_amt.getText().toString() + "-" + formatter.format(getTotalPaidAmt()) + ")" + " = " + formatter.format(amt));
+            //amt = Double.parseDouble(et_received_amt.getText().toString()) - getTotalPaidAmt();
+            //tv_refund_amt.setText("(" + et_received_amt.getText().toString() + "-" + formatter.format(getTotalPaidAmt()) + ")" + " = " + formatter.format(amt));
 
         }else{
             ll_refund.setVisibility(View.GONE);
@@ -308,8 +327,8 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                     tv_advance_pay.setText("0.0");
 
                     ll_refund.setVisibility(View.VISIBLE);
-                    amt = Double.parseDouble(et_received_amt.getText().toString()) - getTotalPaidAmt();
-                    tv_refund_amt.setText("(" + et_received_amt.getText().toString() + "-" + formatter.format(getTotalPaidAmt()) + ")" + " = " + formatter.format(amt));
+                   // amt = Double.parseDouble(et_received_amt.getText().toString()) - getTotalPaidAmt();
+                   // tv_refund_amt.setText("(" + et_received_amt.getText().toString() + "-" + formatter.format(getTotalPaidAmt()) + ")" + " = " + formatter.format(amt));
 
                 }else{
                     ll_refund.setVisibility(View.GONE);
@@ -334,15 +353,15 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
             public void onClick(View view) {
                 if (tv_selected_retailer.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Select Customer Name", Toast.LENGTH_SHORT).show();
-                } else if (et_received_amt.getText().toString().equals("")) {
+                } /*else if (et_received_amt.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), " Enter Amount", Toast.LENGTH_SHORT).show();
-                } else if (tv_payment_mode.getText().toString().equals("")) {
+                } */else if (isModeSelect(paymentList)) {
                     Toast.makeText(getApplicationContext(), " Please Select Payment Mode", Toast.LENGTH_SHORT).show();
-                } else if (paymentModeId != CASH_PAYMENT_MODE && et_ref_no.getText().toString().equals("")) {
+                }/* else if (paymentModeId != CASH_PAYMENT_MODE && et_ref_no.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), " Enter The Reference Number", Toast.LENGTH_SHORT).show();
                 } else if (paymentModeId != CASH_PAYMENT_MODE && et_bank_name.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), " Enter Bank Name", Toast.LENGTH_SHORT).show();
-                } else if (tv_pay_date.getText().toString().equals("")) {
+                }*/ else if (isDateSelect(paymentList)) {
                     Toast.makeText(getApplicationContext(), "Select Pay Date", Toast.LENGTH_SHORT).show();
                 }else if(paymentList.size()==0){
                     new AlertDialog.Builder(VanSalePaymentNewActivity.this)
@@ -392,6 +411,39 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
 
     }
 
+    private boolean isModeSelect(List<PaymentModel>paymentList){
+        int cnt=0;
+        for(int i=0; i<paymentList.size();i++){
+            if(paymentList.get(i).getAmt()>0){
+               if(paymentList.get(i).getPayMode()==null||paymentList.get(i).getPayMode().equalsIgnoreCase("")){
+                   cnt+=1;
+               }
+            }
+
+        }
+        if(cnt==0){
+            return false;
+        }else{
+            return true ;
+        }
+    }
+    private boolean isDateSelect(List<PaymentModel>paymentList){
+        int cnt=0;
+        for(int i=0; i<paymentList.size();i++){
+            if(paymentList.get(i).getAmt()>0){
+                if(paymentList.get(i).getPayDate()==null||paymentList.get(i).getPayDate().equalsIgnoreCase("")){
+                    cnt+=1;
+                }
+            }
+
+        }
+        if(cnt==0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     private void getRetailerList() {
         try{
             FRetailer_Master.clear();
@@ -415,7 +467,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
     }
     private void getPaymentModeList() {
 
-        String templateListResponse = "[{\"id\":\"1\",\"name\":\"CASH\"},{\"id\":\"2\",\"name\":\"CHEQUE\"},{\"id\":\"3\",\"name\":\"CREDIT/DEBIT CARD\"},{\"id\":\"4\",\"name\":\"UPI PAYMENT\"},{\"id\":\"5\",\"name\":\"CHALLAN\"}]";
+        String templateListResponse = "[{\"id\":\"1\",\"name\":\"Cash\"},{\"id\":\"2\",\"name\":\"UPI\"},{\"id\":\"3\",\"name\":\"Cheque\"},{\"id\":\"4\",\"name\":\"Credit/Debit Card\"},{\"id\":\"5\",\"name\":\"Challan\"}]";
         Log.d(TAG, "paymenyModeList" + templateListResponse);
 
         if (templateListResponse != null && !templateListResponse.equals("")) {
@@ -443,7 +495,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("axn", "get/saveadvpayment");
         queryParams.put("divisionCode",Shared_Common_Pref.Div_Code);
-        queryParams.put("Advance_Amt",et_received_amt.getText().toString());
+        queryParams.put("Advance_Amt","0");//et_received_amt.getText().toString());
         queryParams.put("Customer_Code",selectedRetailerId);
         queryParams.put("stk_code",stockistId);
 
@@ -487,12 +539,12 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         dailyInventoryDataObject.addProperty("Stockist_Name", shared_common_pref.getvalue(Constants.Distributor_name));
         dailyInventoryDataObject.addProperty("Cust_ID", selectedRetailerId);
         dailyInventoryDataObject.addProperty("Cust_Name", tv_selected_retailer.getText().toString());
-        dailyInventoryDataObject.addProperty("Total_amount", et_received_amt.getText().toString());
+        dailyInventoryDataObject.addProperty("Total_amount", String.valueOf(getTotalAmt()));//et_received_amt.getText().toString()
         dailyInventoryDataObject.addProperty("Refund_Amount", amt);
         dailyInventoryDataObject.addProperty("Mode", tv_payment_mode.getText().toString());
         dailyInventoryDataObject.addProperty("Reference_No", et_ref_no.getText().toString());
         dailyInventoryDataObject.addProperty("Bk_name", et_bank_name.getText().toString());
-        dailyInventoryDataObject.addProperty("Pay_Date", pay_date + " 00:00:00:00");
+        dailyInventoryDataObject.addProperty("Pay_Date", Common_Class.GetDate());
         dailyInventoryDataObject.addProperty("collect_by",shared_common_pref.getvalue(Constants.Distributor_name) );
         dailyInventoryDataObject.addProperty("Remark", "");
         dailyInventoryDataObject.addProperty("Advance_pay", tv_advance_pay.getText().toString());
@@ -516,12 +568,18 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                 jsonObject.addProperty("Pen_amt", p.getPendingAmt());
                 jsonObject.addProperty("paid_amt", p.getAmt());
                 jsonObject.addProperty("order_no", p.getOrderNo());
+                jsonObject.addProperty("pay_mode",p.getPayMode());
+                jsonObject.addProperty("pay_date",p.getPayDate());
                 paymentArray.add(jsonObject);
 
             }
         }
         dailyInventoryDataObject.add("Payment_Details", paymentArray);
-        dailyInventoryObject.add("VanPendingPaymentDetailsNative", dailyInventoryDataObject);
+        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
+            dailyInventoryObject.add("VanPendingPaymentDetailsNative", dailyInventoryDataObject);
+        }else{
+            dailyInventoryObject.add("SecPendingPaymentDetailsNative", dailyInventoryDataObject);
+        }
         jsonArray.add(dailyInventoryObject);
 
         Map<String, Object> queryParams = new HashMap<>();
@@ -573,7 +631,12 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
 
     private void getPendingPaymentDets() {
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("axn", "get/pendingpaymentdets");
+        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
+            queryParams.put("axn", "get/pendingpaymentdets");
+        }else{
+            queryParams.put("axn", "get/secpendingpaymentdets");
+        }
+
         queryParams.put("divisionCode", Shared_Common_Pref.Div_Code);
         queryParams.put("stockist_code", stockistId);
         queryParams.put("Customer_Code", selectedRetailerId);
@@ -599,7 +662,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                             JSONArray jsonArray =new JSONArray(res.string());
                             // JSONObject jsonArray=new JSONObject(res);
                             Log.d("PaymentFragment", "jsonArray" + jsonArray.length());
-
+                                 double totOutStanding=0;
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
@@ -618,6 +681,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                                 }
                                 if (jsonObject.has("Bal_Amt")) {
                                     pending_amt = jsonObject.getDouble("Bal_Amt");
+                                    totOutStanding+=jsonObject.getDouble("Bal_Amt");
                                 }
                                 if (jsonObject.has("BillNo")) {
                                     order_no = jsonObject.getString("BillNo");
@@ -625,6 +689,8 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
 
                                 PaymentModel paymentModel = new PaymentModel(bill_no, bill_date, billed_amt, pending_amt, order_no);
                                 paymentList.add(paymentModel);
+                                tv_outstanding_amt.setText("-"+formatter.format(totOutStanding));
+
 
 
                             }
@@ -632,15 +698,15 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                             if (paymentList.size() > 0) {
                                 //  ll_header.setVisibility(View.VISIBLE);
                                 rv_pending_payment.setVisibility(View.VISIBLE);
-                                tv_amount_label.setText(R.string.received_amt);
+                                tv_amount_label.setText("Over All Outstanging Rs.");
                             } else {
                                 tv_amount_label.setText(R.string.advance_amt);
                                 rv_pending_payment.setVisibility(View.GONE);
                             }
                             paymentAdapter.setPaymentList(paymentList);
-                            if(!et_received_amt.getText().toString().isEmpty()) {
+                          /*  if(!et_received_amt.getText().toString().isEmpty()) {
                                 setRecAmt(Double.parseDouble(et_received_amt.getText().toString()));
-                            }
+                            }*/
 
 
                         } catch (JSONException e) {
@@ -666,7 +732,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
 
 
 
-    public void setRecAmt(Double recAmt) {
+  /*  public void setRecAmt(Double recAmt) {
         double rcamt = recAmt;
 
         Log.d("sda", "gh" + paymentList.size());
@@ -687,8 +753,8 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                 ll_advance_pay.setVisibility(View.VISIBLE);
                 tv_advance_pay.setText("" + formatter.format(rcamt));
                 advanceAmt= Double.valueOf(formatter.format(rcamt));
-                Double amt = Double.parseDouble(et_received_amt.getText().toString()) - getTotalPaidAmt();
-                tv_refund_amt.setText("(" + et_received_amt.getText().toString() + "-" + formatter.format(getTotalPaidAmt()) + ")" + " = " + formatter.format(amt));
+             //   Double amt = Double.parseDouble(et_received_amt.getText().toString()) - getTotalPaidAmt();
+               // tv_refund_amt.setText("(" + et_received_amt.getText().toString() + "-" + formatter.format(getTotalPaidAmt()) + ")" + " = " + formatter.format(amt));
             } else {
                 ll_advance_pay.setVisibility(View.GONE);
                 ll_refund.setVisibility(View.GONE);
@@ -698,7 +764,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
             ll_advance_pay.setVisibility(View.GONE);
             ll_refund.setVisibility(View.GONE);
         }
-    }
+    }*/
 
 
     private String getPaidInvoiceNo() {
@@ -711,7 +777,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         return s;
     }
 
-    private double getTotalPaidAmt() {
+  /*  private double getTotalPaidAmt() {
         double amt = 0.0;
         for (int i = 0; i < paymentList.size(); i++) {
             if (paymentList.get(i).getAmt() > 0) {
@@ -720,7 +786,7 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
         }
         Log.d("PaymentFragment", "getTotalPaidAmt" + amt);
         return amt;
-    }
+    }*/
 
     @Override
     public void onDestroy() {
@@ -744,6 +810,11 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                 break;
             case R.id.toolbar_home:
                 common_class.CommonIntentwithoutFinish(SFA_Activity.class);
+                break;
+            case R.id.tvVanSalPay:
+                Intent payIntent=new Intent(VanSalePaymentNewActivity.this, VanTransactionActivity.class);
+                payIntent.putExtra("stkLoadAmt",-1.00);
+                startActivity(payIntent);
                 break;
         }
     }
@@ -776,6 +847,23 @@ public class VanSalePaymentNewActivity extends AppCompatActivity implements View
                 ll_ref_no.setVisibility(View.GONE);
                 ll_bank_name.setVisibility(View.GONE);
             }
+        }else if(type==12){
+            Log.e("currentpositionnew:",""+currentPosition);
+            PaymentModel paymentModelnew=paymentAdapter.getPaymentData(currentPosition);
+            paymentModelnew.setPayMode(myDataset.get(position).getName());
+            Log.e("paymentModelnewData:",paymentModelnew.toString());
+           // paymentAdapter.notifyDataSetChanged();
+            //paymentAdapter.updateCurrentObject(paymentModelnew);
+            paymentAdapter.notifyItemChanged(currentPosition);
+
+
         }
+    }
+    public double getTotalAmt(){
+        double totAmt=0;
+        for(int i=0;i<paymentList.size();i++){
+           totAmt+=paymentList.get(i).getAmt();
+        }
+        return totAmt;
     }
 }

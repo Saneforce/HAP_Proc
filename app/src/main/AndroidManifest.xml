@@ -285,6 +285,10 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SFA_Activity.VanTransactionActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SFA_Activity.PaymentActivity"
             android:exported="true"
             android:screenOrientation="portrait" />

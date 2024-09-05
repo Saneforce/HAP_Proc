@@ -71,6 +71,8 @@ public class SalesReturnActivity extends AppCompatActivity {
     int itemsCount, qtyCount;
     double retInvTotal;
     Shared_Common_Pref sharedCommonPref;
+    TextView tvTittle;
+    String orderType="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,7 @@ public class SalesReturnActivity extends AppCompatActivity {
         viewHistory = findViewById(R.id.viewHistory);
         totalTV = findViewById(R.id.total);
         quantitiesTV = findViewById(R.id.quantities);
+        tvTittle=findViewById(R.id.headtext);
         context = this;
         common_class = new Common_Class(context);
         invoiceList = new ArrayList<>();
@@ -101,9 +104,13 @@ public class SalesReturnActivity extends AppCompatActivity {
         sharedCommonPref = new Shared_Common_Pref(context);
         common_class.gotoHomeScreen(context, home);
         todayDate.setText("Date: " + new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
-        outletName.setText(Shared_Common_Pref.OutletName.toUpperCase());
+
         outletAddress.setText(Shared_Common_Pref.OutletAddress);
         rlInvoice.setEnabled(false);
+        Intent intent=getIntent();
+        if(intent.hasExtra("orderType")){
+            orderType=intent.getStringExtra("orderType");
+        }
         rlInvoice.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.custom_layout_complementary_invoice, null, false);
@@ -115,6 +122,8 @@ public class SalesReturnActivity extends AppCompatActivity {
             recyclerView1.setAdapter(adapter);
             TextView close = view.findViewById(R.id.close);
             AlertDialog dialog = builder.create();
+
+
             adapter.setItemSelect(invoiceNumber -> {
                 selectedInvoiceNumber = invoiceNumber;
                 returnTypeRG.clearCheck();
@@ -189,9 +198,31 @@ public class SalesReturnActivity extends AppCompatActivity {
             CalculateTotal();
         });
 
-        viewHistory.setOnClickListener(v -> startActivity(new Intent(context, SalesReturnHistoryActivity.class)));
+        viewHistory.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View view) {
+                                               // startActivity(new Intent(context, SalesReturnHistoryActivity.class))
+                                               Intent intent = new Intent(SalesReturnActivity.this, SalesReturnHistoryActivity.class);
+                                               intent.putExtra("orderType","CounterSales");
+                                               startActivity(intent);
+                                           }
+                                       }
+
+
+        );
 
         getCustomerInvoices();
+        if(orderType.equalsIgnoreCase("CounterSales")) {
+            tvTittle.setText("CounterSales Return");
+            outletName.setText("");
+            outletName.setVisibility(View.GONE);
+        }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+            tvTittle.setText("VanSales Return");
+            outletName.setText(Shared_Common_Pref.OutletName.toUpperCase());
+        }else{
+            tvTittle.setText("Sales Return");
+            outletName.setText(Shared_Common_Pref.OutletName.toUpperCase());
+        }
     }
 
     private void CalculateTotal() {
@@ -277,7 +308,12 @@ public class SalesReturnActivity extends AppCompatActivity {
 
     private void SubmitToServer(String type) {
         ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Submitting Sales Return...");
+        if(orderType.equalsIgnoreCase("CounterSales")) {
+            progressDialog.setMessage("Submitting CounterSales Return...");
+        }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
+            progressDialog.setMessage("Submitting VanSales Return...");
+        else
+            progressDialog.setMessage("Submitting Sales Return...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         try {
@@ -350,11 +386,21 @@ public class SalesReturnActivity extends AppCompatActivity {
             // Preparing Data Array
             JSONArray data = new JSONArray();
             data.put(masterObject);
-
-            submissionResult = "Sales return submission failed...";
+            if(orderType.equalsIgnoreCase("CounterSales")) {
+                submissionResult = "CounterSales return submission failed...";
+            } else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
+                submissionResult = "VanSales return submission failed...";
+            else
+                submissionResult = "Sales return submission failed...";
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Map<String, String> params = new HashMap<>();
-            params.put("axn", "save/sales_return");
+            if(orderType.equalsIgnoreCase("CounterSales")) {
+                params.put("axn", "save/counter_sales_return");
+            }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")) {
+                params.put("axn", "save/van_sales_return");
+            }else {
+                params.put("axn", "save/sales_return");
+            }
             params.put("divisionCode", Shared_Common_Pref.Div_Code);
             params.put("Sf_code", Shared_Common_Pref.Sf_Code);
             Call<ResponseBody> call = apiInterface.getUniversalData(params , data.toString());
@@ -370,7 +416,12 @@ public class SalesReturnActivity extends AppCompatActivity {
                             String results = response.body().string();
                             JSONObject jsonObject = new JSONObject(results);
                             if (jsonObject.getBoolean("success")) {
-                                submissionResult = "Sales return submitted successfully...";
+                                if(orderType.equalsIgnoreCase("CounterSales")) {
+                                    submissionResult = "CounterSales return submitted successfully...";
+                                }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute"))
+                                    submissionResult = "VanSales return submitted successfully...";
+                                else
+                                    submissionResult = "Sales return submitted successfully...";
                                 progressDialog.dismiss();
                                 ShowFinalResult();
                             }
@@ -421,7 +472,9 @@ public class SalesReturnActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("axn", "get_product_list_for_invoice");
         params.put("invoice", invoice);
-        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+        if(orderType.equalsIgnoreCase("CounterSales")) {
+            params.put("ordertype", "countersale");
+        }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
             params.put("ordertype", "vansale");
         }else{
             params.put("ordertype", "secondary");
@@ -509,7 +562,9 @@ public class SalesReturnActivity extends AppCompatActivity {
         String outletCode = Shared_Common_Pref.OutletCode;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> params = new HashMap<>();
-        if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
+        if(orderType.equalsIgnoreCase("CounterSales")) {
+            params.put("axn", "get_today_countersale_of_outlet");
+        }else if(Shared_Common_Pref.SFA_MENU.equalsIgnoreCase("VanSalesDashboardRoute")){
             //params.put("axn", "get_latest_vaninvoice_of_outlet"); // Enable this line to get last 30 days's vaninvoices...
               params.put("axn", "get_today_vaninvoice_of_outlet"); // Enable this line to get only today's vaninvoices...
         }else {
@@ -517,6 +572,7 @@ public class SalesReturnActivity extends AppCompatActivity {
             params.put("axn", "get_today_invoice_of_outlet"); // Enable this line to get only today's invoices...
         }
         params.put("outletCode", outletCode);
+        params.put("distCode",sharedCommonPref.getvalue(Constants.Distributor_Id));
         Call<ResponseBody> call = apiInterface.getUniversalData(params);
         call.enqueue(new Callback<>() {
             @Override

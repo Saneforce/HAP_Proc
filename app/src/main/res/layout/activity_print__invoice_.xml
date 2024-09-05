@@ -827,8 +827,7 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"></TextView>
                             </RelativeLayout>
-
-                            <RelativeLayout
+                           <RelativeLayout
 
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
@@ -842,6 +841,28 @@
                                     android:textSize="@dimen/C12dp"></TextView>
 
                                 <TextView
+                                    android:id="@+id/totalqty_new"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+                            </RelativeLayout>
+                            <RelativeLayout
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Qty in Piece"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"></TextView>
+
+                                <TextView
                                     android:id="@+id/totalqty"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -850,6 +871,7 @@
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C12dp"></TextView>
                             </RelativeLayout>
+
 
                             <RelativeLayout
                                 android:layout_marginBottom="-15dp"

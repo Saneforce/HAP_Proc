@@ -1,204 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/C5dp"
+        app:cardCornerRadius="@dimen/C5dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/C5dp">
+        android:padding="@dimen/C5dp">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3.5">
+        android:weightSum="2">
 
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
+            android:textColor="@color/subExpHeader"
             android:id="@+id/tvSNo"
-            android:layout_weight="0.5"
-            android:layout_marginStart="@dimen/C5dp"
-            android:text="S.No"></TextView>
+            android:layout_weight="0.2"
+            android:text="S.No"
+            android:visibility="gone"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
+            android:textColor="@color/subExpHeader"
             android:id="@+id/tvRetailerName"
             android:layout_weight="1.5"
             android:text="Retailer Name"
-            android:gravity="start"></TextView>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:id="@+id/tvInvNum"
-            android:layout_weight="1.5"
-            android:text="Inv No"
-            android:gravity="end"
-            android:layout_marginEnd="@dimen/C3dp"></TextView>
+            android:gravity="start"
+            android:textSize="15sp"/>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="2">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:id="@+id/tvAmount"
-            android:layout_weight="1"
-            android:text="Amount"
-            android:layout_marginStart="@dimen/C8dp"
-            android:gravity="end"></TextView>
-
-       <!-- <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/green"
+            android:textColor="@color/OnDuty"
             android:id="@+id/tvInvNum"
-            android:layout_weight="1.5"
-            android:text="INV NO"
-            android:gravity="start"
-           ></TextView>
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:id="@+id/tvAmount"
             android:layout_weight="1"
-            android:text="Amount"></TextView>-->
+            android:text="Inv No"
+            android:textSize="13sp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:id="@+id/tvCollectedAmt"
-            android:layout_weight="1.5"
-            android:text="CollectedAmount"
-            android:gravity="end"></TextView>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:id="@+id/tvCredit"
-            android:layout_weight="1.5"
-            android:text="Credit"
-            android:gravity="end"
-            android:layout_marginEnd="@dimen/C3dp"></TextView>
-
-
+            android:textColor="@color/OnDuty"
+            android:id="@+id/tvInvDate"
+            android:layout_weight="1"
+            android:text="Inv Date"
+            android:textSize="13sp"
+            android:gravity="end"/>
     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/OnDuty"
+            android:id="@+id/tvInvValue"
+            android:layout_weight="1"
+            android:text="Inv Value"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/OnDuty"
+            android:id="@+id/tvPenAmt"
+            android:layout_weight="1"
+            android:text="Pen.Amt"
+            android:textSize="13sp"
+            android:gravity="end"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="4">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/green"
-                android:id="@+id/tvPaytype"
-                android:layout_weight="1"
-                android:text=""
-                android:layout_marginStart="@dimen/C8dp"
-                android:gravity="end"></TextView>
-
-            <!-- <TextView
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/green"
-                 android:id="@+id/tvInvNum"
-                 android:layout_weight="1.5"
-                 android:text="INV NO"
-                 android:gravity="start"
-                ></TextView>
-
-
-             <TextView
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/green"
-                 android:id="@+id/tvAmount"
-                 android:layout_weight="1"
-                 android:text="Amount"></TextView>-->
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/green"
-                android:id="@+id/tvRefno"
-                android:layout_weight="1.5"
-                android:text=""
-                android:gravity="end"></TextView>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/green"
-                android:id="@+id/tvBankname"
-                android:layout_weight="1.5"
-                android:text=""
-                android:gravity="end"
-                android:layout_marginEnd="@dimen/C3dp"></TextView>
-
+            android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/OnDuty"
+            android:id="@+id/tvRecAmt"
+            android:layout_weight="1"
+            android:text="Rec.Amt"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/OnDuty"
+            android:id="@+id/tvPayMode"
+            android:layout_weight="1"
+            android:text="Pay Mode"
+            android:textSize="13sp"
+            android:gravity="end"/>
 
         </LinearLayout>
-    <!--<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-
-        <TextView
-            android:id="@+id/tvSNo"
-            style="@style/TextStyle"
-            android:layout_weight="1"
-            android:text="S.No"></TextView>
-        <TextView
-            android:id="@+id/tvRetailerName"
-            style="@style/TextStyle"
-            android:layout_weight="1.5"
-            android:text="Retailer\nName"></TextView>
-        <TextView
-            android:id="@+id/tvInvNum"
-            style="@style/TextStyle"
-            android:layout_weight="1.5"
-            android:text="INV NO"></TextView>
-
-        <TextView
-            android:id="@+id/tvAmount"
-            style="@style/TextStyle"
-            android:layout_weight="1"
-            android:text="Amount"></TextView>
-        <TextView
-            android:id="@+id/tvCollectedAmt"
-            style="@style/TextStyle"
-            android:layout_weight="1"
-            android:text="Collected\nAmount"></TextView>
-        <TextView
-
-            android:id="@+id/tvCredit"
-            style="@style/TextStyle"
-            android:layout_weight="1"
-            android:text="Credit"></TextView>
-
-    </LinearLayout>-->
+        android:layout_height="1.5dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/C5dp"
+        android:layout_weight="1"
+        android:background="@color/grey_400">
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/C5dp"
-        android:layout_marginRight="@dimen/C5dp"
-        android:background="@color/statuscolor">
 
-    </View>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:text="Out Standing"
+                android:textSize="14sp"></TextView>
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_red"
+                android:id="@+id/tvOutStand"
+                android:layout_weight="1"
+                android:text="-0.00"
+                android:textSize="14sp"
+                android:gravity="end"></TextView>
+        </LinearLayout>
+
+
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
 
 

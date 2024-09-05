@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SFA_Activity.Order_Category_Select">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:id="@+id/db1_root"
@@ -48,7 +46,8 @@
             android:layout_margin="@dimen/C10dp"
             android:layout_weight="1"
             android:padding="@dimen/C8dp"
-            app:cardCornerRadius="@dimen/C5dp"/>
+            app:cardCornerRadius="@dimen/C5dp"
+            android:visibility="gone"/>
 
             <LinearLayout
 
@@ -60,22 +59,22 @@
                     android:textStyle="bold"
                     style="@style/TextStyle"
                     android:text="Invoice Details"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:textStyle="bold"
                     android:id="@+id/tvVSPayDate"
                     style="@style/TextStyle"
-                    android:text="Date : 25-05-2022"
+                    android:text="Date : 25-05-2022 "
                     android:drawableRight="@drawable/ic_baseline_date_range_24"
                     android:drawableTint="@color/colorPrimaryDark"/>
 
-                <LinearLayout
+              <!--  <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                   >
+                    android:visibility="gone">
 
 
                     <TextView
@@ -93,7 +92,7 @@
                         android:textStyle="bold" />
 
 
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <TextView
                     android:id="@+id/tv_nodata"
@@ -110,16 +109,22 @@
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
                   android:id="@+id/ll_head"
-                  android:layout_marginTop="@dimen/C5dp">
+                  android:layout_marginTop="@dimen/C5dp"
+                 >
 
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/C5dp"
-                    android:layout_marginRight="@dimen/C5dp"
+
                     android:background="@color/black"
                     android:outlineAmbientShadowColor="@color/statuscolor"></View>
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:background="@color/Allbackround"
+                      android:padding="@dimen/C5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -129,51 +134,44 @@
 
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
                         android:layout_marginStart="@dimen/C5dp"
-                        android:text="S.No"></TextView>
+                        android:text="S.No   "
+
+                        android:textSize="13sp"
+                        android:visibility="gone"></TextView>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:text="Retailer Name"
-                        android:gravity="start"></TextView>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="INV NO"
-                        android:gravity="end"
-                        android:layout_marginEnd="@dimen/C3dp"></TextView>
+                        android:layout_marginStart="@dimen/C5dp"
+                        android:textSize="13sp"></TextView>
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center">
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Amount"
-                        android:layout_marginStart="@dimen/C8dp"
-                        android:gravity="end"></TextView>
+                        android:text="Invoice No"
+                        android:layout_marginStart="@dimen/C5dp"
+                        android:textSize="13sp"></TextView>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="Cash"
-                        android:gravity="end"></TextView>
-                    <TextView
-                        android:id="@+id/tvCredit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="Credit"
+                        android:layout_weight="1"
+                        android:text="Invoice Date"
                         android:gravity="end"
-                        android:layout_marginEnd="@dimen/C3dp"></TextView>
+                        android:textSize="13sp"
+                        android:layout_marginEnd="8dp"></TextView>
+
                 </LinearLayout>
                   <LinearLayout
                       android:layout_width="match_parent"
@@ -184,37 +182,61 @@
                           android:layout_width="0dp"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
-                          android:text="Paytype"
-                          android:layout_marginStart="@dimen/C8dp"
-                          android:gravity="end"></TextView>
+                          android:text="Invoice Val"
+                          android:layout_marginStart="@dimen/C5dp"
+                          android:textSize="13sp"></TextView>
                       <TextView
                           android:layout_width="0dp"
                           android:layout_height="wrap_content"
-                          android:layout_weight="1.5"
-                          android:text="Ref.No"
-                          android:gravity="end"></TextView>
-                      <TextView
-                          android:id="@+id/tvBankName"
-                          android:layout_width="0dp"
-                          android:layout_height="wrap_content"
-                          android:layout_weight="1.5"
-                          android:text="BankName"
+                          android:layout_weight="1"
+                          android:text="Pending Amt"
                           android:gravity="end"
-                          android:layout_marginEnd="@dimen/C3dp"></TextView>
+                          android:layout_marginEnd="8dp"></TextView>
+
                   </LinearLayout>
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:gravity="center">
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:text="Receive Amt"
+                          android:layout_marginStart="@dimen/C5dp"
+                          android:textSize="13sp"></TextView>
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:text="Pay Mode"
+                          android:gravity="end"
+                          android:layout_marginEnd="8dp"></TextView>
 
-
-
+                  </LinearLayout>
+                  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="OutStanding Amt"
+                      android:layout_gravity="end"
+                      android:layout_marginEnd="8dp"></TextView>
+                  </LinearLayout>
 
                   <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/C5dp"
-                    android:layout_marginRight="@dimen/C5dp"
-                    android:background="@color/black"
+                      android:background="@color/black"
                     android:outlineAmbientShadowColor="@color/statuscolor"></View>
               </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:orientation="vertical"
@@ -223,13 +245,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/adapter_vansales_pay"
-                    tools:itemCount="5"
+                    tools:itemCount="2"
                    />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/ll_total">
+            android:id="@+id/ll_total"
+            android:padding="5dp">
 
         <View
             android:layout_width="match_parent"
@@ -239,49 +262,98 @@
             android:background="@color/black"
             android:outlineAmbientShadowColor="@color/statuscolor" />
             <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="7"
-                    android:visibility="visible"
-                    android:layout_margin="@dimen/C5dp">
+                    android:layout_weight="1"
+                    android:text="Total Invoice Val"
+                    android:layout_marginStart="@dimen/C5dp"
+                    android:textSize="13sp"></TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                   android:id="@+id/tvTotInvVal"
+                    android:gravity="end"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="8dp"></TextView>
 
-                    <TextView
-                        android:textStyle="bold"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Total"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
-                    <TextView
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total Pening Amt"
+                    android:layout_marginStart="@dimen/C5dp"
+                    android:textSize="13sp"></TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/tvTotPenAmt"
+                    android:gravity="end"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="8dp"></TextView>
 
-                        android:id="@+id/tvTotSal"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textStyle="bold"
-                        android:text=""
-                        android:gravity="end"></TextView>
-                    <TextView
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
-                        android:id="@+id/tvTotCollAmt"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textStyle="bold"
-                        android:text=""
-                        android:gravity="end"></TextView>
-                    <TextView
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total Recive Amt"
+                    android:layout_marginStart="@dimen/C5dp"
+                    android:textSize="13sp"></TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/tvTotRecAmt"
+                    android:gravity="end"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="8dp"></TextView>
 
-                        android:id="@+id/tvTotCredit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textStyle="bold"
-                        android:gravity="end"
-                        android:text=""></TextView>
-                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total Outstanding Amt"
+                    android:layout_marginStart="@dimen/C5dp"
+                    android:textSize="13sp"></TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/tvTotOutstand"
+                    android:gravity="end"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="8dp"></TextView>
+
+            </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -292,7 +364,7 @@
                     android:outlineAmbientShadowColor="@color/statuscolor"></View>
 
 
-                <LinearLayout
+               <!-- <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -317,15 +389,17 @@
                         android:textStyle="bold" />
 
 
-                </LinearLayout>
+                </LinearLayout>-->
 
 
             </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
 
 
 
-    </ScrollView>
+
 </RelativeLayout>

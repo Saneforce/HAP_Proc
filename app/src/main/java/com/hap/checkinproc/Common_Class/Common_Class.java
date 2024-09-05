@@ -64,6 +64,7 @@ import com.hap.checkinproc.SFA_Activity.ProjectionHistoryActivity;
 import com.hap.checkinproc.SFA_Activity.TodayPrimOrdActivity;
 import com.hap.checkinproc.SFA_Activity.VanSalPaymentActivity;
 import com.hap.checkinproc.SFA_Activity.VanStockViewActivity;
+import com.hap.checkinproc.SFA_Activity.VanTransactionActivity;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -402,6 +403,27 @@ public class Common_Class {
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
 
                     break;
+                case Constants.Van_Inv_Transaction_History:
+                    QuerySTring1 = "{\"tableName\":\"vaninvtransactionhistory\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", getDateYearMonthFormat(VanTransactionActivity.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(VanTransactionActivity.tvEndDate.getText().toString()));
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+
+                    break;
+                case Constants.Sec_Inv_Transaction_History:
+                    QuerySTring1 = "{\"tableName\":\"secinvtransactionhistory\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", getDateYearMonthFormat(VanTransactionActivity.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(VanTransactionActivity.tvEndDate.getText().toString()));
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+
+                    break;
+                    case Constants.CounterSale_Transaction_History:
+                    QuerySTring1 = "{\"tableName\":\"countersaletransactionhistory\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", getDateYearMonthFormat(VanTransactionActivity.tvStartDate.getText().toString()));
+                    QueryString.put("todate", getDateYearMonthFormat(VanTransactionActivity.tvEndDate.getText().toString()));
+
+
+                    break;
                 case Constants.Van_Get_Payment_Details:
                     QuerySTring1 = "{\"tableName\":\"vangetpaymentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", getDateYearMonthFormat(Invoice_History.tvStartDate.getText().toString()));
@@ -412,6 +434,13 @@ public class Common_Class {
 
                 case Constants.VanSalOrderList:
                     QuerySTring1 = "{\"tableName\":\"vangetpaymentdetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
+                    QueryString.put("DateNew",VanSalPaymentActivity.date);
+                    break;
+                case Constants.VanSalOrderListNew:
+                    QuerySTring1 = "{\"tableName\":\"vangetpaymentdetailsnew\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("RetailerID", Shared_Common_Pref.OutletCode);
@@ -586,6 +615,20 @@ public class Common_Class {
 
                 case Constants.SalesReturnDetailsList:
                     QuerySTring1 = "{\"tableName\":\"get_sales_return_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
+                case Constants.VanSalesReturnDetailsList:
+                    QuerySTring1 = "{\"tableName\":\"get_vansales_return_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
+                    break;
+
+                case Constants.CounterSalesReturnDetailsList:
+                    QuerySTring1 = "{\"tableName\":\"get_countersales_return_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
                     QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
@@ -768,6 +811,10 @@ public class Common_Class {
                         axnname = "get/stockistledger";
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         break;
+                    case Constants.STOCK_DATA_NEW:
+                        axnname = "get/stockistledgernew";
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        break;
                     case Constants.OUTLET_CATEGORY:
                         axnname = "get/outletcategory";
                         QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
@@ -831,6 +878,13 @@ public class Common_Class {
                         break;
                     case Constants.LEDGER:
                         axnname = "get/outletwiseledger";
+                        data.put("SF", Shared_Common_Pref.Sf_Code);
+                        data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("FDT", jparam.get("FDate").getAsString());
+                        data.put("TDT", jparam.get("TDate").getAsString());
+                        break;
+                    case Constants.LEDGER_VAN:
+                        axnname = "get/vanoutletwiseledger";
                         data.put("SF", Shared_Common_Pref.Sf_Code);
                         data.put("Stk", shared_common_pref.getvalue(Constants.Distributor_Id));
                         data.put("FDT", jparam.get("FDate").getAsString());
@@ -1185,7 +1239,7 @@ public class Common_Class {
                     shared_common_pref.save(Constants.CusSubGrpErp, jsonObject1.getString("CusSubGrpErp"));
                     shared_common_pref.save(Constants.DistributorGst, jsonObject1.optString("GSTN"));
                     shared_common_pref.save(Constants.DistributorFSSAI, jsonObject1.optString("FSSAI"));
-                    shared_common_pref.save(Constants.RSM_CUTOFF_TIME,jsonObject1.optString("SFCutoff"));
+                   // shared_common_pref.save(Constants.RSM_CUTOFF_TIME,jsonObject1.optString("SFCutoff"));
                     getDataFromApi(Retailer_OutletList, activity, false);
                     break;
                 }

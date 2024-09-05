@@ -1,10 +1,13 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.Common_Class.Constants.Route_Id;
+import static com.hap.checkinproc.Common_Class.Constants.Route_name;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.MRPCap;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.ProductsLoaded;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.StockCheck;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -74,6 +77,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -84,6 +89,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,6 +142,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
     JSONArray CatFreeDetdata, FreeDetails,freeQtyNew;
     TextView tv_no_match;
+    ImageView btnFilter;
+    LinearLayout ll_count_det;
+
+    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_order,tv_postot_saleretval,tv_postot_saleret;
+    TextView btnPosReturnEntrySales;
+    TextView tvPosTransaction;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -162,6 +176,16 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             tvCounterEntrySales = findViewById(R.id.btnPosEntrySales);
             btnPosStockLoad = findViewById(R.id.btnPosStockLoad);
             tv_no_match=findViewById(R.id.tv_no_match);
+            btnFilter=findViewById(R.id.btnFilter);
+            ll_count_det=findViewById(R.id.ll_count_det);
+            tv_tot_sku=findViewById(R.id.tv_tot_sku);
+            tv_tot_qty=findViewById(R.id.tv_tot_qty);
+            tv_tot_value=findViewById(R.id.tv_tot_value);
+            tv_tot_order=findViewById(R.id.tv_tot_order);
+            tv_postot_saleret=findViewById(R.id.tv_postot_saleret);
+            tv_postot_saleretval=findViewById(R.id.tv_postot_saleretval);
+            btnPosReturnEntrySales=findViewById(R.id.btnPosReturnEntrySales);
+            tvPosTransaction=findViewById(R.id.tvPosTransaction);
 
             tvCounterEntrySales.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -177,8 +201,31 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                 }
             });
+            btnPosReturnEntrySales.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent =new Intent(POSActivity.this, SalesReturnActivity.class);
+                    intent.putExtra("orderType","CounterSales");
+                    startActivity(intent);
+
+                }
+            });
 
 
+            btnFilter.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onClick(View v) {
+                    if(ll_count_det.getVisibility()==View.GONE) {
+                        ll_count_det.setVisibility(View.VISIBLE);
+                        btnFilter.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter_off));
+                    }else{
+                        ll_count_det.setVisibility(View.GONE);
+                        btnFilter.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter));
+                    }
+                }
+            });
+            getTodayCounterSaleData();
             etCategoryItemSearch = findViewById(R.id.searchView);
             ivScanner = findViewById(R.id.ivScanner);
             etName = findViewById(R.id.edt_name);
@@ -221,6 +268,7 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             ivClose.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
             tvPosOrders.setOnClickListener(this);
+            tvPosTransaction.setOnClickListener(this);
             Ukey = Common_Class.GetEkey();
             recyclerView = findViewById(R.id.orderrecyclerview);
             freeRecyclerview = findViewById(R.id.freeRecyclerview);
@@ -278,6 +326,14 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
 
                         if (!Common_Class.isNullOrEmpty(s.toString())) {
                             payAmt = Double.parseDouble(s.toString());
+                        }
+                        if(payAmt<=totalvalues){
+                            tvBalAmt.setText(formatter.format((payAmt - totalvalues)));
+                        }else{
+                            etRecAmt.setText("");
+                            payAmt=0;
+                            Toast.makeText(getApplicationContext(),"Enter less than or equal to Invoice Amt",Toast.LENGTH_SHORT).show();
+                            tvBalAmt.setText(formatter.format((payAmt - totalvalues)));
                         }
 
                         tvBalAmt.setText(formatter.format((payAmt - totalvalues)));
@@ -755,6 +811,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.tvPosOrders:
                 startActivity(new Intent(getApplicationContext(), PosHistoryActivity.class));
                 break;
+                case R.id.tvPosTransaction:
+               Intent intent1= new Intent(getApplicationContext(), VanTransactionActivity.class);
+               intent1.putExtra("EntryBy","CounterSale");
+               startActivity(intent1);
+                break;
             case R.id.ivScanner:
                 Intent intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("scan", "scan");
@@ -893,12 +954,13 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                         OutletItem.put("ordertypeid", OrderTypId);
                         OutletItem.put("ordertypenm", OrderTypNm);
                         OutletItem.put("payMode", tvPayMode.getText().toString());
+                        OutletItem.put("loginType",sharedCommonPref.getvalue(Constants.LOGIN_TYPE));
                         OutletItem.put("totAmtTax", totTax);
 
                         sharedCommonPref.save(Constants.Retailor_Name_ERP_Code,cusName);
                         sharedCommonPref.save(Constants.Retailor_PHNo,etPhone.getText().toString());
-                        OutletItem.put("RecAmt",
-                                tvPayMode.getText().toString().equalsIgnoreCase("cash") ? etRecAmt.getText().toString() : "0");
+                        OutletItem.put("RecAmt", etRecAmt.getText().toString());
+                        //OutletItem.put("RecAmt",tvPayMode.getText().toString().equalsIgnoreCase("cash") ? etRecAmt.getText().toString() : "0");
                         OutletItem.put("Balance", tvPayMode.getText().toString().equalsIgnoreCase("cash") ?
                                 tvBalAmt.getText().toString() : "0");
 
@@ -1657,10 +1719,11 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case 20:
                 tvPayMode.setText("" + myDataset.get(position).getName());
-                if (myDataset.get(position).getName().equalsIgnoreCase("cash"))
+                findViewById(R.id.llPayAmtDetail).setVisibility(View.VISIBLE);
+               /* if (myDataset.get(position).getName().equalsIgnoreCase("cash"))
                     findViewById(R.id.llPayAmtDetail).setVisibility(View.VISIBLE);
                 else
-                    findViewById(R.id.llPayAmtDetail).setVisibility(View.GONE);
+                    findViewById(R.id.llPayAmtDetail).setVisibility(View.GONE);*/
                 break;
 
         }
@@ -2623,5 +2686,107 @@ public class POSActivity extends AppCompatActivity implements View.OnClickListen
             Log.v(TAG, " orderAdapter:qty " + e.getMessage());
         }
 
+    }
+    private void  getTodayCounterSaleData(){
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("distributorCode", sharedCommonPref.getvalue(Constants.Distributor_Id));
+
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+
+
+                Call<ResponseBody> call = service.getCounterSaleDataNew(sharedCommonPref.getvalue(Constants.Distributor_Id),HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                int sku=0;
+                                int qty=0;
+                                double value=0;
+                                int  billCnt=0;
+
+                                int  salretCnt=0;
+                                double saleretValue=0;
+
+
+
+                                JSONObject data = new JSONObject(is.toString());
+
+                                JSONArray countSale = data.getJSONArray("CounterSale");
+                                if(countSale.length()>0) {
+                                    JSONObject object= countSale.getJSONObject(0);
+                                    if(object.has("Item")){
+                                        sku=object.getInt("Item");
+                                    }
+                                    if(object.has("TotQty")){
+                                        qty=object.getInt("TotQty");
+                                    }
+                                    if(object.has("TotValue")){
+                                        value=object.getDouble("TotValue");
+                                    }
+                                    if(object.has("billCnt")){
+                                        billCnt=object.getInt("billCnt");
+                                    }
+                                }
+                                JSONArray saleReturn = data.getJSONArray("PosReturn");
+                                if(saleReturn.length()>0){
+                                    JSONObject saleReturnObj = saleReturn.getJSONObject(0);
+                                    if(saleReturnObj.has("retCnt")){
+                                        salretCnt=saleReturnObj.getInt("retCnt");
+                                    }
+                                    if(saleReturnObj.has("saleRetVal")){
+                                        saleretValue=saleReturnObj.getDouble("saleRetVal");
+                                    }
+
+                                }
+
+                                tv_tot_sku.setText(""+sku);
+                                tv_tot_qty.setText(""+qty);
+                                tv_tot_value.setText(""+CurrencySymbol+" " + formatter.format(value));
+                                tv_tot_order.setText(""+billCnt);
+                                tv_postot_saleret.setText(""+salretCnt);
+                                tv_postot_saleretval.setText("" + CurrencySymbol + " " + formatter.format(saleretValue));
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
     }
 }

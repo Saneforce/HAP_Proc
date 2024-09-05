@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -39,6 +41,32 @@ public class Common_Class {
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
+    public static String GetDatewothouttimeNew() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+    public static String GetDateOneFormatToOther(String input) {
+        String formattedDate=input;
+        try {
+        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        DateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+
+            Date  date = originalFormat.parse(input);
+             formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return formattedDate;
+    }
+
+
+
+
+
 
     public void showMsg(Activity activity, String msg) {
         Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);

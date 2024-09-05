@@ -237,6 +237,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                             tvTotalDiscLabel.setText("(Total Discount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
                             //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
                             tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
+                            tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(totalvalues));
                         }
                         etDiscAmt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -265,7 +266,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     tvTotalDiscLabel.setText("(Total Discount "+CurrencySymbol+" " + formatter.format(cashDiscount+rDiscAmt)+")");
                     //tvSaveAmt.setText("Your Saving Amount is MRP "+formatter.format(totalMRP)+" - NetAmount "+formatter.format(totalvalues)+" = "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
                     tvSaveAmt.setText("Total Profit "+CurrencySymbol+" "  + formatter.format(totalMRP-totalvalues));
-
+                    tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(totalvalues));
                 }
 
                 @Override
@@ -337,12 +338,25 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     try {
                         payAmt = 0;
 
-                        if (!Common_Class.isNullOrEmpty(s.toString())) {
+                        /*if (!Common_Class.isNullOrEmpty(s.toString())) {
                             payAmt = Double.parseDouble(s.toString());
                         }
 
-                        tvTotOutstanding.setText(CurrencySymbol+" " + formatter.format(outstandAmt + (totalvalues - payAmt)));
+                        tvTotOutstanding.setText(CurrencySymbol+" " + formatter.format(outstandAmt + (totalvalues - payAmt)));*/
+                        if (!Common_Class.isNullOrEmpty(s.toString())) {
+                            payAmt = Double.parseDouble(s.toString());
 
+                            if(payAmt<=totalvalues){
+                                tvTotOutstanding.setText(CurrencySymbol +" "+ formatter.format(outstandAmt + ((totalvalues) - payAmt)));
+                            }else{
+                                etRecAmt.setText("");
+                                payAmt=0;
+                                Toast.makeText(getApplicationContext(),"Enter less than or equal to Invoice Amt",Toast.LENGTH_SHORT).show();
+                                tvTotOutstanding.setText(CurrencySymbol +" "+ formatter.format(outstandAmt + ((totalvalues) - payAmt )));
+                            }
+                        }else{
+                            tvTotOutstanding.setText(CurrencySymbol +" "+ formatter.format(outstandAmt + ((totalvalues) - payAmt)));
+                        }
                     } catch (Exception e) {
 
                     }
@@ -1226,6 +1240,7 @@ private int getCatePos(Integer CId) throws JSONException {
            orderTotTax.clear();
 
            for (int l = 0; l < Getorder_Array_List.size(); l++) {
+               if(Getorder_Array_List.get(l).getProductDetailsModal()!=null){
                for (int tax = 0; tax < Getorder_Array_List.get(l).getProductDetailsModal().size(); tax++) {
                    String label = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Type();
                    Double amt = Getorder_Array_List.get(l).getProductDetailsModal().get(tax).getTax_Amt();
@@ -1250,6 +1265,7 @@ private int getCatePos(Integer CId) throws JSONException {
                    }
 
                }
+           }
            }
 
            String label = "", amt = "";
@@ -1841,7 +1857,7 @@ private int getCatePos(Integer CId) throws JSONException {
                 }
 
                 double totQty= Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
-                holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll("\\.00$","") + " " + holder.tvUOM.getText());
 
                 holder.tvTknStock.setText("" + ((int) totQty) + " EA");
                 holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty) + " EA");
@@ -2027,7 +2043,7 @@ private int getCatePos(Integer CId) throws JSONException {
                             }
                             //if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)
                             //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()) + " EA");
-                            holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll("\\.00$","") + " " + holder.tvUOM.getText());
 
                             holder.tvTknStock.setText("" + ((int) totQty) + " EA");
                             holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty) + " EA");
@@ -2796,7 +2812,7 @@ private int getCatePos(Integer CId) throws JSONException {
             }
             //if (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0)
             //    holder.tvStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()) + " EA");
-            holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll(".00","") + " " + holder.tvUOM.getText());
+            holder.tvStock.setText("" + String.format(formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())).replaceAll("\\.00$","") + " " + holder.tvUOM.getText());
 
             holder.tvTknStock.setText("" + ((int) totQty) + " EA");
             holder.tvCLStock.setText("" + (Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() - (int) totQty) + " EA");

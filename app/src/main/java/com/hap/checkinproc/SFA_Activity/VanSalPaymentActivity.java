@@ -32,10 +32,10 @@ import java.util.Calendar;
 public class VanSalPaymentActivity extends AppCompatActivity implements UpdateResponseUI, View.OnClickListener {
 
     Common_Class common_class;
-    TextView  tvLoadAmt, tvUnLoadAmt, tvTotVanSal,tvTotCollAmt,tvTotCredit;
-    NumberFormat formatter = new DecimalFormat("##0.00");
+   // TextView  tvLoadAmt, tvUnLoadAmt, tvTotVanSal,tvTotCollAmt,tvTotCredit;
+   NumberFormat formatter = new DecimalFormat("##0.00");
     RecyclerView rvVanSales;
-    private double salAmt,collectAmt,creditAmt;
+    private double invAmt,penAmt,recAmt,outstandAmt;
     private double totStkAmt;
 
     public static String stDate = "", endDate = "";
@@ -44,6 +44,7 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
     public static  String date="";
     private DatePickerDialog fromDatePickerDialog;
     public static TextView tvDt;
+    TextView tvTotInvVal,tvTotPenAmt,tvTotRecAmt,tvTotOutstand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +52,21 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
 
         common_class = new Common_Class(this);
 
-        tvLoadAmt = findViewById(R.id.tvLoadStkAmt);
-        tvUnLoadAmt = findViewById(R.id.tvUnLoadStkAmt);
+        //tvLoadAmt = findViewById(R.id.tvLoadStkAmt);
+        //tvUnLoadAmt = findViewById(R.id.tvUnLoadStkAmt);
         tvDt = findViewById(R.id.tvVSPayDate);
         rvVanSales = findViewById(R.id.rvVanSal);
-        tvTotVanSal = findViewById(R.id.tvTotSal);
-        tvTotCollAmt = findViewById(R.id.tvTotCollAmt);
-        tvTotCredit=findViewById(R.id.tvTotCredit);
+        //tvTotVanSal = findViewById(R.id.tvTotSal);
+       // tvTotCollAmt = findViewById(R.id.tvTotCollAmt);
+       // tvTotCredit=findViewById(R.id.tvTotCredit);
         ll_head=findViewById(R.id.ll_head);
         ll_total=findViewById(R.id.ll_total);
         tv_nodata=findViewById(R.id.tv_nodata);
+        tvTotInvVal=findViewById(R.id.tvTotInvVal);
+        tvTotRecAmt=findViewById(R.id.tvTotRecAmt);
+        tvTotPenAmt=findViewById(R.id.tvTotPenAmt);
+        tvTotOutstand=findViewById(R.id.tvTotOutstand);
+
         tvDt.setText("Date : " + Common_Class.GetDatemonthyearformat());
         tvDt.setOnClickListener(this);
         date=Common_Class.GetDatewothouttime();
@@ -70,11 +76,12 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
         if (totStkAmt == -1) {
             common_class.getDb_310Data(Constants.VAN_STOCK_AMT, this);
         } else {
-            tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt));
+            //tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt));
 
         }
 
-        common_class.getDataFromApi(Constants.VanSalOrderList, this, false);
+        //common_class.getDataFromApi(Constants.VanSalOrderList, this, false);
+        common_class.getDataFromApi(Constants.VanSalOrderListNew, this, false);
 
         ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -91,6 +98,10 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                     Log.v(key, apiDataResponse);
                     setHistoryAdapter(apiDataResponse);
                     break;
+                case Constants.VanSalOrderListNew:
+                    Log.v(key, apiDataResponse);
+                    setHistoryAdapter(apiDataResponse);
+                    break;
                 case Constants.VAN_STOCK_AMT:
                     JSONObject stkObj = new JSONObject(apiDataResponse);
                     totStkAmt = 0;
@@ -103,8 +114,8 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                         }
                     }
 
-                    tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt));
-                    tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
+                    //tvLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt));
+                    //tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
 
                     break;
 
@@ -122,25 +133,32 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
             if (!Common_Class.isNullOrEmpty(apiDataResponse) && !apiDataResponse.equalsIgnoreCase("[]")) {
 
                 JSONArray filterArr = new JSONArray();
-                salAmt = 0;
-                collectAmt=0;
-                creditAmt=0;
+                invAmt=0;
+                penAmt=0;
+                recAmt=0;
+                outstandAmt=0;
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
+                    filterArr.put(obj);
 
-                    if (obj.getString("Status") != null && obj.getString("Status").equalsIgnoreCase("VANSALES")) {
-                        salAmt += obj.getDouble("Order_Value");
-                        collectAmt+= obj.getDouble("Collect_Amt");
-                        creditAmt+=(obj.getDouble("Order_Value")-obj.getDouble("Collect_Amt"));
-                        filterArr.put(obj);
-                    }
+                        invAmt += obj.getDouble("InvVal");
+                        penAmt+= obj.getDouble("PenAmt");
+                        recAmt+=obj.getDouble("RecAmt");
+                        outstandAmt+=obj.getDouble("OutStand");
+
+
                 }
-                tvTotVanSal.setText(CurrencySymbol+" "+ formatter.format(salAmt));
-                tvTotCollAmt.setText(CurrencySymbol+" "+ formatter.format(collectAmt));
-                tvTotCredit.setText(CurrencySymbol+" "+ formatter.format(creditAmt));
+                tvTotInvVal.setText(CurrencySymbol+" "+ formatter.format(invAmt));
+                 tvTotPenAmt.setText(CurrencySymbol+" "+ formatter.format(penAmt));
+                tvTotRecAmt.setText(CurrencySymbol+" "+ formatter.format(recAmt));
+                tvTotOutstand.setText(CurrencySymbol+" " + formatter.format(outstandAmt));
 
-                tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
+
+                //tvTotVanSal.setText(CurrencySymbol+" "+ formatter.format(salAmt));
+               // tvTotCollAmt.setText(CurrencySymbol+" "+ formatter.format(collectAmt));
+                //tvTotCredit.setText(CurrencySymbol+" "+ formatter.format(creditAmt));
+                //tvUnLoadAmt.setText(CurrencySymbol+" " + formatter.format(totStkAmt - salAmt));
 
                 if(filterArr.length()>0){
                     tv_nodata.setVisibility(View.GONE);
@@ -184,7 +202,8 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 String datenew=(""+dayOfMonth+"-"+month+"-"+year);
                tvDt.setText("Date : " +datenew);
-                common_class.getDataFromApi(Constants.VanSalOrderList, VanSalPaymentActivity.this , false);
+              //  common_class.getDataFromApi(Constants.VanSalOrderList, VanSalPaymentActivity.this , false);
+                common_class.getDataFromApi(Constants.VanSalOrderListNew, VanSalPaymentActivity.this , false);
 
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -228,18 +247,25 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
 
                 JSONObject obj = arr.getJSONObject(position);
 
-                holder.tvSNo.setText("" + (position + 1));
+                //holder.tvSNo.setText("" + (position + 1));
+                holder.tvRetailerName.setText(""+(position + 1)+" "+obj.getString("CusName"));
+                holder.tvInvNo.setText("" + obj.getString("InvNo"));
+                holder.tvInvDate.setText(""+obj.getString("InvDate"));
+                holder.tvInVal.setText("InvVal : "+CurrencySymbol+formatter.format(obj.getDouble("InvVal")));
+                holder.tvPenAmt.setText("Pen.Amt : "+CurrencySymbol+formatter.format(obj.getDouble("PenAmt")));
+                holder.tvRecAmt.setText("Rec.Amt : "+CurrencySymbol+formatter.format(obj.getDouble("RecAmt")));
+                holder.tvPayMode.setText(""+obj.getString("PayMode"));
+                holder.tvOutStand.setText("-"+formatter.format(obj.getDouble("OutStand")));
 
-                holder.tvInvNo.setText("" + obj.getString("OrderNo"));
 
-                holder.tvAmt.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Order_Value")));
+              /*  holder.tvAmt.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Order_Value")));
                 holder.tvRetailerName.setText("" + obj.getString("Cus_Name"));
                 holder.tvCollectedAmt.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Collect_Amt")));
                 holder.tvCredit.setText(CurrencySymbol+" " + formatter.format(obj.getDouble("Order_Value") -obj.getDouble("Collect_Amt")));
 
                 holder.tvPaytype.setText(""+obj.getString("Pay_Mode"));
                 holder.tvRefNo.setText(""+obj.getString("Pay_Ref_no"));
-                holder.tvBankName.setText(""+obj.getString("PaymentName"));
+                holder.tvBankName.setText(""+obj.getString("PaymentName"));*/
 
 
             } catch (Exception e) {
@@ -255,21 +281,21 @@ public class VanSalPaymentActivity extends AppCompatActivity implements UpdateRe
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView tvSNo, tvInvNo, tvAmt,tvRetailerName,tvCollectedAmt,tvCredit;
-            TextView tvPaytype,tvRefNo,tvBankName;
+            TextView tvSNo,tvRetailerName,tvInvNo,tvInvDate,tvInVal,tvPenAmt,tvPayMode,tvRecAmt,tvOutStand;
+            //TextView tvPaytype,tvRefNo,tvBankName;
 
 
             public MyViewHolder(View view) {
                 super(view);
                 tvSNo = view.findViewById(R.id.tvSNo);
                 tvInvNo = view.findViewById(R.id.tvInvNum);
-                tvAmt = view.findViewById(R.id.tvAmount);
+                tvInvDate = view.findViewById(R.id.tvInvDate);
                 tvRetailerName=view.findViewById(R.id.tvRetailerName);
-                tvCollectedAmt=view.findViewById(R.id.tvCollectedAmt);
-                tvCredit=view.findViewById(R.id.tvCredit);
-                tvPaytype=view.findViewById(R.id.tvPaytype);
-                tvRefNo=view.findViewById(R.id.tvRefno);
-                tvBankName=view.findViewById(R.id.tvBankname);
+                tvInVal=view.findViewById(R.id.tvInvValue);
+                tvPenAmt=view.findViewById(R.id.tvPenAmt);
+                tvPayMode=view.findViewById(R.id.tvPayMode);
+                tvRecAmt=view.findViewById(R.id.tvRecAmt);
+                tvOutStand=view.findViewById(R.id.tvOutStand);
 
             }
         }

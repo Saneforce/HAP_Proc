@@ -511,7 +511,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
 
 
            // common_class.getDb_310Data(Constants.STOCK_LEDGER, this);
-            common_class.getDb_310Data(Constants.STOCK_DATA, this);
+            common_class.getDb_310Data(Constants.STOCK_DATA_NEW, this);
         } catch (Exception e) {
             Log.v(TAG, " order oncreate: " + e.getMessage());
 
@@ -1380,6 +1380,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                             JSONObject obj = arr.getJSONObject(i);
 
                             for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                                Product_Modal.get(pm).setBalance(0);
                                 if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
                                     Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
                                     Log.v("name:" + Product_Modal.get(pm).getName(), ":Bal:" + obj.getInt("Balance"));
@@ -1391,7 +1392,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                         mProdct_Adapter.notifyDataSetChanged();
                     }
                     break;
-                case Constants.STOCK_DATA:
+                case Constants.STOCK_DATA_NEW:
                     JSONObject stkObjnew = new JSONObject(apiDataResponse);
                     if (stkObjnew.getBoolean("success")) {
                         JSONArray arr = stkObjnew.getJSONArray("Data");
@@ -1399,6 +1400,7 @@ public class VanSalStockLoadActivity extends AppCompatActivity implements View.O
                             JSONObject obj = arr.getJSONObject(i);
 
                             for (int pm = 0; pm < Product_Modal.size(); pm++) {
+                                Product_Modal.get(pm).setBalance(0);
                                 if (obj.getString("ProdCode").equalsIgnoreCase(Product_Modal.get(pm).getId())) {
                                     Product_Modal.get(pm).setBalance(obj.getInt("Balance"));
                                     break;
@@ -1748,7 +1750,7 @@ Log.e("Product_Modal_sz:",""+Product_Modal.size());
                     //   holder.tvTknStock.setTextColor(getResources().getColor(R.color.color_red));
                     // holder.tvCLStock.setTextColor(getResources().getColor(R.color.color_red));
                 }
-                holder.tvStock.setText("" + formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()) + " " + holder.tvUOM.getText());
+                holder.tvStock.setText("" + formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()).replaceAll("\\.00$","") + " " + holder.tvUOM.getText());
 
 
 
@@ -1924,7 +1926,7 @@ Log.e("Product_Modal_sz:",""+Product_Modal.size());
 
                             double totQty = (enterQty * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty());
 
-                            holder.tvStock.setText("" + formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty())+ " " + holder.tvUOM.getText());
+                            holder.tvStock.setText("" + formatNumber(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance()/Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty()).replaceAll("\\.00$","")+ " " + holder.tvUOM.getText());
                             //  if (/*Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() != null && Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCheckStock() > 0 &&*/ Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getBalance() < totQty) {
 //                                totQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty() * Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getCnvQty();
 //                                enterQty = Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getQty();

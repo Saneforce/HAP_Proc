@@ -88,7 +88,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Amt"
+            android:text="Recieved Amt"
             android:gravity="center"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -145,12 +145,12 @@
             android:ems="3"
             android:maxLength="8"
             android:visibility="visible"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/shape_rect_edit"
             android:textColor="@color/black"
-            android:focusable="false"
+            android:focusable="true"
 
             android:importantForAutofill="no"/>
         <TextView
@@ -163,6 +163,123 @@
             android:layout_gravity="center"
             android:gravity="end"
             android:visibility="gone"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pay Date"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pay Mode"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Balance Amt"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:textColor="@color/black"/>
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:weightSum="3">
+        <TextView
+            android:id="@+id/tv_pay_date"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:hint="Date"
+            android:textSize="13sp"
+            android:maxLength="10"
+            android:visibility="visible"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_rect_edit"
+            android:textColor="@color/black" />
+       <!-- <EditText
+            android:id="@+id/et_pay_mode"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:hint="Pay Mode"
+            android:textSize="13sp"
+            android:ems="3"
+            android:maxLength="8"
+            android:visibility="visible"
+            android:layout_marginHorizontal="5dp"
+
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_rect_edit"
+            android:textColor="@color/black"
+            android:focusable="false"
+
+            android:importantForAutofill="no"/>-->
+       <!-- <Spinner
+            android:id="@+id/sp_pay_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/shape_rect_edit"
+            android:padding="5dp"/>-->
+        <TextView
+            android:id="@+id/tv_pay_mode"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:hint="Pay Mode"
+            android:textSize="13sp"
+            android:maxLength="10"
+            android:visibility="visible"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawableRight="@drawable/dropdown"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/shape_rect_edit"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_balance_amt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="vhggh"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:textColor="@color/black"/>
     </LinearLayout>
     <View

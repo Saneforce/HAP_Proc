@@ -131,7 +131,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
     ImageView btnFilter;
     LinearLayout ll_van_det;
 
-    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_vansale,tv_tot_norder,tv_tot_vanorder;
+    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_vansale,tv_tot_norder,tv_tot_vanorder,
+    tv_vantot_saleretval,tv_vantot_saleret;
     int vansaleCnt=0,vanNoOrdCnt=0,vanorderCnt=0;
     NumberFormat formatter = new DecimalFormat("##0.00");
    Switch  swPlus4, swMinus18, swAmbient;
@@ -181,8 +182,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
                 Log.d("LiveEvent", "reloadList");
                 if (mode.equalsIgnoreCase("reloadSale") && updSale == false) {
                     getSalesCounts();
-                   // getLastInvoiceData();
                     getLastVanInvoiceData();
+                    getVanReturnData();
                 }
             }
         });
@@ -277,7 +278,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
             txClsOtlt.setTypeface(null, Typeface.NORMAL);
             txClsOtlt.setTextColor(getResources().getColor(R.color.grey_900));
-           // getLastVanInvoiceData();
+
             btnFilter=findViewById(R.id.btnFilter);
             ll_van_det=findViewById(R.id.ll_van_det);
             tv_tot_sku=findViewById(R.id.tv_tot_sku);
@@ -286,6 +287,8 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             tv_tot_vansale=findViewById(R.id.tv_tot_vansale);
             tv_tot_norder=findViewById(R.id.tv_tot_noorder);
             tv_tot_vanorder=findViewById(R.id.tv_tot_vanorder);
+            tv_vantot_saleret=findViewById(R.id.tv_vantot_saleret);
+            tv_vantot_saleretval=findViewById(R.id.tv_vantot_saleretval);
 
             common_class.gotoHomeScreen(this, ivToolbarHome);
             categoryType = "+4";
@@ -540,8 +543,9 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
             Retailer_Modal_List = new ArrayList<>();
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
                 common_class.getDb_310Data(Rout_List, this);
-             //   getLastInvoiceData();
+
                   getLastVanInvoiceData();
+                  getVanReturnData();
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
                 distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
@@ -688,7 +692,7 @@ public class VanSalesDashboardRoute extends AppCompatActivity implements Main_Mo
         }
         if (!Common_Class.isNullOrEmpty(shared_common_pref.getvalue(Constants.Distributor_Id))) {
             common_class.getDb_310Data(Constants.VAN_RETAILER_STATUS, this);
-           // getLastVanInvoiceData();
+
         }
 
     }
@@ -825,6 +829,7 @@ private void  getLastVanInvoiceData(){
 
                                 }
                             }
+
                             tv_tot_sku.setText(""+sku);
                             tv_tot_qty.setText(""+qty);
                             tv_tot_value.setText(""+CurrencySymbol+" " + formatter.format(value));
@@ -854,7 +859,7 @@ private void  getLastVanInvoiceData(){
     }
 }
 
-    private void getLastInvoiceData() {
+    private void  getVanReturnData(){
         try {
 
             if (common_class.isNetworkAvailable(this)) {
@@ -866,7 +871,7 @@ private void  getLastVanInvoiceData(){
                 HeadItem.put("divisionCode", div_code);
 
 
-                Call<ResponseBody> call = service.getLastThreeMnthsData(HeadItem.toString());
+                Call<ResponseBody> call = service.getVanReturnDataNew(shared_common_pref.getvalue(Constants.Distributor_Id),HeadItem.toString());
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -884,7 +889,25 @@ private void  getLastVanInvoiceData(){
                                     Log.v("Res>>", is.toString());
                                 }
 
-                                shared_common_pref.save(Constants.RetailorTodayData, is.toString());
+
+                                int  salretCnt=0;
+                                double saleretValue=0;
+                                JSONArray TodaySales = new JSONArray(is.toString());
+                                if (TodaySales.length() > 0) {
+                                    for (int i = 0; i < TodaySales.length(); i++) {
+                                        JSONObject item = TodaySales.getJSONObject(i);
+                                        if(item.has("retCnt")){
+                                            salretCnt=item.getInt("retCnt");
+                                        }
+                                        if(item.has("saleRetVal")){
+                                            saleretValue=item.getDouble("saleRetVal");
+                                        }
+
+
+                                    }
+                                }
+                                tv_vantot_saleret.setText(""+salretCnt);
+                                tv_vantot_saleretval.setText("" + CurrencySymbol + " " + formatter.format(saleretValue));
 
                             }
 

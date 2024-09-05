@@ -8,13 +8,59 @@
 
     <include layout="@layout/sfatoolbar"></include>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_bg"
+        android:orientation="horizontal"
+        android:padding="@dimen/C3dp"
+
+        android:layout_below="@+id/ll_toolbar"
+        android:id="@+id/ll_head">
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/basic"
+            android:paddingLeft="@dimen/C5dp"
+            android:text="PAYMENTS"
+            android:textAlignment="textStart"
+            android:textAllCaps="true"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+
+            android:textStyle="bold" />
+
+
+
+
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/tvVanSalPay"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/basic"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/C5dp"
+            android:text="Transaction"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="13sp" />
+
+
+    </LinearLayout>
+
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_payments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/vw_bottom"
-        android:layout_below="@+id/ll_toolbar"
+        android:layout_below="@+id/ll_head"
         android:layout_marginBottom="30dp"
         android:fillViewport="true"
         android:visibility="visible">
@@ -126,7 +172,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="@string/received_amt"
+                    android:text="Over All Outstanging Rs."
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -142,14 +188,11 @@
                     app:cardCornerRadius="5dp"
                     app:cardElevation="10dp">
 
-                    <EditText
-                        android:id="@+id/et_received_amt"
+                    <TextView
+                        android:id="@+id/tv_outstanding_amt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:hint="Enter Amount "
-                        android:importantForAutofill="no"
-                        android:inputType="number"
                         android:paddingVertical="15dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
@@ -167,7 +210,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -342,7 +386,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

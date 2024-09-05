@@ -79,6 +79,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -133,7 +134,11 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
     private final ArrayList<Common_Model> modelRetailChannel = new ArrayList<>();
 
     String categoryType = "", freezerFilter = "";
+    ImageView btnFilter_tss;
+    LinearLayout ll_sec_det;
 
+    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_saleret,tv_tot_norder,tv_tot_saleretval;
+    NumberFormat formatter = new DecimalFormat("##0.00");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +159,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
         getSalesCounts();
+        getTodaySecondaryData();
         JSONObject jParam = new JSONObject();
         try {
             jParam.put("SF", UserDetails.getString("Sfcode", ""));
@@ -247,6 +253,15 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             rvOutletCategory = findViewById(R.id.rvOutletCategory);
             rvMasterCategory = findViewById(R.id.rvOutletMasterCategory);
 
+            btnFilter_tss=findViewById(R.id.btnFilter_tss);
+            ll_sec_det=findViewById(R.id.ll_sec_det);
+            tv_tot_sku=findViewById(R.id.tv_tot_sku);
+            tv_tot_qty=findViewById(R.id.tv_tot_qty);
+            tv_tot_value=findViewById(R.id.tv_tot_value);
+            tv_tot_saleret=findViewById(R.id.tv_tot_saleret);
+            tv_tot_norder=findViewById(R.id.tv_tot_noorder);
+            tv_tot_saleretval=findViewById(R.id.tv_tot_saleretval);
+
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
             route_text.setOnClickListener(this);
@@ -298,6 +313,21 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             });
+
+            btnFilter_tss.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onClick(View v) {
+                    if(ll_sec_det.getVisibility()==View.GONE) {
+                        ll_sec_det.setVisibility(View.VISIBLE);
+                        btnFilter_tss.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter_off));
+                    }else{
+                        ll_sec_det.setVisibility(View.GONE);
+                        btnFilter_tss.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter));
+                    }
+                }
+            });
+
             swACOutlet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1098,6 +1128,7 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             common_class.getDataFromApi(Retailer_OutletList, this, false);
             common_class.getDb_310Data(Rout_List, this);
             shared_common_pref.save(Constants.DivERP, myDataset.get(position).getDivERP());
+            getTodaySecondaryData();
         } else if (type == 3) {
             route_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_name, myDataset.get(position).getName());
@@ -1407,6 +1438,117 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
             mView = view;
             recyclerView = view.findViewById(R.id.recyclerView);
             updateData();
+        }
+    }
+
+    private void  getTodaySecondaryData(){
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+                HeadItem.put("categoryType",categoryType);
+
+
+                Call<ResponseBody> call = service.getSecondaryData(shared_common_pref.getvalue(Constants.Distributor_Id),HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+                                ll_sec_det.setVisibility(View.VISIBLE);
+                                btnFilter_tss.setImageDrawable(getResources().getDrawable(R.drawable.ic_btnfilter_off));
+
+                                int sku=0;
+                                int qty=0;
+                                double value=0;
+                                int  salretCnt=0;
+                                double saleretValue=0;
+                                int noOrderCnt=0;
+
+
+                                JSONObject data = new JSONObject(is.toString());
+
+                                JSONArray secInv = data.getJSONArray("SecInv");
+                                if(secInv.length()>0) {
+                                    JSONObject object= secInv.getJSONObject(0);
+                                    if(object.has("Item")){
+                                        sku=object.getInt("Item");
+                                    }
+                                    if(object.has("TotQty")){
+                                        qty=object.getInt("TotQty");
+                                    }
+                                    if(object.has("TotValue")){
+                                        value=object.getDouble("TotValue");
+                                    }
+
+                                }
+                                JSONArray saleReturn = data.getJSONArray("SaleReturn");
+                                if(saleReturn.length()>0){
+                                    JSONObject saleReturnObj = saleReturn.getJSONObject(0);
+                                    if(saleReturnObj.has("retCnt")){
+                                        salretCnt=saleReturnObj.getInt("retCnt");
+                                    }
+                                    if(saleReturnObj.has("saleRetVal")){
+                                        saleretValue=saleReturnObj.getDouble("saleRetVal");
+                                    }
+
+                                }
+
+
+                                JSONArray noOrder = data.getJSONArray("NoOrder");
+                                if(noOrder.length()>0) {
+                                    JSONObject noOrderObj = noOrder.getJSONObject(0);
+                                    if(noOrderObj.has("noOrderCnt")){
+                                        noOrderCnt=noOrderObj.getInt("noOrderCnt");
+                                    }
+                                }
+
+                                tv_tot_sku.setText("" + sku);
+                                tv_tot_qty.setText("" + qty);
+                                tv_tot_value.setText("" + CurrencySymbol + " " + formatter.format(value));
+                                tv_tot_saleret.setText(""+salretCnt);
+                                tv_tot_saleretval.setText("" + CurrencySymbol + " " + formatter.format(saleretValue));
+                                tv_tot_norder.setText(""+noOrderCnt);
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
         }
     }
 }

@@ -228,7 +228,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                     findNearCutOfftime();
                     tvProjectionTimer.setText(Common_Class.GetTime() + "   /   " + sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
 
-                    Log.v("cutoffTimeProjection", sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
+                  //  Log.v("cutoffTimeProjection", sharedCommonPref.getvalue(Constants.RSM_CUTOFF_TIME));
                     handler.postDelayed(this, 1000);
 
                 }
@@ -563,7 +563,7 @@ public class ProjectionCategorySelectActivity extends AppCompatActivity implemen
                         showOrderList();
                     }
                 } catch (Exception e) {
-
+                  Log.e("errorData:",e.getMessage());
                 }
                 break;
 

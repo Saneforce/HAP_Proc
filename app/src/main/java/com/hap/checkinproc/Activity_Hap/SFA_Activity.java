@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import static com.hap.checkinproc.Common_Class.Constants.GroupFilter;
 import static com.hap.checkinproc.Common_Class.Constants.VAN_STOCK;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.CurrencySymbol;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.activeActivity;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.getActiveActivity;
 import static com.hap.checkinproc.SFA_Activity.HAPApp.setAppLogos;
@@ -26,10 +27,12 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -52,6 +55,7 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnLiveUpdateListener;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
@@ -102,7 +106,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI /*,Main_Model.MasterSyncView*/ {
+public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface /*,Main_Model.MasterSyncView*/ {
     public static final String UserDetail = "MyPrefs";
     public static final String CheckInDetail = "CheckInDetail";
     public static String sfa_date = "";
@@ -146,6 +150,16 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     private DatePickerDialog fromDatePickerDialog;
     private List<ListModel> menuList = new ArrayList<>();
 
+    TextView tv_tot_sku,tv_tot_qty,tv_tot_value,tv_tot_saleret,tv_tot_norder,tv_tot_saleretval;
+    TextView tv_vantot_sku,tv_vantot_qty,tv_vantot_value,tv_tot_vansale,tv_vantot_norder,tv_tot_vanorder,
+            tv_vantot_saleretval,tv_vantot_saleret;
+    TextView tv_postot_sku,tv_postot_qty,tv_postot_value,tv_postot_order,tv_postot_saleretval,tv_postot_saleret;
+    CardView cv_secord_det,cv_vansale_det,cv_countersale_det;
+    List<Common_Model> activityList=new ArrayList<>();
+    RelativeLayout rlActivity;
+    TextView tvActivity;
+    LinearLayout ll_activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +178,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         ryclOffers = findViewById(R.id.ryclOffers);
         lblSlideNo = findViewById(R.id.lblSlideNo);
         btnCloseOffer = findViewById(R.id.btnCloseOffer);
+
+
         init();
         setOnClickListener();
 
@@ -730,6 +746,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         Logout.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
         ivProcureSync.setOnClickListener(this);
+        rlActivity.setOnClickListener(this);
 
     }
 
@@ -854,9 +871,60 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         tvUpdTime = findViewById(R.id.tvUpdTime);
         rvPrimOrd = findViewById(R.id.rvPrimOrder);
 
+        tv_tot_sku=findViewById(R.id.tv_tot_sku);
+        tv_tot_qty=findViewById(R.id.tv_tot_qty);
+        tv_tot_value=findViewById(R.id.tv_tot_value);
+        tv_tot_saleret=findViewById(R.id.tv_tot_saleret);
+        tv_tot_norder=findViewById(R.id.tv_tot_noorder);
+        tv_tot_saleretval=findViewById(R.id.tv_tot_saleretval);
+
+        tv_vantot_sku=findViewById(R.id.tv_vantot_sku);
+        tv_vantot_qty=findViewById(R.id.tv_vantot_qty);
+        tv_vantot_value=findViewById(R.id.tv_vantot_value);
+        tv_tot_vansale=findViewById(R.id.tv_tot_vansale);
+        tv_vantot_norder=findViewById(R.id.tv_vantot_noorder);
+        tv_tot_vanorder=findViewById(R.id.tv_tot_vanorder);
+        tv_vantot_saleret=findViewById(R.id.tv_vantot_saleret);
+        tv_vantot_saleretval=findViewById(R.id.tv_vantot_saleretval);
+
+        tv_postot_sku=findViewById(R.id.tv_postot_sku);
+        tv_postot_qty=findViewById(R.id.tv_postot_qty);
+        tv_postot_value=findViewById(R.id.tv_postot_value);
+        tv_postot_order=findViewById(R.id.tv_tot_order);
+        tv_postot_saleret=findViewById(R.id.tv_postot_saleret);
+        tv_postot_saleretval=findViewById(R.id.tv_postot_saleretval);
+        cv_secord_det=findViewById(R.id.cv_secondary_details);
+        cv_vansale_det=findViewById(R.id.cv_vansales_details);
+        cv_countersale_det=findViewById(R.id.cv_countersales_details);
+        rlActivity=findViewById(R.id.rl_activity);
+        tvActivity=findViewById(R.id.tvActivity);
+        ll_activity=findViewById(R.id.ll_activity);
+
+
+
 
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
         Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+        getActivityDetails();
+
+        if (sharedCommonPref.getvalue(Constants.LOGIN_TYPE).equals(Constants.CHECKIN_TYPE)){
+          /*  cv_countersale_det.setVisibility(View.VISIBLE);
+            cv_secord_det.setVisibility(View.VISIBLE);
+            cv_vansale_det.setVisibility(View.VISIBLE);
+            getTodaySecondaryData();
+            getTodayCounterSalesData();
+            getTodayVanSalesData();*/
+            cv_countersale_det.setVisibility(View.GONE);
+            cv_secord_det.setVisibility(View.GONE);
+            cv_vansale_det.setVisibility(View.GONE);
+            ll_activity.setVisibility(View.VISIBLE);
+        }else{
+            cv_countersale_det.setVisibility(View.GONE);
+            cv_secord_det.setVisibility(View.GONE);
+            cv_vansale_det.setVisibility(View.GONE);
+            ll_activity.setVisibility(View.GONE);
+        }
+
 
 
     }
@@ -894,6 +962,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.Lin_Lead:
                 common_class.CommonIntentwithNEwTask(Lead_Activity.class);
+                break;
+            case R.id.rl_activity:
+                Log.e("cbvn","adss");
+                common_class.showCommonDialog(activityList, 17, this);
                 break;
             case R.id.toolbar_home:
                 AlertDialogBox.showDialog(SFA_Activity.this, "HAP SFA", "Are You Sure Want to Logout?", "OK", "Cancel", false, new AlertBox() {
@@ -1403,6 +1475,397 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+    }
+
+    private void  getTodaySecondaryData(){
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode",Shared_Common_Pref.Sf_Code);
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+
+
+
+                Call<ResponseBody> call = service.getTotalSecondaryData(Shared_Common_Pref.Sf_Code,HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                int sku=0;
+                                int qty=0;
+                                double value=0;
+                                int  salretCnt=0;
+                                double saleretValue=0;
+                                int noOrderCnt=0;
+
+
+                                JSONObject data = new JSONObject(is.toString());
+
+                                JSONArray secInv = data.getJSONArray("SecInv");
+                                if(secInv.length()>0) {
+                                    JSONObject object= secInv.getJSONObject(0);
+                                    if(object.has("Item")){
+                                        sku=object.getInt("Item");
+                                    }
+                                    if(object.has("TotQty")){
+                                        qty=object.getInt("TotQty");
+                                    }
+                                    if(object.has("TotValue")){
+                                        value=object.getDouble("TotValue");
+                                    }
+
+                                }
+                                JSONArray saleReturn = data.getJSONArray("SaleReturn");
+                                if(saleReturn.length()>0){
+                                    JSONObject saleReturnObj = saleReturn.getJSONObject(0);
+                                    if(saleReturnObj.has("retCnt")){
+                                        salretCnt=saleReturnObj.getInt("retCnt");
+                                    }
+                                    if(saleReturnObj.has("saleRetVal")){
+                                        saleretValue=saleReturnObj.getDouble("saleRetVal");
+                                    }
+
+                                }
+
+
+                                JSONArray noOrder = data.getJSONArray("NoOrder");
+                                if(noOrder.length()>0) {
+                                    JSONObject noOrderObj = noOrder.getJSONObject(0);
+                                    if(noOrderObj.has("noOrderCnt")){
+                                        noOrderCnt=noOrderObj.getInt("noOrderCnt");
+                                    }
+                                }
+
+                                tv_tot_sku.setText("" + sku);
+                                tv_tot_qty.setText("" + qty);
+                                tv_tot_value.setText("" + CurrencySymbol + " " + formatter.format(value));
+                                tv_tot_saleret.setText(""+salretCnt);
+                                tv_tot_saleretval.setText("" + CurrencySymbol + " " + formatter.format(saleretValue));
+                                tv_tot_norder.setText(""+noOrderCnt);
+                                cv_secord_det.setVisibility(View.VISIBLE);
+                                cv_countersale_det.setVisibility(View.GONE);
+                                cv_vansale_det.setVisibility(View.GONE);
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+    private void  getTodayCounterSalesData(){
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode",Shared_Common_Pref.Sf_Code);
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+
+
+
+                Call<ResponseBody> call = service.getTotalCounterSalesData(Shared_Common_Pref.Sf_Code,HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                int sku=0;
+                                int qty=0;
+                                double value=0;
+                                int billCnt=0;
+                                int  salretCnt=0;
+                                double saleretValue=0;
+
+
+
+                                JSONObject data = new JSONObject(is.toString());
+
+                                JSONArray countSale = data.getJSONArray("CounterSale");
+                                if(countSale.length()>0) {
+                                    JSONObject object= countSale.getJSONObject(0);
+                                    if(object.has("Item")){
+                                        sku=object.getInt("Item");
+                                    }
+                                    if(object.has("TotQty")){
+                                        qty=object.getInt("TotQty");
+                                    }
+                                    if(object.has("TotValue")){
+                                        value=object.getDouble("TotValue");
+                                    }
+                                    if(object.has("billCnt")){
+                                        billCnt=object.getInt("billCnt");
+                                    }
+                                }
+                                JSONArray saleReturn = data.getJSONArray("PosReturn");
+                                if(saleReturn.length()>0){
+                                    JSONObject saleReturnObj = saleReturn.getJSONObject(0);
+                                    if(saleReturnObj.has("retCnt")){
+                                        salretCnt=saleReturnObj.getInt("retCnt");
+                                    }
+                                    if(saleReturnObj.has("saleRetVal")){
+                                        saleretValue=saleReturnObj.getDouble("saleRetVal");
+                                    }
+
+                                }
+
+
+
+
+                                tv_postot_sku.setText("" + sku);
+                                tv_postot_qty.setText("" + qty);
+                                tv_postot_value.setText("" + CurrencySymbol + " " + formatter.format(value));
+                                tv_postot_order.setText(""+billCnt);
+                                tv_postot_saleret.setText(""+salretCnt);
+                                tv_postot_saleretval.setText("" + CurrencySymbol + " " + formatter.format(saleretValue));
+                                cv_secord_det.setVisibility(View.GONE);
+                                cv_countersale_det.setVisibility(View.VISIBLE);
+                                cv_vansale_det.setVisibility(View.GONE);
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+    private void  getTodayVanSalesData(){
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode",Shared_Common_Pref.Sf_Code);
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+
+
+
+                Call<ResponseBody> call = service.getTotalVanSalesData(Shared_Common_Pref.Sf_Code,HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                int sku=0;
+                                int qty=0;
+                                double value=0;
+                                int  salretCnt=0;
+                                double saleretValue=0;
+                                int noOrderCnt=0;
+                                int vanOrderCnt=0;
+                                int vanInvCnt=0;
+
+
+                                JSONObject data = new JSONObject(is.toString());
+
+                                JSONArray secInv = data.getJSONArray("VanInv");
+                                if(secInv.length()>0) {
+                                    JSONObject object= secInv.getJSONObject(0);
+                                    if(object.has("Item")){
+                                        sku=object.getInt("Item");
+                                    }
+                                    if(object.has("TotQty")){
+                                        qty=object.getInt("TotQty");
+                                    }
+                                    if(object.has("TotValue")){
+                                        value=object.getDouble("TotValue");
+                                    }
+                                    if(object.has("billCnt")){
+                                        vanInvCnt=object.getInt("billCnt");
+                                    }
+
+                                }
+                                JSONArray saleReturn = data.getJSONArray("VanReturn");
+                                if(saleReturn.length()>0){
+                                    JSONObject saleReturnObj = saleReturn.getJSONObject(0);
+                                    if(saleReturnObj.has("retCnt")){
+                                        salretCnt=saleReturnObj.getInt("retCnt");
+                                    }
+                                    if(saleReturnObj.has("saleRetVal")){
+                                        saleretValue=saleReturnObj.getDouble("saleRetVal");
+                                    }
+
+                                }
+
+
+                                JSONArray noOrder = data.getJSONArray("NoOrder");
+                                if(noOrder.length()>0) {
+                                    JSONObject noOrderObj = noOrder.getJSONObject(0);
+                                    if(noOrderObj.has("noOrderCnt")){
+                                        noOrderCnt=noOrderObj.getInt("noOrderCnt");
+                                    }
+                                }
+
+                                JSONArray vanOrder = data.getJSONArray("VanOrder");
+                                if(vanOrder.length()>0) {
+                                    JSONObject vanOrderObj = vanOrder.getJSONObject(0);
+                                    if(vanOrderObj.has("ordCnt")){
+                                        vanOrderCnt=vanOrderObj.getInt("ordCnt");
+                                    }
+                                }
+
+                                tv_vantot_sku.setText("" + sku);
+                                tv_vantot_qty.setText("" + qty);
+                                tv_vantot_value.setText("" + CurrencySymbol + " " + formatter.format(value));
+                                tv_vantot_saleret.setText(""+salretCnt);
+                                tv_vantot_saleretval.setText("" + CurrencySymbol + " " + formatter.format(saleretValue));
+                                tv_vantot_norder.setText(""+noOrderCnt);
+                                tv_tot_vanorder.setText(""+vanOrderCnt);
+                                tv_tot_vansale.setText(""+vanInvCnt);
+                                cv_secord_det.setVisibility(View.GONE);
+                                cv_countersale_det.setVisibility(View.GONE);
+                                cv_vansale_det.setVisibility(View.VISIBLE);
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(VanSalesDashboardRoute.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+    public void getActivityDetails(){
+        String orderList = "[{\"id\":\"1\",\"name\":\"Secondary Sales\"},{\"id\":\"2\",\"name\":\"VanSales\"},{\"id\":\"3\",\"name\":\"CounterSales\"}]";
+        if (orderList != null && !orderList.equals("")) {
+            activityList.clear();
+            try {
+                JSONArray jsonArray = new JSONArray(orderList);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Common_Model selectionModel = new Common_Model(jsonObject.getString("name"), jsonObject.getString("id"));
+                    activityList.add(selectionModel);
+                }
+
+                Log.e( "getpaymentModeList: "  ,""+activityList.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        common_class.dismissCommonDialog(type);
+        switch (type) {
+            case 17:
+                tvActivity.setText(myDataset.get(position).getName());
+                if (Integer.parseInt(myDataset.get(position).getId()) == 1) {
+                    getTodaySecondaryData();
+                  /*  cv_secord_det.setVisibility(View.VISIBLE);
+                    cv_countersale_det.setVisibility(View.GONE);
+                    cv_vansale_det.setVisibility(View.GONE);*/
+                } else if (Integer.parseInt(myDataset.get(position).getId()) == 2) {
+                    getTodayVanSalesData();
+                    /*cv_secord_det.setVisibility(View.GONE);
+                    cv_countersale_det.setVisibility(View.GONE);
+                    cv_vansale_det.setVisibility(View.VISIBLE);*/
+                } else if (Integer.parseInt(myDataset.get(position).getId()) == 3) {
+                    getTodayCounterSalesData();
+                   /* cv_secord_det.setVisibility(View.GONE);
+                    cv_countersale_det.setVisibility(View.VISIBLE);
+                    cv_vansale_det.setVisibility(View.GONE);*/
+                    break;
+
+                }
+        }
     }
 }
 

@@ -794,4 +794,30 @@ public interface ApiInterface {
     @POST("db_v310.php?axn=save/salesvancalls")
     Call<JsonObject> saveVanCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/todaycountersaledetails")
+    Call<ResponseBody> getCounterSaleData(@Query("distCode") String distCode,@Field("data") String body);
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/todaysecondarydetails")
+    Call<ResponseBody> getSecondaryData(@Query("distCode") String distCode,@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/totalsecondarydet")
+    Call<ResponseBody> getTotalSecondaryData(@Query("sfCode") String distCode,@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/totalcountersaledet")
+    Call<ResponseBody> getTotalCounterSalesData(@Query("sfCode") String distCode,@Field("data") String body);
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/totalvansaledet")
+    Call<ResponseBody> getTotalVanSalesData(@Query("sfCode") String distCode,@Field("data") String body);
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/todaycountersaledetailsnew")
+    Call<ResponseBody> getCounterSaleDataNew(@Query("distCode") String distCode,@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/todayvanreturndetail")
+    Call<ResponseBody> getVanReturnDataNew(@Query("distCode") String distCode,@Field("data") String body);
 }

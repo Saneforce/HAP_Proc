@@ -648,11 +648,12 @@ Log.d("Error","Can't Clear SFWish");
                 }
 
 
-               // eMail="1014700@hap.in";
-               // eMail="Anisfathima2406@gmail.com";
+                // eMail="1014700@hap.in";
+                 //eMail="Anisfathima2406@gmail.com";
+                //eMail="1013445@hap.in";
               // eMail="sathishsaneforceqc@gmail.com";
                // eMail="balasaneforceqc@gmail.com";
-               // eMail="ciadmin@hap.in";
+               //  eMail="ciadmin@hap.in";
                // eMail="SAN SALES";
                // eMail="1021302@hap.in";//sd agencies
                 //  eMail="1013237@hap.in";//selva sivagami
@@ -684,7 +685,7 @@ Log.d("Error","Can't Clear SFWish");
                // eMail="thalapathi.s@hap.in";
               //  eMail="babu.d@hap.in";
                // eMail="1017438@hap.in";
-               //eMail="1028757@hap.in";//brunai
+              // eMail="1028757@hap.in";//brunai
                // eMail="nethaji.r@hap.in";
                // eMail="shasikant.s@hap.in";
                 // eMail="manickam.j@hap.in";
@@ -701,7 +702,7 @@ Log.d("Error","Can't Clear SFWish");
               //  eMail="ramesh.bh@hap.in";
                // eMail="24013@hap.in";//CHANDAKA VENKATAAPPARAO
              //   eMail="sundaram.m@hap.in";
-                // eMail="1030754@hap.in";//uae-verglas
+               // eMail="1030754@hap.in";//uae-verglas
               //  eMail="madesh.s@hap.in";//
                  // eMail="10944@hap.in";
                  // eMail="elayarasan.c@hap.in";
@@ -916,7 +917,40 @@ Log.d("Error","Can't Clear SFWish");
                 //eMail="1029636@hap.in";
                // eMail="1014523@hap.in";
                 //  eMail="1015738@hap.in";
-                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);
+                //eMail="Harishkumar.d@hap.in";
+                //eMail="saravanan.gu@hap.in";
+                //eMail="binesh.b@hap.in";
+                //eMail="ajmal.s@hap.in";
+                //eMail="suresh.l@hap.in";
+                //eMail="rafik.mo@hap.in";
+              //  eMail="1031041@hap.in";
+                //eMail="1013499@hap.in";
+                //eMail="saravanan.gu@hap.in";
+                //eMail="1031788@hap.in";
+               // eMail="suresh.j@hap.in";
+                //eMail="1019387@hap.in";
+                //eMail="gpmuthu@hap.in";
+                //eMail="1013533@hap.in";
+                //eMail="subash.ma@hap.in";
+                //eMail="1015502@hap.in";
+                //eMail="durai.r@hap.in";
+                //eMail="1008012@hap.in";
+               // eMail="sathyanarayanan.r@hap.in";
+                //eMail="madhava.gr@hap.in";
+               // eMail="25957@hap.in";
+                //eMail="1026391@hap.in";
+                //eMail="sankar.ar@hap.in";
+                //eMail="velsankar.n@hap.in";
+                //eMail="venkatesan.pe@hap.in";
+                //eMail="prashant.g@hap.in";
+               // eMail="mohanraj.de@hap.in";
+                //eMail="25598@hap.in";
+               // eMail="8227@hap.in";
+                //eMail="nagarajan.ve@hap.in"
+                //eMail="1014057@hap.in";
+               //eMail="prabakaran.p@hap.in";
+               // eMail="1030555@hap.in";
+                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,com.hap.checkinproc.BuildConfig.VERSION_NAME, deviceToken);//com.hap.checkinproc.BuildConfig.VERSION_NAME
                 modelCall.enqueue(new Callback<Model>() {
                     @Override
                     public void onResponse(Call<Model> call, Response<Model> response) {

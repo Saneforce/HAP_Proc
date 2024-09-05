@@ -132,6 +132,7 @@ public class Constants {
     public static final String RETAIL_CLASS = "retailClass";
     public static final String CUSTOMER_DATA = "customerData";
     public static final String STOCK_DATA = "stockData";
+    public static final String STOCK_DATA_NEW = "stockDataNew";
     public static final String GRN_ORDER_DATA = "grnOrderData";
     public static final String DELIVERY_SEQUENCE = "deliverySequence";
     public static final String SALES_RETURN = "salesReturn";
@@ -247,4 +248,11 @@ public class Constants {
     public static final String REPEAT_SECONDARY_ORDER = "repeatSecOrder";
     public static final String REPEAT_VAN_LOADING = "repeatVanLoading";
     public static final String REPEAT_VAN_INVOICE = "repeatVanInvoice";
+    public static final String VanSalesReturnDetailsList = "VanSalesReturnDetailsList";
+    public static final String CounterSalesReturnDetailsList="CounterSalesReturnDetailsList";
+    public static final String Van_Inv_Transaction_History="VanInvTransactionHistory";
+    public static final String LEDGER_VAN = "ledgervan";
+    public static final String VanSalOrderListNew="vansalOrderListNew";
+    public static final String Sec_Inv_Transaction_History="SecInvTransactionHistory";
+    public static final String CounterSale_Transaction_History="CounterSaleTransactionHistory";
 }

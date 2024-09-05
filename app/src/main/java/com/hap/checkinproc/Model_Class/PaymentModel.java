@@ -8,6 +8,11 @@ public class PaymentModel {
     private Double pendingAmt;
     private  Double  Amt=0.0;
     private  String orderNo;
+    private String payMode;
+    private String payDate;
+    private int spinPos;
+    private Double balAmt;
+
 
     public PaymentModel(String bill_no, String bill_date, double billed_amt, double pending_amt, String orderNo) {
         this.billNo=bill_no;
@@ -15,6 +20,15 @@ public class PaymentModel {
         this.billedAmt=billed_amt;
         this.pendingAmt=pending_amt;
         this.orderNo=orderNo;
+        this.balAmt=pending_amt;
+    }
+    public PaymentModel(String bill_no, String bill_date, double billed_amt, double pending_amt, String orderNo, double balanceAmt) {
+        this.billNo=bill_no;
+        this.billDate=bill_date;
+        this.billedAmt=billed_amt;
+        this.pendingAmt=pending_amt;
+        this.orderNo=orderNo;
+        this.balAmt=balanceAmt;
     }
     public PaymentModel(String bill_no, String bill_date, double billed_amt, double pending_amt, double paid_amt) {
         this.billNo=bill_no;
@@ -72,6 +86,30 @@ public class PaymentModel {
         this.orderNo = orderNo;
     }
 
+    public String getPayMode() { return payMode;}
 
+    public void setPayMode(String payMode) { this.payMode = payMode;}
 
+    public String getPayDate() {return payDate;}
+
+    public void setPayDate(String payDate) {this.payDate = payDate;}
+
+    public int getSpinPos() {return spinPos;}
+
+    public void setSpinPos(int spinPos) {this.spinPos = spinPos;}
+    public Double getBalAmt() {return balAmt;}
+
+    public void setBalAmt(Double balAmt) {this.balAmt = balAmt;}
+    @Override
+    public String toString() {
+        return "paymentmodel{" +
+                "id=" + billNo +
+                ", billamt=" + billedAmt +
+                ", pendamt=" + pendingAmt +
+                ", receiveamt='" + Amt + '\'' +
+                ", balanceAmt'" + balAmt + '\'' +
+                ", mode='" + payMode + '\'' +
+                ", date=" + payDate +
+                '}';
+    }
 }
