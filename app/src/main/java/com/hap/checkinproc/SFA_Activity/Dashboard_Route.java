@@ -1188,7 +1188,6 @@ public class Dashboard_Route extends AppCompatActivity implements View.OnClickLi
                             JSONArray jsonArray = jsonObject.getJSONArray("Data");
                             String outletCode = "";
 
-
                             for (int arr = 0; arr < jsonArray.length(); arr++) {
                                 JSONObject arrObj = jsonArray.getJSONObject(arr);
 
