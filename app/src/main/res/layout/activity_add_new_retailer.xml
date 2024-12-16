@@ -757,11 +757,11 @@
                     </LinearLayout>
 
                     <!-- Todo: Map Visibility-->
-                    <fragment
+                    <!--<fragment
                         android:id="@+id/route_map"
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="130dp" />
+                        android:layout_height="130dp" />-->
 
                     <LinearLayout
                         android:id="@+id/ll_country"
