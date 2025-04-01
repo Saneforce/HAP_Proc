@@ -11,9 +11,9 @@ android {
         minSdkVersion 21
         compileSdk 34
         targetSdkVersion 34
-        versionCode 3316
+        versionCode 3317
 //        versionName "8.4.4" // Distributor
-        versionName "9.1.1" // Salesforce
+        versionName "9.1.2" // Salesforce
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
