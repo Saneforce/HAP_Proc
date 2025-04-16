@@ -647,7 +647,7 @@ Log.d("Error","Can't Clear SFWish");
                     }
                 }
 
-                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail,"6.1.4", deviceToken);//com.hap.checkinproc.BuildConfig.VERSION_NAME
+                Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, getString(R.string.app_ver), deviceToken);//com.hap.checkinproc.BuildConfig.VERSION_NAME
                 modelCall.enqueue(new Callback<Model>() {
                     @Override
                     public void onResponse(Call<Model> call, Response<Model> response) {
