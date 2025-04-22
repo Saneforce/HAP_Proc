@@ -1,7 +1,10 @@
 <resources>
     <!--    <string name="app_name" translatable="false">HAP SFA</string>-->
+    <!--    <string name="app_ver">v8.4.4</string>-->
+
     <string name="app_name" translatable="false">HAP Check-In</string>
-    <string name="app_ver">v9.1.2</string>
+    <string name="app_ver">v9.1.3</string>
+
     <string name="tool_app_ver">@string/app_ver</string>
 
     <string name="loading_please_wait" translatable="false">Loading Please Wait......</string>

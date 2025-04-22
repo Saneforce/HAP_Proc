@@ -13,7 +13,7 @@ android {
         targetSdkVersion 34
         versionCode 3317
 //        versionName "v8.4.4" // Distributor
-        versionName "v9.1.2" // Salesforce
+        versionName "v9.1.3" // Salesforce
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
