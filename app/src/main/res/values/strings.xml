@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name" translatable="false">HAP SFA</string>
-    <!--        <string name="app_name" translatable="false">HAP Check-In</string>-->
-    <!--    <string name="app_name" translatable="false">HAP Check-In</string>-->
+    <!--    <string name="app_name" translatable="false">HAP SFA</string>-->
+    <!--    <string name="app_ver">v8.4.4</string>-->
+
+    <string name="app_name" translatable="false">HAP Check-In</string>
+    <string name="app_ver">v9.1.3</string>
+
+    <string name="tool_app_ver">@string/app_ver</string>
 
     <string name="loading_please_wait" translatable="false">Loading Please Wait......</string>
     <string name="todo" translatable="false">TODO</string>
@@ -92,8 +96,6 @@
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Photo</string>
-    <string name="app_ver">v 6.1.4</string>
-    <string name="tool_app_ver">Ver 6.1.4</string>
     <string name="trv_exc_entry">Travel Mode Exception Entry</string>
     <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
     <string name="trv_exc_status">Travel Mode Exception Status</string>
