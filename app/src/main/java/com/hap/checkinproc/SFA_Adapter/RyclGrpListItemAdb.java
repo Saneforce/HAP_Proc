@@ -28,6 +28,11 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
     private Context mContext;
     static onListItemClick itemClick;
     Common_Class common_class;
+    private boolean isItemSelect;
+
+    public void DisableGroup(boolean mIsItemSelect) {
+        this.isItemSelect=mIsItemSelect;
+    }
 
     String id = "";
 
@@ -35,6 +40,7 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
         this.mlist = mlist;
         this.mContext = mContext;
         this.itemClick = mItemClick;
+        this.isItemSelect = false;
         common_class = new Common_Class(mContext);
     }
 
@@ -69,7 +75,7 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
                 @Override
                 public void onClick(View view) {
                     try {
-
+                        if(isItemSelect) return;
                         JSONObject itm = null;
                         try {
                             itm = mlist.getJSONObject(holder.getBindingAdapterPosition());

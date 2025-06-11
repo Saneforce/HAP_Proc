@@ -1069,6 +1069,8 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             }
 
+            grplistItems.DisableGroup(!Getorder_Array_List.isEmpty());
+
             totTax = 0;
             try {
                 String totAmtTax = sharedCommonPref.getvalue(Constants.POS_NETAMT_TAX);
@@ -2290,8 +2292,9 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                                 holder.Free.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getFree() +" EA");
                                 holder.lblFreeNm.setText("" + Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getOff_Pro_name());
                                 holder.Disc.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getDiscount()));
-                                if (!(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getOff_Pro_name().equalsIgnoreCase(pna)))
-                                holder.llFreeProd.setVisibility(View.VISIBLE);
+                                if (!(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getOff_Pro_name().equalsIgnoreCase(pna))) {
+                                    holder.llFreeProd.setVisibility(View.VISIBLE);
+                                }
                                 holder.Amount.setText(CurrencySymbol+" " + formatter.format(Product_Details_Modalitem.get(holder.getBindingAdapterPosition()).getAmount()));
 
 

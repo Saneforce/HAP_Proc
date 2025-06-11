@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 /.idea/other.xml
+/.idea/AndroidProjectSystem.xml
+/.idea/runConfigurations.xml
