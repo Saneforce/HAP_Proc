@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,11 +42,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.QRCodeScanner;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.BuildConfig;
@@ -67,9 +63,7 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Dashboard_View_Adapter;
-import com.hap.checkinproc.SFA_Adapter.RyclBrandListItemAdb;
 import com.hap.checkinproc.SFA_Adapter.RyclListItemAdb;
-import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -564,18 +558,25 @@ public class OfferCounterActivity extends AppCompatActivity implements View.OnCl
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
-           /* if(StockCheck.equalsIgnoreCase("1")) {
-                for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                    double enterQty = Getorder_Array_List.get(z).getQty();
-                    double totQty = (enterQty * Getorder_Array_List.get(z).getCnvQty());
-                    if ((Getorder_Array_List.get(z).getBalance() - (int) totQty) < 0) {
-                        Toast.makeText(this, "Low Stock", Toast.LENGTH_LONG).show();
-                        ResetSubmitBtn(0);
-                        return;
+            if(StockCheck.equalsIgnoreCase("1")) {
+                try {
+                    JSONArray Order_Details = new JSONArray(CartDetails.getString("Cart","[]"));
+                    for(int ij=0;ij<Order_Details.length();ij++) {
+                        JSONObject jObj = Order_Details.getJSONObject(ij);
+                        JSONArray jProd = jObj.getJSONArray("Prods");
+                        for (int ik = 0; ik < jProd.length(); ik++) {
+                            JSONObject itm = jProd.getJSONObject(ik);
+                            double enterQty = itm.getDouble("Qty");
+                            double totQty = (enterQty * itm.getDouble("ConversionFactor"));
+                            if (itm.getDouble("Balance") < totQty) {
+                                Toast.makeText(this, "Low Stock", Toast.LENGTH_LONG).show();
+                                ResetSubmitBtn(0);
+                                return;
+                            }
+                        }
                     }
-                }
+                } catch (JSONException ignored) { }
             }
-            */
 
             AlertDialogBox.showDialog(OfferCounterActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
@@ -601,7 +602,7 @@ public class OfferCounterActivity extends AppCompatActivity implements View.OnCl
                         OutletItem.put("phoneNo", etPhone.getText().toString());
                         OutletItem.put("address", etAddress.getText().toString());
                         OutletItem.put("CashDiscount", cashDiscount);
-                        OutletItem.put("NetAmount", formatter.format(totalvalues));
+                        OutletItem.put("NetAmount", formatter.format(InvAmt + totTax));
                         OutletItem.put("InvAmt", InvAmt);
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("ordertype", "posoff");
@@ -780,17 +781,19 @@ public class OfferCounterActivity extends AppCompatActivity implements View.OnCl
                 }
             }
 
+            cashDiscount = Math.ceil(totalvalues/2);
+            Double subTotal=totalvalues - cashDiscount;
+
             tvTotalItems.setText("Items : " + NofItm + "   Qty : " + totalQty);
-            tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(totalvalues));
+            tvTotalAmount.setText(CurrencySymbol+" " + formatter.format(subTotal));
             tvTotLabel.setText("Price (" + NofItm + " items)");
             tvBillSubTotal.setText(CurrencySymbol+" " + formatter.format(totalvalues));
             tvBillTotItem.setText("" + NofItm);
             tvBillTotQty.setText("" + totalQty);
-            Double subTotal=totalvalues/2;
 
             tvBillToPay.setText(CurrencySymbol+" " + formatter.format(subTotal));
-            tvCashDiscount.setText(CurrencySymbol+" " + formatter.format(subTotal));
-            cashDiscount=subTotal;
+            tvCashDiscount.setText(CurrencySymbol+" " + formatter.format(cashDiscount));
+
             InvAmt=subTotal/1.05;
             totTax=subTotal-InvAmt;
             tvNetAmtTax.setText(CurrencySymbol+" " + formatter.format(InvAmt));
