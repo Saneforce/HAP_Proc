@@ -1763,10 +1763,16 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
 
         SumWOBLodging();
+
         String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("₹", "");
         if (sBillAmt.isEmpty()) sBillAmt = "0";
-        if ((nofNght < 1 && OnlyNight == 1) || transferflg == 1)
+
+        if (mChckCont.isChecked())//if (count == 1)
+        {
+            tTotAmt = 0;
+        } else {
             tTotAmt = Float.parseFloat(sBillAmt);
+        }
         totLodgAmt = String.valueOf(tTotAmt);
         //  lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
 
@@ -1776,16 +1782,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         if ((nofNght < 1 && OnlyNight == 1) || transferflg == 1)
             txldgTdyAmt.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
 
-
-        Log.v("COunt_stay", String.valueOf(count));
-        if (mChckCont.isChecked())//if (count == 1)
-        {
-            tTotAmt = 0;
-            calOverAllTotal(localCov, otherExp, tTotAmt);
-        } else {
-            Log.v("TOTAL_continueStay", String.valueOf(continueStay));
-            calOverAllTotal(localCov, otherExp, tTotAmt);
-        }
+        calOverAllTotal(localCov, otherExp, tTotAmt);
 
     }
 
