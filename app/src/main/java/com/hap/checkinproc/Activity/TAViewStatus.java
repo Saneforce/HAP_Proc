@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity;
 
+import static android.view.View.GONE;
+
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -731,9 +733,9 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                 linLocalSpinner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listOrderType.clear();
+                        /*listOrderType.clear();
                         Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                        dynamicModeType(lcPosCntS);
+                        dynamicModeType(lcPosCntS);*/
                     }
                 });
 
@@ -1502,7 +1504,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
     }
 
     public void onLCDelete(View v) {
-        LinearLayout pv = (LinearLayout) v.getParent().getParent();
+        /*LinearLayout pv = (LinearLayout) v.getParent().getParent();
 
         edtRwID = pv.findViewById(R.id.lcRwID);
         if (!edtRwID.getText().toString().equalsIgnoreCase(""))
@@ -1515,7 +1517,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
         if (linlocalCon.getChildCount() == 0) {
             localTotal.setVisibility(View.GONE);
         }
-        SumOFLCAmount();
+        SumOFLCAmount();*/
 
     }
 
@@ -2313,6 +2315,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
                             enterTo.setText(tldraftJson.get("To_P").getAsString());
                             enterFare.setText(tldraftJson.get("Fare").getAsString());
+                            enterFare.setEnabled(false);
 
                             edtTVGstNum.setText(tldraftJson.get("GSTNo").getAsString());
                             edtTVGstAmt.setText(tldraftJson.get("GSTAmt").getAsString());
@@ -2865,15 +2868,22 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             edtLCGstNum = (EditText) (LcchildView.findViewById(R.id.edt_lcConv_gst));
             edtLCGstAmt = (EditText) (LcchildView.findViewById(R.id.edt_lcConv_gst_amt));
             edtLCGstBillNo = (EditText) (LcchildView.findViewById(R.id.edt_lcConv_gst_bno));
+            ImageView delete_lc = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
 
             String sRWID = expCode + "_" + System.nanoTime();
             edtRwID.setText(sRWID);
 
             editTexts.setText(expCode);
+            delete_lc.setVisibility(GONE);
+            editTexts.setEnabled(false);
             editLaFare.setText(expFare);
+            editLaFare.setEnabled(false);
             edtLCGstNum.setText(lcdraftJson.get("GSTNo").getAsString());
+            edtLCGstNum.setEnabled(false);
             edtLCGstAmt.setText(lcdraftJson.get("GSTAmt").getAsString());
+            edtLCGstAmt.setEnabled(false);
             edtLCGstBillNo.setText(lcdraftJson.get("GSTBNo").getAsString());
+            edtLCGstBillNo.setEnabled(false);
 
             if (!lcUKey.equals("")) {
                 lcTxtUKey.setText(lcUKey);
@@ -2908,9 +2918,9 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             linLocalSpinner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listOrderType.clear();
+                    /*listOrderType.clear();
                     Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                    dynamicModeType(lcPosCntS);
+                    dynamicModeType(lcPosCntS);*/
                 }
             });
             lcAttach.setOnClickListener(new View.OnClickListener() {
@@ -3019,26 +3029,34 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
             edtOEGstNum = (EditText) (childView.findViewById(R.id.edt_otherExp_gst));
             edtOEGstAmt = (EditText) (childView.findViewById(R.id.edt_otherExp_gst_amt));
             edtOEGstBillNo = (EditText) (childView.findViewById(R.id.edt_otherExp_gst_bno));
+            ImageView oe_delete = (ImageView) (childView.findViewById(R.id.oe_delete));
 
             String sRWID = expCode + "_" + System.nanoTime();
             edtRwID.setText(sRWID);
             String AttFlg = lcdraftJson.get("Attachments").getAsString();
             int maxVal = lcdraftJson.get("Max_Allowance").getAsInt();
-            oeAttach.setVisibility(View.GONE);
+            oeAttach.setVisibility(GONE);
             if (AttFlg.equals("1")) {
-               // oeAttach.setVisibility(View.VISIBLE);
+                // oeAttach.setVisibility(View.VISIBLE);
                 oePreview.setVisibility(View.VISIBLE);
                 oEGstLayout.setVisibility(View.VISIBLE);
             } else {
-                oePreview.setVisibility(View.GONE);
-                oEGstLayout.setVisibility(View.GONE);
+                oePreview.setVisibility(GONE);
+                oEGstLayout.setVisibility(GONE);
             }
 
+            oe_delete.setVisibility(GONE);
             oeEditext.setText(expCode);
             edtOE.setText(expFare);
             edtOEGstNum.setText(lcdraftJson.get("GSTNo").getAsString());
             edtOEGstAmt.setText(lcdraftJson.get("GSTAmt").getAsString());
             edtOEGstBillNo.setText(lcdraftJson.get("GSTBNo").getAsString());
+
+            oeEditext.setEnabled(false);
+            edtOE.setEnabled(false);
+            edtOEGstNum.setEnabled(false);
+            edtOEGstAmt.setEnabled(false);
+            edtOEGstBillNo.setEnabled(false);
 
 
             if (!oeUKey.equals("") && oeUKey != "" && !oeUKey.isEmpty() && oeUKey != null) {
@@ -3131,9 +3149,9 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                 @Override
                 public void onClick(View v) {
 
-                    OtherExpenseList.clear();
+                    /*OtherExpenseList.clear();
                     Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
-                    OtherExpenseMode(valuedf);
+                    OtherExpenseMode(valuedf);*/
 
                 }
             });
@@ -3168,6 +3186,9 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                 deleteButton = views.findViewById(R.id.delete_button);
                 etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
                 etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
+                etrTaFr.setEnabled(false);
+                etrTaTo.setEnabled(false);
+                deleteButton.setVisibility(GONE);
 
 //                if (Alw_Eligibilty.equalsIgnoreCase("0")) {
 //                    enterFare.setVisibility(View.INVISIBLE);
@@ -4882,7 +4903,6 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                 // locationList=response.body();
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 try {
-                    finish();
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     if (flag == 1) {
                         Toast.makeText(getApplicationContext(), "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
@@ -4890,8 +4910,7 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
                         Toast.makeText(getApplicationContext(), "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
 
                     }
-
-
+                    mCommon_class.gotoHomeScreen(TAViewStatus.this);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -4903,6 +4922,12 @@ public class TAViewStatus extends AppCompatActivity implements Master_Interface,
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TAClaimActivity.isImageDeletable = false;
     }
 
 }

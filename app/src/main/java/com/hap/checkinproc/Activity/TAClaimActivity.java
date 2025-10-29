@@ -247,6 +247,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     private String Ukey = "";
     String StartFrom,EndTo,StartKM,EndKM,PersonalKM,TravelledKM;
 
+    public static boolean isImageDeletable = true;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -6095,6 +6097,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     @Override
     protected void onResume() {
         super.onResume();
+        isImageDeletable = true;
         RefreshFare();
 
     }

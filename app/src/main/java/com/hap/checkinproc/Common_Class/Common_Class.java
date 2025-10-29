@@ -2023,8 +2023,19 @@ public class Common_Class {
                 context.startActivity(intent);
             }
         });
+    }
 
-
+    public void gotoHomeScreen(Context context) {
+        SharedPreferences CheckInDetails = ((Activity) context).getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+        Intent intent;
+        if (CheckIn) {
+            intent = new Intent(context, SFA_Activity.class);
+        } else {
+            intent = new Intent(context, Dashboard.class);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ((Activity) context).startActivity(intent);
     }
 
 

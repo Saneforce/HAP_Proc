@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.PdfViewerActivity;
+import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -120,7 +121,7 @@ public class AttachementActivity extends AppCompatActivity {
                     View cv = parentLinearLayout.getChildAt(position);
                     ImageView taAttachs = (ImageView) (cv.findViewById(R.id.img_preview));
                     deleteImage = (ImageView) cv.findViewById(R.id.img_delete);
-                    if (ImageUKey.equals("1")) {
+                    if (ImageUKey.equals("1") || !TAClaimActivity.isImageDeletable) {
                         deleteImage.setVisibility(View.GONE);
                     } else {
                         deleteImage.setVisibility(View.VISIBLE);
