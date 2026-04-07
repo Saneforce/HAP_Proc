@@ -141,6 +141,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     LinearLayout llDistributor;
 
     boolean isSubmit = false;
+    String selectedGroupId = "", selectedGroupName = "", selectedTypeId = "", selectedCategoryId = "";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -445,6 +446,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     private void FilterTypes(String GrpID) {
         try {
+            selectedGroupId = GrpID;
             JSONArray TypGroups = new JSONArray();
             JSONArray tTypGroups = db.getMasterData(Constants.ProdTypes_List);
             LinearLayoutManager TypgridlayManager = new LinearLayoutManager(this);
@@ -481,8 +483,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void GetJsonData(String jsonResponse, String type, String filter) {
-
-        //type =1 product category data values
+        selectedTypeId = filter;
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
             if (type.equals("1"))
@@ -1069,7 +1070,7 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
             }
 
-            grplistItems.DisableGroup(!Getorder_Array_List.isEmpty());
+            grplistItems.DisableGroup((!Getorder_Array_List.isEmpty()) && (selectedGroupName.equalsIgnoreCase("+4") || selectedGroupName.equalsIgnoreCase("-18")));
 
             totTax = 0;
             try {
@@ -1315,12 +1316,15 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                         @Override
                         public void onItemClick(JSONObject item) {
                             try {
+                                if ((!Getorder_Array_List.isEmpty()) && (item.getString("name").equalsIgnoreCase("+4") || item.getString("name").equalsIgnoreCase("-18"))) {
+                                    return;
+                                }
                                 grpName = "";
                                 grpCode = "";
                                 FilterTypes(item.getString("id"));
                                 common_class.brandPos = 0;
-
-                                tvGrpName.setText("" + item.getString("name"));
+                                selectedGroupName = item.getString("name");
+                                tvGrpName.setText(selectedGroupName);
                                 getSlotTimes(item.getString("id"));
                             } catch (Exception e) {
 
@@ -1340,6 +1344,20 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                     grplistItems.notify(ProdGroups, this, "" + grpCode, new onListItemClick() {
                         @Override
                         public void onItemClick(JSONObject item) {
+                            try {
+                                if ((!Getorder_Array_List.isEmpty()) && (item.getString("name").equalsIgnoreCase("+4") || item.getString("name").equalsIgnoreCase("-18"))) {
+                                    return;
+                                }
+                                grpName = "";
+                                grpCode = "";
+                                FilterTypes(item.getString("id"));
+                                common_class.brandPos = 0;
+                                selectedGroupName = item.getString("name");
+                                tvGrpName.setText(selectedGroupName);
+                                getSlotTimes(item.getString("id"));
+                            } catch (Exception e) {
+
+                            }
 
                         }
                     });
@@ -1406,10 +1424,11 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
 
     public void showOrderItemList(int categoryPos, String filterString) {
         try {
+            selectedCategoryId = listt.get(categoryPos).getId();
             Log.v(TAG + "showorder:", "" + listt.size());
             Product_ModalSetAdapter.clear();
             for (Product_Details_Modal personNpi : Product_Modal) {
-                if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
+                if (personNpi.getProduct_Grp_Code().toString().equals(selectedGroupId) && personNpi.getTyp().toString().equals(selectedTypeId) && personNpi.getProductCatCode().toString().equals(selectedCategoryId)) {
                     if (Common_Class.isNullOrEmpty(filterString))
                         Product_ModalSetAdapter.add(personNpi);
                     else if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
@@ -1468,9 +1487,13 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
                 public void onItemClick(JSONObject item) {
 
                     try {
+                        if ((!Getorder_Array_List.isEmpty()) && (item.getString("name").equalsIgnoreCase("+4") || item.getString("name").equalsIgnoreCase("-18"))) {
+                            return;
+                        }
                         FilterTypes(item.getString("id"));
                         common_class.brandPos = 0;
-                        tvGrpName.setText("" + item.getString("name"));
+                        selectedGroupName = item.getString("name");
+                        tvGrpName.setText(selectedGroupName);
                         getSlotTimes(item.getString("id"));
 
                     } catch (JSONException e) {
@@ -1481,7 +1504,12 @@ public class PrimaryOrderActivity extends AppCompatActivity implements View.OnCl
             Grpgrid.setAdapter(grplistItems);
 
             FilterTypes(saveProductname.equalsIgnoreCase("") ? ProdGroups.getJSONObject(0).getString("id") : "" + id);
-            tvGrpName.setText(saveProductname.equalsIgnoreCase("") ? "" + ProdGroups.getJSONObject(0).getString("name") : saveProductname);
+            if (saveProductname.isEmpty()) {
+                selectedGroupName = ProdGroups.getJSONObject(0).getString("name");
+            } else {
+                selectedGroupName = saveProductname;
+            }
+            tvGrpName.setText(selectedGroupName);
             getSlotTimes(saveProductname.equalsIgnoreCase("") ? ProdGroups.getJSONObject(0).getString("id") : "" + id);
 
         } catch (Exception e) {

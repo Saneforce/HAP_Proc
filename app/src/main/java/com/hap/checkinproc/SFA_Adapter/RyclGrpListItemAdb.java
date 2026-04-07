@@ -32,6 +32,7 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
 
     public void DisableGroup(boolean mIsItemSelect) {
         this.isItemSelect=mIsItemSelect;
+        notifyDataSetChanged();
     }
 
     String id = "";
@@ -80,17 +81,12 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
                         try {
                             itm = mlist.getJSONObject(holder.getBindingAdapterPosition());
                             if (itemClick != null) itemClick.onItemClick(itm);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        } catch (JSONException ignored) { }
                         if (id.equalsIgnoreCase("") || (id.equalsIgnoreCase(itm.getString("id")))) {
                             selPOS = position;
                         }
                         notifyDataSetChanged();
-                    } catch (Exception e) {
-
-                    }
-
+                    } catch (Exception ignored) { }
                 }
             });
 
@@ -108,7 +104,7 @@ public class RyclGrpListItemAdb extends RecyclerView.Adapter<RyclGrpListItemAdb.
                 // if (id.equalsIgnoreCase("") || (!id.equalsIgnoreCase(itm.getString("id")))) {
 
                 holder.gridcolor.setBackground(mContext.getResources().getDrawable(R.drawable.cardbutton));
-                if (!id.equalsIgnoreCase("") && !id.equalsIgnoreCase(itm.getString("id")))
+                if (isItemSelect && (!id.equalsIgnoreCase("") && !id.equalsIgnoreCase(itm.getString("id"))))
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.grey_500));
                 else
                     holder.icon.setTextColor(mContext.getResources().getColor(R.color.black));

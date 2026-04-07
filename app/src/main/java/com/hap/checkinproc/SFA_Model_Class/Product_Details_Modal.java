@@ -106,6 +106,9 @@ public class Product_Details_Modal {
     @SerializedName("Product_Cat_Code")
     @Expose
     private Integer productCatCode;
+    @SerializedName("Typ")
+    @Expose
+    private Integer Typ;
 
     public Integer getpCatCode() {
         return pCatCode;
@@ -1451,5 +1454,11 @@ public class Product_Details_Modal {
 
     }
 
+    public Integer getTyp() {
+        return Typ;
+    }
 
+    public void setTyp(Integer typ) {
+        Typ = typ;
+    }
 }
